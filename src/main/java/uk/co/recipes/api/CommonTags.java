@@ -11,5 +11,5 @@ package uk.co.recipes.api;
  */
 public enum CommonTags implements ITag {
 
-	SERVES_COUNT
+	SERVES_COUNT, VEGETARIAN, VEGAN, NUT_FREE
 }
