@@ -5,7 +5,7 @@
 	<artifactId>recipes-domain</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>RecipesExplorer Domain</name>
-	<description>fatbellyjones</description>
+	<description>???</description>
 	<dependencies>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -27,6 +27,12 @@
 		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-core</artifactId>
+			<version>1.3</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-all</artifactId>
 			<version>1.3</version>
 			<scope>test</scope>
 		</dependency>
