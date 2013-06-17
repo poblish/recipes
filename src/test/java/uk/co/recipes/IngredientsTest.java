@@ -33,8 +33,19 @@ public class IngredientsTest {
 		final Ingredient lambIngredient = new Ingredient( new NamedItem(lambNeck), new Quantity( Units.GRAMMES, 900));
 		lambIngredient.addNote( ENGLISH, "Neck fillets, cut into large chunks");
 
+		///////////////////////////////////////////////////
+
+		final ICanonicalItem bacon = new CanonicalItem("Bacon");
+		final ICanonicalItem ssBacon = new CanonicalItem("Smoked Streaky Bacon", bacon);
+
+		final Ingredient baconIngredient = new Ingredient( new NamedItem(ssBacon), new Quantity( Units.GRAMMES, 200));
+		baconIngredient.addNote( ENGLISH, "Preferably in one piece, skinned and cut into pieces");
+
+		///////////////////////////////////////////////////
+
 		final RecipeStage stage1 = new RecipeStage();
 		stage1.addIngredient(lambIngredient);
+		stage1.addIngredient(baconIngredient);
 
 		final Recipe r = new Recipe();
 		r.addStage(stage1);
@@ -44,7 +55,7 @@ public class IngredientsTest {
 
 		final String recipeJson = GSON.toJson(r);
 		System.out.println(recipeJson);
-		assertThat( recipeJson, is("{\"stages\":[{\"ingredients\":[{\"item\":{\"name\":\"Lamb Neck\",\"canonicalItem\":{\"canonicalName\":\"Lamb Neck\",\"parent\":{},\"varieties\":[]}},\"quantity\":{\"units\":\"GRAMMES\",\"number\":900},\"notes\":{\"en\":\"Neck fillets, cut into large chunks\"}}]}],\"tagsMap\":{\"SERVES_COUNT\":\"4\"}}"));
+		assertThat( recipeJson, is("{\"stages\":[{\"ingredients\":[{\"item\":{\"name\":\"Lamb Neck\",\"canonicalItem\":{\"canonicalName\":\"Lamb Neck\",\"parent\":{},\"varieties\":[]}},\"quantity\":{\"units\":\"GRAMMES\",\"number\":900},\"notes\":{\"en\":\"Neck fillets, cut into large chunks\"}},{\"item\":{\"name\":\"Smoked Streaky Bacon\",\"canonicalItem\":{\"canonicalName\":\"Smoked Streaky Bacon\",\"parent\":{},\"varieties\":[]}},\"quantity\":{\"units\":\"GRAMMES\",\"number\":200},\"notes\":{\"en\":\"Preferably in one piece, skinned and cut into pieces\"}}]}],\"tagsMap\":{\"SERVES_COUNT\":\"4\"}}"));
 
 //		final Recipe retrievedRecipe = GSON.fromJson( recipeJson, Recipe.class);
 //		assertThat( r, is(retrievedRecipe));
