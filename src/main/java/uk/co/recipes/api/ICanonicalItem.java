@@ -21,4 +21,6 @@ public interface ICanonicalItem {
 	Collection<ICanonicalItem> varieties();
 
 	void addVariety( ICanonicalItem item);
+
+	void setParent( ICanonicalItem canonicalItem);
 }

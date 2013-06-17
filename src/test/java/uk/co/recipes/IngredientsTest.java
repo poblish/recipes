@@ -1,47 +1,76 @@
 package uk.co.recipes;
 
-import java.util.Locale;
+import static java.util.Locale.ENGLISH;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+
+import java.lang.reflect.Type;
 
 import org.testng.annotations.Test;
 
 import uk.co.recipes.api.CommonTags;
-import uk.co.recipes.api.IQuantity;
-import uk.co.recipes.api.IUnit;
+import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.IRecipeStage;
+import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.Units;
 
+import com.google.common.base.Optional;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.InstanceCreator;
 
 public class IngredientsTest {
 
+	private final static Gson GSON = builder().create();
+
+	// See: http://www.bbcgoodfood.com/recipes/5533/herby-lamb-cobbler
 	@Test
 	public void initialTest() {
-		final CanonicalItem ci1 = new CanonicalItem("Lamb");
-		final CanonicalItem ci2 = new CanonicalItem("Lamb Neck");
-		ci1.addVariety(ci2);
+		final ICanonicalItem lamb = new CanonicalItem("Lamb");
+		final ICanonicalItem lambNeck = new CanonicalItem("Lamb Neck", lamb);
 
-		final IQuantity q = new IQuantity() {
-
-			@Override
-			public int number() {
-				return 900;
-			}
-
-			@Override
-			public IUnit units() {
-				return Units.GRAMMES;
-			}};
-
-		final NamedItem n1 = new NamedItem(ci2);
-		final Ingredient i1 = new Ingredient( n1, q);
-		i1.addNote( Locale.ENGLISH, "Neck fillets, cut into large chunks");
+		final Ingredient lambIngredient = new Ingredient( new NamedItem(lambNeck), new Quantity( Units.GRAMMES, 900));
+		lambIngredient.addNote( ENGLISH, "Neck fillets, cut into large chunks");
 
 		final RecipeStage stage1 = new RecipeStage();
-		stage1.addIngredient(i1);
+		stage1.addIngredient(lambIngredient);
 
 		final Recipe r = new Recipe();
 		r.addStage(stage1);
 		r.addTag( CommonTags.SERVES_COUNT, "4");
 
-		System.out.println( new Gson().toJson(r) );
+		///////////////////////////////////////////////////
+
+		final String recipeJson = GSON.toJson(r);
+		System.out.println(recipeJson);
+		assertThat( recipeJson, is("{\"stages\":[{\"ingredients\":[{\"item\":{\"name\":\"Lamb Neck\",\"canonicalItem\":{\"canonicalName\":\"Lamb Neck\",\"parent\":{},\"varieties\":[]}},\"quantity\":{\"units\":\"GRAMMES\",\"number\":900},\"notes\":{\"en\":\"Neck fillets, cut into large chunks\"}}]}],\"tagsMap\":{\"SERVES_COUNT\":\"4\"}}"));
+
+//		final Recipe retrievedRecipe = GSON.fromJson( recipeJson, Recipe.class);
+//		assertThat( r, is(retrievedRecipe));
+
+		///////////////////////////////////////////////////
+
+		assertThat( lambNeck.parent(), is( Optional.of(lamb) ));
+		assertThat( lamb.parent().orNull(), nullValue());
+	}
+
+	private static GsonBuilder builder() {
+		final GsonBuilder gb = new GsonBuilder();
+		gb.registerTypeAdapter( IRecipeStage.class, new InstanceCreator<IRecipeStage>() {
+
+			@Override
+			public IRecipeStage createInstance( Type type) {
+				return new RecipeStage();
+			}});
+
+		gb.registerTypeAdapter( ITag.class, new InstanceCreator<ITag>() {
+
+			@Override
+			public ITag createInstance( Type type) {
+				return CommonTags.SERVES_COUNT;
+			}});
+
+		return gb;
 	}
 }

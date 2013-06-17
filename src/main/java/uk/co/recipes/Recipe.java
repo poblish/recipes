@@ -12,6 +12,7 @@ import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IRecipeStage;
 import uk.co.recipes.api.ITag;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -63,5 +64,31 @@ public class Recipe implements IRecipe {
 	@Override
 	public Map<ITag,String> tagValues() {
 		return tagsMap;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hashCode( stages, tagsMap);
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals( Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Recipe)) {
+			return false;
+		}
+		final Recipe other = (Recipe) obj;
+		return Objects.equal( stages, other.stages) && Objects.equal( tagsMap, other.tagsMap);
 	}
 }

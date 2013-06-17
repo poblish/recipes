@@ -19,7 +19,7 @@ import com.google.common.collect.Sets;
 public class CanonicalItem implements ICanonicalItem {
 
 	private final String canonicalName;
-	private final Optional<ICanonicalItem> parent;
+	private Optional<ICanonicalItem> parent;
 	private Collection<ICanonicalItem> varieties = Sets.newHashSet();
 
 	/**
@@ -40,7 +40,10 @@ public class CanonicalItem implements ICanonicalItem {
 	public CanonicalItem(String canonicalName, Collection<ICanonicalItem> varieties) {
 		this.canonicalName = canonicalName;
 		this.parent = Optional.absent();
-		this.varieties.addAll(varieties);
+
+		for ( final ICanonicalItem eachVariety : varieties) {
+			addVariety(eachVariety);
+		}
 	}
 
 	/**
@@ -48,10 +51,9 @@ public class CanonicalItem implements ICanonicalItem {
 	 * @param parent
 	 * @param varieties
 	 */
-	public CanonicalItem(String canonicalName, ICanonicalItem parent, Collection<ICanonicalItem> varieties) {
+	public CanonicalItem(String canonicalName, ICanonicalItem parent) {
 		this.canonicalName = canonicalName;
 		this.parent = Optional.of(parent);
-		this.varieties.addAll(varieties);
 	}
 
 	/* (non-Javadoc)
@@ -75,6 +77,7 @@ public class CanonicalItem implements ICanonicalItem {
 	 */
 	@Override
 	public void addVariety( ICanonicalItem variety) {
+		variety.setParent(this);
 		varieties.add(variety);
 	}
 
@@ -84,5 +87,13 @@ public class CanonicalItem implements ICanonicalItem {
 	@Override
 	public Collection<ICanonicalItem> varieties() {
 		return varieties;
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.co.recipes.api.ICanonicalItem#setParent(uk.co.recipes.api.ICanonicalItem)
+	 */
+	@Override
+	public void setParent( ICanonicalItem inParent) {
+		parent = Optional.of(inParent);
 	}
 }
