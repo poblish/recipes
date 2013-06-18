@@ -6,41 +6,30 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
-import java.net.URL;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import uk.co.recipes.api.CommonTags;
 import uk.co.recipes.api.ICanonicalItem;
-import uk.co.recipes.api.IRecipeStage;
-import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.Units;
+import uk.co.recipes.persistence.CanonicalItemFactory;
 
 import com.google.common.base.Optional;
-import com.google.common.base.Throwables;
+import com.google.common.base.Supplier;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.InstanceCreator;
 
 public class IngredientsTest {
 
 	private final static HttpClient CLIENT = new DefaultHttpClient();
 
-	private final static Gson GSON = builder().create();
-	private final static ObjectMapper MAPPER = new ObjectMapper();
-
+	private final static Gson GSON = new Gson();
 	private final static String	IDX_URL = "http://localhost:9200/recipe/items";
 
 
@@ -48,40 +37,24 @@ public class IngredientsTest {
 	public void cleanIndices() throws ClientProtocolException, IOException {
 		final HttpResponse resp = CLIENT.execute( new HttpDelete(IDX_URL) );
 		EntityUtils.consume( resp.getEntity() );
-
-		final ICanonicalItem lamb = new CanonicalItem("Lamb");
-		final ICanonicalItem lambNeck = new CanonicalItem("Lamb Neck", lamb);
-
-		put(lamb, "1");
-		put(lambNeck, "2");
-	}
-
-	public void put( final ICanonicalItem inItem, String inId) throws IOException {
-		final HttpPost req = new HttpPost( IDX_URL + "/" + inId);
-
-		try {
-			req.setEntity( new StringEntity( GSON.toJson(inItem) ) );
-//			String s = MAPPER.writeValueAsString(inItem);
-//			req.setEntity( new StringEntity( MAPPER.writeValueAsString(inItem) ) );
-
-			final HttpResponse resp = CLIENT.execute(req);
-			assertThat( resp.getStatusLine().getStatusCode(), is(201));
-			EntityUtils.consume( resp.getEntity() );
-		}
-		catch (UnsupportedEncodingException e) {
-			Throwables.propagate(e);
-		}
-	}
-
-	public ICanonicalItem get( final ICanonicalItem inItem, String inId) throws IOException {
-		return MAPPER.readValue( MAPPER.readTree( new URL( IDX_URL + "/" + inId) ).path("_source"), CanonicalItem.class);
 	}
 
 	// See: http://www.bbcgoodfood.com/recipes/5533/herby-lamb-cobbler
 	@Test
 	public void initialTest() throws IOException {
-		final ICanonicalItem lamb = get( null, "1");
-		final ICanonicalItem lambNeck = get( null, "2"); // new CanonicalItem("Lamb Neck", lamb);
+		final ICanonicalItem lamb = CanonicalItemFactory.getOrCreate( "Lamb", new Supplier<ICanonicalItem>() {
+
+			@Override
+			public ICanonicalItem get() {
+				return new CanonicalItem("Lamb");
+			}});
+
+		final ICanonicalItem lambNeck = CanonicalItemFactory.getOrCreate( "Lamb Neck", new Supplier<ICanonicalItem>() {
+
+			@Override
+			public ICanonicalItem get() {
+				return new CanonicalItem("Lamb Neck", lamb);
+			}});
 
 		final Ingredient lambIngredient = new Ingredient( new NamedItem(lambNeck), new Quantity( Units.GRAMMES, 900));
 		lambIngredient.addNote( ENGLISH, "Neck fillets, cut into large chunks");
@@ -117,24 +90,5 @@ public class IngredientsTest {
 
 		assertThat( lambNeck.parent(), is( Optional.of(lamb) ));
 		assertThat( lamb.parent().orNull(), nullValue());
-	}
-
-	private static GsonBuilder builder() {
-		final GsonBuilder gb = new GsonBuilder();
-		gb.registerTypeAdapter( IRecipeStage.class, new InstanceCreator<IRecipeStage>() {
-
-			@Override
-			public IRecipeStage createInstance( Type type) {
-				return new RecipeStage();
-			}});
-
-		gb.registerTypeAdapter( ITag.class, new InstanceCreator<ITag>() {
-
-			@Override
-			public ITag createInstance( Type type) {
-				return CommonTags.SERVES_COUNT;
-			}});
-
-		return gb;
 	}
 }
