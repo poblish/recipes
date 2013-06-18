@@ -3,10 +3,18 @@
  */
 package uk.co.recipes;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.Collection;
+
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 import uk.co.recipes.api.ICanonicalItem;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 
@@ -16,12 +24,13 @@ import com.google.common.collect.Sets;
  * @author andrewregan
  *
  */
+@JsonAutoDetect
 public class CanonicalItem implements ICanonicalItem {
 
-	private final String canonicalName;
-	private Optional<ICanonicalItem> parent;
+	private String canonicalName;
+	private ICanonicalItem parent = null; // Can't use Optional<> as it screws with JSON serialization
 	private Collection<ICanonicalItem> varieties = Sets.newHashSet();
-
+	
 	/**
 	 * @param canonicalName
 	 * @param parent
@@ -29,7 +38,6 @@ public class CanonicalItem implements ICanonicalItem {
 	 */
 	public CanonicalItem(String canonicalName) {
 		this.canonicalName = canonicalName;
-		this.parent = Optional.absent();
 	}
 
 	/**
@@ -39,7 +47,6 @@ public class CanonicalItem implements ICanonicalItem {
 	 */
 	public CanonicalItem(String canonicalName, Collection<ICanonicalItem> varieties) {
 		this.canonicalName = canonicalName;
-		this.parent = Optional.absent();
 
 		for ( final ICanonicalItem eachVariety : varieties) {
 			addVariety(eachVariety);
@@ -51,9 +58,29 @@ public class CanonicalItem implements ICanonicalItem {
 	 * @param parent
 	 * @param varieties
 	 */
+	@JsonCreator
+	public CanonicalItem(@JsonProperty("canonicalName") String canonicalName, @JsonDeserialize(as=CanonicalItem.class) @JsonProperty("parent") ICanonicalItem parent, @JsonProperty("varieties") Collection<ICanonicalItem> varieties) {
+		this.canonicalName = canonicalName;
+
+		if ( parent != null && /* Jackson!!! */ parent.canonicalName() != null) {
+			this.parent = parent;
+		}
+
+		if ( varieties != null) {
+			for ( final ICanonicalItem eachVariety : varieties) {
+				addVariety(eachVariety);
+			}
+		}
+	}
+
+	/**
+	 * @param canonicalName
+	 * @param parent
+	 * @param varieties
+	 */
 	public CanonicalItem(String canonicalName, ICanonicalItem parent) {
 		this.canonicalName = canonicalName;
-		this.parent = Optional.of(parent);
+		this.parent = parent;
 	}
 
 	/* (non-Javadoc)
@@ -69,7 +96,7 @@ public class CanonicalItem implements ICanonicalItem {
 	 */
 	@Override
 	public Optional<ICanonicalItem> parent() {
-		return parent;
+		return Optional.fromNullable(parent);
 	}
 
 	/* (non-Javadoc)
@@ -94,6 +121,40 @@ public class CanonicalItem implements ICanonicalItem {
 	 */
 	@Override
 	public void setParent( ICanonicalItem inParent) {
-		parent = Optional.of(inParent);
+		parent = checkNotNull( inParent, "Cannot set parent to null");
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hashCode( parent, canonicalName);  // Ignoring varieties
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals( Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof CanonicalItem)) {
+			return false;
+		}
+		final CanonicalItem other = (CanonicalItem) obj;
+		return Objects.equal( canonicalName, other.canonicalName) && Objects.equal( parent, other.parent);  // Ignoring varieties
+	}
+
+	public String toString() {
+		return Objects.toStringHelper(this).omitNullValues()
+						.add( "name", canonicalName)
+						.add( "parent", parent)
+						.add( "num_varieties", varieties.size())
+						.toString();
 	}
 }
