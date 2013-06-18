@@ -41,8 +41,6 @@ public class IngredientsTest {
 	private final static Gson GSON = builder().create();
 	private final static ObjectMapper MAPPER = new ObjectMapper();
 
-//	private final static Charset UTF8 = Charset.forName("UTF-8");
-
 	private final static String	IDX_URL = "http://localhost:9200/recipe/items";
 
 
@@ -77,15 +75,6 @@ public class IngredientsTest {
 
 	public ICanonicalItem get( final ICanonicalItem inItem, String inId) throws IOException {
 		return MAPPER.readValue( MAPPER.readTree( new URL( IDX_URL + "/" + inId) ).path("_source"), CanonicalItem.class);
-//		final HttpResponse resp = CLIENT.execute( new HttpGet( IDX_URL + "/1") );
-//
-//		try {
-//			final byte[] bs = ByteStreams.toByteArray( resp.getEntity().getContent() );
-//			return GSON.fromJson( new String( bs, UTF8), CanonicalItem.class);
-//		}
-//		finally {
-//			EntityUtils.consume( resp.getEntity() );
-//		}
 	}
 
 	// See: http://www.bbcgoodfood.com/recipes/5533/herby-lamb-cobbler
