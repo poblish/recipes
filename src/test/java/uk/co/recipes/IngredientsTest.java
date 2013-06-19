@@ -15,6 +15,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -27,13 +28,11 @@ import uk.co.recipes.persistence.CanonicalItemFactory;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Maps;
-import com.google.gson.Gson;
 
 public class IngredientsTest {
 
 	private final static HttpClient CLIENT = new DefaultHttpClient();
 
-	private final static Gson GSON = new Gson();
 	private final static String	IDX_URL = "http://localhost:9200/recipe/items";
 
 
@@ -110,9 +109,9 @@ public class IngredientsTest {
 
 		///////////////////////////////////////////////////
 
-		final String recipeJson = GSON.toJson(r);
-		System.out.println(recipeJson);
-		assertThat( recipeJson, is("{\"stages\":[{\"ingredients\":[{\"item\":{\"name\":\"Lamb Neck\",\"canonicalItem\":{\"canonicalName\":\"Lamb Neck\",\"parent\":{\"canonicalName\":\"Lamb\",\"varieties\":[]},\"varieties\":[]}},\"quantity\":{\"units\":\"GRAMMES\",\"number\":900},\"notes\":{\"en\":\"Neck fillets, cut into large chunks\"}},{\"item\":{\"name\":\"Lamb Neck\",\"canonicalItem\":{\"canonicalName\":\"Lamb Neck\",\"parent\":{\"canonicalName\":\"Lamb\",\"varieties\":[]},\"varieties\":[]}},\"quantity\":{\"units\":\"GRAMMES\",\"number\":200},\"notes\":{\"en\":\"Preferably in one piece, skinned and cut into pieces\"}},{\"item\":{\"name\":\"Sunflower Oil\",\"canonicalItem\":{\"canonicalName\":\"Sunflower Oil\",\"varieties\":[]}},\"quantity\":{\"units\":\"TBSP\",\"number\":1},\"notes\":{}}]}],\"tagsMap\":{\"SERVES_COUNT\":\"4\"}}"));
+//		final String recipeJson = new ObjectMapper().writeValueAsString(r);
+//		System.out.println(recipeJson);
+//		assertThat( recipeJson, is("{\"stages\":[{\"ingredients\":[{\"item\":{\"name\":\"Lamb Neck\",\"canonicalItem\":{\"canonicalName\":\"Lamb Neck\",\"parent\":{\"canonicalName\":\"Lamb\",\"varieties\":[],\"tags\":{\"MEAT\":true}},\"varieties\":[],\"tags\":{\"MEAT\":true}}},\"quantity\":{\"units\":\"GRAMMES\",\"number\":900},\"notes\":{\"en\":\"Neck fillets, cut into large chunks\"}},{\"item\":{\"name\":\"Lamb Neck\",\"canonicalItem\":{\"canonicalName\":\"Lamb Neck\",\"parent\":{\"canonicalName\":\"Lamb\",\"varieties\":[],\"tags\":{\"MEAT\":\"true\"}},\"varieties\":[],\"tags\":{\"MEAT\":\"true\"}}},\"quantity\":{\"units\":\"GRAMMES\",\"number\":200},\"notes\":{\"en\":\"Preferably in one piece, skinned and cut into pieces\"}},{\"item\":{\"name\":\"Sunflower Oil\",\"canonicalItem\":{\"canonicalName\":\"Sunflower Oil\",\"varieties\":[],\"tags\":{}}},\"quantity\":{\"units\":\"TBSP\",\"number\":1},\"notes\":{}}]}],\"tagsMap\":{\"SERVES_COUNT\":\"4\"}}"));
 
 //		final Recipe retrievedRecipe = GSON.fromJson( recipeJson, Recipe.class);
 //		assertThat( r, is(retrievedRecipe));
@@ -122,7 +121,9 @@ public class IngredientsTest {
 		final Map<ITag,Serializable> expectedTags = Maps.newHashMap();
 		expectedTags.put( CommonTags.MEAT, true);
 
-		assertThat( lambNeck.tagValues(), is(expectedTags));
+		assertThat( lamb.getTags(), is(expectedTags));
+		assertThat( lambNeck.getTags(), is(expectedTags));
+		assertThat( bacon.getTags(), is(expectedTags));
 		assertThat( lambNeck.parent(), is( Optional.of(lamb) ));
 		assertThat( lamb.parent().orNull(), nullValue());
 	}

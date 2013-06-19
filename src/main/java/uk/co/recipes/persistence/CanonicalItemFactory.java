@@ -8,8 +8,8 @@ import static org.hamcrest.Matchers.is;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
 import java.net.URL;
 
 import org.apache.http.HttpResponse;
@@ -18,20 +18,23 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.JsonProcessingException;
+import org.codehaus.jackson.JsonToken;
+import org.codehaus.jackson.Version;
+import org.codehaus.jackson.map.DeserializationContext;
+import org.codehaus.jackson.map.JsonDeserializer;
+import org.codehaus.jackson.map.KeyDeserializer;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.module.SimpleModule;
 
 import uk.co.recipes.CanonicalItem;
-import uk.co.recipes.RecipeStage;
 import uk.co.recipes.api.CommonTags;
 import uk.co.recipes.api.ICanonicalItem;
-import uk.co.recipes.api.IRecipeStage;
 import uk.co.recipes.api.ITag;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.InstanceCreator;
 
 /**
  * TODO
@@ -43,7 +46,6 @@ public class CanonicalItemFactory {
 
 	private final static HttpClient CLIENT = new DefaultHttpClient();
 
-	private final static Gson GSON = builder().create();
 	private final static ObjectMapper MAPPER = new ObjectMapper();
 
 	private final static String	IDX_URL = "http://localhost:9200/recipe/items";
@@ -53,9 +55,7 @@ public class CanonicalItemFactory {
 		final HttpPost req = new HttpPost( IDX_URL + "/" + inId);
 
 		try {
-			req.setEntity( new StringEntity( GSON.toJson(inItem) ) );
-//			String s = MAPPER.writeValueAsString(inItem);
-//			req.setEntity( new StringEntity( MAPPER.writeValueAsString(inItem) ) );
+			req.setEntity( new StringEntity( MAPPER.writeValueAsString(inItem) ) );
 
 			final HttpResponse resp = CLIENT.execute(req);
 			assertThat( resp.getStatusLine().getStatusCode(), is(201));
@@ -69,6 +69,24 @@ public class CanonicalItemFactory {
 	}
 
 	public static ICanonicalItem get( String inId) throws IOException {
+		SimpleModule testModule = new SimpleModule("MyModule", new Version(1, 0, 0, null));
+		testModule.addKeyDeserializer( ITag.class, new KeyDeserializer() {
+
+			@Override
+			public Object deserializeKey( String key, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+				return CommonTags.valueOf(key);
+			}} );
+
+		testModule.addDeserializer( Serializable.class, new JsonDeserializer<Serializable>() {
+
+			@Override
+			public Serializable deserialize( JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+				JsonToken t = jp.getCurrentToken();
+				return t.asString();
+			}} );
+
+		MAPPER.registerModule(testModule);
+
 		return MAPPER.readValue( MAPPER.readTree( new URL( IDX_URL + "/" + inId) ).path("_source"), CanonicalItem.class);
 	}
 
@@ -84,24 +102,5 @@ public class CanonicalItemFactory {
 		catch (FileNotFoundException e) { /* Not found! */ }
 
 		return put( inCreator.get(), nameId);
-	}
-
-	private static GsonBuilder builder() {
-		final GsonBuilder gb = new GsonBuilder();
-		gb.registerTypeAdapter( IRecipeStage.class, new InstanceCreator<IRecipeStage>() {
-
-			@Override
-			public IRecipeStage createInstance( Type type) {
-				return new RecipeStage();
-			}});
-
-		gb.registerTypeAdapter( ITag.class, new InstanceCreator<ITag>() {
-
-			@Override
-			public ITag createInstance( Type type) {
-				return CommonTags.SERVES_COUNT;
-			}});
-
-		return gb;
 	}
 }

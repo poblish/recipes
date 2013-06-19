@@ -64,7 +64,7 @@ public class Recipe implements IRecipe {
 	 * @see uk.co.recipes.api.ITagging#tagValues()
 	 */
 	@Override
-	public Map<ITag,Serializable> tagValues() {
+	public Map<ITag,Serializable> getTags() {
 		return tagsMap;
 	}
 

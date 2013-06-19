@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
@@ -28,15 +27,13 @@ import com.google.common.collect.Sets;
  * @author andrewregan
  *
  */
-@JsonAutoDetect
 public class CanonicalItem implements ICanonicalItem {
 
 	private String canonicalName;
 	private ICanonicalItem parent = null; // Can't use Optional<> as it screws with JSON serialization
 	private Collection<ICanonicalItem> varieties = Sets.newHashSet();
 
-	transient // FIXME! FIXME!
-	private Map<ITag,Serializable> tagsMap = Maps.newHashMap();
+	private Map<ITag,Serializable> tags = Maps.newHashMap();
 
 	/**
 	 * @param canonicalName
@@ -73,7 +70,7 @@ public class CanonicalItem implements ICanonicalItem {
 
 		if ( parent != null && /* Jackson!!! */ parent.canonicalName() != null) {
 			this.parent = parent;
-			this.tagsMap.putAll( parent.tagValues() );
+//			this.tags.putAll( parent.getTags() );
 		}
 
 		if ( varieties != null) {
@@ -91,7 +88,7 @@ public class CanonicalItem implements ICanonicalItem {
 	public CanonicalItem(String canonicalName, ICanonicalItem parent) {
 		this.canonicalName = canonicalName;
 		setParent(parent);
-		this.tagsMap.putAll( parent.tagValues() );
+//		this.tags.putAll( parent.getTags() );
 	}
 
 	/* (non-Javadoc)
@@ -129,15 +126,21 @@ public class CanonicalItem implements ICanonicalItem {
 
 	@Override
 	public void addTag( final ITag key, final Serializable value) {
-		tagsMap.put( key, value);
+		tags.put( key, value);
 	}
 
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.api.ITagging#tagValues()
 	 */
 	@Override
-	public Map<ITag,Serializable> tagValues() {
-		return tagsMap;
+	public Map<ITag,Serializable> getTags() {
+		final Map<ITag,Serializable> allTags = Maps.newHashMap(tags);
+
+		if ( parent != null) {
+			allTags.putAll( parent.getTags() );
+		}
+
+		return allTags;
 	}
 
 	/* (non-Javadoc)
@@ -178,7 +181,7 @@ public class CanonicalItem implements ICanonicalItem {
 		return Objects.toStringHelper(this).omitNullValues()
 						.add( "name", canonicalName)
 						.add( "parent", parent)
-						.add( "tags", tagsMap)
+						.add( "tags", getTags())
 						.add( "num_varieties", varieties.size())
 						.toString();
 	}

@@ -16,5 +16,5 @@ public interface ITagging {
 
 	void addTag( final ITag key, final Serializable value);
 
-	Map<ITag,Serializable> tagValues();
+	Map<ITag,Serializable> getTags();
 }
