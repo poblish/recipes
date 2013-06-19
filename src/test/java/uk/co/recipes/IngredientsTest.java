@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.nullValue;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
@@ -15,6 +16,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -44,7 +46,7 @@ public class IngredientsTest {
 
 	// See: http://www.bbcgoodfood.com/recipes/5533/herby-lamb-cobbler
 	@Test
-	public void initialTest() throws IOException {
+	public void initialTest() throws IOException, InterruptedException {
 		final ICanonicalItem lamb = CanonicalItemFactory.getOrCreate( "Lamb", new Supplier<ICanonicalItem>() {
 
 			@Override
@@ -115,6 +117,11 @@ public class IngredientsTest {
 
 //		final Recipe retrievedRecipe = GSON.fromJson( recipeJson, Recipe.class);
 //		assertThat( r, is(retrievedRecipe));
+
+		Thread.sleep(1000);  // Time for indexing to happen!
+
+		final JsonNode jn = new ObjectMapper().readTree( new URL(IDX_URL + "/_search?q=MEAT:true") ).path("hits").path("hits");
+		assertThat( jn.size(), is(3));
 
 		///////////////////////////////////////////////////
 
