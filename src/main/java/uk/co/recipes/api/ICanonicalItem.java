@@ -13,7 +13,7 @@ import com.google.common.base.Optional;
  * @author andrewregan
  *
  */
-public interface ICanonicalItem {
+public interface ICanonicalItem extends ITagging {
 
 	String canonicalName();
 

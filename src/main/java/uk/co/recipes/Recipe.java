@@ -3,6 +3,7 @@
  */
 package uk.co.recipes;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -26,14 +27,10 @@ import com.google.common.collect.Sets;
 public class Recipe implements IRecipe {
 
 	private final List<IRecipeStage> stages = Lists.newArrayList();
-	private final Map<ITag,String> tagsMap = Maps.newHashMap();
+	private final Map<ITag,Serializable> tagsMap = Maps.newHashMap();
 
 	public void addStage( final RecipeStage inStage) {
 		stages.add(inStage);
-	}
-
-	public void addTag( final ITag key, final String value) {
-		tagsMap.put( key, value);
 	}
 
 	/* (non-Javadoc)
@@ -58,11 +55,16 @@ public class Recipe implements IRecipe {
 		return stages;
 	}
 
+	@Override
+	public void addTag( final ITag key, final Serializable value) {
+		tagsMap.put( key, value);
+	}
+
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.api.ITagging#tagValues()
 	 */
 	@Override
-	public Map<ITag,String> tagValues() {
+	public Map<ITag,Serializable> tagValues() {
 		return tagsMap;
 	}
 
@@ -90,5 +92,12 @@ public class Recipe implements IRecipe {
 		}
 		final Recipe other = (Recipe) obj;
 		return Objects.equal( stages, other.stages) && Objects.equal( tagsMap, other.tagsMap);
+	}
+
+	public String toString() {
+		return Objects.toStringHelper(this).omitNullValues()
+						.add( "stages", stages)
+						.add( "tags", tagsMap)
+						.toString();
 	}
 }

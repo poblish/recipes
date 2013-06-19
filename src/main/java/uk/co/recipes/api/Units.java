@@ -11,5 +11,5 @@ package uk.co.recipes.api;
  */
 public enum Units implements IUnit {
 
-	GRAMMES
+	GRAMMES, TSP, TBSP
 }

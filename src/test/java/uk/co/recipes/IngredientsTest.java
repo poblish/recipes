@@ -6,6 +6,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -18,11 +20,13 @@ import org.testng.annotations.Test;
 
 import uk.co.recipes.api.CommonTags;
 import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.Units;
 import uk.co.recipes.persistence.CanonicalItemFactory;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
+import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 
 public class IngredientsTest {
@@ -46,7 +50,9 @@ public class IngredientsTest {
 
 			@Override
 			public ICanonicalItem get() {
-				return new CanonicalItem("Lamb");
+				final ICanonicalItem meat = new CanonicalItem("Lamb");
+				meat.addTag( CommonTags.MEAT, Boolean.TRUE);
+				return meat;
 			}});
 
 		final ICanonicalItem lambNeck = CanonicalItemFactory.getOrCreate( "Lamb Neck", new Supplier<ICanonicalItem>() {
@@ -61,17 +67,42 @@ public class IngredientsTest {
 
 		///////////////////////////////////////////////////
 
-		final ICanonicalItem bacon = new CanonicalItem("Bacon");
-		final ICanonicalItem ssBacon = new CanonicalItem("Smoked Streaky Bacon", bacon);
+		final ICanonicalItem bacon = CanonicalItemFactory.getOrCreate( "Bacon", new Supplier<ICanonicalItem>() {
+
+			@Override
+			public ICanonicalItem get() {
+				final ICanonicalItem meat = new CanonicalItem("Bacon");
+				meat.addTag( CommonTags.MEAT, Boolean.TRUE);
+				return meat;
+			}});
+
+		final ICanonicalItem ssBacon = CanonicalItemFactory.getOrCreate( "Lamb Neck", new Supplier<ICanonicalItem>() {
+
+			@Override
+			public ICanonicalItem get() {
+				return new CanonicalItem("Smoked Streaky Bacon", bacon);
+			}});
 
 		final Ingredient baconIngredient = new Ingredient( new NamedItem(ssBacon), new Quantity( Units.GRAMMES, 200));
 		baconIngredient.addNote( ENGLISH, "Preferably in one piece, skinned and cut into pieces");
 
 		///////////////////////////////////////////////////
 
+		final ICanonicalItem oil = CanonicalItemFactory.getOrCreate( "Sunflower Oil", new Supplier<ICanonicalItem>() {
+
+			@Override
+			public ICanonicalItem get() {
+				return new CanonicalItem("Sunflower Oil");
+			}});
+
+		final Ingredient oilIngredient = new Ingredient( new NamedItem(oil), new Quantity( Units.TBSP, 1));
+
+		///////////////////////////////////////////////////
+
 		final RecipeStage stage1 = new RecipeStage();
 		stage1.addIngredient(lambIngredient);
 		stage1.addIngredient(baconIngredient);
+		stage1.addIngredient(oilIngredient);
 
 		final Recipe r = new Recipe();
 		r.addStage(stage1);
@@ -81,13 +112,17 @@ public class IngredientsTest {
 
 		final String recipeJson = GSON.toJson(r);
 		System.out.println(recipeJson);
-		assertThat( recipeJson, is("{\"stages\":[{\"ingredients\":[{\"item\":{\"name\":\"Lamb Neck\",\"canonicalItem\":{\"canonicalName\":\"Lamb Neck\",\"parent\":{\"canonicalName\":\"Lamb\",\"varieties\":[]},\"varieties\":[]}},\"quantity\":{\"units\":\"GRAMMES\",\"number\":900},\"notes\":{\"en\":\"Neck fillets, cut into large chunks\"}},{\"item\":{\"name\":\"Smoked Streaky Bacon\",\"canonicalItem\":{\"canonicalName\":\"Smoked Streaky Bacon\",\"parent\":{\"canonicalName\":\"Bacon\",\"varieties\":[]},\"varieties\":[]}},\"quantity\":{\"units\":\"GRAMMES\",\"number\":200},\"notes\":{\"en\":\"Preferably in one piece, skinned and cut into pieces\"}}]}],\"tagsMap\":{\"SERVES_COUNT\":\"4\"}}"));
+		assertThat( recipeJson, is("{\"stages\":[{\"ingredients\":[{\"item\":{\"name\":\"Lamb Neck\",\"canonicalItem\":{\"canonicalName\":\"Lamb Neck\",\"parent\":{\"canonicalName\":\"Lamb\",\"varieties\":[]},\"varieties\":[]}},\"quantity\":{\"units\":\"GRAMMES\",\"number\":900},\"notes\":{\"en\":\"Neck fillets, cut into large chunks\"}},{\"item\":{\"name\":\"Lamb Neck\",\"canonicalItem\":{\"canonicalName\":\"Lamb Neck\",\"parent\":{\"canonicalName\":\"Lamb\",\"varieties\":[]},\"varieties\":[]}},\"quantity\":{\"units\":\"GRAMMES\",\"number\":200},\"notes\":{\"en\":\"Preferably in one piece, skinned and cut into pieces\"}},{\"item\":{\"name\":\"Sunflower Oil\",\"canonicalItem\":{\"canonicalName\":\"Sunflower Oil\",\"varieties\":[]}},\"quantity\":{\"units\":\"TBSP\",\"number\":1},\"notes\":{}}]}],\"tagsMap\":{\"SERVES_COUNT\":\"4\"}}"));
 
 //		final Recipe retrievedRecipe = GSON.fromJson( recipeJson, Recipe.class);
 //		assertThat( r, is(retrievedRecipe));
 
 		///////////////////////////////////////////////////
 
+		final Map<ITag,Serializable> expectedTags = Maps.newHashMap();
+		expectedTags.put( CommonTags.MEAT, true);
+
+		assertThat( lambNeck.tagValues(), is(expectedTags));
 		assertThat( lambNeck.parent(), is( Optional.of(lamb) ));
 		assertThat( lamb.parent().orNull(), nullValue());
 	}
