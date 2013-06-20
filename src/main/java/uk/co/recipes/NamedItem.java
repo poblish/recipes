@@ -24,7 +24,7 @@ public class NamedItem implements INamedItem {
 	 */
 	public NamedItem(ICanonicalItem canonicalItem) {
 		this.canonicalItem = canonicalItem;
-		name = canonicalItem.canonicalName();
+		name = canonicalItem.getCanonicalName();
 	}
 
 	/**

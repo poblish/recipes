@@ -15,7 +15,7 @@ import com.google.common.base.Optional;
  */
 public interface ICanonicalItem extends ITagging {
 
-	String canonicalName();
+	String getCanonicalName();
 
 	Optional<ICanonicalItem> parent();
 	Collection<ICanonicalItem> varieties();

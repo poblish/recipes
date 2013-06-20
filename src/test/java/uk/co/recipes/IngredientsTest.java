@@ -121,7 +121,7 @@ public class IngredientsTest {
 //		final Recipe retrievedRecipe = GSON.fromJson( recipeJson, Recipe.class);
 //		assertThat( r, is(retrievedRecipe));
 
-		Thread.sleep(500);  // Time for indexing to happen!
+		Thread.sleep(1000);  // Time for indexing to happen!
 
 		final JsonNode jn = om.readTree( new URL(IDX_URL + "/_search?q=MEAT:true") ).path("hits").path("hits");
 		assertThat( jn.size(), is(3));

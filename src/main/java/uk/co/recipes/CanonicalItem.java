@@ -68,7 +68,7 @@ public class CanonicalItem implements ICanonicalItem {
 						 @JsonProperty("varieties") Collection<ICanonicalItem> varieties) {
 		this.canonicalName = canonicalName;
 
-		if ( parent != null && /* Jackson!!! */ parent.canonicalName() != null) {
+		if ( parent != null && /* Jackson!!! */ parent.getCanonicalName() != null) {
 			this.parent = parent;
 //			this.tags.putAll( parent.getTags() );
 		}
@@ -95,7 +95,7 @@ public class CanonicalItem implements ICanonicalItem {
 	 * @see uk.co.recipes.api.ICanonicalItem#canonicalName()
 	 */
 	@Override
-	public String canonicalName() {
+	public String getCanonicalName() {
 		return canonicalName;
 	}
 
@@ -141,6 +141,11 @@ public class CanonicalItem implements ICanonicalItem {
 		}
 
 		return allTags;
+	}
+
+	// Strictly for Jackson only
+	public CanonicalItem getParent() {
+		return (CanonicalItem) parent;
 	}
 
 	/* (non-Javadoc)
