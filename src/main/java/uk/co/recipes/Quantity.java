@@ -3,8 +3,10 @@
  */
 package uk.co.recipes;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import uk.co.recipes.api.IQuantity;
 import uk.co.recipes.api.IUnit;
+import uk.co.recipes.api.Units;
 
 import com.google.common.base.Objects;
 
@@ -24,7 +26,7 @@ public class Quantity implements IQuantity {
 	 * @param number
 	 */
 	public Quantity(IUnit units, int number) {
-		this.units = units;
+		this.units = checkNotNull(units, "Units cannot be null");
 		this.number = number;
 	}
 
@@ -33,7 +35,6 @@ public class Quantity implements IQuantity {
 	 */
 	@Override
 	public IUnit units() {
-		// TODO Auto-generated method stub
 		return units;
 	}
 
@@ -42,7 +43,6 @@ public class Quantity implements IQuantity {
 	 */
 	@Override
 	public int number() {
-		// TODO Auto-generated method stub
 		return number;
 	}
 
@@ -70,5 +70,13 @@ public class Quantity implements IQuantity {
 		}
 		final Quantity other = (Quantity) obj;
 		return number == other.number && Objects.equal( units, other.units);
+	}
+
+	public String toString() {
+		if ( units == Units.INSTANCES) {
+			return String.valueOf(number);
+		}
+
+		return number + " " + units;
 	}
 }

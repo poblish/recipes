@@ -183,10 +183,12 @@ public class CanonicalItem implements ICanonicalItem {
 	}
 
 	public String toString() {
+		final Map<ITag,Serializable> tags = getTags();
+
 		return Objects.toStringHelper(this).omitNullValues()
 						.add( "name", canonicalName)
 						.add( "parent", parent)
-						.add( "tags", getTags())
+						.add( "tags", tags.isEmpty() ? null : tags)
 						.add( "num_varieties", varieties.size())
 						.toString();
 	}

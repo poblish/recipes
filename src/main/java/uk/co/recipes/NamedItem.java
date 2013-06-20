@@ -3,6 +3,8 @@
  */
 package uk.co.recipes;
 
+import com.google.common.base.Objects;
+
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.INamedItem;
 
@@ -51,5 +53,12 @@ public class NamedItem implements INamedItem {
 	@Override
 	public ICanonicalItem canonicalItem() {
 		return canonicalItem;
+	}
+
+	public String toString() {
+		return Objects.toStringHelper(this).omitNullValues()
+						.add( "name", name)
+						.add( "canonical", canonicalItem)
+						.toString();
 	}
 }

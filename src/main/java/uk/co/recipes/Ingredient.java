@@ -10,6 +10,7 @@ import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.INamedItem;
 import uk.co.recipes.api.IQuantity;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
 
 /**
@@ -63,5 +64,13 @@ public class Ingredient implements IIngredient {
 	@Override
 	public Map<Locale,String> notes() {
 		return notes;
+	}
+
+	public String toString() {
+		return Objects.toStringHelper(this).omitNullValues()
+						.add( "q", quantity)
+						.add( "item", item)
+						.add( "notes", notes.isEmpty() ? null : notes)
+						.toString();
 	}
 }
