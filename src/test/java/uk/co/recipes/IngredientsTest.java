@@ -26,6 +26,7 @@ import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.Units;
 import uk.co.recipes.persistence.CanonicalItemFactory;
+import uk.co.recipes.persistence.JacksonFactory;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
@@ -111,17 +112,23 @@ public class IngredientsTest {
 
 		///////////////////////////////////////////////////
 
-//		final String recipeJson = new ObjectMapper().writeValueAsString(r);
+		final ObjectMapper om = JacksonFactory.getMapper();
+
+//		final String recipeJson = om.writeValueAsString(r);
 //		System.out.println(recipeJson);
 //		assertThat( recipeJson, is("{\"stages\":[{\"ingredients\":[{\"item\":{\"name\":\"Lamb Neck\",\"canonicalItem\":{\"canonicalName\":\"Lamb Neck\",\"parent\":{\"canonicalName\":\"Lamb\",\"varieties\":[],\"tags\":{\"MEAT\":true}},\"varieties\":[],\"tags\":{\"MEAT\":true}}},\"quantity\":{\"units\":\"GRAMMES\",\"number\":900},\"notes\":{\"en\":\"Neck fillets, cut into large chunks\"}},{\"item\":{\"name\":\"Lamb Neck\",\"canonicalItem\":{\"canonicalName\":\"Lamb Neck\",\"parent\":{\"canonicalName\":\"Lamb\",\"varieties\":[],\"tags\":{\"MEAT\":\"true\"}},\"varieties\":[],\"tags\":{\"MEAT\":\"true\"}}},\"quantity\":{\"units\":\"GRAMMES\",\"number\":200},\"notes\":{\"en\":\"Preferably in one piece, skinned and cut into pieces\"}},{\"item\":{\"name\":\"Sunflower Oil\",\"canonicalItem\":{\"canonicalName\":\"Sunflower Oil\",\"varieties\":[],\"tags\":{}}},\"quantity\":{\"units\":\"TBSP\",\"number\":1},\"notes\":{}}]}],\"tagsMap\":{\"SERVES_COUNT\":\"4\"}}"));
 
 //		final Recipe retrievedRecipe = GSON.fromJson( recipeJson, Recipe.class);
 //		assertThat( r, is(retrievedRecipe));
 
-		Thread.sleep(1000);  // Time for indexing to happen!
+		Thread.sleep(500);  // Time for indexing to happen!
 
-		final JsonNode jn = new ObjectMapper().readTree( new URL(IDX_URL + "/_search?q=MEAT:true") ).path("hits").path("hits");
+		final JsonNode jn = om.readTree( new URL(IDX_URL + "/_search?q=MEAT:true") ).path("hits").path("hits");
 		assertThat( jn.size(), is(3));
+
+		for ( JsonNode each : jn) {
+			System.out.println(om.readValue( each, CanonicalItem.class));
+		}
 
 		///////////////////////////////////////////////////
 
