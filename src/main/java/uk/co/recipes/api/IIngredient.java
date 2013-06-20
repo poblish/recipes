@@ -15,9 +15,9 @@ import java.util.Map;
  */
 public interface IIngredient {
 
-	INamedItem item();
-	IQuantity quantity();
+	INamedItem getItem();
+	IQuantity getQuantity();
 
 	void addNote( final Locale inLocale, final String inNote);
-	Map<Locale,String> notes();
+	Map<Locale,String> getNotes();
 }

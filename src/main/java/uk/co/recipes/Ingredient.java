@@ -38,7 +38,7 @@ public class Ingredient implements IIngredient {
 	 * @see uk.co.recipes.api.IIngredient#item()
 	 */
 	@Override
-	public INamedItem item() {
+	public INamedItem getItem() {
 		return item;
 	}
 
@@ -46,7 +46,7 @@ public class Ingredient implements IIngredient {
 	 * @see uk.co.recipes.api.IIngredient#quantity()
 	 */
 	@Override
-	public IQuantity quantity() {
+	public IQuantity getQuantity() {
 		return quantity;
 	}
 
@@ -62,7 +62,7 @@ public class Ingredient implements IIngredient {
 	 * @see uk.co.recipes.api.IIngredient#notes()
 	 */
 	@Override
-	public Map<Locale,String> notes() {
+	public Map<Locale,String> getNotes() {
 		return notes;
 	}
 

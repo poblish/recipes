@@ -11,6 +11,6 @@ package uk.co.recipes.api;
  */
 public interface IQuantity {
 
-	int number();
-	IUnit units();
+	int getNumber();
+	IUnit getUnits();
 }

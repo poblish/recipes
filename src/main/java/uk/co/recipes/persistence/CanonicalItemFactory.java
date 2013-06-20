@@ -21,6 +21,7 @@ import org.apache.http.util.EntityUtils;
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.api.ICanonicalItem;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 
@@ -54,21 +55,35 @@ public class CanonicalItemFactory {
 		return inItem;
 	}
 
-	public static ICanonicalItem get( String inId) throws IOException {
+	public static ICanonicalItem getById( String inId) throws IOException {
 		return JacksonFactory.getMapper().readValue( JacksonFactory.getMapper().readTree( new URL( IDX_URL + "/" + inId) ).path("_source"), CanonicalItem.class);
 	}
 
-	public static ICanonicalItem getOrCreate( final String inCanonicalName, final Supplier<ICanonicalItem> inCreator) throws IOException {
-		final String nameId = inCanonicalName.toLowerCase().replace( ' ', '_');
+	public static String toId( final String inCanonicalName) throws IOException {
+		return inCanonicalName.toLowerCase().replace( ' ', '_');
+	}
 
+	public static Optional<ICanonicalItem> get( final String inCanonicalName) throws IOException {
 		try {
-			final ICanonicalItem item = get(nameId);
-			if ( item != null) {
-				return item;
-			}
+			return Optional.fromNullable( getById( toId(inCanonicalName) ) );
 		}
 		catch (FileNotFoundException e) { /* Not found! */ }
 
-		return put( inCreator.get(), nameId);
+		return Optional.absent();
+	}
+
+	public static ICanonicalItem getOrCreate( final String inCanonicalName, final Supplier<ICanonicalItem> inCreator) {
+		try {
+			final Optional<ICanonicalItem> got = get(inCanonicalName);
+	
+			if (got.isPresent()) {
+				return got.get();
+			}
+	
+			return put( inCreator.get(), toId(inCanonicalName));
+		}
+		catch (IOException e) {
+			throw Throwables.propagate(e);
+		}
 	}
 }

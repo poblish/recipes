@@ -11,6 +11,6 @@ package uk.co.recipes.api;
  */
 public interface INamedItem {
 
-	String name();
-	ICanonicalItem canonicalItem();
+	String getName();
+	ICanonicalItem getCanonicalItem();
 }

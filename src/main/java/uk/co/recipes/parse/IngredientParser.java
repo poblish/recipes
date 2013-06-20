@@ -12,10 +12,13 @@ import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Ingredient;
 import uk.co.recipes.NamedItem;
 import uk.co.recipes.Quantity;
+import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.NonNumericQuantities;
 import uk.co.recipes.api.Units;
+import uk.co.recipes.persistence.CanonicalItemFactory;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Supplier;
 
 /**
  * TODO
@@ -37,7 +40,8 @@ public class IngredientParser {
 
 		Matcher m = A.matcher(inStr);
 		if (m.matches()) {
-			final Ingredient ingr = new Ingredient( new NamedItem( new CanonicalItem( m.group(3) ) ), new Quantity( UnitParser.parse( m.group(2) ), Integer.valueOf( m.group(1) )));
+
+			final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(3) ) ), new Quantity( UnitParser.parse( m.group(2) ), Integer.valueOf( m.group(1) )));
 
 			if ( m.group(4) != null) {
 				ingr.addNote( ENGLISH, m.group(4));
@@ -81,5 +85,14 @@ public class IngredientParser {
 		}
 
 		return Optional.absent();
+	}
+
+	private static ICanonicalItem findItem( final String inName) {
+		return CanonicalItemFactory.getOrCreate( inName, new Supplier<ICanonicalItem>() {
+
+			@Override
+			public ICanonicalItem get() {
+				return new CanonicalItem(inName);
+			}} );
 	}
 }

@@ -45,7 +45,7 @@ public class Quantity implements IQuantity {
 	 * @see uk.co.recipes.api.IQuantity#units()
 	 */
 	@Override
-	public IUnit units() {
+	public IUnit getUnits() {
 		return units;
 	}
 
@@ -53,7 +53,7 @@ public class Quantity implements IQuantity {
 	 * @see uk.co.recipes.api.IQuantity#number()
 	 */
 	@Override
-	public int number() {
+	public int getNumber() {
 		return number;
 	}
 

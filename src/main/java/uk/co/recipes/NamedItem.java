@@ -43,7 +43,7 @@ public class NamedItem implements INamedItem {
 	 * @see uk.co.recipes.api.INamedItem#name()
 	 */
 	@Override
-	public String name() {
+	public String getName() {
 		return name;
 	}
 
@@ -51,7 +51,7 @@ public class NamedItem implements INamedItem {
 	 * @see uk.co.recipes.api.INamedItem#canonicalItem()
 	 */
 	@Override
-	public ICanonicalItem canonicalItem() {
+	public ICanonicalItem getCanonicalItem() {
 		return canonicalItem;
 	}
 
