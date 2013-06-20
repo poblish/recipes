@@ -189,7 +189,7 @@ public class CanonicalItem implements ICanonicalItem {
 						.add( "name", canonicalName)
 						.add( "parent", parent)
 						.add( "tags", tags.isEmpty() ? null : tags)
-						.add( "num_varieties", varieties.size())
+//						.add( "num_varieties", varieties.size())
 						.toString();
 	}
 }

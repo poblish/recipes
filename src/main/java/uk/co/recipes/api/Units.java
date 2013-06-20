@@ -13,5 +13,5 @@ public enum Units implements IUnit {
 
 	INSTANCES, GRAMMES, TSP, TBSP,
 
-	G, ML
+	ML, BUNCHES, SPLASHES
 }
