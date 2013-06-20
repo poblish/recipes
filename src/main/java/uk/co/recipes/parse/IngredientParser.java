@@ -53,7 +53,7 @@ public class IngredientParser {
 		{
 			m = B.matcher(inStr);
 			if (m.matches()) {
-				final Ingredient ingr = new Ingredient( new NamedItem( new CanonicalItem( m.group(4) ) ), new Quantity( UnitParser.parse( m.group(3) ), NonNumericQuantities.valueOf( m.group(2).trim().toUpperCase() )));
+				final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(4) ) ), new Quantity( UnitParser.parse( m.group(3) ), NonNumericQuantities.valueOf( m.group(2).trim().toUpperCase() )));
 
 				if ( m.group(5) != null) {
 					ingr.addNote( ENGLISH, m.group(5));
@@ -65,7 +65,7 @@ public class IngredientParser {
 			{
 				m = C.matcher(inStr);
 				if (m.matches()) {
-					final Ingredient ingr = new Ingredient( new NamedItem( new CanonicalItem( m.group(3) ) ), new Quantity( Units.INSTANCES, Integer.valueOf( m.group(2) )));
+					final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(3) ) ), new Quantity( Units.INSTANCES, Integer.valueOf( m.group(2) )));
 					ingr.addNote( ENGLISH, "Juice of");
 
 					return Optional.of(ingr);
@@ -74,7 +74,7 @@ public class IngredientParser {
 				{
 					m = D.matcher(inStr);
 					if (m.matches()) {
-						final Ingredient ingr = new Ingredient( new NamedItem( new CanonicalItem( m.group(1) ) ), new Quantity( Units.INSTANCES, 1));
+						final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(1) ) ), new Quantity( Units.INSTANCES, 1));
 //							ingr.addNote( ENGLISH, "Beaten");
 						ingr.addNote( ENGLISH, m.group(2));
 
