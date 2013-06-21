@@ -12,6 +12,7 @@ import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Ingredient;
 import uk.co.recipes.NamedItem;
 import uk.co.recipes.Quantity;
+import uk.co.recipes.api.CommonTags;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.NonNumericQuantities;
 import uk.co.recipes.api.Units;
@@ -31,7 +32,7 @@ public class IngredientParser {
 	private static final String	NOTES = "([,\\(].*)?";
 	private static final String	SUFFIX = "([\\w- ]*)" + NOTES;
 
-	private static final Pattern	A = Pattern.compile("([0-9]+)(g|ml| heaped tbsp| tbsp)? " + SUFFIX, Pattern.CASE_INSENSITIVE);
+	private static final Pattern	A = Pattern.compile("([0-9]+)(g|cm|mm|ml| heaped tbsp| tbsp| tsp)? " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	B = Pattern.compile("((small|large) (splash|bunch)) " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	C = Pattern.compile("(juice|zest) ([0-9]+) (.*)(, (.*))*", Pattern.CASE_INSENSITIVE);
 	private static final Pattern	D = Pattern.compile("(beaten egg)" + NOTES, Pattern.CASE_INSENSITIVE);
@@ -109,7 +110,18 @@ public class IngredientParser {
 
 			@Override
 			public ICanonicalItem get() {
-				return new CanonicalItem(inName);
+				final ICanonicalItem item = new CanonicalItem(inName);
+
+				String lcase = inName.toLowerCase();
+
+				if ( lcase.endsWith("seeds") || lcase.endsWith("seed")) {
+					item.addTag( CommonTags.SPICE, Boolean.TRUE);
+				}
+				else if ( lcase.endsWith(" oil")) {
+					item.addTag( CommonTags.OIL, Boolean.TRUE);
+				}
+
+				return item;
 			}} );
 	}
 }

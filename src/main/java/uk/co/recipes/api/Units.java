@@ -11,7 +11,11 @@ package uk.co.recipes.api;
  */
 public enum Units implements IUnit {
 
-	INSTANCES, GRAMMES, TSP, HEAPED_TBSP, TBSP,
+	INSTANCES,
 
-	ML, BUNCHES, SPLASHES
+	GRAMMES, ML, CM, MM,
+
+	TSP, HEAPED_TBSP, TBSP,
+
+	BUNCHES, SPLASHES
 }

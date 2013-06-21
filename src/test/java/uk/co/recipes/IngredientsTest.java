@@ -94,7 +94,9 @@ public class IngredientsTest {
 
 			@Override
 			public ICanonicalItem get() {
-				return new CanonicalItem("Sunflower Oil");
+				ICanonicalItem ic = new CanonicalItem("Sunflower Oil");
+				ic.addTag( CommonTags.OIL, Boolean.TRUE);
+				return ic;
 			}});
 
 		final Ingredient oilIngredient = new Ingredient( new NamedItem(oil), new Quantity( Units.TBSP, 1));
@@ -109,6 +111,8 @@ public class IngredientsTest {
 		final Recipe r = new Recipe();
 		r.addStage(stage1);
 		r.addTag( CommonTags.SERVES_COUNT, "4");
+
+		RecipeFactory.put( r, );
 
 		///////////////////////////////////////////////////
 
