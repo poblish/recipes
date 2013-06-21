@@ -3,6 +3,7 @@
  */
 package uk.co.recipes.persistence;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -60,6 +61,7 @@ public class CanonicalItemFactory {
 	}
 
 	public static String toId( final String inCanonicalName) throws IOException {
+		checkArgument( !inCanonicalName.contains(","), "Name should not contain comma: '" + inCanonicalName + "'");
 		return inCanonicalName.toLowerCase().replace( ' ', '_');
 	}
 

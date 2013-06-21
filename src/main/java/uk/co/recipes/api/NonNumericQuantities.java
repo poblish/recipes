@@ -11,5 +11,5 @@ package uk.co.recipes.api;
  */
 public enum NonNumericQuantities {
 
-	SMALL, LARGE
+	SMALL, LARGE, ANY_AMOUNT
 }

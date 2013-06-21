@@ -85,6 +85,10 @@ public class Quantity implements IQuantity {
 
 	public String toString() {
 		if ( units == Units.INSTANCES) {
+			if ( nnQuantity == NonNumericQuantities.ANY_AMOUNT) {
+				return "Some";
+			}
+
 			return String.valueOf(number);
 		}
 

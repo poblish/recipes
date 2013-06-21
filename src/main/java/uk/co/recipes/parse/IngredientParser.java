@@ -28,57 +28,74 @@ import com.google.common.base.Supplier;
  */
 public class IngredientParser {
 
-	private static final String	NOTES = "(?:, (.*))?";
+	private static final String	NOTES = "([,\\(].*)?";
 	private static final String	SUFFIX = "([\\w- ]*)" + NOTES;
 
-	private static final Pattern	A = Pattern.compile("([0-9]+)(g|ml| tbsp)? " + SUFFIX, Pattern.CASE_INSENSITIVE);
+	private static final Pattern	A = Pattern.compile("([0-9]+)(g|ml| heaped tbsp| tbsp)? " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	B = Pattern.compile("((small|large) (splash|bunch)) " + SUFFIX, Pattern.CASE_INSENSITIVE);
-	private static final Pattern	C = Pattern.compile("(juice) ([0-9]+) (.*)(, (.*))*", Pattern.CASE_INSENSITIVE);
+	private static final Pattern	C = Pattern.compile("(juice|zest) ([0-9]+) (.*)(, (.*))*", Pattern.CASE_INSENSITIVE);
 	private static final Pattern	D = Pattern.compile("(beaten egg)" + NOTES, Pattern.CASE_INSENSITIVE);
+	private static final Pattern	E = Pattern.compile("(dressed [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);
 
 	public static Optional<Ingredient> parse( final String inStr) {
 
 		Matcher m = A.matcher(inStr);
 		if (m.matches()) {
 
-			final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(3) ) ), new Quantity( UnitParser.parse( m.group(2) ), Integer.valueOf( m.group(1) )));
+			final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(3).trim() ) ), new Quantity( UnitParser.parse( m.group(2) ), Integer.valueOf( m.group(1) )));
 
-			if ( m.group(4) != null) {
-				ingr.addNote( ENGLISH, m.group(4));
+			final String note = m.group(4);
+			if ( note != null) {
+				ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
 			}
 
 			return Optional.of(ingr);
 		}
-		else
-		{
+		else {
 			m = B.matcher(inStr);
 			if (m.matches()) {
-				final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(4) ) ), new Quantity( UnitParser.parse( m.group(3) ), NonNumericQuantities.valueOf( m.group(2).trim().toUpperCase() )));
+				final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(4).trim() ) ), new Quantity( UnitParser.parse( m.group(3) ), NonNumericQuantities.valueOf( m.group(2).trim().toUpperCase() )));
 
-				if ( m.group(5) != null) {
-					ingr.addNote( ENGLISH, m.group(5));
+				final String note = m.group(5);
+				if ( note != null) {
+					ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
 				}
 
 				return Optional.of(ingr);
 			}
-			else
-			{
+			else {
 				m = C.matcher(inStr);
 				if (m.matches()) {
-					final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(3) ) ), new Quantity( Units.INSTANCES, Integer.valueOf( m.group(2) )));
+					final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(3).trim() ) ), new Quantity( Units.INSTANCES, Integer.valueOf( m.group(2) )));
 					ingr.addNote( ENGLISH, "Juice of");
 
 					return Optional.of(ingr);
 				}
-				else
-				{
+				else {
 					m = D.matcher(inStr);
 					if (m.matches()) {
-						final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(1) ) ), new Quantity( Units.INSTANCES, 1));
+						final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(1).trim() ) ), new Quantity( Units.INSTANCES, 1));
 //							ingr.addNote( ENGLISH, "Beaten");
-						ingr.addNote( ENGLISH, m.group(2));
+
+						final String note = m.group(2);
+						if ( note != null) {
+							ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
+						}
 
 						return Optional.of(ingr);
+					}
+					else {
+						m = E.matcher(inStr);
+						if (m.matches()) {
+							final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(1).trim() ) ), new Quantity( Units.INSTANCES, NonNumericQuantities.ANY_AMOUNT));
+
+							final String note = m.group(2);
+							if ( note != null) {
+								ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
+							}
+
+							return Optional.of(ingr);
+						}
 					}
 				}
 			}

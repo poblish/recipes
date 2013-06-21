@@ -33,6 +33,6 @@ public class UnitParser {
 			return Units.SPLASHES;
 		}
 
-		return Units.valueOf( inUnitsStr.trim().toUpperCase() );
+		return Units.valueOf( s.replace(' ', '_') );
 	}
 }
