@@ -4,7 +4,7 @@
 package uk.co.recipes.persistence;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isOneOf;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -40,7 +40,7 @@ public class RecipeFactory {
 			req.setEntity( new StringEntity( JacksonFactory.getMapper().writeValueAsString(inRecipe) ) );
 
 			final HttpResponse resp = CLIENT.execute(req);
-			assertThat( resp.getStatusLine().getStatusCode(), is(201));
+			assertThat( resp.getStatusLine().getStatusCode(), isOneOf(201, 200));
 			EntityUtils.consume( resp.getEntity() );
 		}
 		catch (UnsupportedEncodingException e) {
