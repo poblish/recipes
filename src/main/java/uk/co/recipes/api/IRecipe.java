@@ -14,7 +14,9 @@ import java.util.List;
  */
 public interface IRecipe extends ITagging {
 
-	Collection<IIngredient> ingredients();
+	String getTitle();
 
-	List<IRecipeStage> stages();
+	Collection<IIngredient> getIngredients();
+
+	List<IRecipeStage> getStages();
 }

@@ -27,6 +27,7 @@ import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.Units;
 import uk.co.recipes.persistence.CanonicalItemFactory;
 import uk.co.recipes.persistence.JacksonFactory;
+import uk.co.recipes.persistence.RecipeFactory;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
@@ -108,11 +109,11 @@ public class IngredientsTest {
 		stage1.addIngredient(baconIngredient);
 		stage1.addIngredient(oilIngredient);
 
-		final Recipe r = new Recipe();
+		final Recipe r = new Recipe("Herby Lamb Cobbler");
 		r.addStage(stage1);
 		r.addTag( CommonTags.SERVES_COUNT, "4");
 
-		RecipeFactory.put( r, );
+		RecipeFactory.put( r, RecipeFactory.toId(r));
 
 		///////////////////////////////////////////////////
 

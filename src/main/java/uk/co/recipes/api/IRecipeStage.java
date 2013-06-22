@@ -3,6 +3,8 @@
  */
 package uk.co.recipes.api;
 
+import java.util.Collection;
+
 /**
  * TODO
  *
@@ -11,4 +13,5 @@ package uk.co.recipes.api;
  */
 public interface IRecipeStage {
 
+	Collection<IIngredient> getIngredients();
 }

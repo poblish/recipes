@@ -25,6 +25,14 @@ public class RecipeStage implements IRecipeStage {
 		ingredients.add(ingredient);
 	}
 
+	/* (non-Javadoc)
+	 * @see uk.co.recipes.api.IRecipeStage#getIngredients()
+	 */
+	@Override
+	public Collection<IIngredient> getIngredients() {
+		return ingredients;
+	}
+
 	public String toString() {
 		return Objects.toStringHelper(this).omitNullValues()
 						.add( "ingredients", ingredients)

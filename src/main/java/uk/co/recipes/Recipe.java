@@ -3,6 +3,8 @@
  */
 package uk.co.recipes;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -26,8 +28,20 @@ import com.google.common.collect.Sets;
  */
 public class Recipe implements IRecipe {
 
+	private final String title;
 	private final List<IRecipeStage> stages = Lists.newArrayList();
 	private final Map<ITag,Serializable> tagsMap = Maps.newHashMap();
+
+	public Recipe( String inTitle) {
+		title = checkNotNull( inTitle, "Title cannot be null");
+	}
+
+	/**
+	 * @return the title
+	 */
+	public String getTitle() {
+		return title;
+	}
 
 	public void addStage( final RecipeStage inStage) {
 		stages.add(inStage);
@@ -37,11 +51,11 @@ public class Recipe implements IRecipe {
 	 * @see uk.co.recipes.api.IRecipe#ingredients()
 	 */
 	@Override
-	public Collection<IIngredient> ingredients() {
+	public Collection<IIngredient> getIngredients() {
 		final Collection<IIngredient> is = Sets.newHashSet();
 
 		for ( IRecipeStage eachStage : stages) {
-			// FIXME is.addAll( eachStage.);
+			is.addAll( eachStage.getIngredients() );
 		}
 
 		return is;
@@ -51,7 +65,7 @@ public class Recipe implements IRecipe {
 	 * @see uk.co.recipes.api.IRecipe#stages()
 	 */
 	@Override
-	public List<IRecipeStage> stages() {
+	public List<IRecipeStage> getStages() {
 		return stages;
 	}
 
@@ -73,7 +87,7 @@ public class Recipe implements IRecipe {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCode( stages, tagsMap);
+		return Objects.hashCode( title, stages, tagsMap);
 	}
 
 	/* (non-Javadoc)
@@ -91,11 +105,12 @@ public class Recipe implements IRecipe {
 			return false;
 		}
 		final Recipe other = (Recipe) obj;
-		return Objects.equal( stages, other.stages) && Objects.equal( tagsMap, other.tagsMap);
+		return Objects.equal( title, other.title) && Objects.equal( stages, other.stages) && Objects.equal( tagsMap, other.tagsMap);
 	}
 
 	public String toString() {
 		return Objects.toStringHelper(this).omitNullValues()
+						.add( "title", title)
 						.add( "stages", stages)
 						.add( "tags", tagsMap)
 						.toString();
