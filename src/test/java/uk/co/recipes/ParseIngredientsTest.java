@@ -8,7 +8,12 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.util.EntityUtils;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import uk.co.recipes.api.IIngredient;
@@ -21,6 +26,11 @@ import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 
 public class ParseIngredientsTest {
+
+	@BeforeClass
+	public void cleanIndices() throws ClientProtocolException, IOException {
+		RecipeFactory.deleteAll();
+	}
 
 	@Test
 	public void parseIngredients1() throws IOException {
