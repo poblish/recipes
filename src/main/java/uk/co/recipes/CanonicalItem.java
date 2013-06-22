@@ -179,7 +179,7 @@ public class CanonicalItem implements ICanonicalItem {
 			return false;
 		}
 		final CanonicalItem other = (CanonicalItem) obj;
-		return Objects.equal( canonicalName, other.canonicalName) && Objects.equal( parent, other.parent);  // Ignoring varieties
+		return Objects.equal( canonicalName.toLowerCase(), other.canonicalName.toLowerCase()) && Objects.equal( parent, other.parent);  // Ignoring varieties
 	}
 
 	public String toString() {

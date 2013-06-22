@@ -13,6 +13,7 @@ import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.ITag;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
 
 /**
@@ -60,6 +61,20 @@ public class Similarity {
 			return 1.0;
 		}
 
+		Optional<ICanonicalItem> pa = inA.parent();
+		Optional<ICanonicalItem> pb = inB.parent();
+		double pScore = 0.8d;
+
+		while (pa.isPresent()) {
+			if ( pa.equals(pb)) {
+				return pScore;
+			}
+
+			pa = pa.get().parent();
+			pb = pb.get().parent();
+			pScore *= 0.8d;
+		}
+
 		return between( inA.getTags(), inB.getTags());
 	}
 
@@ -70,7 +85,7 @@ public class Similarity {
 		SimilarityAggregator aggr = new SimilarityAggregator();  // I think...
 
 		for ( int i = 0; i < ia.length; i++) {
-			for ( int j = 0; j < ib.length; j++) {
+			for ( int j = 0	; j < ib.length; j++) {
 				aggr.record( between( ia[i], ib[j]) );
 			}
 		}
