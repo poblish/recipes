@@ -5,14 +5,14 @@ import static org.hamcrest.Matchers.is;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.util.EntityUtils;
+import org.codehaus.jackson.JsonNode;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -79,5 +79,13 @@ public class ParseIngredientsTest {
 		////////////////////////////////////////////////////////////
 
 		return allIngredients;
+	}
+
+	@AfterClass
+	public void findGarlicRecipes() throws InterruptedException, IOException {
+		Thread.sleep(1000);  // Time for indexing to happen!
+
+		final JsonNode jn = JacksonFactory.getMapper().readTree( new URL("http://localhost:9200/recipe/recipes" + "/_search?q=name:garlic") ).path("hits").path("hits");
+		assertThat( jn.size(), is(1));
 	}
 }
