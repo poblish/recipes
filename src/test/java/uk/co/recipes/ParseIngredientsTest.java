@@ -20,6 +20,8 @@ import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.parse.IngredientParser;
 import uk.co.recipes.persistence.JacksonFactory;
 import uk.co.recipes.persistence.RecipeFactory;
+import uk.co.recipes.similarity.IncompatibleIngredientsException;
+import uk.co.recipes.similarity.Similarity;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
@@ -50,6 +52,25 @@ public class ParseIngredientsTest {
 		assertThat( allIngredients.toString(), is("[Ingredient{q=1, item=NamedItem{name=large onion, canonical=CanonicalItem{name=large onion}}}, Ingredient{q=6, item=NamedItem{name=garlic cloves, canonical=CanonicalItem{name=garlic cloves}}, notes={en=roughly chopped}}, Ingredient{q=50 GRAMMES, item=NamedItem{name=ginger, canonical=CanonicalItem{name=ginger}}, notes={en=roughly chopped}}, Ingredient{q=4 TBSP, item=NamedItem{name=vegetable oil, canonical=CanonicalItem{name=vegetable oil, tags={OIL=true}}}}, Ingredient{q=2 TSP, item=NamedItem{name=cumin seeds, canonical=CanonicalItem{name=cumin seeds, tags={SPICE=true}}}}, Ingredient{q=1 TSP, item=NamedItem{name=fennel seed, canonical=CanonicalItem{name=fennel seed, tags={SPICE=true}}}}, Ingredient{q=5 CM, item=NamedItem{name=cinnamon stick, canonical=CanonicalItem{name=cinnamon stick}}}, Ingredient{q=1 TSP, item=NamedItem{name=chilli flakes, canonical=CanonicalItem{name=chilli flakes}}}, Ingredient{q=1 TSP, item=NamedItem{name=garam masala, canonical=CanonicalItem{name=garam masala}}}, Ingredient{q=1 TSP, item=NamedItem{name=turmeric, canonical=CanonicalItem{name=turmeric}}}, Ingredient{q=1 TSP, item=NamedItem{name=caster sugar, canonical=CanonicalItem{name=caster sugar}}}, Ingredient{q=400 GRAMMES, item=NamedItem{name=can chopped tomatoes, canonical=CanonicalItem{name=can chopped tomatoes}}}, Ingredient{q=8, item=NamedItem{name=chicken thighs, canonical=CanonicalItem{name=chicken thighs}}, notes={en=skinned, boneless (about 800g)}}, Ingredient{q=250 ML, item=NamedItem{name=hot chicken stock, canonical=CanonicalItem{name=hot chicken stock}}}, Ingredient{q=2 TBSP, item=NamedItem{name=chopped coriander, canonical=CanonicalItem{name=chopped coriander}}}]"));
 	}
 
+	@Test
+	public void testSimilarity() throws IOException, IncompatibleIngredientsException {
+		final List<IIngredient> ingr1 = parseIngredientsFrom("inputs.txt");
+		final List<IIngredient> ingr2 = parseIngredientsFrom("inputs2.txt");
+		final List<IIngredient> ingr3 = parseIngredientsFrom("inputs3.txt");
+
+		final double s12 = Similarity.amongIngredients( ingr1, ingr2);
+		final double s13 = Similarity.amongIngredients( ingr1, ingr3);
+		final double s23 = Similarity.amongIngredients( ingr2, ingr3);
+
+		System.out.println(s12);
+		System.out.println(s13);
+		System.out.println(s23);
+
+		assertThat( Similarity.amongIngredients( ingr2, ingr1), is(s12));
+		assertThat( Similarity.amongIngredients( ingr3, ingr1), is(s13));
+		assertThat( Similarity.amongIngredients( ingr3, ingr2), is(s23));
+	}
+
 	private List<IIngredient> parseIngredientsFrom( final String inFilename) throws IOException {
 		final List<IIngredient> allIngredients = Lists.newArrayList();
 
@@ -57,7 +78,7 @@ public class ParseIngredientsTest {
 			final Optional<Ingredient> theIngr = IngredientParser.parse(eachLine);
 			if (theIngr.isPresent()) {
 
-				System.out.println( JacksonFactory.getMapper().writeValueAsString( theIngr.get() ) );
+				// System.out.println( JacksonFactory.getMapper().writeValueAsString( theIngr.get() ) );
 
 				allIngredients.add( theIngr.get() );
 			}
