@@ -13,7 +13,7 @@ public enum Units implements IUnit {
 
 	INSTANCES,
 
-	GRAMMES, ML, CM, MM,
+	KG, GRAMMES, ML, CM, INCH, MM,
 
 	TSP, HEAPED_TBSP, TBSP,
 

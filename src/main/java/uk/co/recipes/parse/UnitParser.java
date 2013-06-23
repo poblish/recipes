@@ -19,10 +19,22 @@ public class UnitParser {
 			return Units.INSTANCES;
 		}
 
-		final String s = inUnitsStr.trim().toUpperCase();
+		String s = inUnitsStr.trim().toUpperCase();
 
-		if (s.equals("G")) {
+		if (s.startsWith("-")) {
+			s = s.substring(1);
+		}
+
+		if (s.equals("G") || s.equals("GMS")) {
 			return Units.GRAMMES;
+		}
+
+		if (s.startsWith("TABLESPOON")) {
+			return Units.TBSP;
+		}
+
+		if (s.startsWith("TEASPOON")) {
+			return Units.TSP;
 		}
 
 		if (s.equals("BUNCH")) {
