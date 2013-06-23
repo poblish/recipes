@@ -126,7 +126,12 @@ public class CanonicalItem implements ICanonicalItem {
 
 	@Override
 	public void addTag( final ITag key, final Serializable value) {
-		tags.put( key, value);
+		tags.put( key, checkNotNull( value, "Value cannot be null"));
+	}
+
+	@Override
+	public void addTag( final ITag key) {
+		tags.put( key, Boolean.TRUE);
 	}
 
 	/* (non-Javadoc)

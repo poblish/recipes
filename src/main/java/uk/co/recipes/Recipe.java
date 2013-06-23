@@ -71,7 +71,12 @@ public class Recipe implements IRecipe {
 
 	@Override
 	public void addTag( final ITag key, final Serializable value) {
-		tagsMap.put( key, value);
+		tagsMap.put( key, checkNotNull( value, "Value cannot be null"));
+	}
+
+	@Override
+	public void addTag( final ITag key) {
+		tagsMap.put( key, Boolean.TRUE);
 	}
 
 	/* (non-Javadoc)
