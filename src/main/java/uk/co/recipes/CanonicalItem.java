@@ -167,6 +167,9 @@ public class CanonicalItem implements ICanonicalItem {
 				System.err.println("Jackson deserialized null!");
 				tags.put( each.getKey(), Boolean.TRUE);
 			}
+			else if (each.getValue().equals("true")) /* Ugh!!! */ {
+				tags.put( each.getKey(), Boolean.TRUE);
+			}
 			else {
 				tags.put( each.getKey(), each.getValue());
 			}
