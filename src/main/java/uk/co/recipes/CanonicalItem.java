@@ -139,10 +139,19 @@ public class CanonicalItem implements ICanonicalItem {
 	 */
 	@Override
 	public Map<ITag,Serializable> getTags() {
-		final Map<ITag,Serializable> allTags = Maps.newHashMap(tags);
+		if ( parent == null) {
+			return tags;
+		}
 
-		if ( parent != null) {
-			allTags.putAll( parent.getTags() );
+		final Map<ITag,Serializable> allTags = Maps.newHashMap( parent.getTags() );
+
+		for ( Entry<ITag,Serializable> each : tags.entrySet()) {
+			if ( each.getValue() == Boolean.FALSE) {
+				allTags.remove( each.getKey() );  // Do not inherit!
+			}
+			else {
+				allTags.put( each.getKey(), each.getValue());
+			}
 		}
 
 		return allTags;

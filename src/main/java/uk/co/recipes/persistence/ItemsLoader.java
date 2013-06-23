@@ -52,7 +52,12 @@ public class ItemsLoader {
 						@SuppressWarnings("unchecked")
 						Map<String,Object> m = (Map<String,Object>) tagsObj;
 						for ( String each : m.keySet()) {
-							newItem.addTag( CommonTags.valueOf(each) );
+							if (each.startsWith("-")) {
+								newItem.addTag( CommonTags.valueOf( each.substring(1)), Boolean.FALSE);
+							}
+							else {
+								newItem.addTag( CommonTags.valueOf(each) );
+							}
 						}
 					}
 
