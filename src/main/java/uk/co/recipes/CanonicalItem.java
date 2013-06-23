@@ -8,6 +8,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -85,10 +86,9 @@ public class CanonicalItem implements ICanonicalItem {
 	 * @param parent
 	 * @param varieties
 	 */
-	public CanonicalItem(String canonicalName, ICanonicalItem parent) {
+	public CanonicalItem(String canonicalName, final Optional<ICanonicalItem> inParent) {
 		this.canonicalName = canonicalName;
-		setParent(parent);
-//		this.tags.putAll( parent.getTags() );
+		parent = inParent.orNull();  // Yuk!
 	}
 
 	/* (non-Javadoc)
@@ -152,6 +152,7 @@ public class CanonicalItem implements ICanonicalItem {
 	@SuppressWarnings("unused")
 	private void setTags( Map<ITag,Serializable> inTags) {
 		tags.clear();
+
 		for ( Entry<ITag,Serializable> each : inTags.entrySet()) {
 			if (each.getValue() == null) {
 				System.err.println("Jackson deserialized null!");

@@ -5,6 +5,10 @@ package uk.co.recipes;
 
 import org.testng.annotations.Test;
 
+import uk.co.recipes.api.ICanonicalItem;
+
+import com.google.common.base.Optional;
+
 /**
  * TODO
  *
@@ -15,10 +19,10 @@ public class CanonicalItemTest {
 
 	@Test
 	public void testEqualsHash() {
-		final CanonicalItem orig = new CanonicalItem("Lamb");
-		final CanonicalItem copy = new CanonicalItem("Lamb");
-		final CanonicalItem diff1 = new CanonicalItem("Lamb", copy);
-		final CanonicalItem diff2 = new CanonicalItem("Beef");
+		final ICanonicalItem orig = new CanonicalItem("Lamb");
+		final ICanonicalItem copy = new CanonicalItem("Lamb");
+		final ICanonicalItem diff1 = new CanonicalItem("Lamb", Optional.of(copy));
+		final ICanonicalItem diff2 = new CanonicalItem("Beef");
 
 		TestUtils.testEqualsHashcode(orig, copy, diff1, diff2);
 	}

@@ -54,7 +54,7 @@ public class IngredientsTest {
 			@Override
 			public ICanonicalItem get() {
 				final ICanonicalItem meat = new CanonicalItem("Lamb");
-				meat.addTag( CommonTags.MEAT, Boolean.TRUE);
+				meat.addTag( CommonTags.MEAT );
 				return meat;
 			}});
 
@@ -62,7 +62,7 @@ public class IngredientsTest {
 
 			@Override
 			public ICanonicalItem get() {
-				return new CanonicalItem("Lamb Neck", lamb);
+				return new CanonicalItem("Lamb Neck", Optional.of(lamb));
 			}});
 
 		final Ingredient lambIngredient = new Ingredient( new NamedItem(lambNeck), new Quantity( Units.GRAMMES, 900));
@@ -75,7 +75,7 @@ public class IngredientsTest {
 			@Override
 			public ICanonicalItem get() {
 				final ICanonicalItem meat = new CanonicalItem("Bacon");
-				meat.addTag( CommonTags.MEAT, Boolean.TRUE);
+				meat.addTag( CommonTags.MEAT );
 				return meat;
 			}});
 
@@ -83,7 +83,7 @@ public class IngredientsTest {
 
 			@Override
 			public ICanonicalItem get() {
-				return new CanonicalItem("Smoked Streaky Bacon", bacon);
+				return new CanonicalItem("Smoked Streaky Bacon", Optional.of(bacon));
 			}});
 
 		final Ingredient baconIngredient = new Ingredient( new NamedItem(ssBacon), new Quantity( Units.GRAMMES, 200));
@@ -96,7 +96,7 @@ public class IngredientsTest {
 			@Override
 			public ICanonicalItem get() {
 				ICanonicalItem ic = new CanonicalItem("Sunflower Oil");
-				ic.addTag( CommonTags.OIL, Boolean.TRUE);
+				ic.addTag( CommonTags.OIL );
 				return ic;
 			}});
 
