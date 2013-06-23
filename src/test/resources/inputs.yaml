@@ -26,6 +26,16 @@
 ---
 
 
+{canonicalName: Oil, tags: OIL}
+---
+{canonicalName: Vegetable Oil, parent: Oil}
+---
+{canonicalName: Olive Oil, parent: Vegetable Oil}
+---
+{canonicalName: Sunflower Oil, parent: Vegetable Oil}
+---
+
+
 {canonicalName: Beef, tags: MEAT}
 ---
 {canonicalName: Chicken, tags: MEAT}

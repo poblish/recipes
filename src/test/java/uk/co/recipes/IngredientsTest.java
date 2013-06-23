@@ -88,23 +88,10 @@ public class IngredientsTest {
 
 		///////////////////////////////////////////////////
 
-		final ICanonicalItem oil = CanonicalItemFactory.getOrCreate( "Sunflower Oil", new Supplier<ICanonicalItem>() {
-
-			@Override
-			public ICanonicalItem get() {
-				ICanonicalItem ic = new CanonicalItem("Sunflower Oil");
-				ic.addTag( CommonTags.OIL );
-				return ic;
-			}});
-
-		final Ingredient oilIngredient = new Ingredient( new NamedItem(oil), new Quantity( Units.TBSP, 1));
-
-		///////////////////////////////////////////////////
-
 		final RecipeStage stage1 = new RecipeStage();
 		stage1.addIngredient(lambIngredient);
 		stage1.addIngredient(baconIngredient);
-		stage1.addIngredient(oilIngredient);
+//		stage1.addIngredient(oilIngredient);
 
 		final Recipe r = new Recipe("Herby Lamb Cobbler");
 		r.addStage(stage1);
