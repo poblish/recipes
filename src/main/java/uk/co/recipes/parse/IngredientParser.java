@@ -29,13 +29,14 @@ import com.google.common.base.Supplier;
  */
 public class IngredientParser {
 
+	private static final String	DEC_FRAC_NUMBER_PATTERN = "([0-9\\.]+(?: [0-9]/[0-9])?)";
 	private static final String	NOTES = "([,\\(].*)?";
 	private static final String	SUFFIX = "([\\w- ]*)" + NOTES;
 
-	private static final Pattern	A = Pattern.compile("([0-9]+)(g|cm|mm|ml| heaped tbsp| tbsp| tsp)? " + SUFFIX, Pattern.CASE_INSENSITIVE);
+	private static final Pattern	A = Pattern.compile( DEC_FRAC_NUMBER_PATTERN + "(kg|g|gms|cm|-inch|mm|ml| heaped tbsp| tablespoons?| tbsp| tsp| teaspoon)? " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	B = Pattern.compile("((small|large) (splash|bunch)) " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	C = Pattern.compile("(juice|zest) ([0-9]+) (.*)(, (.*))*", Pattern.CASE_INSENSITIVE);
-	private static final Pattern	D = Pattern.compile("(beaten egg)" + NOTES, Pattern.CASE_INSENSITIVE);
+	private static final Pattern	D = Pattern.compile("(salt|beaten egg)" + NOTES, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	E = Pattern.compile("(dressed [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);
 
 	public static Optional<Ingredient> parse( final String inStr) {
@@ -43,7 +44,7 @@ public class IngredientParser {
 		Matcher m = A.matcher(inStr);
 		if (m.matches()) {
 
-			final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(3).trim() ) ), new Quantity( UnitParser.parse( m.group(2) ), Integer.valueOf( m.group(1) )));
+			final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(3).trim() ) ), new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse( m.group(1) )));
 
 			final String note = m.group(4);
 			if ( note != null) {
@@ -67,7 +68,7 @@ public class IngredientParser {
 			else {
 				m = C.matcher(inStr);
 				if (m.matches()) {
-					final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(3).trim() ) ), new Quantity( Units.INSTANCES, Integer.valueOf( m.group(2) )));
+					final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(3).trim() ) ), new Quantity( Units.INSTANCES, NumericAmountParser.parse( m.group(2) )));
 					ingr.addNote( ENGLISH, "Juice of");
 
 					return Optional.of(ingr);
@@ -115,10 +116,10 @@ public class IngredientParser {
 				String lcase = inName.toLowerCase();
 
 				if ( lcase.endsWith("seeds") || lcase.endsWith("seed")) {
-					item.addTag( CommonTags.SPICE, Boolean.TRUE);
+					item.addTag( CommonTags.SPICE );
 				}
 				else if ( lcase.endsWith(" oil")) {
-					item.addTag( CommonTags.OIL, Boolean.TRUE);
+					item.addTag( CommonTags.OIL );
 				}
 
 				return item;
