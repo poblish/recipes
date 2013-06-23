@@ -5,6 +5,7 @@ package uk.co.recipes.parse;
 
 import static java.util.Locale.ENGLISH;
 
+import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,6 +21,7 @@ import uk.co.recipes.persistence.CanonicalItemFactory;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
+import com.google.common.collect.Lists;
 
 /**
  * TODO
@@ -44,12 +46,22 @@ public class IngredientParser {
 		Matcher m = A.matcher(inStr);
 		if (m.matches()) {
 
-			final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(3).trim() ) ), new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse( m.group(1) )));
+			final Collection<String> notesToAdd = Lists.newArrayList();
+			String theNameToUse = m.group(3).trim();
+
+			if (theNameToUse.startsWith("Large ") || theNameToUse.startsWith("large ")) /* FIXME Ugh!! */ {
+				theNameToUse = theNameToUse.substring(6);
+				notesToAdd.add("Large");
+			}
+
+			final Ingredient ingr = new Ingredient( new NamedItem( findItem(theNameToUse) ), new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse( m.group(1) )));
 
 			final String note = m.group(4);
 			if ( note != null) {
 				ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
 			}
+
+			ingr.addNotes( ENGLISH, notesToAdd);
 
 			return Optional.of(ingr);
 		}
@@ -113,6 +125,7 @@ public class IngredientParser {
 			public ICanonicalItem get() {
 				final ICanonicalItem item = new CanonicalItem(inName);
 
+				// FIXME This stuff is OK, but not really sustainable
 				String lcase = inName.toLowerCase();
 
 				if ( lcase.endsWith("seeds") || lcase.endsWith("seed")) {
