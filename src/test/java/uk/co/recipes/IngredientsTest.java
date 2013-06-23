@@ -10,12 +10,7 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.Map;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.testng.annotations.BeforeClass;
@@ -26,6 +21,7 @@ import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.Units;
 import uk.co.recipes.persistence.CanonicalItemFactory;
+import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.persistence.JacksonFactory;
 import uk.co.recipes.persistence.RecipeFactory;
 
@@ -35,15 +31,16 @@ import com.google.common.collect.Maps;
 
 public class IngredientsTest {
 
-	private final static HttpClient CLIENT = new DefaultHttpClient();
-
 	private final static String	IDX_URL = "http://localhost:9200/recipe/items";
-
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
-		final HttpResponse resp = CLIENT.execute( new HttpDelete(IDX_URL) );
-		EntityUtils.consume( resp.getEntity() );
+		CanonicalItemFactory.deleteAll();
+	}
+
+	@BeforeClass
+	public void loadIngredientsFromYaml() throws IOException {
+		ItemsLoader.load();
 	}
 
 	// See: http://www.bbcgoodfood.com/recipes/5533/herby-lamb-cobbler
