@@ -17,5 +17,7 @@ public enum CommonTags implements ITag {
 	SPICE, // Cinnamon, Ginger, Cloves, Saffron, Nutmeg, Vanilla, Cumin
 
 	// Herbs are obtained from the leaves of herbaceous (non-woody) plants.
-	HERB // Thyme, Sage, Oregano, Parsley, Marjoram, Basil, Chives, Rosemary, Mint
+	HERB, // Thyme, Sage, Oregano, Parsley, Marjoram, Basil, Chives, Rosemary, Mint
+
+	INDIAN, CHINESE, JAPANESE, THAI, FRENCH, ITALIAN, GREEK, ENGLISH
 }
