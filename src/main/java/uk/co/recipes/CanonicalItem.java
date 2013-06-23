@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -19,7 +20,6 @@ import uk.co.recipes.api.ITag;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 /**
@@ -34,7 +34,7 @@ public class CanonicalItem implements ICanonicalItem {
 	private ICanonicalItem parent = null; // Can't use Optional<> as it screws with JSON serialization
 	private Collection<ICanonicalItem> varieties = Sets.newHashSet();
 
-	private Map<ITag,Serializable> tags = Maps.newHashMap();
+	private Map<ITag,Serializable> tags = new TreeMap<>();  // Try to keep the order regular. This will *not* sort enums by name, only by index
 
 	/**
 	 * @param canonicalName
@@ -143,7 +143,8 @@ public class CanonicalItem implements ICanonicalItem {
 			return tags;
 		}
 
-		final Map<ITag,Serializable> allTags = Maps.newHashMap( parent.getTags() );
+		final Map<ITag,Serializable> allTags = new TreeMap<>();  // Try to keep the order regular. This will *not* sort enums by name, only by index
+		allTags.putAll( parent.getTags() );
 
 		for ( Entry<ITag,Serializable> each : tags.entrySet()) {
 			if ( each.getValue() == Boolean.FALSE) {
