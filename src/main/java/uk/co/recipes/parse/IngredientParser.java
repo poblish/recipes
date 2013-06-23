@@ -33,7 +33,7 @@ public class IngredientParser {
 	private static final String	NOTES = "([,\\(].*)?";
 	private static final String	SUFFIX = "([\\w- ]*)" + NOTES;
 
-	private static final Pattern	A = Pattern.compile( DEC_FRAC_NUMBER_PATTERN + "(kg|g|gms|cm|-inch|mm|ml| heaped tbsp| tablespoons?| tbsp| tsp| teaspoon)? " + SUFFIX, Pattern.CASE_INSENSITIVE);
+	private static final Pattern	A = Pattern.compile( DEC_FRAC_NUMBER_PATTERN + "(kg|g|gms|cm|-inch|mm|ml| heaped tbsps?| tablespoons?| tbsps?| tsps?| teaspoons?)? " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	B = Pattern.compile("((small|large) (splash|bunch)) " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	C = Pattern.compile("(juice|zest) ([0-9]+) (.*)(, (.*))*", Pattern.CASE_INSENSITIVE);
 	private static final Pattern	D = Pattern.compile("(salt|beaten egg)" + NOTES, Pattern.CASE_INSENSITIVE);
