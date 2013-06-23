@@ -63,7 +63,7 @@ public class ParseIngredientsTest {
 	@Test
 	public void parseIngredientsChCashBlackSpiceCurry() throws IOException {
 		final List<IIngredient> allIngredients = parseIngredientsFrom("chCashBlackSpiceCurry.txt");
-		assertThat( allIngredients.toString(), is(""));
+		assertThat( allIngredients.toString(), is("[Ingredient{q=1 KG, item=NamedItem{name=chicken, canonical=CanonicalItem{name=chicken}}, notes={en=skinned}}, Ingredient{q=6, item=NamedItem{name=cloves, canonical=CanonicalItem{name=cloves}}}, Ingredient{q=100 GRAMMES, item=NamedItem{name=coconut grated, canonical=CanonicalItem{name=coconut grated}}}, Ingredient{q=3 INCH, item=NamedItem{name=Cinnamon Stick, canonical=CanonicalItem{name=Cinnamon Stick, parent=CanonicalItem{name=Cinnamon, tags={SPICE=true}}, tags={SPICE=true, INDIAN=true}}}}, Ingredient{q=12, item=NamedItem{name=plump garlic cloves, canonical=CanonicalItem{name=plump garlic cloves}}, notes={en=peeled}}, Ingredient{q=225 GRAMMES, item=NamedItem{name=cashew nuts, canonical=CanonicalItem{name=cashew nuts}}}, Ingredient{q=1, item=NamedItem{name=large onion, canonical=CanonicalItem{name=large onion}}, notes={en=chopped}}, Ingredient{q=0 TBSP, item=NamedItem{name=coriander seeds, canonical=CanonicalItem{name=coriander seeds, tags={SPICE=true}}}}, Ingredient{q=0 TSP, item=NamedItem{name=Cumin Seeds, canonical=CanonicalItem{name=Cumin Seeds, tags={SPICE=true, INDIAN=true}}}}, Ingredient{q=4 TBSP, item=NamedItem{name=oil, canonical=CanonicalItem{name=oil}}}, Ingredient{q=4, item=NamedItem{name=whole dried red chillies, canonical=CanonicalItem{name=whole dried red chillies}}}, Ingredient{q=1, item=NamedItem{name=salt, canonical=CanonicalItem{name=salt}}}]"));
 	}
 
 	@Test
@@ -73,19 +73,19 @@ public class ParseIngredientsTest {
 		final List<IIngredient> ingr3 = parseIngredientsFrom("inputs3.txt");
 		final List<IIngredient> ingr4 = parseIngredientsFrom("chCashBlackSpiceCurry.txt");
 
-//		final double s12 = Similarity.amongIngredients( ingr1, ingr2);
-//		final double s13 = Similarity.amongIngredients( ingr1, ingr3);
-//		final double s23 = Similarity.amongIngredients( ingr2, ingr3);
+		final double s12 = Similarity.amongIngredients( ingr1, ingr2);
+		final double s13 = Similarity.amongIngredients( ingr1, ingr3);
+		final double s23 = Similarity.amongIngredients( ingr2, ingr3);
 		final double s34 = Similarity.amongIngredients( ingr3, ingr4);
 
-//		System.out.println(s12);
-//		System.out.println(s13);
-//		System.out.println(s23);
+		System.out.println(s12);
+		System.out.println(s13);
+		System.out.println(s23);
 		System.out.println(s34);
 
-//		assertThat( Similarity.amongIngredients( ingr2, ingr1), is(s12));
-//		assertThat( Similarity.amongIngredients( ingr3, ingr1), is(s13));
-//		assertThat( Similarity.amongIngredients( ingr3, ingr2), is(s23));
+		assertThat( Similarity.amongIngredients( ingr2, ingr1), is(s12));
+		assertThat( Similarity.amongIngredients( ingr3, ingr1), is(s13));
+		assertThat( Similarity.amongIngredients( ingr3, ingr2), is(s23));
 	}
 
 	private List<IIngredient> parseIngredientsFrom( final String inFilename) throws IOException {

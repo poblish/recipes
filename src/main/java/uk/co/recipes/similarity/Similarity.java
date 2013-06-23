@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import uk.co.recipes.api.CommonTags;
 import uk.co.recipes.api.ICanonicalItem;
@@ -14,7 +15,9 @@ import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.ITag;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 
 /**
  * All similarities in the range -1.0 to 1.0, with 1.0 representing perfect similarity
@@ -65,9 +68,15 @@ public class Similarity {
 		Optional<ICanonicalItem> pb = inB.parent();
 		double pScore = 0.8d;
 
+		// System.out.println( inA + " vs. " + inB);
+
 		while (pa.isPresent()) {
 			if ( pa.equals(pb)) {
 				return pScore;
+			}
+
+			if (!pb.isPresent()) {
+				break;
 			}
 
 			pa = pa.get().parent();
@@ -78,35 +87,28 @@ public class Similarity {
 		return between( inA.getTags(), inB.getTags());
 	}
 
-	@SuppressWarnings("unchecked")
 	public static double between( final Map<ITag,Serializable> inA, final Map<ITag,Serializable> inB) throws IncompatibleIngredientsException {
-		final Entry<ITag,Serializable>[] ia = Iterables.toArray( inA.entrySet(), Entry.class);
-		final Entry<ITag,Serializable>[] ib = Iterables.toArray( inB.entrySet(), Entry.class);
-		SimilarityAggregator aggr = new SimilarityAggregator();  // I think...
-
-		for ( int i = 0; i < ia.length; i++) {
-			for ( int j = 0	; j < ib.length; j++) {
-				aggr.record( between( ia[i], ib[j]) );
-			}
+		if ( inA.isEmpty() || inB.isEmpty()) {
+			return 0.0;
 		}
 
-		return aggr.aggregate();
+		final Set<Entry<ITag,Serializable>> union = Sets.union( inA.entrySet(), inB.entrySet());
+
+		if ( entriesHaveTag( union, CommonTags.MEAT) && ( entriesHaveTag( union, CommonTags.VEGETARIAN) || entriesHaveTag( union, CommonTags.VEGAN))) {
+			throw new IncompatibleIngredientsException();
+		}
+
+		final int numInTotal = union.size();
+		final int numInCommon = Sets.intersection( inA.entrySet(), inB.entrySet()).size();
+		final double score = Math.sqrt((double) numInCommon / (double) numInTotal);
+
+		// System.out.println( "  " + inA.entrySet() + " vs. " + inB.entrySet() + " ... " + union + " ... " + numInCommon + " / " + numInTotal + " = " + score);
+
+		return score;
 	}
 
-	public static double between( final Entry<ITag,Serializable> inA, final Entry<ITag,Serializable> inB) throws IncompatibleIngredientsException {
-		if (( inA.getKey() == CommonTags.MEAT && inB.getKey() == CommonTags.VEGETARIAN) || ( inB.getKey() == CommonTags.MEAT && inA.getKey() == CommonTags.VEGETARIAN) ) {  // FIXME Should check values too!
-			throw new IncompatibleIngredientsException();
-		}
-
-		if (( inA.getKey() == CommonTags.MEAT && inB.getKey() == CommonTags.VEGAN) || ( inB.getKey() == CommonTags.MEAT && inA.getKey() == CommonTags.VEGAN) ) {  // FIXME Should check values too!
-			throw new IncompatibleIngredientsException();
-		}
-
-		if ( inA.getKey() == inB.getKey()) {  // FIXME Should check values too!
-			return 1.0;
-		}
-
-		return 0;
+	private static boolean entriesHaveTag( final Set<Entry<ITag,Serializable>> inEntries, final CommonTags inTag) {
+		return !FluentIterable.from(inEntries).filter( TagUtils.findActivated(inTag) ).isEmpty();
 	}
 
 	private static class SimilarityAggregator {
@@ -123,7 +125,7 @@ public class Similarity {
 				return 0;
 			}
 
-			return similarity / (double) count;
+			return Math.sqrt( similarity / (double) count);
 		}
 	}
 }
