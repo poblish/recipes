@@ -148,7 +148,22 @@ public class CanonicalItem implements ICanonicalItem {
 		return allTags;
 	}
 
-	// Strictly for Jackson only
+	// Strictly for Jackson only. *Can* be private
+	@SuppressWarnings("unused")
+	private void setTags( Map<ITag,Serializable> inTags) {
+		tags.clear();
+		for ( Entry<ITag,Serializable> each : inTags.entrySet()) {
+			if (each.getValue() == null) {
+				System.err.println("Jackson deserialized null!");
+				tags.put( each.getKey(), Boolean.TRUE);
+			}
+			else {
+				tags.put( each.getKey(), each.getValue());
+			}
+		}
+	}
+
+	// Strictly for Jackson only. Must be public
 	public CanonicalItem getParent() {
 		return (CanonicalItem) parent;
 	}
