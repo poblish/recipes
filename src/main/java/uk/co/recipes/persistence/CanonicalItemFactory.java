@@ -14,6 +14,7 @@ import java.net.URL;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -87,5 +88,10 @@ public class CanonicalItemFactory {
 		catch (IOException e) {
 			throw Throwables.propagate(e);
 		}
+	}
+
+	public static void deleteAll() throws IOException {
+		final HttpResponse resp = CLIENT.execute( new HttpDelete(IDX_URL) );
+		EntityUtils.consume( resp.getEntity() );
 	}
 }
