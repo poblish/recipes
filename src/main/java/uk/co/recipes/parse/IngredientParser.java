@@ -138,7 +138,7 @@ public class IngredientParser {
 
 	// FIXME This needs to be in a DSL, configurable, or something
 	private static class NameAdjuster {
-		private static final String[]	BAD_PREFIXES = {"beaten", "chilled", "chopped", "cold", "crushed", "dressed", "dried", "fresh", "hot", "large", "plump", "small", "smoked", "whole"};
+		private static final String[]	BAD_PREFIXES = {"beaten", "can", "chilled", "chopped", "cold", "crushed", "dressed", "dried", "fresh", "hot", "large", "plump", "small", "smoked", "tin", "whole"};
 
 		private final Collection<String> notesToAdd = Lists.newArrayList();
 

@@ -33,6 +33,16 @@
 ---
 
 
+{canonicalName: Chilli, tags: CHILLI}
+---
+{canonicalName: Chilli Flakes, parent: Chilli}
+---
+{canonicalName: Red Chillies, parent: Chilli}
+---
+{canonicalName: Green Chillies, parent: Chilli}
+---
+
+
 {canonicalName: Carrot, tags: VEGETABLE}
 ---
 {canonicalName: Onion, tags: VEGETABLE}
@@ -43,6 +53,11 @@
 ---
 # FIXME Got to handle plurals properly!
 {canonicalName: Spring Onions, parent: Onion}
+---
+{canonicalName: Tomato, tags: VEGETABLE}
+---
+# FIXME Got to handle plurals properly!
+{canonicalName: Tomatoes, tags: VEGETABLE}
 ---
 
 
