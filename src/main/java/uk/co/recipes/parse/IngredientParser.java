@@ -41,60 +41,60 @@ public class IngredientParser {
 	private static final Pattern	D = Pattern.compile("(salt|beaten egg)" + NOTES, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	E = Pattern.compile("(dressed [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);
 
+
 	public static Optional<Ingredient> parse( final String inStr) {
 
 		Matcher m = A.matcher(inStr);
 		if (m.matches()) {
-
-			final Collection<String> notesToAdd = Lists.newArrayList();
-			String theNameToUse = m.group(3).trim();
-
-			if (theNameToUse.startsWith("Large ") || theNameToUse.startsWith("large ")) /* FIXME Ugh!! */ {
-				theNameToUse = theNameToUse.substring(6);
-				notesToAdd.add("Large");
-			}
-
-			final Ingredient ingr = new Ingredient( new NamedItem( findItem(theNameToUse) ), new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse( m.group(1) )));
+			final NameAdjuster na = new NameAdjuster();
+			final Ingredient ingr = new Ingredient( new NamedItem( findItem( na.adjust( m.group(3).trim() ) ) ), new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse( m.group(1) )));
 
 			final String note = m.group(4);
 			if ( note != null) {
 				ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
 			}
 
-			ingr.addNotes( ENGLISH, notesToAdd);
+			ingr.addNotes( ENGLISH, na.getExtraNotes());
 
 			return Optional.of(ingr);
 		}
 		else {
 			m = B.matcher(inStr);
 			if (m.matches()) {
-				final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(4).trim() ) ), new Quantity( UnitParser.parse( m.group(3) ), NonNumericQuantities.valueOf( m.group(2).trim().toUpperCase() )));
+				final NameAdjuster na = new NameAdjuster();
+				final Ingredient ingr = new Ingredient( new NamedItem( findItem( na.adjust( m.group(4).trim() ) ) ), new Quantity( UnitParser.parse( m.group(3) ), NonNumericQuantities.valueOf( m.group(2).trim().toUpperCase() )));
 
 				final String note = m.group(5);
 				if ( note != null) {
 					ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
 				}
 
+				ingr.addNotes( ENGLISH, na.getExtraNotes());
+
 				return Optional.of(ingr);
 			}
 			else {
 				m = C.matcher(inStr);
 				if (m.matches()) {
-					final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(3).trim() ) ), new Quantity( Units.INSTANCES, NumericAmountParser.parse( m.group(2) )));
+					final NameAdjuster na = new NameAdjuster();
+					final Ingredient ingr = new Ingredient( new NamedItem( findItem( na.adjust( m.group(3).trim() ) ) ), new Quantity( Units.INSTANCES, NumericAmountParser.parse( m.group(2) )));
 					ingr.addNote( ENGLISH, "Juice of");
+					ingr.addNotes( ENGLISH, na.getExtraNotes());
 
 					return Optional.of(ingr);
 				}
 				else {
 					m = D.matcher(inStr);
 					if (m.matches()) {
-						final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(1).trim() ) ), new Quantity( Units.INSTANCES, 1));
-//							ingr.addNote( ENGLISH, "Beaten");
+						final NameAdjuster na = new NameAdjuster();
+						final Ingredient ingr = new Ingredient( new NamedItem( findItem( na.adjust( m.group(1).trim() ) ) ), new Quantity( Units.INSTANCES, 1));
 
 						final String note = m.group(2);
 						if ( note != null) {
 							ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
 						}
+
+						ingr.addNotes( ENGLISH, na.getExtraNotes());
 
 						return Optional.of(ingr);
 					}
@@ -134,5 +134,39 @@ public class IngredientParser {
 
 				return item;
 			}} );
+	}
+
+	// FIXME This needs to be in a DSL, configurable, or something
+	private static class NameAdjuster {
+		private static final String[]	BAD_PREFIXES = {"beaten", "chilled", "chopped", "cold", "crushed", "dressed", "dried", "fresh", "hot", "large", "plump", "small", "smoked", "whole"};
+
+		private final Collection<String> notesToAdd = Lists.newArrayList();
+
+		public String adjust( final String inName) {
+			String theNameToUse = inName.toLowerCase();
+			int incr = 0;
+
+			while (true) {
+				boolean anyDoneThisRound = false;
+				for ( String eachPrefix : BAD_PREFIXES) {
+					if (theNameToUse.startsWith(eachPrefix + " ")) {
+						incr += eachPrefix.length() + 1;
+						theNameToUse = theNameToUse.substring( eachPrefix.length() + 1);
+						notesToAdd.add(eachPrefix);
+						anyDoneThisRound = true;
+					}
+				}
+
+				if (!anyDoneThisRound) {
+					break;
+				}
+			}
+
+			return inName.substring(incr);
+		}
+
+		public Collection<String> getExtraNotes() {
+			return notesToAdd;
+		}
 	}
 }
