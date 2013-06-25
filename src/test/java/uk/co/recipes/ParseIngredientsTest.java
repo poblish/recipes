@@ -17,6 +17,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import uk.co.recipes.api.IIngredient;
+import uk.co.recipes.cats.Categorisation;
 import uk.co.recipes.parse.IngredientParser;
 import uk.co.recipes.persistence.CanonicalItemFactory;
 import uk.co.recipes.persistence.ItemsLoader;
@@ -74,6 +75,13 @@ public class ParseIngredientsTest {
 		final List<IIngredient> ingr4 = parseIngredientsFrom("chCashBlackSpiceCurry.txt");
 		final List<IIngredient> ingrBol1 = parseIngredientsFrom("bol1.txt");
 		final List<IIngredient> ingrBol2 = parseIngredientsFrom("bol2.txt");
+
+		assertThat( Categorisation.forIngredients(ingr1).toString(), is("[ALCOHOL, DAIRY, FAT x 2, FLOUR x 2, FRUIT, HERB x 4, MEAT, OIL, VEGETABLE x 2, WINE]"));
+		assertThat( Categorisation.forIngredients(ingr2).toString(), is("[CHEESE x 2, DAIRY x 2, FAT, FRUIT, ITALIAN x 3, OIL, PASTA, VEGETABLE]"));
+		assertThat( Categorisation.forIngredients(ingr3).toString(), is("[CHILLI, FAT, HERB, INDIAN x 5, MEAT, OIL, SEED, SPICE x 6, SUGAR, VEGETABLE x 3]"));
+		assertThat( Categorisation.forIngredients(ingr4).toString(), is("[CHILLI, FAT, HERB, INDIAN x 4, MEAT, NUT, OIL, SALT, SPICE x 4, VEGETABLE x 2]"));
+		assertThat( Categorisation.forIngredients(ingrBol1).toString(), is("[ALCOHOL, CHEESE, DAIRY, FAT, HERB x 2, ITALIAN, MEAT, OIL, SUGAR, VEGETABLE x 4, VINEGAR, WINE]"));
+		assertThat( Categorisation.forIngredients(ingrBol2).toString(), is("[DAIRY x 2, FAT, MEAT x 3, SPICE, VEGETABLE x 4]"));
 
 		final double s12 = Similarity.amongIngredients( ingr1, ingr2);
 		final double s13 = Similarity.amongIngredients( ingr1, ingr3);
