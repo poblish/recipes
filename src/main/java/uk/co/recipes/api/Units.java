@@ -17,5 +17,5 @@ public enum Units implements IUnit {
 
 	TSP, HEAPED_TBSP, TBSP,
 
-	BUNCHES, SPLASHES
+	BUNCHES, SPLASHES, KNOB, STICK, GLASS
 }

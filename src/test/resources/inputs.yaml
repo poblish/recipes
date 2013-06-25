@@ -25,6 +25,8 @@
 ---
 {canonicalName: Mixed Herbs, tags: HERB}
 ---
+{canonicalName: Nutmeg, tags: SPICE}
+---
 {canonicalName: Rosemary, tags: HERB}
 ---
 {canonicalName: Thyme, tags: HERB}
@@ -45,7 +47,23 @@
 
 {canonicalName: Carrot, tags: VEGETABLE}
 ---
+# FIXME Got to handle plurals properly!
+{canonicalName: Carrots, tags: VEGETABLE}
+---
+{canonicalName: Celery, tags: VEGETABLE}
+---
+# FIXME Got to handle plurals properly!
+{canonicalName: Celery Sticks, parent: Celery}
+---
+{canonicalName: Garlic, tags: VEGETABLE}
+---
+# FIXME Got to handle plurals properly!
+{canonicalName: Garlic Cloves, parent: Garlic}
+---
 {canonicalName: Onion, tags: VEGETABLE}
+---
+# FIXME Got to handle plurals properly!
+{canonicalName: Onions, tags: VEGETABLE}
 ---
 {canonicalName: Baby Onions, parent: Onion}
 ---
@@ -58,6 +76,9 @@
 ---
 # FIXME Got to handle plurals properly!
 {canonicalName: Tomatoes, tags: VEGETABLE}
+---
+# FIXME Got to handle plurals properly!
+{canonicalName: Plum Tomatoes, parent: Tomato}
 ---
 
 
@@ -98,15 +119,19 @@
 ---
 
 
-{canonicalName: Butter, tags: FAT}
+{canonicalName: Butter, tags: {DAIRY, FAT}}
 ---
 {canonicalName: Margarine, tags: FAT}
 ---
 
 
-{canonicalName: Mascarpone, tags: {CHEESE, ITALIAN}}
+{canonicalName: Mascarpone, tags: {DAIRY, CHEESE, ITALIAN}}
 ---
-{canonicalName: Parmesan, tags: {CHEESE, ITALIAN}}
+{canonicalName: Parmesan, tags: {DAIRY, CHEESE, ITALIAN}}
+---
+
+
+{canonicalName: Milk, tags: DAIRY}
 ---
 
 
@@ -120,13 +145,23 @@
 ---
 
 
+{canonicalName: Vinegar, tags: VINEGAR}
+---
+{canonicalName: Red Wine Vinegar, parent: Vinegar}
+---
+
+
 {canonicalName: Gnocchi, tags: {PASTA, ITALIAN}}
 ---
 
 
 {canonicalName: Beef, tags: MEAT}
 ---
+{canonicalName: Minced Beef, parent: Beef}
+---
 {canonicalName: Chicken, tags: MEAT}
+---
+{canonicalName: Chicken Liver, tags: MEAT}
 ---
 {canonicalName: Chicken Thighs, parent: Chicken}
 ---
@@ -136,4 +171,10 @@
 ---
 {canonicalName: Bacon, tags: MEAT}
 ---
+{canonicalName: Bacon Rashers, parent: Bacon}
+---
 {canonicalName: Streaky Bacon, parent: Bacon}
+---
+
+
+{canonicalName: Red Wine, tags: {WINE, ALCOHOL}}

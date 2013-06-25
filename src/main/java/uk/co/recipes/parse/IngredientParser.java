@@ -35,10 +35,10 @@ public class IngredientParser {
 	private static final String	NOTES = "([,\\(].*)?";
 	private static final String	SUFFIX = "([\\w- ]*)" + NOTES;
 
-	private static final Pattern	A = Pattern.compile( DEC_FRAC_NUMBER_PATTERN + "(kg|g|gms|cm|-inch|mm|ml| heaped tbsps?| tablespoons?| tbsps?| tsps?| teaspoons?)? " + SUFFIX, Pattern.CASE_INSENSITIVE);
-	private static final Pattern	B = Pattern.compile("((small|large) (splash|bunch)) " + SUFFIX, Pattern.CASE_INSENSITIVE);
+	private static final Pattern	A = Pattern.compile( DEC_FRAC_NUMBER_PATTERN + "(kg|g|gms|cm|-inch|mm|ml| sticks?| heaped tbsps?| tablespoons?| tbsps?| tsps?| teaspoons?)? " + SUFFIX, Pattern.CASE_INSENSITIVE);
+	private static final Pattern	B = Pattern.compile("((generous|small|large) (splash|bunch|glass|knob of?)) " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	C = Pattern.compile("(juice|zest) ([0-9]+) (.*)(, (.*))*", Pattern.CASE_INSENSITIVE);
-	private static final Pattern	D = Pattern.compile("(salt|beaten egg)" + NOTES, Pattern.CASE_INSENSITIVE);
+	private static final Pattern	D = Pattern.compile("(nutmeg|parmesan|salt|beaten egg)" + NOTES, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	E = Pattern.compile("(dressed [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);
 
 
@@ -138,7 +138,7 @@ public class IngredientParser {
 
 	// FIXME This needs to be in a DSL, configurable, or something
 	private static class NameAdjuster {
-		private static final String[]	BAD_PREFIXES = {"beaten", "can", "chilled", "chopped", "cold", "crushed", "dressed", "dried", "fresh", "hot", "large", "plump", "small", "smoked", "tin", "whole"};
+		private static final String[]	BAD_PREFIXES = {"beaten", "can", "chilled", "chopped", "coarsely", "cold", "crushed", "dressed", "dried", "fresh", "hot", "large", "plump", "small", "smoked", "tin", "whole"};
 
 		private final Collection<String> notesToAdd = Lists.newArrayList();
 

@@ -45,6 +45,14 @@ public class UnitParser {
 			return Units.SPLASHES;
 		}
 
+		if (s.startsWith("KNOB")) {
+			return Units.KNOB;
+		}
+
+		if (s.startsWith("STICK")) {
+			return Units.STICK;
+		}
+
 		return Units.valueOf( s.replace(' ', '_') );
 	}
 }

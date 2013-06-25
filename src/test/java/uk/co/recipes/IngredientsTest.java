@@ -113,7 +113,7 @@ public class IngredientsTest {
 		Thread.sleep(1000);  // Time for indexing to happen!
 
 		final JsonNode jn = om.readTree( new URL(IDX_URL + "/_search?q=MEAT:true") ).path("hits").path("hits");
-		assertThat( jn.size(), is(8));
+		assertThat( jn.size(), is(10));
 
 		for ( JsonNode each : jn) {
 			System.out.println(om.readValue( each, CanonicalItem.class));
