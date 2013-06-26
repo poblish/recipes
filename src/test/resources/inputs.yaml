@@ -1,5 +1,7 @@
 {canonicalName: Bay Leaves, tags: HERB}
 ---
+{canonicalName: Chinese five-spice powder, tags: {SPICE, CHINESE}}
+---
 {canonicalName: Cinnamon, tags: SPICE}
 ---
 {canonicalName: Cinnamon Stick, parent: Cinnamon, tags: INDIAN}
@@ -21,7 +23,10 @@
 ---
 {canonicalName: Garam Masala, tags: {SPICE, INDIAN}}
 ---
-{canonicalName: Ginger, tags: {SPICE, INDIAN}}
+{canonicalName: Ginger, tags: {SPICE, INDIAN, CHINESE}}
+---
+# FIXME This is surely a naming, not a child
+{canonicalName: Root Ginger, parent: Ginger}
 ---
 {canonicalName: Mixed Herbs, tags: HERB}
 ---
@@ -29,15 +34,20 @@
 ---
 {canonicalName: Rosemary, tags: HERB}
 ---
+{canonicalName: Star Anise, tags: {SPICE, CHINESE}}
+---
 {canonicalName: Thyme, tags: HERB}
 ---
 {canonicalName: Turmeric, tags: {SPICE, INDIAN}}
 ---
 
 
-{canonicalName: Chilli, tags: CHILLI}
+{canonicalName: Chilli, tags: {CHILLI, INDIAN, THAI, CHINESE}}
 ---
 {canonicalName: Chilli Flakes, parent: Chilli}
+---
+# FIXME This is surely a naming, not a child
+{canonicalName: Red Chilli, parent: Chilli}
 ---
 {canonicalName: Red Chillies, parent: Chilli}
 ---
@@ -155,7 +165,13 @@
 ---
 
 
-{canonicalName: Worcestershire Sauce, parent: SAUCE}
+{canonicalName: Soy Sauce, tags: {SAUCE, CHINESE}}
+---
+{canonicalName: Worcestershire Sauce, tags: SAUCE}
+---
+{canonicalName: Beef Stock, tags: {MEAT, SAUCE}}
+---
+{canonicalName: Chicken Stock, tags: {MEAT, SAUCE}}
 ---
 
 

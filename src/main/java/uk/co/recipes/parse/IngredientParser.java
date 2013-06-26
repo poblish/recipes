@@ -36,10 +36,10 @@ public class IngredientParser {
 	private static final String	SUFFIX = "([\\w- ]*)" + NOTES;
 
 	private static final Pattern	A = Pattern.compile( DEC_FRAC_NUMBER_PATTERN + "(kg|g|gms|cm|-inch|mm|ml| sticks?| heaped tbsps?| tablespoons?| tbsps?| tsps?| teaspoons?)? " + SUFFIX, Pattern.CASE_INSENSITIVE);
-	private static final Pattern	B = Pattern.compile("((generous|small|large) (splash|bunch|glass|knob of?)) " + SUFFIX, Pattern.CASE_INSENSITIVE);
+	private static final Pattern	B = Pattern.compile("((generous|small|large|thumb-size) (splash|bunch|glass|piece|knob of?)) " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	C = Pattern.compile("(juice|zest) ([0-9]+) (.*)(, (.*))*", Pattern.CASE_INSENSITIVE);
 	private static final Pattern	D = Pattern.compile("(nutmeg|parmesan|salt|beaten egg)" + NOTES, Pattern.CASE_INSENSITIVE);
-	private static final Pattern	E = Pattern.compile("(dressed [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);
+	private static final Pattern	E = Pattern.compile("((?:dressed|steamed) [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);
 
 
 	public static Optional<Ingredient> parse( final String inStr) {
@@ -62,7 +62,7 @@ public class IngredientParser {
 			m = B.matcher(inStr);
 			if (m.matches()) {
 				final NameAdjuster na = new NameAdjuster();
-				final Ingredient ingr = new Ingredient( new NamedItem( findItem( na.adjust( m.group(4).trim() ) ) ), new Quantity( UnitParser.parse( m.group(3) ), NonNumericQuantities.valueOf( m.group(2).trim().toUpperCase() )));
+				final Ingredient ingr = new Ingredient( new NamedItem( findItem( na.adjust( m.group(4).trim() ) ) ), new Quantity( UnitParser.parse( m.group(3) ), NonNumericQuantityParser.parse( m.group(2).trim().toUpperCase() )));
 
 				final String note = m.group(5);
 				if ( note != null) {
@@ -138,7 +138,7 @@ public class IngredientParser {
 
 	// FIXME This needs to be in a DSL, configurable, or something
 	private static class NameAdjuster {
-		private static final String[]	BAD_PREFIXES = {"beaten", "can", "chilled", "chopped", "coarsely", "cold", "crushed", "dressed", "dried", "fresh", "hot", "large", "plump", "small", "smoked", "tin", "whole"};
+		private static final String[]	BAD_PREFIXES = {"beaten", "can", "chilled", "chopped", "coarsely", "cold", "crushed", "dark", "dressed", "dried", "fresh", "hot", "large", "plump", "small", "smoked", "tin", "whole"};
 
 		private final Collection<String> notesToAdd = Lists.newArrayList();
 
