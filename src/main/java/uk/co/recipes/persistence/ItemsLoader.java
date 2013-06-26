@@ -12,7 +12,6 @@ import org.yaml.snakeyaml.Yaml;
 
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.api.ICanonicalItem;
-import uk.co.recipes.tags.CommonTags;
 import uk.co.recipes.tags.TagUtils;
 
 import com.google.common.base.Optional;
