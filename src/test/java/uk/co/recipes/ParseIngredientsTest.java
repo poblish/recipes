@@ -2,6 +2,7 @@ package uk.co.recipes;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static uk.co.recipes.tags.CommonTags.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +18,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import uk.co.recipes.api.IIngredient;
+import uk.co.recipes.api.ITag;
 import uk.co.recipes.cats.Categorisation;
 import uk.co.recipes.parse.IngredientParser;
 import uk.co.recipes.persistence.CanonicalItemFactory;
@@ -82,6 +84,14 @@ public class ParseIngredientsTest {
 		assertThat( Categorisation.forIngredients(ingr4).toString(), is("[CHILLI, FAT, HERB, INDIAN x 4, MEAT, NUT, OIL, SALT, SPICE x 4, VEGETABLE x 2]"));
 		assertThat( Categorisation.forIngredients(ingrBol1).toString(), is("[ALCOHOL, CHEESE, DAIRY, FAT, HERB x 2, ITALIAN, MEAT, OIL, SUGAR, VEGETABLE x 4, VINEGAR, WINE]"));
 		assertThat( Categorisation.forIngredients(ingrBol2).toString(), is("[DAIRY x 2, FAT, MEAT x 3, SPICE, VEGETABLE x 4]"));
+
+		final ITag[] tags = new ITag[]{ INDIAN, CHINESE, JAPANESE, THAI, FRENCH, ITALIAN, GREEK, ENGLISH };
+		assertThat( Categorisation.forIngredients(ingr1, tags).toString(), is("[]"));
+		assertThat( Categorisation.forIngredients(ingr2, tags).toString(), is("[ITALIAN x 3]"));
+		assertThat( Categorisation.forIngredients(ingr3, tags).toString(), is("[INDIAN x 5]"));
+		assertThat( Categorisation.forIngredients(ingr4, tags).toString(), is("[INDIAN x 4]"));
+		assertThat( Categorisation.forIngredients(ingrBol1, tags).toString(), is("[ITALIAN]"));
+		assertThat( Categorisation.forIngredients(ingrBol2, tags).toString(), is("[]"));
 
 		final double s12 = Similarity.amongIngredients( ingr1, ingr2);
 		final double s13 = Similarity.amongIngredients( ingr1, ingr3);

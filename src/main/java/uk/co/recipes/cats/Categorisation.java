@@ -34,4 +34,14 @@ public class Categorisation {
 
 		return tagsSet;
 	}
+
+	public static Multiset<ITag> forIngredients( final Collection<IIngredient> inIngredients, final ITag... inTagsToCheck) throws IncompatibleIngredientsException {
+		final Multiset<ITag> tagsSet = TreeMultiset.create( TagUtils.comparator() );
+
+		for ( IIngredient each : inIngredients) {
+			tagsSet.addAll( FluentIterable.from( each.getItem().getCanonicalItem().getTags().entrySet() ).filter( findActivated(inTagsToCheck) ).transform( entryKeys() ).toList() );
+		}
+
+		return tagsSet;
+	}
 }

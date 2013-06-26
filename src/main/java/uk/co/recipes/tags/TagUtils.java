@@ -4,6 +4,8 @@
 package uk.co.recipes.tags;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map.Entry;
 
@@ -33,10 +35,11 @@ public class TagUtils {
 		}
 	};
 
-	public static Predicate<Entry<ITag,Serializable>> findActivated( final CommonTags inTag) {
+	public static Predicate<Entry<ITag,Serializable>> findActivated( final ITag... inTags) {
+		final Collection<ITag> tagsColl = Arrays.asList(inTags);
 		return new Predicate<Entry<ITag,Serializable>>() {
 			public boolean apply( final Entry<ITag,Serializable> inEntry) {
-				return inEntry.getKey() == inTag && ( inEntry.getValue() == Boolean.TRUE || Boolean.parseBoolean((String) inEntry.getValue() ));
+				return tagsColl.contains( inEntry.getKey() ) && ( inEntry.getValue() == Boolean.TRUE || Boolean.parseBoolean((String) inEntry.getValue() ));
 			}
 		};
 	}
