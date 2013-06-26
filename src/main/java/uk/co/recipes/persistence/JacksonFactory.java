@@ -18,8 +18,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
 import org.codehaus.jackson.map.module.SimpleModule;
 
-import uk.co.recipes.api.CommonTags;
 import uk.co.recipes.api.ITag;
+import uk.co.recipes.tags.TagUtils;
 
 /**
  * TODO
@@ -37,7 +37,7 @@ public class JacksonFactory {
 
 			@Override
 			public Object deserializeKey( String key, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-				return CommonTags.valueOf(key);
+				return TagUtils.forName(key);
 			}} );
 
 		testModule.addDeserializer( Serializable.class, new JsonDeserializer<Serializable>() {

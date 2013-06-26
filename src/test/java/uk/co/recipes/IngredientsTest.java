@@ -16,7 +16,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import uk.co.recipes.api.CommonTags;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.Units;
@@ -24,6 +23,7 @@ import uk.co.recipes.persistence.CanonicalItemFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.persistence.JacksonFactory;
 import uk.co.recipes.persistence.RecipeFactory;
+import uk.co.recipes.tags.CommonTags;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;

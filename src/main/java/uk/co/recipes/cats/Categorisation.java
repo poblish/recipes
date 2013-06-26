@@ -3,15 +3,15 @@
  */
 package uk.co.recipes.cats;
 
-import static uk.co.recipes.similarity.TagUtils.entryKeys;
-import static uk.co.recipes.similarity.TagUtils.findActivated;
+import static uk.co.recipes.tags.TagUtils.entryKeys;
+import static uk.co.recipes.tags.TagUtils.findActivated;
 
 import java.util.Collection;
 
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.similarity.IncompatibleIngredientsException;
-import uk.co.recipes.similarity.TagUtils;
+import uk.co.recipes.tags.TagUtils;
 
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Multiset;

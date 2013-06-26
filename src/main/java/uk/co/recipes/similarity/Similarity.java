@@ -9,10 +9,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import uk.co.recipes.api.CommonTags;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.ITag;
+import uk.co.recipes.tags.CommonTags;
+import uk.co.recipes.tags.TagUtils;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;

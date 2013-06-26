@@ -13,11 +13,11 @@ import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Ingredient;
 import uk.co.recipes.NamedItem;
 import uk.co.recipes.Quantity;
-import uk.co.recipes.api.CommonTags;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.NonNumericQuantities;
 import uk.co.recipes.api.Units;
 import uk.co.recipes.persistence.CanonicalItemFactory;
+import uk.co.recipes.tags.CommonTags;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;

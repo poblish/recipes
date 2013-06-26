@@ -1,7 +1,9 @@
 /**
  * 
  */
-package uk.co.recipes.api;
+package uk.co.recipes.tags;
+
+import uk.co.recipes.api.ITag;
 
 /**
  * TODO
@@ -23,5 +25,6 @@ public enum CommonTags implements ITag {
 
 	WINE, ALCOHOL, VINEGAR, SAUCE,
 
+	// Should be in NationalCuisineTags...
 	INDIAN, CHINESE, JAPANESE, THAI, FRENCH, ITALIAN, GREEK, ENGLISH
 }

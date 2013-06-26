@@ -1,13 +1,12 @@
 /**
  * 
  */
-package uk.co.recipes.similarity;
+package uk.co.recipes.tags;
 
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Map.Entry;
 
-import uk.co.recipes.api.CommonTags;
 import uk.co.recipes.api.ITag;
 
 import com.google.common.base.Function;
@@ -48,6 +47,15 @@ public class TagUtils {
 
 	public static Function<Entry<ITag,Serializable>,ITag> entryKeys() {
 		return ENTRY_KEYS;
+	}
+
+	public static ITag forName( final String inName) {
+//		try {
+			return CommonTags.valueOf(inName);
+//		}
+//		catch (IllegalArgumentException e) {
+//			return NationalCuisineTags.valueOf(inName);
+//		}
 	}
 
 	public static Comparator<ITag> comparator() {

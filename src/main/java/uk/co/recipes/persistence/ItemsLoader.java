@@ -11,8 +11,9 @@ import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
 
 import uk.co.recipes.CanonicalItem;
-import uk.co.recipes.api.CommonTags;
 import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.tags.CommonTags;
+import uk.co.recipes.tags.TagUtils;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
@@ -46,17 +47,17 @@ public class ItemsLoader {
 
 					final Object tagsObj = map.get("tags");
 					if ( tagsObj instanceof String) {
-						newItem.addTag( CommonTags.valueOf((String) tagsObj) );
+						newItem.addTag( TagUtils.forName((String) tagsObj) );
 					}
 					else if ( tagsObj instanceof Map) {
 						@SuppressWarnings("unchecked")
 						Map<String,Object> m = (Map<String,Object>) tagsObj;
 						for ( String each : m.keySet()) {
 							if (each.startsWith("-")) {
-								newItem.addTag( CommonTags.valueOf( each.substring(1)), Boolean.FALSE);
+								newItem.addTag( TagUtils.forName( each.substring(1)), Boolean.FALSE);
 							}
 							else {
-								newItem.addTag( CommonTags.valueOf(each) );
+								newItem.addTag( TagUtils.forName(each) );
 							}
 						}
 					}
