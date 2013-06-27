@@ -6,6 +6,8 @@ package uk.co.recipes.persistence;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 import org.yaml.snakeyaml.Yaml;
@@ -16,6 +18,7 @@ import uk.co.recipes.tags.TagUtils;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
+import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 
 /**
@@ -44,25 +47,34 @@ public class ItemsLoader {
 				public ICanonicalItem get() {
 					final ICanonicalItem newItem = new CanonicalItem( name, parentCI);
 
-					final Object tagsObj = map.get("tags");
-					if ( tagsObj instanceof String) {
-						newItem.addTag( TagUtils.forName((String) tagsObj) );
-					}
-					else if ( tagsObj instanceof Map) {
-						@SuppressWarnings("unchecked")
-						Map<String,Object> m = (Map<String,Object>) tagsObj;
-						for ( String each : m.keySet()) {
-							if (each.startsWith("-")) {
-								newItem.addTag( TagUtils.forName( each.substring(1)), Boolean.FALSE);
-							}
-							else {
-								newItem.addTag( TagUtils.forName(each) );
-							}
+					for ( String each : yamlObjectToStrings( map.get("tags") )) {
+						if (each.startsWith("-")) {
+							newItem.addTag( TagUtils.forName( each.substring(1)), Boolean.FALSE);
+						}
+						else {
+							newItem.addTag( TagUtils.forName(each) );
 						}
 					}
 
 					return newItem;
 				}});
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Collection<String> yamlObjectToStrings( final Object inYamlObj) {
+		if ( inYamlObj == null) {
+			return Collections.emptyList();
+		}
+
+		if ( inYamlObj instanceof String) {
+			return Lists.newArrayList((String) inYamlObj);
+		}
+		else if ( inYamlObj instanceof Map) {
+			return ((Map<String,Object>) inYamlObj).keySet();
+		}
+		else {
+			throw new RuntimeException("Unexpected type: " + inYamlObj.getClass());
 		}
 	}
 }
