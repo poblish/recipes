@@ -29,7 +29,7 @@ import com.google.common.base.Supplier;
  */
 public class IngredientParser {
 
-	private static final String	DEC_FRAC_NUMBER_PATTERN = "([0-9\\.]+(?: [0-9]/[0-9])?)";
+	private static final String	DEC_FRAC_NUMBER_PATTERN = "([0-9\\.]*(?: ?[0-9]/[0-9])?)";
 	private static final String	NOTES = "([,\\(].*)?";
 	private static final String	SUFFIX = "([\\w- ]*)" + NOTES;
 
