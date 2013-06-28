@@ -95,6 +95,32 @@ public class Ingredient implements IIngredient {
 		return notes;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hashCode( item, quantity, notes);
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals( Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Ingredient)) {
+			return false;
+		}
+		final Ingredient other = (Ingredient) obj;
+		return Objects.equal( item, other.item) && Objects.equal( quantity, other.quantity) && Objects.equal( notes, other.notes);
+	}
+
 	public String toString() {
 		return Objects.toStringHelper(this).omitNullValues()
 						.add( "q", quantity)
