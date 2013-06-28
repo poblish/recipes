@@ -78,8 +78,6 @@ public class ParseIngredientsTest {
 	public void testAliases() throws IOException, IncompatibleIngredientsException {
 		final List<IIngredient> namings1 = parseIngredientsFrom("namings1.txt");
 		final List<IIngredient> namings2 = parseIngredientsFrom("namings2.txt");
-		System.out.println( namings1 + " vs ...");
-		System.out.println( namings2);
 		assertThat( Similarity.amongIngredients( namings1, namings2), is(1.0));
 		assertThat( namings1, is(namings2));
 		assertThat( namings2, is(namings1));
