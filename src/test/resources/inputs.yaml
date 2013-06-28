@@ -8,7 +8,7 @@
 ---
 {canonicalName: Cloves, tags: {SPICE, INDIAN}}
 ---
-{canonicalName: Coriander, tags: HERB}
+{canonicalName: Coriander, tags: HERB, aliases: {Cilantro}}
 ---
 {canonicalName: Coriander Powder, parent: Coriander, tags: {-HERB, SPICE, INDIAN}}
 ---
@@ -70,6 +70,12 @@
 # FIXME Got to handle plurals properly!
 {canonicalName: Garlic Cloves, parent: Garlic}
 ---
+{canonicalName: Mixed Leaves, tags: VEGETABLE}
+---
+{canonicalName: Mushrooms, tags: VEGETABLE}
+---
+{canonicalName: Button Mushrooms, parent: Mushrooms}
+---
 {canonicalName: Onion, tags: VEGETABLE}
 ---
 # FIXME Got to handle plurals properly!
@@ -127,6 +133,12 @@
 ---
 {canonicalName: Granulated Sugar, parent: Sugar}
 ---
+{canonicalName: Brown Sugar, parent: Sugar}
+---
+{canonicalName: Light Muscovado Sugar, parent: Brown Sugar}
+---
+{canonicalName: Dark Muscovado Sugar, parent: Brown Sugar}
+---
 
 
 {canonicalName: Butter, tags: {DAIRY, FAT}}
@@ -181,6 +193,8 @@
 
 {canonicalName: Beef, tags: MEAT}
 ---
+{canonicalName: Braising Beef, parent: Beef}
+---
 {canonicalName: Minced Beef, parent: Beef}
 ---
 {canonicalName: Chicken, tags: MEAT}
@@ -202,3 +216,10 @@
 
 
 {canonicalName: Red Wine, tags: {WINE, ALCOHOL}}
+---
+{canonicalName: White Wine, tags: {WINE, ALCOHOL}}
+---
+{canonicalName: Chinese Cooking Wine, tags: {WINE, ALCOHOL}}
+---
+{canonicalName: Dry Sherry, tags: {WINE, ALCOHOL}}
+
