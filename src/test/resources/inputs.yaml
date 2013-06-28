@@ -1,4 +1,18 @@
-{canonicalName: Bay Leaves, tags: HERB}
+{canonicalName: Bay Leaf, tags: HERB, aliases: {Bay Leaves}}
+---
+{canonicalName: Coriander, tags: HERB, aliases: {Cilantro}}
+---
+{canonicalName: Mixed Herbs, tags: HERB}
+---
+{canonicalName: Parsley, tags: HERB}
+---
+{canonicalName: Rosemary, tags: HERB}
+---
+{canonicalName: Thyme, tags: HERB}
+---
+
+
+{canonicalName: Allspice, tags: SPICE, aliases: {Allspice Berries}}
 ---
 {canonicalName: Chinese five-spice powder, tags: {SPICE, CHINESE}}
 ---
@@ -7,8 +21,6 @@
 {canonicalName: Cinnamon Stick, parent: Cinnamon, tags: INDIAN}
 ---
 {canonicalName: Cloves, tags: {SPICE, INDIAN}}
----
-{canonicalName: Coriander, tags: HERB, aliases: {Cilantro}}
 ---
 {canonicalName: Coriander Powder, parent: Coriander, tags: {-HERB, SPICE, INDIAN}}
 ---
@@ -28,19 +40,13 @@
 # FIXME This is surely a naming, not a child
 {canonicalName: Root Ginger, parent: Ginger}
 ---
-{canonicalName: Mixed Herbs, tags: HERB}
----
 {canonicalName: Nutmeg, tags: SPICE}
 ---
 {canonicalName: Pepper, tags: SPICE}
 ---
 {canonicalName: Black Pepper, tags: SPICE, parent: Pepper, aliases: {Pepper Powder, Black Pepper}}
 ---
-{canonicalName: Rosemary, tags: HERB}
----
 {canonicalName: Star Anise, tags: {SPICE, CHINESE}}
----
-{canonicalName: Thyme, tags: HERB}
 ---
 {canonicalName: Turmeric, tags: {SPICE, INDIAN}}
 ---
@@ -99,6 +105,8 @@
 ---
 # FIXME Got to handle plurals properly!
 {canonicalName: Plum Tomatoes, parent: Tomato}
+---
+{canonicalName: Tomato Paste, parent: Tomato}
 ---
 
 
@@ -225,5 +233,9 @@
 ---
 {canonicalName: Chinese Cooking Wine, tags: {WINE, ALCOHOL}}
 ---
-{canonicalName: Dry Sherry, tags: {WINE, ALCOHOL}}
+{canonicalName: Dry Sherry, tags: {WINE, ALCOHOL, SPANISH}}
+---
+{canonicalName: Brandy, tags: {WINE, ALCOHOL, FRENCH}}
+---
+{canonicalName: Cognac, parent: Brandy}
 
