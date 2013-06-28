@@ -99,12 +99,15 @@ public class IngredientParser {
 					else {
 						m = E.matcher(inStr);
 						if (m.matches()) {
-							final Ingredient ingr = new Ingredient( new NamedItem( findItem( m.group(1).trim() ) ), new Quantity( Units.INSTANCES, NonNumericQuantities.ANY_AMOUNT));
+							final NameAdjuster na = new NameAdjuster();
+							final Ingredient ingr = new Ingredient( new NamedItem( findItem( na.adjust( m.group(1).trim() ) ) ), new Quantity( Units.INSTANCES, NonNumericQuantities.ANY_AMOUNT));
 
 							final String note = m.group(2);
 							if ( note != null) {
 								ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
 							}
+
+							ingr.addNotes( ENGLISH, na.getExtraNotes());
 
 							return Optional.of(ingr);
 						}
