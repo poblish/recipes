@@ -41,6 +41,10 @@ public class UnitParser {
 			return Units.INCH;
 		}
 
+		if (s.equals("CUPS")) {
+			return Units.CUP;
+		}
+
 		if (s.equals("BUNCH")) {
 			return Units.BUNCHES;
 		}
