@@ -34,6 +34,8 @@ import com.google.common.io.Files;
 
 public class ParseIngredientsTest {
 
+	private static int garlicRecipes = 0;
+
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
 		CanonicalItemFactory.deleteAll();
@@ -41,14 +43,15 @@ public class ParseIngredientsTest {
 	}
 
 	@BeforeClass
-	public void loadIngredientsFromYaml() throws IOException {
+	public void loadIngredientsFromYaml() throws InterruptedException, IOException {
 		ItemsLoader.load();
+		Thread.sleep(1000);
 	}
 
 	@Test
 	public void parseIngredients1() throws IOException {
 		final List<IIngredient> allIngredients = parseIngredientsFrom("inputs.txt");
-		assertThat( allIngredients.toString(), is("[Ingredient{q=1 TBSP, item=NamedItem{name=Sunflower Oil, canonical=CanonicalItem{name=Sunflower Oil, parent=CanonicalItem{name=Vegetable Oil, parent=CanonicalItem{name=Oil, tags={OIL=true, FAT=true}}, tags={OIL=true, FAT=true}}, tags={OIL=true, FAT=true}}}}, Ingredient{q=200 GRAMMES, item=NamedItem{name=Streaky Bacon, canonical=CanonicalItem{name=Streaky Bacon, parent=CanonicalItem{name=Bacon, tags={MEAT=true}}, tags={MEAT=true}}}, notes={en=[preferably in one piece, skinned and cut into pieces, smoked]}}, Ingredient{q=900 GRAMMES, item=NamedItem{name=lamb neck fillets, canonical=CanonicalItem{name=lamb neck fillets}}, notes={en=[cut into large chunks]}}, Ingredient{q=350 GRAMMES, item=NamedItem{name=Baby Onions, canonical=CanonicalItem{name=Baby Onions, parent=CanonicalItem{name=Onion, tags={VEGETABLE=true}}, tags={VEGETABLE=true}}}, notes={en=[peeled]}}, Ingredient{q=5, item=NamedItem{name=Carrot, canonical=CanonicalItem{name=Carrot, tags={VEGETABLE=true}}}, notes={en=[cut into large chunks]}}, Ingredient{q=350 GRAMMES, item=NamedItem{name=button mushrooms, canonical=CanonicalItem{name=button mushrooms}}, notes={en=[small]}}, Ingredient{q=3 TBSP, item=NamedItem{name=Plain Flour, canonical=CanonicalItem{name=Plain Flour, parent=CanonicalItem{name=Flour, tags={FLOUR=true}}, tags={FLOUR=true}}}}, Ingredient{q=3, item=NamedItem{name=Bay Leaves, canonical=CanonicalItem{name=Bay Leaves, tags={HERB=true}}}}, Ingredient{q=SMALL BUNCHES, item=NamedItem{name=Thyme, canonical=CanonicalItem{name=Thyme, tags={HERB=true}}}}, Ingredient{q=350 ML, item=NamedItem{name=Red Wine, canonical=CanonicalItem{name=Red Wine, tags={WINE=true, ALCOHOL=true}}}}, Ingredient{q=350 ML, item=NamedItem{name=lamb or beef stock, canonical=CanonicalItem{name=lamb or beef stock}}}, Ingredient{q=LARGE SPLASHES, item=NamedItem{name=Worcestershire Sauce, canonical=CanonicalItem{name=Worcestershire Sauce, tags={SAUCE=true}}}}, Ingredient{q=350 GRAMMES, item=NamedItem{name=Self-raising Flour, canonical=CanonicalItem{name=Self-raising Flour, parent=CanonicalItem{name=Flour, tags={FLOUR=true}}, tags={FLOUR=true}}}}, Ingredient{q=4 TBSP, item=NamedItem{name=Mixed Herbs, canonical=CanonicalItem{name=Mixed Herbs, tags={HERB=true}}}, notes={en=[including thyme, rosemary and parsley, chopped]}}, Ingredient{q=200 GRAMMES, item=NamedItem{name=Butter, canonical=CanonicalItem{name=Butter, tags={FAT=true, DAIRY=true}}}, notes={en=[grated, chilled]}}, Ingredient{q=1, item=NamedItem{name=Lemon, canonical=CanonicalItem{name=Lemon, tags={FRUIT=true}}}, notes={en=[Juice of]}}, Ingredient{q=5, item=NamedItem{name=Bay Leaves, canonical=CanonicalItem{name=Bay Leaves, tags={HERB=true}}}}, Ingredient{q=1, item=NamedItem{name=Egg, canonical=CanonicalItem{name=Egg, tags={EGG=true}}}, notes={en=[to glaze, beaten]}}]"));
+		assertThat( allIngredients.toString(), is("[Ingredient{q=1 TBSP, item=NamedItem{name=Sunflower Oil, canonical=CanonicalItem{name=Sunflower Oil, parent=CanonicalItem{name=Vegetable Oil, parent=CanonicalItem{name=Oil, tags={OIL=true, FAT=true}}, tags={OIL=true, FAT=true}}, tags={OIL=true, FAT=true}}}}, Ingredient{q=200 GRAMMES, item=NamedItem{name=Streaky Bacon, canonical=CanonicalItem{name=Streaky Bacon, parent=CanonicalItem{name=Bacon, tags={MEAT=true}}, tags={MEAT=true}}}, notes={en=[preferably in one piece, skinned and cut into pieces, smoked]}}, Ingredient{q=900 GRAMMES, item=NamedItem{name=lamb neck fillets, canonical=CanonicalItem{name=lamb neck fillets}}, notes={en=[cut into large chunks]}}, Ingredient{q=350 GRAMMES, item=NamedItem{name=Baby Onions, canonical=CanonicalItem{name=Baby Onions, parent=CanonicalItem{name=Onion, tags={VEGETABLE=true}}, tags={VEGETABLE=true}}}, notes={en=[peeled]}}, Ingredient{q=5, item=NamedItem{name=Carrot, canonical=CanonicalItem{name=Carrot, tags={VEGETABLE=true}}}, notes={en=[cut into large chunks]}}, Ingredient{q=350 GRAMMES, item=NamedItem{name=Button Mushrooms, canonical=CanonicalItem{name=Button Mushrooms, parent=CanonicalItem{name=Mushrooms, tags={VEGETABLE=true}}, tags={VEGETABLE=true}}}, notes={en=[small]}}, Ingredient{q=3 TBSP, item=NamedItem{name=Plain Flour, canonical=CanonicalItem{name=Plain Flour, parent=CanonicalItem{name=Flour, tags={FLOUR=true}}, tags={FLOUR=true}}}}, Ingredient{q=3, item=NamedItem{name=Bay Leaves, canonical=CanonicalItem{name=Bay Leaves, tags={HERB=true}}}}, Ingredient{q=SMALL BUNCHES, item=NamedItem{name=Thyme, canonical=CanonicalItem{name=Thyme, tags={HERB=true}}}}, Ingredient{q=350 ML, item=NamedItem{name=Red Wine, canonical=CanonicalItem{name=Red Wine, tags={WINE=true, ALCOHOL=true}}}}, Ingredient{q=350 ML, item=NamedItem{name=Beef Stock, canonical=CanonicalItem{name=Beef Stock, tags={MEAT=true, SAUCE=true}}}}, Ingredient{q=LARGE SPLASHES, item=NamedItem{name=Worcestershire Sauce, canonical=CanonicalItem{name=Worcestershire Sauce, tags={SAUCE=true}}}}, Ingredient{q=350 GRAMMES, item=NamedItem{name=Self-raising Flour, canonical=CanonicalItem{name=Self-raising Flour, parent=CanonicalItem{name=Flour, tags={FLOUR=true}}, tags={FLOUR=true}}}}, Ingredient{q=4 TBSP, item=NamedItem{name=Mixed Herbs, canonical=CanonicalItem{name=Mixed Herbs, tags={HERB=true}}}, notes={en=[including thyme, rosemary and parsley, chopped]}}, Ingredient{q=200 GRAMMES, item=NamedItem{name=Butter, canonical=CanonicalItem{name=Butter, tags={FAT=true, DAIRY=true}}}, notes={en=[grated, chilled]}}, Ingredient{q=1, item=NamedItem{name=Lemon, canonical=CanonicalItem{name=Lemon, tags={FRUIT=true}}}, notes={en=[Juice of]}}, Ingredient{q=5, item=NamedItem{name=Bay Leaves, canonical=CanonicalItem{name=Bay Leaves, tags={HERB=true}}}}, Ingredient{q=1, item=NamedItem{name=Egg, canonical=CanonicalItem{name=Egg, tags={EGG=true}}}, notes={en=[to glaze, beaten]}}]"));
 	}
 
 	@Test
@@ -61,12 +64,25 @@ public class ParseIngredientsTest {
 	public void parseIngredients3() throws IOException {
 		final List<IIngredient> allIngredients = parseIngredientsFrom("inputs3.txt");
 		assertThat( allIngredients.toString(), is("[Ingredient{q=1, item=NamedItem{name=Onion, canonical=CanonicalItem{name=Onion, tags={VEGETABLE=true}}}, notes={en=[large]}}, Ingredient{q=6, item=NamedItem{name=Garlic Cloves, canonical=CanonicalItem{name=Garlic Cloves, parent=CanonicalItem{name=Garlic, tags={VEGETABLE=true}}, tags={VEGETABLE=true}}}, notes={en=[roughly chopped]}}, Ingredient{q=50 GRAMMES, item=NamedItem{name=Ginger, canonical=CanonicalItem{name=Ginger, tags={SPICE=true, INDIAN=true, CHINESE=true}}}, notes={en=[roughly chopped]}}, Ingredient{q=4 TBSP, item=NamedItem{name=Vegetable Oil, canonical=CanonicalItem{name=Vegetable Oil, parent=CanonicalItem{name=Oil, tags={OIL=true, FAT=true}}, tags={OIL=true, FAT=true}}}}, Ingredient{q=2 TSP, item=NamedItem{name=Cumin Seeds, canonical=CanonicalItem{name=Cumin Seeds, tags={SPICE=true, INDIAN=true}}}}, Ingredient{q=1 TSP, item=NamedItem{name=Fennel Seed, canonical=CanonicalItem{name=Fennel Seed, tags={SPICE=true, SEED=true}}}}, Ingredient{q=5 CM, item=NamedItem{name=Cinnamon Stick, canonical=CanonicalItem{name=Cinnamon Stick, parent=CanonicalItem{name=Cinnamon, tags={SPICE=true}}, tags={SPICE=true, INDIAN=true}}}}, Ingredient{q=1 TSP, item=NamedItem{name=Chilli Flakes, canonical=CanonicalItem{name=Chilli Flakes, parent=CanonicalItem{name=Chilli, tags={CHILLI=true, INDIAN=true, CHINESE=true, THAI=true}}, tags={CHILLI=true, INDIAN=true, CHINESE=true, THAI=true}}}}, Ingredient{q=1 TSP, item=NamedItem{name=Garam Masala, canonical=CanonicalItem{name=Garam Masala, tags={SPICE=true, INDIAN=true}}}}, Ingredient{q=1 TSP, item=NamedItem{name=Turmeric, canonical=CanonicalItem{name=Turmeric, tags={SPICE=true, INDIAN=true}}}}, Ingredient{q=1 TSP, item=NamedItem{name=Caster Sugar, canonical=CanonicalItem{name=Caster Sugar, parent=CanonicalItem{name=Sugar, tags={SUGAR=true}}, tags={SUGAR=true}}}}, Ingredient{q=400 GRAMMES, item=NamedItem{name=Tomatoes, canonical=CanonicalItem{name=Tomatoes, tags={VEGETABLE=true}}}, notes={en=[can, chopped]}}, Ingredient{q=8, item=NamedItem{name=Chicken Thighs, canonical=CanonicalItem{name=Chicken Thighs, parent=CanonicalItem{name=Chicken, tags={MEAT=true}}, tags={MEAT=true}}}, notes={en=[skinned, boneless (about 800g)]}}, Ingredient{q=250 ML, item=NamedItem{name=Chicken Stock, canonical=CanonicalItem{name=Chicken Stock, tags={MEAT=true, SAUCE=true}}}, notes={en=[hot]}}, Ingredient{q=2 TBSP, item=NamedItem{name=Coriander, canonical=CanonicalItem{name=Coriander, tags={HERB=true}}}, notes={en=[chopped]}}]"));
+		garlicRecipes++;
 	}
 
 	@Test
 	public void parseIngredientsChCashBlackSpiceCurry() throws IOException {
 		final List<IIngredient> allIngredients = parseIngredientsFrom("chCashBlackSpiceCurry.txt");
 		assertThat( allIngredients.toString(), is("[Ingredient{q=1 KG, item=NamedItem{name=Chicken, canonical=CanonicalItem{name=Chicken, tags={MEAT=true}}}, notes={en=[skinned]}}, Ingredient{q=6, item=NamedItem{name=Cloves, canonical=CanonicalItem{name=Cloves, tags={SPICE=true, INDIAN=true}}}}, Ingredient{q=100 GRAMMES, item=NamedItem{name=coconut grated, canonical=CanonicalItem{name=coconut grated}}}, Ingredient{q=3 INCH, item=NamedItem{name=Cinnamon Stick, canonical=CanonicalItem{name=Cinnamon Stick, parent=CanonicalItem{name=Cinnamon, tags={SPICE=true}}, tags={SPICE=true, INDIAN=true}}}}, Ingredient{q=12, item=NamedItem{name=Garlic Cloves, canonical=CanonicalItem{name=Garlic Cloves, parent=CanonicalItem{name=Garlic, tags={VEGETABLE=true}}, tags={VEGETABLE=true}}}, notes={en=[peeled, plump]}}, Ingredient{q=225 GRAMMES, item=NamedItem{name=Cashew Nuts, canonical=CanonicalItem{name=Cashew Nuts, tags={NUT=true}}}}, Ingredient{q=1, item=NamedItem{name=Onion, canonical=CanonicalItem{name=Onion, tags={VEGETABLE=true}}}, notes={en=[chopped, large]}}, Ingredient{q=0 TBSP, item=NamedItem{name=Coriander Seeds, canonical=CanonicalItem{name=Coriander Seeds, parent=CanonicalItem{name=Coriander, tags={HERB=true}}, tags={SPICE=true, HERB=true, INDIAN=true}}}}, Ingredient{q=0 TSP, item=NamedItem{name=Cumin Seeds, canonical=CanonicalItem{name=Cumin Seeds, tags={SPICE=true, INDIAN=true}}}}, Ingredient{q=4 TBSP, item=NamedItem{name=Oil, canonical=CanonicalItem{name=Oil, tags={OIL=true, FAT=true}}}}, Ingredient{q=4, item=NamedItem{name=Red Chillies, canonical=CanonicalItem{name=Red Chillies, parent=CanonicalItem{name=Chilli, tags={CHILLI=true, INDIAN=true, CHINESE=true, THAI=true}}, tags={CHILLI=true, INDIAN=true, CHINESE=true, THAI=true}}}, notes={en=[whole, dried]}}, Ingredient{q=1, item=NamedItem{name=Salt, canonical=CanonicalItem{name=Salt, tags={SALT=true}}}}]"));
+		garlicRecipes++;
+	}
+
+	@Test
+	public void testAliases() throws IOException, IncompatibleIngredientsException {
+		final List<IIngredient> namings1 = parseIngredientsFrom("namings1.txt");
+		final List<IIngredient> namings2 = parseIngredientsFrom("namings2.txt");
+		System.out.println( namings1 + " vs ...");
+		System.out.println( namings2);
+		assertThat( Similarity.amongIngredients( namings1, namings2), is(1.0));
+		assertThat( namings1, is(namings2));
+		assertThat( namings2, is(namings1));
 	}
 
 	@Test
@@ -79,13 +95,15 @@ public class ParseIngredientsTest {
 		final List<IIngredient> ingrBol2 = parseIngredientsFrom("bol2.txt");
 		final List<IIngredient> ingrChBeef = parseIngredientsFrom("chineseBeef.txt");
 
-		assertThat( Categorisation.forIngredients(ingr1).toString(), is("[ALCOHOL, DAIRY, EGG, FAT x 2, FLOUR x 2, FRUIT, HERB x 4, MEAT, OIL, SAUCE, VEGETABLE x 2, WINE]"));
-		assertThat( Categorisation.forIngredients(ingr2).toString(), is("[CHEESE x 2, CHILLI, CHINESE, DAIRY x 2, FAT, FRUIT, INDIAN, ITALIAN x 3, OIL, PASTA, THAI, VEGETABLE]"));
+		garlicRecipes = 4;
+
+		assertThat( Categorisation.forIngredients(ingr1).toString(), is("[ALCOHOL, DAIRY, EGG, FAT x 2, FLOUR x 2, FRUIT, HERB x 4, MEAT x 2, OIL, SAUCE x 2, VEGETABLE x 3, WINE]"));
+		assertThat( Categorisation.forIngredients(ingr2).toString(), is("[CHEESE x 2, CHILLI, CHINESE, DAIRY x 2, FAT, FRUIT, INDIAN, ITALIAN x 3, OIL, PASTA, THAI, VEGETABLE x 2]"));
 		assertThat( Categorisation.forIngredients(ingr3).toString(), is("[CHILLI, CHINESE x 2, FAT, HERB, INDIAN x 6, MEAT x 2, OIL, SAUCE, SEED, SPICE x 6, SUGAR, THAI, VEGETABLE x 3]"));
 		assertThat( Categorisation.forIngredients(ingr4).toString(), is("[CHILLI, CHINESE, FAT, HERB, INDIAN x 5, MEAT, NUT, OIL, SALT, SPICE x 4, THAI, VEGETABLE x 2]"));
-		assertThat( Categorisation.forIngredients(ingrBol1).toString(), is("[ALCOHOL, CHEESE, DAIRY, FAT, HERB x 2, ITALIAN, MEAT, OIL, SUGAR, VEGETABLE x 4, VINEGAR, WINE]"));
-		assertThat( Categorisation.forIngredients(ingrBol2).toString(), is("[DAIRY x 2, FAT, MEAT x 3, SPICE, VEGETABLE x 4]"));
-		assertThat( Categorisation.forIngredients(ingrChBeef).toString(), is("[CHILLI, CHINESE x 5, FAT, FLOUR, INDIAN x 2, MEAT, OIL, SAUCE x 2, SPICE x 3, THAI, VEGETABLE]"));
+		assertThat( Categorisation.forIngredients(ingrBol1).toString(), is("[ALCOHOL, CHEESE, DAIRY, FAT, HERB x 2, ITALIAN, MEAT x 2, OIL, SUGAR, VEGETABLE x 6, VINEGAR, WINE]"));
+		assertThat( Categorisation.forIngredients(ingrBol2).toString(), is("[ALCOHOL, DAIRY x 2, FAT, MEAT x 3, SPICE, VEGETABLE x 4, WINE]"));
+		assertThat( Categorisation.forIngredients(ingrChBeef).toString(), is("[ALCOHOL, CHILLI, CHINESE x 5, FAT, FLOUR, INDIAN x 2, MEAT x 2, OIL, SAUCE x 2, SPICE x 3, SUGAR, THAI, VEGETABLE x 2, WINE]"));
 
 		final ITag[] tags = new ITag[]{ INDIAN, CHINESE, JAPANESE, THAI, FRENCH, ITALIAN, GREEK, ENGLISH };
 		assertThat( Categorisation.forIngredients(ingr1, tags).toString(), is("[]"));
@@ -156,6 +174,6 @@ public class ParseIngredientsTest {
 		Thread.sleep(1000);  // Time for indexing to happen!
 
 		final JsonNode jn = JacksonFactory.getMapper().readTree( new URL("http://localhost:9200/recipe/recipes" + "/_search?q=name:garlic") ).path("hits").path("hits");
-		assertThat( jn.size(), is(4));
+		assertThat( jn.size(), is(garlicRecipes));
 	}
 }

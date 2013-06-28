@@ -56,6 +56,10 @@ public class ItemsLoader {
 						}
 					}
 
+					for ( String each : yamlObjectToStrings( map.get("aliases") )) {
+						((CanonicalItem) newItem).aliases.add(each);
+					}
+
 					return newItem;
 				}});
 		}

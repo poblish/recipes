@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -19,6 +20,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.codehaus.jackson.JsonNode;
 
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.api.ICanonicalItem;
@@ -76,13 +78,37 @@ public class CanonicalItemFactory {
 	}
 
 	public static ICanonicalItem getOrCreate( final String inCanonicalName, final Supplier<ICanonicalItem> inCreator) {
+		return getOrCreate( inCanonicalName, inCreator, false);
+	}
+
+	public static ICanonicalItem getOrCreate( final String inCanonicalName, final Supplier<ICanonicalItem> inCreator, final boolean inMatchAliases) {
 		try {
 			final Optional<ICanonicalItem> got = get(inCanonicalName);
 	
 			if (got.isPresent()) {
 				return got.get();
 			}
-	
+
+			if (inMatchAliases) {
+				try {
+					String url =  IDX_URL + "/_search?q=aliases:" + URLEncoder.encode( inCanonicalName, "UTF-8") +"&sort=_score";
+					System.out.println("Search for '" + inCanonicalName + "' with " + url);
+					final JsonNode jn1 = JacksonFactory.getMapper().readTree( new URL(url) ).path("hits").path("hits");
+					System.out.println("jn1 = " + jn1);
+					final JsonNode jn = jn1.get(0);
+					System.out.println("jn = " + jn);
+
+					if ( jn != null) {
+						ICanonicalItem ci = JacksonFactory.getMapper().readValue( jn.path("_source"), CanonicalItem.class);
+						if ( ci != null) {
+							System.out.println("Alias '" + inCanonicalName + "' => " + ci);
+							return ci;
+						}
+					}
+				}
+				catch (IOException e) { e.printStackTrace(); /* Not found! */ }
+			}
+
 			return put( inCreator.get(), toId(inCanonicalName));
 		}
 		catch (IOException e) {

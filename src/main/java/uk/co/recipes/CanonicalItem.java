@@ -33,6 +33,7 @@ public class CanonicalItem implements ICanonicalItem {
 	private String canonicalName;
 	private ICanonicalItem parent = null; // Can't use Optional<> as it screws with JSON serialization
 	private Collection<ICanonicalItem> varieties = Sets.newHashSet();
+	public Collection<String> aliases = Sets.newHashSet();
 
 	private Map<ITag,Serializable> tags = new TreeMap<>();  // Try to keep the order regular. This will *not* sort enums by name, only by index
 
@@ -156,6 +157,10 @@ public class CanonicalItem implements ICanonicalItem {
 		}
 
 		return allTags;
+	}
+
+	public Collection<String> getAliases() {
+		return this.aliases;
 	}
 
 	// Strictly for Jackson only. *Can* be private
