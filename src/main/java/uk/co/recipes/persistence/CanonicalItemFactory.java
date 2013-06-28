@@ -91,23 +91,20 @@ public class CanonicalItemFactory {
 
 			if (inMatchAliases) {
 				try {
-					String url =  IDX_URL + "/_search?q=aliases:" + URLEncoder.encode( inCanonicalName, "UTF-8") +"&sort=_score";
-					System.out.println("Search for '" + inCanonicalName + "' with " + url);
-					final JsonNode jn1 = JacksonFactory.getMapper().readTree( new URL(url) ).path("hits").path("hits");
-					System.out.println("jn1 = " + jn1);
-					final JsonNode jn = jn1.get(0);
-					System.out.println("jn = " + jn);
+					final JsonNode foundAliasNode = JacksonFactory.getMapper().readTree( new URL(IDX_URL + "/_search?q=aliases:" + URLEncoder.encode( inCanonicalName, "UTF-8") +"&sort=_score") ).path("hits").path("hits").get(0);
 
-					if ( jn != null) {
-						ICanonicalItem ci = JacksonFactory.getMapper().readValue( jn.path("_source"), CanonicalItem.class);
-						if ( ci != null) {
-							System.out.println("Alias '" + inCanonicalName + "' => " + ci);
-							return ci;
+					if ( foundAliasNode != null) {
+						final ICanonicalItem mappedAlias = JacksonFactory.getMapper().readValue( foundAliasNode.path("_source"), CanonicalItem.class);
+						if ( mappedAlias != null) {
+							System.out.println("Successfully mapped Alias '" + inCanonicalName + "' => " + mappedAlias);
+							return mappedAlias;
 						}
 					}
 				}
-				catch (IOException e) { e.printStackTrace(); /* Not found! */ }
+				catch (IOException e) { /* Not found! */ }
 			}
+
+			System.out.println("Creating '" + inCanonicalName + "' ...");
 
 			return put( inCreator.get(), toId(inCanonicalName));
 		}
