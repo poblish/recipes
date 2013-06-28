@@ -4,10 +4,12 @@
 3-inch cinnamon stick
 12 plump garlic cloves, peeled
 225g cashew nuts
-// 1/2-in piece of fresh ginger, chopped
+// 1/2-in piece of fresh ginger, chopped  ... Replaced with =>
+0.5-in piece of fresh ginger, chopped
 1 large onion, chopped
 2 1/2 tablespoon coriander seeds
-// 1/2 teaspoon coarse pepper powder
+// 1/2 teaspoon coarse pepper powder  ... Replaced with =>
+0.5 teaspoon coarse pepper powder
 1 1/2 teaspoons cumin seeds
 4 tablespoons oil
 4 whole dried red chillies

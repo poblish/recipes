@@ -37,6 +37,10 @@ public class UnitParser {
 			return Units.TSP;
 		}
 
+		if (s.equals("IN")) {
+			return Units.INCH;
+		}
+
 		if (s.equals("BUNCH")) {
 			return Units.BUNCHES;
 		}

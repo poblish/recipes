@@ -32,6 +32,10 @@
 ---
 {canonicalName: Nutmeg, tags: SPICE}
 ---
+{canonicalName: Pepper, tags: SPICE}
+---
+{canonicalName: Black Pepper, tags: SPICE, parent: Pepper, aliases: {Pepper Powder, Black Pepper}}
+---
 {canonicalName: Rosemary, tags: HERB}
 ---
 {canonicalName: Star Anise, tags: {SPICE, CHINESE}}
