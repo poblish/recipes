@@ -3,11 +3,9 @@
  */
 package uk.co.recipes.persistence;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.JsonToken;
 import org.codehaus.jackson.Version;
 import org.codehaus.jackson.map.DeserializationConfig;
@@ -36,14 +34,14 @@ public class JacksonFactory {
 		testModule.addKeyDeserializer( ITag.class, new KeyDeserializer() {
 
 			@Override
-			public Object deserializeKey( String key, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+			public Object deserializeKey( String key, DeserializationContext ctxt) {
 				return TagUtils.forName(key);
 			}} );
 
 		testModule.addDeserializer( Serializable.class, new JsonDeserializer<Serializable>() {
 
 			@Override
-			public Serializable deserialize( JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+			public Serializable deserialize( JsonParser jp, DeserializationContext ctxt) {
 				JsonToken t = jp.getCurrentToken();
 				return t.asString();
 			}} );
