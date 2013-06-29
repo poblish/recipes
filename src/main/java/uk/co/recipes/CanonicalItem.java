@@ -32,7 +32,6 @@ public class CanonicalItem implements ICanonicalItem {
 
 	private String canonicalName;
 	private ICanonicalItem parent = null; // Can't use Optional<> as it screws with JSON serialization
-	private Collection<ICanonicalItem> varieties = Sets.newHashSet();
 	public Collection<String> aliases = Sets.newHashSet();
 
 	private Map<ITag,Serializable> tags = new TreeMap<>();  // Try to keep the order regular. This will *not* sort enums by name, only by index
@@ -51,34 +50,13 @@ public class CanonicalItem implements ICanonicalItem {
 	 * @param parent
 	 * @param varieties
 	 */
-	public CanonicalItem(String canonicalName, Collection<ICanonicalItem> varieties) {
-		this.canonicalName = canonicalName;
-
-		for ( final ICanonicalItem eachVariety : varieties) {
-			addVariety(eachVariety);
-		}
-	}
-
-	/**
-	 * @param canonicalName
-	 * @param parent
-	 * @param varieties
-	 */
 	@JsonCreator
 	public CanonicalItem(@JsonProperty("canonicalName") String canonicalName,
-						 @JsonDeserialize(as=CanonicalItem.class) @JsonProperty("parent") ICanonicalItem parent,
-						 @JsonProperty("varieties") Collection<ICanonicalItem> varieties) {
+						 @JsonDeserialize(as=CanonicalItem.class) @JsonProperty("parent") ICanonicalItem parent) {
 		this.canonicalName = canonicalName;
 
 		if ( parent != null && /* Jackson!!! */ parent.getCanonicalName() != null) {
 			this.parent = parent;
-//			this.tags.putAll( parent.getTags() );
-		}
-
-		if ( varieties != null) {
-			for ( final ICanonicalItem eachVariety : varieties) {
-				addVariety(eachVariety);
-			}
 		}
 	}
 
@@ -106,23 +84,6 @@ public class CanonicalItem implements ICanonicalItem {
 	@Override
 	public Optional<ICanonicalItem> parent() {
 		return Optional.fromNullable(parent);
-	}
-
-	/* (non-Javadoc)
-	 * @see uk.co.recipes.api.ICanonicalItem#addVariety(uk.co.recipes.api.ICanonicalItem)
-	 */
-	@Override
-	public void addVariety( ICanonicalItem variety) {
-		variety.setParent(this);
-		varieties.add(variety);
-	}
-
-	/* (non-Javadoc)
-	 * @see uk.co.recipes.api.ICanonicalItem#varieties()
-	 */
-	@Override
-	public Collection<ICanonicalItem> varieties() {
-		return varieties;
 	}
 
 	@Override
@@ -218,7 +179,7 @@ public class CanonicalItem implements ICanonicalItem {
 			return false;
 		}
 		final CanonicalItem other = (CanonicalItem) obj;
-		return Objects.equal( canonicalName.toLowerCase(), other.canonicalName.toLowerCase()) && Objects.equal( parent, other.parent);  // Ignoring varieties
+		return Objects.equal( canonicalName.toLowerCase(), other.canonicalName.toLowerCase()) && Objects.equal( parent, other.parent);
 	}
 
 	public String toString() {
@@ -228,7 +189,6 @@ public class CanonicalItem implements ICanonicalItem {
 						.add( "name", canonicalName)
 						.add( "parent", parent)
 						.add( "tags", tags.isEmpty() ? null : tags)
-//						.add( "num_varieties", varieties.size())
 						.toString();
 	}
 }
