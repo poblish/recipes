@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Ingredient;
-import uk.co.recipes.NamedItem;
 import uk.co.recipes.Quantity;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.NonNumericQuantities;
@@ -45,7 +44,7 @@ public class IngredientParser {
 		Matcher m = A.matcher(inStr);
 		if (m.matches()) {
 			final NameAdjuster na = new NameAdjuster();
-			final Ingredient ingr = new Ingredient( new NamedItem( findItem( na.adjust( m.group(3).trim() ) ) ), new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse( m.group(1) )));
+			final Ingredient ingr = new Ingredient( findItem( na.adjust( m.group(3).trim() ) ), new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse( m.group(1) )));
 
 			final String note = m.group(4);
 			if ( note != null) {
@@ -60,7 +59,7 @@ public class IngredientParser {
 			m = B.matcher(inStr);
 			if (m.matches()) {
 				final NameAdjuster na = new NameAdjuster();
-				final Ingredient ingr = new Ingredient( new NamedItem( findItem( na.adjust( m.group(4).trim() ) ) ), new Quantity( UnitParser.parse( m.group(3) ), NonNumericQuantityParser.parse( m.group(2).trim().toUpperCase() )));
+				final Ingredient ingr = new Ingredient( findItem( na.adjust( m.group(4).trim() ) ), new Quantity( UnitParser.parse( m.group(3) ), NonNumericQuantityParser.parse( m.group(2).trim().toUpperCase() )));
 
 				final String note = m.group(5);
 				if ( note != null) {
@@ -75,7 +74,7 @@ public class IngredientParser {
 				m = C.matcher(inStr);
 				if (m.matches()) {
 					final NameAdjuster na = new NameAdjuster();
-					final Ingredient ingr = new Ingredient( new NamedItem( findItem( na.adjust( m.group(3).trim() ) ) ), new Quantity( Units.INSTANCES, NumericAmountParser.parse( m.group(2) )));
+					final Ingredient ingr = new Ingredient( findItem( na.adjust( m.group(3).trim() ) ), new Quantity( Units.INSTANCES, NumericAmountParser.parse( m.group(2) )));
 					ingr.addNote( ENGLISH, "Juice of");
 					ingr.addNotes( ENGLISH, na.getExtraNotes());
 
@@ -85,7 +84,7 @@ public class IngredientParser {
 					m = D.matcher(inStr);
 					if (m.matches()) {
 						final NameAdjuster na = new NameAdjuster();
-						final Ingredient ingr = new Ingredient( new NamedItem( findItem( na.adjust( m.group(1).trim() ) ) ), new Quantity( Units.INSTANCES, 1));
+						final Ingredient ingr = new Ingredient( findItem( na.adjust( m.group(1).trim() ) ), new Quantity( Units.INSTANCES, 1));
 
 						final String note = m.group(2);
 						if ( note != null) {
@@ -100,7 +99,7 @@ public class IngredientParser {
 						m = E.matcher(inStr);
 						if (m.matches()) {
 							final NameAdjuster na = new NameAdjuster();
-							final Ingredient ingr = new Ingredient( new NamedItem( findItem( na.adjust( m.group(1).trim() ) ) ), new Quantity( Units.INSTANCES, NonNumericQuantities.ANY_AMOUNT));
+							final Ingredient ingr = new Ingredient( findItem( na.adjust( m.group(1).trim() ) ), new Quantity( Units.INSTANCES, NonNumericQuantities.ANY_AMOUNT));
 
 							final String note = m.group(2);
 							if ( note != null) {

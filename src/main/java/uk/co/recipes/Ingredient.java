@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
-import uk.co.recipes.api.INamedItem;
 import uk.co.recipes.api.IQuantity;
 
 import com.google.common.base.Objects;
@@ -24,7 +24,7 @@ import com.google.common.collect.Maps;
  */
 public class Ingredient implements IIngredient {
 
-	private INamedItem item;
+	private ICanonicalItem item;
 	private IQuantity quantity;
 	private final Map<Locale,List<String>> notes = Maps.newHashMap();
 
@@ -32,7 +32,7 @@ public class Ingredient implements IIngredient {
 	 * @param item
 	 * @param quantity
 	 */
-	public Ingredient(INamedItem item, IQuantity quantity) {
+	public Ingredient(ICanonicalItem item, IQuantity quantity) {
 		this.item = item;
 		this.quantity = quantity;
 	}
@@ -41,7 +41,7 @@ public class Ingredient implements IIngredient {
 	 * @see uk.co.recipes.api.IIngredient#item()
 	 */
 	@Override
-	public INamedItem getItem() {
+	public ICanonicalItem getItem() {
 		return item;
 	}
 

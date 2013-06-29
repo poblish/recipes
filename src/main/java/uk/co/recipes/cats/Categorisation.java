@@ -29,7 +29,7 @@ public class Categorisation {
 		final Multiset<ITag> tagsSet = TreeMultiset.create( TagUtils.comparator() );
 
 		for ( IIngredient each : inIngredients) {
-			tagsSet.addAll( FluentIterable.from( each.getItem().getCanonicalItem().getTags().entrySet() ).filter( findActivated() ).transform( entryKeys() ).toList() );
+			tagsSet.addAll( FluentIterable.from( each.getItem().getTags().entrySet() ).filter( findActivated() ).transform( entryKeys() ).toList() );
 		}
 
 		return tagsSet;
@@ -39,7 +39,7 @@ public class Categorisation {
 		final Multiset<ITag> tagsSet = TreeMultiset.create( TagUtils.comparator() );
 
 		for ( IIngredient each : inIngredients) {
-			tagsSet.addAll( FluentIterable.from( each.getItem().getCanonicalItem().getTags().entrySet() ).filter( findActivated(inTagsToCheck) ).transform( entryKeys() ).toList() );
+			tagsSet.addAll( FluentIterable.from( each.getItem().getTags().entrySet() ).filter( findActivated(inTagsToCheck) ).transform( entryKeys() ).toList() );
 		}
 
 		return tagsSet;

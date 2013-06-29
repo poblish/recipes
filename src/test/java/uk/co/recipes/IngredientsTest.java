@@ -62,7 +62,7 @@ public class IngredientsTest {
 				return new CanonicalItem("Lamb Neck", Optional.of(lamb));
 			}});
 
-		final Ingredient lambIngredient = new Ingredient( new NamedItem(lambNeck), new Quantity( Units.GRAMMES, 900));
+		final Ingredient lambIngredient = new Ingredient( lambNeck, new Quantity( Units.GRAMMES, 900));
 		lambIngredient.addNote( ENGLISH, "Neck fillets, cut into large chunks");
 
 		///////////////////////////////////////////////////
@@ -83,7 +83,7 @@ public class IngredientsTest {
 				return new CanonicalItem("Smoked Streaky Bacon", Optional.of(bacon));
 			}});
 
-		final Ingredient baconIngredient = new Ingredient( new NamedItem(ssBacon), new Quantity( Units.GRAMMES, 200));
+		final Ingredient baconIngredient = new Ingredient( ssBacon, new Quantity( Units.GRAMMES, 200));
 		baconIngredient.addNote( ENGLISH, "Preferably in one piece, skinned and cut into pieces");
 
 		///////////////////////////////////////////////////

@@ -11,6 +11,6 @@ package uk.co.recipes.api;
  */
 public interface IIngredient extends INoteworthy {
 
-	INamedItem getItem();
+	ICanonicalItem getItem();
 	IQuantity getQuantity();
 }

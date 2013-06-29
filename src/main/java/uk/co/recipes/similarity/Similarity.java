@@ -57,7 +57,7 @@ public class Similarity {
 	}
 
 	public static double between( final IIngredient inA, final IIngredient inB) throws IncompatibleIngredientsException {
-		return between( inA.getItem().getCanonicalItem(), inB.getItem().getCanonicalItem());
+		return between( inA.getItem(), inB.getItem());
 	}
 
 	public static double between( final ICanonicalItem inA, final ICanonicalItem inB) throws IncompatibleIngredientsException {
