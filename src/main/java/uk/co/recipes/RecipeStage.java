@@ -3,6 +3,7 @@
  */
 package uk.co.recipes;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 import uk.co.recipes.api.IIngredient;
@@ -23,6 +24,10 @@ public class RecipeStage implements IRecipeStage {
 
 	public void addIngredient( final IIngredient ingredient) {
 		ingredients.add(ingredient);
+	}
+
+	public void addIngredients( final IIngredient... inIngredients) {
+		ingredients.addAll( Arrays.asList(inIngredients) );
 	}
 
 	public void addIngredients( final Collection<IIngredient> inIngredients) {
