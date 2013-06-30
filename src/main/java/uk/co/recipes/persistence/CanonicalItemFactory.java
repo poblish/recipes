@@ -31,7 +31,6 @@ import uk.co.recipes.api.ICanonicalItem;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
-import com.google.common.collect.Lists;
 
 /**
  * TODO
@@ -118,17 +117,8 @@ public class CanonicalItemFactory {
 	}
 
 	// FIXME - pretty lame!
-	public static Collection<CanonicalItem>  listAll() throws JsonParseException, JsonMappingException, IOException {
-		final JsonNode allNodes = JacksonFactory.getMapper().readTree( new URL(IDX_URL + "/_search?q=*&size=9999") ).path("hits").path("hits");
-
-		final Collection<CanonicalItem> all = Lists.newArrayList();
-
-		for ( JsonNode each : allNodes) {
-			all.add( JacksonFactory.getMapper().readValue( each.path("_source"), CanonicalItem.class));
-		}
-//		final CanonicalItem[] myObjects = JacksonFactory.getMapper().readValue( allNodes, CanonicalItem[].class);
-
-		return all;
+	public static Collection<CanonicalItem> listAll() throws JsonParseException, JsonMappingException, IOException {
+		return EsUtils.listAll( IDX_URL, CanonicalItem.class);
 	}
 
 	public static void deleteAll() throws IOException {
