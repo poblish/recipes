@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Collection;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -21,6 +22,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.api.ICanonicalItem;
@@ -28,6 +31,7 @@ import uk.co.recipes.api.ICanonicalItem;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
+import com.google.common.collect.Lists;
 
 /**
  * TODO
@@ -111,6 +115,20 @@ public class CanonicalItemFactory {
 		catch (IOException e) {
 			throw Throwables.propagate(e);
 		}
+	}
+
+	// FIXME - pretty lame!
+	public static Collection<CanonicalItem>  listAll() throws JsonParseException, JsonMappingException, IOException {
+		final JsonNode allNodes = JacksonFactory.getMapper().readTree( new URL(IDX_URL + "/_search?q=*&size=9999") ).path("hits").path("hits");
+
+		final Collection<CanonicalItem> all = Lists.newArrayList();
+
+		for ( JsonNode each : allNodes) {
+			all.add( JacksonFactory.getMapper().readValue( each.path("_source"), CanonicalItem.class));
+		}
+//		final CanonicalItem[] myObjects = JacksonFactory.getMapper().readValue( allNodes, CanonicalItem[].class);
+
+		return all;
 	}
 
 	public static void deleteAll() throws IOException {
