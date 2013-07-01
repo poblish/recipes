@@ -28,6 +28,10 @@ public class Ingredient implements IIngredient {
 	private IQuantity quantity;
 	private final Map<Locale,List<String>> notes = Maps.newHashMap();
 
+	// Purely for Jackson deserialization
+	public Ingredient() {
+	}
+
 	/**
 	 * @param item
 	 * @param quantity

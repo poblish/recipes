@@ -6,10 +6,15 @@ package uk.co.recipes;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IRecipeStage;
 
+import com.google.common.base.Function;
 import com.google.common.base.Objects;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
 /**
@@ -21,6 +26,10 @@ import com.google.common.collect.Lists;
 public class RecipeStage implements IRecipeStage {
 
 	private final Collection<IIngredient> ingredients = Lists.newArrayList();
+
+	// Purely for Jackson deserialization
+	public RecipeStage() {
+	}
 
 	public void addIngredient( final IIngredient ingredient) {
 		ingredients.add(ingredient);
@@ -40,6 +49,21 @@ public class RecipeStage implements IRecipeStage {
 	@Override
 	public Collection<IIngredient> getIngredients() {
 		return ingredients;
+	}
+
+	@JsonIgnore
+    @Override
+    public Collection<ICanonicalItem> getItems() {
+        return FluentIterable.from(ingredients).transform( new Function<IIngredient,ICanonicalItem>() {
+
+            @Override
+            public ICanonicalItem apply( final IIngredient input) {
+                return input.getItem();
+            }} ).toSet();
+    }
+
+	public void setIngredients( final Collection<IIngredient> inIngredients) {
+		ingredients.addAll(inIngredients);
 	}
 
 	public String toString() {

@@ -10,6 +10,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IRecipeStage;
@@ -28,9 +31,13 @@ import com.google.common.collect.Sets;
  */
 public class Recipe implements IRecipe {
 
-	private final String title;
+	private String title;
 	private final List<IRecipeStage> stages = Lists.newArrayList();
 	private final Map<ITag,Serializable> tagsMap = Maps.newHashMap();
+
+	// Purely for Jackson deserialization
+	public Recipe() {
+	}
 
 	public Recipe( String inTitle) {
 		title = checkNotNull( inTitle, "Title cannot be null");

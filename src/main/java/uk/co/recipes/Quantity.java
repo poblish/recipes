@@ -23,6 +23,10 @@ public class Quantity implements IQuantity {
 	private int number;
 	private NonNumericQuantities nnQuantity;
 
+	// Purely for Jackson deserialization
+	public Quantity() {
+	}
+
 	/**
 	 * @param units
 	 * @param number
