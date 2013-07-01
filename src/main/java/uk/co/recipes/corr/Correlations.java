@@ -7,19 +7,22 @@ import static com.google.common.base.Predicates.in;
 import static com.google.common.base.Predicates.not;
 import static uk.co.recipes.tags.TagUtils.entryKeys;
 import static uk.co.recipes.tags.TagUtils.findActivated;
-import com.google.common.collect.HashMultiset;
-import java.util.Arrays;
+
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
+
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.persistence.CanonicalItemFactory;
 import uk.co.recipes.persistence.RecipeFactory;
 import uk.co.recipes.tags.TagUtils;
+
 import com.google.common.base.Predicate;
 import com.google.common.base.Throwables;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Multisets;
@@ -105,7 +108,7 @@ public class Correlations {
 			Throwables.propagate(e);
 		}
 
-		return tagsSet;
+		return Multisets.copyHighestCountFirst(tagsSet);
 	}
 
 	public static void findCountsWithout( final ICanonicalItem... inExclusions) {

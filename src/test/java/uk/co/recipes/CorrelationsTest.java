@@ -58,9 +58,9 @@ public class CorrelationsTest {
 		assertThat( Correlations.findCountsWith( CanonicalItemFactory.get("olive oil").get(), CanonicalItemFactory.get("Garlic").get(), CanonicalItemFactory.get("Onions").get()).toString(), is(expected));
 
 		final Multiset<ITag> withTags = Correlations.findTagsWith( CanonicalItemFactory.get("Coriander").get(), CanonicalItemFactory.get("Chicken Stock").get(), CanonicalItemFactory.get("Star Anise").get() , CanonicalItemFactory.get("Cumin Seeds").get());
-		assertThat( withTags.toString(), is("[CHINESE, HERB, INDIAN, MEAT, SAUCE, SPICE x 2]"));
+		assertThat( withTags.toString(), is("[SPICE x 2, CHINESE, HERB, INDIAN, MEAT, SAUCE]"));
 
 		final Multiset<ITag> withoutTags = Correlations.findTagsWithout( CanonicalItemFactory.get("Coriander").get() );
-		assertThat( withoutTags.toString(), is("[ALCOHOL x 6, CHEESE x 2, CHILLI x 5, CHINESE x 10, DAIRY x 4, EGG, FAT x 6, FLOUR x 4, FRENCH x 2, FRUIT x 2, HERB x 7, INDIAN x 14, ITALIAN x 3, MEAT x 13, NUT, OIL x 4, PASTA, SALT, SAUCE x 4, SEED x 2, SPANISH, SPICE x 18, SUGAR x 6, THAI x 5, VEGETABLE x 18, VINEGAR x 2, WINE x 6]"));
+		assertThat( withoutTags.toString(), is("[SPICE x 18, VEGETABLE x 18, INDIAN x 14, MEAT x 13, CHINESE x 10, HERB x 7, ALCOHOL x 6, FAT x 6, SUGAR x 6, WINE x 6, CHILLI x 5, THAI x 5, DAIRY x 4, FLOUR x 4, OIL x 4, SAUCE x 4, ITALIAN x 3, CHEESE x 2, FRENCH x 2, FRUIT x 2, SEED x 2, VINEGAR x 2, EGG, NUT, PASTA, SALT, SPANISH]"));
 	}
 }
