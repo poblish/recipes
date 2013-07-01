@@ -68,6 +68,40 @@ public class Recipe implements IRecipe {
 		return is;
 	}
 
+	@JsonIgnore
+	@Override
+    public Collection<ICanonicalItem> getItems() {
+        final Collection<ICanonicalItem> is = Sets.newHashSet();
+
+        for ( IRecipeStage eachStage : stages) {
+            is.addAll( eachStage.getItems() );
+        }
+
+        return is;
+    }
+
+    public boolean containsAllOf( final ICanonicalItem... inOthers) {
+    	System.out.println("=== Starting " + this);
+
+        for ( final ICanonicalItem eachInclusion : inOthers) {
+            boolean found = false;
+	        for ( ICanonicalItem eachItem : getItems()) {
+	        	System.out.println("::: " + eachItem + " v " + eachInclusion);
+                if (eachItem.descendsFrom(eachInclusion)) {
+    	        	System.out.println("::: TRUE");
+                    found = true;
+                    break;
+                }
+	        }
+
+	        if (!found) {
+	        	return false;
+	        }
+	    }
+
+        return true;
+    }
+
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.api.IRecipe#stages()
 	 */

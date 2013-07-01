@@ -156,6 +156,19 @@ public class CanonicalItem implements ICanonicalItem {
 		parent = checkNotNull( inParent, "Cannot set parent to null");
 	}
 
+    @Override
+    public boolean descendsFrom( final ICanonicalItem inOther) {
+        if (this.equals(inOther)) {
+            return true;
+        }
+
+        if ( parent != null) {
+            return parent.descendsFrom(inOther);
+        }
+
+        return false;
+    }
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */

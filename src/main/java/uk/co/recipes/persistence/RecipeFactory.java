@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.isOneOf;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Collection;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -16,7 +17,10 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 
+import uk.co.recipes.Recipe;
 import uk.co.recipes.api.IRecipe;
 
 import com.google.common.base.Throwables;
@@ -53,6 +57,11 @@ public class RecipeFactory {
 
 	public static String toId( final IRecipe inRecipe) throws IOException {
 		return inRecipe.getTitle().toLowerCase().replace( ' ', '_');
+	}
+
+	// FIXME - pretty lame!
+	public static Collection<Recipe> listAll() throws JsonParseException, JsonMappingException, IOException {
+		return EsUtils.listAll( IDX_URL, Recipe.class);
 	}
 
 	public static void deleteAll() throws IOException {

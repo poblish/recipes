@@ -2,17 +2,15 @@ package uk.co.recipes;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static uk.co.recipes.TestDataUtils.parseIngredientsFrom;
 import static uk.co.recipes.tags.CommonTags.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
 import org.codehaus.jackson.JsonNode;
-import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -20,17 +18,12 @@ import org.testng.annotations.Test;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.cats.Categorisation;
-import uk.co.recipes.parse.IngredientParser;
 import uk.co.recipes.persistence.CanonicalItemFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.persistence.JacksonFactory;
 import uk.co.recipes.persistence.RecipeFactory;
 import uk.co.recipes.similarity.IncompatibleIngredientsException;
 import uk.co.recipes.similarity.Similarity;
-
-import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
-import com.google.common.io.Files;
 
 public class ParseIngredientsTest {
 
@@ -90,6 +83,7 @@ public class ParseIngredientsTest {
 		assertThat( namings2, is(namings1));
 	}
 
+
 	@Test
 	public void testSimilarity() throws IOException, IncompatibleIngredientsException {
 		final List<IIngredient> ingr1 = parseIngredientsFrom("inputs.txt");
@@ -138,41 +132,6 @@ public class ParseIngredientsTest {
 		// assertThat( Similarity.amongIngredients( ingr3, ingr2), is(s23));
 	}
 
-	private List<IIngredient> parseIngredientsFrom( final String inFilename) throws IOException {
-		final List<IIngredient> allIngredients = Lists.newArrayList();
-
-		for ( String eachLine : Files.readLines( new File("src/test/resources/ingredients/" + inFilename), Charset.forName("utf-8"))) {
-
-			if (eachLine.startsWith("// ")) {
-				continue;
-			}
-
-			final Optional<Ingredient> theIngr = IngredientParser.parse(eachLine);
-			if (theIngr.isPresent()) {
-
-				// System.out.println( JacksonFactory.getMapper().writeValueAsString( theIngr.get() ) );
-
-				allIngredients.add( theIngr.get() );
-			}
-			else {
-				Assert.fail(eachLine + " not matched");
-			}
-		}
-
-		////////////////////////////////////////////////////////////
-
-		final RecipeStage stage1 = new RecipeStage();
-		stage1.addIngredients(allIngredients);
-
-		final Recipe r = new Recipe(inFilename);
-		r.addStage(stage1);
-
-		RecipeFactory.put( r, RecipeFactory.toId(r));
-
-		////////////////////////////////////////////////////////////
-
-		return allIngredients;
-	}
 
 	@AfterClass
 	public void findGarlicRecipes() throws InterruptedException, IOException {

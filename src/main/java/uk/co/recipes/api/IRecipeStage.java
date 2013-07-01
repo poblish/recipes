@@ -14,4 +14,5 @@ import java.util.Collection;
 public interface IRecipeStage {
 
 	Collection<IIngredient> getIngredients();
+    Collection<ICanonicalItem> getItems();
 }
