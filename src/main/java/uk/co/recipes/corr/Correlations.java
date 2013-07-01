@@ -59,35 +59,6 @@ public class Correlations {
 		}
 	}
 
-    /* public static Multiset<ICanonicalItem> findCountsWith( final ICanonicalItem... inInclusions) {
-        final Multiset<ICanonicalItem> counts = HashMultiset.create();
-        try {
-            final Collection<Recipe> all = RecipeFactory.listAll();
-            for ( Recipe each : all) {
-                for ( ICanonicalItem eachOther : each.getItems()) {
-                    boolean allowed = true;
-                    System.out.println("TRYING " + eachOther + " v " + Arrays.asList(inInclusions));
-
-                    for ( ICanonicalItem eachInclusion : inInclusions) {
-                        if (eachOther.descendsFrom(eachInclusion)) {
-                            allowed = false;
-                            break;
-                        }
-                    }
-
-                    if (allowed) {
-                        System.out.println("-> Add " + eachOther);
-                        counts.add(eachOther);
-                    }
-                }
-            }
-            return counts;
-        }
-        catch (IOException e) {
-            throw Throwables.propagate(e);
-        }
-    } */
-
 	public static Multiset<ITag> findTagsWith( final ICanonicalItem... inInclusions) {
 		return findTagsWithPredicate( in( Lists.newArrayList(inInclusions) ), inInclusions);
 	}
