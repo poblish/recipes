@@ -80,6 +80,8 @@
 # FIXME Got to handle plurals properly!
 {canonicalName: Garlic Cloves, parent: Garlic}
 ---
+{canonicalName: Leek, tags: VEGETABLE}
+---
 {canonicalName: Mixed Leaves, tags: VEGETABLE}
 ---
 {canonicalName: Mushrooms, tags: VEGETABLE}
@@ -200,6 +202,8 @@
 
 
 {canonicalName: Gnocchi, tags: {PASTA, ITALIAN}}
+---
+{canonicalName: Orzo, tags: {PASTA, ITALIAN}, aliases: {Orzo Pasta}}
 ---
 
 
