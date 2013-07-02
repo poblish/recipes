@@ -1,6 +1,10 @@
+{canonicalName: Water}
+---
+
+
 {canonicalName: Bay Leaf, tags: HERB, aliases: {Bay Leaves}}
 ---
-{canonicalName: Coriander, tags: HERB, aliases: {Cilantro}}
+{canonicalName: Coriander, tags: HERB, aliases: {Cilantro, Coriander Leaves}}
 ---
 {canonicalName: Mixed Herbs, tags: HERB}
 ---
@@ -22,7 +26,7 @@
 ---
 {canonicalName: Cloves, tags: {SPICE, INDIAN}}
 ---
-{canonicalName: Coriander Powder, parent: Coriander, tags: {-HERB, SPICE, INDIAN}}
+{canonicalName: Coriander Powder, parent: Coriander, tags: {-HERB, SPICE, INDIAN}, aliases: {Ground Coriander}}
 ---
 {canonicalName: Coriander Seeds, parent: Coriander, tags: {-HERB, SPICE, INDIAN}}
 ---
@@ -44,7 +48,7 @@
 ---
 {canonicalName: Pepper, tags: SPICE}
 ---
-{canonicalName: Black Pepper, tags: SPICE, parent: Pepper, aliases: {Pepper Powder, Black Pepper}}
+{canonicalName: Black Pepper, tags: SPICE, parent: Pepper, aliases: {Pepper Powder, Black Pepper, Black Peppercorns, Ground Black Pepper}}
 ---
 {canonicalName: Star Anise, tags: {SPICE, CHINESE}}
 ---
@@ -88,6 +92,8 @@
 ---
 {canonicalName: Button Mushrooms, parent: Mushrooms}
 ---
+{canonicalName: White Mushrooms, parent: Mushrooms}
+---
 {canonicalName: Onion, tags: VEGETABLE}
 ---
 # FIXME Got to handle plurals properly!
@@ -95,7 +101,11 @@
 ---
 {canonicalName: Baby Onions, parent: Onion}
 ---
+{canonicalName: Pearl Onions, parent: Onion}
+---
 {canonicalName: Spring Onion, parent: Onion}
+---
+{canonicalName: Yellow Onion, parent: Onion}
 ---
 # FIXME Got to handle plurals properly!
 {canonicalName: Spring Onions, parent: Onion}
@@ -181,6 +191,8 @@
 ---
 {canonicalName: Olive Oil, parent: Vegetable Oil}
 ---
+{canonicalName: Rapeseed Oil, parent: Vegetable Oil}
+---
 {canonicalName: Sunflower Oil, parent: Vegetable Oil}
 ---
 
@@ -198,6 +210,8 @@
 {canonicalName: Beef Stock, tags: {MEAT, SAUCE}}
 ---
 {canonicalName: Chicken Stock, tags: {MEAT, SAUCE}}
+---
+{canonicalName: Tamarind Paste, tags: {FRUIT, SAUCE}}
 ---
 
 
