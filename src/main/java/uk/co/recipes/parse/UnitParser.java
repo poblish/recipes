@@ -65,6 +65,10 @@ public class UnitParser {
 			return Units.KNOB;
 		}
 
+		if (s.startsWith("CLOVE")) {
+			return Units.CLOVE;
+		}
+
 		if (s.startsWith("STICK")) {
 			return Units.STICK;
 		}
