@@ -81,14 +81,10 @@ public class Recipe implements IRecipe {
     }
 
     public boolean containsAllOf( final ICanonicalItem... inOthers) {
-    	System.out.println("=== Starting " + this);
-
         for ( final ICanonicalItem eachInclusion : inOthers) {
             boolean found = false;
 	        for ( ICanonicalItem eachItem : getItems()) {
-	        	System.out.println("::: " + eachItem + " v " + eachInclusion);
                 if (eachItem.descendsFrom(eachInclusion)) {
-    	        	System.out.println("::: TRUE");
                     found = true;
                     break;
                 }
