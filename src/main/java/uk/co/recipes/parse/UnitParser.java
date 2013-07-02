@@ -33,8 +33,16 @@ public class UnitParser {
 			return Units.TBSP;
 		}
 
-		if (s.startsWith("TEASPOON")) {
+		if (s.startsWith("TSP") || s.startsWith("TEASPOON")) {
 			return Units.TSP;
+		}
+
+		if (s.startsWith("LB")) {
+			return Units.POUNDS;
+		}
+
+		if (s.startsWith("OZ")) {
+			return Units.OUNCES;
 		}
 
 		if (s.equals("IN")) {

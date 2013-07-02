@@ -32,10 +32,10 @@ public class IngredientParser {
 	private static final String	NOTES = "([,\\(].*)?";
 	private static final String	SUFFIX = "([\\w- ]*)" + NOTES;
 
-	private static final Pattern	A = Pattern.compile( DEC_FRAC_NUMBER_PATTERN + "( ?kg|g|gms|cm|-in|-inch|mm|ml| cups?| sticks?| heaped tbsps?| tablespoons?| tbsps?| tsps?| teaspoons?)? " + SUFFIX, Pattern.CASE_INSENSITIVE);
+	private static final Pattern	A = Pattern.compile( DEC_FRAC_NUMBER_PATTERN + "( ?kg|g|gms| ?lbs?\\.?| ?oz\\.?|cm|-in|-inch|mm|ml| ?quarts?| cups?| sticks?| heaped tbsps?| tablespoons?| tbsp[s\\.]?| tsp[s\\.]?| teaspoons?)? " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	B = Pattern.compile("((generous|small|large|thumb-size) (splash|bunch|glass|piece|knob of?)) " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	C = Pattern.compile("(juice|zest) ([0-9]+) (.*)(, (.*))*", Pattern.CASE_INSENSITIVE);
-	private static final Pattern	D = Pattern.compile("(nutmeg|parmesan|salt|beaten egg)" + NOTES, Pattern.CASE_INSENSITIVE);
+	private static final Pattern	D = Pattern.compile("(nutmeg|parmesan|salt|salt and pepper.*|beaten egg)" + NOTES, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	E = Pattern.compile("((?:dressed|steamed) [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);
 
 
