@@ -6,12 +6,9 @@ import static uk.co.recipes.TestDataUtils.parseIngredientsFrom;
 import static uk.co.recipes.tags.CommonTags.*;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
-import org.codehaus.jackson.JsonNode;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -20,14 +17,11 @@ import uk.co.recipes.api.ITag;
 import uk.co.recipes.cats.Categorisation;
 import uk.co.recipes.persistence.CanonicalItemFactory;
 import uk.co.recipes.persistence.ItemsLoader;
-import uk.co.recipes.persistence.JacksonFactory;
 import uk.co.recipes.persistence.RecipeFactory;
 import uk.co.recipes.similarity.IncompatibleIngredientsException;
 import uk.co.recipes.similarity.Similarity;
 
 public class ParseIngredientsTest {
-
-	private static int garlicRecipes = 0;
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
@@ -57,26 +51,22 @@ public class ParseIngredientsTest {
 	public void parseIngredients3() throws IOException {
 		final List<IIngredient> allIngredients = parseIngredientsFrom("inputs3.txt");
 		assertThat( allIngredients.toString(), is("[Ingredient{q=1, item=CanonicalItem{name=Onion, tags={VEGETABLE=true}}, notes={en=[large]}}, Ingredient{q=6, item=CanonicalItem{name=Garlic Cloves, parent=CanonicalItem{name=Garlic, tags={VEGETABLE=true}}, tags={VEGETABLE=true}}, notes={en=[roughly chopped]}}, Ingredient{q=50 GRAMMES, item=CanonicalItem{name=Ginger, tags={SPICE=true, INDIAN=true, CHINESE=true}}, notes={en=[roughly chopped]}}, Ingredient{q=4 TBSP, item=CanonicalItem{name=Vegetable Oil, parent=CanonicalItem{name=Oil, tags={OIL=true, FAT=true}}, tags={OIL=true, FAT=true}}}, Ingredient{q=2 TSP, item=CanonicalItem{name=Cumin Seeds, tags={SPICE=true, INDIAN=true}}}, Ingredient{q=1 TSP, item=CanonicalItem{name=Fennel Seed, tags={SPICE=true, SEED=true}}}, Ingredient{q=5 CM, item=CanonicalItem{name=Cinnamon Stick, parent=CanonicalItem{name=Cinnamon, tags={SPICE=true}}, tags={SPICE=true, INDIAN=true}}}, Ingredient{q=1 TSP, item=CanonicalItem{name=Chilli Flakes, parent=CanonicalItem{name=Chilli, tags={CHILLI=true, INDIAN=true, CHINESE=true, THAI=true}}, tags={CHILLI=true, INDIAN=true, CHINESE=true, THAI=true}}}, Ingredient{q=1 TSP, item=CanonicalItem{name=Garam Masala, tags={SPICE=true, INDIAN=true}}}, Ingredient{q=1 TSP, item=CanonicalItem{name=Turmeric, tags={SPICE=true, INDIAN=true}}}, Ingredient{q=1 TSP, item=CanonicalItem{name=Caster Sugar, parent=CanonicalItem{name=Sugar, tags={SUGAR=true}}, tags={SUGAR=true}}}, Ingredient{q=400 GRAMMES, item=CanonicalItem{name=Tomatoes, tags={VEGETABLE=true}}, notes={en=[can, chopped]}}, Ingredient{q=8, item=CanonicalItem{name=Chicken Thighs, parent=CanonicalItem{name=Chicken, tags={MEAT=true}}, tags={MEAT=true}}, notes={en=[skinned, boneless (about 800g)]}}, Ingredient{q=250 ML, item=CanonicalItem{name=Chicken Stock, tags={MEAT=true, SAUCE=true}}, notes={en=[hot]}}, Ingredient{q=2 TBSP, item=CanonicalItem{name=Coriander, tags={HERB=true}}, notes={en=[chopped]}}]"));
-		garlicRecipes++;
 	}
 
 	@Test
 	public void parseIngredientsChCashBlackSpiceCurry() throws IOException {
 		final List<IIngredient> allIngredients = parseIngredientsFrom("chCashBlackSpiceCurry.txt");
 		assertThat( allIngredients.toString(), is("[Ingredient{q=1 KG, item=CanonicalItem{name=Chicken, tags={MEAT=true}}, notes={en=[skinned]}}, Ingredient{q=6, item=CanonicalItem{name=Cloves, tags={SPICE=true, INDIAN=true}}}, Ingredient{q=100 GRAMMES, item=CanonicalItem{name=coconut grated}}, Ingredient{q=3 INCH, item=CanonicalItem{name=Cinnamon Stick, parent=CanonicalItem{name=Cinnamon, tags={SPICE=true}}, tags={SPICE=true, INDIAN=true}}}, Ingredient{q=12, item=CanonicalItem{name=Garlic Cloves, parent=CanonicalItem{name=Garlic, tags={VEGETABLE=true}}, tags={VEGETABLE=true}}, notes={en=[peeled, plump]}}, Ingredient{q=225 GRAMMES, item=CanonicalItem{name=Cashew Nuts, tags={NUT=true}}}, Ingredient{q=0 INCH, item=CanonicalItem{name=Ginger, tags={SPICE=true, INDIAN=true, CHINESE=true}}, notes={en=[chopped]}}, Ingredient{q=1, item=CanonicalItem{name=Onion, tags={VEGETABLE=true}}, notes={en=[chopped, large]}}, Ingredient{q=0 TBSP, item=CanonicalItem{name=Coriander Seeds, parent=CanonicalItem{name=Coriander, tags={HERB=true}}, tags={SPICE=true, HERB=true, INDIAN=true}}}, Ingredient{q=0 TSP, item=CanonicalItem{name=Black Pepper, parent=CanonicalItem{name=Pepper, tags={SPICE=true}}, tags={SPICE=true}}, notes={en=[coarse]}}, Ingredient{q=0 TSP, item=CanonicalItem{name=Cumin Seeds, tags={SPICE=true, INDIAN=true}}}, Ingredient{q=4 TBSP, item=CanonicalItem{name=Oil, tags={OIL=true, FAT=true}}}, Ingredient{q=4, item=CanonicalItem{name=Red Chillies, parent=CanonicalItem{name=Chilli, tags={CHILLI=true, INDIAN=true, CHINESE=true, THAI=true}}, tags={CHILLI=true, INDIAN=true, CHINESE=true, THAI=true}}, notes={en=[whole, dried]}}, Ingredient{q=1, item=CanonicalItem{name=Salt, tags={SALT=true}}}]"));
-		garlicRecipes++;
 	}
 
 	@Test
 	public void parseIngredientsVenisonBurgundy() throws IOException {
-		garlicRecipes++;
 		final List<IIngredient> allIngredients = parseIngredientsFrom("venisonBurgundy.txt");
 		assertThat( allIngredients.toString(), is("[Ingredient{q=3 CUP, item=CanonicalItem{name=Red Wine, tags={WINE=true, ALCOHOL=true}}, notes={en=[dry]}}, Ingredient{q=2 CUP, item=CanonicalItem{name=Beef Stock, tags={MEAT=true, SAUCE=true}}}, Ingredient{q=0 CUP, item=CanonicalItem{name=Cognac, parent=CanonicalItem{name=Brandy, tags={WINE=true, ALCOHOL=true, FRENCH=true}}, tags={WINE=true, ALCOHOL=true, FRENCH=true}}, notes={en=[(or good quality brandy)]}}, Ingredient{q=1, item=CanonicalItem{name=Onion, tags={VEGETABLE=true}}, notes={en=[chopped into large pieces, large]}}, Ingredient{q=2, item=CanonicalItem{name=Carrots, tags={VEGETABLE=true}}, notes={en=[peeled and cut into 2-inch-long pieces]}}, Ingredient{q=3, item=CanonicalItem{name=Garlic, tags={VEGETABLE=true}}, notes={en=[crushed and chopped]}}, Ingredient{q=0 CUP, item=CanonicalItem{name=Parsley, tags={HERB=true}}, notes={en=[chopped, fresh]}}, Ingredient{q=1 TSP, item=CanonicalItem{name=Thyme, tags={HERB=true}}, notes={en=[dried]}}, Ingredient{q=1 TSP, item=CanonicalItem{name=Rosemary, tags={HERB=true}}, notes={en=[dried]}}, Ingredient{q=10, item=CanonicalItem{name=Black Pepper, parent=CanonicalItem{name=Pepper, tags={SPICE=true}}, tags={SPICE=true}}}, Ingredient{q=3, item=CanonicalItem{name=Cloves, tags={SPICE=true, INDIAN=true}}, notes={en=[whole]}}, Ingredient{q=1, item=CanonicalItem{name=Allspice, tags={SPICE=true}}}, Ingredient{q=1, item=CanonicalItem{name=Bay Leaf, tags={HERB=true}}, notes={en=[dried]}}, Ingredient{q=3, item=CanonicalItem{name=pounds venison chuck}, notes={en=[(shoulder cuts), cut into 2-inch chunks]}}, Ingredient{q=0, item=CanonicalItem{name=Streaky Bacon, parent=CanonicalItem{name=Bacon, tags={MEAT=true}}, tags={MEAT=true}}, notes={en=[cut into thick slices, and then coarsely chopped]}}, Ingredient{q=2 TBSP, item=CanonicalItem{name=Butter, tags={FAT=true, DAIRY=true}}}, Ingredient{q=1 TBSP, item=CanonicalItem{name=Tomato Paste, parent=CanonicalItem{name=Tomato, tags={VEGETABLE=true}}, tags={VEGETABLE=true}}}, Ingredient{q=2 TBSP, item=CanonicalItem{name=Olive Oil, parent=CanonicalItem{name=Vegetable Oil, parent=CanonicalItem{name=Oil, tags={OIL=true, FAT=true}}, tags={OIL=true, FAT=true}}, tags={OIL=true, FAT=true}}}, Ingredient{q=1, item=CanonicalItem{name=Onions, tags={VEGETABLE=true}}, notes={en=[peeled]}}, Ingredient{q=1, item=CanonicalItem{name=Mushrooms, tags={VEGETABLE=true}}, notes={en=[wiped clean and bottoms trimmed]}}, Ingredient{q=0 TSP, item=CanonicalItem{name=Salt, tags={SALT=true}}}, Ingredient{q=0 TSP, item=CanonicalItem{name=Black Pepper, parent=CanonicalItem{name=Pepper, tags={SPICE=true}}, tags={SPICE=true}}}, Ingredient{q=1 TBSP, item=CanonicalItem{name=Flour, tags={FLOUR=true}}}]"));
 	}
 
 	@Test
 	public void parseIngredientsBeefStewOrzo() throws IOException {
-		garlicRecipes++;
 		final List<IIngredient> allIngredients = parseIngredientsFrom("beefStewOrzo.txt");
 		assertThat( allIngredients.toString(), is("[Ingredient{q=0 POUNDS, item=CanonicalItem{name=Lamb, tags={MEAT=true}}, notes={en=[cut into 2-inch chunks (see note)]}}, Ingredient{q=0 CUP, item=CanonicalItem{name=Olive Oil, parent=CanonicalItem{name=Vegetable Oil, parent=CanonicalItem{name=Oil, tags={OIL=true, FAT=true}}, tags={OIL=true, FAT=true}}, tags={OIL=true, FAT=true}}, notes={en=[(separated)]}}, Ingredient{q=1, item=CanonicalItem{name=Onion, tags={VEGETABLE=true}}, notes={en=[diced, large]}}, Ingredient{q=4, item=CanonicalItem{name=Garlic, tags={VEGETABLE=true}}, notes={en=[minced finely]}}, Ingredient{q=1, item=CanonicalItem{name=Leek, tags={VEGETABLE=true}}, notes={en=[(cleaned, trimmed and cut in half), large]}}, Ingredient{q=1, item=CanonicalItem{name=Carrot, tags={VEGETABLE=true}}, notes={en=[cut into thirds, large]}}, Ingredient{q=0 CUP, item=CanonicalItem{name=White Wine, tags={WINE=true, ALCOHOL=true}}, notes={en=[dry]}}, Ingredient{q=3, item=CanonicalItem{name=Allspice, tags={SPICE=true}}}, Ingredient{q=28 OUNCES, item=CanonicalItem{name=Tomatoes, tags={VEGETABLE=true}}, notes={en=[can, crushed]}}, Ingredient{q=1 TSP, item=CanonicalItem{name=Sugar, tags={SUGAR=true}}}, Ingredient{q=1 QUART, item=CanonicalItem{name=water}}, Ingredient{q=1 POUNDS, item=CanonicalItem{name=Orzo, tags={PASTA=true, ITALIAN=true}}}, Ingredient{q=1, item=CanonicalItem{name=Pepper, tags={SPICE=true}}}]"));
 	}
@@ -100,8 +90,6 @@ public class ParseIngredientsTest {
 		final List<IIngredient> ingrBol1 = parseIngredientsFrom("bol1.txt");
 		final List<IIngredient> ingrBol2 = parseIngredientsFrom("bol2.txt");
 		final List<IIngredient> ingrChBeef = parseIngredientsFrom("chineseBeef.txt");
-
-		garlicRecipes = 5;
 
 		assertThat( Categorisation.forIngredients(ingr1).toString(), is("[ALCOHOL, DAIRY, EGG, FAT x 2, FLOUR x 2, FRUIT, HERB x 4, MEAT x 2, OIL, SAUCE x 2, VEGETABLE x 3, WINE]"));
 		assertThat( Categorisation.forIngredients(ingr2).toString(), is("[CHEESE x 2, CHILLI, CHINESE, DAIRY x 2, FAT, FRUIT, INDIAN, ITALIAN x 3, OIL, PASTA, THAI, VEGETABLE x 2]"));
@@ -137,14 +125,5 @@ public class ParseIngredientsTest {
 		assertThat( Similarity.amongIngredients( ingr2, ingr1), is(s12));
 		assertThat( Similarity.amongIngredients( ingr3, ingr1), is(s13));
 		// assertThat( Similarity.amongIngredients( ingr3, ingr2), is(s23));
-	}
-
-
-	@AfterClass
-	public void findGarlicRecipes() throws InterruptedException, IOException {
-		Thread.sleep(1000);  // Time for indexing to happen!
-
-		final JsonNode jn = JacksonFactory.getMapper().readTree( new URL("http://localhost:9200/recipe/recipes/_search?q=canonicalName:garlic") ).path("hits").path("hits");
-		assertThat( jn.size(), is(garlicRecipes));
 	}
 }
