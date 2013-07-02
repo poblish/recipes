@@ -4,7 +4,7 @@
 package uk.co.recipes.persistence;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static org.elasticsearch.index.query.QueryBuilders.termQuery;
+import static org.elasticsearch.index.query.QueryBuilders.matchPhraseQuery;
 import static org.elasticsearch.search.sort.SortOrder.DESC;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -110,10 +110,11 @@ public class CanonicalItemFactory {
 
 			if (inMatchAliases) {
 				try {
-					final SearchResponse resp = ES_CLIENT.prepareSearch("recipe").setTypes("items").setQuery( termQuery( "aliases", inCanonicalName.toLowerCase()) ).addSort( "_score", DESC).execute().actionGet();
+					// http://www.elasticsearch.org/guide/reference/query-dsl/match-query/
+					final SearchResponse resp = ES_CLIENT.prepareSearch("recipe").setTypes("items").setQuery( matchPhraseQuery( "aliases", inCanonicalName.toLowerCase()) ).addSort( "_score", DESC).execute().actionGet();
 					final SearchHit[] hits = resp.getHits().hits();
 
-					if ( hits.length > 0) {
+					if ( /* Yes, want only one great match */ hits.length == 1) {
 						final ICanonicalItem mappedAlias = JacksonFactory.getMapper().readValue( hits[0].getSourceAsString(), CanonicalItem.class);
 						if ( mappedAlias != null) {
 							System.out.println("Successfully mapped Alias '" + inCanonicalName + "' => " + mappedAlias);
