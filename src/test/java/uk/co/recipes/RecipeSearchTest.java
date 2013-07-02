@@ -12,6 +12,7 @@ import java.net.URL;
 
 import org.apache.http.client.ClientProtocolException;
 import org.codehaus.jackson.JsonNode;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -30,6 +31,7 @@ public class RecipeSearchTest {
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
+		CanonicalItemFactory.startES();
 		CanonicalItemFactory.deleteAll();
 		RecipeFactory.deleteAll();
 	}
@@ -53,5 +55,10 @@ public class RecipeSearchTest {
 	public void findGarlicRecipes() throws InterruptedException, IOException {
 		final JsonNode jn = JacksonFactory.getMapper().readTree( new URL("http://localhost:9200/recipe/recipes/_search?q=canonicalName:garlic") ).path("hits").path("hits");
 		assertThat( jn.size(), is(4));
+	}
+
+	@AfterClass
+	public void shutDown() {
+		CanonicalItemFactory.stopES();
 	}
 }
