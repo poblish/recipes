@@ -66,6 +66,12 @@
 			<artifactId>commons-math3</artifactId>
 			<version>3.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.elasticsearch</groupId>
+			<artifactId>elasticsearch</artifactId>
+			<version>0.90.2</version>
+			<type>jar</type>
+		</dependency>
 	</dependencies>
 	<build>
 		<defaultGoal>clean install</defaultGoal>
