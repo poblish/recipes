@@ -37,7 +37,7 @@ public class UnitParser {
 			return Units.TSP;
 		}
 
-		if (s.startsWith("LB")) {
+		if (s.startsWith("LB") || s.startsWith("POUND")) {
 			return Units.POUNDS;
 		}
 
