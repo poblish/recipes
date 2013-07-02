@@ -75,6 +75,13 @@ public class ParseIngredientsTest {
 	}
 
 	@Test
+	public void parseIngredientsBeefStewOrzo() throws IOException {
+		garlicRecipes++;
+		final List<IIngredient> allIngredients = parseIngredientsFrom("beefStewOrzo.txt");
+		assertThat( allIngredients.toString(), is("[Ingredient{q=0 POUNDS, item=CanonicalItem{name=Lamb, tags={MEAT=true}}, notes={en=[cut into 2-inch chunks (see note)]}}, Ingredient{q=0 CUP, item=CanonicalItem{name=Olive Oil, parent=CanonicalItem{name=Vegetable Oil, parent=CanonicalItem{name=Oil, tags={OIL=true, FAT=true}}, tags={OIL=true, FAT=true}}, tags={OIL=true, FAT=true}}, notes={en=[(separated)]}}, Ingredient{q=1, item=CanonicalItem{name=Onion, tags={VEGETABLE=true}}, notes={en=[diced, large]}}, Ingredient{q=4, item=CanonicalItem{name=Garlic, tags={VEGETABLE=true}}, notes={en=[minced finely]}}, Ingredient{q=1, item=CanonicalItem{name=Leek, tags={VEGETABLE=true}}, notes={en=[(cleaned, trimmed and cut in half), large]}}, Ingredient{q=1, item=CanonicalItem{name=Carrot, tags={VEGETABLE=true}}, notes={en=[cut into thirds, large]}}, Ingredient{q=0 CUP, item=CanonicalItem{name=White Wine, tags={WINE=true, ALCOHOL=true}}, notes={en=[dry]}}, Ingredient{q=3, item=CanonicalItem{name=Allspice, tags={SPICE=true}}}, Ingredient{q=28 OUNCES, item=CanonicalItem{name=Tomatoes, tags={VEGETABLE=true}}, notes={en=[can, crushed]}}, Ingredient{q=1 TSP, item=CanonicalItem{name=Sugar, tags={SUGAR=true}}}, Ingredient{q=1 QUART, item=CanonicalItem{name=water}}, Ingredient{q=1 POUNDS, item=CanonicalItem{name=Orzo, tags={PASTA=true, ITALIAN=true}}}, Ingredient{q=1, item=CanonicalItem{name=Pepper, tags={SPICE=true}}}]"));
+	}
+
+	@Test
 	public void testAliases() throws IOException, IncompatibleIngredientsException {
 		final List<IIngredient> namings1 = parseIngredientsFrom("namings1.txt");
 		final List<IIngredient> namings2 = parseIngredientsFrom("namings2.txt");
