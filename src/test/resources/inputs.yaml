@@ -193,6 +193,8 @@
 ---
 {canonicalName: Rapeseed Oil, parent: Vegetable Oil}
 ---
+{canonicalName: Sesame Oil, parent: Vegetable Oil, tags: {CHINESE}}
+---
 {canonicalName: Sunflower Oil, parent: Vegetable Oil}
 ---
 
@@ -210,6 +212,8 @@
 {canonicalName: Beef Stock, tags: {MEAT, SAUCE}}
 ---
 {canonicalName: Chicken Stock, tags: {MEAT, SAUCE}}
+---
+{canonicalName: Fish Sauce, tags: {MEAT, SAUCE, THAI, VIETNAMESE}}
 ---
 {canonicalName: Tamarind Paste, tags: {FRUIT, SAUCE}}
 ---
