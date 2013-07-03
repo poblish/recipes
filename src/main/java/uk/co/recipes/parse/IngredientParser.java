@@ -29,13 +29,13 @@ import com.google.common.base.Supplier;
 public class IngredientParser {
 
 	private static final String	DEC_FRAC_NUMBER_PATTERN = "([0-9\\.]*(?: ?[0-9]/[0-9])?)";
-	private static final String	NOTES = "([,\\(].*)?";
+	private static final String	NOTES = "([,;\\(].*)?";
 	private static final String	SUFFIX = "([\\w- ]*)" + NOTES;
 
-	private static final Pattern	A = Pattern.compile( DEC_FRAC_NUMBER_PATTERN + "( ?kg|g|gms| ?pounds?| ?lbs?\\.?| ?oz\\.?|cm|-in|-inch|mm|ml| litres?| ?quarts?| cups?| sticks?| heaped tbsps?| tablespoons?| tbsp[s\\.]?| tsp[s\\.]?| teaspoons?| handfuls?| cloves?)? " + SUFFIX, Pattern.CASE_INSENSITIVE);
+	private static final Pattern	A = Pattern.compile( DEC_FRAC_NUMBER_PATTERN + "( ?kg|g|gms| ?pounds?| ?lbs?\\.?| ?oz\\.?|cm|-in|-inch|mm|ml| litres?| ?quarts?| cups?| sticks?| heaped tbsps?| tablespoons?| tbsp[s\\.]?| tsp[s\\.]?| teaspoons?| ?handfuls?| cloves?)? " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	B = Pattern.compile("((generous|small|large|thumb-sized?) (splash|bunch|glass|piece|knob of?)) " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	C = Pattern.compile("(juice|zest) ([0-9]+) (.*)(, (.*))*", Pattern.CASE_INSENSITIVE);
-	private static final Pattern	D = Pattern.compile("(nutmeg|parmesan|salt|salt and pepper.*|beaten egg)" + NOTES, Pattern.CASE_INSENSITIVE);
+	private static final Pattern	D = Pattern.compile("(nutmeg|parmesan|salt|salt and pepper.*|beaten egg|.*cream)" + NOTES, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	E = Pattern.compile("((?:dressed|steamed|cooked|sliced) [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);
 
 
@@ -44,7 +44,13 @@ public class IngredientParser {
 		Matcher m = A.matcher(inStr);
 		if (m.matches()) {
 			final NameAdjuster na = new NameAdjuster();
-			final Ingredient ingr = new Ingredient( findItem( na.adjust( m.group(3).trim() ) ), new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse( m.group(1) )));
+
+			String numericQuantityStr = m.group(1);
+			if (numericQuantityStr.isEmpty()) {  // "handful" == "1 handful"
+				numericQuantityStr = "1";
+			}
+
+			final Ingredient ingr = new Ingredient( findItem( na.adjust( m.group(3).trim() ) ), new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse(numericQuantityStr)));
 
 			final String note = m.group(4);
 			if ( note != null) {
