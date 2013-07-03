@@ -2,21 +2,31 @@
 ---
 
 
+{canonicalName: Baking Powder, aliases: {Cocoa Powder}}
+---
+{canonicalName: Cocoa, aliases: {Cocoa Powder}}
+---
+
+
 {canonicalName: Bay Leaf, tags: HERB, aliases: {Bay Leaves}}
 ---
 {canonicalName: Coriander, tags: HERB, aliases: {Cilantro, Coriander Leaves}}
 ---
 {canonicalName: Mixed Herbs, tags: HERB}
 ---
+{canonicalName: Oregano, tags: HERB, aliases: {Oregano Sprigs}}
+---
 {canonicalName: Parsley, tags: HERB}
 ---
-{canonicalName: Rosemary, tags: HERB}
+{canonicalName: Rosemary, tags: HERB, aliases: {Rosemary Sprigs}}
 ---
 {canonicalName: Thyme, tags: HERB}
 ---
 
 
 {canonicalName: Allspice, tags: SPICE, aliases: {Allspice Berries}}
+---
+{canonicalName: Caraway Seeds, tags: {SPICE, CHINESE}}
 ---
 {canonicalName: Chinese five-spice powder, tags: {SPICE, CHINESE}}
 ---
@@ -46,6 +56,8 @@
 ---
 {canonicalName: Nutmeg, tags: SPICE}
 ---
+{canonicalName: Paprika, tags: {SPICE, HUNGARIAN, SPANISH}}
+---
 {canonicalName: Pepper, tags: SPICE}
 ---
 {canonicalName: Black Pepper, tags: SPICE, parent: Pepper, aliases: {Pepper Powder, Black Pepper, Black Peppercorns, Ground Black Pepper}}
@@ -58,31 +70,35 @@
 
 {canonicalName: Chilli, tags: {CHILLI, INDIAN, THAI, CHINESE}}
 ---
-{canonicalName: Chilli Flakes, parent: Chilli}
+{    canonicalName: Chilli Flakes, parent: Chilli}
 ---
 # FIXME This is surely a naming, not a child
-{canonicalName: Red Chilli, parent: Chilli}
+{    canonicalName: Red Chilli, parent: Chilli}
 ---
-{canonicalName: Red Chillies, parent: Chilli}
+{    canonicalName: Red Chillies, parent: Chilli}
 ---
-{canonicalName: Green Chillies, parent: Chilli}
+{    canonicalName: Green Chillies, parent: Chilli}
 ---
 
 
+{canonicalName: Cabbage, tags: VEGETABLE, aliases: {Green Cabbage}}
+---
 {canonicalName: Carrot, tags: VEGETABLE}
 ---
 # FIXME Got to handle plurals properly!
-{canonicalName: Carrots, tags: VEGETABLE}
+{    canonicalName: Carrots, tags: VEGETABLE}
+---
+{canonicalName: Celeriac, tags: VEGETABLE}
 ---
 {canonicalName: Celery, tags: VEGETABLE}
 ---
 # FIXME Got to handle plurals properly!
-{canonicalName: Celery Sticks, parent: Celery}
+{    canonicalName: Celery Sticks, parent: Celery}
 ---
 {canonicalName: Garlic, tags: VEGETABLE}
 ---
 # FIXME Got to handle plurals properly!
-{canonicalName: Garlic Cloves, parent: Garlic}
+{    canonicalName: Garlic Cloves, parent: Garlic}
 ---
 {canonicalName: Leek, tags: VEGETABLE}
 ---
@@ -90,35 +106,47 @@
 ---
 {canonicalName: Mushrooms, tags: VEGETABLE}
 ---
-{canonicalName: Button Mushrooms, parent: Mushrooms}
+{    canonicalName: Button Mushrooms, parent: Mushrooms}
 ---
-{canonicalName: White Mushrooms, parent: Mushrooms}
+{    canonicalName: White Mushrooms, parent: Mushrooms}
 ---
 {canonicalName: Onion, tags: VEGETABLE}
 ---
 # FIXME Got to handle plurals properly!
-{canonicalName: Onions, tags: VEGETABLE}
+{    canonicalName: Onions, tags: VEGETABLE}
 ---
-{canonicalName: Baby Onions, parent: Onion}
+{    canonicalName: Baby Onions, parent: Onion}
 ---
-{canonicalName: Pearl Onions, parent: Onion}
+{    canonicalName: Pearl Onions, parent: Onion}
 ---
-{canonicalName: Spring Onion, parent: Onion}
+{    canonicalName: Spring Onion, parent: Onion}
 ---
-{canonicalName: Yellow Onion, parent: Onion}
+{    canonicalName: Yellow Onion, parent: Onion}
+---
+{    canonicalName: Shallot, parent: Onion, aliases: {Shallots}}
 ---
 # FIXME Got to handle plurals properly!
-{canonicalName: Spring Onions, parent: Onion}
+{    canonicalName: Spring Onions, parent: Onion}
+---
+{canonicalName: Pak Choi, tags: {VEGETABLE, CHINESE}}
+---
+{canonicalName: Red Pepper, tags: VEGETABLE}
+---
+{canonicalName: Green Pepper, tags: VEGETABLE}
+---
+{canonicalName: Yellow Pepper, tags: VEGETABLE}
+---
+{canonicalName: Potato, tags: VEGETABLE, aliases: {Potatoes}}
 ---
 {canonicalName: Tomato, tags: VEGETABLE}
 ---
 # FIXME Got to handle plurals properly!
-{canonicalName: Tomatoes, tags: VEGETABLE}
+{    canonicalName: Tomatoes, tags: VEGETABLE}
 ---
 # FIXME Got to handle plurals properly!
-{canonicalName: Plum Tomatoes, parent: Tomato}
+{    canonicalName: Plum Tomatoes, parent: Tomato}
 ---
-{canonicalName: Tomato Paste, parent: Tomato}
+{    canonicalName: Tomato Paste, parent: Tomato}
 ---
 
 
@@ -140,10 +168,11 @@
 ---
 
 
-# FIXME Got to handle plurals properly!
-{canonicalName: Cashew Nuts, tags: NUT}
+{canonicalName: Cashew Nuts, tags: NUT, aliases: Cashew Nut}
 ---
-{canonicalName: Peanut, parent: NUT}
+{canonicalName: Hazelnuts, tags: NUT, aliases: Hazelnut}
+---
+{canonicalName: Peanuts, parent: NUT}
 ---
 
 
@@ -153,19 +182,23 @@
 
 {canonicalName: Sugar, tags: SUGAR}
 ---
-{canonicalName: Caster Sugar, parent: Sugar}
+{    canonicalName: Caster Sugar, parent: Sugar}
 ---
-{canonicalName: Granulated Sugar, parent: Sugar}
+{    canonicalName: Golden Caster Sugar, parent: Sugar}
 ---
-{canonicalName: Brown Sugar, parent: Sugar}
+{    canonicalName: Granulated Sugar, parent: Sugar}
 ---
-{canonicalName: Light Muscovado Sugar, parent: Brown Sugar}
+{    canonicalName: Brown Sugar, parent: Sugar}
 ---
-{canonicalName: Dark Muscovado Sugar, parent: Brown Sugar}
+{        canonicalName: Light Muscovado Sugar, parent: Brown Sugar}
+---
+{        canonicalName: Dark Muscovado Sugar, parent: Brown Sugar}
 ---
 
 
 {canonicalName: Butter, tags: {DAIRY, FAT}}
+---
+{    canonicalName: Unsalted Butter, parent: Butter}
 ---
 {canonicalName: Margarine, tags: FAT}
 ---
@@ -177,25 +210,35 @@
 ---
 
 
-{canonicalName: Egg, tags: EGG}
+{canonicalName: Eggs, tags: EGG, aliases: {Egg}}
+---
+{    canonicalName: Egg Yolks, parent: Egg}
 ---
 
 
 {canonicalName: Milk, tags: DAIRY}
 ---
+{canonicalName: Cream, tags: DAIRY}
+---
+{    canonicalName: Double Cream, parent: Cream}
+---
+{    canonicalName: Single Cream, parent: Cream}
+---
+{    canonicalName: Soured Cream, parent: Cream}
+---
 
 
 {canonicalName: Oil, tags: {OIL, FAT}}
 ---
-{canonicalName: Vegetable Oil, parent: Oil}
+{    canonicalName: Vegetable Oil, parent: Oil}
 ---
-{canonicalName: Olive Oil, parent: Vegetable Oil}
+{        canonicalName: Olive Oil, parent: Vegetable Oil}
 ---
-{canonicalName: Rapeseed Oil, parent: Vegetable Oil}
+{        canonicalName: Rapeseed Oil, parent: Vegetable Oil}
 ---
-{canonicalName: Sesame Oil, parent: Vegetable Oil, tags: {CHINESE}}
+{        canonicalName: Sesame Oil, parent: Vegetable Oil, tags: {CHINESE}}
 ---
-{canonicalName: Sunflower Oil, parent: Vegetable Oil}
+{        canonicalName: Sunflower Oil, parent: Vegetable Oil}
 ---
 
 
@@ -227,9 +270,9 @@
 
 {canonicalName: Beef, tags: MEAT}
 ---
-{canonicalName: Braising Beef, parent: Beef}
+{    canonicalName: Braising Beef, parent: Beef}
 ---
-{canonicalName: Minced Beef, parent: Beef}
+{    canonicalName: Minced Beef, parent: Beef}
 ---
 {canonicalName: Chicken, tags: MEAT}
 ---
@@ -239,13 +282,19 @@
 ---
 {canonicalName: Lamb, tags: MEAT}
 ---
+{    canonicalName: Lamb Shoulder, parent: Lamb, aliases: {Shoulder of Lamb}}
+---
 {canonicalName: Pork, tags: MEAT}
+---
+{    canonicalName: Pork Loin, parent: Pork, aliases: {British Pork Loin}}
+---
+{    canonicalName: Pork Shoulder, parent: Pork}
 ---
 {canonicalName: Bacon, tags: MEAT}
 ---
-{canonicalName: Bacon Rashers, parent: Bacon}
+{    canonicalName: Bacon Rashers, parent: Bacon}
 ---
-{canonicalName: Streaky Bacon, parent: Bacon}
+{    canonicalName: Streaky Bacon, parent: Bacon}
 ---
 
 
@@ -257,7 +306,10 @@
 ---
 {canonicalName: Dry Sherry, tags: {WINE, ALCOHOL, SPANISH}}
 ---
+{canonicalName: Amaretto, tags: {ALCOHOL}}
+---
 {canonicalName: Brandy, tags: {WINE, ALCOHOL, FRENCH}}
 ---
 {canonicalName: Cognac, parent: Brandy}
-
+---
+{canonicalName: Tia Maria, tags: {ALCOHOL}}
