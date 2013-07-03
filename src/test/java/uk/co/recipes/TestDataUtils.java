@@ -31,7 +31,7 @@ public class TestDataUtils {
 
 		for ( String eachLine : Files.readLines( new File("src/test/resources/ingredients/" + inFilename), Charset.forName("utf-8"))) {
 
-			if (eachLine.startsWith("// ")) {
+			if (eachLine.isEmpty() || eachLine.startsWith("// ")) {
 				continue;
 			}
 
