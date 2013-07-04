@@ -14,10 +14,13 @@ import com.google.common.collect.Lists;
  *
  */
 public class NameAdjuster {
-	private static final String[]	BAD_PREFIXES = {"beaten", "can", "chilled", "chopped", "coarse", "coarsely", "cold", "crushed", "dark", "dressed", "dry", "dried", "fresh", "hot", "large", "lean", "long", "plump", "quality", "small", "smoked", "tin", "toasted", "whole"};
+	private static final String[]	BAD_PREFIXES = {"beaten", "can", "chilled", "chopped", "coarse", "coarsely", "cold", "cooked", "crushed", "dark", "dressed", "dry", "dried", "firm", "fresh",
+													"full-bodied", "hot", "large", "lean", "long", "medium", "plump", "quality", "raw", "skinless", "small", "smoked", "sustainable", "tin",
+													"toasted", "whole"};
 
 	private final Collection<String> notesToAdd = Lists.newArrayList();
 
+	// FIXME Can probably replace with one big regex
 	public String adjust( final String inName) {
 		String theNameToUse = inName.toLowerCase();
 		int incr = 0;

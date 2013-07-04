@@ -1,5 +1,13 @@
 {canonicalName: Water}
 ---
+{canonicalName: Coffee}
+---
+{canonicalName: Instant Coffee, parent: Coffee}
+---
+
+
+{canonicalName: Chocolate}
+---
 
 
 {canonicalName: Baking Powder, aliases: {Cocoa Powder}}
@@ -62,6 +70,8 @@
 ---
 {canonicalName: Black Pepper, tags: SPICE, parent: Pepper, aliases: {Pepper Powder, Black Pepper, Black Peppercorns, Ground Black Pepper}}
 ---
+{canonicalName: White Peppercorns, tags: SPICE, parent: Pepper}
+---
 {canonicalName: Star Anise, tags: {SPICE, CHINESE}}
 ---
 {canonicalName: Turmeric, tags: {SPICE, INDIAN}}
@@ -81,6 +91,12 @@
 ---
 
 
+{canonicalName: Rice, tags: {}}
+---
+{    canonicalName: Basmati Rice, parent: Rice, tags: {INDIAN}}
+---
+
+
 {canonicalName: Cabbage, tags: VEGETABLE, aliases: {Green Cabbage}}
 ---
 {canonicalName: Carrot, tags: VEGETABLE}
@@ -95,10 +111,11 @@
 # FIXME Got to handle plurals properly!
 {    canonicalName: Celery Sticks, parent: Celery}
 ---
-{canonicalName: Garlic, tags: VEGETABLE}
+{canonicalName: Courgette, tags: VEGETABLE}
 ---
-# FIXME Got to handle plurals properly!
-{    canonicalName: Garlic Cloves, parent: Garlic}
+{canonicalName: Garlic Cloves, tags: VEGETABLE, aliases: {Garlic, Garlic Clove}}
+---
+{canonicalName: Green Beans, tags: VEGETABLE}
 ---
 {canonicalName: Leek, tags: VEGETABLE}
 ---
@@ -146,7 +163,7 @@
 # FIXME Got to handle plurals properly!
 {    canonicalName: Plum Tomatoes, parent: Tomato}
 ---
-{    canonicalName: Tomato Paste, parent: Tomato}
+{    canonicalName: Tomato Paste, parent: Tomato, aliases: {Tomato Puree}}
 ---
 
 
@@ -268,17 +285,25 @@
 ---
 
 
+{canonicalName: Prawns, tags: SEAFOOD}
+---
+{    canonicalName: King Prawns, parent: Prawns}
+---
+
+
 {canonicalName: Beef, tags: MEAT}
 ---
 {    canonicalName: Braising Beef, parent: Beef}
 ---
-{    canonicalName: Minced Beef, parent: Beef}
+{    canonicalName: Minced Beef, parent: Beef, aliases: {Beef Mince}}
 ---
-{canonicalName: Chicken, tags: MEAT}
+{canonicalName: Chicken, tags: {MEAT, POULTRY}}
 ---
-{canonicalName: Chicken Liver, tags: MEAT}
+{    canonicalName: Chicken Mince, parent: Chicken}
 ---
-{canonicalName: Chicken Thighs, parent: Chicken}
+{    canonicalName: Chicken Thighs, parent: Chicken}
+---
+{canonicalName: Chicken Liver, tags: {MEAT, POULTRY, OFFAL}}
 ---
 {canonicalName: Lamb, tags: MEAT}
 ---
