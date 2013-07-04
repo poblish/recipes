@@ -20,6 +20,8 @@
 ---
 {canonicalName: Coriander, tags: HERB, aliases: {Cilantro, Coriander Leaves}}
 ---
+{canonicalName: Dill, tags: HERB}
+---
 {canonicalName: Mixed Herbs, tags: HERB}
 ---
 {canonicalName: Oregano, tags: HERB, aliases: {Oregano Sprigs}}
@@ -97,6 +99,8 @@
 ---
 
 
+{canonicalName: Broccoli, tags: VEGETABLE}
+---
 {canonicalName: Cabbage, tags: VEGETABLE, aliases: {Green Cabbage}}
 ---
 {canonicalName: Carrot, tags: VEGETABLE}
@@ -112,6 +116,8 @@
 {    canonicalName: Celery Sticks, parent: Celery}
 ---
 {canonicalName: Courgette, tags: VEGETABLE}
+---
+{canonicalName: Cucumber, tags: VEGETABLE}
 ---
 {canonicalName: Garlic Cloves, tags: VEGETABLE, aliases: {Garlic, Garlic Clove}}
 ---
@@ -155,18 +161,18 @@
 ---
 {canonicalName: Potato, tags: VEGETABLE, aliases: {Potatoes}}
 ---
-{canonicalName: Tomato, tags: VEGETABLE}
+{canonicalName: Tomato, tags: VEGETABLE, aliases: {Tomatoes}}
 ---
-# FIXME Got to handle plurals properly!
-{    canonicalName: Tomatoes, tags: VEGETABLE}
+{    canonicalName: Cherry Tomatoes, parent: Tomato}
 ---
-# FIXME Got to handle plurals properly!
 {    canonicalName: Plum Tomatoes, parent: Tomato}
 ---
 {    canonicalName: Tomato Paste, parent: Tomato, aliases: {Tomato Puree}}
 ---
 
 
+{canonicalName: Avocado, tags: FRUIT}
+---
 {canonicalName: Lemon, tags: FRUIT}
 ---
 {canonicalName: Lime, tags: FRUIT}
@@ -263,6 +269,8 @@
 ---
 {canonicalName: Red Wine Vinegar, parent: Vinegar}
 ---
+{canonicalName: White Wine Vinegar, parent: Vinegar}
+---
 
 
 {canonicalName: Soy Sauce, tags: {SAUCE, CHINESE}}
@@ -276,6 +284,10 @@
 {canonicalName: Fish Sauce, tags: {MEAT, SAUCE, THAI, VIETNAMESE}}
 ---
 {canonicalName: Tamarind Paste, tags: {FRUIT, SAUCE}}
+---
+{canonicalName: Mustard, tags: SAUCE}
+---
+{    canonicalName: Dijon Mustard, parent: Mustard}
 ---
 
 
