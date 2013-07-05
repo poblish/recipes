@@ -15,8 +15,8 @@ import com.google.common.collect.Lists;
  */
 public class NameAdjuster {
 	private static final String[]	BAD_PREFIXES = {"beaten", "can", "chilled", "chopped", "coarse", "coarsely", "cold", "cooked", "crushed", "dark", "dressed", "dry", "dried", "firm", "fresh",
-													"full-bodied", "hot", "large", "lean", "long", "medium", "plump", "quality", "raw", "skinless", "small", "smoked", "sustainable", "tin",
-													"toasted", "whole"};
+													"full-bodied", "hot", "large", "lean", "long", "medium", "peeled", "plump", "quality", "raw", "roughly", "skinless", "small", "smoked",
+													"sustainable", "tin", "toasted", "whole"};
 
 	private final Collection<String> notesToAdd = Lists.newArrayList();
 

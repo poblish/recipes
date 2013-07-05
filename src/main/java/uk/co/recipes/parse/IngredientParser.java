@@ -36,7 +36,7 @@ public class IngredientParser {
 	private static final Pattern	B = Pattern.compile("((generous|small|large|thumb-sized?) (splash|bunch|glass|piece|knob of?)) " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	C = Pattern.compile("(juice|zest|zest and juice) ([0-9]+) " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	D = Pattern.compile("(nutmeg|parmesan|salt|salt and pepper.*|beaten egg|.*cream)" + NOTES, Pattern.CASE_INSENSITIVE);
-	private static final Pattern	E = Pattern.compile("((?:dressed|steamed|cooked|sliced|sweet) [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);
+	private static final Pattern	E = Pattern.compile("((?:dressed|steamed|cooked|sliced|sweet|roughly chopped) [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);
 
 
 	public static Optional<Ingredient> parse( final String inStr) {

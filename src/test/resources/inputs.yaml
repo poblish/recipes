@@ -36,7 +36,9 @@
 
 {canonicalName: Allspice, tags: SPICE, aliases: {Allspice Berries}}
 ---
-{canonicalName: Caraway Seeds, tags: {SPICE, CHINESE}}
+{canonicalName: Caraway Seeds, tags: {SPICE}}
+---
+{canonicalName: Chilli Powder, tags: {SPICE, INDIAN}}
 ---
 {canonicalName: Chinese five-spice powder, tags: {SPICE, CHINESE}}
 ---
@@ -57,7 +59,7 @@
 # FIXME Got to handle plurals properly!
 {canonicalName: Fennel Seeds, tags: {SPICE, SEED}}
 ---
-{canonicalName: Garam Masala, tags: {SPICE, INDIAN}}
+{canonicalName: Garam Masala, tags: {SPICE, INDIAN}, aliases: {Garam Masala Powder}}
 ---
 {canonicalName: Ginger, tags: {SPICE, INDIAN, CHINESE}}
 ---
@@ -76,7 +78,13 @@
 ---
 {canonicalName: Star Anise, tags: {SPICE, CHINESE}}
 ---
-{canonicalName: Turmeric, tags: {SPICE, INDIAN}}
+{canonicalName: Turmeric, tags: {SPICE, INDIAN}, aliases: {Turmeric Powder}}
+---
+
+
+{canonicalName: Mustard Seeds, tags: {SEED}}
+---
+{canonicalName: Sizzling Seeds, tags: {SEED, INDIAN}}
 ---
 
 
@@ -90,6 +98,8 @@
 {    canonicalName: Red Chillies, parent: Chilli}
 ---
 {    canonicalName: Green Chillies, parent: Chilli}
+---
+{    canonicalName: Bird's eye chili, parent: Chilli, tags: {THAI, VIETNAMESE}, aliases: {Thai chili, Birds eye chillies}}
 ---
 
 
@@ -223,6 +233,8 @@
 ---
 {    canonicalName: Unsalted Butter, parent: Butter}
 ---
+{canonicalName: Ghee, tags: {DAIRY, FAT, INDIAN}, aliases: {Butter Ghee}}
+---
 {canonicalName: Margarine, tags: FAT}
 ---
 
@@ -248,6 +260,10 @@
 {    canonicalName: Single Cream, parent: Cream}
 ---
 {    canonicalName: Soured Cream, parent: Cream}
+---
+{canonicalName: Yogurt, tags: DAIRY}
+---
+{    canonicalName: Natural Yogurt, parent: Yogurt}
 ---
 
 
@@ -314,6 +330,8 @@
 {    canonicalName: Chicken Mince, parent: Chicken}
 ---
 {    canonicalName: Chicken Thighs, parent: Chicken}
+---
+{    canonicalName: Diced Chicken, parent: Chicken}
 ---
 {canonicalName: Chicken Liver, tags: {MEAT, POULTRY, OFFAL}}
 ---
