@@ -72,6 +72,12 @@
 			<version>0.90.2</version>
 			<type>jar</type>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.mahout</groupId>
+			<artifactId>mahout-core</artifactId>
+			<version>0.7</version>
+			<type>jar</type>
+		</dependency>
 	</dependencies>
 	<build>
 		<defaultGoal>clean install</defaultGoal>
