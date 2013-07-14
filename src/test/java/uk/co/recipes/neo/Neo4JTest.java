@@ -3,14 +3,33 @@ package uk.co.recipes.neo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
+import static uk.co.recipes.TestDataUtils.parseIngredientsFrom;
 
+import java.io.IOException;
+import java.util.List;
+
+import org.apache.http.client.ClientProtocolException;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.ResourceIterator;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.test.TestGraphDatabaseFactory;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import uk.co.recipes.Recipe;
+import uk.co.recipes.RecipeStage;
+import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.IIngredient;
+import uk.co.recipes.persistence.CanonicalItemFactory;
+import uk.co.recipes.persistence.ItemsLoader;
+import uk.co.recipes.persistence.RecipeFactory;
+
+import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
 
 /**
  * 
@@ -28,6 +47,106 @@ public class Neo4JTest {
 	    graphDb = new TestGraphDatabaseFactory().newImpermanentDatabase();
 	}
 	
+	@BeforeClass
+	public void cleanIndices() throws ClientProtocolException, IOException {
+		CanonicalItemFactory.startES();
+		CanonicalItemFactory.deleteAll();
+		RecipeFactory.deleteAll();
+	}
+
+	@BeforeClass
+	public void loadIngredientsFromYaml() throws InterruptedException, IOException {
+		ItemsLoader.load();
+		Thread.sleep(1000);
+	}
+
+	@Test
+	public void recipesTest() throws IOException {
+		Transaction tx = graphDb.beginTx();
+
+		try {
+			Recipe r = new Recipe("Lamb Cobbler");
+			Node recipeNode = graphDb.createNode( MyLabels.RECIPE );
+			recipeNode.setProperty( "name", "Lamb Cobbler");
+
+			final List<IIngredient> ings = parseIngredientsFrom("inputs.txt");
+
+			for ( IIngredient each : ings) {
+				Optional<Node> on = findItem( each.getItem() );
+				Node n = on.isPresent() ? on.get() : graphDb.createNode( MyLabels.INGREDIENT );
+
+				n.setProperty( "name", each.getItem().getCanonicalName());
+				n.createRelationshipTo( recipeNode, MyRelationshipTypes.CONTAINED_IN);
+			}
+//
+//			RecipeStage rs = new RecipeStage();
+//			rs.addIngredients(ings);
+//			r.addStage(rs);
+
+			System.out.println("Got   " + graphDb.getNodeById(1L));
+
+			final Node foundNode = findItem("Bay Leaf").get();
+			System.out.println("Props " + Lists.newArrayList( foundNode.getPropertyKeys() ));
+			System.out.println("Relns " + Lists.newArrayList( foundNode.getRelationships() ));
+			System.out.println(recipeNode);
+
+			final Node foundRecipe = findRecipe("Lamb Cobbler").get();
+			System.out.println("Props " + Lists.newArrayList( foundRecipe.getPropertyKeys() ));
+			System.out.println("Relns " + Lists.newArrayList( foundRecipe.getRelationships() ));
+		}
+		catch ( Exception e) {
+			tx.failure();
+			throw e;
+		}
+		finally {
+			tx.finish();
+		}
+	}
+
+	private Optional<Node> findItem( final ICanonicalItem inItem) {
+		return findItem( inItem.getCanonicalName() );
+	}
+
+	private Optional<Node> findItem( final String inCanonicalName) {
+		final ResourceIterator<Node> itr = graphDb.findNodesByLabelAndProperty( MyLabels.INGREDIENT, "name", inCanonicalName).iterator();
+
+		try {
+		    if (itr.hasNext()) {
+		    	return Optional.fromNullable( itr.next() );
+		    }
+
+		    return Optional.absent();
+		}
+		finally {
+			itr.close();
+		}
+	}
+
+	private Optional<Node> findRecipe( final String inName) {
+		final ResourceIterator<Node> itr = graphDb.findNodesByLabelAndProperty( MyLabels.RECIPE, "name", inName).iterator();
+
+		try {
+		    if (itr.hasNext()) {
+		    	return Optional.fromNullable( itr.next() );
+		    }
+
+		    return Optional.absent();
+		}
+		finally {
+			itr.close();
+		}
+	}
+
+	enum MyRelationshipTypes implements RelationshipType
+	{
+		CONTAINED_IN
+	}
+
+	enum MyLabels implements Label
+	{
+		INGREDIENT, RECIPE
+	}
+
 	@Test
 	public void basicTest() {
 		Transaction tx = graphDb.beginTx();
@@ -56,7 +175,13 @@ public class Neo4JTest {
 		// property should match.
 		Node foundNode = graphDb.getNodeById( n.getId() );
 		assertThat( foundNode.getId(), is( n.getId() ) );
-		assertThat( (String) foundNode.getProperty( "name" ), is( "Nancy" ) );	}
+		assertThat( (String) foundNode.getProperty( "name" ), is( "Nancy" ) );
+	}
+
+	@AfterClass
+	public void shutDown() {
+		CanonicalItemFactory.stopES();
+	}
 
 	@AfterClass
 	public void destroyTestDatabase() {
