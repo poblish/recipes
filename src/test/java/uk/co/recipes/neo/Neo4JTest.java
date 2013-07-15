@@ -93,6 +93,24 @@ public class Neo4JTest {
 			final Node foundRecipe = findRecipe("Lamb Cobbler").get();
 			System.out.println("Props " + Lists.newArrayList( foundRecipe.getPropertyKeys() ));
 			System.out.println("Relns " + Lists.newArrayList( foundRecipe.getRelationships() ));
+
+			///////////////////////////////////////////////////////////////////////////////////////////
+
+			Node recipeNode2 = graphDb.createNode( MyLabels.RECIPE );
+			recipeNode2.setProperty( "name", "Thai Fish Curry");
+
+			final List<IIngredient> ings2 = parseIngredientsFrom("ttFishCurry.txt");
+
+			for ( IIngredient each : ings2) {
+				Optional<Node> on = findItem( each.getItem() );
+				Node n = on.isPresent() ? on.get() : graphDb.createNode( MyLabels.INGREDIENT );
+
+				n.setProperty( "name", each.getItem().getCanonicalName());
+				n.createRelationshipTo( recipeNode, MyRelationshipTypes.CONTAINED_IN);
+			}
+
+			///////////////////////////////////////////////////////////////////////////////////////////
+
 		}
 		catch ( Exception e) {
 			tx.failure();
