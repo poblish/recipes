@@ -6,7 +6,9 @@ import static org.hamcrest.Matchers.is;
 import static uk.co.recipes.TestDataUtils.parseIngredientsFrom;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.apache.http.client.ClientProtocolException;
 import org.neo4j.cypher.javacompat.ExecutionEngine;
@@ -25,6 +27,7 @@ import org.testng.annotations.Test;
 
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
+import uk.co.recipes.api.ITag;
 import uk.co.recipes.persistence.CanonicalItemFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.persistence.RecipeFactory;
@@ -79,8 +82,10 @@ public class Neo4JTest {
 				Optional<Node> on = findItem( each.getItem() );
 				Node n = on.isPresent() ? on.get() : graphDb.createNode( MyLabels.INGREDIENT );
 
-				n.setProperty( "name", each.getItem().getCanonicalName());
+				n.setProperty( "name", each.getItem().getCanonicalName());  // FIXME Don't overwrite!
 				n.createRelationshipTo( recipeNode, MyRelationshipTypes.CONTAINED_IN);
+
+				handleTagsForIIngredient( each, n);
 			}
 //
 //			RecipeStage rs = new RecipeStage();
@@ -109,8 +114,10 @@ public class Neo4JTest {
 				Optional<Node> on = findItem( each.getItem() );
 				Node n = on.isPresent() ? on.get() : graphDb.createNode( MyLabels.INGREDIENT );
 
-				n.setProperty( "name", each.getItem().getCanonicalName());
+				n.setProperty( "name", each.getItem().getCanonicalName());  // FIXME Don't overwrite!
 				n.createRelationshipTo( recipeNode2, MyRelationshipTypes.CONTAINED_IN);
+
+                handleTagsForIIngredient( each, n);
 			}
 
 			///////////////////////////////////////////////////////////////////////////////////////////  See: http://docs.neo4j.org/chunked/stable/tutorials-cypher-java.html
@@ -121,8 +128,12 @@ public class Neo4JTest {
 
 			ExecutionResult result = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry')" +
 //						" MATCH me-[:CONTAINED_IN]->myFavorites-[:tagged]->tag<-[:tagged]-theirFavorites<-[:CONTAINED_IN]-people" + " WHERE NOT(me=people)" + " RETURN people.name as name, COUNT(*) as similar_favs" + " ORDER BY similar_favs DESC");
-							" MATCH me<-[:CONTAINED_IN]-ingreds" + " WHERE NOT(me=ingreds)" + " RETURN ingreds.name as name, COUNT(*) as similar_favs" + " ORDER BY similar_favs DESC");
+							" MATCH me<-[:CONTAINED_IN]-ingreds" + " WHERE NOT(me=ingreds)" + " RETURN ingreds.name as name, COUNT(*) as similar_favs ORDER BY similar_favs DESC");
 			System.out.println("Result = " + result.dumpToString());
+
+            ExecutionResult result3 = engine.execute("START me=node:node_auto_index(name='Ginger')" +
+                        " MATCH me<-[:TAGGED]-tags WHERE NOT(me=tags) RETURN tags.name as name, COUNT(*) as similar_favs ORDER BY similar_favs DESC");
+            System.out.println("Tags for Ingredient = " + result3.dumpToString());
 
 			ExecutionResult result1 = engine.execute("START me=node:node_auto_index(name='Lamb Cobbler') RETURN me");
 			System.out.println("Result1 = " + result1.dumpToString());
@@ -138,7 +149,18 @@ public class Neo4JTest {
 		}
 	}
 
-	private Optional<Node> findItem( final ICanonicalItem inItem) {
+    private void handleTagsForIIngredient( final IIngredient inIngr, final Node inIngrNode) {
+        for ( Entry<ITag,Serializable> eachTag : inIngr.getItem().getTags().entrySet()) {
+            Optional<Node> optTagNode = findItem( eachTag.getKey().toString() );
+            Node tagNode = optTagNode.isPresent() ? optTagNode.get() : graphDb.createNode( MyLabels.INGREDIENT );
+
+            tagNode.setProperty( "name", eachTag.getKey().toString());  // FIXME Don't overwrite!
+            // FIXME Save value too, surely?
+            tagNode.createRelationshipTo( inIngrNode, MyRelationshipTypes.TAGGED);
+        }
+    }
+
+    private Optional<Node> findItem( final ICanonicalItem inItem) {
 		return findItem( inItem.getCanonicalName() );
 	}
 
@@ -157,27 +179,42 @@ public class Neo4JTest {
 		}
 	}
 
-	private Optional<Node> findRecipe( final String inName) {
-		final ResourceIterator<Node> itr = graphDb.findNodesByLabelAndProperty( MyLabels.RECIPE, "name", inName).iterator();
+    private Optional<Node> findRecipe( final String inName) {
+        final ResourceIterator<Node> itr = graphDb.findNodesByLabelAndProperty( MyLabels.RECIPE, "name", inName).iterator();
 
-		try {
-		    if (itr.hasNext()) {
-		    	return Optional.fromNullable( itr.next() );
-		    }
+        try {
+            if (itr.hasNext()) {
+                return Optional.fromNullable( itr.next() );
+            }
 
-		    return Optional.absent();
-		}
-		finally {
-			itr.close();
-		}
-	}
+            return Optional.absent();
+        }
+        finally {
+            itr.close();
+        }
+    }
+
+    private Optional<Node> findTag( final String inName) {
+        final ResourceIterator<Node> itr = graphDb.findNodesByLabelAndProperty( MyLabels.TAG, "name", inName).iterator();
+
+        try {
+            if (itr.hasNext()) {
+                return Optional.fromNullable( itr.next() );
+            }
+
+            return Optional.absent();
+        }
+        finally {
+            itr.close();
+        }
+    }
 
 	enum MyRelationshipTypes implements RelationshipType {
-		CONTAINED_IN
+		CONTAINED_IN, TAGGED
 	}
 
 	enum MyLabels implements Label {
-		INGREDIENT, RECIPE
+		INGREDIENT, RECIPE, TAG
 	}
 
 	@Test
