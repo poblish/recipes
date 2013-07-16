@@ -9,19 +9,20 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
+import org.neo4j.cypher.javacompat.ExecutionEngine;
+import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.ResourceIterator;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.factory.GraphDatabaseSettings;
 import org.neo4j.test.TestGraphDatabaseFactory;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import uk.co.recipes.Recipe;
-import uk.co.recipes.RecipeStage;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.persistence.CanonicalItemFactory;
@@ -44,7 +45,11 @@ public class Neo4JTest {
 
 	@BeforeClass
 	public void prepareTestDatabase() {
-	    graphDb = new TestGraphDatabaseFactory().newImpermanentDatabase();
+	    graphDb = new TestGraphDatabaseFactory().newImpermanentDatabaseBuilder()
+	    										.setConfig( GraphDatabaseSettings.node_keys_indexable, "name")
+	    										.setConfig( GraphDatabaseSettings.node_auto_indexing, "true")
+//	    										.setConfig( GraphDatabaseSettings.relationship_auto_indexing, "true")
+	    										.newGraphDatabase();
 	}
 	
 	@BeforeClass
@@ -65,7 +70,7 @@ public class Neo4JTest {
 		Transaction tx = graphDb.beginTx();
 
 		try {
-			Recipe r = new Recipe("Lamb Cobbler");
+//			Recipe r = new Recipe("Lamb Cobbler");
 			Node recipeNode = graphDb.createNode( MyLabels.RECIPE );
 			recipeNode.setProperty( "name", "Lamb Cobbler");
 
@@ -106,11 +111,31 @@ public class Neo4JTest {
 				Node n = on.isPresent() ? on.get() : graphDb.createNode( MyLabels.INGREDIENT );
 
 				n.setProperty( "name", each.getItem().getCanonicalName());
-				n.createRelationshipTo( recipeNode, MyRelationshipTypes.CONTAINED_IN);
+				n.createRelationshipTo( recipeNode2, MyRelationshipTypes.CONTAINED_IN);
 			}
 
 			///////////////////////////////////////////////////////////////////////////////////////////
 
+			Node myNode = graphDb.createNode();
+			myNode.setProperty( "name", "my node" );
+
+			// tx.success();
+
+			///////////////////////////////////////////////////////////////////////////////////////////  See: http://docs.neo4j.org/chunked/stable/tutorials-cypher-java.html
+
+			ExecutionEngine engine = new ExecutionEngine(graphDb);
+
+			System.out.println("Result = " + engine.execute("START me=node:node_auto_index(name='Thai Fish Curry') MATCH me<-[:CONTAINED_IN]-ingreds RETURN me,ingreds").dumpToString());
+
+			ExecutionResult result = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry')" +
+//						" MATCH me-[:CONTAINED_IN]->myFavorites-[:tagged]->tag<-[:tagged]-theirFavorites<-[:CONTAINED_IN]-people" + " WHERE NOT(me=people)" + " RETURN people.name as name, COUNT(*) as similar_favs" + " ORDER BY similar_favs DESC");
+							" MATCH me<-[:CONTAINED_IN]-ingreds" + " WHERE NOT(me=ingreds)" + " RETURN ingreds.name as name, COUNT(*) as similar_favs" + " ORDER BY similar_favs DESC");
+			System.out.println("Result = " + result.dumpToString());
+
+			ExecutionResult result1 = engine.execute("START me=node:node_auto_index(name='Lamb Cobbler') RETURN me");
+			System.out.println("Result1 = " + result1.dumpToString());
+			ExecutionResult result2 = engine.execute("START n=node(*) WHERE n.name ! = 'Bay Leaf' RETURN n, n.name");
+			System.out.println("Result2 = " + result2.dumpToString());
 		}
 		catch ( Exception e) {
 			tx.failure();
@@ -155,13 +180,11 @@ public class Neo4JTest {
 		}
 	}
 
-	enum MyRelationshipTypes implements RelationshipType
-	{
+	enum MyRelationshipTypes implements RelationshipType {
 		CONTAINED_IN
 	}
 
-	enum MyLabels implements Label
-	{
+	enum MyLabels implements Label {
 		INGREDIENT, RECIPE
 	}
 
