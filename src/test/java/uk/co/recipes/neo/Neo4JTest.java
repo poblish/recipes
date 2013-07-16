@@ -124,6 +124,11 @@ public class Neo4JTest {
 
 			final ExecutionEngine engine = new ExecutionEngine(graphDb);
 
+			ExecutionResult result1 = engine.execute("START me=node:node_auto_index(name='Cashew Curry') RETURN me");
+			System.out.println("Find with node:node_auto_index = \r" + result1.dumpToString());
+			ExecutionResult result2 = engine.execute("START n=node(*) WHERE n.name ! = 'Cumin Seeds' RETURN n, n.name");
+			System.out.println("Find by node name = \r" + result2.dumpToString());
+
 			ExecutionResult iForR = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry')" +
 								" MATCH me<-[:CONTAINED_IN]-ingreds WHERE NOT(me=ingreds) RETURN ingreds.name as name, COUNT(*) as c ORDER BY c DESC");
 			System.out.println("Ingredients for Recipe = \r" + iForR.dumpToString());
@@ -145,13 +150,16 @@ public class Neo4JTest {
 			System.out.println("Ingredients shared with other Recipes \r" + result5.dumpToString());
 
             ExecutionResult tForI = engine.execute("START me=node:node_auto_index(name='Ginger')" +
-                        " MATCH me<-[:TAGGED]-tags WHERE NOT(me=tags) RETURN tags.name as name, COUNT(*) as c ORDER BY c DESC");
+                            " MATCH me<-[:TAGGED]-tags WHERE NOT(me=tags) RETURN tags.name as name, COUNT(*) as c ORDER BY c DESC");
             System.out.println("Tags for Ingredient = \r" + tForI.dumpToString());
 
-			ExecutionResult result1 = engine.execute("START me=node:node_auto_index(name='Cashew Curry') RETURN me");
-			System.out.println("Find with node:node_auto_index = \r" + result1.dumpToString());
-			ExecutionResult result2 = engine.execute("START n=node(*) WHERE n.name ! = 'Cumin Seeds' RETURN n, n.name");
-			System.out.println("Find by node name = \r" + result2.dumpToString());
+            ExecutionResult iCountForT = engine.execute("START me=node:node_auto_index(name='INDIAN')" +
+                            " MATCH me-[:TAGGED]->ingredients RETURN ingredients.name as name ORDER BY name");
+            System.out.println("Ingredients tagged 'INDIAN' = \r" + iCountForT.dumpToString());
+
+            ExecutionResult rCountForT = engine.execute("START me=node:node_auto_index(name='INDIAN')" +
+                            " MATCH me-[:TAGGED]->ingredients-[:CONTAINED_IN]->recipe RETURN recipe.name AS name, COUNT(*) AS num_ingredients ORDER BY num_ingredients DESC, name");
+            System.out.println("Recipes tagged 'INDIAN' = \r" + rCountForT.dumpToString());
 		}
 		catch ( Exception e) {
 			tx.failure();
