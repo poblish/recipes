@@ -74,9 +74,9 @@ public class Neo4JTest {
 		try {
 //			Recipe r = new Recipe("Lamb Cobbler");
 			Node recipeNode = graphDb.createNode( MyLabels.RECIPE );
-			recipeNode.setProperty( "name", "Lamb Cobbler");
+			recipeNode.setProperty( "name", "Cashew Curry");
 
-			final List<IIngredient> ings = parseIngredientsFrom("inputs.txt");
+			final List<IIngredient> ings = parseIngredientsFrom("chCashBlackSpiceCurry.txt");
 
 			for ( IIngredient each : ings) {
 				Optional<Node> on = findItem( each.getItem() );
@@ -94,12 +94,12 @@ public class Neo4JTest {
 
 			System.out.println("Got   " + graphDb.getNodeById(1L));
 
-			final Node foundNode = findItem("Bay Leaf").get();
+			final Node foundNode = findItem("Cumin Seeds").get();
 			System.out.println("Props " + Lists.newArrayList( foundNode.getPropertyKeys() ));
 			System.out.println("Relns " + Lists.newArrayList( foundNode.getRelationships() ));
 			System.out.println(recipeNode);
 
-			final Node foundRecipe = findRecipe("Lamb Cobbler").get();
+			final Node foundRecipe = findRecipe("Cashew Curry").get();
 			System.out.println("Props " + Lists.newArrayList( foundRecipe.getPropertyKeys() ));
 			System.out.println("Relns " + Lists.newArrayList( foundRecipe.getRelationships() ));
 
@@ -126,19 +126,31 @@ public class Neo4JTest {
 
 			ExecutionResult iForR = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry')" +
 								" MATCH me<-[:CONTAINED_IN]-ingreds WHERE NOT(me=ingreds) RETURN ingreds.name as name, COUNT(*) as c ORDER BY c DESC");
-				System.out.println("Ingredients for Recipe = \r" + iForR.dumpToString());
+			System.out.println("Ingredients for Recipe = \r" + iForR.dumpToString());
 
-			ExecutionResult result3 = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry')" +
-								" MATCH me<-[:CONTAINED_IN]-ingreds<-[:TAGGED]-tag RETURN tag.name as name, COUNT(*) as c ORDER BY c DESC");
-				System.out.println("Tags for Recipe = \r" + result3.dumpToString());
+			ExecutionResult tForR1 = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry')" +
+							" MATCH me<-[:CONTAINED_IN]-ingreds<-[:TAGGED]-tag RETURN tag.name as name, COUNT(*) as c ORDER BY c DESC, name");
+			System.out.println("Tags for Recipe 1 = \r" + tForR1.dumpToString());
+
+			ExecutionResult tForR2 = engine.execute("START me=node:node_auto_index(name='Cashew Curry')" +
+						" MATCH me<-[:CONTAINED_IN]-ingreds<-[:TAGGED]-tag RETURN tag.name as name, COUNT(*) as c ORDER BY c DESC, name");
+			System.out.println("Tags for Recipe 2 = \r" + tForR2.dumpToString());
+
+			ExecutionResult result4 = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry')" +
+							" MATCH me<-[:CONTAINED_IN]-ingreds<-[:TAGGED]-tag-[:TAGGED]->otherIngredients-[:CONTAINED_IN]->others WHERE NOT(me=others) RETURN others.name as name, tag.name, COUNT(*) as c ORDER BY c DESC, name");
+			System.out.println("Tags shared with other Recipes??? \r" + result4.dumpToString());
+
+			ExecutionResult result5 = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry')" +
+							" MATCH me<-[:CONTAINED_IN]-ingreds-[:CONTAINED_IN]->others WHERE NOT(me=others) RETURN others.name as name, ingreds.name ORDER BY name, ingreds.name");
+			System.out.println("Ingredients shared with other Recipes \r" + result5.dumpToString());
 
             ExecutionResult tForI = engine.execute("START me=node:node_auto_index(name='Ginger')" +
                         " MATCH me<-[:TAGGED]-tags WHERE NOT(me=tags) RETURN tags.name as name, COUNT(*) as c ORDER BY c DESC");
             System.out.println("Tags for Ingredient = \r" + tForI.dumpToString());
 
-			ExecutionResult result1 = engine.execute("START me=node:node_auto_index(name='Lamb Cobbler') RETURN me");
+			ExecutionResult result1 = engine.execute("START me=node:node_auto_index(name='Cashew Curry') RETURN me");
 			System.out.println("Find with node:node_auto_index = \r" + result1.dumpToString());
-			ExecutionResult result2 = engine.execute("START n=node(*) WHERE n.name ! = 'Bay Leaf' RETURN n, n.name");
+			ExecutionResult result2 = engine.execute("START n=node(*) WHERE n.name ! = 'Cumin Seeds' RETURN n, n.name");
 			System.out.println("Find by node name = \r" + result2.dumpToString());
 		}
 		catch ( Exception e) {
