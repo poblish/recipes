@@ -122,23 +122,24 @@ public class Neo4JTest {
 
 			///////////////////////////////////////////////////////////////////////////////////////////  See: http://docs.neo4j.org/chunked/stable/tutorials-cypher-java.html
 
-			ExecutionEngine engine = new ExecutionEngine(graphDb);
+			final ExecutionEngine engine = new ExecutionEngine(graphDb);
 
-			System.out.println("Result = " + engine.execute("START me=node:node_auto_index(name='Thai Fish Curry') MATCH me<-[:CONTAINED_IN]-ingreds RETURN me,ingreds").dumpToString());
+			ExecutionResult iForR = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry')" +
+								" MATCH me<-[:CONTAINED_IN]-ingreds WHERE NOT(me=ingreds) RETURN ingreds.name as name, COUNT(*) as c ORDER BY c DESC");
+				System.out.println("Ingredients for Recipe = \r" + iForR.dumpToString());
 
-			ExecutionResult result = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry')" +
-//						" MATCH me-[:CONTAINED_IN]->myFavorites-[:tagged]->tag<-[:tagged]-theirFavorites<-[:CONTAINED_IN]-people" + " WHERE NOT(me=people)" + " RETURN people.name as name, COUNT(*) as similar_favs" + " ORDER BY similar_favs DESC");
-							" MATCH me<-[:CONTAINED_IN]-ingreds" + " WHERE NOT(me=ingreds)" + " RETURN ingreds.name as name, COUNT(*) as similar_favs ORDER BY similar_favs DESC");
-			System.out.println("Result = " + result.dumpToString());
+			ExecutionResult result3 = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry')" +
+								" MATCH me<-[:CONTAINED_IN]-ingreds<-[:TAGGED]-tag RETURN tag.name as name, COUNT(*) as c ORDER BY c DESC");
+				System.out.println("Tags for Recipe = \r" + result3.dumpToString());
 
-            ExecutionResult result3 = engine.execute("START me=node:node_auto_index(name='Ginger')" +
-                        " MATCH me<-[:TAGGED]-tags WHERE NOT(me=tags) RETURN tags.name as name, COUNT(*) as similar_favs ORDER BY similar_favs DESC");
-            System.out.println("Tags for Ingredient = " + result3.dumpToString());
+            ExecutionResult tForI = engine.execute("START me=node:node_auto_index(name='Ginger')" +
+                        " MATCH me<-[:TAGGED]-tags WHERE NOT(me=tags) RETURN tags.name as name, COUNT(*) as c ORDER BY c DESC");
+            System.out.println("Tags for Ingredient = \r" + tForI.dumpToString());
 
 			ExecutionResult result1 = engine.execute("START me=node:node_auto_index(name='Lamb Cobbler') RETURN me");
-			System.out.println("Result1 = " + result1.dumpToString());
+			System.out.println("Find with node:node_auto_index = \r" + result1.dumpToString());
 			ExecutionResult result2 = engine.execute("START n=node(*) WHERE n.name ! = 'Bay Leaf' RETURN n, n.name");
-			System.out.println("Result2 = " + result2.dumpToString());
+			System.out.println("Find by node name = \r" + result2.dumpToString());
 		}
 		catch ( Exception e) {
 			tx.failure();
