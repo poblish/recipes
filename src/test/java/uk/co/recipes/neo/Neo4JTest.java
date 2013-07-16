@@ -154,8 +154,12 @@ public class Neo4JTest {
             System.out.println("Tags for Ingredient = \r" + tForI.dumpToString());
 
             ExecutionResult iCountForT = engine.execute("START me=node:node_auto_index(name='INDIAN')" +
-                            " MATCH me-[:TAGGED]->ingredients RETURN ingredients.name as name ORDER BY name");
+                            " MATCH me-[:TAGGED]->indianIngr RETURN DISTINCT indianIngr.name as name ORDER BY name");  // Not too happy with DISTINCT, but works...
             System.out.println("Ingredients tagged 'INDIAN' = \r" + iCountForT.dumpToString());
+
+            ExecutionResult iCountForTT = engine.execute("START a=node:node_auto_index(name='INDIAN'), b=node:node_auto_index(name='SPICE')" +
+                            " MATCH a-[:TAGGED]->indianIngr, b-[:TAGGED]->spiceIngr WHERE indianIngr=spiceIngr RETURN DISTINCT indianIngr.name as name ORDER BY name");  // Bit crazy? Not too happy with DISTINCT, but works...
+            System.out.println("Ingredients tagged 'INDIAN' and 'SPICE' = \r" + iCountForTT.dumpToString());
 
             ExecutionResult rCountForT = engine.execute("START me=node:node_auto_index(name='INDIAN')" +
                             " MATCH me-[:TAGGED]->ingredients-[:CONTAINED_IN]->recipe RETURN recipe.name AS name, COUNT(*) AS num_ingredients ORDER BY num_ingredients DESC, name");
