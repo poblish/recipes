@@ -48,7 +48,6 @@ public class Neo4JTest {
 	    graphDb = new TestGraphDatabaseFactory().newImpermanentDatabaseBuilder()
 	    										.setConfig( GraphDatabaseSettings.node_keys_indexable, "name")
 	    										.setConfig( GraphDatabaseSettings.node_auto_indexing, "true")
-//	    										.setConfig( GraphDatabaseSettings.relationship_auto_indexing, "true")
 	    										.newGraphDatabase();
 	}
 	
@@ -113,13 +112,6 @@ public class Neo4JTest {
 				n.setProperty( "name", each.getItem().getCanonicalName());
 				n.createRelationshipTo( recipeNode2, MyRelationshipTypes.CONTAINED_IN);
 			}
-
-			///////////////////////////////////////////////////////////////////////////////////////////
-
-			Node myNode = graphDb.createNode();
-			myNode.setProperty( "name", "my node" );
-
-			// tx.success();
 
 			///////////////////////////////////////////////////////////////////////////////////////////  See: http://docs.neo4j.org/chunked/stable/tutorials-cypher-java.html
 
