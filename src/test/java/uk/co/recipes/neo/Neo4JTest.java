@@ -129,40 +129,35 @@ public class Neo4JTest {
 			ExecutionResult result2 = engine.execute("START n=node(*) WHERE n.name ! = 'Cumin Seeds' RETURN n, n.name");
 			System.out.println("Find by node name = \r" + result2.dumpToString());
 
-			ExecutionResult iForR = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry')" +
-								" MATCH me<-[:CONTAINED_IN]-ingreds WHERE NOT(me=ingreds) RETURN ingreds.name as name, COUNT(*) as c ORDER BY c DESC");
+			ExecutionResult iForR = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry') MATCH me<-[:CONTAINED_IN]-ingreds WHERE NOT(me=ingreds) RETURN ingreds.name as name, COUNT(*) as c ORDER BY c DESC");
 			System.out.println("Ingredients for Recipe = \r" + iForR.dumpToString());
 
-			ExecutionResult tForR1 = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry')" +
-							" MATCH me<-[:CONTAINED_IN]-ingreds<-[:TAGGED]-tag RETURN tag.name as name, COUNT(*) as c ORDER BY c DESC, name");
+			ExecutionResult tForR1 = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry') MATCH me<-[:CONTAINED_IN]-ingreds<-[:TAGGED]-tag RETURN tag.name as name, COUNT(*) as c ORDER BY c DESC, name");
 			System.out.println("Tags for Recipe 1 = \r" + tForR1.dumpToString());
 
-			ExecutionResult tForR2 = engine.execute("START me=node:node_auto_index(name='Cashew Curry')" +
-						" MATCH me<-[:CONTAINED_IN]-ingreds<-[:TAGGED]-tag RETURN tag.name as name, COUNT(*) as c ORDER BY c DESC, name");
+			ExecutionResult tForR2 = engine.execute("START me=node:node_auto_index(name='Cashew Curry') MATCH me<-[:CONTAINED_IN]-ingreds<-[:TAGGED]-tag RETURN tag.name as name, COUNT(*) as c ORDER BY c DESC, name");
 			System.out.println("Tags for Recipe 2 = \r" + tForR2.dumpToString());
 
-			ExecutionResult result4 = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry')" +
-							" MATCH me<-[:CONTAINED_IN]-ingreds<-[:TAGGED]-tag-[:TAGGED]->otherIngredients-[:CONTAINED_IN]->others WHERE NOT(me=others) RETURN others.name as name, tag.name, COUNT(*) as c ORDER BY c DESC, name");
+			ExecutionResult result4 = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry') MATCH me<-[:CONTAINED_IN]-ingreds<-[:TAGGED]-tag-[:TAGGED]->otherIngredients-[:CONTAINED_IN]->others WHERE NOT(me=others) RETURN others.name as name, tag.name, COUNT(*) as c ORDER BY c DESC, name");
 			System.out.println("Tags shared with other Recipes??? \r" + result4.dumpToString());
 
-			ExecutionResult result5 = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry')" +
-							" MATCH me<-[:CONTAINED_IN]-ingreds-[:CONTAINED_IN]->others WHERE NOT(me=others) RETURN others.name as name, ingreds.name ORDER BY name, ingreds.name");
+			ExecutionResult result5 = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry') MATCH me<-[:CONTAINED_IN]-ingreds-[:CONTAINED_IN]->others WHERE NOT(me=others) RETURN others.name as name, ingreds.name ORDER BY name, ingreds.name");
 			System.out.println("Ingredients shared with other Recipes \r" + result5.dumpToString());
 
-            ExecutionResult tForI = engine.execute("START me=node:node_auto_index(name='Ginger')" +
-                            " MATCH me<-[:TAGGED]-tags WHERE NOT(me=tags) RETURN tags.name as name, COUNT(*) as c ORDER BY c DESC");
+			ExecutionResult result6 = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry') MATCH me<-[:CONTAINED_IN]-ingreds-[:CONTAINED_IN]->others WHERE NOT(me=others) RETURN others.name as name, COUNT(*) AS c ORDER BY c DESC, name");
+			System.out.println("Ingredients shared with other Recipes II \r" + result6.dumpToString());
+
+            ExecutionResult tForI = engine.execute("START me=node:node_auto_index(name='Ginger') MATCH me<-[:TAGGED]-tags WHERE NOT(me=tags) RETURN tags.name as name, COUNT(*) as c ORDER BY c DESC");
             System.out.println("Tags for Ingredient = \r" + tForI.dumpToString());
 
-            ExecutionResult iCountForT = engine.execute("START me=node:node_auto_index(name='INDIAN')" +
-                            " MATCH me-[:TAGGED]->indianIngr RETURN DISTINCT indianIngr.name as name ORDER BY name");  // Not too happy with DISTINCT, but works...
+            ExecutionResult iCountForT = engine.execute("START me=node:node_auto_index(name='INDIAN') MATCH me-[:TAGGED]->indianIngr RETURN DISTINCT indianIngr.name as name ORDER BY name");  // Not too happy with DISTINCT, but works...
             System.out.println("Ingredients tagged 'INDIAN' = \r" + iCountForT.dumpToString());
 
             ExecutionResult iCountForTT = engine.execute("START a=node:node_auto_index(name='INDIAN'), b=node:node_auto_index(name='SPICE')" +
                             " MATCH a-[:TAGGED]->indianIngr, b-[:TAGGED]->spiceIngr WHERE indianIngr=spiceIngr RETURN DISTINCT indianIngr.name as name ORDER BY name");  // Bit crazy? Not too happy with DISTINCT, but works...
             System.out.println("Ingredients tagged 'INDIAN' and 'SPICE' = \r" + iCountForTT.dumpToString());
 
-            ExecutionResult rCountForT = engine.execute("START me=node:node_auto_index(name='INDIAN')" +
-                            " MATCH me-[:TAGGED]->ingredients-[:CONTAINED_IN]->recipe RETURN recipe.name AS name, COUNT(*) AS num_ingredients ORDER BY num_ingredients DESC, name");
+            ExecutionResult rCountForT = engine.execute("START me=node:node_auto_index(name='INDIAN') MATCH me-[:TAGGED]->ingredients-[:CONTAINED_IN]->recipe RETURN recipe.name AS name, COUNT(*) AS num_ingredients ORDER BY num_ingredients DESC, name");
             System.out.println("Recipes tagged 'INDIAN' = \r" + rCountForT.dumpToString());
 		}
 		catch ( Exception e) {
