@@ -80,9 +80,8 @@ public class Neo4JTest {
 
 			for ( IIngredient each : ings) {
 				Optional<Node> on = findItem( each.getItem() );
-				Node n = on.isPresent() ? on.get() : graphDb.createNode( MyLabels.INGREDIENT );
+				Node n = on.isPresent() ? on.get() : createItemHierarchy( each.getItem() );
 
-				n.setProperty( "name", each.getItem().getCanonicalName());  // FIXME Don't overwrite!
 				n.createRelationshipTo( recipeNode, MyRelationshipTypes.CONTAINED_IN);
 
 				handleTagsForIIngredient( each, n);
@@ -112,9 +111,8 @@ public class Neo4JTest {
 
 			for ( IIngredient each : ings2) {
 				Optional<Node> on = findItem( each.getItem() );
-				Node n = on.isPresent() ? on.get() : graphDb.createNode( MyLabels.INGREDIENT );
+				Node n = on.isPresent() ? on.get() : createItemHierarchy( each.getItem() );
 
-				n.setProperty( "name", each.getItem().getCanonicalName());  // FIXME Don't overwrite!
 				n.createRelationshipTo( recipeNode2, MyRelationshipTypes.CONTAINED_IN);
 
                 handleTagsForIIngredient( each, n);
@@ -159,6 +157,12 @@ public class Neo4JTest {
 
             ExecutionResult rCountForT = engine.execute("START me=node:node_auto_index(name='INDIAN') MATCH me-[:TAGGED]->ingredients-[:CONTAINED_IN]->recipe RETURN recipe.name AS name, COUNT(*) AS num_ingredients ORDER BY num_ingredients DESC, name");
             System.out.println("Recipes tagged 'INDIAN' = \r" + rCountForT.dumpToString());
+
+            ExecutionResult parent1Level = engine.execute("START me=node:node_auto_index(name='Rapeseed Oil') MATCH me-[:CHILD]->parent RETURN parent.name AS name ORDER BY name");
+            System.out.println("Oil parentage I = \r" + parent1Level.dumpToString());
+
+            ExecutionResult parent2Level = engine.execute("START me=node:node_auto_index(name='Rapeseed Oil') MATCH me-[:CHILD]->parent-[:CHILD]->parent2 RETURN DISTINCT parent2.name AS name ORDER BY name");
+            System.out.println("Oil parentage II = \r" + parent2Level.dumpToString());
 		}
 		catch ( Exception e) {
 			tx.failure();
@@ -214,23 +218,41 @@ public class Neo4JTest {
         }
     }
 
-    private Optional<Node> findTag( final String inName) {
-        final ResourceIterator<Node> itr = graphDb.findNodesByLabelAndProperty( MyLabels.TAG, "name", inName).iterator();
+//    private Optional<Node> findTag( final String inName) {
+//        final ResourceIterator<Node> itr = graphDb.findNodesByLabelAndProperty( MyLabels.TAG, "name", inName).iterator();
+//
+//        try {
+//            if (itr.hasNext()) {
+//                return Optional.fromNullable( itr.next() );
+//            }
+//
+//            return Optional.absent();
+//        }
+//        finally {
+//            itr.close();
+//        }
+//    }
 
-        try {
-            if (itr.hasNext()) {
-                return Optional.fromNullable( itr.next() );
-            }
+	private Node createItemHierarchy( final ICanonicalItem inItem) {
+		final Node us = graphDb.createNode( MyLabels.INGREDIENT );
+		us.setProperty( "name", inItem.getCanonicalName());
 
-            return Optional.absent();
-        }
-        finally {
-            itr.close();
-        }
-    }
+		ICanonicalItem childItem = inItem;
+		Node childNode = us;
+		while (childItem.parent().isPresent()) {
+			final Optional<Node> on = findItem( childItem.parent().get() );
+			Node parentNode = on.isPresent() ? on.get() : createItemHierarchy( childItem.parent().get() );
+			System.out.println("--> " + childItem + " is child of " + childItem.parent());
+			childNode.createRelationshipTo( parentNode, MyRelationshipTypes.CHILD);
+			childItem = childItem.parent().get();
+			childNode = parentNode;
+		}
+
+		return us;
+	}
 
 	enum MyRelationshipTypes implements RelationshipType {
-		CONTAINED_IN, TAGGED
+		CONTAINED_IN, TAGGED, CHILD
 	}
 
 	enum MyLabels implements Label {
