@@ -49,6 +49,11 @@ public class Neo4JTest {
 
 	@BeforeClass
 	public void prepareTestDatabase() {
+//		graphDb = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder("/Users/andrewregan/Development/java/recipe_explorer/data")
+//	    										.setConfig( GraphDatabaseSettings.node_keys_indexable, "name")
+//	    										.setConfig( GraphDatabaseSettings.node_auto_indexing, "true")
+//	    										.newGraphDatabase();
+
 	    graphDb = new TestGraphDatabaseFactory().newImpermanentDatabaseBuilder()
 	    										.setConfig( GraphDatabaseSettings.node_keys_indexable, "name")
 	    										.setConfig( GraphDatabaseSettings.node_auto_indexing, "true")
@@ -145,6 +150,12 @@ public class Neo4JTest {
 
 			ExecutionResult result6 = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry') MATCH me<-[:CONTAINED_IN]-ingreds-[:CONTAINED_IN]->others WHERE NOT(me=others) RETURN others.name as name, COUNT(*) AS c ORDER BY c DESC, name");
 			System.out.println("Ingredients shared with other Recipes II \r" + result6.dumpToString());
+
+			ExecutionResult result7 = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry') MATCH me<-[:CONTAINED_IN]-allMine, allTheirs-[:CONTAINED_IN]->others WHERE NOT(me=others) and NOT(allMine=allTheirs) RETURN others.name as name, COUNT(DISTINCT allMine) + COUNT(DISTINCT allTheirs) AS num_unshared ORDER BY name, num_unshared DESC");
+			System.out.println("Ingredients not shared with other Recipes \r" + result7.dumpToString());
+
+//			ExecutionResult result8 = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry') MATCH me<-[:TAGGED]-allMine, allTheirs-[:TAGGED]->others WHERE NOT(me=others) and NOT(allMine=allTheirs) RETURN others.name as name, COUNT(DISTINCT allMine) + COUNT(DISTINCT allTheirs) AS num_unshared ORDER BY name, num_unshared DESC");
+//			System.out.println("Tags not shared with other Recipes?? \r" + result8.dumpToString());
 
             ExecutionResult tForI = engine.execute("START me=node:node_auto_index(name='Ginger') MATCH me<-[:TAGGED]-tags WHERE NOT(me=tags) RETURN tags.name as name, COUNT(*) as c ORDER BY c DESC");
             System.out.println("Tags for Ingredient = \r" + tForI.dumpToString());
