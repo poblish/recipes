@@ -175,8 +175,8 @@ public class Neo4JTest {
 
     private void handleTagsForIIngredient( final IIngredient inIngr, final Node inIngrNode) {
         for ( Entry<ITag,Serializable> eachTag : inIngr.getItem().getTags().entrySet()) {
-            Optional<Node> optTagNode = findItem( eachTag.getKey().toString() );
-            Node tagNode = optTagNode.isPresent() ? optTagNode.get() : graphDb.createNode( MyLabels.INGREDIENT );
+            Optional<Node> optTagNode = findTag( eachTag.getKey() );
+            Node tagNode = optTagNode.isPresent() ? optTagNode.get() : graphDb.createNode( MyLabels.TAG );
 
             tagNode.setProperty( "name", eachTag.getKey().toString());  // FIXME Don't overwrite!
             // FIXME Save value too, surely?
@@ -218,20 +218,20 @@ public class Neo4JTest {
         }
     }
 
-//    private Optional<Node> findTag( final String inName) {
-//        final ResourceIterator<Node> itr = graphDb.findNodesByLabelAndProperty( MyLabels.TAG, "name", inName).iterator();
-//
-//        try {
-//            if (itr.hasNext()) {
-//                return Optional.fromNullable( itr.next() );
-//            }
-//
-//            return Optional.absent();
-//        }
-//        finally {
-//            itr.close();
-//        }
-//    }
+    private Optional<Node> findTag( final ITag inName) {
+        final ResourceIterator<Node> itr = graphDb.findNodesByLabelAndProperty( MyLabels.TAG, "name", /* FIXME? */ inName.toString()).iterator();
+
+        try {
+            if (itr.hasNext()) {
+                return Optional.fromNullable( itr.next() );
+            }
+
+            return Optional.absent();
+        }
+        finally {
+            itr.close();
+        }
+    }
 
 	private Node createItemHierarchy( final ICanonicalItem inItem) {
 		final Node us = graphDb.createNode( MyLabels.INGREDIENT );
