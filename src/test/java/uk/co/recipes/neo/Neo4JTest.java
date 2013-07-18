@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import org.apache.http.client.ClientProtocolException;
 import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
@@ -161,8 +162,11 @@ public class Neo4JTest {
             ExecutionResult parent1Level = engine.execute("START me=node:node_auto_index(name='Rapeseed Oil') MATCH me-[:CHILD]->parent RETURN parent.name AS name ORDER BY name");
             System.out.println("Oil parentage I = \r" + parent1Level.dumpToString());
 
-            ExecutionResult parent2Level = engine.execute("START me=node:node_auto_index(name='Rapeseed Oil') MATCH me-[:CHILD]->parent-[:CHILD]->parent2 RETURN DISTINCT parent2.name AS name ORDER BY name");
+            ExecutionResult parent2Level = engine.execute("START me=node:node_auto_index(name='Rapeseed Oil') MATCH me-[:CHILD]->parent-[:CHILD]->parent2 RETURN parent2.name AS name ORDER BY name");
             System.out.println("Oil parentage II = \r" + parent2Level.dumpToString());
+
+            ExecutionResult parentTopLevel = engine.execute("START me=node:node_auto_index(name='Rapeseed Oil') MATCH me-[:CHILD*1..]->parent WHERE NOT(parent-[:CHILD]->()) RETURN parent.name AS name ORDER BY name");
+            System.out.println("Oil top parentage = \r" + parentTopLevel.dumpToString());
 		}
 		catch ( Exception e) {
 			tx.failure();
@@ -242,8 +246,15 @@ public class Neo4JTest {
 		while (childItem.parent().isPresent()) {
 			final Optional<Node> on = findItem( childItem.parent().get() );
 			Node parentNode = on.isPresent() ? on.get() : createItemHierarchy( childItem.parent().get() );
+
+			// Make sure we haven't been here before
+			if ( childNode.getSingleRelationship( MyRelationshipTypes.CHILD, Direction.OUTGOING) != null) {
+				break;
+			}
+
 			System.out.println("--> " + childItem + " is child of " + childItem.parent());
 			childNode.createRelationshipTo( parentNode, MyRelationshipTypes.CHILD);
+			
 			childItem = childItem.parent().get();
 			childNode = parentNode;
 		}
