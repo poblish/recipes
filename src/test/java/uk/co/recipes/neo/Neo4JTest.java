@@ -1,7 +1,6 @@
 package uk.co.recipes.neo;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static uk.co.recipes.TestDataUtils.parseIngredientsFrom;
 
@@ -21,8 +20,8 @@ import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.ResourceIterator;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseSettings;
-import org.neo4j.test.TestGraphDatabaseFactory;
 import org.neo4j.server.Bootstrapper;
+import org.neo4j.test.TestGraphDatabaseFactory;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -51,15 +50,22 @@ public class Neo4JTest {
 
 	@BeforeClass
 	public void prepareTestDatabase() {
-//		graphDb = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder("/Users/andrewregan/Development/java/recipe_explorer/data")
-//	    										.setConfig( GraphDatabaseSettings.node_keys_indexable, "name")
-//	    										.setConfig( GraphDatabaseSettings.node_auto_indexing, "true")
-//	    										.newGraphDatabase();
-
 	    graphDb = new TestGraphDatabaseFactory().newImpermanentDatabaseBuilder()
 	    										.setConfig( GraphDatabaseSettings.node_keys_indexable, "name")
 	    										.setConfig( GraphDatabaseSettings.node_auto_indexing, "true")
 	    										.newGraphDatabase();
+
+//		graphDb = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder("/private/tmp/neo4j")
+//	    										.setConfig( GraphDatabaseSettings.node_keys_indexable, "name")
+//	    										.setConfig( GraphDatabaseSettings.node_auto_indexing, "true")
+//	    										.newGraphDatabase();
+
+//		bootstrapper = new WrappingNeoServerBootstrapper((GraphDatabaseAPI) graphDb);
+//		bootstrapper.start();
+//
+//		final ExecutionEngine engine = new ExecutionEngine(graphDb);
+//		engine.execute("start r=relationship(*) delete r");
+//		engine.execute("start r=node(*) delete r");
 	}
 
 	@BeforeClass
@@ -99,8 +105,6 @@ public class Neo4JTest {
 //			rs.addIngredients(ings);
 //			r.addStage(rs);
 
-			System.out.println("Got   " + graphDb.getNodeById(1L));
-
 			final Node foundNode = findItem("Cumin Seeds").get();
 			System.out.println("Props " + Lists.newArrayList( foundNode.getPropertyKeys() ));
 			System.out.println("Relns " + Lists.newArrayList( foundNode.getRelationships() ));
@@ -125,6 +129,8 @@ public class Neo4JTest {
 
                 handleTagsForIIngredient( each, n);
 			}
+
+//			tx.success();
 
 			///////////////////////////////////////////////////////////////////////////////////////////  See: http://docs.neo4j.org/chunked/stable/tutorials-cypher-java.html
 
