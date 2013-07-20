@@ -22,6 +22,7 @@ import org.neo4j.graphdb.ResourceIterator;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseSettings;
 import org.neo4j.test.TestGraphDatabaseFactory;
+import org.neo4j.server.Bootstrapper;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -46,6 +47,7 @@ import com.google.common.collect.Lists;
 public class Neo4JTest {
 
 	private GraphDatabaseService graphDb;
+	private Bootstrapper bootstrapper = null;
 
 	@BeforeClass
 	public void prepareTestDatabase() {
@@ -59,7 +61,7 @@ public class Neo4JTest {
 	    										.setConfig( GraphDatabaseSettings.node_auto_indexing, "true")
 	    										.newGraphDatabase();
 	}
-	
+
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
 		CanonicalItemFactory.startES();
@@ -317,6 +319,10 @@ public class Neo4JTest {
 
 	@AfterClass
 	public void destroyTestDatabase() {
+	    if ( bootstrapper != null) {
+	    	bootstrapper.stop();
+	    }
+
 	    graphDb.shutdown();
 	}
 }
