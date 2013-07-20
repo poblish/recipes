@@ -291,25 +291,23 @@ public class Neo4JTest {
 			n = graphDb.createNode();
 			n.setProperty( "name", "Nancy" );
 			tx.success();
+
+			// The node should have an id greater than 0, which is the id of the
+			// reference node.
+//			assertThat( n.getId(), is( greaterThan( 0L ) ) );
+
+			// Retrieve a node by using the id of the created node. The id's and
+			// property should match.
+			Node foundNode = graphDb.getNodeById( n.getId() );
+			assertThat( foundNode.getId(), is( n.getId() ) );
+			assertThat( (String) foundNode.getProperty( "name" ), is( "Nancy" ) );
 		}
-		catch ( Exception e )
-		{
+		catch ( Exception e ) {
 			tx.failure();
 		}
-		finally
-		{
+		finally {
 			tx.finish();
 		}
-
-		// The node should have an id greater than 0, which is the id of the
-		// reference node.
-		assertThat( n.getId(), is( greaterThan( 0L ) ) );
-
-		// Retrieve a node by using the id of the created node. The id's and
-		// property should match.
-		Node foundNode = graphDb.getNodeById( n.getId() );
-		assertThat( foundNode.getId(), is( n.getId() ) );
-		assertThat( (String) foundNode.getProperty( "name" ), is( "Nancy" ) );
 	}
 
 	@AfterClass
