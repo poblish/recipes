@@ -130,6 +130,39 @@ public class Neo4JTest {
                 handleTagsForIIngredient( each, n);
 			}
 
+			///////////////////////////////////////////////////////////////////////////////////////////  Collaborative Filtering. Follow our existing Taste example: 1,1,7; 1,2,9; 1,3,6; 1,4,2; 2,1,5; 2,3,3; 2,4,1; 2,5,8; 3,2,4; 3,6,10; 3,7,10; 4,2,1; 4,5,8; 4,7,9; 5,8,5
+			///////////////////////////////////////////////////////////////////////////////////////////  Where Ingredient indexes are for: Cumin Seeds; Green Beans; Turmeric; Garlic Cloves; Basmati Rice; Tamarind Paste; Fennel Seed; Coriander
+
+			final Node user_1 = graphDb.createNode( MyLabels.USER );
+			user_1.setProperty( "name", "User 1");
+			rateItem( user_1, "Cumin Seeds", 7);
+			rateItem( user_1, "Green Beans", 9);
+			rateItem( user_1, "Turmeric", 6);
+			rateItem( user_1, "Garlic Cloves", 2);
+
+			final Node user_2 = graphDb.createNode( MyLabels.USER );
+			user_2.setProperty( "name", "User 2");
+			rateItem( user_2, "Cumin Seeds", 5);
+			rateItem( user_2, "Turmeric", 3);
+			rateItem( user_2, "Garlic Cloves", 1);
+			rateItem( user_2, "Basmati Rice", 8);
+
+			final Node user_3 = graphDb.createNode( MyLabels.USER );
+			user_3.setProperty( "name", "User 3");
+			rateItem( user_3, "Green Beans", 4);
+			rateItem( user_3, "Tamarind Paste", 10);
+			rateItem( user_3, "Fennel Seed", 10);
+
+			final Node user_4 = graphDb.createNode( MyLabels.USER );
+			user_4.setProperty( "name", "User 4");
+			rateItem( user_4, "Green Beans", 1);
+			rateItem( user_4, "Basmati Rice", 8);
+			rateItem( user_4, "Fennel Seed", 9);
+
+			final Node user_5 = graphDb.createNode( MyLabels.USER );
+			user_5.setProperty( "name", "User 5");
+			rateItem( user_5, "Coriander", 5);
+
 //			tx.success();
 
 			///////////////////////////////////////////////////////////////////////////////////////////  See: http://docs.neo4j.org/chunked/stable/tutorials-cypher-java.html
@@ -194,6 +227,10 @@ public class Neo4JTest {
 		finally {
 			tx.finish();
 		}
+	}
+
+	private void rateItem( final Node inUser, final String inItemName, final int inScore) {
+		inUser.createRelationshipTo( findItem(inItemName).get(), MyRelationshipTypes.RATING).setProperty( "score", inScore);
 	}
 
     private void handleTagsForIIngredient( final IIngredient inIngr, final Node inIngrNode) {
@@ -282,11 +319,11 @@ public class Neo4JTest {
 	}
 
 	enum MyRelationshipTypes implements RelationshipType {
-		CONTAINED_IN, TAGGED, CHILD
+		CONTAINED_IN, TAGGED, CHILD, RATING
 	}
 
 	enum MyLabels implements Label {
-		INGREDIENT, RECIPE, TAG
+		INGREDIENT, RECIPE, TAG, USER
 	}
 
 	@Test
