@@ -236,6 +236,14 @@ public class Neo4JTest {
 		return n;
 	}
 
+	private Node createTag( final ITag inTag, final Serializable inValue) {
+		final Node n = graphDb.createNode( MyLabels.TAG );
+		n.setProperty( "name", inTag.toString());
+		n.setProperty( "type", "TAG");
+        // FIXME Save value too, surely?
+		return n;
+	}
+
 	private void rateItem( final Node inUser, final String inItemName, final int inScore) {
 		inUser.createRelationshipTo( findItem(inItemName).get(), MyRelationshipTypes.RATING).setProperty( "score", inScore);
 	}
@@ -243,10 +251,8 @@ public class Neo4JTest {
     private void handleTagsForIIngredient( final IIngredient inIngr, final Node inIngrNode) {
         for ( Entry<ITag,Serializable> eachTag : inIngr.getItem().getTags().entrySet()) {
             Optional<Node> optTagNode = findTag( eachTag.getKey() );
-            Node tagNode = optTagNode.isPresent() ? optTagNode.get() : graphDb.createNode( MyLabels.TAG );
+            Node tagNode = optTagNode.isPresent() ? optTagNode.get() : createTag( eachTag.getKey(), eachTag.getValue());
 
-            tagNode.setProperty( "name", eachTag.getKey().toString());  // FIXME Don't overwrite!
-            // FIXME Save value too, surely?
             tagNode.createRelationshipTo( inIngrNode, MyRelationshipTypes.TAGGED);
         }
     }
