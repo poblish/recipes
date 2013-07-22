@@ -53,7 +53,7 @@ public class Reco4JTest {
 					// System.out.println("Skip " + i + ": " + node.getProperty("type"));
 				    continue;
 				}
-                System.out.println(i + ":> " + node.getProperty("name") + " / " + node.getRatingsFromUser(ph) + " / " + rec.recommend(node, 20));
+                System.out.println(i + ":> " + node.getProperty("name") + " gets: " + rec.recommend(node, 20) + " ... based upon " + node.getRatingsFromUser(ph));
 			}
 			catch (NotFoundException t) {
 				// Ignore
