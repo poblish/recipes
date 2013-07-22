@@ -87,8 +87,7 @@ public class Neo4JTest {
 
 		try {
 //			Recipe r = new Recipe("Lamb Cobbler");
-			Node recipeNode = graphDb.createNode( MyLabels.RECIPE );
-			recipeNode.setProperty( "name", "Cashew Curry");
+			Node recipeNode = createRecipe("Cashew Curry");
 
 			final List<IIngredient> ings = parseIngredientsFrom("chCashBlackSpiceCurry.txt");
 
@@ -116,8 +115,7 @@ public class Neo4JTest {
 
 			///////////////////////////////////////////////////////////////////////////////////////////
 
-			Node recipeNode2 = graphDb.createNode( MyLabels.RECIPE );
-			recipeNode2.setProperty( "name", "Thai Fish Curry");
+			Node recipeNode2 = createRecipe("Thai Fish Curry");
 
 			final List<IIngredient> ings2 = parseIngredientsFrom("ttFishCurry.txt");
 
@@ -228,6 +226,13 @@ public class Neo4JTest {
 		final Node n = graphDb.createNode( MyLabels.USER );
 		n.setProperty( "name", inName);
 		n.setProperty( "type", "USER");
+		return n;
+	}
+
+	private Node createRecipe( final String inName) {
+		final Node n = graphDb.createNode( MyLabels.RECIPE );
+		n.setProperty( "name", inName);
+		n.setProperty( "type", "RECIPE");
 		return n;
 	}
 
