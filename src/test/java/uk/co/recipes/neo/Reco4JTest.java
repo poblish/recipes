@@ -3,6 +3,7 @@ package uk.co.recipes.neo;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.neo4j.graphdb.NotFoundException;
 import org.reco4j.engine.RecommenderEngine;
 import org.reco4j.graph.neo4j.Neo4JNode;
 import org.reco4j.graph.neo4j.Neo4jGraph;
@@ -27,7 +28,7 @@ public class Reco4JTest {
 		props.setProperty("dbPath", "/private/tmp/neo4j");
 //		props.setProperty("KValue", "2");
 //		props.setProperty("DistanceAlgorithm", "3");
-//		props.setProperty("recommenderType", "1");
+		props.setProperty("recommenderType", "4");
 		props.setProperty("recalculateSimilarity", "true");
 		props.setProperty("userType", "USER");
 		props.setProperty("userIdentifier", "name");
@@ -44,12 +45,21 @@ public class Reco4JTest {
 
 		IRecommender<?> rec = RecommenderEngine.buildRecommender(graphDB, props);
 
-		for (int i = 0; i < 300; i++) {
+		for (int i = 0; i < 200; i++) {
 			try {
 				Neo4JNode node = new Neo4JNode(i);
-				System.out.println(i + ":> " + node.getRatingsFromUser(ph) + " / " + rec.recommend(node));
-			} catch (Throwable t) {
-				// ystem.err.println(t);
+				if (!node.getProperty("type").equals("USER")) {
+				    // No idea why: node.getRatingsFromUser(ph) works for these non-users too!!
+					// System.out.println("Skip " + i + ": " + node.getProperty("type"));
+				    continue;
+				}
+                System.out.println(i + ":> " + node.getProperty("name") + " / " + node.getRatingsFromUser(ph) + " / " + rec.recommend(node, 20));
+			}
+			catch (NotFoundException t) {
+				// Ignore
+			}
+			catch (Throwable t) {
+				t.printStackTrace();
 			}
 		}
 	}
