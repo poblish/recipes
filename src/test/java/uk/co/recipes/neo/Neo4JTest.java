@@ -185,8 +185,8 @@ public class Neo4JTest {
 			ExecutionResult result6 = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry') MATCH me<-[:CONTAINED_IN]-ingreds-[:CONTAINED_IN]->others WHERE NOT(me=others) RETURN others.name as name, COUNT(*) AS c ORDER BY c DESC, name");
 			System.out.println("Ingredients shared with other Recipes II \r" + result6.dumpToString());
 
-			ExecutionResult result7 = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry') MATCH me<-[:CONTAINED_IN]-allMine, allTheirs-[:CONTAINED_IN]->others WHERE NOT(me=others) and NOT(allMine=allTheirs) RETURN others.name as name, COUNT(DISTINCT allMine) + COUNT(DISTINCT allTheirs) AS num_unshared ORDER BY name, num_unshared DESC");
-			System.out.println("Ingredients not shared with other Recipes \r" + result7.dumpToString());
+			ExecutionResult result7 = engine.profile("START me=node:node_auto_index(name='Thai Fish Curry') MATCH me<-[:CONTAINED_IN]-allMine, allTheirs-[:CONTAINED_IN]->others WHERE NOT(me=others) and NOT(allMine=allTheirs) RETURN others.name as name, COUNT(DISTINCT allMine) + COUNT(DISTINCT allTheirs) AS num_unshared ORDER BY name, num_unshared DESC");
+			System.out.println("Ingredients not shared with other Recipes \r" + result7.dumpToString() + "\r" + result7.executionPlanDescription());
 
 //			ExecutionResult result8 = engine.execute("START me=node:node_auto_index(name='Thai Fish Curry') MATCH me<-[:TAGGED]-allMine, allTheirs-[:TAGGED]->others WHERE NOT(me=others) and NOT(allMine=allTheirs) RETURN others.name as name, COUNT(DISTINCT allMine) + COUNT(DISTINCT allTheirs) AS num_unshared ORDER BY name, num_unshared DESC");
 //			System.out.println("Tags not shared with other Recipes?? \r" + result8.dumpToString());
@@ -194,15 +194,15 @@ public class Neo4JTest {
             ExecutionResult tForI = engine.execute("START me=node:node_auto_index(name='Ginger') MATCH me<-[:TAGGED]-tags WHERE NOT(me=tags) RETURN tags.name as name, COUNT(*) as c ORDER BY c DESC");
             System.out.println("Tags for Ingredient = \r" + tForI.dumpToString());
 
-            ExecutionResult iCountForT = engine.execute("START me=node:node_auto_index(name='INDIAN') MATCH me-[:TAGGED]->indianIngr RETURN DISTINCT indianIngr.name as name ORDER BY name");  // Not too happy with DISTINCT, but works...
-            System.out.println("Ingredients tagged 'INDIAN' = \r" + iCountForT.dumpToString());
+            ExecutionResult iCountForT = engine.profile("START me=node:node_auto_index(name='INDIAN') MATCH me-[:TAGGED]->indianIngr RETURN DISTINCT indianIngr.name as name ORDER BY name");  // Not too happy with DISTINCT, but works...
+            System.out.println("Ingredients tagged 'INDIAN' = \r" + iCountForT.dumpToString() + "\r" + iCountForT.executionPlanDescription());
 
-            ExecutionResult iCountForTT = engine.execute("START a=node:node_auto_index(name='INDIAN'), b=node:node_auto_index(name='SPICE')" +
+            ExecutionResult iCountForTT = engine.profile("START a=node:node_auto_index(name='INDIAN'), b=node:node_auto_index(name='SPICE')" +
                             " MATCH a-[:TAGGED]->indianIngr, b-[:TAGGED]->spiceIngr WHERE indianIngr=spiceIngr RETURN DISTINCT indianIngr.name as name ORDER BY name");  // Bit crazy? Not too happy with DISTINCT, but works...
-            System.out.println("Ingredients tagged 'INDIAN' and 'SPICE' = \r" + iCountForTT.dumpToString());
+            System.out.println("Ingredients tagged 'INDIAN' and 'SPICE' = \r" + iCountForTT.dumpToString() + "\r" + iCountForTT.executionPlanDescription());
 
-            ExecutionResult rCountForT = engine.execute("START me=node:node_auto_index(name='INDIAN') MATCH me-[:TAGGED]->ingredients-[:CONTAINED_IN]->recipe RETURN recipe.name AS name, COUNT(*) AS num_ingredients ORDER BY num_ingredients DESC, name");
-            System.out.println("Recipes tagged 'INDIAN' = \r" + rCountForT.dumpToString());
+            ExecutionResult rCountForT = engine.profile("START me=node:node_auto_index(name='INDIAN') MATCH me-[:TAGGED]->ingredients-[:CONTAINED_IN]->recipe RETURN recipe.name AS name, COUNT(*) AS num_ingredients ORDER BY num_ingredients DESC, name");
+            System.out.println("Recipes tagged 'INDIAN' = \r" + rCountForT.dumpToString() + "\r" + rCountForT.executionPlanDescription());
 
             ExecutionResult parent1Level = engine.execute("START me=node:node_auto_index(name='Rapeseed Oil') MATCH me-[:CHILD]->parent RETURN parent.name AS name ORDER BY name");
             System.out.println("Oil parentage I = \r" + parent1Level.dumpToString());
@@ -210,8 +210,8 @@ public class Neo4JTest {
             ExecutionResult parent2Level = engine.execute("START me=node:node_auto_index(name='Rapeseed Oil') MATCH me-[:CHILD]->parent-[:CHILD]->parent2 RETURN parent2.name AS name ORDER BY name");
             System.out.println("Oil parentage II = \r" + parent2Level.dumpToString());
 
-            ExecutionResult parentTopLevel = engine.execute("START me=node:node_auto_index(name='Rapeseed Oil') MATCH me-[:CHILD*1..]->parent WHERE NOT(parent-[:CHILD]->()) RETURN parent.name AS name ORDER BY name");
-            System.out.println("Oil top parentage = \r" + parentTopLevel.dumpToString());
+            ExecutionResult parentTopLevel = engine.profile("START me=node:node_auto_index(name='Rapeseed Oil') MATCH me-[:CHILD*1..]->parent WHERE NOT(parent-[:CHILD]->()) RETURN parent.name AS name ORDER BY name");
+            System.out.println("Oil top parentage = \r" + parentTopLevel.dumpToString() + "\r" + parentTopLevel.executionPlanDescription());
 		}
 		catch ( Exception e) {
 			tx.failure();
