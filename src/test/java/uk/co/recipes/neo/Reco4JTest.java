@@ -3,7 +3,7 @@ package uk.co.recipes.neo;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.reco4j.similarity.ISimilarityConfig.SIMILARITY_TYPE_COSINE;
+import static org.reco4j.similarity.ISimilarityConfig.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -80,6 +80,58 @@ public class Reco4JTest {
 		assertThat( gotActualRatings.size(), is(5));
 		assertThat( gotActualRatings, is( asList( asList( newRating( 11, 2.0), newRating( 36, 6.0), newRating( 43, 9.0), newRating( 22, 7.0)), asList( newRating( 48, 8.0), newRating( 11, 1.0), newRating( 36, 3.0), newRating( 22, 5.0)), asList( newRating( 40, 10.0), newRating( 44, 10.0), newRating( 43, 4.0)), asList( newRating( 40, 9.0), newRating( 48, 8.0), newRating( 43, 1.0)), asList( newRating( 18, 5.0) )) ));
 		assertThat( gotRecommendedRatings, is( asList( asList( newRating( 44, 9.0), newRating( 40, 9.0), newRating( 48, 5.855755076535925)), asList( newRating( 40, 8.0), newRating( 43, 4.25)), asList( newRating( 48, 7.303061543300931), newRating( 11, 4.0), newRating( 36, 4.0), newRating( 22, 4.0)), asList( newRating( 44, 5.404082057734576), newRating( 11, 4.853571800517753), newRating( 36, 4.853571800517753), newRating( 22, 4.853571800517753)), new ArrayList<Rating>() ) ));
+
+		graphDB.getGraphDB().shutdown();
+	}
+
+	@Test
+	public void testKnn_JaccardSimilarity() throws IOException {
+
+		Properties props = new Properties();
+		props.setProperty("dbPath", "/private/tmp/neo4j");
+		props.setProperty("DistanceAlgorithm", "" + SIMILARITY_TYPE_JACCARD);
+		props.setProperty("recommenderType", "1");
+		props.setProperty("recalculateSimilarity", "true");
+		props.setProperty("userType", "USER");
+		props.setProperty("userIdentifier", "name");
+		props.setProperty("itemType", "INGREDIENT");
+		props.setProperty("itemIdentifier", "name");
+		props.setProperty("rankEdgeIdentifier", "RATING");
+		props.setProperty("RankValueIdentifier", "score");
+
+		Neo4JPropertiesHandle ph = Neo4JPropertiesHandle.getInstance();
+		ph.setProperties(props);
+
+		Neo4jGraph graphDB = new Neo4jGraph(ph);
+		graphDB.initDatabase();
+
+		IRecommender<?> rec = RecommenderEngine.buildRecommender(graphDB, props);
+
+		List<String> gotNames = Lists.newArrayList();
+		List<List<Rating>> gotActualRatings = Lists.newArrayList();
+		List<List<Rating>> gotRecommendedRatings = Lists.newArrayList();
+
+		for (int i = 50; i < 200 && gotNames.size() < 5; i++) {
+			try {
+				final Neo4JNode node = new Neo4JNode(i);
+				if (!node.getProperty("type").equals("USER")) {
+				    // No idea why: node.getRatingsFromUser(ph) works for these non-users too!!
+				    continue;
+				}
+
+				gotNames.add( node.getProperty("name") );
+				gotActualRatings.add( filterRatings( node.getRatingsFromUser(ph) ) );
+				gotRecommendedRatings.add( filterRatings( rec.recommend(node, 20) ) );
+			}
+			catch (NotFoundException t) {
+				// Ignore
+			}
+		}
+
+		assertThat( gotNames, is( asList("User 1","User 2","User 3","User 4","User 5") ));
+		assertThat( gotActualRatings.size(), is(5));
+		assertThat( gotActualRatings, is( asList( asList( newRating( 11, 2.0), newRating( 36, 6.0), newRating( 43, 9.0), newRating( 22, 7.0)), asList( newRating( 48, 8.0), newRating( 11, 1.0), newRating( 36, 3.0), newRating( 22, 5.0)), asList( newRating( 40, 10.0), newRating( 44, 10.0), newRating( 43, 4.0)), asList( newRating( 40, 9.0), newRating( 48, 8.0), newRating( 43, 1.0)), asList( newRating( 18, 5.0) )) ));
+		assertThat( gotRecommendedRatings, is( asList( asList( newRating( 44, 9.0), newRating( 40, 9.0), newRating( 48, 5.8)), asList( newRating( 40, 8.0), newRating( 43, 4.25)), asList( newRating( 48, 7.428571428571429), newRating( 11, 4.0), newRating( 36, 4.0), newRating( 22, 4.0)), asList( newRating( 44, 5.8), newRating( 11, 5.0), newRating( 36, 5.0), newRating( 22, 5.0)), new ArrayList<Rating>() ) ));
 
 		graphDB.getGraphDB().shutdown();
 	}
