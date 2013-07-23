@@ -3,6 +3,7 @@ package uk.co.recipes.neo;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.reco4j.similarity.ISimilarityConfig.SIMILARITY_TYPE_COSINE;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,20 +25,19 @@ import com.google.common.collect.Lists;
 
 /**
  * 
- * TODO
+ * See: http://www.reco4j.org/get-started.jsp
  * 
  * @author andrewregan
  * 
  */
 public class Reco4JTest {
 
-	// See: http://www.reco4j.org/get-started.jsp
 	@Test
-	public void testKnnWithCosineSimilarity() throws IOException {
+	public void testKnn_CosineSimilarity() throws IOException {
 
 		Properties props = new Properties();
 		props.setProperty("dbPath", "/private/tmp/neo4j");
-		props.setProperty("DistanceAlgorithm", "3");
+		props.setProperty("DistanceAlgorithm", "" + SIMILARITY_TYPE_COSINE);
 		props.setProperty("recommenderType", "1");
 		props.setProperty("recalculateSimilarity", "true");
 		props.setProperty("userType", "USER");
@@ -84,13 +84,11 @@ public class Reco4JTest {
 		graphDB.getGraphDB().shutdown();
 	}
 
-	// See: http://www.reco4j.org/get-started.jsp
 	@Test
-	public void testMahoutWithCosineSimilarity() throws IOException {
+	public void testMahout_LogLikelihoodSimilarity() throws IOException {
 
 		Properties props = new Properties();
 		props.setProperty("dbPath", "/private/tmp/neo4j");
-		props.setProperty("DistanceAlgorithm", "3");
 		props.setProperty("recommenderType", "4");
 		props.setProperty("recalculateSimilarity", "true");
 		props.setProperty("userType", "USER");
