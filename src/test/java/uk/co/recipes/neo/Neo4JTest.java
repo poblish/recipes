@@ -301,6 +301,7 @@ public class Neo4JTest {
 	private Node createItemHierarchy( final ICanonicalItem inItem) {
 		final Node us = graphDb.createNode( MyLabels.INGREDIENT );
 		us.setProperty( "name", inItem.getCanonicalName());
+		us.setProperty( "type", "INGREDIENT");
 
 		ICanonicalItem childItem = inItem;
 		Node childNode = us;
@@ -340,6 +341,7 @@ public class Neo4JTest {
 		{
 			n = graphDb.createNode();
 			n.setProperty( "name", "Nancy" );
+			n.setProperty( "type", "");
 			tx.success();
 
 			// The node should have an id greater than 0, which is the id of the
