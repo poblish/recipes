@@ -73,7 +73,7 @@ public class Neo4JTest {
 		Thread.sleep(1000);
 	}
 
-	@Test
+	@Test(groups="before")
 	public void recipesTest() throws IOException {
 		Transaction tx = graphDb.beginTx();
 
@@ -332,7 +332,7 @@ public class Neo4JTest {
 		INGREDIENT, RECIPE, TAG, USER
 	}
 
-	@Test
+	@Test(dependsOnGroups="before")
 	public void basicTest() {
 		Transaction tx = graphDb.beginTx();
 
