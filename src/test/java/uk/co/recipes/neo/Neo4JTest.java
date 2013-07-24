@@ -4,6 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static uk.co.recipes.TestDataUtils.parseIngredientsFrom;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
@@ -19,9 +21,9 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.ResourceIterator;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.factory.GraphDatabaseSettings;
 import org.neo4j.server.Bootstrapper;
-import org.neo4j.test.TestGraphDatabaseFactory;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -49,23 +51,13 @@ public class Neo4JTest {
 	private Bootstrapper bootstrapper = null;
 
 	@BeforeClass
-	public void prepareTestDatabase() {
-	    graphDb = new TestGraphDatabaseFactory().newImpermanentDatabaseBuilder()
+	public void prepareTestDatabase() throws FileNotFoundException {
+		FileUtils.deleteRecursive( new File("/private/tmp/neo4j") );  // Yuk!
+
+		graphDb = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder("/private/tmp/neo4j")
 	    										.setConfig( GraphDatabaseSettings.node_keys_indexable, "name")
 	    										.setConfig( GraphDatabaseSettings.node_auto_indexing, "true")
 	    										.newGraphDatabase();
-
-//		graphDb = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder("/private/tmp/neo4j")
-//	    										.setConfig( GraphDatabaseSettings.node_keys_indexable, "name")
-//	    										.setConfig( GraphDatabaseSettings.node_auto_indexing, "true")
-//	    										.newGraphDatabase();
-
-//		bootstrapper = new WrappingNeoServerBootstrapper((GraphDatabaseAPI) graphDb);
-//		bootstrapper.start();
-//
-//		final ExecutionEngine engine = new ExecutionEngine(graphDb);
-//		engine.execute("start r=relationship(*) delete r");
-//		engine.execute("start r=node(*) delete r");
 	}
 
 	@BeforeClass
