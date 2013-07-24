@@ -120,8 +120,8 @@ public class Neo4JTest {
                 handleTagsForIIngredient( each, n);
 			}
 
-			///////////////////////////////////////////////////////////////////////////////////////////  Collaborative Filtering. Follow our existing Taste example: 1,1,7; 1,2,9; 1,3,6; 1,4,2; 2,1,5; 2,3,3; 2,4,1; 2,5,8; 3,2,4; 3,6,10; 3,7,10; 4,2,1; 4,5,8; 4,7,9; 5,8,5
-			///////////////////////////////////////////////////////////////////////////////////////////  Where Ingredient indexes are for: Cumin Seeds; Green Beans; Turmeric; Garlic Cloves; Basmati Rice; Tamarind Paste; Fennel Seed; Coriander
+			////////////////////////////////////////////////////////////////////  Collaborative Filtering. Follow our existing Taste example: 1,1,7; 1,2,9; 1,3,6; 1,4,2; 2,1,5; 2,3,3; 2,4,1; 2,5,8; 3,2,4; 3,6,10; 3,7,10; 4,2,1; 4,5,8; 4,7,9; 5,8,5
+			////////////////////////////////////////////////////////////////////  Where Ingredient indexes are for: (1) Cumin Seeds; (2) Green Beans; (3) Turmeric; (4) Garlic Cloves; (5) Basmati Rice; (6) Tamarind Paste; (7) Fennel Seed; (8) Coriander
 
 			final Node user_1 = createUser("User 1");
 			rateItem( user_1, "Cumin Seeds", 7);
