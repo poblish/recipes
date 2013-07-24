@@ -148,7 +148,7 @@ public class Neo4JTest {
 			final Node user_5 = createUser("User 5");
 			rateItem( user_5, "Coriander", 5);
 
-//			tx.success();
+			tx.success();  // *Needed* for Reco4J
 
 			///////////////////////////////////////////////////////////////////////////////////////////  See: http://docs.neo4j.org/chunked/stable/tutorials-cypher-java.html
 
