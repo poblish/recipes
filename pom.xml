@@ -103,6 +103,12 @@
 			<artifactId>reco4j-neo4j</artifactId>
 			<version>0.4.0</version>
 		</dependency>
+		<dependency>
+			<groupId>net.myrrix</groupId>
+			<artifactId>myrrix-client</artifactId>
+			<version>1.0.1</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<defaultGoal>clean install</defaultGoal>
