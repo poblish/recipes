@@ -33,28 +33,8 @@ public class MyrrixTest {
 		clientConfig.setHost("localhost");
 		clientConfig.setPort(8080);
 
-//		HttpClient hc = new DefaultHttpClient();
-//		hc.execute( new HttpDelete("http://localhost:8080/pref/1/8") );
-//		hc.execute( new HttpDelete("http://localhost:8080/pref/1/2") );
-//		hc.execute( new HttpDelete("http://localhost:8080/pref/1/3") );
-//		hc.execute( new HttpDelete("http://localhost:8080/pref/1/4") );
-
 		// TranslatingRecommender recommender = new TranslatingClientRecommender( new ClientRecommender(clientConfig) );
 		final ClientRecommender recommender = new ClientRecommender(clientConfig);
-//		recommender.removePreference( 1L, 1L);
-//		recommender.removePreference( 1L, 2L);
-//		recommender.removePreference( 1L, 3L);
-//		recommender.removePreference( 1L, 4L);
-//		recommender.removePreference( 2L, 1L);
-//		recommender.removePreference( 2L, 3L);
-//		recommender.removePreference( 2L, 4L);
-//		recommender.removePreference( 2L, 5L);
-//		recommender.removePreference( 3L, 6L);
-//		recommender.removePreference( 3L, 7L);
-//		recommender.removePreference( 4L, 2L);
-//		recommender.removePreference( 4L, 5L);
-//		recommender.removePreference( 4L, 7L);
-//		recommender.removePreference( 5L, 8L);
 		recommender.ingest( new File("src/test/resources/taste/main.txt") );
 		recommender.refresh();
 
@@ -63,10 +43,7 @@ public class MyrrixTest {
 		assertThat( getRecommendationUsers( recommender.recommend( userId++, 10) ), is( Arrays.asList( 2, 8, 7, 6) ));
 		assertThat( getRecommendationUsers( recommender.recommend( userId++, 10) ), is( Arrays.asList( 5, 8, 4, 3, 1) ));
 		assertThat( getRecommendationUsers( recommender.recommend( userId++, 10) ), is( Arrays.asList( 6, 1, 3, 4, 8) ));
-
-		List<Integer> user5_Scores = getRecommendationUsers( recommender.recommend( userId++, 10) );  // Just too variable
-//		assertThat( user5_Scores.indexOf(3), lessThan( user5_Scores.indexOf(7) ));  // 6 better than 3
-//		assertThat( user5_Scores.indexOf(1), lessThan( user5_Scores.indexOf(8) ));  // 3 better than 8
+		getRecommendationUsers( recommender.recommend( userId++, 10) );  // No asserts: just too variable
 	}
 
 	final List<Integer> getRecommendationUsers( final List<RecommendedItem> inItems) {
