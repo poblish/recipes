@@ -128,17 +128,22 @@ public class Neo4JTest {
 			rateItem( user_1, "Green Beans", 9);
 			rateItem( user_1, "Turmeric", 6);
 			rateItem( user_1, "Garlic Cloves", 2);
+			rateItem( user_1, "Thai Fish Curry", 7);  // Recipe
+			rateItem( user_1, "Cashew Curry", 8);  // Recipe
 
 			final Node user_2 = createUser("User 2");
 			rateItem( user_2, "Cumin Seeds", 5);
 			rateItem( user_2, "Turmeric", 3);
 			rateItem( user_2, "Garlic Cloves", 1);
 			rateItem( user_2, "Basmati Rice", 8);
+			rateItem( user_2, "Thai Fish Curry", 3);  // Recipe
+			rateItem( user_2, "Cashew Curry", 6);  // Recipe
 
 			final Node user_3 = createUser("User 3");
 			rateItem( user_3, "Green Beans", 4);
 			rateItem( user_3, "Tamarind Paste", 10);
 			rateItem( user_3, "Fennel Seed", 10);
+			rateItem( user_3, "Cashew Curry", 10);  // Recipe
 
 			final Node user_4 = createUser("User 4");
 			rateItem( user_4, "Green Beans", 1);
@@ -147,6 +152,7 @@ public class Neo4JTest {
 
 			final Node user_5 = createUser("User 5");
 			rateItem( user_5, "Coriander", 5);
+			rateItem( user_5, "Thai Fish Curry", 4);  // Recipe
 
 			tx.success();  // *Needed* for Reco4J
 
@@ -237,7 +243,13 @@ public class Neo4JTest {
 	}
 
 	private void rateItem( final Node inUser, final String inItemName, final int inScore) {
-		inUser.createRelationshipTo( findItem(inItemName).get(), MyRelationshipTypes.RATING).setProperty( "score", inScore);
+		Optional<Node> gotItem = findItem(inItemName);
+		if (gotItem.isPresent()) {
+			inUser.createRelationshipTo( gotItem.get(), MyRelationshipTypes.RATING).setProperty( "score", inScore);
+		}
+		else {
+			inUser.createRelationshipTo( findRecipe(inItemName).get(), MyRelationshipTypes.RECIPE_RATING).setProperty( "score", inScore);
+		}
 	}
 
     private void handleTagsForIIngredient( final IIngredient inIngr, final Node inIngrNode) {
@@ -325,7 +337,7 @@ public class Neo4JTest {
 	}
 
 	enum MyRelationshipTypes implements RelationshipType {
-		CONTAINED_IN, TAGGED, CHILD, RATING
+		CONTAINED_IN, TAGGED, CHILD, RATING, RECIPE_RATING
 	}
 
 	enum MyLabels implements Label {
