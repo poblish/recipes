@@ -13,7 +13,11 @@ import net.myrrix.client.MyrrixClientConfiguration;
 
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
+import org.elasticsearch.common.base.Throwables;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import uk.co.recipes.service.taste.api.ITasteRecommendationsAPI;
 
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
@@ -27,33 +31,58 @@ import com.google.common.collect.FluentIterable;
  */
 public class MyrrixTest {
 
-	@Test
-	public void testMyrrixClient() throws IOException, TasteException {
+	private static ClientRecommender RECOMMENDER;
+
+	@BeforeClass
+	public void setUp() throws IOException, TasteException {
 		final MyrrixClientConfiguration clientConfig = new MyrrixClientConfiguration();
 		clientConfig.setHost("localhost");
 		clientConfig.setPort(8080);
 
-		// TranslatingRecommender recommender = new TranslatingClientRecommender( new ClientRecommender(clientConfig) );
-		final ClientRecommender recommender = new ClientRecommender(clientConfig);
-		recommender.ingest( new File("src/test/resources/taste/main.txt") );
-		recommender.refresh();
-
-		long userId = 1L;
-		assertThat( getRecommendationUsers( recommender.recommend( userId++, 10) ), is( Arrays.asList( 5, 7, 6, 8) ));
-		assertThat( getRecommendationUsers( recommender.recommend( userId++, 10) ), is( Arrays.asList( 2, 8, 7, 6) ));
-		assertThat( getRecommendationUsers( recommender.recommend( userId++, 10) ), is( Arrays.asList( 5, 8, 4, 3, 1) ));
-		assertThat( getRecommendationUsers( recommender.recommend( userId++, 10) ), is( Arrays.asList( 6, 1, 3, 4, 8) ));
-		getRecommendationUsers( recommender.recommend( userId++, 10) );  // No asserts: just too variable
+		// RECOMMENDER = new TranslatingClientRecommender( new ClientRecommender(clientConfig) );
+		RECOMMENDER = new ClientRecommender(clientConfig);
+		RECOMMENDER.ingest( new File("src/test/resources/taste/main.txt") );
+		RECOMMENDER.refresh();
 	}
 
-	final List<Integer> getRecommendationUsers( final List<RecommendedItem> inItems) {
-		System.out.println(inItems);
-		return FluentIterable.from(inItems).transform( new Function<RecommendedItem,Integer>() {
+	@Test
+	public void testMyrrixClient() throws IOException, TasteException {
+		final ITasteRecommendationsAPI api = new TestMyrrixRecsApi();
 
-			@Override
-			public Integer apply( RecommendedItem input) {
-				return /* FIXME */ (int) input.getItemID();
+		long userId = 1L;
+		assertThat( api.recommendIngredients( userId++, 10), is( Arrays.asList( 5L, 7L, 6L, 8L) ));
+		assertThat( api.recommendIngredients( userId++, 10), is( Arrays.asList( 2L, 8L, 7L, 6L) ));
+		assertThat( api.recommendIngredients( userId++, 10), is( Arrays.asList( 5L, 8L, 4L, 3L, 1L) ));
+		assertThat( api.recommendIngredients( userId++, 10), is( Arrays.asList( 6L, 1L, 3L, 4L, 8L) ));
+		api.recommendIngredients( userId++, 10);  // No asserts: just too variable
+	}
+
+	private static class TestMyrrixRecsApi implements ITasteRecommendationsAPI {
+
+		@Override
+		public List<Long> recommendIngredients( long inUser, int inNumRecs) {
+			try {
+				return getRecommendationUsers( RECOMMENDER.recommend( inUser, inNumRecs) );
 			}
-		} ).toList();
+			catch (TasteException e) {
+				throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+			}
+		}
+
+		private static List<Long> getRecommendationUsers( final List<RecommendedItem> inItems) {
+			System.out.println(inItems);
+			return FluentIterable.from(inItems).transform( new Function<RecommendedItem,Long>() {
+
+				@Override
+				public Long apply( RecommendedItem input) {
+					return input.getItemID();
+				}
+			} ).toList();
+		}
+
+		@Override
+		public List<Long> recommendRecipes( long inUser, int inNumRecs) {
+			throw new RuntimeException("unimpl");
+		}		
 	}
 }
