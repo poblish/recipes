@@ -9,6 +9,7 @@ import static org.hamcrest.Matchers.isOneOf;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -79,5 +80,14 @@ public class RecipeFactory {
 	public void deleteAll() throws IOException {
 		final HttpResponse resp = httpClient.execute( new HttpDelete(itemIndexUrl) );
 		EntityUtils.consume( resp.getEntity() );
+	}
+
+	/**
+	 * @param items
+	 * @return
+	 */
+	public List<IRecipe> getAll( final List<Long> inIds) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

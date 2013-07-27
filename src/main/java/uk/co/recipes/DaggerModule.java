@@ -76,6 +76,12 @@ public class DaggerModule {
 	}
 
 	@Provides
+	@Named("elasticSearchUsersUrl")
+	String provideEsUsersUrl() {
+		return "http://localhost:9200/recipe/users";
+	}
+
+	@Provides
 	@Singleton
 	ClientRecommender provideClientRecommender() throws IOException {
 		final MyrrixClientConfiguration clientConfig = new MyrrixClientConfiguration();

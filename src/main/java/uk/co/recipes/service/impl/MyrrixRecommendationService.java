@@ -3,13 +3,23 @@
  */
 package uk.co.recipes.service.impl;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import net.myrrix.client.ClientRecommender;
+
+import org.apache.mahout.cf.taste.common.TasteException;
+import org.elasticsearch.common.base.Throwables;
+
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
+import uk.co.recipes.myrrix.MyrrixUtils;
+import uk.co.recipes.persistence.CanonicalItemFactory;
+import uk.co.recipes.persistence.EsUserFactory;
+import uk.co.recipes.persistence.RecipeFactory;
 import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
 
@@ -24,12 +34,33 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 	@Inject
 	MyrrixTasteRecommendationService tasteRecommendations;
 
+	@Inject
+	ClientRecommender recommender;
+
+	@Inject
+	EsUserFactory userFactory;
+
+	@Inject
+	CanonicalItemFactory itemsFactory;
+
+	@Inject
+	RecipeFactory recipesFactory;
+
+
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.service.api.IRecommendationsAPI#recommendIngredients(uk.co.recipes.api.IUser, int)
 	 */
 	@Override
 	public List<ICanonicalItem> recommendIngredients( IUser inUser, int inNumRecs) {
-		throw new RuntimeException("unimpl");
+		try {
+			return itemsFactory.getAll( MyrrixUtils.getItems( recommender.recommend( userFactory.toId(inUser), inNumRecs) ) );
+		}
+		catch (TasteException e) {
+			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+		}
+		catch (IOException e) {
+			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+		}
 	}
 
 	/* (non-Javadoc)
@@ -37,7 +68,15 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 	 */
 	@Override
 	public List<IRecipe> recommendRecipes( IUser inUser, int inNumRecs) {
-		throw new RuntimeException("unimpl");
+		try {
+			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.recommend( userFactory.toId(inUser), inNumRecs) ) );
+		}
+		catch (TasteException e) {
+			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+		}
+		catch (IOException e) {
+			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+		}
 	}		
 
 	@Override
