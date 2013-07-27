@@ -2,7 +2,6 @@ package uk.co.recipes.neo;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static uk.co.recipes.TestDataUtils.parseIngredientsFrom;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,6 +27,8 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import uk.co.recipes.DaggerModule;
+import uk.co.recipes.TestDataUtils;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.ITag;
@@ -38,6 +39,8 @@ import uk.co.recipes.persistence.RecipeFactory;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
+import dagger.ObjectGraph;
+
 /**
  * 
  * TODO
@@ -46,6 +49,11 @@ import com.google.common.collect.Lists;
  *
  */
 public class Neo4JTest {
+
+	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
+
+	private CanonicalItemFactory itemFactory = GRAPH.get( CanonicalItemFactory.class );
+	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
 
 	private GraphDatabaseService graphDb;
 	private Bootstrapper bootstrapper = null;
@@ -63,13 +71,13 @@ public class Neo4JTest {
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
 		CanonicalItemFactory.startES();
-		CanonicalItemFactory.deleteAll();
+		itemFactory.deleteAll();
 		RecipeFactory.deleteAll();
 	}
 
 	@BeforeClass
 	public void loadIngredientsFromYaml() throws InterruptedException, IOException {
-		ItemsLoader.load();
+		GRAPH.get( ItemsLoader.class ).load();
 		Thread.sleep(1000);
 	}
 
@@ -81,7 +89,7 @@ public class Neo4JTest {
 //			Recipe r = new Recipe("Lamb Cobbler");
 			Node recipeNode = createRecipe("Cashew Curry");
 
-			final List<IIngredient> ings = parseIngredientsFrom("chCashBlackSpiceCurry.txt");
+			final List<IIngredient> ings = dataUtils.parseIngredientsFrom("chCashBlackSpiceCurry.txt");
 
 			for ( IIngredient each : ings) {
 				Optional<Node> on = findItem( each.getItem() );
@@ -109,7 +117,7 @@ public class Neo4JTest {
 
 			Node recipeNode2 = createRecipe("Thai Fish Curry");
 
-			final List<IIngredient> ings2 = parseIngredientsFrom("ttFishCurry.txt");
+			final List<IIngredient> ings2 = dataUtils.parseIngredientsFrom("ttFishCurry.txt");
 
 			for ( IIngredient each : ings2) {
 				Optional<Node> on = findItem( each.getItem() );

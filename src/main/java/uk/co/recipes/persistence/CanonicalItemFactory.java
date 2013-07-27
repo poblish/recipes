@@ -15,12 +15,14 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Collection;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -47,9 +49,12 @@ public class CanonicalItemFactory {
 
 	private static Client ES_CLIENT;
 
-	private final static HttpClient CLIENT = new DefaultHttpClient();
+	@Inject
+	HttpClient httpClient;
 
-	private final static String	IDX_URL = "http://localhost:9200/recipe/items";
+	@Inject
+	@Named("elasticSearchUrl")
+	String itemIndexUrl;
 
 	// FIXME - rubbish
 	public static void startES() {
@@ -61,13 +66,13 @@ public class CanonicalItemFactory {
 		ES_CLIENT.close();
 	}
 
-	public static ICanonicalItem put( final ICanonicalItem inItem, String inId) throws IOException {
-		final HttpPost req = new HttpPost( IDX_URL + "/" + inId);
+	public ICanonicalItem put( final ICanonicalItem inItem, String inId) throws IOException {
+		final HttpPost req = new HttpPost( itemIndexUrl + "/" + inId);
 
 		try {
 			req.setEntity( new StringEntity( JacksonFactory.getMapper().writeValueAsString(inItem) ) );
 
-			final HttpResponse resp = CLIENT.execute(req);
+			final HttpResponse resp = httpClient.execute(req);
 			assertThat( resp.getStatusLine().getStatusCode(), is(201));
 			EntityUtils.consume( resp.getEntity() );
 		}
@@ -78,8 +83,8 @@ public class CanonicalItemFactory {
 		return inItem;
 	}
 
-	public static ICanonicalItem getById( String inId) throws IOException {
-		return JacksonFactory.getMapper().readValue( JacksonFactory.getMapper().readTree( new URL( IDX_URL + "/" + inId) ).path("_source"), CanonicalItem.class);
+	public ICanonicalItem getById( String inId) throws IOException {
+		return JacksonFactory.getMapper().readValue( JacksonFactory.getMapper().readTree( new URL( itemIndexUrl + "/" + inId) ).path("_source"), CanonicalItem.class);
 	}
 
 	public static String toId( final String inCanonicalName) throws IOException {
@@ -87,7 +92,7 @@ public class CanonicalItemFactory {
 		return inCanonicalName.toLowerCase().replace( ' ', '_');
 	}
 
-	public static Optional<ICanonicalItem> get( final String inCanonicalName) throws IOException {
+	public Optional<ICanonicalItem> get( final String inCanonicalName) throws IOException {
 		try {
 			return Optional.fromNullable( getById( toId(inCanonicalName) ) );
 		}
@@ -96,11 +101,11 @@ public class CanonicalItemFactory {
 		return Optional.absent();
 	}
 
-	public static ICanonicalItem getOrCreate( final String inCanonicalName, final Supplier<ICanonicalItem> inCreator) {
+	public ICanonicalItem getOrCreate( final String inCanonicalName, final Supplier<ICanonicalItem> inCreator) {
 		return getOrCreate( inCanonicalName, inCreator, false);
 	}
 
-	public static ICanonicalItem getOrCreate( final String inCanonicalName, final Supplier<ICanonicalItem> inCreator, final boolean inMatchAliases) {
+	public ICanonicalItem getOrCreate( final String inCanonicalName, final Supplier<ICanonicalItem> inCreator, final boolean inMatchAliases) {
 		try {
 			final Optional<ICanonicalItem> got = get(inCanonicalName);
 	
@@ -135,12 +140,12 @@ public class CanonicalItemFactory {
 	}
 
 	// FIXME - pretty lame!
-	public static Collection<CanonicalItem> listAll() throws JsonParseException, JsonMappingException, IOException {
-		return EsUtils.listAll( IDX_URL, CanonicalItem.class);
+	public Collection<CanonicalItem> listAll() throws JsonParseException, JsonMappingException, IOException {
+		return EsUtils.listAll( itemIndexUrl, CanonicalItem.class);
 	}
 
-	public static void deleteAll() throws IOException {
-		final HttpResponse resp = CLIENT.execute( new HttpDelete(IDX_URL) );
+	public void deleteAll() throws IOException {
+		final HttpResponse resp = httpClient.execute( new HttpDelete(itemIndexUrl) );
 		EntityUtils.consume( resp.getEntity() );
 	}
 }

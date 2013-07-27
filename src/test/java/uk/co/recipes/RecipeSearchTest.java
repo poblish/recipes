@@ -5,7 +5,6 @@ package uk.co.recipes;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static uk.co.recipes.TestDataUtils.parseIngredientsFrom;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,6 +19,7 @@ import uk.co.recipes.persistence.CanonicalItemFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.persistence.JacksonFactory;
 import uk.co.recipes.persistence.RecipeFactory;
+import dagger.ObjectGraph;
 
 /**
  * TODO
@@ -29,22 +29,27 @@ import uk.co.recipes.persistence.RecipeFactory;
  */
 public class RecipeSearchTest {
 
+	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
+
+	private CanonicalItemFactory itemFactory = GRAPH.get( CanonicalItemFactory.class );
+	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
+
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
 		CanonicalItemFactory.startES();
-		CanonicalItemFactory.deleteAll();
+		itemFactory.deleteAll();
 		RecipeFactory.deleteAll();
 	}
 
 	@BeforeClass
 	public void loadIngredientsFromYaml() throws InterruptedException, IOException {
-		ItemsLoader.load();
+		GRAPH.get( ItemsLoader.class ).load();
 
-		parseIngredientsFrom("inputs3.txt");
-		parseIngredientsFrom("chCashBlackSpiceCurry.txt");
-		parseIngredientsFrom("bol1.txt");
-		parseIngredientsFrom("bol2.txt");
-		parseIngredientsFrom("chineseBeef.txt");
+		dataUtils.parseIngredientsFrom("inputs3.txt");
+		dataUtils.parseIngredientsFrom("chCashBlackSpiceCurry.txt");
+		dataUtils.parseIngredientsFrom("bol1.txt");
+		dataUtils.parseIngredientsFrom("bol2.txt");
+		dataUtils.parseIngredientsFrom("chineseBeef.txt");
 
         while ( RecipeFactory.listAll().size() < 5) {
         	Thread.sleep(200); // Wait for saves to appear...

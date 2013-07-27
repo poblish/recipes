@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.testng.Assert;
 
 import uk.co.recipes.api.IIngredient;
@@ -26,7 +28,10 @@ import com.google.common.io.Files;
  */
 public class TestDataUtils {
 
-	public static List<IIngredient> parseIngredientsFrom( final String inFilename) throws IOException {
+	@Inject
+	IngredientParser parser;
+
+	public List<IIngredient> parseIngredientsFrom( final String inFilename) throws IOException {
 		final List<IIngredient> allIngredients = Lists.newArrayList();
 
 		for ( String eachLine : Files.readLines( new File("src/test/resources/ingredients/" + inFilename), Charset.forName("utf-8"))) {
@@ -35,7 +40,7 @@ public class TestDataUtils {
 				continue;
 			}
 
-			final Optional<Ingredient> theIngr = IngredientParser.parse(eachLine);
+			final Optional<Ingredient> theIngr = parser.parse(eachLine);
 			if (theIngr.isPresent()) {
 
 				// System.out.println( JacksonFactory.getMapper().writeValueAsString( theIngr.get() ) );

@@ -8,6 +8,8 @@ import static java.util.Locale.ENGLISH;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.inject.Inject;
+
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Ingredient;
 import uk.co.recipes.Quantity;
@@ -28,6 +30,9 @@ import com.google.common.base.Supplier;
  */
 public class IngredientParser {
 
+	@Inject
+	CanonicalItemFactory itemFactory;
+
 	private static final String	DEC_FRAC_NUMBER_PATTERN = "([0-9\\.]*(?: ?[0-9]/[0-9])?)";
 	private static final String	NOTES = "([,;\\(].*)?";
 	private static final String	SUFFIX = "([\\w- ]*)" + NOTES;
@@ -38,8 +43,7 @@ public class IngredientParser {
 	private static final Pattern	D = Pattern.compile("(nutmeg|parmesan|salt|salt and pepper.*|beaten egg|.*cream)" + NOTES, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	E = Pattern.compile("((?:dressed|steamed|cooked|sliced|sweet|roughly chopped) [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);
 
-
-	public static Optional<Ingredient> parse( final String inStr) {
+	public Optional<Ingredient> parse( final String inStr) {
 
 		Matcher m = A.matcher(inStr);
 		if (m.matches()) {
@@ -124,8 +128,8 @@ public class IngredientParser {
 		return Optional.absent();
 	}
 
-	private static ICanonicalItem findItem( final String inName) {
-		return CanonicalItemFactory.getOrCreate( inName, new Supplier<ICanonicalItem>() {
+	private ICanonicalItem findItem( final String inName) {
+		return itemFactory.getOrCreate( inName, new Supplier<ICanonicalItem>() {
 
 			@Override
 			public ICanonicalItem get() {
@@ -139,6 +143,7 @@ public class IngredientParser {
 				}
 
 				return item;
-			}}, true);
+			}
+		}, true);
 	}
 }

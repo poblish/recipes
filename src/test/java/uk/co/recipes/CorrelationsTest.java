@@ -5,7 +5,6 @@ package uk.co.recipes;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static uk.co.recipes.TestDataUtils.parseIngredientsFrom;
 
 import java.io.IOException;
 
@@ -23,6 +22,8 @@ import uk.co.recipes.similarity.IncompatibleIngredientsException;
 
 import com.google.common.collect.Multiset;
 
+import dagger.ObjectGraph;
+
 /**
  * TODO
  *
@@ -31,25 +32,31 @@ import com.google.common.collect.Multiset;
  */
 public class CorrelationsTest {
 
+	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
+
+	private CanonicalItemFactory itemFactory = GRAPH.get( CanonicalItemFactory.class );
+	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
+	private Correlations corrs = GRAPH.get( Correlations.class );
+
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
 		CanonicalItemFactory.startES();
-		CanonicalItemFactory.deleteAll();
+		itemFactory.deleteAll();
 		RecipeFactory.deleteAll();
 	}
 
 	@BeforeClass
 	public void loadIngredientsFromYaml() throws InterruptedException, IOException {
-		ItemsLoader.load();
+		GRAPH.get( ItemsLoader.class ).load();
 		Thread.sleep(1000);
 	}
 
 	@Test
 	public void testCorrelations() throws IOException, IncompatibleIngredientsException, InterruptedException {
-		parseIngredientsFrom("venisonBurgundy.txt");
-        parseIngredientsFrom("bol1.txt");
-        parseIngredientsFrom("bol2.txt");
-        parseIngredientsFrom("chineseBeef.txt");
+		dataUtils.parseIngredientsFrom("venisonBurgundy.txt");
+		dataUtils.parseIngredientsFrom("bol1.txt");
+		dataUtils.parseIngredientsFrom("bol2.txt");
+		dataUtils.parseIngredientsFrom("chineseBeef.txt");
 
         while ( RecipeFactory.listAll().size() < 4) {
         	Thread.sleep(200); // Wait for saves to appear...
@@ -57,12 +64,12 @@ public class CorrelationsTest {
 
         // For all the recipes (amongst those 4) that contain Olive Oil, Garlic, and Onions, what are the most popular of the shared ingredients?
         final String expected = "[CanonicalItem{name=Minced Beef, parent=CanonicalItem{name=Beef, tags={MEAT=true}}, tags={MEAT=true}}, CanonicalItem{name=x 400g cans chopped tomatoes}, CanonicalItem{name=Sugar, tags={SUGAR=true}}, CanonicalItem{name=Bay Leaf, tags={HERB=true}}, CanonicalItem{name=Red Wine Vinegar, parent=CanonicalItem{name=Vinegar, tags={VINEGAR=true}}, tags={VINEGAR=true}}, CanonicalItem{name=Mixed Herbs, tags={HERB=true}}, CanonicalItem{name=Celery Sticks, parent=CanonicalItem{name=Celery, tags={VEGETABLE=true}}, tags={VEGETABLE=true}}, CanonicalItem{name=Red Wine, tags={WINE=true, ALCOHOL=true}}, CanonicalItem{name=Mushrooms, tags={VEGETABLE=true}}, CanonicalItem{name=Tomato Paste, parent=CanonicalItem{name=Tomato, tags={VEGETABLE=true}}, tags={VEGETABLE=true}}, CanonicalItem{name=Bacon Rashers, parent=CanonicalItem{name=Bacon, tags={MEAT=true}}, tags={MEAT=true}}, CanonicalItem{name=Carrots, tags={VEGETABLE=true}}, CanonicalItem{name=Parmesan, tags={DAIRY=true, CHEESE=true, ITALIAN=true}}]";
-		assertThat( Correlations.findCountsWith( CanonicalItemFactory.get("olive oil").get(), CanonicalItemFactory.get("Garlic Cloves").get(), CanonicalItemFactory.get("Onions").get()).toString(), is(expected));
+		assertThat( corrs.findCountsWith( itemFactory.get("olive oil").get(), itemFactory.get("Garlic Cloves").get(), itemFactory.get("Onions").get()).toString(), is(expected));
 
-		final Multiset<ITag> withTags = Correlations.findTagsWith( CanonicalItemFactory.get("Coriander").get(), CanonicalItemFactory.get("Chicken Stock").get(), CanonicalItemFactory.get("Star Anise").get() , CanonicalItemFactory.get("Cumin Seeds").get());
+		final Multiset<ITag> withTags = corrs.findTagsWith( itemFactory.get("Coriander").get(), itemFactory.get("Chicken Stock").get(), itemFactory.get("Star Anise").get() , itemFactory.get("Cumin Seeds").get());
 		assertThat( withTags.toString(), is("[SPICE x 2, CHINESE, HERB, INDIAN, MEAT, SAUCE]"));
 
-		final Multiset<ITag> withoutTags = Correlations.findTagsWithout( CanonicalItemFactory.get("Coriander").get() );
+		final Multiset<ITag> withoutTags = corrs.findTagsWithout( itemFactory.get("Coriander").get() );
 		assertThat( withoutTags.toString(), is("[VEGETABLE x 33, SPICE x 22, INDIAN x 19, MEAT x 19, CHINESE x 13, DAIRY x 12, FAT x 10, HERB x 9, ALCOHOL x 8, SAUCE x 8, SUGAR x 7, THAI x 7, CHILLI x 6, OIL x 6, WINE x 6, POULTRY x 5, FLOUR x 4, FRUIT x 4, ITALIAN x 4, SEED x 4, VINEGAR x 3, CHEESE x 2, FRENCH x 2, NUT x 2, PASTA x 2, SEAFOOD x 2, SPANISH x 2, VIETNAMESE x 2, EGG, HUNGARIAN, OFFAL, SALT]"));
 	}
 

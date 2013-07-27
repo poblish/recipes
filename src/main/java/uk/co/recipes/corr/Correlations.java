@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.inject.Inject;
+
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
@@ -36,7 +38,10 @@ import com.google.common.collect.TreeMultiset;
  */
 public class Correlations {
 
-	public static Multiset<ICanonicalItem> findCountsWith( final ICanonicalItem... inInclusions) {
+	@Inject
+	CanonicalItemFactory itemFactory;
+
+	public Multiset<ICanonicalItem> findCountsWith( final ICanonicalItem... inInclusions) {
 	    final Multiset<ICanonicalItem> counts = HashMultiset.create();
 		try {
 			final Collection<Recipe> all = RecipeFactory.listAll();
@@ -59,19 +64,19 @@ public class Correlations {
 		}
 	}
 
-	public static Multiset<ITag> findTagsWith( final ICanonicalItem... inInclusions) {
+	public Multiset<ITag> findTagsWith( final ICanonicalItem... inInclusions) {
 		return findTagsWithPredicate( in( Lists.newArrayList(inInclusions) ), inInclusions);
 	}
 
-	public static Multiset<ITag> findTagsWithout( final ICanonicalItem... inInclusions) {
+	public Multiset<ITag> findTagsWithout( final ICanonicalItem... inInclusions) {
 		return findTagsWithPredicate( not( in( Lists.newArrayList(inInclusions) ) ), inInclusions);
 	}
 
-	public static Multiset<ITag> findTagsWithPredicate( final Predicate<ICanonicalItem> inPredicate, final ICanonicalItem... inInclusions) {
+	public Multiset<ITag> findTagsWithPredicate( final Predicate<ICanonicalItem> inPredicate, final ICanonicalItem... inInclusions) {
 		final Multiset<ITag> tagsSet = TreeMultiset.create( TagUtils.comparator() );
 
 		try {
-			for ( ICanonicalItem each : FluentIterable.from( CanonicalItemFactory.listAll() ).filter(inPredicate).toList()) {
+			for ( ICanonicalItem each : FluentIterable.from( itemFactory.listAll() ).filter(inPredicate).toList()) {
 				tagsSet.addAll( FluentIterable.from( each.getTags().entrySet() ).filter( findActivated() ).transform( entryKeys() ).toList() );
 			}
 		}

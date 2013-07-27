@@ -29,24 +29,30 @@ import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Maps;
 
+import dagger.ObjectGraph;
+
 public class IngredientsTest {
+
+	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
+
+	private CanonicalItemFactory itemFactory = GRAPH.get( CanonicalItemFactory.class );
 
 	private final static String	IDX_URL = "http://localhost:9200/recipe/items";
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
-		CanonicalItemFactory.deleteAll();
+		itemFactory.deleteAll();
 	}
 
 	@BeforeClass
 	public void loadIngredientsFromYaml() throws IOException {
-		ItemsLoader.load();
+		GRAPH.get( ItemsLoader.class ).load();
 	}
 
 	// See: http://www.bbcgoodfood.com/recipes/5533/herby-lamb-cobbler
 	@Test
 	public void initialTest() throws IOException, InterruptedException {
-		final ICanonicalItem lamb = CanonicalItemFactory.getOrCreate( "Lamb", new Supplier<ICanonicalItem>() {
+		final ICanonicalItem lamb = itemFactory.getOrCreate( "Lamb", new Supplier<ICanonicalItem>() {
 
 			@Override
 			public ICanonicalItem get() {
@@ -55,7 +61,7 @@ public class IngredientsTest {
 				return meat;
 			}});
 
-		final ICanonicalItem lambNeck = CanonicalItemFactory.getOrCreate( "Lamb Neck", new Supplier<ICanonicalItem>() {
+		final ICanonicalItem lambNeck = itemFactory.getOrCreate( "Lamb Neck", new Supplier<ICanonicalItem>() {
 
 			@Override
 			public ICanonicalItem get() {
@@ -67,7 +73,7 @@ public class IngredientsTest {
 
 		///////////////////////////////////////////////////
 
-		final ICanonicalItem bacon = CanonicalItemFactory.getOrCreate( "Bacon", new Supplier<ICanonicalItem>() {
+		final ICanonicalItem bacon = itemFactory.getOrCreate( "Bacon", new Supplier<ICanonicalItem>() {
 
 			@Override
 			public ICanonicalItem get() {
@@ -76,7 +82,7 @@ public class IngredientsTest {
 				return meat;
 			}});
 
-		final ICanonicalItem ssBacon = CanonicalItemFactory.getOrCreate( "Lamb Neck", new Supplier<ICanonicalItem>() {
+		final ICanonicalItem ssBacon = itemFactory.getOrCreate( "Lamb Neck", new Supplier<ICanonicalItem>() {
 
 			@Override
 			public ICanonicalItem get() {

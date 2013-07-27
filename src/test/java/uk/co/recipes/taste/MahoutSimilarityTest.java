@@ -2,7 +2,6 @@ package uk.co.recipes.taste;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static uk.co.recipes.TestDataUtils.parseIngredientsFrom;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +20,8 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import uk.co.recipes.DaggerModule;
+import uk.co.recipes.TestDataUtils;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.persistence.CanonicalItemFactory;
 import uk.co.recipes.persistence.ItemsLoader;
@@ -32,6 +33,8 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Doubles;
 
+import dagger.ObjectGraph;
+
 /**
  * 
  * TODO
@@ -41,16 +44,21 @@ import com.google.common.primitives.Doubles;
  */
 public class MahoutSimilarityTest {
 
+	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
+
+	private CanonicalItemFactory itemFactory = GRAPH.get( CanonicalItemFactory.class );
+	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
+
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
 		CanonicalItemFactory.startES();
-		CanonicalItemFactory.deleteAll();
+		itemFactory.deleteAll();
 		RecipeFactory.deleteAll();
 	}
 
 	@BeforeClass
 	public void loadIngredientsFromYaml() throws InterruptedException, IOException {
-		ItemsLoader.load();
+		GRAPH.get( ItemsLoader.class ).load();
 		Thread.sleep(1000);
 	}
 
@@ -68,7 +76,7 @@ public class MahoutSimilarityTest {
 		assertThat( recommender.recommend(5L, 10).toString(), is("[]"));
 	}
 
-	private static class MySimilarity extends AbstractItemSimilarity {
+	private class MySimilarity extends AbstractItemSimilarity {
 
 		protected MySimilarity(DataModel dataModel) {
 			super(dataModel);
@@ -116,24 +124,24 @@ public class MahoutSimilarityTest {
 		}
 	}
 
-	private static List<IIngredient> getItem( long inId) throws IOException {
+	private List<IIngredient> getItem( long inId) throws IOException {
 		switch ((int) inId) {
 			case 0:
-				return parseIngredientsFrom("inputs.txt");
+				return dataUtils.parseIngredientsFrom("inputs.txt");
 			case 1:
-				return parseIngredientsFrom("inputs2.txt");
+				return dataUtils.parseIngredientsFrom("inputs2.txt");
 			case 2:
-				return parseIngredientsFrom("inputs3.txt");
+				return dataUtils.parseIngredientsFrom("inputs3.txt");
 			case 3:
-				return parseIngredientsFrom("chCashBlackSpiceCurry.txt");
+				return dataUtils.parseIngredientsFrom("chCashBlackSpiceCurry.txt");
 			case 4:
-				return parseIngredientsFrom("bol1.txt");
+				return dataUtils.parseIngredientsFrom("bol1.txt");
 			case 5:
-				return parseIngredientsFrom("bol2.txt");
+				return dataUtils.parseIngredientsFrom("bol2.txt");
 			case 6:
-				return parseIngredientsFrom("chineseBeef.txt");
+				return dataUtils.parseIngredientsFrom("chineseBeef.txt");
 			case 7:
-				return parseIngredientsFrom("ttFishCurry.txt");
+				return dataUtils.parseIngredientsFrom("ttFishCurry.txt");
 		}
 		
 		return null;

@@ -10,6 +10,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.yaml.snakeyaml.Yaml;
 
 import uk.co.recipes.CanonicalItem;
@@ -29,9 +31,12 @@ import com.google.common.io.Files;
  */
 public class ItemsLoader {
 
+	@Inject
+	CanonicalItemFactory itemFactory;
+
 	private final static Optional<ICanonicalItem> MISSING = Optional.absent();
 
-	public static void load() throws IOException {
+	public void load() throws IOException {
 		for ( Object each : new Yaml().loadAll( Files.toString( new File("src/test/resources/inputs.yaml"), Charset.forName("utf-8")))) {
 
 			@SuppressWarnings("unchecked")
@@ -39,9 +44,9 @@ public class ItemsLoader {
 
 			final String name = (String) map.get("canonicalName");
 			final String parentName = (String) map.get("parent");
-			final Optional<ICanonicalItem> parentCI = ( parentName != null) ? CanonicalItemFactory.get(parentName) : MISSING;
+			final Optional<ICanonicalItem> parentCI = ( parentName != null) ? itemFactory.get(parentName) : MISSING;
 
-			CanonicalItemFactory.getOrCreate( name, new Supplier<ICanonicalItem>() {
+			itemFactory.getOrCreate( name, new Supplier<ICanonicalItem>() {
 
 				@Override
 				public ICanonicalItem get() {
