@@ -7,12 +7,10 @@ import static org.hamcrest.Matchers.nullValue;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.http.client.ClientProtocolException;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -22,6 +20,8 @@ import uk.co.recipes.api.Units;
 import uk.co.recipes.persistence.CanonicalItemFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.persistence.RecipeFactory;
+import uk.co.recipes.service.api.ISearchAPI;
+import uk.co.recipes.service.impl.EsSearchService;
 import uk.co.recipes.tags.CommonTags;
 
 import com.google.common.base.Optional;
@@ -36,9 +36,7 @@ public class IngredientsTest {
 
 	private CanonicalItemFactory itemFactory = GRAPH.get( CanonicalItemFactory.class );
 	private RecipeFactory recipeFactory = GRAPH.get( RecipeFactory.class );
-	private ObjectMapper mapper = GRAPH.get( ObjectMapper.class );
-
-	private final static String	IDX_URL = new DaggerModule().provideEsItemsUrl();  // Yuk - FIXME!?
+	private ISearchAPI searchService = GRAPH.get( EsSearchService.class );
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
@@ -117,12 +115,9 @@ public class IngredientsTest {
 
 		Thread.sleep(1000);  // Time for indexing to happen!
 
-		final JsonNode jn = mapper.readTree( new URL(IDX_URL + "/_search?q=MEAT:true") ).path("hits").path("hits");
-		assertThat( jn.size(), is(10));
-
-		for ( JsonNode each : jn) {
-			System.out.println(mapper.readValue( each, CanonicalItem.class));
-		}
+		final List<ICanonicalItem> results = searchService.findItemsByName("MEAT:true");
+		assertThat( results.size(), is(10));
+		System.out.println(results);
 
 		///////////////////////////////////////////////////
 

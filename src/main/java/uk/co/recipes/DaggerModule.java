@@ -24,6 +24,7 @@ import uk.co.recipes.persistence.CanonicalItemFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.persistence.JacksonFactory;
 import uk.co.recipes.persistence.RecipeFactory;
+import uk.co.recipes.service.impl.EsSearchService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
 import dagger.Module;
@@ -36,7 +37,7 @@ import dagger.Provides;
  * 
  */
 @Module(injects={CanonicalItemFactory.class, RecipeFactory.class, ItemsLoader.class, IngredientParser.class, TestDataUtils.class, Correlations.class, ObjectMapper.class, ClientRecommender.class,
-				 MyrrixTasteRecommendationService.class, MyrrixRecommendationService.class, Client.class})
+				 MyrrixTasteRecommendationService.class, MyrrixRecommendationService.class, Client.class, EsSearchService.class})
 public class DaggerModule {
 
 	@Provides

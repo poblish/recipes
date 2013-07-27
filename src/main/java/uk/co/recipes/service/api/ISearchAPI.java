@@ -3,6 +3,11 @@
  */
 package uk.co.recipes.service.api;
 
+import java.io.IOException;
+import java.util.List;
+
+import uk.co.recipes.api.ICanonicalItem;
+
 /**
  * TODO
  *
@@ -11,4 +16,5 @@ package uk.co.recipes.service.api;
  */
 public interface ISearchAPI {
 
+	List<ICanonicalItem> findItemsByName( final String inName) throws IOException;
 }
