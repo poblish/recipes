@@ -1,1 +1,1 @@
-java -jar  /Users/andrewregan/Development/java/recipe_explorer/myrrix-serving-1.0.1.jar  --port 8080
+nohup java -jar  /Users/andrewregan/Development/java/recipe_explorer/myrrix-serving-1.0.1.jar  --port 8080 &
