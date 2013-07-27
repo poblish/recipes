@@ -16,6 +16,7 @@ import org.testng.annotations.Test;
 import uk.co.recipes.DaggerModule;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
+import uk.co.recipes.service.taste.impl.MyrrixTasteSimilarityService;
 import dagger.ObjectGraph;
 
 /**
@@ -32,6 +33,8 @@ public class MyrrixTest {
 	private MyrrixTasteRecommendationService api = GRAPH.get( MyrrixTasteRecommendationService.class );
 	private MyrrixRecommendationService fullApi = GRAPH.get( MyrrixRecommendationService.class );
 
+	private MyrrixTasteSimilarityService explorerApi = GRAPH.get( MyrrixTasteSimilarityService.class );
+
 	@BeforeClass
 	public void setUp() throws IOException, TasteException {
 		final ClientRecommender recommender = GRAPH.get( ClientRecommender.class );
@@ -47,5 +50,15 @@ public class MyrrixTest {
 		assertThat( api.recommendIngredients( userId++, 10), is( Arrays.asList( 5L, 8L, 4L, 3L, 1L) ));
 		assertThat( api.recommendIngredients( userId++, 10), is( Arrays.asList( 6L, 1L, 3L, 4L, 8L) ));
 		api.recommendIngredients( userId++, 10);  // No asserts: just too variable
+	}
+
+	@Test
+	public void testMyrrixSimilarity() throws IOException, TasteException {
+		long userId = 1L;
+		assertThat( explorerApi.similarIngredients( userId++, 10), is( Arrays.asList( 3L, 4L, 5L, 2L, 8L, 6L, 7L) ));
+		assertThat( explorerApi.similarIngredients( userId++, 10), is( Arrays.asList( 7L, 4L, 3L, 1L, 6L, 5L, 8L) ));
+		assertThat( explorerApi.similarIngredients( userId++, 10), is( Arrays.asList( 1L, 4L, 5L, 2L, 8L, 6L, 7L) ));
+		assertThat( explorerApi.similarIngredients( userId++, 10), is( Arrays.asList( 3L, 1L, 5L, 2L, 8L, 6L, 7L) ));
+		assertThat( explorerApi.similarIngredients( userId++, 10), is( Arrays.asList( 7L, 1L, 3L, 4L, 2L, 8L, 6L) ));
 	}
 }

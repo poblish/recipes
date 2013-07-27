@@ -13,7 +13,7 @@ import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.elasticsearch.common.base.Throwables;
 
-import uk.co.recipes.service.taste.api.ITasteRecommendationsAPI;
+import uk.co.recipes.service.taste.api.ITasteSimilarityAPI;
 
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
@@ -24,15 +24,15 @@ import com.google.common.collect.FluentIterable;
  * @author andrewregan
  *
  */
-public class MyrrixTasteRecommendationService implements ITasteRecommendationsAPI {
+public class MyrrixTasteSimilarityService implements ITasteSimilarityAPI {
 
 	@Inject
 	ClientRecommender recommender;
 
 	@Override
-	public List<Long> recommendIngredients( long inUser, int inNumRecs) {
+	public List<Long> similarIngredients( long inUser, int inNumRecs) {
 		try {
-			return getUsers( recommender.recommend( inUser, inNumRecs) );
+			return getUsers( recommender.mostSimilarItems( inUser, inNumRecs) );
 		}
 		catch (TasteException e) {
 			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
@@ -40,7 +40,7 @@ public class MyrrixTasteRecommendationService implements ITasteRecommendationsAP
 	}
 
 	@Override
-	public List<Long> recommendRecipes( long inUser, int inNumRecs) {
+	public List<Long> similarRecipes( long inUser, int inNumRecs) {
 		throw new RuntimeException("unimpl");
 	}		
 
