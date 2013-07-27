@@ -21,6 +21,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.IRecipe;
@@ -42,11 +43,18 @@ public class RecipeFactory {
 	@Named("elasticSearchRecipesUrl")
 	String itemIndexUrl;
 
+	@Inject
+	ObjectMapper mapper;
+
+	@Inject
+	EsUtils esUtils;
+
+
 	public IRecipe put( final IRecipe inRecipe, String inId) throws IOException {
 		final HttpPost req = new HttpPost( itemIndexUrl + "/" + inId);
 
 		try {
-			req.setEntity( new StringEntity( JacksonFactory.getMapper().writeValueAsString(inRecipe) ) );
+			req.setEntity( new StringEntity( mapper.writeValueAsString(inRecipe) ) );
 
 			final HttpResponse resp = httpClient.execute(req);
 			assertThat( resp.getStatusLine().getStatusCode(), isOneOf(201, 200));
@@ -65,7 +73,7 @@ public class RecipeFactory {
 
 	// FIXME - pretty lame!
 	public Collection<Recipe> listAll() throws JsonParseException, JsonMappingException, IOException {
-		return EsUtils.listAll( itemIndexUrl, Recipe.class);
+		return esUtils.listAll( itemIndexUrl, Recipe.class);
 	}
 
 	public void deleteAll() throws IOException {

@@ -40,9 +40,7 @@ import com.google.common.base.Throwables;
  */
 public class JacksonFactory {
 
-	private final static ObjectMapper MAPPER = new ObjectMapper();
-
-	static {
+	public static void initialiseMapper( final ObjectMapper inMapper) {
 		SimpleModule testModule = new SimpleModule("MyModule", new Version(1, 0, 0, null));
 		testModule.addKeyDeserializer( ITag.class, new KeyDeserializer() {
 
@@ -75,14 +73,9 @@ public class JacksonFactory {
 		testModule.addAbstractTypeMapping( ICanonicalItem.class, CanonicalItem.class);
         testModule.addAbstractTypeMapping( IQuantity.class, Quantity.class);
 
-		MAPPER.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);  // When reading in ES hits, e.g. _index
-		MAPPER.configure(SerializationConfig.Feature.WRITE_EMPTY_JSON_ARRAYS, false);
+        inMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);  // When reading in ES hits, e.g. _index
+        inMapper.configure(SerializationConfig.Feature.WRITE_EMPTY_JSON_ARRAYS, false);
 
-		MAPPER.registerModule(testModule);
-
-	}
-
-	public static ObjectMapper getMapper() {
-		return MAPPER;
+        inMapper.registerModule(testModule);
 	}
 }

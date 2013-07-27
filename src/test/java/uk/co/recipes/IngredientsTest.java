@@ -21,7 +21,6 @@ import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.Units;
 import uk.co.recipes.persistence.CanonicalItemFactory;
 import uk.co.recipes.persistence.ItemsLoader;
-import uk.co.recipes.persistence.JacksonFactory;
 import uk.co.recipes.persistence.RecipeFactory;
 import uk.co.recipes.tags.CommonTags;
 
@@ -37,6 +36,7 @@ public class IngredientsTest {
 
 	private CanonicalItemFactory itemFactory = GRAPH.get( CanonicalItemFactory.class );
 	private RecipeFactory recipeFactory = GRAPH.get( RecipeFactory.class );
+	private ObjectMapper mapper = GRAPH.get( ObjectMapper.class );
 
 	private final static String	IDX_URL = "http://localhost:9200/recipe/items";
 
@@ -108,8 +108,6 @@ public class IngredientsTest {
 
 		///////////////////////////////////////////////////
 
-		final ObjectMapper om = JacksonFactory.getMapper();
-
 //		final String recipeJson = om.writeValueAsString(r);
 //		System.out.println(recipeJson);
 //		assertThat( recipeJson, is("{\"stages\":[{\"ingredients\":[{\"item\":{\"name\":\"Lamb Neck\",\"canonicalItem\":{\"canonicalName\":\"Lamb Neck\",\"parent\":{\"canonicalName\":\"Lamb\",\"varieties\":[],\"tags\":{\"MEAT\":true}},\"varieties\":[],\"tags\":{\"MEAT\":true}}},\"quantity\":{\"units\":\"GRAMMES\",\"number\":900},\"notes\":{\"en\":\"Neck fillets, cut into large chunks\"}},{\"item\":{\"name\":\"Lamb Neck\",\"canonicalItem\":{\"canonicalName\":\"Lamb Neck\",\"parent\":{\"canonicalName\":\"Lamb\",\"varieties\":[],\"tags\":{\"MEAT\":\"true\"}},\"varieties\":[],\"tags\":{\"MEAT\":\"true\"}}},\"quantity\":{\"units\":\"GRAMMES\",\"number\":200},\"notes\":{\"en\":\"Preferably in one piece, skinned and cut into pieces\"}},{\"item\":{\"name\":\"Sunflower Oil\",\"canonicalItem\":{\"canonicalName\":\"Sunflower Oil\",\"varieties\":[],\"tags\":{}}},\"quantity\":{\"units\":\"TBSP\",\"number\":1},\"notes\":{}}]}],\"tagsMap\":{\"SERVES_COUNT\":\"4\"}}"));
@@ -119,11 +117,11 @@ public class IngredientsTest {
 
 		Thread.sleep(1000);  // Time for indexing to happen!
 
-		final JsonNode jn = om.readTree( new URL(IDX_URL + "/_search?q=MEAT:true") ).path("hits").path("hits");
+		final JsonNode jn = mapper.readTree( new URL(IDX_URL + "/_search?q=MEAT:true") ).path("hits").path("hits");
 		assertThat( jn.size(), is(10));
 
 		for ( JsonNode each : jn) {
-			System.out.println(om.readValue( each, CanonicalItem.class));
+			System.out.println(mapper.readValue( each, CanonicalItem.class));
 		}
 
 		///////////////////////////////////////////////////

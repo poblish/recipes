@@ -26,6 +26,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
@@ -56,6 +57,13 @@ public class CanonicalItemFactory {
 	@Named("elasticSearchItemsUrl")
 	String itemIndexUrl;
 
+	@Inject
+	ObjectMapper mapper;
+
+	@Inject
+	EsUtils esUtils;
+
+
 	// FIXME - rubbish
 	public static void startES() {
 		ES_CLIENT = new TransportClient().addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
@@ -70,7 +78,7 @@ public class CanonicalItemFactory {
 		final HttpPost req = new HttpPost( itemIndexUrl + "/" + inId);
 
 		try {
-			req.setEntity( new StringEntity( JacksonFactory.getMapper().writeValueAsString(inItem) ) );
+			req.setEntity( new StringEntity( mapper.writeValueAsString(inItem) ) );
 
 			final HttpResponse resp = httpClient.execute(req);
 			assertThat( resp.getStatusLine().getStatusCode(), is(201));
@@ -84,7 +92,7 @@ public class CanonicalItemFactory {
 	}
 
 	public ICanonicalItem getById( String inId) throws IOException {
-		return JacksonFactory.getMapper().readValue( JacksonFactory.getMapper().readTree( new URL( itemIndexUrl + "/" + inId) ).path("_source"), CanonicalItem.class);
+		return mapper.readValue( mapper.readTree( new URL( itemIndexUrl + "/" + inId) ).path("_source"), CanonicalItem.class);
 	}
 
 	public static String toId( final String inCanonicalName) throws IOException {
@@ -120,7 +128,7 @@ public class CanonicalItemFactory {
 					final SearchHit[] hits = resp.getHits().hits();
 
 					if ( /* Yes, want only one great match */ hits.length == 1) {
-						final ICanonicalItem mappedAlias = JacksonFactory.getMapper().readValue( hits[0].getSourceAsString(), CanonicalItem.class);
+						final ICanonicalItem mappedAlias = mapper.readValue( hits[0].getSourceAsString(), CanonicalItem.class);
 						if ( mappedAlias != null) {
 							System.out.println("Successfully mapped Alias '" + inCanonicalName + "' => " + mappedAlias);
 							return mappedAlias;
@@ -141,7 +149,7 @@ public class CanonicalItemFactory {
 
 	// FIXME - pretty lame!
 	public Collection<CanonicalItem> listAll() throws JsonParseException, JsonMappingException, IOException {
-		return EsUtils.listAll( itemIndexUrl, CanonicalItem.class);
+		return esUtils.listAll( itemIndexUrl, CanonicalItem.class);
 	}
 
 	public void deleteAll() throws IOException {
