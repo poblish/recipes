@@ -53,6 +53,7 @@ public class Neo4JTest {
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
 	private CanonicalItemFactory itemFactory = GRAPH.get( CanonicalItemFactory.class );
+	private RecipeFactory recipeFactory = GRAPH.get( RecipeFactory.class );
 	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
 
 	private GraphDatabaseService graphDb;
@@ -72,7 +73,7 @@ public class Neo4JTest {
 	public void cleanIndices() throws ClientProtocolException, IOException {
 		CanonicalItemFactory.startES();
 		itemFactory.deleteAll();
-		RecipeFactory.deleteAll();
+		recipeFactory.deleteAll();
 	}
 
 	@BeforeClass

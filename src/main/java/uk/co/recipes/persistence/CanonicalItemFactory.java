@@ -53,7 +53,7 @@ public class CanonicalItemFactory {
 	HttpClient httpClient;
 
 	@Inject
-	@Named("elasticSearchUrl")
+	@Named("elasticSearchItemsUrl")
 	String itemIndexUrl;
 
 	// FIXME - rubbish

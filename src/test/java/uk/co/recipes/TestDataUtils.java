@@ -31,6 +31,9 @@ public class TestDataUtils {
 	@Inject
 	IngredientParser parser;
 
+	@Inject
+	RecipeFactory recipeFactory;
+
 	public List<IIngredient> parseIngredientsFrom( final String inFilename) throws IOException {
 		final List<IIngredient> allIngredients = Lists.newArrayList();
 
@@ -60,7 +63,7 @@ public class TestDataUtils {
 		final Recipe r = new Recipe(inFilename);
 		r.addStage(stage1);
 
-		RecipeFactory.put( r, RecipeFactory.toId(r));
+		recipeFactory.put( r, RecipeFactory.toId(r));
 
 		////////////////////////////////////////////////////////////
 

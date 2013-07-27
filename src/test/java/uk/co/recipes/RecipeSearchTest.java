@@ -32,13 +32,14 @@ public class RecipeSearchTest {
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
 	private CanonicalItemFactory itemFactory = GRAPH.get( CanonicalItemFactory.class );
+	private RecipeFactory recipeFactory = GRAPH.get( RecipeFactory.class );
 	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
 		CanonicalItemFactory.startES();
 		itemFactory.deleteAll();
-		RecipeFactory.deleteAll();
+		recipeFactory.deleteAll();
 	}
 
 	@BeforeClass
@@ -51,7 +52,7 @@ public class RecipeSearchTest {
 		dataUtils.parseIngredientsFrom("bol2.txt");
 		dataUtils.parseIngredientsFrom("chineseBeef.txt");
 
-        while ( RecipeFactory.listAll().size() < 5) {
+        while ( recipeFactory.listAll().size() < 5) {
         	Thread.sleep(200); // Wait for saves to appear...
         }
 	}

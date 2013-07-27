@@ -10,12 +10,14 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -33,18 +35,20 @@ import com.google.common.base.Throwables;
  */
 public class RecipeFactory {
 
-	private final static HttpClient CLIENT = new DefaultHttpClient();
+	@Inject
+	HttpClient httpClient;
 
-	private final static String	IDX_URL = "http://localhost:9200/recipe/recipes";
+	@Inject
+	@Named("elasticSearchRecipesUrl")
+	String itemIndexUrl;
 
-
-	public static IRecipe put( final IRecipe inRecipe, String inId) throws IOException {
-		final HttpPost req = new HttpPost( IDX_URL + "/" + inId);
+	public IRecipe put( final IRecipe inRecipe, String inId) throws IOException {
+		final HttpPost req = new HttpPost( itemIndexUrl + "/" + inId);
 
 		try {
 			req.setEntity( new StringEntity( JacksonFactory.getMapper().writeValueAsString(inRecipe) ) );
 
-			final HttpResponse resp = CLIENT.execute(req);
+			final HttpResponse resp = httpClient.execute(req);
 			assertThat( resp.getStatusLine().getStatusCode(), isOneOf(201, 200));
 			EntityUtils.consume( resp.getEntity() );
 		}
@@ -60,12 +64,12 @@ public class RecipeFactory {
 	}
 
 	// FIXME - pretty lame!
-	public static Collection<Recipe> listAll() throws JsonParseException, JsonMappingException, IOException {
-		return EsUtils.listAll( IDX_URL, Recipe.class);
+	public Collection<Recipe> listAll() throws JsonParseException, JsonMappingException, IOException {
+		return EsUtils.listAll( itemIndexUrl, Recipe.class);
 	}
 
-	public static void deleteAll() throws IOException {
-		final HttpResponse resp = CLIENT.execute( new HttpDelete(IDX_URL) );
+	public void deleteAll() throws IOException {
+		final HttpResponse resp = httpClient.execute( new HttpDelete(itemIndexUrl) );
 		EntityUtils.consume( resp.getEntity() );
 	}
 }

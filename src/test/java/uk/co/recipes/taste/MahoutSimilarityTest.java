@@ -47,13 +47,14 @@ public class MahoutSimilarityTest {
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
 	private CanonicalItemFactory itemFactory = GRAPH.get( CanonicalItemFactory.class );
+	private RecipeFactory recipeFactory = GRAPH.get( RecipeFactory.class );
 	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
 		CanonicalItemFactory.startES();
 		itemFactory.deleteAll();
-		RecipeFactory.deleteAll();
+		recipeFactory.deleteAll();
 	}
 
 	@BeforeClass

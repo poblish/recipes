@@ -35,6 +35,7 @@ public class CorrelationsTest {
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
 	private CanonicalItemFactory itemFactory = GRAPH.get( CanonicalItemFactory.class );
+	private RecipeFactory recipeFactory = GRAPH.get( RecipeFactory.class );
 	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
 	private Correlations corrs = GRAPH.get( Correlations.class );
 
@@ -42,7 +43,7 @@ public class CorrelationsTest {
 	public void cleanIndices() throws ClientProtocolException, IOException {
 		CanonicalItemFactory.startES();
 		itemFactory.deleteAll();
-		RecipeFactory.deleteAll();
+		recipeFactory.deleteAll();
 	}
 
 	@BeforeClass
@@ -58,7 +59,7 @@ public class CorrelationsTest {
 		dataUtils.parseIngredientsFrom("bol2.txt");
 		dataUtils.parseIngredientsFrom("chineseBeef.txt");
 
-        while ( RecipeFactory.listAll().size() < 4) {
+        while ( recipeFactory.listAll().size() < 4) {
         	Thread.sleep(200); // Wait for saves to appear...
         }
 

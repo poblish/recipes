@@ -36,6 +36,7 @@ public class IngredientsTest {
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
 	private CanonicalItemFactory itemFactory = GRAPH.get( CanonicalItemFactory.class );
+	private RecipeFactory recipeFactory = GRAPH.get( RecipeFactory.class );
 
 	private final static String	IDX_URL = "http://localhost:9200/recipe/items";
 
@@ -103,7 +104,7 @@ public class IngredientsTest {
 		r.addStage(stage1);
 		r.addTag( CommonTags.SERVES_COUNT, "4");
 
-		RecipeFactory.put( r, RecipeFactory.toId(r));
+		recipeFactory.put( r, RecipeFactory.toId(r));
 
 		///////////////////////////////////////////////////
 

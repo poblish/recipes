@@ -41,10 +41,13 @@ public class Correlations {
 	@Inject
 	CanonicalItemFactory itemFactory;
 
+	@Inject
+	RecipeFactory recipeFactory;
+
 	public Multiset<ICanonicalItem> findCountsWith( final ICanonicalItem... inInclusions) {
 	    final Multiset<ICanonicalItem> counts = HashMultiset.create();
 		try {
-			final Collection<Recipe> all = RecipeFactory.listAll();
+			final Collection<Recipe> all = recipeFactory.listAll();
 			System.out.println(all.size());
 			for ( Recipe each : all) {
 			    if (!each.containsAllOf(inInclusions)) {
