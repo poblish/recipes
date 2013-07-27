@@ -29,8 +29,6 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.search.SearchHit;
 
 import uk.co.recipes.CanonicalItem;
@@ -48,7 +46,8 @@ import com.google.common.base.Throwables;
  */
 public class CanonicalItemFactory {
 
-	private static Client ES_CLIENT;
+	@Inject
+	Client esClient;
 
 	@Inject
 	HttpClient httpClient;
@@ -63,16 +62,6 @@ public class CanonicalItemFactory {
 	@Inject
 	EsUtils esUtils;
 
-
-	// FIXME - rubbish
-	public static void startES() {
-		ES_CLIENT = new TransportClient().addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
-	}
-
-	// FIXME - rubbish
-	public static void stopES() {
-		ES_CLIENT.close();
-	}
 
 	public ICanonicalItem put( final ICanonicalItem inItem, String inId) throws IOException {
 		final HttpPost req = new HttpPost( itemIndexUrl + "/" + inId);
@@ -124,7 +113,7 @@ public class CanonicalItemFactory {
 			if (inMatchAliases) {
 				try {
 					// http://www.elasticsearch.org/guide/reference/query-dsl/match-query/
-					final SearchResponse resp = ES_CLIENT.prepareSearch("recipe").setTypes("items").setQuery( matchPhraseQuery( "aliases", inCanonicalName.toLowerCase()) ).addSort( "_score", DESC).execute().actionGet();
+					final SearchResponse resp = esClient.prepareSearch("recipe").setTypes("items").setQuery( matchPhraseQuery( "aliases", inCanonicalName.toLowerCase()) ).addSort( "_score", DESC).execute().actionGet();
 					final SearchHit[] hits = resp.getHits().hits();
 
 					if ( /* Yes, want only one great match */ hits.length == 1) {
@@ -155,5 +144,9 @@ public class CanonicalItemFactory {
 	public void deleteAll() throws IOException {
 		final HttpResponse resp = httpClient.execute( new HttpDelete(itemIndexUrl) );
 		EntityUtils.consume( resp.getEntity() );
+	}
+
+	public void stopES() {
+		esClient.close();
 	}
 }

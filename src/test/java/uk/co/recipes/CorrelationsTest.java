@@ -41,7 +41,6 @@ public class CorrelationsTest {
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
-		CanonicalItemFactory.startES();
 		itemFactory.deleteAll();
 		recipeFactory.deleteAll();
 	}
@@ -76,6 +75,6 @@ public class CorrelationsTest {
 
 	@AfterClass
 	public void shutDown() {
-		CanonicalItemFactory.stopES();
+		itemFactory.stopES();
 	}
 }

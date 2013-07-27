@@ -14,6 +14,9 @@ import net.myrrix.client.MyrrixClientConfiguration;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.transport.InetSocketTransportAddress;
 
 import uk.co.recipes.corr.Correlations;
 import uk.co.recipes.parse.IngredientParser;
@@ -32,7 +35,8 @@ import dagger.Provides;
  * @author andrewregan
  * 
  */
-@Module(injects={CanonicalItemFactory.class, RecipeFactory.class, ItemsLoader.class, IngredientParser.class, TestDataUtils.class, Correlations.class, ObjectMapper.class, ClientRecommender.class, MyrrixTasteRecommendationService.class, MyrrixRecommendationService.class})
+@Module(injects={CanonicalItemFactory.class, RecipeFactory.class, ItemsLoader.class, IngredientParser.class, TestDataUtils.class, Correlations.class, ObjectMapper.class, ClientRecommender.class,
+				 MyrrixTasteRecommendationService.class, MyrrixRecommendationService.class, Client.class})
 public class DaggerModule {
 
 	@Provides
@@ -47,6 +51,12 @@ public class DaggerModule {
 		final ObjectMapper inst = new ObjectMapper();
 		JacksonFactory.initialiseMapper(inst);
 		return inst;
+	}
+
+	@Provides
+	@Singleton
+	Client provideEsClient() {
+		return new TransportClient().addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
 	}
 
 	@Provides

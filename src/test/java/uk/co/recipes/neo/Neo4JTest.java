@@ -71,7 +71,6 @@ public class Neo4JTest {
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
-		CanonicalItemFactory.startES();
 		itemFactory.deleteAll();
 		recipeFactory.deleteAll();
 	}
@@ -385,7 +384,7 @@ public class Neo4JTest {
 
 	@AfterClass
 	public void shutDown() {
-		CanonicalItemFactory.stopES();
+		itemFactory.stopES();
 	}
 
 	@AfterClass

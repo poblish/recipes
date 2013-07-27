@@ -32,7 +32,6 @@ public class ParseIngredientsTest {
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
-		CanonicalItemFactory.startES();
 		itemFactory.deleteAll();
 		recipeFactory.deleteAll();
 	}
@@ -154,6 +153,6 @@ public class ParseIngredientsTest {
 
 	@AfterClass
 	public void shutDown() {
-		CanonicalItemFactory.stopES();
+		itemFactory.stopES();
 	}
 }

@@ -39,7 +39,6 @@ public class RecipeSearchTest {
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
-		CanonicalItemFactory.startES();
 		itemFactory.deleteAll();
 		recipeFactory.deleteAll();
 	}
@@ -67,6 +66,6 @@ public class RecipeSearchTest {
 
 	@AfterClass
 	public void shutDown() {
-		CanonicalItemFactory.stopES();
+		itemFactory.stopES();
 	}
 }

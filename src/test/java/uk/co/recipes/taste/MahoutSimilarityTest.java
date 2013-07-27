@@ -52,7 +52,6 @@ public class MahoutSimilarityTest {
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
-		CanonicalItemFactory.startES();
 		itemFactory.deleteAll();
 		recipeFactory.deleteAll();
 	}
@@ -150,6 +149,6 @@ public class MahoutSimilarityTest {
 
 	@AfterClass
 	public void shutDown() {
-		CanonicalItemFactory.stopES();
+		itemFactory.stopES();
 	}
 }
