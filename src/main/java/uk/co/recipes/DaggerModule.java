@@ -3,8 +3,13 @@
  */
 package uk.co.recipes;
 
+import java.io.IOException;
+
 import javax.inject.Named;
 import javax.inject.Singleton;
+
+import net.myrrix.client.ClientRecommender;
+import net.myrrix.client.MyrrixClientConfiguration;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -16,6 +21,7 @@ import uk.co.recipes.persistence.CanonicalItemFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.persistence.JacksonFactory;
 import uk.co.recipes.persistence.RecipeFactory;
+import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
 import dagger.Module;
 import dagger.Provides;
 
@@ -25,7 +31,7 @@ import dagger.Provides;
  * @author andrewregan
  * 
  */
-@Module(injects={CanonicalItemFactory.class, RecipeFactory.class, ItemsLoader.class, IngredientParser.class, TestDataUtils.class, Correlations.class, ObjectMapper.class})
+@Module(injects={CanonicalItemFactory.class, RecipeFactory.class, ItemsLoader.class, IngredientParser.class, TestDataUtils.class, Correlations.class, ObjectMapper.class, ClientRecommender.class, MyrrixTasteRecommendationService.class})
 public class DaggerModule {
 
 	@Provides
@@ -53,5 +59,15 @@ public class DaggerModule {
 	String provideEsRecipesUrl() {
 		return "http://localhost:9200/recipe/recipes";
 	}
-}
 
+	@Provides
+	@Singleton
+	ClientRecommender provideClientRecommender() throws IOException {
+		final MyrrixClientConfiguration clientConfig = new MyrrixClientConfiguration();
+		clientConfig.setHost("localhost");
+		clientConfig.setPort(8080);
+
+		// TranslatingClientRecommender recommender = new TranslatingClientRecommender( new ClientRecommender(clientConfig) );
+		return new ClientRecommender(clientConfig);
+	}
+}

@@ -16,7 +16,6 @@ import org.elasticsearch.common.base.Throwables;
 import uk.co.recipes.service.taste.api.ITasteRecommendationsAPI;
 
 import com.google.common.base.Function;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.FluentIterable;
 
 /**
@@ -28,11 +27,7 @@ import com.google.common.collect.FluentIterable;
 public class MyrrixTasteRecommendationService implements ITasteRecommendationsAPI {
 
 	@Inject
-	private ClientRecommender recommender;
-
-	public MyrrixTasteRecommendationService( final ClientRecommender inRecommender) {
-		recommender = Preconditions.checkNotNull(inRecommender);
-	}
+	ClientRecommender recommender;
 
 	@Override
 	public List<Long> recommendIngredients( long inUser, int inNumRecs) {

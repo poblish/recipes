@@ -7,16 +7,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
-import javax.inject.Inject;
-
 import net.myrrix.client.ClientRecommender;
-import net.myrrix.client.MyrrixClientConfiguration;
 
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import uk.co.recipes.DaggerModule;
 import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
+import dagger.ObjectGraph;
 
 /**
  * 
@@ -27,21 +26,15 @@ import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
  */
 public class MyrrixTest {
 
-	@Inject
-	MyrrixTasteRecommendationService api;
+	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
+
+	private MyrrixTasteRecommendationService api = GRAPH.get( MyrrixTasteRecommendationService.class );
 
 	@BeforeClass
 	public void setUp() throws IOException, TasteException {
-		final MyrrixClientConfiguration clientConfig = new MyrrixClientConfiguration();
-		clientConfig.setHost("localhost");
-		clientConfig.setPort(8080);
-
-		// TranslatingClientRecommender recommender = new TranslatingClientRecommender( new ClientRecommender(clientConfig) );
-		ClientRecommender recommender = new ClientRecommender(clientConfig);
+		final ClientRecommender recommender = GRAPH.get( ClientRecommender.class );
 		recommender.ingest( new File("src/test/resources/taste/main.txt") );
 		recommender.refresh();
-
-		api = new MyrrixTasteRecommendationService(recommender);
 	}
 
 	@Test
