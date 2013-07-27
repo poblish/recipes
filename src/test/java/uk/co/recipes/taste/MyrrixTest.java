@@ -14,6 +14,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import uk.co.recipes.DaggerModule;
+import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
 import dagger.ObjectGraph;
 
@@ -29,6 +30,7 @@ public class MyrrixTest {
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
 	private MyrrixTasteRecommendationService api = GRAPH.get( MyrrixTasteRecommendationService.class );
+	private MyrrixRecommendationService fullApi = GRAPH.get( MyrrixRecommendationService.class );
 
 	@BeforeClass
 	public void setUp() throws IOException, TasteException {

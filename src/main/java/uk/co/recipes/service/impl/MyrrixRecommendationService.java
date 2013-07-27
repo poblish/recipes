@@ -13,8 +13,6 @@ import uk.co.recipes.api.IUser;
 import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
 
-import com.google.common.base.Preconditions;
-
 /**
  * TODO
  *
@@ -24,11 +22,7 @@ import com.google.common.base.Preconditions;
 public class MyrrixRecommendationService implements IRecommendationsAPI {
 
 	@Inject
-	private MyrrixTasteRecommendationService tasteRecommendations;
-
-	public MyrrixRecommendationService( final MyrrixTasteRecommendationService inTasteRecommendations) {
-		tasteRecommendations = Preconditions.checkNotNull(inTasteRecommendations);
-	}
+	MyrrixTasteRecommendationService tasteRecommendations;
 
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.service.api.IRecommendationsAPI#recommendIngredients(uk.co.recipes.api.IUser, int)
