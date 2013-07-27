@@ -38,7 +38,7 @@ public class IngredientsTest {
 	private RecipeFactory recipeFactory = GRAPH.get( RecipeFactory.class );
 	private ObjectMapper mapper = GRAPH.get( ObjectMapper.class );
 
-	private final static String	IDX_URL = "http://localhost:9200/recipe/items";
+	private final static String	IDX_URL = new DaggerModule().provideEsItemsUrl();  // Yuk - FIXME!?
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
