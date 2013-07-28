@@ -4,21 +4,27 @@
 package uk.co.recipes;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
+import java.io.StringReader;
+
+import net.myrrix.client.ClientRecommender;
 
 import org.apache.http.client.ClientProtocolException;
-import org.codehaus.jackson.map.ObjectMapper;
+import org.apache.mahout.cf.taste.common.TasteException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.persistence.CanonicalItemFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.persistence.RecipeFactory;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.impl.EsSearchService;
+import uk.co.recipes.service.impl.MyrrixExplorerService;
 import dagger.ObjectGraph;
 
 /**
@@ -34,9 +40,11 @@ public class RecipeSearchTest {
 	private CanonicalItemFactory itemFactory = GRAPH.get( CanonicalItemFactory.class );
 	private RecipeFactory recipeFactory = GRAPH.get( RecipeFactory.class );
 
-	private ObjectMapper mapper = GRAPH.get( ObjectMapper.class );
 	private ISearchAPI searchApi = GRAPH.get( EsSearchService.class );
 	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
+
+	private MyrrixExplorerService explorerApi = GRAPH.get( MyrrixExplorerService.class );
+	private ClientRecommender recommender = GRAPH.get( ClientRecommender.class );
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
@@ -57,6 +65,18 @@ public class RecipeSearchTest {
         while ( recipeFactory.listAll().size() < 5) {
         	Thread.sleep(200); // Wait for saves to appear...
         }
+	}
+
+	@Test
+	public void testExplorer() throws IOException, TasteException {
+		final IRecipe recipe1 = recipeFactory.getById("chcashblackspicecurry.txt");
+		assertThat( recipe1.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
+
+		final StringReader sr = new StringReader("1," + recipe1.getId() + "");
+		recommender.ingest(sr);
+		recommender.refresh();
+
+		System.out.println( explorerApi.similarRecipes( recipe1, 10) );
 	}
 
 	@Test
