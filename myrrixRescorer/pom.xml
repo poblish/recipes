@@ -8,12 +8,6 @@
 	<description>???</description>
 	<dependencies>
 		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>14.0.1</version>
-			<type>jar</type>
-		</dependency>
-		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<version>6.8.5</version>
@@ -24,17 +18,6 @@
 					<groupId>junit</groupId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>net.myrrix</groupId>
-			<artifactId>myrrix-client</artifactId>
-			<version>1.0.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.squareup.dagger</groupId>
-			<artifactId>dagger</artifactId>
-			<version>1.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>net.myrrix</groupId>
@@ -56,5 +39,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
