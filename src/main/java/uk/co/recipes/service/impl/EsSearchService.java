@@ -94,4 +94,38 @@ public class EsSearchService implements ISearchAPI {
 			throw Throwables.propagate(e);
 		}
 	}
+
+	/* (non-Javadoc)
+	 * @see uk.co.recipes.service.api.ISearchAPI#countItemsByName(java.lang.String)
+	 */
+	@Override
+	public int countItemsByName( String inName) throws IOException {
+		try
+		{
+			return mapper.readTree( new URL( itemIndexUrl + "/_search?q=" + inName) ).path("hits").path("hits").size();
+		}
+		catch (MalformedURLException e) {
+			throw Throwables.propagate(e);
+		}
+		catch (JsonProcessingException e) {
+			throw Throwables.propagate(e);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.co.recipes.service.api.ISearchAPI#countRecipesByName(java.lang.String)
+	 */
+	@Override
+	public int countRecipesByName( String inName) throws IOException {
+		try
+		{
+			return mapper.readTree( new URL( recipesIndexUrl + "/_search?q=" + inName) ).path("hits").path("hits").size();
+		}
+		catch (MalformedURLException e) {
+			throw Throwables.propagate(e);
+		}
+		catch (JsonProcessingException e) {
+			throw Throwables.propagate(e);
+		}
+	}
 }

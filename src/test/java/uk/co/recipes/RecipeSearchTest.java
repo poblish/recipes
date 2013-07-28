@@ -61,7 +61,7 @@ public class RecipeSearchTest {
 
 	@Test
 	public void findGarlicRecipes() throws InterruptedException, IOException {
-		assertThat( searchApi.findRecipesByName("garlic").size(), is(4));
+		assertThat( searchApi.countRecipesByName("garlic"), is(4));
 	}
 
 	@AfterClass

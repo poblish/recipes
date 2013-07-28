@@ -18,5 +18,8 @@ import uk.co.recipes.api.IRecipe;
 public interface ISearchAPI {
 
 	List<ICanonicalItem> findItemsByName( final String inName) throws IOException;
+	int countItemsByName( final String inName) throws IOException;
+
 	List<IRecipe> findRecipesByName( final String inName) throws IOException;
+	int countRecipesByName( final String inName) throws IOException;
 }
