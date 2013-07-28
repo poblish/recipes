@@ -3,9 +3,6 @@
  */
 package uk.co.recipes.service.impl;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -49,7 +46,6 @@ public class EsSearchService implements ISearchAPI {
 		try
 		{
 			final JsonNode jn = mapper.readTree( new URL( itemIndexUrl + "/_search?q=" + inName) ).path("hits").path("hits");
-			assertThat( jn.size(), is(10));
 	
 			final List<ICanonicalItem> results = Lists.newArrayList();
 	
