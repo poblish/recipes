@@ -15,6 +15,7 @@ import java.util.List;
 public interface IRecipe extends ITagging {
 
 	long getId();
+	void setId( long id);
 
 	String getTitle();
 

@@ -58,21 +58,23 @@ public class EsUserFactory {
 	EsUtils esUtils;
 
 
-	public IUser put( final IUser inItem, String inId) throws IOException {
+	public IUser put( final IUser inUser, String inId) throws IOException {
 		final HttpPost req = new HttpPost( usersIndexUrl + "/" + inId);
 
 		try {
-			req.setEntity( new StringEntity( mapper.writeValueAsString(inItem) ) );
+			req.setEntity( new StringEntity( mapper.writeValueAsString(inUser) ) );
 
 			final HttpResponse resp = httpClient.execute(req);
 			assertThat( resp.getStatusLine().getStatusCode(), is(201));
 			EntityUtils.consume( resp.getEntity() );
+
+			inUser.setId( esUtils.getSeqnoForType("users_seqno") );
 		}
 		catch (UnsupportedEncodingException e) {
 			Throwables.propagate(e);
 		}
 
-		return inItem;
+		return inUser;
 	}
 
 	public IUser getById( String inId) throws IOException {

@@ -14,6 +14,7 @@ import java.util.TreeMap;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.elasticsearch.common.Preconditions;
 
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
@@ -30,6 +31,9 @@ import com.google.common.collect.Sets;
  */
 public class CanonicalItem implements ICanonicalItem {
 
+	private final static long UNSET_ID = -1L;
+
+	private long id = UNSET_ID;
 	private String canonicalName;
 	private ICanonicalItem parent = null; // Can't use Optional<> as it screws with JSON serialization
 	public Collection<String> aliases = Sets.newHashSet();
@@ -68,11 +72,6 @@ public class CanonicalItem implements ICanonicalItem {
 	public CanonicalItem(String canonicalName, final Optional<ICanonicalItem> inParent) {
 		this.canonicalName = canonicalName;
 		parent = inParent.orNull();  // Yuk!
-	}
-
-	@Override
-	public long getId() {
-		return 0;
 	}
 
 	/* (non-Javadoc)
@@ -173,6 +172,29 @@ public class CanonicalItem implements ICanonicalItem {
 
         return false;
     }
+
+	/* (non-Javadoc)
+	 * @see uk.co.recipes.api.ICanonicalItem#getId()
+	 */
+	@Override
+	public long getId() {
+		return id;
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.co.recipes.api.ICanonicalItem#setId(long)
+	 */
+	@Override
+	public void setId( long inId) {
+		if ( id == UNSET_ID && inId == UNSET_ID) {
+			// Let Jackson off...
+			return;
+		}
+
+		Preconditions.checkArgument( inId >= 0, "New Id must be >= 0 [" + inId +"]");
+		Preconditions.checkState( id == UNSET_ID, "Cannot change Item Id");
+		id = inId;
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()

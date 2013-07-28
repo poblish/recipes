@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.elasticsearch.common.Preconditions;
 
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
@@ -31,6 +32,9 @@ import com.google.common.collect.Sets;
  */
 public class Recipe implements IRecipe {
 
+	private final static long UNSET_ID = Long.MAX_VALUE;
+
+	private long id = UNSET_ID;
 	private String title;
 	private final List<IRecipeStage> stages = Lists.newArrayList();
 	private final Map<ITag,Serializable> tagsMap = Maps.newHashMap();
@@ -41,11 +45,6 @@ public class Recipe implements IRecipe {
 
 	public Recipe( String inTitle) {
 		title = checkNotNull( inTitle, "Title cannot be null");
-	}
-
-	@Override
-	public long getId() {
-		return 0;
 	}
 
 	/**
@@ -127,6 +126,23 @@ public class Recipe implements IRecipe {
 	@Override
 	public Map<ITag,Serializable> getTags() {
 		return tagsMap;
+	}
+
+	@Override
+	public long getId() {
+		return id;
+	}
+
+	@Override
+	public void setId( long inId) {
+		if ( id == UNSET_ID && inId == UNSET_ID) {
+			// Let Jackson off...
+			return;
+		}
+
+		Preconditions.checkArgument( inId < 0, "New Id must be < 0 [" + inId +"]");
+		Preconditions.checkState( id == UNSET_ID, "Cannot change Item Id");
+		id = inId;
 	}
 
 	/* (non-Javadoc)
