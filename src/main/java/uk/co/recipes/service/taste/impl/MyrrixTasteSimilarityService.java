@@ -3,12 +3,14 @@
  */
 package uk.co.recipes.service.taste.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import net.myrrix.client.ClientRecommender;
 
+import org.apache.mahout.cf.taste.common.NoSuchItemException;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.elasticsearch.common.base.Throwables;
 
@@ -30,6 +32,9 @@ public class MyrrixTasteSimilarityService implements ITasteSimilarityAPI {
 	public List<Long> similarIngredients( long inUser, int inNumRecs) {
 		try {
 			return MyrrixUtils.getItems( recommender.mostSimilarItems( inUser, inNumRecs) );
+		}
+		catch (NoSuchItemException e) {
+			return Collections.emptyList();
 		}
 		catch (TasteException e) {
 			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
