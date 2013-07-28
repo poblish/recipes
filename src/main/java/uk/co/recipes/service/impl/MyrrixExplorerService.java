@@ -17,10 +17,8 @@ import org.elasticsearch.common.base.Throwables;
 
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
-import uk.co.recipes.api.IUser;
 import uk.co.recipes.myrrix.MyrrixUtils;
 import uk.co.recipes.persistence.CanonicalItemFactory;
-import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.RecipeFactory;
 import uk.co.recipes.service.api.IExplorerAPI;
 import uk.co.recipes.service.taste.impl.MyrrixTasteSimilarityService;
@@ -40,9 +38,6 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	ClientRecommender recommender;
 
 	@Inject
-	EsUserFactory userFactory;
-
-	@Inject
 	CanonicalItemFactory itemsFactory;
 
 	@Inject
@@ -53,16 +48,14 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	 * @see uk.co.recipes.service.api.IExplorerAPI#similarIngredients(uk.co.recipes.api.IUser, int)
 	 */
 	@Override
-	public List<ICanonicalItem> similarIngredients( final IUser inUser, int inNumRecs) {
+	public List<ICanonicalItem> similarIngredients( final ICanonicalItem inTarget, int inNumRecs) {
 		try {
-			return itemsFactory.getAll( MyrrixUtils.getItems( recommender.mostSimilarItems( userFactory.toId(inUser), inNumRecs) ) );
+			return itemsFactory.getAll( MyrrixUtils.getItems( recommender.mostSimilarItems( inTarget.getId(), inNumRecs) ) );
+		}
 		catch (NoSuchItemException e) {
 			return Collections.emptyList();
 		}
 		catch (TasteException e) {
-			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
-		}
-		catch (IOException e) {
 			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
 		}
 	}
@@ -71,9 +64,10 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	 * @see uk.co.recipes.service.api.IExplorerAPI#similarRecipes(uk.co.recipes.api.IUser, int)
 	 */
 	@Override
-	public List<IRecipe> similarRecipes( final IUser inUser, int inNumRecs) {
+	public List<IRecipe> similarRecipes( final IRecipe inTarget, int inNumRecs) {
 		try {
-			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.mostSimilarItems( userFactory.toId(inUser), inNumRecs) ) );
+			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.mostSimilarItems( inTarget.getId(), inNumRecs) ) );
+		}
 		catch (NoSuchItemException e) {
 			return Collections.emptyList();
 		}

@@ -102,7 +102,7 @@ public class IngredientsTest {
 		r.addStage(stage1);
 		r.addTag( CommonTags.SERVES_COUNT, "4");
 
-		recipeFactory.put( r, RecipeFactory.toId(r));
+		recipeFactory.put( r, recipeFactory.toId(r));
 
 		///////////////////////////////////////////////////
 

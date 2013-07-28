@@ -32,7 +32,8 @@ import com.google.common.collect.Sets;
  */
 public class Recipe implements IRecipe {
 
-	private final static long UNSET_ID = Long.MAX_VALUE;
+	private final static long UNSET_ID = 0x3FFFFFFFFFFFFFFFL;  // Halfway to Long.MAX_VALUE
+	public final static long BASE_ID = UNSET_ID + 1L;
 
 	private long id = UNSET_ID;
 	private String title;
@@ -140,7 +141,7 @@ public class Recipe implements IRecipe {
 			return;
 		}
 
-		Preconditions.checkArgument( inId < 0, "New Id must be < 0 [" + inId +"]");
+		Preconditions.checkArgument( inId >= BASE_ID, "New Id must be >= " + BASE_ID + " [" + inId +"]");
 		Preconditions.checkState( id == UNSET_ID, "Cannot change Item Id");
 		id = inId;
 	}

@@ -32,6 +32,8 @@ import com.google.common.collect.Sets;
 public class CanonicalItem implements ICanonicalItem {
 
 	private final static long UNSET_ID = -1L;
+	private final static long TOO_HIGH_ID = 0x4000000000000000L;
+
 
 	private long id = UNSET_ID;
 	private String canonicalName;
@@ -191,7 +193,7 @@ public class CanonicalItem implements ICanonicalItem {
 			return;
 		}
 
-		Preconditions.checkArgument( inId >= 0, "New Id must be >= 0 [" + inId +"]");
+		Preconditions.checkArgument( inId >= 0 && inId < TOO_HIGH_ID, "New Id must be >= 0 [" + inId +"]");
 		Preconditions.checkState( id == UNSET_ID, "Cannot change Item Id");
 		id = inId;
 	}
