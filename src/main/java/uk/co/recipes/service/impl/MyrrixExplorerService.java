@@ -66,7 +66,7 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	@Override
 	public List<IRecipe> similarRecipes( final IRecipe inTarget, int inNumRecs) {
 		try {
-			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.mostSimilarItems( inTarget.getId(), inNumRecs) ) );
+			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.mostSimilarItems( new long[]{ inTarget.getId() }, inNumRecs, new String[]{"RECIPE"}, /* "contextUserID" */ 0L) ) );
 		}
 		catch (NoSuchItemException e) {
 			return Collections.emptyList();
