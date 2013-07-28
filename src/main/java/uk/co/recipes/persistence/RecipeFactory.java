@@ -71,6 +71,10 @@ public class RecipeFactory {
 	}
 
 	public Optional<IRecipe> getById( long inId) throws IOException {
+		if ( inId < Recipe.BASE_ID) {  // Just in case...
+			return Optional.absent();
+		}
+
 		final Iterator<JsonNode> nodeItr = mapper.readTree( new URL( itemIndexUrl + "/_search?q=id:" + inId) ).path("hits").path("hits").iterator();
 		if (nodeItr.hasNext()) {
 			return Optional.fromNullable((IRecipe) mapper.readValue( nodeItr.next(), Recipe.class) );
