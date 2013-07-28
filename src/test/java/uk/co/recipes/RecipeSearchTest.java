@@ -7,10 +7,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
-import java.net.URL;
 
 import org.apache.http.client.ClientProtocolException;
-import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -19,6 +17,8 @@ import org.testng.annotations.Test;
 import uk.co.recipes.persistence.CanonicalItemFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.persistence.RecipeFactory;
+import uk.co.recipes.service.api.ISearchAPI;
+import uk.co.recipes.service.impl.EsSearchService;
 import dagger.ObjectGraph;
 
 /**
@@ -35,6 +35,7 @@ public class RecipeSearchTest {
 	private RecipeFactory recipeFactory = GRAPH.get( RecipeFactory.class );
 
 	private ObjectMapper mapper = GRAPH.get( ObjectMapper.class );
+	private ISearchAPI searchApi = GRAPH.get( EsSearchService.class );
 	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
 
 	@BeforeClass
@@ -60,8 +61,7 @@ public class RecipeSearchTest {
 
 	@Test
 	public void findGarlicRecipes() throws InterruptedException, IOException {
-		final JsonNode jn = mapper.readTree( new URL("http://localhost:9200/recipe/recipes/_search?q=canonicalName:garlic") ).path("hits").path("hits");
-		assertThat( jn.size(), is(4));
+		assertThat( searchApi.findRecipesByName("garlic").size(), is(4));
 	}
 
 	@AfterClass

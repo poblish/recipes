@@ -17,7 +17,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.elasticsearch.common.base.Throwables;
 
 import uk.co.recipes.CanonicalItem;
+import uk.co.recipes.Recipe;
 import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.service.api.ISearchAPI;
 
 import com.google.common.collect.Lists;
@@ -37,6 +39,10 @@ public class EsSearchService implements ISearchAPI {
 	@Named("elasticSearchItemsUrl")
 	String itemIndexUrl;
 
+	@Inject
+	@Named("elasticSearchRecipesUrl")
+	String recipesIndexUrl;
+
 
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.service.api.ISearchAPI#findItemsByName(java.lang.String)
@@ -51,6 +57,32 @@ public class EsSearchService implements ISearchAPI {
 	
 			for ( final JsonNode each : jn) {
 				results.add( mapper.readValue( each, CanonicalItem.class) );
+			}
+	
+			return results;
+		}
+		catch (MalformedURLException e) {
+			throw Throwables.propagate(e);
+		}
+		catch (JsonProcessingException e) {
+			throw Throwables.propagate(e);
+		}
+	}
+
+
+	/* (non-Javadoc)
+	 * @see uk.co.recipes.service.api.ISearchAPI#findRecipesByName(java.lang.String)
+	 */
+	@Override
+	public List<IRecipe> findRecipesByName( String inName) throws IOException {
+		try
+		{
+			final JsonNode jn = mapper.readTree( new URL( recipesIndexUrl + "/_search?q=" + inName) ).path("hits").path("hits");
+	
+			final List<IRecipe> results = Lists.newArrayList();
+	
+			for ( final JsonNode each : jn) {
+				results.add( mapper.readValue( each, Recipe.class) );
 			}
 	
 			return results;
