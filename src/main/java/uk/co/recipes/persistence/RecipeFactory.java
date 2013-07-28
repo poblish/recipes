@@ -55,6 +55,8 @@ public class RecipeFactory {
 		final HttpPost req = new HttpPost( itemIndexUrl + "/" + inId);
 
 		try {
+			inRecipe.setId( /* Recipes have -ve Ids */ -esUtils.getSeqnoForType("recipes_seqno") /* Ensure first recipe is -1, not 0 */ - 1);
+
 			req.setEntity( new StringEntity( mapper.writeValueAsString(inRecipe) ) );
 
 			final HttpResponse resp = httpClient.execute(req);

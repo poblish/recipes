@@ -68,13 +68,13 @@ public class CanonicalItemFactory {
 		final HttpPost req = new HttpPost( itemIndexUrl + "/" + inId);
 
 		try {
+			inItem.setId( esUtils.getSeqnoForType("items_seqno") );
+
 			req.setEntity( new StringEntity( mapper.writeValueAsString(inItem) ) );
 
 			final HttpResponse resp = httpClient.execute(req);
 			assertThat( resp.getStatusLine().getStatusCode(), is(201));
 			EntityUtils.consume( resp.getEntity() );
-
-			inItem.setId( esUtils.getSeqnoForType("items_seqno") );
 		}
 		catch (UnsupportedEncodingException e) {
 			Throwables.propagate(e);

@@ -62,13 +62,13 @@ public class EsUserFactory {
 		final HttpPost req = new HttpPost( usersIndexUrl + "/" + inId);
 
 		try {
+			inUser.setId( esUtils.getSeqnoForType("users_seqno") );
+
 			req.setEntity( new StringEntity( mapper.writeValueAsString(inUser) ) );
 
 			final HttpResponse resp = httpClient.execute(req);
 			assertThat( resp.getStatusLine().getStatusCode(), is(201));
 			EntityUtils.consume( resp.getEntity() );
-
-			inUser.setId( esUtils.getSeqnoForType("users_seqno") );
 		}
 		catch (UnsupportedEncodingException e) {
 			Throwables.propagate(e);
