@@ -1,1 +1,2 @@
-nohup java -jar  /Users/andrewregan/Development/java/recipe_explorer/myrrix-serving-1.0.1.jar  --port 8080 &
+nohup java -jar  /Users/andrewregan/Development/java/recipe_explorer/myrrix-serving-1.0.1.jar  --port 8080   > /private/tmp/nohup.out 2>&1&
+nohup elasticsearch -f -D es.config=/usr/local/Cellar/elasticsearch-0.20/0.20.6/config/elasticsearch.yml     > /private/tmp/nohup.out 2>&1&
