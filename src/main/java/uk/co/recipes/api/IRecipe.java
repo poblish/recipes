@@ -14,6 +14,8 @@ import java.util.List;
  */
 public interface IRecipe extends ITagging {
 
+	long getId();
+
 	String getTitle();
 
 	Collection<IIngredient> getIngredients();

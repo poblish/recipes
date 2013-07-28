@@ -18,7 +18,6 @@ import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.myrrix.MyrrixUtils;
 import uk.co.recipes.persistence.CanonicalItemFactory;
-import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.RecipeFactory;
 import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
@@ -38,9 +37,6 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 	ClientRecommender recommender;
 
 	@Inject
-	EsUserFactory userFactory;
-
-	@Inject
 	CanonicalItemFactory itemsFactory;
 
 	@Inject
@@ -53,12 +49,9 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 	@Override
 	public List<ICanonicalItem> recommendIngredients( IUser inUser, int inNumRecs) {
 		try {
-			return itemsFactory.getAll( MyrrixUtils.getItems( recommender.recommend( userFactory.toId(inUser), inNumRecs) ) );
+			return itemsFactory.getAll( MyrrixUtils.getItems( recommender.recommend( inUser.getId(), inNumRecs) ) );
 		}
 		catch (TasteException e) {
-			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
-		}
-		catch (IOException e) {
 			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
 		}
 	}
@@ -69,7 +62,7 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 	@Override
 	public List<IRecipe> recommendRecipes( IUser inUser, int inNumRecs) {
 		try {
-			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.recommend( userFactory.toId(inUser), inNumRecs) ) );
+			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.recommend( inUser.getId(), inNumRecs) ) );
 		}
 		catch (TasteException e) {
 			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right

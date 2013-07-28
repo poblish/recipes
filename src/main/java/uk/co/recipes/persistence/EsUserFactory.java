@@ -83,11 +83,6 @@ public class EsUserFactory {
 		return inName.toLowerCase().replace( ' ', '_');
 	}
 
-	public long toId( final IUser inUser) throws IOException {
-		// FIXME FIXME FIXME!
-		return (long) inUser.hashCode();
-	}
-
 	public Optional<IUser> get( final String inCanonicalName) throws IOException {
 		try {
 			return Optional.fromNullable( getById( toId(inCanonicalName) ) );

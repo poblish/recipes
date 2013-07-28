@@ -13,6 +13,8 @@ import com.google.common.base.Optional;
  */
 public interface ICanonicalItem extends ITagging {
 
+	long getId();
+
 	String getCanonicalName();
 
 	Optional<ICanonicalItem> parent();

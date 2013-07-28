@@ -13,4 +13,8 @@ import uk.co.recipes.api.IUser;
  */
 public class User implements IUser {
 
+	@Override
+	public long getId() {
+		return 0;
+	}
 }

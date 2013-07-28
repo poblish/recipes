@@ -43,6 +43,11 @@ public class Recipe implements IRecipe {
 		title = checkNotNull( inTitle, "Title cannot be null");
 	}
 
+	@Override
+	public long getId() {
+		return 0;
+	}
+
 	/**
 	 * @return the title
 	 */

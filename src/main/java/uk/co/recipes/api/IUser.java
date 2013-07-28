@@ -11,4 +11,5 @@ package uk.co.recipes.api;
  */
 public interface IUser {
 
+	long getId();
 }

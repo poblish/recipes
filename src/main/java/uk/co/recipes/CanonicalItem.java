@@ -70,6 +70,11 @@ public class CanonicalItem implements ICanonicalItem {
 		parent = inParent.orNull();  // Yuk!
 	}
 
+	@Override
+	public long getId() {
+		return 0;
+	}
+
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.api.ICanonicalItem#canonicalName()
 	 */
