@@ -49,7 +49,7 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 	@Override
 	public List<ICanonicalItem> recommendIngredients( IUser inUser, int inNumRecs) {
 		try {
-			return itemsFactory.getAll( MyrrixUtils.getItems( recommender.recommend( inUser.getId(), inNumRecs) ) );
+			return itemsFactory.getAll( MyrrixUtils.getItems( recommender.recommend( inUser.getId(), inNumRecs, false, new String[]{"ITEM"}) ) );
 		}
 		catch (TasteException e) {
 			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
@@ -62,7 +62,7 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 	@Override
 	public List<IRecipe> recommendRecipes( IUser inUser, int inNumRecs) {
 		try {
-			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.recommend( inUser.getId(), inNumRecs) ) );
+			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.recommend( inUser.getId(), inNumRecs, false, new String[]{"RECIPE"}) ) );
 		}
 		catch (TasteException e) {
 			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right

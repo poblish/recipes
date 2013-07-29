@@ -50,7 +50,7 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	@Override
 	public List<ICanonicalItem> similarIngredients( final ICanonicalItem inTarget, int inNumRecs) {
 		try {
-			return itemsFactory.getAll( MyrrixUtils.getItems( recommender.mostSimilarItems( inTarget.getId(), inNumRecs) ) );
+			return itemsFactory.getAll( MyrrixUtils.getItems( recommender.mostSimilarItems( new long[]{ inTarget.getId() }, inNumRecs, new String[]{"ITEM"}, /* "contextUserID" */ 0L) ) );
 		}
 		catch (NoSuchItemException e) {
 			return Collections.emptyList();
