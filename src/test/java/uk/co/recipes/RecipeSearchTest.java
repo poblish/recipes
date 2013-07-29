@@ -91,10 +91,7 @@ public class RecipeSearchTest {
 	}
 
 	@Test
-	public void testSimilarity() throws IOException, TasteException {
-		final IRecipe recipe1 = recipeFactory.getById("chcashblackspicecurry.txt");
-		assertThat( recipe1.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
-
+	public void testRecommendations() throws IOException, TasteException {
 		final IUser user1 = userFactory.getOrCreate( "Andrew Regan", new Supplier<IUser>() {
 
 			@Override
@@ -105,16 +102,27 @@ public class RecipeSearchTest {
 
 		assertThat( user1.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
 
-		final StringReader sr = new StringReader( user1.getId() + "," + recipe1.getId() + "");
-		recommender.ingest(sr);
+		final StringBuffer buf = new StringBuffer( user1.getId() + "," + getRecipeIdByName("inputs3.txt") + "," + Math.random() + "\n");
+		buf.append( user1.getId() + "," + getRecipeIdByName("chcashblackspicecurry.txt") + "," + Math.random() + "\n");
+		buf.append( user1.getId() + "," + getRecipeIdByName("bol1.txt") + "," + Math.random() + "\n");
+		buf.append( user1.getId() + "," + getRecipeIdByName("bol2.txt") + "," + Math.random() + "\n");
+		buf.append( user1.getId() + "," + getRecipeIdByName("chinesebeef.txt") + "," + Math.random() + "\n");
+
+		recommender.ingest( new StringReader( buf.toString() ) );
 		recommender.refresh();
 
-		System.out.println( recsApi.recommendRecipes( user1, 10) );
+		System.out.println( recsApi.recommendRecipes( user1, 100) );
 	}
 
 	@Test
 	public void findGarlicRecipes() throws InterruptedException, IOException {
 		assertThat( searchApi.countRecipesByName("garlic"), is(4));
+	}
+
+	private long getRecipeIdByName( final String inName) throws IOException {
+		final IRecipe r = recipeFactory.getById(inName);
+		assertThat( r.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
+		return r.getId();
 	}
 
 	@AfterClass
