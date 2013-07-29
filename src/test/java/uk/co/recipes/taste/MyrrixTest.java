@@ -43,8 +43,8 @@ public class MyrrixTest {
 	}
 
 	@Test
-	public void testMyrrixClient() throws IOException, TasteException {
-		long userId = 1L;
+	public void testMyrrixRecommendations() throws IOException, TasteException {
+		long userId = 1000L;
 		assertThat( api.recommendIngredients( userId++, 10), is( Arrays.asList( 5L, 7L, 6L, 8L) ));
 		assertThat( api.recommendIngredients( userId++, 10), is( Arrays.asList( 2L, 8L, 7L, 6L) ));
 		assertThat( api.recommendIngredients( userId++, 10), is( Arrays.asList( 5L, 8L, 4L, 3L, 1L) ));
@@ -54,7 +54,7 @@ public class MyrrixTest {
 
 	@Test
 	public void testMyrrixSimilarity() throws IOException, TasteException {
-		long userId = 1L;
+		long userId = 1000L;
 		assertThat( explorerApi.similarIngredients( userId++, 10), is( Arrays.asList( 3L, 4L, 5L, 2L, 8L, 6L, 7L) ));
 		assertThat( explorerApi.similarIngredients( userId++, 10), is( Arrays.asList( 7L, 4L, 3L, 1L, 6L, 5L, 8L) ));
 		assertThat( explorerApi.similarIngredients( userId++, 10), is( Arrays.asList( 1L, 4L, 5L, 2L, 8L, 6L, 7L) ));
