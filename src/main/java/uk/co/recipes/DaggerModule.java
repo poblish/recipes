@@ -21,6 +21,7 @@ import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import uk.co.recipes.corr.Correlations;
 import uk.co.recipes.parse.IngredientParser;
 import uk.co.recipes.persistence.CanonicalItemFactory;
+import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.persistence.JacksonFactory;
 import uk.co.recipes.persistence.RecipeFactory;
@@ -40,7 +41,7 @@ import dagger.Provides;
  */
 @Module(injects={CanonicalItemFactory.class, RecipeFactory.class, ItemsLoader.class, IngredientParser.class, TestDataUtils.class, Correlations.class, ObjectMapper.class, ClientRecommender.class,
 				 MyrrixTasteRecommendationService.class, MyrrixRecommendationService.class, MyrrixTasteSimilarityService.class, MyrrixExplorerService.class,
-				 Client.class, EsSearchService.class})
+				 Client.class, EsSearchService.class, EsUserFactory.class})
 public class DaggerModule {
 
 	@Provides

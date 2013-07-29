@@ -19,12 +19,20 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import uk.co.recipes.api.IRecipe;
+import uk.co.recipes.api.IUser;
 import uk.co.recipes.persistence.CanonicalItemFactory;
+import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.persistence.RecipeFactory;
+import uk.co.recipes.service.api.IExplorerAPI;
+import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.impl.EsSearchService;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
+import uk.co.recipes.service.impl.MyrrixRecommendationService;
+
+import com.google.common.base.Supplier;
+
 import dagger.ObjectGraph;
 
 /**
@@ -39,11 +47,14 @@ public class RecipeSearchTest {
 
 	private CanonicalItemFactory itemFactory = GRAPH.get( CanonicalItemFactory.class );
 	private RecipeFactory recipeFactory = GRAPH.get( RecipeFactory.class );
+	private EsUserFactory userFactory = GRAPH.get( EsUserFactory.class );
 
 	private ISearchAPI searchApi = GRAPH.get( EsSearchService.class );
 	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
 
-	private MyrrixExplorerService explorerApi = GRAPH.get( MyrrixExplorerService.class );
+	private IExplorerAPI explorerApi = GRAPH.get( MyrrixExplorerService.class );
+	private IRecommendationsAPI recsApi = GRAPH.get( MyrrixRecommendationService.class );
+
 	private ClientRecommender recommender = GRAPH.get( ClientRecommender.class );
 
 	@BeforeClass
@@ -77,6 +88,28 @@ public class RecipeSearchTest {
 		recommender.refresh();
 
 		System.out.println( explorerApi.similarRecipes( recipe1, 10) );
+	}
+
+	@Test
+	public void testSimilarity() throws IOException, TasteException {
+		final IRecipe recipe1 = recipeFactory.getById("chcashblackspicecurry.txt");
+		assertThat( recipe1.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
+
+		final IUser user1 = userFactory.getOrCreate( "Andrew Regan", new Supplier<IUser>() {
+
+			@Override
+			public IUser get() {
+				return new User();
+			}
+		} );
+
+		assertThat( user1.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
+
+		final StringReader sr = new StringReader( user1.getId() + "," + recipe1.getId() + "");
+		recommender.ingest(sr);
+		recommender.refresh();
+
+		System.out.println( recsApi.recommendRecipes( user1, 10) );
 	}
 
 	@Test
