@@ -18,7 +18,7 @@ import uk.co.recipes.Recipe;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.persistence.EsItemFactory;
-import uk.co.recipes.persistence.RecipeFactory;
+import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.tags.TagUtils;
 
 import com.google.common.base.Predicate;
@@ -42,7 +42,7 @@ public class Correlations {
 	EsItemFactory itemFactory;
 
 	@Inject
-	RecipeFactory recipeFactory;
+	EsRecipeFactory recipeFactory;
 
 	public Multiset<ICanonicalItem> findCountsWith( final ICanonicalItem... inInclusions) {
 	    final Multiset<ICanonicalItem> counts = HashMultiset.create();

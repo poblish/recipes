@@ -14,7 +14,7 @@ import org.testng.Assert;
 
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.parse.IngredientParser;
-import uk.co.recipes.persistence.RecipeFactory;
+import uk.co.recipes.persistence.EsRecipeFactory;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
@@ -32,7 +32,7 @@ public class TestDataUtils {
 	IngredientParser parser;
 
 	@Inject
-	RecipeFactory recipeFactory;
+	EsRecipeFactory recipeFactory;
 
 	public List<IIngredient> parseIngredientsFrom( final String inFilename) throws IOException {
 		final List<IIngredient> allIngredients = Lists.newArrayList();

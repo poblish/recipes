@@ -24,7 +24,7 @@ import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
-import uk.co.recipes.persistence.RecipeFactory;
+import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.service.api.IExplorerAPI;
 import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.api.ISearchAPI;
@@ -47,7 +47,7 @@ public class RecipeSearchTest {
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
 	private EsItemFactory itemFactory = GRAPH.get( EsItemFactory.class );
-	private RecipeFactory recipeFactory = GRAPH.get( RecipeFactory.class );
+	private EsRecipeFactory recipeFactory = GRAPH.get( EsRecipeFactory.class );
 	private EsUserFactory userFactory = GRAPH.get( EsUserFactory.class );
 
 	private ISearchAPI searchApi = GRAPH.get( EsSearchService.class );

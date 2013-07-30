@@ -34,7 +34,7 @@ import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.ItemsLoader;
-import uk.co.recipes.persistence.RecipeFactory;
+import uk.co.recipes.persistence.EsRecipeFactory;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
@@ -53,7 +53,7 @@ public class Neo4JTest {
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
 	private EsItemFactory itemFactory = GRAPH.get( EsItemFactory.class );
-	private RecipeFactory recipeFactory = GRAPH.get( RecipeFactory.class );
+	private EsRecipeFactory recipeFactory = GRAPH.get( EsRecipeFactory.class );
 	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
 
 	private GraphDatabaseService graphDb;

@@ -19,7 +19,7 @@ import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.myrrix.MyrrixUtils;
 import uk.co.recipes.persistence.EsItemFactory;
-import uk.co.recipes.persistence.RecipeFactory;
+import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
 
@@ -41,7 +41,7 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 	EsItemFactory itemsFactory;
 
 	@Inject
-	RecipeFactory recipesFactory;
+	EsRecipeFactory recipesFactory;
 
 	@Inject
 	MyrrixUpdater myrrixUpdater;

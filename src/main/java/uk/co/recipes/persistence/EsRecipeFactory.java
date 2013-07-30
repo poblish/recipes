@@ -41,7 +41,7 @@ import com.google.common.collect.Lists;
  * @author andrewregan
  *
  */
-public class RecipeFactory {
+public class EsRecipeFactory {
 
 	@Inject
 	HttpClient httpClient;

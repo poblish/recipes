@@ -19,7 +19,7 @@ import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.Units;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.ItemsLoader;
-import uk.co.recipes.persistence.RecipeFactory;
+import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.impl.EsSearchService;
 import uk.co.recipes.tags.CommonTags;
@@ -35,7 +35,7 @@ public class IngredientsTest {
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
 	private EsItemFactory itemFactory = GRAPH.get( EsItemFactory.class );
-	private RecipeFactory recipeFactory = GRAPH.get( RecipeFactory.class );
+	private EsRecipeFactory recipeFactory = GRAPH.get( EsRecipeFactory.class );
 	private ISearchAPI searchService = GRAPH.get( EsSearchService.class );
 
 	@BeforeClass
