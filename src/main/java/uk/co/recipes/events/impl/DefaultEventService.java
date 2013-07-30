@@ -22,10 +22,6 @@ public class DefaultEventService implements IEventService {
 
 	private Set<IEventListener> listeners = Sets.newHashSet();
 
-	public DefaultEventService() {
-	    // NOOP
-	}
-
     public void addItem( final ICanonicalItem inItem) {
         for ( IEventListener each : listeners) {
             each.onAddItem( new ItemEvent( null, inItem) );
