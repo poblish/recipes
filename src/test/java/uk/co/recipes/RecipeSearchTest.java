@@ -6,18 +6,15 @@ package uk.co.recipes;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
-
+import uk.co.recipes.events.impl.MyrrixUpdater;
 import java.io.IOException;
 import java.io.StringReader;
-
 import net.myrrix.client.ClientRecommender;
-
 import org.apache.http.client.ClientProtocolException;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.persistence.CanonicalItemFactory;
@@ -30,9 +27,7 @@ import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.impl.EsSearchService;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
-
 import com.google.common.base.Supplier;
-
 import dagger.ObjectGraph;
 
 /**
@@ -57,8 +52,13 @@ public class RecipeSearchTest {
 
 	private ClientRecommender recommender = GRAPH.get( ClientRecommender.class );
 
+	private MyrrixUpdater myrrixUpdater = GRAPH.get( MyrrixUpdater.class );
+
+
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
+	    myrrixUpdater.startListening();
+
 		itemFactory.deleteAll();
 		recipeFactory.deleteAll();
 	}
