@@ -6,6 +6,7 @@ package uk.co.recipes.events.impl;
 import java.util.Set;
 
 import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.api.IEventListener;
 import uk.co.recipes.events.api.IEventService;
@@ -31,6 +32,16 @@ public class DefaultEventService implements IEventService {
     public void rateItem( final IUser inUser, final ICanonicalItem inItem) {
 		for ( IEventListener each : listeners) {
 			each.onRateItem( new ItemEvent( inUser, inItem) );
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.co.recipes.events.api.IEventService#rateRecipe(uk.co.recipes.api.IUser, uk.co.recipes.api.IRecipe)
+	 */
+	@Override
+	public void rateRecipe( final IUser inUser, final IRecipe inRecipe) {
+		for ( IEventListener each : listeners) {
+			each.onRateRecipe( new RecipeEvent( inUser, inRecipe) );
 		}
 	}
 

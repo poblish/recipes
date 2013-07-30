@@ -4,6 +4,7 @@
 package uk.co.recipes.events.api;
 
 import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
 
 /**
@@ -18,4 +19,5 @@ public interface IEventService {
 
     void addItem( final ICanonicalItem inItem);
     void rateItem( final IUser inUser, final ICanonicalItem inItem);
+    void rateRecipe( final IUser inUser, final IRecipe inRecipe);
 }
