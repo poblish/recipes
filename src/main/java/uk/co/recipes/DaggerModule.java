@@ -3,21 +3,25 @@
  */
 package uk.co.recipes;
 
-import uk.co.recipes.events.api.IEventService;
-import uk.co.recipes.events.impl.DefaultEventService;
-import uk.co.recipes.events.impl.MyrrixUpdater;
 import java.io.IOException;
+
 import javax.inject.Named;
 import javax.inject.Singleton;
+
 import net.myrrix.client.ClientRecommender;
 import net.myrrix.client.MyrrixClientConfiguration;
+
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+
 import uk.co.recipes.corr.Correlations;
+import uk.co.recipes.events.api.IEventService;
+import uk.co.recipes.events.impl.DefaultEventService;
+import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.parse.IngredientParser;
 import uk.co.recipes.persistence.CanonicalItemFactory;
 import uk.co.recipes.persistence.EsUserFactory;

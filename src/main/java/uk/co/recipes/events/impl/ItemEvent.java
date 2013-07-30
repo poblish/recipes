@@ -3,10 +3,12 @@
  */
 package uk.co.recipes.events.impl;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.Serializable;
+
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IUser;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 
 /**

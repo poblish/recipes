@@ -4,9 +4,11 @@
 package uk.co.recipes.events.impl;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+
 import javax.inject.Inject;
-import uk.co.recipes.events.api.IEventService;
+
 import uk.co.recipes.events.api.IEventListener;
+import uk.co.recipes.events.api.IEventService;
 
 /**
  * TODO

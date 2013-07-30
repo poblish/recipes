@@ -2,12 +2,12 @@ package uk.co.recipes;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-
-import static org.testng.Assert.*;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;

@@ -3,16 +3,20 @@
  */
 package uk.co.recipes.service.impl;
 
-import uk.co.recipes.events.impl.MyrrixUpdater;
 import java.io.IOException;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import net.myrrix.client.ClientRecommender;
+
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.elasticsearch.common.base.Throwables;
+
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
+import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.myrrix.MyrrixUtils;
 import uk.co.recipes.persistence.CanonicalItemFactory;
 import uk.co.recipes.persistence.RecipeFactory;
