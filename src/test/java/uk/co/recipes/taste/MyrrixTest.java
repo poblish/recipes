@@ -14,7 +14,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import uk.co.recipes.DaggerModule;
-import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
 import uk.co.recipes.service.taste.impl.MyrrixTasteSimilarityService;
 import dagger.ObjectGraph;
@@ -31,7 +30,7 @@ public class MyrrixTest {
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
 	private MyrrixTasteRecommendationService api = GRAPH.get( MyrrixTasteRecommendationService.class );
-	private MyrrixRecommendationService fullApi = GRAPH.get( MyrrixRecommendationService.class );
+	// private MyrrixRecommendationService fullApi = GRAPH.get( MyrrixRecommendationService.class );
 
 	private MyrrixTasteSimilarityService explorerApi = GRAPH.get( MyrrixTasteSimilarityService.class );
 
