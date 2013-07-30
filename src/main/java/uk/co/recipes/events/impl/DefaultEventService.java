@@ -23,15 +23,27 @@ public class DefaultEventService implements IEventService {
 
 	private Set<IEventListener> listeners = Sets.newHashSet();
 
+    public void addListener( final IEventListener inL) {
+        listeners.add(inL);
+    }
+
     public void addItem( final ICanonicalItem inItem) {
         for ( IEventListener each : listeners) {
-            each.onAddItem( new ItemEvent( null, inItem) );
+            each.onAddItem( new ItemEvent( null, inItem, 1.0f) );
         }
     }
 
     public void rateItem( final IUser inUser, final ICanonicalItem inItem) {
+    	rateItem( inUser, inItem, 1.0f);
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.co.recipes.events.api.IEventService#rateItem(uk.co.recipes.api.IUser, uk.co.recipes.api.ICanonicalItem, float)
+	 */
+	@Override
+	public void rateItem( IUser inUser, ICanonicalItem inItem, float inRating) {
 		for ( IEventListener each : listeners) {
-			each.onRateItem( new ItemEvent( inUser, inItem) );
+			each.onRateItem( new ItemEvent( inUser, inItem, inRating) );
 		}
 	}
 
@@ -40,12 +52,16 @@ public class DefaultEventService implements IEventService {
 	 */
 	@Override
 	public void rateRecipe( final IUser inUser, final IRecipe inRecipe) {
-		for ( IEventListener each : listeners) {
-			each.onRateRecipe( new RecipeEvent( inUser, inRecipe) );
-		}
+		rateRecipe( inUser, inRecipe, 1.0f);
 	}
 
-    public void addListener( final IEventListener inL) {
-        listeners.add(inL);
-    }
+	/* (non-Javadoc)
+	 * @see uk.co.recipes.events.api.IEventService#rateRecipe(uk.co.recipes.api.IUser, uk.co.recipes.api.IRecipe, float)
+	 */
+	@Override
+	public void rateRecipe( IUser inUser, IRecipe inRecipe, float inRating) {
+		for ( IEventListener each : listeners) {
+			each.onRateRecipe( new RecipeEvent( inUser, inRecipe, inRating) );
+		}
+	}
 }

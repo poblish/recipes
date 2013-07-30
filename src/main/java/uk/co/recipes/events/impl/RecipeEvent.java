@@ -23,10 +23,12 @@ public class RecipeEvent implements Serializable {
 
     private final IUser user;
     private final IRecipe recipe;
+    private final float rating;
 
-    public RecipeEvent(IUser user, IRecipe inItem) {
+    public RecipeEvent(IUser user, IRecipe inItem, float inRating) {
         this.user = user;
         this.recipe = checkNotNull(inItem);
+        this.rating = inRating;
     }
 
 	public IUser getUser() {
@@ -37,9 +39,15 @@ public class RecipeEvent implements Serializable {
 		return recipe;
 	}
 
+	public float getRating() {
+		return rating;
+	}
+
 	public String toString() {
 		return Objects.toStringHelper(this).omitNullValues()
-						.add( "user", user).add( "recipe", recipe)
+						.add( "user", user)
+						.add( "recipe", recipe)
+						.add( "rating", rating)
 						.toString();
 	}
 }

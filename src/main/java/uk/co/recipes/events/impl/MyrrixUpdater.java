@@ -3,6 +3,7 @@
  */
 package uk.co.recipes.events.impl;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.StringReader;
@@ -14,6 +15,7 @@ import net.myrrix.client.ClientRecommender;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.elasticsearch.common.base.Throwables;
 
+import uk.co.recipes.Recipe;
 import uk.co.recipes.events.api.IEventListener;
 import uk.co.recipes.events.api.IEventService;
 
@@ -44,12 +46,16 @@ public class MyrrixUpdater implements IEventListener {
 
     @Override
     public void onRateItem( final ItemEvent evt) {
+    	checkArgument( evt.getItem().getId() >= 0 && evt.getItem().getId() < Recipe.BASE_ID, "Item has not been persisted, or Id is invalid");
+
         System.out.println("# Rate: " + evt);
         rateGenericItem( evt.getUser().getId(), evt.getItem().getId());
     }
 
     @Override
     public void onRateRecipe( final RecipeEvent evt) {
+    	checkArgument( evt.getRecipe().getId() >= Recipe.BASE_ID, "Recipe has not been persisted");
+
         System.out.println("# Rate: " + evt);
         rateGenericItem( evt.getUser().getId(), evt.getRecipe().getId());
     }

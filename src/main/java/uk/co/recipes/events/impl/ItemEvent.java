@@ -7,10 +7,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.Serializable;
 
-import com.google.common.base.Objects;
-
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IUser;
+
+import com.google.common.base.Objects;
 
 
 /**
@@ -23,10 +23,12 @@ public class ItemEvent implements Serializable {
 
     private final IUser user;
     private final ICanonicalItem item;
+    private final float rating;
 
-    public ItemEvent(IUser user, ICanonicalItem inItem) {
+    public ItemEvent(IUser user, ICanonicalItem inItem, float inRating) {
         this.user = user;
         this.item = checkNotNull(inItem);
+        this.rating = inRating;
     }
 
 	public IUser getUser() {
@@ -37,9 +39,15 @@ public class ItemEvent implements Serializable {
 		return item;
 	}
 
+	public float getRating() {
+		return rating;
+	}
+
 	public String toString() {
 		return Objects.toStringHelper(this).omitNullValues()
-						.add( "user", user).add( "item", item)
+						.add( "user", user)
+						.add( "item", item)
+						.add( "rating", rating)
 						.toString();
 	}
 }
