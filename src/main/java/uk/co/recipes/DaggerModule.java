@@ -3,21 +3,20 @@
  */
 package uk.co.recipes;
 
+import uk.co.recipes.events.api.IEventService;
+import uk.co.recipes.events.impl.DefaultEventService;
+import uk.co.recipes.events.impl.MyrrixUpdater;
 import java.io.IOException;
-
 import javax.inject.Named;
 import javax.inject.Singleton;
-
 import net.myrrix.client.ClientRecommender;
 import net.myrrix.client.MyrrixClientConfiguration;
-
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
-
 import uk.co.recipes.corr.Correlations;
 import uk.co.recipes.parse.IngredientParser;
 import uk.co.recipes.persistence.CanonicalItemFactory;
@@ -41,7 +40,7 @@ import dagger.Provides;
  */
 @Module(injects={CanonicalItemFactory.class, RecipeFactory.class, ItemsLoader.class, IngredientParser.class, TestDataUtils.class, Correlations.class, ObjectMapper.class, ClientRecommender.class,
 				 MyrrixTasteRecommendationService.class, MyrrixRecommendationService.class, MyrrixTasteSimilarityService.class, MyrrixExplorerService.class,
-				 Client.class, EsSearchService.class, EsUserFactory.class})
+				 Client.class, EsSearchService.class, EsUserFactory.class, MyrrixUpdater.class})
 public class DaggerModule {
 
 	@Provides
@@ -81,6 +80,12 @@ public class DaggerModule {
 	String provideEsUsersUrl() {
 		return "http://localhost:9200/recipe/users";
 	}
+
+    @Provides
+    @Singleton
+    IEventService provideEventService() {
+        return new DefaultEventService();
+    }
 
 	@Provides
 	@Singleton

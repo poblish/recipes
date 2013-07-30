@@ -3,16 +3,13 @@
  */
 package uk.co.recipes.service.impl;
 
+import uk.co.recipes.events.impl.MyrrixUpdater;
 import java.io.IOException;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import net.myrrix.client.ClientRecommender;
-
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.elasticsearch.common.base.Throwables;
-
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
@@ -42,6 +39,8 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 	@Inject
 	RecipeFactory recipesFactory;
 
+	@Inject
+	MyrrixUpdater myrrixUpdater;
 
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.service.api.IRecommendationsAPI#recommendIngredients(uk.co.recipes.api.IUser, int)

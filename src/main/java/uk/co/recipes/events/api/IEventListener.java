@@ -3,6 +3,9 @@
  */
 package uk.co.recipes.events.api;
 
+import uk.co.recipes.events.impl.ItemEvent;
+
+
 /**
  * TODO
  *
@@ -11,5 +14,6 @@ package uk.co.recipes.events.api;
  */
 public interface IEventListener {
 
-	void onItemEvent();
+    void onAddItem( final ItemEvent evt);
+    void onRateItem( final ItemEvent evt);
 }
