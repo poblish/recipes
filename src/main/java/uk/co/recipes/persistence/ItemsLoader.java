@@ -32,7 +32,7 @@ import com.google.common.io.Files;
 public class ItemsLoader {
 
 	@Inject
-	CanonicalItemFactory itemFactory;
+	EsItemFactory itemFactory;
 
 	private final static Optional<ICanonicalItem> MISSING = Optional.absent();
 

@@ -23,7 +23,7 @@ import org.testng.annotations.Test;
 import uk.co.recipes.DaggerModule;
 import uk.co.recipes.TestDataUtils;
 import uk.co.recipes.api.IIngredient;
-import uk.co.recipes.persistence.CanonicalItemFactory;
+import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.persistence.RecipeFactory;
 import uk.co.recipes.similarity.IncompatibleIngredientsException;
@@ -46,7 +46,7 @@ public class MahoutSimilarityTest {
 
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
-	private CanonicalItemFactory itemFactory = GRAPH.get( CanonicalItemFactory.class );
+	private EsItemFactory itemFactory = GRAPH.get( EsItemFactory.class );
 	private RecipeFactory recipeFactory = GRAPH.get( RecipeFactory.class );
 	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
 

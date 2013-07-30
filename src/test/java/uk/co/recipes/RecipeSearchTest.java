@@ -21,7 +21,7 @@ import org.testng.annotations.Test;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.impl.MyrrixUpdater;
-import uk.co.recipes.persistence.CanonicalItemFactory;
+import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.persistence.RecipeFactory;
@@ -46,7 +46,7 @@ public class RecipeSearchTest {
 
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
-	private CanonicalItemFactory itemFactory = GRAPH.get( CanonicalItemFactory.class );
+	private EsItemFactory itemFactory = GRAPH.get( EsItemFactory.class );
 	private RecipeFactory recipeFactory = GRAPH.get( RecipeFactory.class );
 	private EsUserFactory userFactory = GRAPH.get( EsUserFactory.class );
 

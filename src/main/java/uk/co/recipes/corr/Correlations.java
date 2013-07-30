@@ -17,7 +17,7 @@ import javax.inject.Inject;
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
-import uk.co.recipes.persistence.CanonicalItemFactory;
+import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.RecipeFactory;
 import uk.co.recipes.tags.TagUtils;
 
@@ -39,7 +39,7 @@ import com.google.common.collect.TreeMultiset;
 public class Correlations {
 
 	@Inject
-	CanonicalItemFactory itemFactory;
+	EsItemFactory itemFactory;
 
 	@Inject
 	RecipeFactory recipeFactory;

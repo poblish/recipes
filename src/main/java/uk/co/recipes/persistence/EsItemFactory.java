@@ -46,7 +46,7 @@ import com.google.common.base.Throwables;
  * @author andrewregan
  *
  */
-public class CanonicalItemFactory {
+public class EsItemFactory {
 
 	@Inject
 	Client esClient;

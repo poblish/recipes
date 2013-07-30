@@ -18,7 +18,7 @@ import org.elasticsearch.common.base.Throwables;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.myrrix.MyrrixUtils;
-import uk.co.recipes.persistence.CanonicalItemFactory;
+import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.RecipeFactory;
 import uk.co.recipes.service.api.IExplorerAPI;
 import uk.co.recipes.service.taste.impl.MyrrixTasteSimilarityService;
@@ -38,7 +38,7 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	ClientRecommender recommender;
 
 	@Inject
-	CanonicalItemFactory itemsFactory;
+	EsItemFactory itemsFactory;
 
 	@Inject
 	RecipeFactory recipesFactory;

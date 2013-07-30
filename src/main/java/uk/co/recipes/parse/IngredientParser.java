@@ -16,7 +16,7 @@ import uk.co.recipes.Quantity;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.NonNumericQuantities;
 import uk.co.recipes.api.Units;
-import uk.co.recipes.persistence.CanonicalItemFactory;
+import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.tags.CommonTags;
 
 import com.google.common.base.Optional;
@@ -31,7 +31,7 @@ import com.google.common.base.Supplier;
 public class IngredientParser {
 
 	@Inject
-	CanonicalItemFactory itemFactory;
+	EsItemFactory itemFactory;
 
 	private static final String	DEC_FRAC_NUMBER_PATTERN = "([0-9\\.]*(?: ?[0-9]/[0-9])?)";
 	private static final String	NOTES = "([,;\\(].*)?";
