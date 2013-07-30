@@ -20,6 +20,7 @@ import org.testng.annotations.Test;
 
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
+import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
@@ -60,6 +61,8 @@ public class RecipeSearchTest {
 
 	private MyrrixUpdater myrrixUpdater = GRAPH.get( MyrrixUpdater.class );
 
+	private IEventService events = GRAPH.get( IEventService.class );
+
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
@@ -93,7 +96,7 @@ public class RecipeSearchTest {
 		recommender.ingest(sr);
 		recommender.refresh();
 
-		System.out.println( explorerApi.similarRecipes( recipe1, 10) );
+		System.out.println("Similar: " + explorerApi.similarRecipes( recipe1, 10) );
 	}
 
 	@Test
@@ -108,27 +111,18 @@ public class RecipeSearchTest {
 
 		assertThat( user1.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
 
-		final StringBuffer buf = new StringBuffer( user1.getId() + "," + getRecipeIdByName("inputs3.txt") + "," + Math.random() + "\n");
-		buf.append( user1.getId() + "," + getRecipeIdByName("chcashblackspicecurry.txt") + "," + Math.random() + "\n");
-		buf.append( user1.getId() + "," + getRecipeIdByName("bol1.txt") + "," + Math.random() + "\n");
-		buf.append( user1.getId() + "," + getRecipeIdByName("bol2.txt") + "," + Math.random() + "\n");
-		buf.append( user1.getId() + "," + getRecipeIdByName("chinesebeef.txt") + "," + Math.random() + "\n");
+		events.rateRecipe( user1, recipeFactory.getById("inputs3.txt"), (float) Math.random());
+		events.rateRecipe( user1, recipeFactory.getById("chcashblackspicecurry.txt"), (float) Math.random());
+		events.rateRecipe( user1, recipeFactory.getById("bol1.txt"), (float) Math.random());
+		events.rateRecipe( user1, recipeFactory.getById("bol2.txt"), (float) Math.random());
+		events.rateRecipe( user1, recipeFactory.getById("chinesebeef.txt"), (float) Math.random());
 
-		recommender.ingest( new StringReader( buf.toString() ) );
-		recommender.refresh();
-
-		System.out.println( recsApi.recommendRecipes( user1, 100) );
+		System.out.println("Recommendations: " + recsApi.recommendRecipes( user1, 100) );
 	}
 
 	@Test
 	public void findGarlicRecipes() throws InterruptedException, IOException {
 		assertThat( searchApi.countRecipesByName("garlic"), is(4));
-	}
-
-	private long getRecipeIdByName( final String inName) throws IOException {
-		final IRecipe r = recipeFactory.getById(inName);
-		assertThat( r.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
-		return r.getId();
 	}
 
 	@AfterClass
