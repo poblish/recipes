@@ -24,8 +24,8 @@ import uk.co.recipes.DaggerModule;
 import uk.co.recipes.TestDataUtils;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.persistence.EsItemFactory;
-import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.persistence.EsRecipeFactory;
+import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.similarity.IncompatibleIngredientsException;
 import uk.co.recipes.similarity.Similarity;
 
