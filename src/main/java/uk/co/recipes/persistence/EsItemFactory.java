@@ -163,8 +163,4 @@ public class EsItemFactory {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	public void stopES() {
-		esClient.close();
-	}
 }

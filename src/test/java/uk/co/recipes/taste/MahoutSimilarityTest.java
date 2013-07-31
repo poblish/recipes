@@ -16,6 +16,7 @@ import org.apache.mahout.cf.taste.impl.similarity.AbstractItemSimilarity;
 import org.apache.mahout.cf.taste.model.DataModel;
 import org.apache.mahout.cf.taste.recommender.Recommender;
 import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
+import org.elasticsearch.client.Client;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -46,6 +47,7 @@ public class MahoutSimilarityTest {
 
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
+	private Client esClient = GRAPH.get( Client.class );
 	private EsItemFactory itemFactory = GRAPH.get( EsItemFactory.class );
 	private EsRecipeFactory recipeFactory = GRAPH.get( EsRecipeFactory.class );
 	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
@@ -150,6 +152,6 @@ public class MahoutSimilarityTest {
 
 	@AfterClass
 	public void shutDown() {
-		itemFactory.stopES();
+		esClient.close();
 	}
 }

@@ -9,6 +9,7 @@ import static org.hamcrest.Matchers.is;
 import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
+import org.elasticsearch.client.Client;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -34,6 +35,7 @@ public class CorrelationsTest {
 
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
+	private Client esClient = GRAPH.get( Client.class );
 	private EsItemFactory itemFactory = GRAPH.get( EsItemFactory.class );
 	private EsRecipeFactory recipeFactory = GRAPH.get( EsRecipeFactory.class );
 	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
@@ -75,6 +77,6 @@ public class CorrelationsTest {
 
 	@AfterClass
 	public void shutDown() {
-		itemFactory.stopES();
+		esClient.close();
 	}
 }

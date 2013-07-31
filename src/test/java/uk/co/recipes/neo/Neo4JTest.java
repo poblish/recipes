@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.apache.http.client.ClientProtocolException;
+import org.elasticsearch.client.Client;
 import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.Direction;
@@ -52,6 +53,7 @@ public class Neo4JTest {
 
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
+	private Client esClient = GRAPH.get( Client.class );
 	private EsItemFactory itemFactory = GRAPH.get( EsItemFactory.class );
 	private EsRecipeFactory recipeFactory = GRAPH.get( EsRecipeFactory.class );
 	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
@@ -384,7 +386,7 @@ public class Neo4JTest {
 
 	@AfterClass
 	public void shutDown() {
-		itemFactory.stopES();
+		esClient.close();
 	}
 
 	@AfterClass

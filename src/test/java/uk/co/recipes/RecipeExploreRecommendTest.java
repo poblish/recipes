@@ -13,6 +13,7 @@ import net.myrrix.client.ClientRecommender;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.mahout.cf.taste.common.TasteException;
+import org.elasticsearch.client.Client;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -43,6 +44,8 @@ import dagger.ObjectGraph;
 public class RecipeExploreRecommendTest {
 
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
+
+	private Client esClient = GRAPH.get( Client.class );
 
 	private EsItemFactory itemFactory = GRAPH.get( EsItemFactory.class );
 	private EsRecipeFactory recipeFactory = GRAPH.get( EsRecipeFactory.class );
@@ -118,6 +121,6 @@ public class RecipeExploreRecommendTest {
 
 	@AfterClass
 	public void shutDown() {
-		itemFactory.stopES();
+		esClient.close();
 	}
 }
