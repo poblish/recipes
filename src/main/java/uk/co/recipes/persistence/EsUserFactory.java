@@ -102,7 +102,7 @@ public class EsUserFactory {
 				return got.get();
 			}
 
-			System.out.println("Creating '" + inCanonicalName + "' ...");
+//			System.out.println("Creating '" + inCanonicalName + "' ...");
 
 			return put( inCreator.get(), toId(inCanonicalName));
 		}

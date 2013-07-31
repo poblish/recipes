@@ -128,7 +128,7 @@ public class EsItemFactory {
 					if ( /* Yes, want only one great match */ hits.length == 1) {
 						final ICanonicalItem mappedAlias = mapper.readValue( hits[0].getSourceAsString(), CanonicalItem.class);
 						if ( mappedAlias != null) {
-							System.out.println("Successfully mapped Alias '" + inCanonicalName + "' => " + mappedAlias);
+//							System.out.println("Successfully mapped Alias '" + inCanonicalName + "' => " + mappedAlias);
 							return mappedAlias;
 						}
 					}
@@ -136,7 +136,7 @@ public class EsItemFactory {
 				catch (IOException e) { /* e.printStackTrace(); */ }
 			}
 
-			System.out.println("Creating '" + inCanonicalName + "' ...");
+//			System.out.println("Creating '" + inCanonicalName + "' ...");
 
 			return put( inCreator.get(), toId(inCanonicalName));
 		}
