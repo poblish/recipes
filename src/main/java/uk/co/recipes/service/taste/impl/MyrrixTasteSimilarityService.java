@@ -31,7 +31,7 @@ public class MyrrixTasteSimilarityService implements ITasteSimilarityAPI {
 	@Override
 	public List<Long> similarIngredients( long inUser, int inNumRecs) {
 		try {
-			return MyrrixUtils.getItems( recommender.mostSimilarItems( inUser, inNumRecs) );
+			return MyrrixUtils.getItems( recommender.mostSimilarItems( new long[]{inUser}, inNumRecs, new String[]{"ITEM"}, /* "contextUserID" */ 0L) );
 		}
 		catch (NoSuchItemException e) {
 			return Collections.emptyList();
