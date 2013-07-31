@@ -28,10 +28,10 @@ public class MahoutTest {
 		final Recommender recommender = new SlopeOneRecommender(model);
 		long userId = 1000L;
 		assertThat( recommender.recommend(userId++, 10).toString(), is("[RecommendedItem[item:7, value:16.0]]"));
-		assertThat( recommender.recommend(userId++, 10).toString(), is("[RecommendedItem[item:2, value:4.6666665]]"));
-		assertThat( recommender.recommend(userId++, 10).toString(), is("[RecommendedItem[item:1, value:6.0], RecommendedItem[item:3, value:4.5], RecommendedItem[item:4, value:1.0]]"));
-		assertThat( recommender.recommend(userId++, 10).toString(), is("[RecommendedItem[item:1, value:6.0], RecommendedItem[item:3, value:4.5], RecommendedItem[item:4, value:1.0]]"));
-		assertThat( recommender.recommend(userId++, 10).toString(), is("[RecommendedItem[item:1, value:6.0], RecommendedItem[item:2, value:4.6666665], RecommendedItem[item:3, value:4.5], RecommendedItem[item:4, value:1.0]]"));
+		assertThat( recommender.recommend(userId++, 10).toString(), is("[RecommendedItem[item:7, value:9.5], RecommendedItem[item:2, value:4.6666665]]"));
+		assertThat( recommender.recommend(userId++, 10).toString(), is("[RecommendedItem[item:1, value:6.0], RecommendedItem[item:3, value:4.5], RecommendedItem[item:4, value:1.5]]"));
+		assertThat( recommender.recommend(userId++, 10).toString(), is("[RecommendedItem[item:1, value:6.0], RecommendedItem[item:3, value:4.5], RecommendedItem[item:4, value:1.5]]"));
+		assertThat( recommender.recommend(userId++, 10).toString(), is("[RecommendedItem[item:7, value:9.5], RecommendedItem[item:1, value:6.0], RecommendedItem[item:2, value:4.6666665], RecommendedItem[item:3, value:4.5], RecommendedItem[item:4, value:1.5]]"));
 	}
 
 	@Test
