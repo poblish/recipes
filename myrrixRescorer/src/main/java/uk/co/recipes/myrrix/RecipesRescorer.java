@@ -40,11 +40,11 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 			@Override
 			public boolean isFiltered( final long inId) {
 				if ( isRecipe && inId < RECIPE_BASE_ID) {
-					LOG.info("RecipesRescorer: Stripping out invalid {RECIPE}... " + inId);
+					LOG.trace("RecipesRescorer: Stripping out invalid {RECIPE}... " + inId);
 					return true;
 				}
 				else if ( isItem && inId >= RECIPE_BASE_ID) {
-					LOG.info("RecipesRescorer: Stripping out invalid {ITEM}... " + inId);
+					LOG.trace("RecipesRescorer: Stripping out invalid {ITEM}... " + inId);
 					return true;
 				}
 
@@ -76,18 +76,18 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 			public boolean isFiltered( final LongPair inPair) {
 				if (isRecipe) {
 					if ( inPair.getFirst() < RECIPE_BASE_ID || inPair.getSecond() < RECIPE_BASE_ID) {
-						LOG.info("RecipesRescorer: Stripping out invalid {RECIPE,RECIPE}... " + inPair);
+						LOG.trace("RecipesRescorer: Stripping out invalid {RECIPE,RECIPE}... " + inPair);
 						return true;
 					}
 				}
 				else if (isItem) {
 					if ( inPair.getFirst() >= RECIPE_BASE_ID || inPair.getSecond() >= RECIPE_BASE_ID) {
-						LOG.info("RecipesRescorer: Stripping out invalid {ITEM,ITEM}... " + inPair);
+						LOG.trace("RecipesRescorer: Stripping out invalid {ITEM,ITEM}... " + inPair);
 						return true;
 					}
 				}
 				else if (( inPair.getFirst() >= RECIPE_BASE_ID && inPair.getSecond() < RECIPE_BASE_ID) || ( inPair.getFirst() < RECIPE_BASE_ID && inPair.getSecond() >= RECIPE_BASE_ID)) {
-					LOG.info("RecipesRescorer: Stripping out invalid {ITEM,RECIPE}... " + inPair);
+					LOG.trace("RecipesRescorer: Stripping out invalid {ITEM,RECIPE}... " + inPair);
 					return true;
 				}
 
