@@ -82,7 +82,7 @@ public class RecipeSearchTest {
 		dataUtils.parseIngredientsFrom("bol2.txt");
 		dataUtils.parseIngredientsFrom("chineseBeef.txt");
 
-        while ( recipeFactory.listAll().size() < 5) {
+        while ( recipeFactory.countAll() < 5) {
         	Thread.sleep(200); // Wait for saves to appear...
         }
 	}

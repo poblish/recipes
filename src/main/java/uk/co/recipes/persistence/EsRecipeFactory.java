@@ -110,10 +110,15 @@ public class EsRecipeFactory {
 		return inCanonicalName.toLowerCase().replace( ' ', '_');
 	}
 
-	// FIXME - pretty lame!
-	public Collection<Recipe> listAll() throws JsonParseException, JsonMappingException, IOException {
-		return esUtils.listAll( itemIndexUrl, Recipe.class);
-	}
+    // FIXME - pretty lame!
+    public Collection<Recipe> listAll() throws JsonParseException, JsonMappingException, IOException {
+        return esUtils.listAll( itemIndexUrl, Recipe.class);
+    }
+
+    // FIXME - pretty lame!
+    public int countAll() throws JsonParseException, JsonMappingException, IOException {
+        return esUtils.countAll( itemIndexUrl, Recipe.class);
+    }
 
 	public void deleteAll() throws IOException {
 		final HttpResponse resp = httpClient.execute( new HttpDelete(itemIndexUrl) );

@@ -46,6 +46,11 @@ public class EsUtils {
 		return allItems;
 	}
 
+    // FIXME - pretty lame!
+    public <T> int countAll( final String inBaseUrl, Class<T> inClass) throws JsonParseException, JsonMappingException, IOException {
+        return mapper.readTree( new URL( inBaseUrl + "/_search?q=*&size=9999") ).path("hits").path("hits").size();
+    }
+
 	/**
 	 * Inspired by http://blogs.perl.org/users/clinton_gormley/2011/10/elasticsearchsequence---a-blazing-fast-ticket-server.html
 	 * @param inIdForEntityType the 'type' of sequence
