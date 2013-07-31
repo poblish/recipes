@@ -24,7 +24,6 @@ import org.apache.http.util.EntityUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.elasticsearch.client.Client;
 
 import uk.co.recipes.User;
 import uk.co.recipes.api.IUser;
@@ -40,9 +39,6 @@ import com.google.common.base.Throwables;
  *
  */
 public class EsUserFactory {
-
-	@Inject
-	Client esClient;
 
 	@Inject
 	HttpClient httpClient;
@@ -123,9 +119,5 @@ public class EsUserFactory {
 	public void deleteAll() throws IOException {
 		final HttpResponse resp = httpClient.execute( new HttpDelete(usersIndexUrl) );
 		EntityUtils.consume( resp.getEntity() );
-	}
-
-	public void stopES() {
-		esClient.close();
 	}
 }
