@@ -29,7 +29,7 @@ public class MyrrixTasteRecommendationService implements ITasteRecommendationsAP
 	@Override
 	public List<Long> recommendIngredients( long inUser, int inNumRecs) {
 		try {
-			return MyrrixUtils.getItems( recommender.recommend( inUser, inNumRecs) );
+			return MyrrixUtils.getItems( recommender.recommend( inUser, inNumRecs, false, new String[]{"ITEM"}) );
 		}
 		catch (TasteException e) {
 			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
