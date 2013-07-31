@@ -16,16 +16,12 @@ import org.apache.mahout.cf.taste.impl.similarity.AbstractItemSimilarity;
 import org.apache.mahout.cf.taste.model.DataModel;
 import org.apache.mahout.cf.taste.recommender.Recommender;
 import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
-import org.elasticsearch.client.Client;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import uk.co.recipes.DaggerModule;
+import uk.co.recipes.AbstractEsDataTest;
 import uk.co.recipes.TestDataUtils;
 import uk.co.recipes.api.IIngredient;
-import uk.co.recipes.persistence.EsItemFactory;
-import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.similarity.IncompatibleIngredientsException;
 import uk.co.recipes.similarity.Similarity;
@@ -34,8 +30,6 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Doubles;
 
-import dagger.ObjectGraph;
-
 /**
  * 
  * TODO
@@ -43,19 +37,13 @@ import dagger.ObjectGraph;
  * @author andrewregan
  *
  */
-public class MahoutSimilarityTest {
+public class MahoutSimilarityTest extends AbstractEsDataTest {
 
-	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
-
-	private Client esClient = GRAPH.get( Client.class );
-	private EsItemFactory itemFactory = GRAPH.get( EsItemFactory.class );
-	private EsRecipeFactory recipeFactory = GRAPH.get( EsRecipeFactory.class );
 	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
-		itemFactory.deleteAll();
-		recipeFactory.deleteAll();
+		super.cleanIndices();
 	}
 
 	@BeforeClass
@@ -148,10 +136,5 @@ public class MahoutSimilarityTest {
 		}
 		
 		return null;
-	}
-
-	@AfterClass
-	public void shutDown() {
-		esClient.close();
 	}
 }
