@@ -26,6 +26,7 @@ import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
+import uk.co.recipes.persistence.EsSequenceFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.service.api.IExplorerAPI;
@@ -52,6 +53,8 @@ public class RecipeExploreRecommendTest {
 	private EsItemFactory itemFactory = GRAPH.get( EsItemFactory.class );
 	private EsRecipeFactory recipeFactory = GRAPH.get( EsRecipeFactory.class );
 	private EsUserFactory userFactory = GRAPH.get( EsUserFactory.class );
+	private EsSequenceFactory sequenceFactory = GRAPH.get( EsSequenceFactory.class );
+	
 
 	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
 
@@ -69,8 +72,10 @@ public class RecipeExploreRecommendTest {
 	public void cleanIndices() throws ClientProtocolException, IOException {
 	    myrrixUpdater.startListening();
 
+	    userFactory.deleteAll();
 		itemFactory.deleteAll();
 		recipeFactory.deleteAll();
+	    sequenceFactory.deleteAll();
 	}
 
 	@BeforeClass
