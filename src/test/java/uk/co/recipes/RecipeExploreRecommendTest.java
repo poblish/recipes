@@ -6,6 +6,8 @@ package uk.co.recipes;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.StringReader;
 
@@ -75,13 +77,20 @@ public class RecipeExploreRecommendTest {
 	public void loadIngredientsFromYaml() throws InterruptedException, IOException {
 		GRAPH.get( ItemsLoader.class ).load();
 
-		dataUtils.parseIngredientsFrom("inputs3.txt");
-		dataUtils.parseIngredientsFrom("chCashBlackSpiceCurry.txt");
-		dataUtils.parseIngredientsFrom("bol1.txt");
-		dataUtils.parseIngredientsFrom("bol2.txt");
-		dataUtils.parseIngredientsFrom("chineseBeef.txt");
+		int count = 0;
 
-        while ( recipeFactory.listAll().size() < 5) {
+		for ( File each : new File("src/test/resources/ingredients").listFiles( new FilenameFilter() {
+
+			@Override
+			public boolean accept( File dir, String name) {
+				return name.endsWith(".txt");
+			}
+		} )) {
+			dataUtils.parseIngredientsFrom( each.getName() );
+			count++;
+		}
+
+        while ( recipeFactory.listAll().size() < count) {
         	Thread.sleep(200); // Wait for saves to appear...
         }
 	}
