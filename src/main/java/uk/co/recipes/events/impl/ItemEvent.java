@@ -46,7 +46,7 @@ public class ItemEvent implements Serializable {
 	public String toString() {
 		return Objects.toStringHelper(this).omitNullValues()
 						.add( "user", user)
-						.add( "item", item)
+						.add( "item", item.getId())
 						.add( "rating", rating)
 						.toString();
 	}

@@ -46,7 +46,7 @@ public class RecipeEvent implements Serializable {
 	public String toString() {
 		return Objects.toStringHelper(this).omitNullValues()
 						.add( "user", user)
-						.add( "recipe", recipe)
+						.add( "recipe", recipe.getId())
 						.add( "rating", rating)
 						.toString();
 	}
