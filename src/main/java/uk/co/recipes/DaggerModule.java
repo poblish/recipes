@@ -25,6 +25,7 @@ import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.parse.IngredientParser;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
+import uk.co.recipes.persistence.EsSequenceFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.persistence.JacksonFactory;
@@ -44,7 +45,7 @@ import dagger.Provides;
  */
 @Module(injects={EsItemFactory.class, EsRecipeFactory.class, ItemsLoader.class, IngredientParser.class, TestDataUtils.class, Correlations.class, ObjectMapper.class, ClientRecommender.class,
 				 MyrrixTasteRecommendationService.class, MyrrixRecommendationService.class, MyrrixTasteSimilarityService.class, MyrrixExplorerService.class,
-				 Client.class, EsSearchService.class, EsUserFactory.class, MyrrixUpdater.class, IEventService.class})
+				 Client.class, EsSearchService.class, EsUserFactory.class, EsSequenceFactory.class, MyrrixUpdater.class, IEventService.class})
 public class DaggerModule {
 
 	@Provides
@@ -83,6 +84,12 @@ public class DaggerModule {
 	@Named("elasticSearchUsersUrl")
 	String provideEsUsersUrl() {
 		return "http://localhost:9200/recipe/users";
+	}
+
+	@Provides
+	@Named("elasticSearchSequenceUrl")
+	String provideEsSequenceUrl() {
+		return "http://localhost:9200/sequence/sequence";
 	}
 
     @Provides
