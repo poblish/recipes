@@ -82,7 +82,10 @@ public class MyrrixUpdater implements IEventListener {
 
         if (changesMade) {
         	recommender.refresh();
-//            System.out.println("# Changes saved!");
+
+        	if (LOG.isTraceEnabled()) {
+        		LOG.trace("onAddItem: refresh done");
+        	}
         }
     }
 
@@ -90,7 +93,10 @@ public class MyrrixUpdater implements IEventListener {
     public void onRateItem( final ItemEvent evt) {
     	checkArgument( evt.getItem().getId() >= 0 && evt.getItem().getId() < Recipe.BASE_ID, "Item has not been persisted, or Id is invalid");
 
-        System.out.println("# Rate: " + evt);
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Rate: " + evt);
+		}
+
         rateGenericItem( evt.getUser().getId(), evt.getItem().getId());
     }
 
@@ -98,7 +104,10 @@ public class MyrrixUpdater implements IEventListener {
     public void onRateRecipe( final RecipeEvent evt) {
     	checkArgument( evt.getRecipe().getId() >= Recipe.BASE_ID, "Recipe has not been persisted");
 
-        System.out.println("# Rate: " + evt);
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Rate: " + evt);
+		}
+
         rateGenericItem( evt.getUser().getId(), evt.getRecipe().getId());
     }
 
