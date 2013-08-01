@@ -66,6 +66,27 @@ public class RecipeStage implements IRecipeStage {
 		ingredients.addAll(inIngredients);
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(ingredients);
+	}
+
+	@Override
+	public boolean equals( Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof RecipeStage)) {
+			return false;
+		}
+
+		final RecipeStage other = (RecipeStage) obj;
+		return Objects.equal( ingredients, other.ingredients);
+	}
+
 	public String toString() {
 		return Objects.toStringHelper(this).omitNullValues()
 						.add( "ingredients", ingredients)
