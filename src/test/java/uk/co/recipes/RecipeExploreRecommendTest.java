@@ -4,6 +4,7 @@
 package uk.co.recipes;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 
@@ -184,15 +185,19 @@ public class RecipeExploreRecommendTest {
 		final List<IRecipe> recsFor1 = recsApi.recommendRecipes( user1, 20);
 		final List<IRecipe> recsFor2 = recsApi.recommendRecipes( user2, 20);
 
-		assertThat( recsFor1.size(), is(2));
-		assertThat( recsFor2.size(), is(2));
+		assertThat( recsFor1.size(), greaterThanOrEqualTo(2));
+		assertThat( recsFor2.size(), greaterThanOrEqualTo(2));
 
 		System.out.println("Recommendations.1: " + recsFor1);
 		System.out.println("Recommendations.2: " + recsFor2);
 
-		assertThat( recsFor1.contains( recipeFactory.getById("bulk.txt") ), is(true));
-		assertThat( recsFor2.contains( recipeFactory.getById("bol2.txt") ), is(true));
-		assertThat( recsFor2.contains( recipeFactory.getById("chinesebeef.txt") ), is(true));
+		assertThat( recsFor1, hasItem( recipeFactory.getById("bulk.txt")  ));
+		assertThat( recsFor1, not(hasItem( recipeFactory.getById("inputs3.txt")  )));
+
+		assertThat( recsFor2, hasItem( recipeFactory.getById("bol2.txt")  ));
+		assertThat( recsFor2, hasItem( recipeFactory.getById("chinesebeef.txt")  ));
+		assertThat( recsFor2, not(hasItem( recipeFactory.getById("chcashblackspicecurry.txt")  )));
+		assertThat( recsFor2, not(hasItem( recipeFactory.getById("inputs3.txt")  )));
 	}
 
 	@AfterClass
