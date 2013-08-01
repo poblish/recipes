@@ -54,9 +54,12 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 		try {
 			return itemsFactory.getAll( MyrrixUtils.getItems( recommender.recommend( inUser.getId(), inNumRecs, false, new String[]{"ITEM"}) ) );
 		}
-		catch (TasteException e) {
-			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
-		}
+        catch (TasteException e) {
+            throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+        }
+        catch (IOException e) {
+            throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+        }
 	}
 
 	/* (non-Javadoc)
