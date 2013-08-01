@@ -1,0 +1,34 @@
+{
+    "configuration": {
+        "status": "error",
+        "name": "RoutingTest",
+        "packages": "org.apache.logging.log4j.test",
+        "ThresholdFilter": {
+            "level": "debug"
+        },
+        "appenders": {
+            "Console": {
+                "name": "STDOUT",
+                "PatternLayout": {
+                    "pattern": "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+                }
+            }
+        },
+        "loggers": {
+            "logger": {
+                "name": "EventLogger",
+                "level": "info",
+                "additivity": "false",
+                "appender-ref": {
+                    "ref": "Routing"
+                }
+            },
+            "root": {
+                "level": "debug",
+                "appender-ref": {
+                    "ref": "STDOUT"
+                }
+            }
+        }
+    }
+}

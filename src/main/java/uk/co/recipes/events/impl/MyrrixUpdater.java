@@ -16,6 +16,8 @@ import net.myrrix.client.ClientRecommender;
 
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.elasticsearch.common.base.Throwables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.ITag;
@@ -30,6 +32,8 @@ import uk.co.recipes.events.api.IEventService;
  */
 public class MyrrixUpdater implements IEventListener {
 
+	private final static Logger LOG = LoggerFactory.getLogger( MyrrixUpdater.class );
+
     @Inject
     IEventService eventService;
 
@@ -43,8 +47,7 @@ public class MyrrixUpdater implements IEventListener {
 
     @Override
     public void onAddItem( final ItemEvent evt) {
-        System.out.println("# Add: " + evt);
-        // throw new RuntimeException("unimpl");
+//        System.out.println("# Add: " + evt);
 
         final long itemId = evt.getItem().getId();
         boolean changesMade = false;
@@ -54,12 +57,14 @@ public class MyrrixUpdater implements IEventListener {
         		if ( eachTag.getValue() instanceof Boolean) {
         			if ((Boolean) eachTag.getValue()) {
         				// Don't bother setting if == FALSE
+        				LOG.debug("# Set Tag '" + eachTag.getKey() + "' val=1.0 for " + itemId);
         	        	recommender.setItemTag( eachTag.getKey().toString(), itemId, 1.0f);
         	        	changesMade = true;
         			}
         		}
         		else {
         			final float val = Float.valueOf((String) eachTag.getValue());
+        			LOG.debug("# Set Tag '" + eachTag.getKey() + "' val=" + val + " for " + itemId);
     	        	recommender.setItemTag( eachTag.getKey().toString(), itemId, val);
     	        	changesMade = true;
         		}
