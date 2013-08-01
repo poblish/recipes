@@ -77,7 +77,7 @@ public class EsRecipeFactory {
 
 		final Iterator<JsonNode> nodeItr = mapper.readTree( new URL( itemIndexUrl + "/_search?q=id:" + inId) ).path("hits").path("hits").iterator();
 		if (nodeItr.hasNext()) {
-			return Optional.fromNullable((IRecipe) mapper.readValue( nodeItr.next(), Recipe.class) );
+			return Optional.fromNullable((IRecipe) mapper.readValue( nodeItr.next().path("_source"), Recipe.class) );
 		}
 
 		return Optional.absent();
