@@ -113,7 +113,6 @@ public class IngredientsTest {
 		final RecipeStage stage1 = new RecipeStage();
 		stage1.addIngredient(lambIngredient);
 		stage1.addIngredient(baconIngredient);
-//		stage1.addIngredient(oilIngredient);
 
 		final Recipe r = new Recipe("Herby Lamb Cobbler");
 		r.addStage(stage1);
@@ -122,13 +121,6 @@ public class IngredientsTest {
 		recipeFactory.put( r, recipeFactory.toId(r));
 
 		///////////////////////////////////////////////////
-
-//		final String recipeJson = om.writeValueAsString(r);
-//		System.out.println(recipeJson);
-//		assertThat( recipeJson, is("{\"stages\":[{\"ingredients\":[{\"item\":{\"name\":\"Lamb Neck\",\"canonicalItem\":{\"canonicalName\":\"Lamb Neck\",\"parent\":{\"canonicalName\":\"Lamb\",\"varieties\":[],\"tags\":{\"MEAT\":true}},\"varieties\":[],\"tags\":{\"MEAT\":true}}},\"quantity\":{\"units\":\"GRAMMES\",\"number\":900},\"notes\":{\"en\":\"Neck fillets, cut into large chunks\"}},{\"item\":{\"name\":\"Lamb Neck\",\"canonicalItem\":{\"canonicalName\":\"Lamb Neck\",\"parent\":{\"canonicalName\":\"Lamb\",\"varieties\":[],\"tags\":{\"MEAT\":\"true\"}},\"varieties\":[],\"tags\":{\"MEAT\":\"true\"}}},\"quantity\":{\"units\":\"GRAMMES\",\"number\":200},\"notes\":{\"en\":\"Preferably in one piece, skinned and cut into pieces\"}},{\"item\":{\"name\":\"Sunflower Oil\",\"canonicalItem\":{\"canonicalName\":\"Sunflower Oil\",\"varieties\":[],\"tags\":{}}},\"quantity\":{\"units\":\"TBSP\",\"number\":1},\"notes\":{}}]}],\"tagsMap\":{\"SERVES_COUNT\":\"4\"}}"));
-
-//		final Recipe retrievedRecipe = GSON.fromJson( recipeJson, Recipe.class);
-//		assertThat( r, is(retrievedRecipe));
 
 		Thread.sleep(1000);  // Time for indexing to happen!
 
@@ -150,48 +142,6 @@ public class IngredientsTest {
 
     @Test
     public void testExplorer() throws IOException, TasteException {
-//        final IUser user1 = userFactory.getOrCreate( "Andrew Regan", new Supplier<IUser>() {
-//
-//            @Override
-//            public IUser get() {
-//                return new User();
-//            }
-//        } );
-//
-//        assertThat( user1.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
-//
-//        final IUser user2 = userFactory.getOrCreate( "Foo Bar", new Supplier<IUser>() {
-//
-//            @Override
-//            public IUser get() {
-//                return new User();
-//            }
-//        } );
-//
-//        assertThat( user2.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
-//
-//        final IUser user3 = userFactory.getOrCreate( "Doh Ray", new Supplier<IUser>() {
-//
-//            @Override
-//            public IUser get() {
-//                return new User();
-//            }
-//        } );
-
-//        events.rateItem( user1, itemFactory.getById("ginger"), (float) Math.random());
-//        events.rateItem( user1, itemFactory.getById("milk"), (float) Math.random());
-//        events.rateItem( user1, itemFactory.getById("coriander"), (float) Math.random());
-//        events.rateItem( user1, itemFactory.getById("lamb"), (float) Math.random());
-//
-//        events.rateItem( user2, itemFactory.getById("ginger"), (float) Math.random());
-//        events.rateItem( user2, itemFactory.getById("cinnamon"), (float) Math.random());
-//        events.rateItem( user2, itemFactory.getById("fennel_seeds"), (float) Math.random());
-//        events.rateItem( user2, itemFactory.getById("red_wine"), (float) Math.random());
-//
-//        events.rateItem( user3, itemFactory.getById("fennel_seeds"), (float) Math.random());
-//        events.rateItem( user3, itemFactory.getById("coriander"), (float) Math.random());
-//        events.rateItem( user3, itemFactory.getById("ginger"), (float) Math.random());
-
         System.out.println("Similar to Ginger: " + explorerApi.similarIngredients( itemFactory.getById("ginger"), 10) );
         System.out.println("Similar to Milk:   " + explorerApi.similarIngredients( itemFactory.getById("milk"), 10) );
         System.out.println("Similar to Lamb:   " + explorerApi.similarIngredients( itemFactory.getById("lamb"), 10) );
