@@ -58,6 +58,9 @@ public class MyrrixExplorerService implements IExplorerAPI {
 		catch (TasteException e) {
 			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
 		}
+        catch (IOException e) {
+            throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+        }
 	}
 
 	/* (non-Javadoc)

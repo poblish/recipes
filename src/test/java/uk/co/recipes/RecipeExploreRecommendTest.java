@@ -63,8 +63,6 @@ public class RecipeExploreRecommendTest {
 	private IExplorerAPI explorerApi = GRAPH.get( MyrrixExplorerService.class );
 	private IRecommendationsAPI recsApi = GRAPH.get( MyrrixRecommendationService.class );
 
-	private ClientRecommender recommender = GRAPH.get( ClientRecommender.class );
-
 	private MyrrixUpdater myrrixUpdater = GRAPH.get( MyrrixUpdater.class );
 
 	private IEventService events = GRAPH.get( IEventService.class );
@@ -104,14 +102,54 @@ public class RecipeExploreRecommendTest {
 
 	@Test
 	public void testExplorer() throws IOException, TasteException {
-		final IRecipe recipe1 = recipeFactory.getById("chcashblackspicecurry.txt");
-		assertThat( recipe1.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
+        final IUser user1 = userFactory.getOrCreate( "Andrew Regan", new Supplier<IUser>() {
 
-		final StringReader sr = new StringReader("1," + recipe1.getId() + "");
-		recommender.ingest(sr);
-		recommender.refresh();
+            @Override
+            public IUser get() {
+                return new User();
+            }
+        } );
 
-		System.out.println("Similar: " + explorerApi.similarRecipes( recipe1, 10) );
+        assertThat( user1.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
+
+        final IUser user2 = userFactory.getOrCreate( "Foo Bar", new Supplier<IUser>() {
+
+            @Override
+            public IUser get() {
+                return new User();
+            }
+        } );
+
+        assertThat( user2.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
+
+        final IUser user3 = userFactory.getOrCreate( "Doh Ray", new Supplier<IUser>() {
+
+            @Override
+            public IUser get() {
+                return new User();
+            }
+        } );
+
+        events.rateRecipe( user1, recipeFactory.getById("inputs3.txt"), (float) Math.random());
+        events.rateRecipe( user1, recipeFactory.getById("bol2.txt"), (float) Math.random());
+        events.rateRecipe( user1, recipeFactory.getById("chinesebeef.txt"), (float) Math.random());
+        events.rateRecipe( user1, recipeFactory.getById("inputs3.txt"), (float) Math.random());
+
+        events.rateRecipe( user2, recipeFactory.getById("inputs3.txt"), (float) Math.random());
+        events.rateRecipe( user2, recipeFactory.getById("chcashblackspicecurry.txt"), (float) Math.random());
+        events.rateRecipe( user2, recipeFactory.getById("bol1.txt"), (float) Math.random());
+        events.rateRecipe( user2, recipeFactory.getById("bulk.txt"), (float) Math.random());
+
+        events.rateRecipe( user3, recipeFactory.getById("bol1.txt"), (float) Math.random());
+        events.rateRecipe( user3, recipeFactory.getById("chinesebeef.txt"), (float) Math.random());
+        events.rateRecipe( user3, recipeFactory.getById("inputs3.txt"), (float) Math.random());
+
+        System.out.println("Similar: " + explorerApi.similarRecipes( recipeFactory.getById("inputs3.txt"), 10) );
+        System.out.println("Similar: " + explorerApi.similarRecipes( recipeFactory.getById("bol1.txt"), 10) );
+        System.out.println("Similar: " + explorerApi.similarRecipes( recipeFactory.getById("bol2.txt"), 10) );
+        System.out.println("Similar: " + explorerApi.similarRecipes( recipeFactory.getById("chinesebeef.txt"), 10) );
+        System.out.println("Similar: " + explorerApi.similarRecipes( recipeFactory.getById("chcashblackspicecurry.txt"), 10) );
+        System.out.println("Similar: " + explorerApi.similarRecipes( recipeFactory.getById("bulk.txt"), 10) );
 	}
 
 	@Test
@@ -148,7 +186,7 @@ public class RecipeExploreRecommendTest {
 		final List<IRecipe> recsFor1 = recsApi.recommendRecipes( user1, 20);
 		final List<IRecipe> recsFor2 = recsApi.recommendRecipes( user2, 20);
 
-		assertThat( recsFor1.size(), is(1));
+		assertThat( recsFor1.size(), is(2));
 		assertThat( recsFor2.size(), is(2));
 
 		System.out.println("Recommendations.1: " + recsFor1);

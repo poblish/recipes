@@ -4,16 +4,24 @@ import static java.util.Locale.ENGLISH;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-
+import uk.co.recipes.persistence.EsSequenceFactory;
+import uk.co.recipes.events.impl.MyrrixUpdater;
+import uk.co.recipes.events.api.IEventService;
+import uk.co.recipes.persistence.EsUserFactory;
+import uk.co.recipes.service.api.IExplorerAPI;
+import uk.co.recipes.service.api.IRecommendationsAPI;
+import uk.co.recipes.service.impl.MyrrixExplorerService;
+import uk.co.recipes.service.impl.MyrrixRecommendationService;
+import org.apache.mahout.cf.taste.common.TasteException;
+import uk.co.recipes.api.IUser;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.http.client.ClientProtocolException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.Units;
@@ -23,11 +31,9 @@ import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.impl.EsSearchService;
 import uk.co.recipes.tags.CommonTags;
-
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Maps;
-
 import dagger.ObjectGraph;
 
 public class IngredientsTest {
@@ -36,11 +42,23 @@ public class IngredientsTest {
 
 	private EsItemFactory itemFactory = GRAPH.get( EsItemFactory.class );
 	private EsRecipeFactory recipeFactory = GRAPH.get( EsRecipeFactory.class );
+    private EsUserFactory userFactory = GRAPH.get( EsUserFactory.class );
+    private EsSequenceFactory sequenceFactory = GRAPH.get( EsSequenceFactory.class );
+
+    private MyrrixUpdater myrrixUpdater = GRAPH.get( MyrrixUpdater.class );
+
 	private ISearchAPI searchService = GRAPH.get( EsSearchService.class );
+    private IExplorerAPI explorerApi = GRAPH.get( MyrrixExplorerService.class );
+    private IRecommendationsAPI recsApi = GRAPH.get( MyrrixRecommendationService.class );
+
+    private IEventService events = GRAPH.get( IEventService.class );
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
+        myrrixUpdater.startListening();
+
 		itemFactory.deleteAll();
+        sequenceFactory.deleteAll();
 	}
 
 	@BeforeClass
@@ -130,4 +148,51 @@ public class IngredientsTest {
 		assertThat( lambNeck.parent(), is( Optional.of(lamb) ));
 		assertThat( lamb.parent().orNull(), nullValue());
 	}
+
+    @Test
+    public void testExplorer() throws IOException, TasteException {
+        final IUser user1 = userFactory.getOrCreate( "Andrew Regan", new Supplier<IUser>() {
+
+            @Override
+            public IUser get() {
+                return new User();
+            }
+        } );
+
+        assertThat( user1.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
+
+        final IUser user2 = userFactory.getOrCreate( "Foo Bar", new Supplier<IUser>() {
+
+            @Override
+            public IUser get() {
+                return new User();
+            }
+        } );
+
+        assertThat( user2.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
+
+        final IUser user3 = userFactory.getOrCreate( "Doh Ray", new Supplier<IUser>() {
+
+            @Override
+            public IUser get() {
+                return new User();
+            }
+        } );
+
+        events.rateItem( user1, itemFactory.getById("ginger"), (float) Math.random());
+        events.rateItem( user1, itemFactory.getById("milk"), (float) Math.random());
+        events.rateItem( user1, itemFactory.getById("coriander"), (float) Math.random());
+        events.rateItem( user1, itemFactory.getById("lamb"), (float) Math.random());
+
+        events.rateItem( user2, itemFactory.getById("ginger"), (float) Math.random());
+        events.rateItem( user2, itemFactory.getById("cinnamon"), (float) Math.random());
+        events.rateItem( user2, itemFactory.getById("fennel_seeds"), (float) Math.random());
+        events.rateItem( user2, itemFactory.getById("red_wine"), (float) Math.random());
+
+        events.rateItem( user3, itemFactory.getById("fennel_seeds"), (float) Math.random());
+        events.rateItem( user3, itemFactory.getById("coriander"), (float) Math.random());
+        events.rateItem( user3, itemFactory.getById("ginger"), (float) Math.random());
+
+        System.out.println("Similar: " + explorerApi.similarIngredients( itemFactory.getById("ginger"), 10) );
+    }
 }

@@ -8,17 +8,18 @@ import static org.elasticsearch.index.query.QueryBuilders.matchPhraseQuery;
 import static org.elasticsearch.search.sort.SortOrder.DESC;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-
+import java.util.Iterator;
+import org.codehaus.jackson.JsonNode;
+import uk.co.recipes.Recipe;
+import com.google.common.collect.Lists;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
@@ -93,6 +94,19 @@ public class EsItemFactory {
 		return mapper.readValue( mapper.readTree( new URL( itemIndexUrl + "/" + inId) ).path("_source"), CanonicalItem.class);
 	}
 
+    public Optional<ICanonicalItem> getById( long inId) throws IOException {
+        if ( inId >= Recipe.BASE_ID) {  // Just in case...
+            return Optional.absent();
+        }
+
+        final Iterator<JsonNode> nodeItr = mapper.readTree( new URL( itemIndexUrl + "/_search?q=id:" + inId) ).path("hits").path("hits").iterator();
+        if (nodeItr.hasNext()) {
+            return Optional.fromNullable((ICanonicalItem) mapper.readValue( nodeItr.next().path("_source"), CanonicalItem.class) );
+        }
+
+        return Optional.absent();
+    }
+
 	public static String toId( final String inCanonicalName) throws IOException {
 		checkArgument( !inCanonicalName.contains(","), "Name should not contain comma: '" + inCanonicalName + "'");
 		return inCanonicalName.toLowerCase().replace( ' ', '_');
@@ -159,8 +173,17 @@ public class EsItemFactory {
 	 * @param items
 	 * @return
 	 */
-	public List<ICanonicalItem> getAll( final List<Long> inIds) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ICanonicalItem> getAll( final List<Long> inIds) throws IOException {
+        final List<ICanonicalItem> results = Lists.newArrayList();
+
+        for ( final Long eachId : inIds) {
+            Optional<ICanonicalItem> oI = getById(eachId);
+
+            if (oI.isPresent()) {  // Shouldn't happen in Production!!
+                results.add( oI.get() );
+            }
+        }
+
+        return results;
 	}
 }
