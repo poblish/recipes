@@ -5,11 +5,13 @@ package uk.co.recipes;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.is;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.List;
 
 import net.myrrix.client.ClientRecommender;
 
@@ -124,13 +126,37 @@ public class RecipeExploreRecommendTest {
 
 		assertThat( user1.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
 
+		final IUser user2 = userFactory.getOrCreate( "Foo Bar", new Supplier<IUser>() {
+
+			@Override
+			public IUser get() {
+				return new User();
+			}
+		} );
+
+		assertThat( user2.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
+
 		events.rateRecipe( user1, recipeFactory.getById("inputs3.txt"), (float) Math.random());
-		events.rateRecipe( user1, recipeFactory.getById("chcashblackspicecurry.txt"), (float) Math.random());
-		events.rateRecipe( user1, recipeFactory.getById("bol1.txt"), (float) Math.random());
 		events.rateRecipe( user1, recipeFactory.getById("bol2.txt"), (float) Math.random());
 		events.rateRecipe( user1, recipeFactory.getById("chinesebeef.txt"), (float) Math.random());
 
-		System.out.println("Recommendations: " + recsApi.recommendRecipes( user1, 100) );
+		events.rateRecipe( user2, recipeFactory.getById("inputs3.txt"), (float) Math.random());
+		events.rateRecipe( user2, recipeFactory.getById("chcashblackspicecurry.txt"), (float) Math.random());
+		events.rateRecipe( user2, recipeFactory.getById("bol1.txt"), (float) Math.random());
+		events.rateRecipe( user2, recipeFactory.getById("bulk.txt"), (float) Math.random());
+
+		final List<IRecipe> recsFor1 = recsApi.recommendRecipes( user1, 20);
+		final List<IRecipe> recsFor2 = recsApi.recommendRecipes( user2, 20);
+
+		assertThat( recsFor1.size(), is(1));
+		assertThat( recsFor2.size(), is(2));
+
+		System.out.println("Recommendations.1: " + recsFor1);
+		System.out.println("Recommendations.2: " + recsFor2);
+
+		assertThat( recsFor1.contains( recipeFactory.getById("bulk.txt") ), is(true));
+		assertThat( recsFor2.contains( recipeFactory.getById("bol2.txt") ), is(true));
+		assertThat( recsFor2.contains( recipeFactory.getById("chinesebeef.txt") ), is(true));
 	}
 
 	@AfterClass
