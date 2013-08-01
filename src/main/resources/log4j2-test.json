@@ -4,7 +4,7 @@
         "name": "RoutingTest",
         "packages": "org.apache.logging.log4j.test",
         "ThresholdFilter": {
-            "level": "debug"
+            "level": "all"
         },
         "appenders": {
             "Console": {
@@ -23,8 +23,13 @@
                     "ref": "Routing"
                 }
             },
+            "logger": {
+                "name": "net.myrrix",
+                "level": "info",
+                "additivity": "true"
+            },
             "root": {
-                "level": "debug",
+                "level": "all",
                 "appender-ref": {
                     "ref": "STDOUT"
                 }
