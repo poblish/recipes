@@ -35,6 +35,7 @@ import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
 import uk.co.recipes.service.taste.impl.MyrrixTasteSimilarityService;
+import uk.co.recipes.test.TestDataUtils;
 import dagger.Module;
 import dagger.Provides;
 

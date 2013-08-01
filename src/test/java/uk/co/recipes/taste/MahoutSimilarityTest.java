@@ -20,11 +20,11 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import uk.co.recipes.AbstractEsDataTest;
-import uk.co.recipes.TestDataUtils;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.similarity.IncompatibleIngredientsException;
 import uk.co.recipes.similarity.Similarity;
+import uk.co.recipes.test.TestDataUtils;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;

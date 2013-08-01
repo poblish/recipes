@@ -33,6 +33,7 @@ import uk.co.recipes.service.api.IExplorerAPI;
 import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
+import uk.co.recipes.test.TestDataUtils;
 
 import com.google.common.base.Supplier;
 

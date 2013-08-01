@@ -19,6 +19,7 @@ import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.impl.EsSearchService;
+import uk.co.recipes.test.TestDataUtils;
 import dagger.ObjectGraph;
 
 /**

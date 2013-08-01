@@ -21,6 +21,7 @@ import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.similarity.IncompatibleIngredientsException;
 import uk.co.recipes.similarity.Similarity;
+import uk.co.recipes.test.TestDataUtils;
 import dagger.ObjectGraph;
 
 public class ParseIngredientsTest {

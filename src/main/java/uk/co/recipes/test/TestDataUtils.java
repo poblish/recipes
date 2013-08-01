@@ -1,7 +1,7 @@
 /**
  * 
  */
-package uk.co.recipes;
+package uk.co.recipes.test;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,8 +10,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.testng.Assert;
-
+import uk.co.recipes.Ingredient;
+import uk.co.recipes.Recipe;
+import uk.co.recipes.RecipeStage;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.parse.IngredientParser;
 import uk.co.recipes.persistence.EsRecipeFactory;
@@ -51,7 +52,7 @@ public class TestDataUtils {
 				allIngredients.add( theIngr.get() );
 			}
 			else {
-				Assert.fail(eachLine + " not matched");
+				throw new RuntimeException(eachLine + " not matched");
 			}
 		}
 

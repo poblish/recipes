@@ -137,7 +137,6 @@
 			<groupId>net.myrrix</groupId>
 			<artifactId>myrrix-client</artifactId>
 			<version>1.0.2-SNAPSHOT</version>
-			<scope>test</scope>
 			<exclusions>
 				<exclusion>
 					<artifactId>slf4j-jdk14</artifactId>

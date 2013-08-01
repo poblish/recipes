@@ -20,6 +20,7 @@ import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.similarity.IncompatibleIngredientsException;
+import uk.co.recipes.test.TestDataUtils;
 
 import com.google.common.collect.Multiset;
 
