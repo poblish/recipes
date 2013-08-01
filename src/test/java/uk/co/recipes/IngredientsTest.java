@@ -2,7 +2,8 @@ package uk.co.recipes;
 
 import static java.util.Locale.ENGLISH;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -16,7 +17,6 @@ import org.testng.annotations.Test;
 
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
-import uk.co.recipes.api.IUser;
 import uk.co.recipes.api.Units;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.events.impl.MyrrixUpdater;
@@ -154,47 +154,47 @@ public class IngredientsTest {
 
     @Test
     public void testExplorer() throws IOException, TasteException {
-        final IUser user1 = userFactory.getOrCreate( "Andrew Regan", new Supplier<IUser>() {
+//        final IUser user1 = userFactory.getOrCreate( "Andrew Regan", new Supplier<IUser>() {
+//
+//            @Override
+//            public IUser get() {
+//                return new User();
+//            }
+//        } );
+//
+//        assertThat( user1.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
+//
+//        final IUser user2 = userFactory.getOrCreate( "Foo Bar", new Supplier<IUser>() {
+//
+//            @Override
+//            public IUser get() {
+//                return new User();
+//            }
+//        } );
+//
+//        assertThat( user2.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
+//
+//        final IUser user3 = userFactory.getOrCreate( "Doh Ray", new Supplier<IUser>() {
+//
+//            @Override
+//            public IUser get() {
+//                return new User();
+//            }
+//        } );
 
-            @Override
-            public IUser get() {
-                return new User();
-            }
-        } );
-
-        assertThat( user1.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
-
-        final IUser user2 = userFactory.getOrCreate( "Foo Bar", new Supplier<IUser>() {
-
-            @Override
-            public IUser get() {
-                return new User();
-            }
-        } );
-
-        assertThat( user2.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
-
-        final IUser user3 = userFactory.getOrCreate( "Doh Ray", new Supplier<IUser>() {
-
-            @Override
-            public IUser get() {
-                return new User();
-            }
-        } );
-
-        events.rateItem( user1, itemFactory.getById("ginger"), (float) Math.random());
-        events.rateItem( user1, itemFactory.getById("milk"), (float) Math.random());
-        events.rateItem( user1, itemFactory.getById("coriander"), (float) Math.random());
-        events.rateItem( user1, itemFactory.getById("lamb"), (float) Math.random());
-
-        events.rateItem( user2, itemFactory.getById("ginger"), (float) Math.random());
-        events.rateItem( user2, itemFactory.getById("cinnamon"), (float) Math.random());
-        events.rateItem( user2, itemFactory.getById("fennel_seeds"), (float) Math.random());
-        events.rateItem( user2, itemFactory.getById("red_wine"), (float) Math.random());
-
-        events.rateItem( user3, itemFactory.getById("fennel_seeds"), (float) Math.random());
-        events.rateItem( user3, itemFactory.getById("coriander"), (float) Math.random());
-        events.rateItem( user3, itemFactory.getById("ginger"), (float) Math.random());
+//        events.rateItem( user1, itemFactory.getById("ginger"), (float) Math.random());
+//        events.rateItem( user1, itemFactory.getById("milk"), (float) Math.random());
+//        events.rateItem( user1, itemFactory.getById("coriander"), (float) Math.random());
+//        events.rateItem( user1, itemFactory.getById("lamb"), (float) Math.random());
+//
+//        events.rateItem( user2, itemFactory.getById("ginger"), (float) Math.random());
+//        events.rateItem( user2, itemFactory.getById("cinnamon"), (float) Math.random());
+//        events.rateItem( user2, itemFactory.getById("fennel_seeds"), (float) Math.random());
+//        events.rateItem( user2, itemFactory.getById("red_wine"), (float) Math.random());
+//
+//        events.rateItem( user3, itemFactory.getById("fennel_seeds"), (float) Math.random());
+//        events.rateItem( user3, itemFactory.getById("coriander"), (float) Math.random());
+//        events.rateItem( user3, itemFactory.getById("ginger"), (float) Math.random());
 
         System.out.println("Similar: " + explorerApi.similarIngredients( itemFactory.getById("ginger"), 10) );
     }
