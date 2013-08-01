@@ -47,7 +47,9 @@ public class MyrrixUpdater implements IEventListener {
 
     @Override
     public void onAddItem( final ItemEvent evt) {
-//        System.out.println("# Add: " + evt);
+    	if (LOG.isTraceEnabled()) {
+    		LOG.trace("onAddItem: " + evt);
+    	}
 
         final long itemId = evt.getItem().getId();
         boolean changesMade = false;
@@ -57,14 +59,18 @@ public class MyrrixUpdater implements IEventListener {
         		if ( eachTag.getValue() instanceof Boolean) {
         			if ((Boolean) eachTag.getValue()) {
         				// Don't bother setting if == FALSE
-        				LOG.debug("# Set Tag '" + eachTag.getKey() + "' val=1.0 for " + itemId);
+        				if (LOG.isDebugEnabled()) {
+        					LOG.debug("Set Tag '" + eachTag.getKey() + "' val=1.0 for " + itemId);
+        				}
         	        	recommender.setItemTag( eachTag.getKey().toString(), itemId, 1.0f);
         	        	changesMade = true;
         			}
         		}
         		else {
         			final float val = Float.valueOf((String) eachTag.getValue());
-        			LOG.debug("# Set Tag '" + eachTag.getKey() + "' val=" + val + " for " + itemId);
+    				if (LOG.isDebugEnabled()) {
+    					LOG.debug("Set Tag '" + eachTag.getKey() + "' val=" + val + " for " + itemId);
+    				}
     	        	recommender.setItemTag( eachTag.getKey().toString(), itemId, val);
     	        	changesMade = true;
         		}
