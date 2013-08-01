@@ -15,6 +15,8 @@ import uk.co.recipes.events.impl.RecipeEvent;
  */
 public interface IEventListener {
 
+	void startListening();
+
     void onAddItem( final ItemEvent evt);
     void onRateItem( final ItemEvent evt);
     void onRateRecipe( final RecipeEvent evt);

@@ -18,19 +18,16 @@ import org.testng.annotations.Test;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.Units;
-import uk.co.recipes.events.api.IEventService;
+import uk.co.recipes.events.api.IEventListener;
 import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsSequenceFactory;
-import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.service.api.IExplorerAPI;
-import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.impl.EsSearchService;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
-import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.tags.CommonTags;
 
 import com.google.common.base.Optional;
@@ -45,20 +42,19 @@ public class IngredientsTest {
 
 	private EsItemFactory itemFactory = GRAPH.get( EsItemFactory.class );
 	private EsRecipeFactory recipeFactory = GRAPH.get( EsRecipeFactory.class );
-    private EsUserFactory userFactory = GRAPH.get( EsUserFactory.class );
     private EsSequenceFactory sequenceFactory = GRAPH.get( EsSequenceFactory.class );
 
-    private MyrrixUpdater myrrixUpdater = GRAPH.get( MyrrixUpdater.class );
+    private IEventListener updater = GRAPH.get( MyrrixUpdater.class );
 
 	private ISearchAPI searchService = GRAPH.get( EsSearchService.class );
     private IExplorerAPI explorerApi = GRAPH.get( MyrrixExplorerService.class );
-    private IRecommendationsAPI recsApi = GRAPH.get( MyrrixRecommendationService.class );
-
-    private IEventService events = GRAPH.get( IEventService.class );
+//    private IRecommendationsAPI recsApi = GRAPH.get( MyrrixRecommendationService.class );
+//
+//    private IEventService events = GRAPH.get( IEventService.class );
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
-        myrrixUpdater.startListening();
+		updater.startListening();
 
 		itemFactory.deleteAll();
         sequenceFactory.deleteAll();
@@ -196,6 +192,10 @@ public class IngredientsTest {
 //        events.rateItem( user3, itemFactory.getById("coriander"), (float) Math.random());
 //        events.rateItem( user3, itemFactory.getById("ginger"), (float) Math.random());
 
-        System.out.println("Similar: " + explorerApi.similarIngredients( itemFactory.getById("ginger"), 10) );
+        System.out.println("Similar to Ginger: " + explorerApi.similarIngredients( itemFactory.getById("ginger"), 10) );
+        System.out.println("Similar to Milk:   " + explorerApi.similarIngredients( itemFactory.getById("milk"), 10) );
+        System.out.println("Similar to Lamb:   " + explorerApi.similarIngredients( itemFactory.getById("lamb"), 10) );
+        System.out.println("Similar to Brandy: " + explorerApi.similarIngredients( itemFactory.getById("brandy"), 10) );
+        System.out.println("Similar to Fish S: " + explorerApi.similarIngredients( itemFactory.getById("fish_sauce"), 10) );
     }
 }

@@ -21,6 +21,7 @@ import org.testng.annotations.Test;
 
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
+import uk.co.recipes.events.api.IEventListener;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.persistence.EsItemFactory;
@@ -60,14 +61,13 @@ public class RecipeExploreRecommendTest {
 	private IExplorerAPI explorerApi = GRAPH.get( MyrrixExplorerService.class );
 	private IRecommendationsAPI recsApi = GRAPH.get( MyrrixRecommendationService.class );
 
-	private MyrrixUpdater myrrixUpdater = GRAPH.get( MyrrixUpdater.class );
-
+    private IEventListener updater = GRAPH.get( MyrrixUpdater.class );
 	private IEventService events = GRAPH.get( IEventService.class );
 
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
-	    myrrixUpdater.startListening();
+		updater.startListening();
 
 	    userFactory.deleteAll();
 		itemFactory.deleteAll();
