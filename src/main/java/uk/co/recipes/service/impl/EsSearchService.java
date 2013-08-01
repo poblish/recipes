@@ -51,12 +51,12 @@ public class EsSearchService implements ISearchAPI {
 	public List<ICanonicalItem> findItemsByName( String inName) throws IOException {
 		try
 		{
-			final JsonNode jn = mapper.readTree( new URL( itemIndexUrl + "/_search?q=" + inName) ).path("hits").path("hits");
+			final JsonNode jn = mapper.readTree( new URL( itemIndexUrl + "/_search?q=" + inName + "&size=9999") ).path("hits").path("hits");
 	
 			final List<ICanonicalItem> results = Lists.newArrayList();
 	
 			for ( final JsonNode each : jn) {
-				results.add( mapper.readValue( each, CanonicalItem.class) );
+				results.add( mapper.readValue( each.path("_source"), CanonicalItem.class) );
 			}
 	
 			return results;
@@ -77,12 +77,12 @@ public class EsSearchService implements ISearchAPI {
 	public List<IRecipe> findRecipesByName( String inName) throws IOException {
 		try
 		{
-			final JsonNode jn = mapper.readTree( new URL( recipesIndexUrl + "/_search?q=" + inName) ).path("hits").path("hits");
+			final JsonNode jn = mapper.readTree( new URL( recipesIndexUrl + "/_search?q=" + inName + "&size=9999") ).path("hits").path("hits");
 	
 			final List<IRecipe> results = Lists.newArrayList();
 	
 			for ( final JsonNode each : jn) {
-				results.add( mapper.readValue( each, Recipe.class) );
+				results.add( mapper.readValue( each.path("_source"), Recipe.class) );
 			}
 	
 			return results;

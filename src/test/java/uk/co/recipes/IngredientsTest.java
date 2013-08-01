@@ -2,8 +2,7 @@ package uk.co.recipes;
 
 import static java.util.Locale.ENGLISH;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -125,8 +124,10 @@ public class IngredientsTest {
 		Thread.sleep(1000);  // Time for indexing to happen!
 
 		final List<ICanonicalItem> results = searchService.findItemsByName("MEAT:true");
-		assertThat( results.size(), is(10));
-		System.out.println(results);
+		assertThat( results.size(), greaterThanOrEqualTo(20));
+		assertThat( results, hasItem( itemFactory.getById("beef_stock") ));
+		assertThat( results, hasItem( itemFactory.getById("lamb") ));
+		assertThat( results, hasItem( itemFactory.getById("diced_chicken") ));
 
 		///////////////////////////////////////////////////
 
