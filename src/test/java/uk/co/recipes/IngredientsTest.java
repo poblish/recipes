@@ -2,38 +2,41 @@ package uk.co.recipes;
 
 import static java.util.Locale.ENGLISH;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import uk.co.recipes.persistence.EsSequenceFactory;
-import uk.co.recipes.events.impl.MyrrixUpdater;
-import uk.co.recipes.events.api.IEventService;
-import uk.co.recipes.persistence.EsUserFactory;
-import uk.co.recipes.service.api.IExplorerAPI;
-import uk.co.recipes.service.api.IRecommendationsAPI;
-import uk.co.recipes.service.impl.MyrrixExplorerService;
-import uk.co.recipes.service.impl.MyrrixRecommendationService;
-import org.apache.mahout.cf.taste.common.TasteException;
-import uk.co.recipes.api.IUser;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.*;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.http.client.ClientProtocolException;
+import org.apache.mahout.cf.taste.common.TasteException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
+import uk.co.recipes.api.IUser;
 import uk.co.recipes.api.Units;
+import uk.co.recipes.events.api.IEventService;
+import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
+import uk.co.recipes.persistence.EsSequenceFactory;
+import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
+import uk.co.recipes.service.api.IExplorerAPI;
+import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.impl.EsSearchService;
+import uk.co.recipes.service.impl.MyrrixExplorerService;
+import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.tags.CommonTags;
+
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Maps;
+
 import dagger.ObjectGraph;
 
 public class IngredientsTest {

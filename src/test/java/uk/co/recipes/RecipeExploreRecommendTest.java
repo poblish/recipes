@@ -10,10 +10,7 @@ import static org.hamcrest.Matchers.is;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.List;
-
-import net.myrrix.client.ClientRecommender;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.mahout.cf.taste.common.TasteException;
