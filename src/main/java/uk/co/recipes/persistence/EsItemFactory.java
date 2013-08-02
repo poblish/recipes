@@ -106,11 +106,11 @@ public class EsItemFactory implements IItemPersistence {
         return esUtils.findOneByIdAndType( itemIndexUrl, inId, ICanonicalItem.class, CanonicalItem.class);
     }
 
-    public String toStringId( final ICanonicalItem inItem) throws IOException {
+    public String toStringId( final ICanonicalItem inItem) {
         return toId( inItem.getCanonicalName() );
     }
 
-	public static String toId( final String inCanonicalName) throws IOException {
+	public static String toId( final String inCanonicalName) {
 		checkArgument( !inCanonicalName.contains(","), "Name should not contain comma: '" + inCanonicalName + "'");
 		return inCanonicalName.toLowerCase().replace( ' ', '_');
 	}
