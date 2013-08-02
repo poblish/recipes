@@ -57,6 +57,9 @@ public class EsRecipeFactory implements IRecipePersistence {
 	@Inject
 	EsUtils esUtils;
 
+	@Inject
+	EsSequenceFactory sequences;
+
     @Inject
     IEventService eventService;
 
@@ -86,7 +89,7 @@ public class EsRecipeFactory implements IRecipePersistence {
 		final HttpPost req = new HttpPost( itemIndexUrl + "/" + inId);
 
 		try {
-			inRecipe.setId( esUtils.getSeqnoForType("recipes_seqno") + Recipe.BASE_ID);
+			inRecipe.setId( sequences.getSeqnoForType("recipes_seqno") + Recipe.BASE_ID);
 
 			req.setEntity( new StringEntity( mapper.writeValueAsString(inRecipe) ) );
 

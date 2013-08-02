@@ -56,12 +56,15 @@ public class EsUserFactory implements IUserPersistence {
 	@Inject
 	EsUtils esUtils;
 
+	@Inject
+	EsSequenceFactory sequences;
+
 
 	public IUser put( final IUser inUser, String inId) throws IOException {
 		final HttpPost req = new HttpPost( usersIndexUrl + "/" + inId);
 
 		try {
-			inUser.setId( esUtils.getSeqnoForType("users_seqno") );
+			inUser.setId( sequences.getSeqnoForType("users_seqno") );
 
 			req.setEntity( new StringEntity( mapper.writeValueAsString(inUser) ) );
 

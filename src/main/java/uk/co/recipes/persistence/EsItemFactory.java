@@ -67,6 +67,9 @@ public class EsItemFactory implements IItemPersistence {
 	@Inject
 	EsUtils esUtils;
 
+	@Inject
+	EsSequenceFactory sequences;
+
     @Inject
     IEventService eventService;
 
@@ -75,7 +78,7 @@ public class EsItemFactory implements IItemPersistence {
 		final HttpPost req = new HttpPost( itemIndexUrl + "/" + inId);
 
 		try {
-			inItem.setId( esUtils.getSeqnoForType("items_seqno") );
+			inItem.setId( sequences.getSeqnoForType("items_seqno") );
 
 			req.setEntity( new StringEntity( mapper.writeValueAsString(inItem) ) );
 
