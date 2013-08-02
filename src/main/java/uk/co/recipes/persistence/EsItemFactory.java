@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -26,7 +25,6 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
-import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -102,12 +100,7 @@ public class EsItemFactory {
             return Optional.absent();
         }
 
-        final Iterator<JsonNode> nodeItr = mapper.readTree( new URL( itemIndexUrl + "/_search?q=id:" + inId) ).path("hits").path("hits").iterator();
-        if (nodeItr.hasNext()) {
-            return Optional.fromNullable((ICanonicalItem) mapper.readValue( nodeItr.next().path("_source"), CanonicalItem.class) );
-        }
-
-        return Optional.absent();
+        return esUtils.findOneByIdAndType( itemIndexUrl, inId, ICanonicalItem.class, CanonicalItem.class);
     }
 
 	public static String toId( final String inCanonicalName) throws IOException {

@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -23,7 +22,6 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
-import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -75,12 +73,7 @@ public class EsRecipeFactory {
 			return Optional.absent();
 		}
 
-		final Iterator<JsonNode> nodeItr = mapper.readTree( new URL( itemIndexUrl + "/_search?q=id:" + inId) ).path("hits").path("hits").iterator();
-		if (nodeItr.hasNext()) {
-			return Optional.fromNullable((IRecipe) mapper.readValue( nodeItr.next().path("_source"), Recipe.class) );
-		}
-
-		return Optional.absent();
+		return esUtils.findOneByIdAndType( itemIndexUrl, inId, IRecipe.class, Recipe.class);
 	}
 
 	public IRecipe put( final IRecipe inRecipe, String inId) throws IOException {
