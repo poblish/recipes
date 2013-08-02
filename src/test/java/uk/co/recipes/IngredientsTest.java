@@ -16,19 +16,25 @@ import org.testng.annotations.Test;
 
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
+import uk.co.recipes.api.IUser;
 import uk.co.recipes.api.Units;
 import uk.co.recipes.events.api.IEventListener;
+import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsSequenceFactory;
+import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.service.api.IExplorerAPI;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
+import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.api.ISearchAPI;
+import uk.co.recipes.service.api.IUserPersistence;
 import uk.co.recipes.service.impl.EsSearchService;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
+import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.tags.CommonTags;
 
 import com.google.common.base.Optional;
@@ -44,15 +50,16 @@ public class IngredientsTest {
 
 	private IItemPersistence itemFactory = GRAPH.get( EsItemFactory.class );
 	private IRecipePersistence recipeFactory = GRAPH.get( EsRecipeFactory.class );
+	private IUserPersistence userFactory = GRAPH.get( EsUserFactory.class );
     private EsSequenceFactory sequenceFactory = GRAPH.get( EsSequenceFactory.class );
 
     private IEventListener updater = GRAPH.get( MyrrixUpdater.class );
 
 	private ISearchAPI searchService = GRAPH.get( EsSearchService.class );
     private IExplorerAPI explorerApi = GRAPH.get( MyrrixExplorerService.class );
-//    private IRecommendationsAPI recsApi = GRAPH.get( MyrrixRecommendationService.class );
-//
-//    private IEventService events = GRAPH.get( IEventService.class );
+    private IRecommendationsAPI recsApi = GRAPH.get( MyrrixRecommendationService.class );
+
+    private IEventService events = GRAPH.get( IEventService.class );
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
@@ -144,7 +151,54 @@ public class IngredientsTest {
 		assertThat( lamb.parent().orNull(), nullValue());
 	}
 
-    @Test
+	@Test
+	public void testRecommendations() throws IOException, TasteException {
+		final IUser user1 = userFactory.getOrCreate( "Andrew Regan", new Supplier<IUser>() {
+
+			@Override
+			public IUser get() {
+				return new User();
+			}
+		} );
+
+		assertThat( user1.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
+
+		final IUser user2 = userFactory.getOrCreate( "Foo Bar", new Supplier<IUser>() {
+
+			@Override
+			public IUser get() {
+				return new User();
+			}
+		} );
+
+		assertThat( user2.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
+
+		events.rateItem( user1, itemFactory.getById("milk"), (float) Math.random());
+		events.rateItem( user1, itemFactory.getById("red_wine"), (float) Math.random());
+
+		events.rateItem( user2, itemFactory.getById("ginger"), (float) Math.random());
+		events.rateItem( user2, itemFactory.getById("lemon"), (float) Math.random());
+		events.rateItem( user2, itemFactory.getById("lime"), (float) Math.random());
+
+		final List<ICanonicalItem> recsFor1 = recsApi.recommendIngredients( user1, 20);
+		final List<ICanonicalItem> recsFor2 = recsApi.recommendIngredients( user2, 20);
+
+		System.out.println("Recommendations.1: " + recsFor1);
+		System.out.println("Recommendations.2: " + recsFor2);
+
+		assertThat( recsFor1.size(), greaterThanOrEqualTo(2));
+		assertThat( recsFor2.size(), greaterThanOrEqualTo(2));
+
+//		assertThat( recsFor1, hasItem( recipeFactory.getById("bulk.txt")  ));
+//		assertThat( recsFor1, not(hasItem( recipeFactory.getById("inputs3.txt")  )));
+//
+//		assertThat( recsFor2, hasItem( recipeFactory.getById("bol2.txt")  ));
+//		assertThat( recsFor2, hasItem( recipeFactory.getById("chinesebeef.txt")  ));
+//		assertThat( recsFor2, not(hasItem( recipeFactory.getById("chcashblackspicecurry.txt")  )));
+//		assertThat( recsFor2, not(hasItem( recipeFactory.getById("inputs3.txt")  )));
+	}
+
+	@Test
     public void testExplorer() throws IOException, TasteException {
         runSimilarity("Avocado");
         runSimilarity("Lemon");
