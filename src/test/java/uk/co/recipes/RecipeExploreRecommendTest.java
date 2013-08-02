@@ -5,6 +5,7 @@ package uk.co.recipes;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import com.google.common.base.Strings;
 import uk.co.recipes.service.api.IUserPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.IItemPersistence;
@@ -97,55 +98,19 @@ public class RecipeExploreRecommendTest {
 
 	@Test
 	public void testExplorer() throws IOException, TasteException {
-        final IUser user1 = userFactory.getOrCreate( "Andrew Regan", new Supplier<IUser>() {
-
-            @Override
-            public IUser get() {
-                return new User();
-            }
-        } );
-
-        assertThat( user1.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
-
-        final IUser user2 = userFactory.getOrCreate( "Foo Bar", new Supplier<IUser>() {
-
-            @Override
-            public IUser get() {
-                return new User();
-            }
-        } );
-
-        assertThat( user2.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
-
-        final IUser user3 = userFactory.getOrCreate( "Doh Ray", new Supplier<IUser>() {
-
-            @Override
-            public IUser get() {
-                return new User();
-            }
-        } );
-
-        events.rateRecipe( user1, recipeFactory.getById("inputs3.txt"), (float) Math.random());
-        events.rateRecipe( user1, recipeFactory.getById("bol2.txt"), (float) Math.random());
-        events.rateRecipe( user1, recipeFactory.getById("chinesebeef.txt"), (float) Math.random());
-        events.rateRecipe( user1, recipeFactory.getById("inputs3.txt"), (float) Math.random());
-
-        events.rateRecipe( user2, recipeFactory.getById("inputs3.txt"), (float) Math.random());
-        events.rateRecipe( user2, recipeFactory.getById("chcashblackspicecurry.txt"), (float) Math.random());
-        events.rateRecipe( user2, recipeFactory.getById("bol1.txt"), (float) Math.random());
-        events.rateRecipe( user2, recipeFactory.getById("bulk.txt"), (float) Math.random());
-
-        events.rateRecipe( user3, recipeFactory.getById("bol1.txt"), (float) Math.random());
-        events.rateRecipe( user3, recipeFactory.getById("chinesebeef.txt"), (float) Math.random());
-        events.rateRecipe( user3, recipeFactory.getById("inputs3.txt"), (float) Math.random());
-
-        System.out.println("Similar: " + explorerApi.similarRecipes( recipeFactory.getById("inputs3.txt"), 10) );
-        System.out.println("Similar: " + explorerApi.similarRecipes( recipeFactory.getById("bol1.txt"), 10) );
-        System.out.println("Similar: " + explorerApi.similarRecipes( recipeFactory.getById("bol2.txt"), 10) );
-        System.out.println("Similar: " + explorerApi.similarRecipes( recipeFactory.getById("chinesebeef.txt"), 10) );
-        System.out.println("Similar: " + explorerApi.similarRecipes( recipeFactory.getById("chcashblackspicecurry.txt"), 10) );
-        System.out.println("Similar: " + explorerApi.similarRecipes( recipeFactory.getById("bulk.txt"), 10) );
+        runSimilarity("inputs3.txt");
+        runSimilarity("bol1.txt");
+        runSimilarity("bol2.txt");
+        runSimilarity("chineseBeef.txt");
+        runSimilarity("chCashBlackSpiceCurry.txt");
+        runSimilarity("bulk.txt");
 	}
+
+    private void runSimilarity( final String inName) throws IOException {
+        final IRecipe item = recipeFactory.get(inName).get();
+        assertThat( inName, is( item.getTitle() ));
+        System.out.println( Strings.padEnd("Similar to " + inName + ":", 28, ' ') + explorerApi.similarRecipes( item, 10) );
+    }
 
 	@Test
 	public void testRecommendations() throws IOException, TasteException {
