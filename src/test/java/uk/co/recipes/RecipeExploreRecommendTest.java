@@ -5,20 +5,19 @@ package uk.co.recipes;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import com.google.common.base.Strings;
-import uk.co.recipes.service.api.IUserPersistence;
-import uk.co.recipes.service.api.IRecipePersistence;
-import uk.co.recipes.service.api.IItemPersistence;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.List;
+
 import org.apache.http.client.ClientProtocolException;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.elasticsearch.client.Client;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.api.IEventListener;
@@ -30,11 +29,17 @@ import uk.co.recipes.persistence.EsSequenceFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.service.api.IExplorerAPI;
+import uk.co.recipes.service.api.IItemPersistence;
+import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.IRecommendationsAPI;
+import uk.co.recipes.service.api.IUserPersistence;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.test.TestDataUtils;
+
+import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
+
 import dagger.ObjectGraph;
 
 /**

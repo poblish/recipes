@@ -3,15 +3,17 @@
  */
 package uk.co.recipes;
 
-import uk.co.recipes.service.api.IRecipePersistence;
-import uk.co.recipes.service.api.IItemPersistence;
 import java.io.IOException;
+
 import org.apache.http.client.ClientProtocolException;
 import org.elasticsearch.client.Client;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
+import uk.co.recipes.service.api.IItemPersistence;
+import uk.co.recipes.service.api.IRecipePersistence;
 import dagger.ObjectGraph;
 
 /**

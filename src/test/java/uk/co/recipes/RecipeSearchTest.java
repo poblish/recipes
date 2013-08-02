@@ -5,17 +5,20 @@ package uk.co.recipes;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import uk.co.recipes.service.api.IRecipePersistence;
-import uk.co.recipes.service.api.IItemPersistence;
+
 import java.io.IOException;
+
 import org.apache.http.client.ClientProtocolException;
 import org.elasticsearch.client.Client;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.ItemsLoader;
+import uk.co.recipes.service.api.IItemPersistence;
+import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.impl.EsSearchService;
 import uk.co.recipes.test.TestDataUtils;
