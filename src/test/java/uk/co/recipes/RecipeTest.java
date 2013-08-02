@@ -48,6 +48,6 @@ public class RecipeTest {
 
 		TestUtils.testEqualsHashcode(r1, r2, r3, r4, r5);
 
-		assertThat( r5.toString(), is("Recipe{title=1, stages=[RecipeStage{ingredients=[Ingredient{q=100 GRAMMES, item=CanonicalItem{name=Lamb}}, Ingredient{q=100 GRAMMES, item=CanonicalItem{name=Beef}}]}], tags={SERVES_COUNT=4}}"));
+		assertThat( r5.toString(), is("Recipe{title=1, id=NEW, stages=[RecipeStage{ingredients=[Ingredient{q=100 GRAMMES, item=CanonicalItem{name=Lamb}}, Ingredient{q=100 GRAMMES, item=CanonicalItem{name=Beef}}]}], tags={SERVES_COUNT=4}}"));
 	}
 }

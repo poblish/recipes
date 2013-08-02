@@ -229,6 +229,7 @@ public class CanonicalItem implements ICanonicalItem {
 
 		return Objects.toStringHelper(this).omitNullValues()
 						.add( "name", canonicalName)
+					//	.add( "id", ( id == UNSET_ID) ? "NEW" : Long.valueOf(id))
 						.add( "parent", parent)
 						.add( "tags", tags.isEmpty() ? null : tags)
 						.toString();

@@ -175,6 +175,7 @@ public class Recipe implements IRecipe {
 	public String toString() {
 		return Objects.toStringHelper(this).omitNullValues()
 						.add( "title", title)
+						.add( "id", ( id == UNSET_ID) ? "NEW" : Long.valueOf(id))
 						.add( "stages", stages)
 						.add( "tags", tagsMap)
 						.toString();
