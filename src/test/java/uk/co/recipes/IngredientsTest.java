@@ -149,15 +149,26 @@ public class IngredientsTest {
         runSimilarity("Avocado");
         runSimilarity("Lemon");
         runSimilarity("Lime");
+
         runSimilarity("Broccoli");
+        runSimilarity("Green Pepper");
         runSimilarity("Onion");
+
         runSimilarity("Ginger");
+        runSimilarity("Oregano");
+        runSimilarity("Paprika");
+
         runSimilarity("Milk");
+        runSimilarity("Coffee");
+
         runSimilarity("Lamb");
         runSimilarity("Brandy");
         runSimilarity("Red Wine");
         runSimilarity("Fish Sauce");
         runSimilarity("Soy Sauce");
+        runSimilarity("Gnocchi");
+        runSimilarity("Dark Muscovado Sugar");
+        runSimilarity("Cashew Nuts");
     }
 
     private void runSimilarity( final String inName) throws IOException {
