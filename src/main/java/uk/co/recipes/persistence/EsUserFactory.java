@@ -18,13 +18,13 @@ import javax.inject.Named;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.elasticsearch.client.Client;
 
 import uk.co.recipes.User;
 import uk.co.recipes.api.IUser;
@@ -42,6 +42,9 @@ import com.google.common.collect.Lists;
  *
  */
 public class EsUserFactory implements IUserPersistence {
+
+	@Inject
+	Client esClient;
 
 	@Inject
 	HttpClient httpClient;
@@ -127,8 +130,7 @@ public class EsUserFactory implements IUserPersistence {
 	}
 
 	public void deleteAll() throws IOException {
-		final HttpResponse resp = httpClient.execute( new HttpDelete(usersIndexUrl) );
-		EntityUtils.consume( resp.getEntity() );
+		esClient.admin().indices().prepareDeleteMapping().setIndices("recipe").setType("users").execute().actionGet();
 	}
 
     @Override

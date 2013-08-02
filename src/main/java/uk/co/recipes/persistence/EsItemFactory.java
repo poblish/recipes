@@ -21,7 +21,6 @@ import javax.inject.Named;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
@@ -174,8 +173,7 @@ public class EsItemFactory implements IItemPersistence {
     }
 
 	public void deleteAll() throws IOException {
-		final HttpResponse resp = httpClient.execute( new HttpDelete(itemIndexUrl) );
-		EntityUtils.consume( resp.getEntity() );
+		esClient.admin().indices().prepareDeleteMapping().setIndices("recipe").setType("items").execute().actionGet();
 	}
 
 	/**
