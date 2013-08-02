@@ -6,11 +6,8 @@ package uk.co.recipes.persistence;
 import java.io.IOException;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.util.EntityUtils;
+import org.elasticsearch.client.Client;
 
 /**
  * TODO
@@ -21,14 +18,9 @@ import org.apache.http.util.EntityUtils;
 public class EsSequenceFactory {
 
 	@Inject
-	HttpClient httpClient;
-
-	@Inject
-	@Named("elasticSearchSequenceUrl")
-	String itemIndexUrl;
-
+	Client esClient;
 
 	public void deleteAll() throws IOException {
-		EntityUtils.consume( httpClient.execute( new HttpDelete(itemIndexUrl) ).getEntity() );
+		esClient.admin().indices().prepareDeleteMapping().setIndices("sequence").setType("sequence").execute().actionGet();
 	}
 }

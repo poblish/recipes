@@ -88,12 +88,6 @@ public class DaggerModule {
 		return "http://localhost:9200/recipe/users";
 	}
 
-	@Provides
-	@Named("elasticSearchSequenceUrl")
-	String provideEsSequenceUrl() {
-		return "http://localhost:9200/sequence/sequence";
-	}
-
     @Provides
     @Singleton
     IEventService provideEventService() {
