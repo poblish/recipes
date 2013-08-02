@@ -3,6 +3,7 @@ package uk.co.recipes;
 import static java.util.Locale.ENGLISH;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import com.google.common.base.Strings;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.IItemPersistence;
 import java.io.IOException;
@@ -140,10 +141,23 @@ public class IngredientsTest {
 
     @Test
     public void testExplorer() throws IOException, TasteException {
-        System.out.println("Similar to Ginger: " + explorerApi.similarIngredients( itemFactory.getById("ginger"), 10) );
-        System.out.println("Similar to Milk:   " + explorerApi.similarIngredients( itemFactory.getById("milk"), 10) );
-        System.out.println("Similar to Lamb:   " + explorerApi.similarIngredients( itemFactory.getById("lamb"), 10) );
-        System.out.println("Similar to Brandy: " + explorerApi.similarIngredients( itemFactory.getById("brandy"), 10) );
-        System.out.println("Similar to Fish S: " + explorerApi.similarIngredients( itemFactory.getById("fish_sauce"), 10) );
+        runSimilarity("Avocado");
+        runSimilarity("Lemon");
+        runSimilarity("Lime");
+        runSimilarity("Broccoli");
+        runSimilarity("Onion");
+        runSimilarity("Ginger");
+        runSimilarity("Milk");
+        runSimilarity("Lamb");
+        runSimilarity("Brandy");
+        runSimilarity("Red Wine");
+        runSimilarity("Fish Sauce");
+        runSimilarity("Soy Sauce");
+    }
+
+    private void runSimilarity( final String inName) throws IOException {
+        final ICanonicalItem item = itemFactory.get(inName).get();
+        assertThat( inName, is( item.getCanonicalName() ));
+        System.out.println( Strings.padEnd("Similar to " + inName + ":", 24, ' ') + explorerApi.similarIngredients( item, 10) );
     }
 }
