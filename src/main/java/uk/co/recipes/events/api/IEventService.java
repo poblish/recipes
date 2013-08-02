@@ -18,10 +18,10 @@ public interface IEventService {
     void addListener( final IEventListener inL);
 
     void addItem( final ICanonicalItem inItem);
-
     void rateItem( final IUser inUser, final ICanonicalItem inItem);
     void rateItem( final IUser inUser, final ICanonicalItem inItem, float inRating);
 
+    void addRecipe( final IRecipe inRecipe);
     void rateRecipe( final IUser inUser, final IRecipe inRecipe);
     void rateRecipe( final IUser inUser, final IRecipe inRecipe, float inRating);
 }

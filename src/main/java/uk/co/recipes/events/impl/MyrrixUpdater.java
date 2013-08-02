@@ -90,6 +90,13 @@ public class MyrrixUpdater implements IEventListener {
     }
 
     @Override
+    public void onAddRecipe( final RecipeEvent evt) {
+    	if (LOG.isTraceEnabled()) {
+    		LOG.trace("onAddRecipe: " + evt);
+    	}
+    }
+
+    @Override
     public void onRateItem( final ItemEvent evt) {
     	checkArgument( evt.getItem().getId() >= 0 && evt.getItem().getId() < Recipe.BASE_ID, "Item has not been persisted, or Id is invalid");
 

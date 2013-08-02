@@ -26,6 +26,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.IRecipe;
+import uk.co.recipes.events.api.IEventService;
 import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
@@ -50,6 +51,9 @@ public class EsRecipeFactory implements IRecipePersistence {
 
 	@Inject
 	EsUtils esUtils;
+
+    @Inject
+    IEventService eventService;
 
 
 	public Optional<IRecipe> get( final String inName) throws IOException {
@@ -84,6 +88,8 @@ public class EsRecipeFactory implements IRecipePersistence {
 			final HttpResponse resp = httpClient.execute(req);
 			assertThat( resp.getStatusLine().getStatusCode(), isOneOf(201, 200));
 			EntityUtils.consume( resp.getEntity() );
+
+			eventService.addRecipe(inRecipe);
 		}
 		catch (UnsupportedEncodingException e) {
 			Throwables.propagate(e);

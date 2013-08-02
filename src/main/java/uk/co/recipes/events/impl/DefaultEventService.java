@@ -33,6 +33,12 @@ public class DefaultEventService implements IEventService {
         }
     }
 
+    public void addRecipe( final IRecipe inRecipe) {
+        for ( IEventListener each : listeners) {
+            each.onAddRecipe( new RecipeEvent( null, inRecipe, 1.0f) );
+        }
+    }
+
     public void rateItem( final IUser inUser, final ICanonicalItem inItem) {
     	rateItem( inUser, inItem, 1.0f);
 	}
