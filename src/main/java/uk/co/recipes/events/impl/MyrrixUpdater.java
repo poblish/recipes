@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.recipes.Recipe;
+import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.events.api.IEventListener;
 import uk.co.recipes.events.api.IEventService;
@@ -55,26 +56,7 @@ public class MyrrixUpdater implements IEventListener {
         boolean changesMade = false;
 
         try {
-        	for ( final Entry<ITag,Serializable> eachTag : evt.getItem().getTags().entrySet()) {
-        		if ( eachTag.getValue() instanceof Boolean) {
-        			if ((Boolean) eachTag.getValue()) {
-        				// Don't bother setting if == FALSE
-        				if (LOG.isDebugEnabled()) {
-        					LOG.debug("Set Tag '" + eachTag.getKey() + "' val=1.0 for " + itemId);
-        				}
-        	        	recommender.setItemTag( eachTag.getKey().toString(), itemId, 1.0f);
-        	        	changesMade = true;
-        			}
-        		}
-        		else {
-        			final float val = Float.valueOf((String) eachTag.getValue());
-    				if (LOG.isDebugEnabled()) {
-    					LOG.debug("Set Tag '" + eachTag.getKey() + "' val=" + val + " for " + itemId);
-    				}
-    	        	recommender.setItemTag( eachTag.getKey().toString(), itemId, val);
-    	        	changesMade = true;
-        		}
-        	}
+        	changesMade = addItemTagsForItem( evt.getItem(), itemId);
 	    }
 		catch (TasteException e) {
 			Throwables.propagate(e);
@@ -94,6 +76,53 @@ public class MyrrixUpdater implements IEventListener {
     	if (LOG.isTraceEnabled()) {
     		LOG.trace("onAddRecipe: " + evt);
     	}
+
+        final long recipeId = evt.getRecipe().getId();
+        boolean changesMade = false;
+
+        try {
+            for ( ICanonicalItem eachItem : evt.getRecipe().getItems()) {
+            	changesMade |= addItemTagsForItem( eachItem, recipeId);
+        	}
+	    }
+		catch (TasteException e) {
+			Throwables.propagate(e);
+		}
+
+        if (changesMade) {
+        	recommender.refresh();
+
+        	if (LOG.isTraceEnabled()) {
+        		LOG.trace("onAddRecipe: refresh done");
+        	}
+        }
+    }
+
+    private boolean addItemTagsForItem( final ICanonicalItem inItem, final long inItemOrRecipeId) throws TasteException {
+    	boolean changesMade = false;
+
+    	for ( final Entry<ITag,Serializable> eachTag : inItem.getTags().entrySet()) {
+    		if ( eachTag.getValue() instanceof Boolean) {
+    			if ((Boolean) eachTag.getValue()) {
+    				// Don't bother setting if == FALSE
+    				if (LOG.isDebugEnabled()) {
+    					LOG.debug("Set Tag '" + eachTag.getKey() + "' val=1.0 for " + inItemOrRecipeId);
+    				}
+    	        	recommender.setItemTag( eachTag.getKey().toString(), inItemOrRecipeId, 1.0f);
+    	        	changesMade = true;
+    			}
+    		}
+    		else {
+    			final float val = Float.valueOf((String) eachTag.getValue());
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Set Tag '" + eachTag.getKey() + "' val=" + val + " for " + inItemOrRecipeId);
+				}
+	        	recommender.setItemTag( eachTag.getKey().toString(), inItemOrRecipeId, val);
+	        	changesMade = true;
+    		}
+    	}
+ 
+    	return changesMade;
     }
 
     @Override
