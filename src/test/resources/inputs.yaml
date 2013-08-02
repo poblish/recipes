@@ -183,11 +183,11 @@
 
 {canonicalName: Avocado, tags: FRUIT}
 ---
-{canonicalName: Lemon, tags: FRUIT}
+{canonicalName: Lemon, tags: {FRUIT, CITRUS}}
 ---
-{canonicalName: Lime, tags: FRUIT}
+{canonicalName: Lime, tags: {FRUIT, CITRUS}}
 ---
-{canonicalName: Orange, parent: FRUIT}
+{canonicalName: Orange, tags: {FRUIT, CITRUS}}
 ---
 
 
@@ -291,13 +291,13 @@
 
 {canonicalName: Soy Sauce, tags: {SAUCE, CHINESE}}
 ---
-{canonicalName: Worcestershire Sauce, tags: SAUCE}
+{canonicalName: Worcestershire Sauce, tags: {FISH, SAUCE}}
 ---
 {canonicalName: Beef Stock, tags: {MEAT, SAUCE}}
 ---
 {canonicalName: Chicken Stock, tags: {MEAT, SAUCE}}
 ---
-{canonicalName: Fish Sauce, tags: {MEAT, SAUCE, THAI, VIETNAMESE}}
+{canonicalName: Fish Sauce, tags: {FISH, SAUCE, THAI, VIETNAMESE}}
 ---
 {canonicalName: Tamarind Paste, tags: {FRUIT, SAUCE}}
 ---

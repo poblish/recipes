@@ -127,7 +127,7 @@ public class IngredientsTest {
 		Thread.sleep(1000);  // Time for indexing to happen!
 
 		final List<ICanonicalItem> results = searchService.findItemsByName("MEAT:true");
-		assertThat( results.size(), greaterThanOrEqualTo(20));
+		assertThat( results.size(), greaterThanOrEqualTo(19));
 		assertThat( results, hasItem( itemFactory.getById("beef_stock") ));
 		assertThat( results, hasItem( itemFactory.getById("lamb") ));
 		assertThat( results, hasItem( itemFactory.getById("diced_chicken") ));
