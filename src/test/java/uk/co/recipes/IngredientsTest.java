@@ -3,17 +3,16 @@ package uk.co.recipes;
 import static java.util.Locale.ENGLISH;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-
+import uk.co.recipes.service.api.IRecipePersistence;
+import uk.co.recipes.service.api.IItemPersistence;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.http.client.ClientProtocolException;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.Units;
@@ -28,19 +27,17 @@ import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.impl.EsSearchService;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.tags.CommonTags;
-
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Maps;
-
 import dagger.ObjectGraph;
 
 public class IngredientsTest {
 
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
-	private EsItemFactory itemFactory = GRAPH.get( EsItemFactory.class );
-	private EsRecipeFactory recipeFactory = GRAPH.get( EsRecipeFactory.class );
+	private IItemPersistence itemFactory = GRAPH.get( EsItemFactory.class );
+	private IRecipePersistence recipeFactory = GRAPH.get( EsRecipeFactory.class );
     private EsSequenceFactory sequenceFactory = GRAPH.get( EsSequenceFactory.class );
 
     private IEventListener updater = GRAPH.get( MyrrixUpdater.class );
@@ -117,7 +114,7 @@ public class IngredientsTest {
 		r.addStage(stage1);
 		r.addTag( CommonTags.SERVES_COUNT, "4");
 
-		recipeFactory.put( r, recipeFactory.toId(r));
+		recipeFactory.put( r, recipeFactory.toStringId(r));
 
 		///////////////////////////////////////////////////
 

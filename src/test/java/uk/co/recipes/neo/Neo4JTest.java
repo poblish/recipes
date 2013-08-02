@@ -2,14 +2,14 @@ package uk.co.recipes.neo;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-
+import uk.co.recipes.service.api.IRecipePersistence;
+import uk.co.recipes.service.api.IItemPersistence;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map.Entry;
-
 import org.apache.http.client.ClientProtocolException;
 import org.elasticsearch.client.Client;
 import org.neo4j.cypher.javacompat.ExecutionEngine;
@@ -27,7 +27,6 @@ import org.neo4j.server.Bootstrapper;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
 import uk.co.recipes.DaggerModule;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
@@ -36,10 +35,8 @@ import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.test.TestDataUtils;
-
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
-
 import dagger.ObjectGraph;
 
 /**
@@ -54,8 +51,8 @@ public class Neo4JTest {
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
 	private Client esClient = GRAPH.get( Client.class );
-	private EsItemFactory itemFactory = GRAPH.get( EsItemFactory.class );
-	private EsRecipeFactory recipeFactory = GRAPH.get( EsRecipeFactory.class );
+	private IItemPersistence itemFactory = GRAPH.get( EsItemFactory.class );
+	private IRecipePersistence recipeFactory = GRAPH.get( EsRecipeFactory.class );
 	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
 
 	private GraphDatabaseService graphDb;

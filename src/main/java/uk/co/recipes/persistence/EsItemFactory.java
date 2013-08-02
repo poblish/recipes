@@ -8,17 +8,15 @@ import static org.elasticsearch.index.query.QueryBuilders.matchPhraseQuery;
 import static org.elasticsearch.search.sort.SortOrder.DESC;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-
+import uk.co.recipes.service.api.IItemPersistence;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
@@ -31,12 +29,10 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.search.SearchHit;
-
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.events.api.IEventService;
-
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
@@ -48,7 +44,7 @@ import com.google.common.collect.Lists;
  * @author andrewregan
  *
  */
-public class EsItemFactory {
+public class EsItemFactory implements IItemPersistence {
 
 	@Inject
 	Client esClient;
@@ -101,6 +97,10 @@ public class EsItemFactory {
         }
 
         return esUtils.findOneByIdAndType( itemIndexUrl, inId, ICanonicalItem.class, CanonicalItem.class);
+    }
+
+    public String toStringId( final ICanonicalItem inItem) throws IOException {
+        return toId( inItem.getCanonicalName() );
     }
 
 	public static String toId( final String inCanonicalName) throws IOException {
@@ -159,6 +159,11 @@ public class EsItemFactory {
 	public Collection<CanonicalItem> listAll() throws JsonParseException, JsonMappingException, IOException {
 		return esUtils.listAll( itemIndexUrl, CanonicalItem.class);
 	}
+
+    // FIXME - pretty lame!
+    public int countAll() throws IOException {
+        return esUtils.countAll( itemIndexUrl, CanonicalItem.class);
+    }
 
 	public void deleteAll() throws IOException {
 		final HttpResponse resp = httpClient.execute( new HttpDelete(itemIndexUrl) );

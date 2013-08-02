@@ -64,7 +64,7 @@ public class TestDataUtils {
 		final Recipe r = new Recipe(inFilename);
 		r.addStage(stage1);
 
-		recipeFactory.put( r, recipeFactory.toId(r));
+		recipeFactory.put( r, recipeFactory.toStringId(r));
 
 		////////////////////////////////////////////////////////////
 
