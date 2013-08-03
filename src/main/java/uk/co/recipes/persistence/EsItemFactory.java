@@ -6,8 +6,6 @@ package uk.co.recipes.persistence;
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.elasticsearch.index.query.QueryBuilders.matchPhraseQuery;
 import static org.elasticsearch.search.sort.SortOrder.DESC;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -74,7 +72,7 @@ public class EsItemFactory implements IItemPersistence {
 
 
 	public ICanonicalItem put( final ICanonicalItem inItem, String inId) throws IOException {
-		final HttpPost req = new HttpPost( itemIndexUrl + "/" + inId);
+		final HttpPost req = new HttpPost( itemIndexUrl + "/" + inId); // URLEncoder.encode( inId, "UTF-8"));
 
 		try {
 			inItem.setId( sequences.getSeqnoForType("items_seqno") );
@@ -82,7 +80,10 @@ public class EsItemFactory implements IItemPersistence {
 			req.setEntity( new StringEntity( mapper.writeValueAsString(inItem) ) );
 
 			final HttpResponse resp = httpClient.execute(req);
-			assertThat( resp.getStatusLine().getStatusCode(), is(201));
+			if ( resp.getStatusLine().getStatusCode() != 201) {
+				throw new RuntimeException("Failure for '" + inId + "', code = " + resp.getStatusLine().getStatusCode());
+			}
+
 			EntityUtils.consume( resp.getEntity() );
 
 			eventService.addItem(inItem);
