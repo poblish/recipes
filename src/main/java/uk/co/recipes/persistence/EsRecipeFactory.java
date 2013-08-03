@@ -25,6 +25,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.indices.TypeMissingException;
 
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.IRecipe;
@@ -128,7 +129,12 @@ public class EsRecipeFactory implements IRecipePersistence {
     }
 
 	public void deleteAll() throws IOException {
-		esClient.admin().indices().prepareDeleteMapping().setIndices("recipe").setType("recipes").execute().actionGet();
+		try {
+			esClient.admin().indices().prepareDeleteMapping().setIndices("recipe").setType("recipes").execute().actionGet();
+		}
+		catch (TypeMissingException e) {
+			// Ignore
+		}
 	}
 
 	/**
