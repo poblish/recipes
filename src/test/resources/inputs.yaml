@@ -99,6 +99,10 @@
 ---
 {    canonicalName: Green Chillies, parent: Chilli}
 ---
+{    canonicalName: Ancho Chile, parent: Chilli, tags: {MEXICAN}, aliases: {Poblano}}
+---
+{    canonicalName: Chile de arbol, parent: Chilli, tags: {MEXICAN}, aliases: {Arbol Chili}}
+---
 {    canonicalName: Bird's eye chili, parent: Chilli, tags: {THAI, VIETNAMESE}, aliases: {Thai chili, Birds eye chillies}}
 ---
 
@@ -181,13 +185,23 @@
 ---
 
 
-{canonicalName: Avocado, tags: FRUIT}
+{canonicalName: Apple, tags: {FRUIT}}
+---
+{canonicalName: Avocado, tags: {FRUIT, MEXICAN}}
+---
+{canonicalName: Grapefruit, tags: {FRUIT, CITRUS}}
 ---
 {canonicalName: Lemon, tags: {FRUIT, CITRUS}}
 ---
 {canonicalName: Lime, tags: {FRUIT, CITRUS}}
 ---
 {canonicalName: Orange, tags: {FRUIT, CITRUS}}
+---
+{canonicalName: Pear, tags: {FRUIT}}
+---
+{canonicalName: Satsuma, tags: {FRUIT, CITRUS}}
+---
+{canonicalName: Tangerine, tags: {FRUIT, CITRUS}}
 ---
 
 
@@ -201,7 +215,7 @@
 ---
 
 
-{canonicalName: Cashew Nuts, tags: NUT, aliases: Cashew Nut}
+{canonicalName: Cashew Nuts, tags: NUT, aliases: {Cashew, Cashew Nut}}
 ---
 {canonicalName: Hazelnuts, tags: NUT, aliases: Hazelnut}
 ---

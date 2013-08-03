@@ -223,6 +223,7 @@ public class IngredientsTest {
         runSimilarity("Gnocchi");
         runSimilarity("Dark Muscovado Sugar");
         runSimilarity("Cashew Nuts");
+        runSimilarity("Semolina");
     }
 
     private void runSimilarity( final String inName) throws IOException {
