@@ -75,7 +75,7 @@ public class CorrelationsTest {
 		assertThat( withTags.toString(), is("[SPICE x 2, CHINESE, HERB, INDIAN, MEAT, SAUCE]"));
 
 		final Multiset<ITag> withoutTags = corrs.findTagsWithout( itemFactory.get("Coriander").get() );
-		assertThat( withoutTags.toString(), is("[VEGETABLE x 33, SPICE x 22, INDIAN x 19, MEAT x 19, CHINESE x 13, DAIRY x 12, FAT x 10, HERB x 9, ALCOHOL x 8, SAUCE x 8, SUGAR x 7, THAI x 7, CHILLI x 6, OIL x 6, WINE x 6, POULTRY x 5, FLOUR x 4, FRUIT x 4, ITALIAN x 4, SEED x 4, VINEGAR x 3, CHEESE x 2, FRENCH x 2, NUT x 2, PASTA x 2, SEAFOOD x 2, SPANISH x 2, VIETNAMESE x 2, EGG, HUNGARIAN, OFFAL, SALT]"));
+		assertThat( withoutTags.toString(), is("[VEGETABLE x 33, SPICE x 22, INDIAN x 21, MEAT x 18, CHINESE x 15, DAIRY x 12, FAT x 10, FRUIT x 10, HERB x 9, THAI x 9, ALCOHOL x 8, CHILLI x 8, SAUCE x 8, SUGAR x 7, CITRUS x 6, OIL x 6, WINE x 6, POULTRY x 5, FLOUR x 4, ITALIAN x 4, SEED x 4, MEXICAN x 3, VINEGAR x 3, CHEESE x 2, FISH x 2, FRENCH x 2, NUT x 2, PASTA x 2, SEAFOOD x 2, SPANISH x 2, VIETNAMESE x 2, EGG, HUNGARIAN, OFFAL, SALT]"));
 	}
 
 	@AfterClass
