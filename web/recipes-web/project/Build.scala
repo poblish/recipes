@@ -11,11 +11,13 @@ object ApplicationBuild extends Build {
     // Add your project dependencies here,
     javaCore,
     javaJdbc,
-    javaEbean
+    javaEbean,
+    "uk.co.recipes" % "recipes-domain" % "0.0.1-SNAPSHOT"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
-    // Add your own project settings here      
+    resolvers += (
+      "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository"
+    )
   )
-
 }
