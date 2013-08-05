@@ -1,4 +1,4 @@
-@(searchItem: String, similarities: List[uk.co.recipes.api.IRecipe], user: uk.co.recipes.api.IUser, recommendations: List[uk.co.recipes.api.IRecipe], title: String)
+@(searchItem: String, similarities: List[uk.co.recipes.api.IRecipe], user: uk.co.recipes.api.IUser, title: String)
 
 @main("Recipes Test") {
 }
@@ -48,21 +48,6 @@
 
 <ol>
 @for( eachRecipe <- similarities) {
-  <li>@eachRecipe.getTitle()
-  	<ol>
-@for(item <- eachRecipe.getItems()) {
-<li>@item.getCanonicalName()&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-info">@tagName</span>}</li>
-}
-  	</ol>
-  </li>
-}
-</ol>
-
-<hr />
-
-<p>Recommended Recipes for @user</p>
-<ol>
-@for( eachRecipe <- recommendations) {
   <li>@eachRecipe.getTitle()
   	<ol>
 @for(item <- eachRecipe.getItems()) {

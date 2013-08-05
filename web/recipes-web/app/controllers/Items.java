@@ -1,10 +1,8 @@
 package controllers;
 
-import uk.co.recipes.api.IRecipe;
-import com.google.common.base.Supplier;
-import dagger.ObjectGraph;
 import java.io.IOException;
 import java.util.List;
+
 import play.mvc.Controller;
 import play.mvc.Result;
 import uk.co.recipes.DaggerModule;
@@ -15,18 +13,26 @@ import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.service.api.IExplorerAPI;
 import uk.co.recipes.service.api.IItemPersistence;
-import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.api.IUserPersistence;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
-import uk.co.recipes.service.impl.MyrrixRecommendationService;
 
+import com.google.common.base.Supplier;
+
+import dagger.ObjectGraph;
+
+/**
+ * 
+ * TODO
+ *
+ * @author andrewregan
+ *
+ */
 public class Items extends Controller {
 
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 	private final static IItemPersistence ITEMS = GRAPH.get( EsItemFactory.class );
     private final static IUserPersistence USERS = GRAPH.get( EsUserFactory.class );
     private final static IExplorerAPI EXPLORER_API = GRAPH.get( MyrrixExplorerService.class );
-    private final static IRecommendationsAPI RECS_API = GRAPH.get( MyrrixRecommendationService.class );
 
     public static Result display( final String name) throws IOException {
         final ICanonicalItem item = ITEMS.get(name).get();
@@ -47,8 +53,7 @@ public class Items extends Controller {
                 return new User();
             }
         } );
-        final List<ICanonicalItem> recommendations = RECS_API.recommendIngredients( user1, 10);
 
-        return ok(views.html.items.render( theInput, similarities, user1, recommendations, gotInput ? "Search Results" : "Test"));
+        return ok(views.html.items.render( theInput, similarities, user1, gotInput ? "Search Results" : "Test"));
     }
 }

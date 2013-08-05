@@ -1,9 +1,8 @@
 package controllers;
 
-import com.google.common.base.Supplier;
-import dagger.ObjectGraph;
 import java.io.IOException;
 import java.util.List;
+
 import play.mvc.Controller;
 import play.mvc.Result;
 import uk.co.recipes.DaggerModule;
@@ -14,18 +13,26 @@ import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.service.api.IExplorerAPI;
 import uk.co.recipes.service.api.IRecipePersistence;
-import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.api.IUserPersistence;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
-import uk.co.recipes.service.impl.MyrrixRecommendationService;
 
+import com.google.common.base.Supplier;
+
+import dagger.ObjectGraph;
+
+/**
+ * 
+ * TODO
+ *
+ * @author andrewregan
+ *
+ */
 public class Recipes extends Controller {
 
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
     private final static IRecipePersistence RECIPES = GRAPH.get( EsRecipeFactory.class );
     private final static IUserPersistence USERS = GRAPH.get( EsUserFactory.class );
     private final static IExplorerAPI EXPLORER_API = GRAPH.get( MyrrixExplorerService.class );
-    private final static IRecommendationsAPI RECS_API = GRAPH.get( MyrrixRecommendationService.class );
 
     public static Result display( final String name) throws IOException {
         final IRecipe recipe = RECIPES.get(name).get();
@@ -46,8 +53,6 @@ public class Recipes extends Controller {
                 return new User();
             }
         } );
-        final List<IRecipe> recommendations = RECS_API.recommendRecipes( user1, 10);
-
-        return ok(views.html.recipes.render( theInput, similarities, user1, recommendations, gotInput ? "Search Results" : "Test"));
+        return ok(views.html.recipes.render( theInput, similarities, user1, gotInput ? "Search Results" : "Test"));
     }
 }

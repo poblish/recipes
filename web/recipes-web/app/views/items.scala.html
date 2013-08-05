@@ -1,4 +1,4 @@
-@(searchItem: String, similarities: List[uk.co.recipes.api.ICanonicalItem], user: uk.co.recipes.api.IUser, recommendations: List[uk.co.recipes.api.ICanonicalItem], title: String)
+@(searchItem: String, similarities: List[uk.co.recipes.api.ICanonicalItem], user: uk.co.recipes.api.IUser, title: String)
 
 @main("Recipes Play Test") {
 }
@@ -48,13 +48,6 @@
 
 <ol>
 @for( eachItem <- similarities) {
-  <li>@eachItem.getCanonicalName()&nbsp;@for(tagName <- eachItem.getTagNamesForDisplay()){&nbsp;<span class="label label-info">@tagName</span>}</li>  <!-- Parent stuff -->
-}
-</ol>
-
-<p>Recommended Items for @user</p>
-<ol>
-@for( eachItem <- recommendations) {
   <li>@eachItem.getCanonicalName()&nbsp;@for(tagName <- eachItem.getTagNamesForDisplay()){&nbsp;<span class="label label-info">@tagName</span>}</li>  <!-- Parent stuff -->
 }
 </ol>
