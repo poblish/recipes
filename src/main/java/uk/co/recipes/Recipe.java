@@ -4,6 +4,8 @@
 package uk.co.recipes;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static uk.co.recipes.tags.TagUtils.findActivated;
+import static uk.co.recipes.tags.TagUtils.tagNamesTitleCase;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -20,6 +22,7 @@ import uk.co.recipes.api.IRecipeStage;
 import uk.co.recipes.api.ITag;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -127,6 +130,11 @@ public class Recipe implements IRecipe {
 	@Override
 	public Map<ITag,Serializable> getTags() {
 		return tagsMap;
+	}
+
+	@Override
+	public List<String> getTagNamesForDisplay() {
+		return FluentIterable.from( getTags().entrySet() ).filter( findActivated() ).transform( tagNamesTitleCase() ).toList();
 	}
 
 	@Override

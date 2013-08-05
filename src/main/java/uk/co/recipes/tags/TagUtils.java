@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 
 import uk.co.recipes.api.ITag;
 
+import com.google.common.base.CaseFormat;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ComparisonChain;
@@ -26,6 +27,12 @@ public class TagUtils {
 	private static final Function<Entry<ITag,Serializable>,ITag> ENTRY_KEYS = new Function<Entry<ITag,Serializable>,ITag>() {
 		public ITag apply( Entry<ITag,Serializable> input) {
 			return input.getKey();
+		}
+	};
+
+	private static final Function<Entry<ITag,Serializable>,String> TAG_NAMES_TITLECASE = new Function<Entry<ITag,Serializable>,String>() {
+		public String apply( Entry<ITag,Serializable> input) {
+			return CaseFormat.UPPER_UNDERSCORE.to( CaseFormat.UPPER_CAMEL, input.getKey().toString());
 		}
 	};
 
@@ -50,6 +57,10 @@ public class TagUtils {
 
 	public static Function<Entry<ITag,Serializable>,ITag> entryKeys() {
 		return ENTRY_KEYS;
+	}
+
+	public static Function<Entry<ITag,Serializable>,String> tagNamesTitleCase() {
+		return TAG_NAMES_TITLECASE;
 	}
 
 	public static ITag forName( final String inName) {

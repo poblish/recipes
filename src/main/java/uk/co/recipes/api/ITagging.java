@@ -4,6 +4,7 @@
 package uk.co.recipes.api;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,4 +19,5 @@ public interface ITagging {
 	void addTag( final ITag key, final Serializable value);
 
 	Map<ITag,Serializable> getTags();
+	List<String> getTagNamesForDisplay();
 }

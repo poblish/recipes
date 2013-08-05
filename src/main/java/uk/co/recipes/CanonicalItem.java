@@ -4,9 +4,12 @@
 package uk.co.recipes;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static uk.co.recipes.tags.TagUtils.findActivated;
+import static uk.co.recipes.tags.TagUtils.tagNamesTitleCase;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -21,6 +24,7 @@ import uk.co.recipes.api.ITag;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Sets;
 
 /**
@@ -124,6 +128,11 @@ public class CanonicalItem implements ICanonicalItem {
 		}
 
 		return allTags;
+	}
+
+	@Override
+	public List<String> getTagNamesForDisplay() {
+		return FluentIterable.from( getTags().entrySet() ).filter( findActivated() ).transform( tagNamesTitleCase() ).toList();
 	}
 
 	public Collection<String> getAliases() {
