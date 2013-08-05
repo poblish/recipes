@@ -36,7 +36,8 @@ public class Items extends Controller {
 
     public static Result display( final String name) throws IOException {
         final ICanonicalItem item = ITEMS.get(name).get();
-        return ok(views.html.item.render( item, ( item != null) ? "Found" : "Not Found"));
+        final List<ICanonicalItem> similarities = EXPLORER_API.similarIngredients( item, 10);
+        return ok(views.html.item.render( item, similarities, ( item != null) ? "Found" : "Not Found"));
     }
 
     public static Result test() throws IOException {
