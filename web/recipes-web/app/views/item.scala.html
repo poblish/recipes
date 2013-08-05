@@ -46,7 +46,7 @@
     </div>
 </section>
 
-<p>@item.getCanonicalName()&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-info">@tagName</span>}</p>
+<p><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-info">@tagName</span>}</p>
 
 </body>
 </html>
