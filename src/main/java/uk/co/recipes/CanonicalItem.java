@@ -15,6 +15,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.elasticsearch.common.Preconditions;
@@ -130,6 +131,7 @@ public class CanonicalItem implements ICanonicalItem {
 		return allTags;
 	}
 
+	@JsonIgnore  // Prevent Jackson insanity
 	@Override
 	public List<String> getTagNamesForDisplay() {
 		return FluentIterable.from( getTags().entrySet() ).filter( findActivated() ).transform( tagNamesTitleCase() ).toList();

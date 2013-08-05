@@ -132,6 +132,7 @@ public class Recipe implements IRecipe {
 		return tagsMap;
 	}
 
+	@JsonIgnore  // Prevent Jackson insanity
 	@Override
 	public List<String> getTagNamesForDisplay() {
 		return FluentIterable.from( getTags().entrySet() ).filter( findActivated() ).transform( tagNamesTitleCase() ).toList();
