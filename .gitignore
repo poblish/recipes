@@ -2,3 +2,4 @@ target/
 test-output/
 .DS_Store
 myrrix-serving-1.0.1.jar
+.target/

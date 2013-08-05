@@ -1,0 +1,56 @@
+@(message: String)
+
+@main("Recipes Play Test") {
+}
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <link rel="shortcut icon" type="image/png" href="/assets/images/favicon.png">
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+    </head>
+
+    <body>
+
+    <div class="navbar navbar-fixed-top navbar-inverse">
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="btn btn-navbar">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</a>
+			<a class="brand" href="index.jsp">Poems 2013</a>
+			<ul class="nav">
+				<li class="active"><a href="index.jsp">Home</a></li>
+				<li><a href="insert.jsp">Add Poem...</a></li>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					Random Poems
+					<b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="pick_random.jsp">Randomly-selected Poem</a></li>
+						<li><a href="random.jsp">Randomly-generated Poem</a></li>
+					</ul>
+				</li>
+				<li><a href="stats.jsp">Statistics</a></li>
+				<li><a href="#"><span class="badge badge-important">568</span> poems</a></li>
+				<li><a href="#"><span class="badge badge-info">717</span> verses</a></li>
+			</ul>
+			<form action="test.html" class="navbar-search pull-right">
+			  <input type="text" name="first_text" class="search-query" placeholder="Search..." />
+			  <input type="hidden" name="styles" value="All styles" />
+			</form>
+		</div>
+	</div>
+
+<section id="top">
+    <div class="wrapper">
+        <h1>Hello Wold!</h1>
+    </div>
+</section>
+@message
+</body>
+</html>
