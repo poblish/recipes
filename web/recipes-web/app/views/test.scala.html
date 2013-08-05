@@ -1,4 +1,4 @@
-@(message: String)
+@(searchItem: String, similarities: List[uk.co.recipes.api.ICanonicalItem], title: String)
 
 @main("Recipes Play Test") {
 }
@@ -48,9 +48,16 @@
 
 <section id="top">
     <div class="wrapper">
-        <h1>Hello Wold!</h1>
+        <h1>@title</h1>
     </div>
 </section>
-@message
+<p>Similiar to @searchItem</p>
+
+<ul>
+@for( eachItem <- similarities) {
+  <li>@eachItem</li>
+}
+</ul>
+
 </body>
 </html>

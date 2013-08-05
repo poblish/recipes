@@ -28,10 +28,10 @@ public class Application extends Controller {
         final ICanonicalItem item = itemFactory.get("ginger").get();
         final List<ICanonicalItem> similarities = explorerApi.similarIngredients( item, 10);
 
-        return ok(views.html.test.render("" + similarities));
+        return ok(views.html.test.render( "ginger", similarities, "Hello, AR"));
     }
 
     public static Result search() {
-        return ok(views.html.test.render("Hello, Wold!"));
+        return ok(views.html.test.render( "???", null, "Hello, Wold!"));
     }
 }
