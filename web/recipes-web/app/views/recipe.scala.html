@@ -45,7 +45,11 @@
     </div>
 </section>
 
-<p>@recipe</p>
-
+<p>@recipe.getTitle()</p>
+<ol>
+@for(item <- recipe.getItems()) {
+<li>@item.getCanonicalName()&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-info">@tagName</span>}</li>
+}
+</ol>
 </body>
 </html>

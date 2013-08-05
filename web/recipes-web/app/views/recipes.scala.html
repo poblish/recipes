@@ -46,18 +46,32 @@
 </section>
 <p>Similiar Recipes to @searchItem</p>
 
-<ul>
-@for( eachItem <- similarities) {
-  <li>@eachItem</li>
+<ol>
+@for( eachRecipe <- similarities) {
+  <li>@eachRecipe.getTitle()
+  	<ol>
+@for(item <- eachRecipe.getItems()) {
+<li>@item.getCanonicalName()&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-info">@tagName</span>}</li>
 }
-</ul>
+  	</ol>
+  </li>
+}
+</ol>
+
+<hr />
 
 <p>Recommended Recipes for @user</p>
-<ul>
-@for( eachItem <- recommendations) {
-  <li>@eachItem</li>
+<ol>
+@for( eachRecipe <- recommendations) {
+  <li>@eachRecipe.getTitle()
+  	<ol>
+@for(item <- eachRecipe.getItems()) {
+<li>@item.getCanonicalName()&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-info">@tagName</span>}</li>
 }
-</ul>
+  	</ol>
+  </li>
+}
+</ol>
 
 </body>
 </html>

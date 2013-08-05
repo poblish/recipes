@@ -46,18 +46,18 @@
 </section>
 <p>Similiar Items to @searchItem</p>
 
-<ul>
+<ol>
 @for( eachItem <- similarities) {
   <li>@eachItem.getCanonicalName()&nbsp;@for(tagName <- eachItem.getTagNamesForDisplay()){&nbsp;<span class="label label-info">@tagName</span>}</li>  <!-- Parent stuff -->
 }
-</ul>
+</ol>
 
 <p>Recommended Items for @user</p>
-<ul>
+<ol>
 @for( eachItem <- recommendations) {
   <li>@eachItem.getCanonicalName()&nbsp;@for(tagName <- eachItem.getTagNamesForDisplay()){&nbsp;<span class="label label-info">@tagName</span>}</li>  <!-- Parent stuff -->
 }
-</ul>
+</ol>
 
 </body>
 </html>
