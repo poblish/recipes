@@ -17,21 +17,20 @@ import dagger.ObjectGraph;
 public class Application extends Controller {
 
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
-	private final static IItemPersistence itemFactory = GRAPH.get( EsItemFactory.class );
-    private final static IExplorerAPI explorerApi = GRAPH.get( MyrrixExplorerService.class );
+	private final static IItemPersistence ITEMS = GRAPH.get( EsItemFactory.class );
+    private final static IExplorerAPI EXPLORER_API = GRAPH.get( MyrrixExplorerService.class );
 
 	public static Result index() {
         return ok(index.render("Your new application is ready."));
     }
 
     public static Result test() throws IOException {
-        final ICanonicalItem item = itemFactory.get("ginger").get();
-        final List<ICanonicalItem> similarities = explorerApi.similarIngredients( item, 10);
+        final String[] theInputs = request().queryString().get("input");
+        final boolean gotInput = ( theInputs != null && theInputs.length > 0 && !theInputs[0].isEmpty());
+        final String theInput = gotInput ? theInputs[0] : "ginger";
+        final ICanonicalItem item = ITEMS.get(theInput).get();
+        final List<ICanonicalItem> similarities = EXPLORER_API.similarIngredients( item, 10);
 
-        return ok(views.html.test.render( "ginger", similarities, "Hello, AR"));
-    }
-
-    public static Result search() {
-        return ok(views.html.test.render( "???", null, "Hello, Wold!"));
+        return ok(views.html.test.render( theInput, similarities, gotInput ? "Search Results" : "Test"));
     }
 }
