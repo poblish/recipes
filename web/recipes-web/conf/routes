@@ -4,7 +4,9 @@
 
 # Home page
 GET     /                           controllers.Application.index()
-GET     /test.html                  controllers.Application.test()
+GET     /items/:name                controllers.Items.display(name: String)
+GET     /items.html                 controllers.Items.test()
+GET     /recipes/:name              controllers.Recipes.display(name: String)
 GET     /recipes.html               controllers.Recipes.test()
 
 # Map static resources from the /public folder to the /assets URL path
