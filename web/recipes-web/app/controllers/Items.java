@@ -46,14 +46,6 @@ public class Items extends Controller {
         final ICanonicalItem item = ITEMS.get(theInput).get();
         final List<ICanonicalItem> similarities = EXPLORER_API.similarIngredients( item, 10);
 
-        final IUser user1 = USERS.getOrCreate( "Andrew Regan", new Supplier<IUser>() {
-
-            @Override
-            public IUser get() {
-                return new User();
-            }
-        } );
-
-        return ok(views.html.items.render( theInput, similarities, user1, gotInput ? "Search Results" : "Test"));
+        return ok(views.html.items.render( theInput, similarities, gotInput ? "Search Results" : "Test"));
     }
 }
