@@ -1,6 +1,6 @@
-@(searchItem: String, similarities: List[uk.co.recipes.api.ICanonicalItem], user: uk.co.recipes.api.IUser, recommendations: List[uk.co.recipes.api.ICanonicalItem], title: String)
+@(searchItem: String, similarities: List[uk.co.recipes.api.IRecipe], user: uk.co.recipes.api.IUser, recommendations: List[uk.co.recipes.api.IRecipe], title: String)
 
-@main("Recipes Play Test") {
+@main("Recipes Test") {
 }
 <!DOCTYPE html>
 
@@ -38,7 +38,7 @@
         <h1>@title</h1>
     </div>
 </section>
-<p>Similiar Items to @searchItem</p>
+<p>Similiar Recipes to @searchItem</p>
 
 <ul>
 @for( eachItem <- similarities) {
@@ -46,7 +46,7 @@
 }
 </ul>
 
-<p>Recommended Items for @user</p>
+<p>Recommended Recipes for @user</p>
 <ul>
 @for( eachItem <- recommendations) {
   <li>@eachItem</li>
