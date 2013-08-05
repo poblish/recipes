@@ -1,4 +1,4 @@
-@(searchItem: String, similarities: List[uk.co.recipes.api.ICanonicalItem], title: String)
+@(searchItem: String, similarities: List[uk.co.recipes.api.ICanonicalItem], user: uk.co.recipes.api.IUser, recommendations: List[uk.co.recipes.api.ICanonicalItem], title: String)
 
 @main("Recipes Play Test") {
 }
@@ -22,7 +22,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</a>
-			<a class="brand" href="index.jsp">Poems 2013</a>
+			<a class="brand" href="index.jsp">Recipes 2013</a>
 			<ul class="nav">
 				<li class="active"><a href="index.jsp">Home</a></li>
 			</ul>
@@ -42,6 +42,13 @@
 
 <ul>
 @for( eachItem <- similarities) {
+  <li>@eachItem</li>
+}
+</ul>
+
+<p>Recommendations for @user</p>
+<ul>
+@for( eachItem <- recommendations) {
   <li>@eachItem</li>
 }
 </ul>
