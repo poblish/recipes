@@ -123,7 +123,7 @@ public class RecipeExploreRecommendTest {
 
 			@Override
 			public IUser get() {
-				return new User();
+				return new User( "aregan", "Andrew Regan");
 			}
 		} );
 
@@ -133,7 +133,7 @@ public class RecipeExploreRecommendTest {
 
 			@Override
 			public IUser get() {
-				return new User();
+				return new User( "foobar", "Foo Bar");
 			}
 		} );
 

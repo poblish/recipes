@@ -157,7 +157,7 @@ public class IngredientsTest {
 
 			@Override
 			public IUser get() {
-				return new User();
+				return new User( "aregan", "Andrew Regan");
 			}
 		} );
 
@@ -167,7 +167,7 @@ public class IngredientsTest {
 
 			@Override
 			public IUser get() {
-				return new User();
+				return new User( "foobar", "Foo Bar");
 			}
 		} );
 

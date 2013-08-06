@@ -156,7 +156,7 @@ public class EsUserFactory implements IUserPersistence {
 
     @Override
     public String toStringId( final IUser obj) throws IOException {
-        throw new RuntimeException("unimpl");  // FIXME?
+        return toId( obj.getUserName() );
     }
 
     @Override
