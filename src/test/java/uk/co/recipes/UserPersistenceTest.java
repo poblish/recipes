@@ -3,11 +3,16 @@
  */
 package uk.co.recipes;
 
-import dagger.ObjectGraph;
+import static com.google.common.collect.Sets.newHashSet;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import java.io.IOException;
+
 import org.apache.http.client.ClientProtocolException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.api.IEventListener;
 import uk.co.recipes.events.impl.MyrrixUpdater;
@@ -22,9 +27,7 @@ import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.IUserPersistence;
 import uk.co.recipes.test.TestDataUtils;
-import static com.google.common.collect.Sets.newHashSet;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import dagger.ObjectGraph;
 
 
 /**

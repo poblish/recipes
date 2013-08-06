@@ -4,6 +4,7 @@
 package uk.co.recipes.api;
 
 import java.util.Collection;
+
 import uk.co.recipes.api.ratings.IItemRating;
 import uk.co.recipes.api.ratings.IRecipeRating;
 

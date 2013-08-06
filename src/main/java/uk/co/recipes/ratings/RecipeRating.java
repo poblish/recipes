@@ -3,12 +3,15 @@
  */
 package uk.co.recipes.ratings;
 
-import com.google.common.base.Objects;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
+
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.ratings.IRecipeRating;
-import static com.google.common.base.Preconditions.checkNotNull;
+
+import com.google.common.base.Objects;
 
 /**
  * TODO

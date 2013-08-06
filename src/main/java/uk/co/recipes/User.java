@@ -3,16 +3,20 @@
  */
 package uk.co.recipes;
 
-import com.google.common.base.Objects;
-import com.google.common.collect.Sets;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.Collection;
+
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.elasticsearch.common.Preconditions;
+
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.api.ratings.IItemRating;
 import uk.co.recipes.api.ratings.IRecipeRating;
-import static com.google.common.base.Preconditions.checkNotNull;
+
+import com.google.common.base.Objects;
+import com.google.common.collect.Sets;
 
 /**
  * TODO
