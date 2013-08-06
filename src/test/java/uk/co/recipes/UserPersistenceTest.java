@@ -3,8 +3,6 @@
  */
 package uk.co.recipes;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 import dagger.ObjectGraph;
 import java.io.IOException;
 import org.apache.http.client.ClientProtocolException;
@@ -23,6 +21,9 @@ import uk.co.recipes.ratings.RecipeRating;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.IUserPersistence;
+import static com.google.common.collect.Sets.newHashSet;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 
 /**
@@ -58,16 +59,17 @@ public class UserPersistenceTest {
     public void testPersistence() throws IOException {
         final String testUName = "aregan_" + System.nanoTime();
         final String testDName = "Andrew Regan #" + System.nanoTime();
+
         final IUser u1 = new User( testUName, testDName);
+        u1.addRating( new ItemRating( itemFactory.get("ginger").get(), 8) );
+        u1.addRating( new RecipeRating( recipeFactory.get("venisonBurgundy.txt").get(), 6) );
+        assertThat( u1.getItemRatings().size(), is(1));
+        assertThat( u1.getRecipeRatings().size(), is(1));
+
         userFactory.put( u1, userFactory.toStringId(u1));
 
-        u1.addRating( new ItemRating( u1, itemFactory.get("ginger").get(), 8) );
-        u1.addRating( new RecipeRating( u1, recipeFactory.get("inputs3.txt").get(), 6) );
-        assertThat( u1.getRatings().size(), is(2));
-
         final IUser retrievedUser = userFactory.getById( userFactory.toStringId(u1) );
-        assertThat( u1, is(retrievedUser));
-
-        userFactory.deleteAll();
+        assertThat( newHashSet( u1.getItemRatings() ), is( newHashSet( retrievedUser.getItemRatings() ) ));
+        assertThat( newHashSet( u1.getRecipeRatings() ), is( newHashSet( retrievedUser.getRecipeRatings() ) ));
     }
 }

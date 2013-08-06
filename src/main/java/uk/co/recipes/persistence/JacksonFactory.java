@@ -3,9 +3,9 @@
  */
 package uk.co.recipes.persistence;
 
+import com.google.common.base.Throwables;
 import java.io.IOException;
 import java.io.Serializable;
-
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
 import org.codehaus.jackson.Version;
@@ -16,21 +16,24 @@ import org.codehaus.jackson.map.KeyDeserializer;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
 import org.codehaus.jackson.map.module.SimpleModule;
-
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Ingredient;
 import uk.co.recipes.Quantity;
+import uk.co.recipes.Recipe;
 import uk.co.recipes.RecipeStage;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IQuantity;
+import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IRecipeStage;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.IUnit;
 import uk.co.recipes.api.Units;
+import uk.co.recipes.api.ratings.IItemRating;
+import uk.co.recipes.api.ratings.IRecipeRating;
+import uk.co.recipes.ratings.ItemRating;
+import uk.co.recipes.ratings.RecipeRating;
 import uk.co.recipes.tags.TagUtils;
-
-import com.google.common.base.Throwables;
 
 /**
  * TODO
@@ -68,10 +71,13 @@ public class JacksonFactory {
                 }
             }} );
 
-		testModule.addAbstractTypeMapping( IRecipeStage.class, RecipeStage.class);
+        testModule.addAbstractTypeMapping( IRecipe.class, Recipe.class);
+        testModule.addAbstractTypeMapping( IRecipeStage.class, RecipeStage.class);
 		testModule.addAbstractTypeMapping( IIngredient.class, Ingredient.class);
 		testModule.addAbstractTypeMapping( ICanonicalItem.class, CanonicalItem.class);
         testModule.addAbstractTypeMapping( IQuantity.class, Quantity.class);
+        testModule.addAbstractTypeMapping( IItemRating.class, ItemRating.class);
+        testModule.addAbstractTypeMapping( IRecipeRating.class, RecipeRating.class);
 
         inMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);  // When reading in ES hits, e.g. _index
         inMapper.configure(SerializationConfig.Feature.WRITE_EMPTY_JSON_ARRAYS, false);

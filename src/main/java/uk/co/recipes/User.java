@@ -3,15 +3,16 @@
  */
 package uk.co.recipes;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 import java.util.Collection;
-import uk.co.recipes.api.ratings.IRating;
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.elasticsearch.common.Preconditions;
 import uk.co.recipes.api.IUser;
-import com.google.common.base.Objects;
+import uk.co.recipes.api.ratings.IItemRating;
+import uk.co.recipes.api.ratings.IRecipeRating;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * TODO
@@ -27,7 +28,8 @@ public class User implements IUser {
 
     private String username;
     private String displayName;
-    private final Collection<IRating> ratings = Sets.newHashSet();  // FIXME Be careful loading this, could be big
+    private final Collection<IItemRating> itemRatings = Sets.newHashSet();  // FIXME Be careful loading this, could be big
+    private final Collection<IRecipeRating> recipeRatings = Sets.newHashSet();  // FIXME Be careful loading this, could be big
 
     @JsonCreator
     public User( @JsonProperty("userName") final String inUName, @JsonProperty("displayName") final String inDName) {
@@ -63,19 +65,29 @@ public class User implements IUser {
     }
 
     @Override
-    public Collection<IRating> getRatings() {
-        return ratings;  // FIXME Be careful loading this, could be big
+    public Collection<IItemRating> getItemRatings() {
+        return itemRatings;  // FIXME Be careful loading this, could be big
     }
 
     @Override
-    public void addRating(IRating inRating) {
-        ratings.add(inRating);
+    public Collection<IRecipeRating> getRecipeRatings() {
+        return recipeRatings;  // FIXME Be careful loading this, could be big
     }
 
     @Override
-    public void removeRating(IRating inRating) {
-        ratings.remove(inRating);
+    public void addRating(IItemRating inRating) {
+        itemRatings.add(inRating);
     }
+
+    @Override
+    public void addRating(IRecipeRating inRating) {
+        recipeRatings.add(inRating);
+    }
+
+//    @Override
+//    public void removeRating(IRating inRating) {
+//        ratings.remove(inRating);
+//    }
 
 	@Override
 	public int hashCode() {

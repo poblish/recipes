@@ -4,7 +4,8 @@
 package uk.co.recipes.api;
 
 import java.util.Collection;
-import uk.co.recipes.api.ratings.IRating;
+import uk.co.recipes.api.ratings.IItemRating;
+import uk.co.recipes.api.ratings.IRecipeRating;
 
 /**
  * TODO
@@ -20,7 +21,11 @@ public interface IUser {
 	String getUserName();
     String getDisplayName();
 
-	Collection<IRating> getRatings();
-    void addRating( IRating inRating);
-    void removeRating( IRating inRating);
+    void addRating( IItemRating inRating);
+	Collection<IItemRating> getItemRatings();
+
+    void addRating( IRecipeRating inRating);
+    Collection<IRecipeRating> getRecipeRatings();
+
+//    void removeRating( IRating inRating);
 }

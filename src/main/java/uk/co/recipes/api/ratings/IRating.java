@@ -3,9 +3,6 @@
  */
 package uk.co.recipes.api.ratings;
 
-import uk.co.recipes.api.IUser;
-
-
 /**
  * TODO
  * 
@@ -14,6 +11,6 @@ import uk.co.recipes.api.IUser;
  */
 public interface IRating {
 
-    IUser getRater();
+    // IUser getRater();
     int getScore();
 }
