@@ -123,9 +123,8 @@ public class EsRecipeFactory implements IRecipePersistence {
         return esUtils.listAll( itemIndexUrl, Recipe.class);
     }
 
-    // FIXME - pretty lame!
-    public int countAll() throws IOException {
-        return esUtils.countAll( itemIndexUrl, Recipe.class);
+    public long countAll() throws IOException {
+        return esUtils.countAll(itemIndexUrl);
     }
 
 	public void deleteAll() throws IOException {

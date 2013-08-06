@@ -169,9 +169,8 @@ public class EsItemFactory implements IItemPersistence {
 		return esUtils.listAll( itemIndexUrl, CanonicalItem.class);
 	}
 
-    // FIXME - pretty lame!
-    public int countAll() throws IOException {
-        return esUtils.countAll( itemIndexUrl, CanonicalItem.class);
+    public long countAll() throws IOException {
+        return esUtils.countAll(itemIndexUrl);
     }
 
 	public void deleteAll() throws IOException {

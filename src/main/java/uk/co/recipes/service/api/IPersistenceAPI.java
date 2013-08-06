@@ -27,7 +27,7 @@ public interface IPersistenceAPI<T> {
 
     String toStringId( final T obj) throws IOException;
 
-    int countAll() throws IOException;
+    long countAll() throws IOException;
 
     void deleteAll() throws IOException;
 }

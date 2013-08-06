@@ -160,7 +160,7 @@ public class EsUserFactory implements IUserPersistence {
     }
 
     @Override
-    public int countAll() throws IOException {
-        return esUtils.countAll( usersIndexUrl, User.class);
+    public long countAll() throws IOException {
+        return esUtils.countAll(usersIndexUrl);
     }
 }

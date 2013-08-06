@@ -57,8 +57,8 @@ public class EsUtils {
 		return allItems;
 	}
 
-    // FIXME - pretty lame!
-    public <T> int countAll( final String inBaseUrl, Class<T> inClass) throws JsonParseException, JsonMappingException, IOException {
-        return mapper.readTree( new URL( inBaseUrl + "/_search?q=*&size=9999") ).path("hits").path("hits").size();
+    public <T> long countAll( final String inBaseUrl) throws JsonParseException, JsonMappingException, IOException {
+        return mapper.readTree( new URL( inBaseUrl + "/_count") ).get("count").asLong();
+    	// FIXME Throws weird errors: return esClient.prepareCount(inIndex).execute().actionGet().count();
     }
 }
