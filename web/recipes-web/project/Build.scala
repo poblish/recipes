@@ -10,8 +10,6 @@ object ApplicationBuild extends Build {
   val appDependencies = Seq(
     // Add your project dependencies here,
     javaCore,
-    javaJdbc,
-    javaEbean,
     "uk.co.recipes" % "recipes-domain" % "0.0.1-SNAPSHOT"
   )
 
