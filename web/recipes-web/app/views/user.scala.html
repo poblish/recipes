@@ -55,6 +55,11 @@
 
 <hr />
 
+<p>Item Ratings: <span class="badge label-default">@user.getItemRatings().size()</span>&nbsp;: @user.getItemRatings()</p>
+<p>Recipe Ratings: <span class="badge label-default">@user.getRecipeRatings().size()</span>&nbsp;: @user.getRecipeRatings()</p>
+
+<hr />
+
 <p>Recommended Recipes</p>
 <ol>
 @for( eachRecipe <- recommendedRecipes) {
