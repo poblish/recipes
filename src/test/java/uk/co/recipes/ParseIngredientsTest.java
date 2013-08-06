@@ -112,15 +112,6 @@ public class ParseIngredientsTest {
 
 	@Test
 	public void testSimilarity() throws IOException, IncompatibleIngredientsException {
-		// Dump this code here for now, to populate ES with Recipes - should factor out into proper Loader, though!
-    	dataUtils.parseIngredientsFrom("beefStewOrzo.txt");
-    	dataUtils.parseIngredientsFrom("bulk.txt");
-    	dataUtils.parseIngredientsFrom("namings1.txt");
-    	dataUtils.parseIngredientsFrom("namings2.txt");
-    	dataUtils.parseIngredientsFrom("noodles.txt");
-    	dataUtils.parseIngredientsFrom("ttFishCurry.txt");
-    	dataUtils.parseIngredientsFrom("venisonBurgundy.txt");
-
     	final List<IIngredient> ingr1 = dataUtils.parseIngredientsFrom("inputs.txt");
 		final List<IIngredient> ingr2 = dataUtils.parseIngredientsFrom("inputs2.txt");
 		final List<IIngredient> ingr3 = dataUtils.parseIngredientsFrom("inputs3.txt");
