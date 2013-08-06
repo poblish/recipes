@@ -21,6 +21,7 @@ import uk.co.recipes.ratings.RecipeRating;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.IUserPersistence;
+import uk.co.recipes.test.TestDataUtils;
 import static com.google.common.collect.Sets.newHashSet;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -32,6 +33,8 @@ import static org.hamcrest.Matchers.is;
  */
 public class UserPersistenceTest {
 
+    private final static String TEST_RECIPE = "inputs3.txt";
+
     private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
     private IItemPersistence itemFactory = GRAPH.get( EsItemFactory.class );
@@ -40,6 +43,7 @@ public class UserPersistenceTest {
     private EsSequenceFactory sequenceFactory = GRAPH.get( EsSequenceFactory.class );
 
     private IEventListener updater = GRAPH.get( MyrrixUpdater.class );
+	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
 
 
     @BeforeClass
@@ -51,8 +55,14 @@ public class UserPersistenceTest {
     }
 
     @BeforeClass
-    public void loadIngredientsFromYaml() throws IOException {
+    public void loadIngredientsFromYaml() throws IOException, InterruptedException {
         GRAPH.get( ItemsLoader.class ).load();
+
+		dataUtils.parseIngredientsFrom(TEST_RECIPE);
+
+        while ( recipeFactory.countAll() < 1) {
+        	Thread.sleep(200); // Wait for saves to appear...
+        }
     }
 
     @Test
@@ -62,7 +72,7 @@ public class UserPersistenceTest {
 
         final IUser u1 = new User( testUName, testDName);
         u1.addRating( new ItemRating( itemFactory.get("ginger").get(), 8) );
-        u1.addRating( new RecipeRating( recipeFactory.get("venisonBurgundy.txt").get(), 6) );
+        u1.addRating( new RecipeRating( recipeFactory.get(TEST_RECIPE).get(), 6) );
         assertThat( u1.getItemRatings().size(), is(1));
         assertThat( u1.getRecipeRatings().size(), is(1));
 
