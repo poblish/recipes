@@ -19,7 +19,6 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 
 import uk.co.recipes.corr.Correlations;
-import uk.co.recipes.events.api.IEventListener;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.events.impl.DefaultEventService;
 import uk.co.recipes.events.impl.MyrrixUpdater;
@@ -37,6 +36,9 @@ import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
 import uk.co.recipes.service.taste.impl.MyrrixTasteSimilarityService;
 import uk.co.recipes.test.TestDataUtils;
+
+import com.google.common.base.Throwables;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -48,7 +50,7 @@ import dagger.Provides;
  */
 @Module(injects={EsItemFactory.class, EsRecipeFactory.class, ItemsLoader.class, IngredientParser.class, TestDataUtils.class, Correlations.class, ObjectMapper.class, ClientRecommender.class,
 				 MyrrixTasteRecommendationService.class, MyrrixRecommendationService.class, MyrrixTasteSimilarityService.class, MyrrixExplorerService.class,
-				 Client.class, EsSearchService.class, EsUserFactory.class, EsSequenceFactory.class, MyrrixUpdater.class, IEventListener.class, IEventService.class, UserRatings.class})
+				 Client.class, EsSearchService.class, EsUserFactory.class, EsSequenceFactory.class, MyrrixUpdater.class, IEventService.class, UserRatings.class})
 public class DaggerModule {
 
 	@Provides
@@ -97,12 +99,17 @@ public class DaggerModule {
 
 	@Provides
 	@Singleton
-	ClientRecommender provideClientRecommender() throws IOException {
+	ClientRecommender provideClientRecommender() {
 		final MyrrixClientConfiguration clientConfig = new MyrrixClientConfiguration();
 		clientConfig.setHost("localhost");
 		clientConfig.setPort(8080);
 
 		// TranslatingClientRecommender recommender = new TranslatingClientRecommender( new ClientRecommender(clientConfig) );
-		return new ClientRecommender(clientConfig);
+		try {
+			return new ClientRecommender(clientConfig);
+		}
+		catch (IOException e) {
+			throw Throwables.propagate(e);
+		}
 	}
 }
