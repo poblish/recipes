@@ -50,7 +50,7 @@ public class Recipes extends Controller {
 
             @Override
             public IUser get() {
-                return new User();
+                return new User( "aregan", "Andrew Regan");
             }
         } );
         return ok(views.html.recipes.render( theInput, similarities, user1, gotInput ? "Search Results" : "Test"));
