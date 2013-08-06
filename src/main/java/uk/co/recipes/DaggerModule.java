@@ -30,6 +30,7 @@ import uk.co.recipes.persistence.EsSequenceFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.persistence.JacksonFactory;
+import uk.co.recipes.ratings.UserRatings;
 import uk.co.recipes.service.impl.EsSearchService;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
@@ -47,7 +48,7 @@ import dagger.Provides;
  */
 @Module(injects={EsItemFactory.class, EsRecipeFactory.class, ItemsLoader.class, IngredientParser.class, TestDataUtils.class, Correlations.class, ObjectMapper.class, ClientRecommender.class,
 				 MyrrixTasteRecommendationService.class, MyrrixRecommendationService.class, MyrrixTasteSimilarityService.class, MyrrixExplorerService.class,
-				 Client.class, EsSearchService.class, EsUserFactory.class, EsSequenceFactory.class, MyrrixUpdater.class, IEventListener.class, IEventService.class})
+				 Client.class, EsSearchService.class, EsUserFactory.class, EsSequenceFactory.class, MyrrixUpdater.class, IEventListener.class, IEventService.class, UserRatings.class})
 public class DaggerModule {
 
 	@Provides

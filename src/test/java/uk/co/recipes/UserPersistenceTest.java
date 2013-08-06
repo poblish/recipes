@@ -23,6 +23,7 @@ import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.ratings.ItemRating;
 import uk.co.recipes.ratings.RecipeRating;
+import uk.co.recipes.ratings.UserRatings;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.IUserPersistence;
@@ -47,6 +48,7 @@ public class UserPersistenceTest {
 
     private IEventListener updater = GRAPH.get( MyrrixUpdater.class );
 	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
+	private UserRatings userRatings = GRAPH.get( UserRatings.class );
 
 
     @BeforeClass
@@ -74,8 +76,8 @@ public class UserPersistenceTest {
         final String testDName = "Andrew Regan #" + System.nanoTime();
 
         final IUser u1 = new User( testUName, testDName);
-        u1.addRating( new ItemRating( itemFactory.get("ginger").get(), 8) );
-        u1.addRating( new RecipeRating( recipeFactory.get(TEST_RECIPE).get(), 6) );
+        userRatings.addRating( u1, new ItemRating( itemFactory.get("ginger").get(), 8) );
+        userRatings.addRating( u1, new RecipeRating( recipeFactory.get(TEST_RECIPE).get(), 6) );
         assertThat( u1.getItemRatings().size(), is(1));
         assertThat( u1.getRecipeRatings().size(), is(1));
 
