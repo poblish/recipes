@@ -60,6 +60,7 @@ public class IngredientsTest {
     private IRecommendationsAPI recsApi = GRAPH.get( MyrrixRecommendationService.class );
 
     private IEventService events = GRAPH.get( IEventService.class );
+//    private IIngredientQuantityScoreBooster booster = GRAPH.get( DefaultIngredientQuantityScoreBooster.class );
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {

@@ -6,6 +6,7 @@ package uk.co.recipes.events.impl;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import uk.co.recipes.service.impl.DefaultIngredientQuantityScoreBooster;
 import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
 import uk.co.recipes.api.IIngredient;
 import java.io.Serializable;
@@ -48,7 +49,9 @@ public class MyrrixUpdater implements IEventListener {
     ClientRecommender recommender;
 
     @Inject
-    IIngredientQuantityScoreBooster booster;
+    // FIXME FIXME - Why doesn't injection work here?
+    IIngredientQuantityScoreBooster booster = new DefaultIngredientQuantityScoreBooster();
+
 
     // Yuk: why can't Dagger do @PostConstruct ?
     public void startListening() {
