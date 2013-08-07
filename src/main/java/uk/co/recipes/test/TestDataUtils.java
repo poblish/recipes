@@ -35,6 +35,10 @@ public class TestDataUtils {
 	@Inject
 	EsRecipeFactory recipeFactory;
 
+	public Optional<Ingredient> parseIngredient( final String inStr) {
+		return parser.parse(inStr);
+	}
+
 	public List<IIngredient> parseIngredientsFrom( final String inFilename) throws IOException {
 		final List<IIngredient> allIngredients = Lists.newArrayList();
 

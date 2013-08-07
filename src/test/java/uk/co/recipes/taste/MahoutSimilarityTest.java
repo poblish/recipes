@@ -60,10 +60,10 @@ public class MahoutSimilarityTest extends AbstractEsDataTest {
 
 		final Recommender recommender = new GenericItemBasedRecommender( model, similarity);
 		long userId = 1000L;
-		assertThat( recommender.recommend(userId++, 10).toString(), is("[RecommendedItem[item:7, value:6.3754864], RecommendedItem[item:6, value:6.235465], RecommendedItem[item:5, value:5.838157]]"));
-		assertThat( recommender.recommend(userId++, 10).toString(), is("[RecommendedItem[item:2, value:4.2387347], RecommendedItem[item:7, value:4.134054]]"));
-		assertThat( recommender.recommend(userId++, 10).toString(), is("[RecommendedItem[item:1, value:7.8836813], RecommendedItem[item:4, value:7.791888], RecommendedItem[item:3, value:7.778363], RecommendedItem[item:5, value:7.7400393]]"));
-		assertThat( recommender.recommend(userId++, 10).toString(), is("[RecommendedItem[item:1, value:6.08632], RecommendedItem[item:4, value:6.060889], RecommendedItem[item:6, value:5.7682915], RecommendedItem[item:3, value:5.7291117]]"));
+		assertThat( recommender.recommend(userId++, 10).toString(), is("[RecommendedItem[item:7, value:6.364982], RecommendedItem[item:6, value:6.234135], RecommendedItem[item:5, value:5.838157]]"));
+		assertThat( recommender.recommend(userId++, 10).toString(), is("[RecommendedItem[item:2, value:4.2267632], RecommendedItem[item:7, value:4.120403]]"));
+		assertThat( recommender.recommend(userId++, 10).toString(), is("[RecommendedItem[item:1, value:7.8819723], RecommendedItem[item:4, value:7.791888], RecommendedItem[item:3, value:7.7751846], RecommendedItem[item:5, value:7.7400393]]"));
+		assertThat( recommender.recommend(userId++, 10).toString(), is("[RecommendedItem[item:1, value:6.0842147], RecommendedItem[item:4, value:6.060889], RecommendedItem[item:6, value:5.76518], RecommendedItem[item:3, value:5.7143188]]"));
 		assertThat( recommender.recommend(userId++, 10).toString(), is("[]"));
 	}
 
