@@ -1,4 +1,4 @@
-@(recipe: uk.co.recipes.api.IRecipe, title: String)
+@(recipe: uk.co.recipes.api.IRecipe, categorisation: com.google.common.collect.Multiset[uk.co.recipes.api.ITag], title: String)
 
 @main("Recipe page") {
 }
@@ -52,5 +52,9 @@
 <li><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-info">@tagName</span>}</li>
 }
 </ol>
+
+<hr />
+<p><span class="label label-default">Categorisation:</span> @categorisation</p>
+
 </body>
 </html>

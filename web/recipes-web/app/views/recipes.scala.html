@@ -1,4 +1,4 @@
-@(searchItem: String, similarities: List[uk.co.recipes.api.IRecipe], user: uk.co.recipes.api.IUser, title: String)
+@(searchItem: String, categorisation: com.google.common.collect.Multiset[uk.co.recipes.api.ITag], similarities: List[uk.co.recipes.api.IRecipe], user: uk.co.recipes.api.IUser, title: String)
 
 @main("Recipes Test") {
 }
@@ -42,10 +42,13 @@
 
 <section id="top">
     <div class="wrapper">
-        <h1>@title</h1>
+        <h1>@title: @searchItem</h1>
     </div>
 </section>
-<p>Similiar Recipes to @searchItem</p>
+
+<p><span class="label label-default">Categorisation:</span> @categorisation</p>
+
+<p>Similiar Recipes:</p>
 
 <ol>
 @for( eachRecipe <- similarities) {
