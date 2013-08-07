@@ -10,7 +10,6 @@ import static org.elasticsearch.search.sort.SortOrder.DESC;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 
@@ -97,7 +96,7 @@ public class EsItemFactory implements IItemPersistence {
 	}
 
 	public ICanonicalItem getById( String inId) throws IOException {
-		return mapper.readValue( mapper.readTree( new URL( itemIndexUrl + "/" + inId) ).path("_source").traverse(), CanonicalItem.class);
+		return mapper.readValue( esUtils.parseSource( itemIndexUrl + "/" + inId), CanonicalItem.class);
 	}
 
     public Optional<ICanonicalItem> getById( long inId) throws IOException {

@@ -9,7 +9,6 @@ import static org.hamcrest.Matchers.isOneOf;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 
@@ -78,7 +77,7 @@ public class EsRecipeFactory implements IRecipePersistence {
 	}
 
 	public IRecipe getById( String inId) throws IOException {
-		return mapper.readValue( mapper.readTree( new URL( itemIndexUrl + "/" + inId) ).path("_source").traverse(), Recipe.class);
+		return mapper.readValue( esUtils.parseSource( itemIndexUrl + "/" + inId), Recipe.class);
 	}
 
 	public Optional<IRecipe> getById( long inId) throws IOException {

@@ -9,7 +9,6 @@ import static org.hamcrest.Matchers.is;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 
@@ -84,7 +83,7 @@ public class EsUserFactory implements IUserPersistence {
 	}
 
 	public IUser getById( String inId) throws IOException {
-		return mapper.readValue( mapper.readTree( new URL( usersIndexUrl + "/" + inId) ).path("_source").traverse(), User.class);
+		return mapper.readValue( esUtils.parseSource( usersIndexUrl + "/" + inId), User.class);
 	}
 
     public Optional<IUser> getById( long inId) throws IOException {

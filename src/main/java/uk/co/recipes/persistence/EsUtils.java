@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import org.elasticsearch.client.Client;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -35,10 +36,18 @@ public class EsUtils {
 	@Inject
 	Client esClient;
 
+	public JsonParser parseSource( final String inUrlString) throws JsonProcessingException, MalformedURLException, IOException {
+		return mapper.readTree( new URL(inUrlString) ).path("_source").traverse();
+	}
+
+	public JsonParser parseSource( final JsonNode inJacksonNode) {
+		return inJacksonNode.path("_source").traverse();
+	}
+
 	public <T> Optional<T> findOneByIdAndType( final String inBaseUrl, final long inId, final Class<T> inIfClazz, final Class<? extends T> inImplClazz) throws JsonProcessingException, MalformedURLException, IOException {
 		final Iterator<JsonNode> nodeItr = mapper.readTree( new URL( inBaseUrl + "/_search?q=id:" + inId + "&size=1") ).path("hits").path("hits").iterator();
 		if (nodeItr.hasNext()) {
-			return Optional.fromNullable((T) mapper.readValue( nodeItr.next().path("_source").traverse(), inImplClazz) );
+			return Optional.fromNullable((T) mapper.readValue( parseSource( nodeItr.next() ), inImplClazz) );
 		}
 
 		return Optional.absent();
@@ -51,7 +60,7 @@ public class EsUtils {
 		final Collection<T> allItems = Lists.newArrayList();
 
 		for ( JsonNode each : allNodes) {
-			allItems.add( mapper.readValue( each.path("_source").traverse(), inClass));
+			allItems.add( mapper.readValue( parseSource(each), inClass));
 		}
 
 		return allItems;

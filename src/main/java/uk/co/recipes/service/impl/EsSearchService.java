@@ -57,7 +57,7 @@ public class EsSearchService implements ISearchAPI {
 			final List<ICanonicalItem> results = Lists.newArrayList();
 	
 			for ( final JsonNode each : jn) {
-				results.add( mapper.readValue( each.path("_source").traverse(), CanonicalItem.class) );
+				results.add( mapper.readValue( each.path("_source").traverse(), CanonicalItem.class) );  // FIXME Remove _source stuff where possible
 			}
 	
 			return results;
@@ -83,7 +83,7 @@ public class EsSearchService implements ISearchAPI {
 			final List<IRecipe> results = Lists.newArrayList();
 	
 			for ( final JsonNode each : jn) {
-				results.add( mapper.readValue( each.path("_source").traverse(), Recipe.class) );
+				results.add( mapper.readValue( each.path("_source").traverse(), Recipe.class) );  // FIXME Remove _source stuff where possible
 			}
 	
 			return results;
