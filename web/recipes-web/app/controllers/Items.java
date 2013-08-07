@@ -28,7 +28,7 @@ public class Items extends Controller {
 
     public static Result display( final String name) throws IOException {
         final ICanonicalItem item = ITEMS.get(name).get();
-        final List<ICanonicalItem> similarities = EXPLORER_API.similarIngredients( item, 10);
+        final List<ICanonicalItem> similarities = EXPLORER_API.similarIngredients( item, 20);
         return ok(views.html.item.render( item, similarities, ( item != null) ? "Found" : "Not Found"));
     }
 
