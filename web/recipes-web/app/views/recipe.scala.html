@@ -9,7 +9,7 @@
         <link rel="shortcut icon" type="image/png" href="/assets/images/favicon.png">
 		<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 		<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
-		<style>body { padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */ }</style>
+		<style>body { padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */ } span.label a { color: white; font-weight: normal; }</style>
     </head>
 
     <body>
@@ -49,7 +49,7 @@
 <p>@recipe.getTitle()</p>
 <ol>
 @for(item <- recipe.getItems()) {
-<li><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-info">@tagName</span>}</li>
+<li><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-info"><a href="/tags/@tagName">@tagName</a></span>}</li>
 }
 </ol>
 
