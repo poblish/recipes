@@ -6,12 +6,11 @@ package uk.co.recipes;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IRecipeStage;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.collect.FluentIterable;

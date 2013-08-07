@@ -21,9 +21,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.indices.TypeMissingException;
 
@@ -31,6 +28,9 @@ import uk.co.recipes.User;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.service.api.IUserPersistence;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
@@ -84,7 +84,7 @@ public class EsUserFactory implements IUserPersistence {
 	}
 
 	public IUser getById( String inId) throws IOException {
-		return mapper.readValue( mapper.readTree( new URL( usersIndexUrl + "/" + inId) ).path("_source"), User.class);
+		return mapper.readValue( mapper.readTree( new URL( usersIndexUrl + "/" + inId) ).path("_source").traverse(), User.class);
 	}
 
     public Optional<IUser> getById( long inId) throws IOException {

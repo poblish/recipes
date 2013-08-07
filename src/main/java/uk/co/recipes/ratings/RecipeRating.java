@@ -4,13 +4,11 @@
 package uk.co.recipes.ratings;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonProperty;
-
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.ratings.IRecipeRating;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
 
 /**

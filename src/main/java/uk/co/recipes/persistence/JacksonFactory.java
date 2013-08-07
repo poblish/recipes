@@ -6,17 +6,6 @@ package uk.co.recipes.persistence;
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonToken;
-import org.codehaus.jackson.Version;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.DeserializationContext;
-import org.codehaus.jackson.map.JsonDeserializer;
-import org.codehaus.jackson.map.KeyDeserializer;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
-import org.codehaus.jackson.map.module.SimpleModule;
-
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Ingredient;
 import uk.co.recipes.Quantity;
@@ -36,6 +25,16 @@ import uk.co.recipes.ratings.ItemRating;
 import uk.co.recipes.ratings.RecipeRating;
 import uk.co.recipes.tags.TagUtils;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.KeyDeserializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.common.base.Throwables;
 
 /**
@@ -47,7 +46,7 @@ import com.google.common.base.Throwables;
 public class JacksonFactory {
 
 	public static void initialiseMapper( final ObjectMapper inMapper) {
-		SimpleModule testModule = new SimpleModule("MyModule", new Version(1, 0, 0, null));
+		SimpleModule testModule = new SimpleModule("MyModule", new Version(1, 0, 0, null, null, null));
 		testModule.addKeyDeserializer( ITag.class, new KeyDeserializer() {
 
 			@Override
@@ -82,8 +81,8 @@ public class JacksonFactory {
         testModule.addAbstractTypeMapping( IItemRating.class, ItemRating.class);
         testModule.addAbstractTypeMapping( IRecipeRating.class, RecipeRating.class);
 
-        inMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);  // When reading in ES hits, e.g. _index
-        inMapper.configure(SerializationConfig.Feature.WRITE_EMPTY_JSON_ARRAYS, false);
+        inMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);  // When reading in ES hits, e.g. _index
+        inMapper.configure(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS, false);
 
         inMapper.registerModule(testModule);
 	}

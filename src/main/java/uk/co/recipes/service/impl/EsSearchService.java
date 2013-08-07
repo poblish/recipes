@@ -11,9 +11,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.elasticsearch.common.base.Throwables;
 
 import uk.co.recipes.CanonicalItem;
@@ -23,6 +20,9 @@ import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.service.api.ISearchAPI;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 
 /**
@@ -57,7 +57,7 @@ public class EsSearchService implements ISearchAPI {
 			final List<ICanonicalItem> results = Lists.newArrayList();
 	
 			for ( final JsonNode each : jn) {
-				results.add( mapper.readValue( each.path("_source"), CanonicalItem.class) );
+				results.add( mapper.readValue( each.path("_source").traverse(), CanonicalItem.class) );
 			}
 	
 			return results;
@@ -83,7 +83,7 @@ public class EsSearchService implements ISearchAPI {
 			final List<IRecipe> results = Lists.newArrayList();
 	
 			for ( final JsonNode each : jn) {
-				results.add( mapper.readValue( each.path("_source"), Recipe.class) );
+				results.add( mapper.readValue( each.path("_source").traverse(), Recipe.class) );
 			}
 	
 			return results;

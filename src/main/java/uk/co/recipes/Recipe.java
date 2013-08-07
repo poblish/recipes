@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.elasticsearch.common.Preconditions;
 
 import uk.co.recipes.api.ICanonicalItem;
@@ -21,6 +20,7 @@ import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IRecipeStage;
 import uk.co.recipes.api.ITag;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Objects;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;

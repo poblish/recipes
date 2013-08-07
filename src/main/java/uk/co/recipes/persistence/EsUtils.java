@@ -11,13 +11,13 @@ import java.util.Iterator;
 
 import javax.inject.Inject;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.elasticsearch.client.Client;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
@@ -38,7 +38,7 @@ public class EsUtils {
 	public <T> Optional<T> findOneByIdAndType( final String inBaseUrl, final long inId, final Class<T> inIfClazz, final Class<? extends T> inImplClazz) throws JsonProcessingException, MalformedURLException, IOException {
 		final Iterator<JsonNode> nodeItr = mapper.readTree( new URL( inBaseUrl + "/_search?q=id:" + inId + "&size=1") ).path("hits").path("hits").iterator();
 		if (nodeItr.hasNext()) {
-			return Optional.fromNullable((T) mapper.readValue( nodeItr.next().path("_source"), inImplClazz) );
+			return Optional.fromNullable((T) mapper.readValue( nodeItr.next().path("_source").traverse(), inImplClazz) );
 		}
 
 		return Optional.absent();
@@ -51,7 +51,7 @@ public class EsUtils {
 		final Collection<T> allItems = Lists.newArrayList();
 
 		for ( JsonNode each : allNodes) {
-			allItems.add( mapper.readValue( each.path("_source"), inClass));
+			allItems.add( mapper.readValue( each.path("_source").traverse(), inClass));
 		}
 
 		return allItems;
