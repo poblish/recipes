@@ -6,6 +6,7 @@ package uk.co.recipes.events.impl;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import uk.co.recipes.api.IIngredient;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.util.Map.Entry;
@@ -60,7 +61,7 @@ public class MyrrixUpdater implements IEventListener {
         boolean changesMade = false;
 
         try {
-        	changesMade = addItemTagsForItem( evt.getItem(), itemId);
+        	changesMade = addItemTagsForItem( evt.getItem(), itemId, 1.0f);
 	    }
 		catch (TasteException e) {
 			Throwables.propagate(e);
@@ -85,8 +86,8 @@ public class MyrrixUpdater implements IEventListener {
         boolean changesMade = false;
 
         try {
-            for ( ICanonicalItem eachItem : evt.getRecipe().getItems()) {
-            	changesMade |= addItemTagsForItem( eachItem, recipeId);
+            for ( IIngredient eachIngr : evt.getRecipe().getIngredients()) {
+            	changesMade |= addItemTagsForItem( eachIngr.getItem(), recipeId, 1.0f);
         	}
 	    }
 		catch (TasteException e) {
@@ -102,8 +103,8 @@ public class MyrrixUpdater implements IEventListener {
         }
     }
 
-    private boolean addItemTagsForItem( final ICanonicalItem inItem, final long inItemOrRecipeId) throws TasteException {
-    	boolean changesMade = handleHierarchicalSimilarityTags( inItem, inItemOrRecipeId, 1.0f);
+    private boolean addItemTagsForItem( final ICanonicalItem inItem, final long inItemOrRecipeId, final float inBasicScore) throws TasteException {
+    	boolean changesMade = handleHierarchicalSimilarityTags( inItem, inItemOrRecipeId, inBasicScore);
   
     	for ( final Entry<ITag,Serializable> eachTag : inItem.getTags().entrySet()) {
     		if ( eachTag.getValue() instanceof Boolean) {
@@ -112,7 +113,7 @@ public class MyrrixUpdater implements IEventListener {
     				if (LOG.isDebugEnabled()) {
     					LOG.debug("Set Tag '" + eachTag.getKey() + "' val=1.0 for " + inItemOrRecipeId);
     				}
-    	        	recommender.setItemTag( eachTag.getKey().toString(), inItemOrRecipeId, 1.0f);
+    	        	recommender.setItemTag( eachTag.getKey().toString(), inItemOrRecipeId, inBasicScore);
     	        	changesMade = true;
     			}
     		}
