@@ -3,22 +3,26 @@
  */
 package uk.co.recipes.service.impl;
 
-import uk.co.recipes.api.ITag;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.elasticsearch.common.base.Throwables;
+
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
+import uk.co.recipes.api.ITag;
 import uk.co.recipes.service.api.ISearchAPI;
+
 import com.google.common.collect.Lists;
 
 /**

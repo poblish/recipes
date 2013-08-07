@@ -3,8 +3,6 @@
  */
 package uk.co.recipes;
 
-import uk.co.recipes.service.impl.DefaultIngredientQuantityScoreBooster;
-import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
 import java.io.IOException;
 
 import javax.inject.Named;
@@ -32,6 +30,8 @@ import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.persistence.JacksonFactory;
 import uk.co.recipes.ratings.UserRatings;
+import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
+import uk.co.recipes.service.impl.DefaultIngredientQuantityScoreBooster;
 import uk.co.recipes.service.impl.EsSearchService;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;

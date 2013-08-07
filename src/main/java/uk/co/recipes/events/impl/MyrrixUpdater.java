@@ -6,9 +6,6 @@ package uk.co.recipes.events.impl;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import uk.co.recipes.service.impl.DefaultIngredientQuantityScoreBooster;
-import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
-import uk.co.recipes.api.IIngredient;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.util.Map.Entry;
@@ -24,10 +21,13 @@ import org.slf4j.LoggerFactory;
 
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.events.api.IEventListener;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.persistence.EsItemFactory;
+import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
+import uk.co.recipes.service.impl.DefaultIngredientQuantityScoreBooster;
 
 /**
  * TODO
