@@ -9,6 +9,7 @@ GET     /items/:name                controllers.Items.display(name: String)
 GET     /items.html                 controllers.Items.test()
 GET     /recipes/:name              controllers.Recipes.display(name: String)
 GET     /recipes.html               controllers.Recipes.test()
+GET     /tags/:name                 controllers.Tags.display(name: String)
 GET     /users/:id                  controllers.Users.display(id: String)
 
 # Map static resources from the /public folder to the /assets URL path
