@@ -6,6 +6,7 @@ package uk.co.recipes.events.impl;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
 import uk.co.recipes.api.IIngredient;
 import java.io.Serializable;
 import java.io.StringReader;
@@ -45,6 +46,9 @@ public class MyrrixUpdater implements IEventListener {
 
     @Inject
     ClientRecommender recommender;
+
+    @Inject
+    IIngredientQuantityScoreBooster booster;
 
     // Yuk: why can't Dagger do @PostConstruct ?
     public void startListening() {
@@ -87,7 +91,7 @@ public class MyrrixUpdater implements IEventListener {
 
         try {
             for ( IIngredient eachIngr : evt.getRecipe().getIngredients()) {
-            	changesMade |= addItemTagsForItem( eachIngr.getItem(), recipeId, 1.0f);
+            	changesMade |= addItemTagsForItem( eachIngr.getItem(), recipeId, 1.0f * booster.getBoostForQuantity( eachIngr.getItem(), eachIngr.getQuantity()));
         	}
 	    }
 		catch (TasteException e) {

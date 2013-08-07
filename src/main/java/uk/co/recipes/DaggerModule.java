@@ -3,6 +3,8 @@
  */
 package uk.co.recipes;
 
+import uk.co.recipes.service.impl.DefaultIngredientQuantityScoreBooster;
+import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
 import java.io.IOException;
 
 import javax.inject.Named;
@@ -95,6 +97,12 @@ public class DaggerModule {
     @Singleton
     IEventService provideEventService() {
         return new DefaultEventService();
+    }
+
+    @Provides
+    @Singleton
+    IIngredientQuantityScoreBooster provideIngredientQuantityScoreBooster() {
+        return new DefaultIngredientQuantityScoreBooster();
     }
 
 	@Provides
