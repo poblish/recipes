@@ -3,25 +3,22 @@
  */
 package uk.co.recipes.service.impl;
 
+import uk.co.recipes.api.ITag;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.elasticsearch.common.base.Throwables;
-
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.service.api.ISearchAPI;
-
 import com.google.common.collect.Lists;
 
 /**
@@ -95,7 +92,17 @@ public class EsSearchService implements ISearchAPI {
 		}
 	}
 
-	/* (non-Javadoc)
+    @Override
+    public List<ICanonicalItem> findItemsByTag( final ITag inTag) throws IOException {
+        return findItemsByName( tagString(inTag) );
+    }
+
+    @Override
+    public List<IRecipe> findRecipesByTag( final ITag inTag) throws IOException {
+        return findRecipesByName( tagString(inTag) );
+    }
+
+    /* (non-Javadoc)
 	 * @see uk.co.recipes.service.api.ISearchAPI#countItemsByName(java.lang.String)
 	 */
 	@Override
@@ -128,4 +135,18 @@ public class EsSearchService implements ISearchAPI {
 			throw Throwables.propagate(e);
 		}
 	}
+
+    @Override
+    public int countItemsByTag( final ITag inTag) throws IOException {
+        return countItemsByName( tagString(inTag) );
+    }
+
+    @Override
+    public int countRecipesByTag( final ITag inTag) throws IOException {
+        return countRecipesByName( tagString(inTag) );
+    }
+
+    private String tagString( final ITag inTag) {
+        return inTag + ":true";
+    }
 }
