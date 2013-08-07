@@ -42,7 +42,7 @@ public class Recipes extends Controller {
         final IRecipe recipe = RECIPES.get(name).get();
         final Multiset<ITag> categorisation = Categorisation.forIngredients( recipe.getIngredients() );
 
-        return ok(views.html.recipe.render( recipe, categorisation, ( recipe != null) ? "Found" : "Not Found"));
+        return ok(views.html.recipe.render( recipe, categorisation, EXPLORER_API.similarRecipes( recipe, 10), ( recipe != null) ? "Found" : "Not Found"));
     }
 
     public static Result test() throws IOException, IncompatibleIngredientsException {
@@ -53,8 +53,6 @@ public class Recipes extends Controller {
         final IRecipe recipe = RECIPES.get(theInput).get();
         final Multiset<ITag> categorisation = Categorisation.forIngredients( recipe.getIngredients() );
 
-        final List<IRecipe> similarities = EXPLORER_API.similarRecipes( recipe, 10);
-
         final IUser user1 = USERS.getOrCreate( "Andrew Regan", new Supplier<IUser>() {
 
             @Override
@@ -62,6 +60,6 @@ public class Recipes extends Controller {
                 return new User( "aregan", "Andrew Regan");
             }
         } );
-        return ok(views.html.recipes.render( theInput, categorisation, similarities, user1, gotInput ? "Search Results" : "Test"));
+        return ok(views.html.recipes.render( theInput, recipe, categorisation, EXPLORER_API.similarRecipes( recipe, 10), user1, gotInput ? "Search Results" : "Test"));
     }
 }
