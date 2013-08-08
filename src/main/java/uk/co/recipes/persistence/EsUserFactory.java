@@ -129,6 +129,17 @@ public class EsUserFactory implements IUserPersistence {
 		return esUtils.listAll( usersIndexUrl, User.class);
 	}
 
+    @Override
+    public void delete( final IUser obj) throws IOException {
+        throw new RuntimeException("unimpl");
+    }
+
+    @Override
+    public void deleteNow( final IUser obj) throws IOException {
+        throw new RuntimeException("unimpl");
+    }
+
+    @Override
 	public void deleteAll() throws IOException {
 		try {
 			esClient.admin().indices().prepareDeleteMapping().setIndices("recipe").setType("users").execute().actionGet();

@@ -172,6 +172,16 @@ public class EsItemFactory implements IItemPersistence {
         return esUtils.countAll(itemIndexUrl);
     }
 
+    @Override
+    public void delete( final ICanonicalItem obj) throws IOException {
+        throw new RuntimeException("unimpl");
+    }
+
+    @Override
+    public void deleteNow( final ICanonicalItem obj) throws IOException {
+        throw new RuntimeException("unimpl");
+    }
+
 	public void deleteAll() throws IOException {
 		try {
 			esClient.admin().indices().prepareDeleteMapping().setIndices("recipe").setType("items").execute().actionGet();

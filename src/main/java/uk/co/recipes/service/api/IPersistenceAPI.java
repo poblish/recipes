@@ -29,5 +29,7 @@ public interface IPersistenceAPI<T> {
 
     long countAll() throws IOException;
 
+    void delete( final T obj) throws IOException;
+    void deleteNow( final T obj) throws IOException;
     void deleteAll() throws IOException;
 }
