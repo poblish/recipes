@@ -1,4 +1,4 @@
-@(itemsCount: Long, recipesCount: Long, usersCount: Long, myrrixUsersCount: Integer, myrrixItemsCount: Integer)
+@(metrics: String, itemsCount: Long, recipesCount: Long, usersCount: Long, myrrixUsersCount: Integer, myrrixItemsCount: Integer)
 
 @main("Statistics") {
 }
@@ -45,6 +45,8 @@
         <h1>Statistics</h1>
     </div>
 </section>
+
+<p style="color:#933">@metrics</p>
 
 <p><em>If low, run RecipeExploreRecommendTest to install all Recipes and set up similarities</em></p>
 

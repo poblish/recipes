@@ -34,14 +34,18 @@ public class Application extends Controller {
     private final static ClientRecommender RECOMMENDER = GRAPH.get( ClientRecommender.class );
     private final static MetricRegistry METRICS = GRAPH.get( MetricRegistry.class );
 
-    public static Result metrics() {
+    public static String getMetricsString() {
+        if (METRICS.getMetrics().isEmpty()) {
+            return "No Metrics in... " + METRICS;
+        }
+
         // See: http://ediweissmann.com/blog/2013/03/10/yammer-metrics-and-playframework/
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final PrintStream ps = new PrintStream(baos);
-        ConsoleReporter.forRegistry(METRICS).outputTo(ps).build();
+        ConsoleReporter.forRegistry(METRICS).outputTo(ps).build().report();
         ps.flush();
         ps.close();
-        return ok(views.html.metrics.render( "Metrics: " + new String( baos.toByteArray() ) ));
+        return "Metrics: " + new String( baos.toByteArray() );
     }
 
 	public static Result index() {
@@ -50,13 +54,13 @@ public class Application extends Controller {
 
 	public static Result stats() {
         try {
-        	return ok(views.html.stats.render( ITEMS.countAll(), RECIPES.countAll(), USERS.countAll(), /* Ugh! FIXME */ RECOMMENDER.getAllUserIDs().size(), /* Ugh! FIXME */ RECOMMENDER.getAllItemIDs().size()));
+        	return ok(views.html.stats.render( getMetricsString(), ITEMS.countAll(), RECIPES.countAll(), USERS.countAll(), /* Ugh! FIXME */ RECOMMENDER.getAllUserIDs().size(), /* Ugh! FIXME */ RECOMMENDER.getAllItemIDs().size()));
         }
         catch (IOException e) {  // Yuk!!!
-        	return ok(views.html.stats.render( -1L, -1L, -1L, -1, -1));
+        	return ok(views.html.stats.render( "???", -1L, -1L, -1L, -1, -1));
         }
         catch (TasteException e) {  // Yuk!!!
-        	return ok(views.html.stats.render( -1L, -1L, -1L, -1, -1));
+        	return ok(views.html.stats.render( "???", -1L, -1L, -1L, -1, -1));
         }
     }
 }
