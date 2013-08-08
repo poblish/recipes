@@ -7,6 +7,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static uk.co.recipes.tags.TagUtils.findActivated;
 import static uk.co.recipes.tags.TagUtils.tagNamesTitleCase;
 
+import java.util.Map.Entry;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -69,7 +70,7 @@ public class Recipe implements IRecipe {
 		return locale;
 	}
 
-	public void addStage( final RecipeStage inStage) {
+	public void addStage( final IRecipeStage inStage) {
 		stages.add(inStage);
 	}
 
@@ -165,6 +166,17 @@ public class Recipe implements IRecipe {
 		Preconditions.checkState( id == UNSET_ID, "Cannot change Item Id");
 		id = inId;
 	}
+
+    public Object clone() {
+        final Recipe theClone = new Recipe(title, locale);
+        for (IRecipeStage eachStage : stages) {
+            theClone.addStage(eachStage);
+        }
+        for (Entry<ITag, Serializable> eachTag : tagsMap.entrySet()) {
+            theClone.addTag(eachTag.getKey(), eachTag.getValue());
+        }
+        return theClone;
+    }
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()

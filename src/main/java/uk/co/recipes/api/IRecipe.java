@@ -13,13 +13,15 @@ import java.util.Locale;
  * @author andrewregan
  * 
  */
-public interface IRecipe extends ITagging {
+public interface IRecipe extends ITagging, Cloneable {
 
 	long getId();
 	void setId( long id);
 
 	String getTitle();
 	Locale getLocale();
+
+	Object clone();
 
 	Collection<IIngredient> getIngredients();
 
