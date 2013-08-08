@@ -163,7 +163,7 @@ public class Recipe implements IRecipe {
 		}
 
 		Preconditions.checkArgument( inId >= BASE_ID, "New Id must be >= " + BASE_ID + " [" + inId +"]");
-		Preconditions.checkState( id == UNSET_ID, "Cannot change Item Id");
+		// Preconditions.checkState( id == UNSET_ID, "Cannot change Item Id");
 		id = inId;
 	}
 

@@ -6,6 +6,7 @@ package uk.co.recipes;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+import com.google.common.base.Throwables;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -167,6 +168,40 @@ public class RecipeExploreRecommendTest {
 		assertThat( recsFor2, not(hasItem( recipeFactory.getById("chcashblackspicecurry.txt")  )));
 		assertThat( recsFor2, not(hasItem( recipeFactory.getById("inputs3.txt")  )));
 	}
+
+    @Test
+    public void testModifiedExploration() throws IOException, TasteException {
+        final IRecipe recipe1 = recipeFactory.get("inputs3.txt").get();
+        final long currNumRecipes = recipeFactory.countAll();
+
+        System.out.println("Existing: " + recipe1);
+
+        ((EsRecipeFactory) recipeFactory).useCopy( recipe1, new EsRecipeFactory.Hook<IRecipe>() {
+
+            @Override
+            public void use( final IRecipe inCopy) throws IOException {
+                assertThat( inCopy.getId(), not( recipe1.getId() ));
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    Throwables.propagate(e);
+                }
+
+                assertThat( recipeFactory.countAll(), is( currNumRecipes + 1));
+                System.out.println("Copy:     " + inCopy);
+            }
+        });
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Throwables.propagate(e);
+        }
+
+        assertThat( recipeFactory.countAll(), is(currNumRecipes));
+        assertThat( recipeFactory.get("inputs3.txt").isPresent(), is(true));
+    }
 
 	@AfterClass
 	public void shutDown() {

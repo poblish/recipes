@@ -163,4 +163,20 @@ public class EsRecipeFactory implements IRecipePersistence {
     public IRecipe getOrCreate(String inCanonicalName, Supplier<IRecipe> inCreator, boolean inMatchAliases) {
         throw new RuntimeException("unimpl");  // FIXME?
     }
+
+    public void useCopy( final IRecipe inModifiedRecipe, final Hook<IRecipe> inHook) throws IOException {
+        final String newId = toStringId(inModifiedRecipe) + "_" + System.nanoTime();
+        final IRecipe newCopy = put((IRecipe) inModifiedRecipe.clone(), newId);
+
+        try {
+            inHook.use(newCopy);
+        }
+        finally {
+            esClient.prepareDelete( "recipe", "recipes", newId).execute();  // Don't need to wait for this
+        }
+    }
+
+    public static interface Hook<T> {
+        public void use( final T inObj) throws IOException;
+    }
 }
