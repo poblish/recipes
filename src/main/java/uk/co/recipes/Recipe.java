@@ -150,6 +150,18 @@ public class Recipe implements IRecipe {
 		return FluentIterable.from( getTags().entrySet() ).filter( findActivated() ).transform( tagNamesTitleCase() ).toList();
 	}
 
+	/* (non-Javadoc)
+	 * @see uk.co.recipes.api.IRecipe#removeItems(uk.co.recipes.api.ICanonicalItem[])
+	 */
+	@Override
+	public boolean removeItems( ICanonicalItem... inItems) {
+		boolean result = false;
+		for ( final IRecipeStage each : stages) {
+			result |= each.removeItems(inItems);
+		}
+		return result;
+	}
+
 	@Override
 	public long getId() {
 		return id;

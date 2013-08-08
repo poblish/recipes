@@ -65,6 +65,23 @@ public class RecipeStage implements IRecipeStage {
 		ingredients.addAll(inIngredients);
 	}
 
+	/* (non-Javadoc)
+	 * @see uk.co.recipes.api.IRecipeStage#removeItems(uk.co.recipes.api.ICanonicalItem[])
+	 */
+	@Override
+	public boolean removeItems( final ICanonicalItem... inItems) {
+		final Collection<ICanonicalItem> inputs = Arrays.asList(inItems);
+		final Collection<IIngredient> deletions = Lists.newArrayList();
+
+		for ( IIngredient each : ingredients) {
+			if (inputs.contains( each.getItem() )) {
+				deletions.add(each);
+			}
+		}
+
+		return ingredients.removeAll(deletions);
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(ingredients);

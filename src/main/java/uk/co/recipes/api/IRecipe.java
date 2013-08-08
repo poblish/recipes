@@ -28,4 +28,6 @@ public interface IRecipe extends ITagging, Cloneable {
 	Collection<ICanonicalItem> getItems();
 
 	List<IRecipeStage> getStages();
+
+	boolean removeItems( final ICanonicalItem... inItems);
 }
