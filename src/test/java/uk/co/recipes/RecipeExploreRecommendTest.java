@@ -181,11 +181,13 @@ public class RecipeExploreRecommendTest {
 
         System.out.println("Existing: " + recipe1);
 
+        assertThat( explorerApi.similarity( recipe1, recipe1), is(1f));  // Check Recipe has 100% similarity to itself
+ 
         ((EsRecipeFactory) recipeFactory).useCopy( recipe1, new EsRecipeFactory.Hook<IRecipe>() {
 
             @Override
             public void use( final IRecipe inCopy) throws IOException {
-                assertThat( inCopy.getId(), not( recipe1.getId() ));
+                assertThat( inCopy.getId(), not( recipe1.getId() ));  // Check newly persisted Recipe has different Id
 
                 try {
                     Thread.sleep(1000);
@@ -193,8 +195,8 @@ public class RecipeExploreRecommendTest {
                     Throwables.propagate(e);
                 }
 
-                assertThat( recipeFactory.countAll(), is( currNumRecipes + 1));
-                System.out.println("Copy:     " + inCopy);
+                assertThat( recipeFactory.countAll(), is( currNumRecipes + 1));  // Check # Recipes has gone up by 1
+                assertThat( explorerApi.similarity( recipe1, inCopy), lessThan(1f));  // Check Recipe has imperfect similarity to itself (could potentially be 100%, I guess...)
             }
         });
 
@@ -204,8 +206,8 @@ public class RecipeExploreRecommendTest {
             Throwables.propagate(e);
         }
 
-        assertThat( recipeFactory.countAll(), is(currNumRecipes));
-        assertThat( recipeFactory.get("inputs3.txt").isPresent(), is(true));
+        assertThat( recipeFactory.countAll(), is(currNumRecipes));  // Check # Recipes is back where it was
+        assertThat( recipeFactory.get("inputs3.txt").isPresent(), is(true));  // Check the original Recipe wasn't deleted, i.e. new one was
     }
 
 	@AfterClass

@@ -44,5 +44,15 @@ public class MyrrixTasteSimilarityService implements ITasteSimilarityAPI {
 	@Override
 	public List<Long> similarRecipes( long inUser, int inNumRecs) {
 		throw new RuntimeException("unimpl");
-	}		
+	}
+
+	@Override
+	public float similarityToItem( long itemOrRecipe1, long itemOrRecipe2) {
+		try {
+			return recommender.similarityToItem( itemOrRecipe1, itemOrRecipe2)[0];
+		}
+		catch (TasteException e) {
+			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+		}
+	}
 }

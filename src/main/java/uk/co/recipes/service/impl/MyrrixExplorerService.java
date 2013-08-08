@@ -97,4 +97,28 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	public List<Long> similarRecipes( final long inUser, int inNumRecs) {
 		return tasteSimilarity.similarRecipes( inUser, inNumRecs);
 	}
+
+	/* (non-Javadoc)
+	 * @see uk.co.recipes.service.api.IExplorerAPI#similarity(uk.co.recipes.api.ICanonicalItem, uk.co.recipes.api.ICanonicalItem)
+	 */
+	@Override
+	public float similarity( final ICanonicalItem item1, final ICanonicalItem item2) {
+		return similarityToItem( item1.getId(), item2.getId());
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.co.recipes.service.api.IExplorerAPI#similarity(uk.co.recipes.api.IRecipe, uk.co.recipes.api.IRecipe)
+	 */
+	@Override
+	public float similarity( final IRecipe recipe1, final IRecipe recipe2) {
+		return similarityToItem( recipe1.getId(), recipe2.getId());
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.co.recipes.service.taste.api.ITasteSimilarityAPI#similarityToItem(long, long)
+	 */
+	@Override
+	public float similarityToItem( final long item1, final long item2) {
+		return tasteSimilarity.similarityToItem( item1, item2);
+	}
 }
