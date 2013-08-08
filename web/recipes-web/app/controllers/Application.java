@@ -1,8 +1,12 @@
 package controllers;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+
+import javax.inject.Inject;
 
 import net.myrrix.client.ClientRecommender;
 
@@ -37,17 +41,23 @@ public class Application extends Controller {
     private final static IRecipePersistence RECIPES = GRAPH.get( EsRecipeFactory.class );
     private final static IUserPersistence USERS = GRAPH.get( EsUserFactory.class );
     private final static ClientRecommender RECOMMENDER = GRAPH.get( ClientRecommender.class );
-    private final static MetricRegistry METRICS = GRAPH.get( MetricRegistry.class );
 
-    public static String getMetricsString() {
-        if (METRICS.getMetrics().isEmpty()) {
-            return "No Metrics in... " + METRICS;
+    private final MetricRegistry metrics;
+
+    @Inject
+    public Application(final MetricRegistry metrics) {
+        this.metrics = checkNotNull(metrics);
+    }
+
+    public String getMetricsString() {
+        if (metrics.getMetrics().isEmpty()) {
+            return "No Metrics in... " + metrics;
         }
 
         // See: http://ediweissmann.com/blog/2013/03/10/yammer-metrics-and-playframework/
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final PrintStream ps = new PrintStream(baos);
-        ConsoleReporter.forRegistry(METRICS).outputTo(ps).build().report();
+        ConsoleReporter.forRegistry(metrics).outputTo(ps).build().report();
         ps.flush();
         ps.close();
         return "Metrics: " + new String( baos.toByteArray() );
@@ -57,7 +67,7 @@ public class Application extends Controller {
         return ok(views.html.index.render("Your new application is ready."));
     }
 
-	public static Result stats() {
+	public Result stats() {
         try {
         	return ok(views.html.stats.render( getMetricsString(), ITEMS.countAll(), RECIPES.countAll(), USERS.countAll(), /* Ugh! FIXME */ RECOMMENDER.getAllUserIDs().size(), /* Ugh! FIXME */ RECOMMENDER.getAllItemIDs().size()));
         }

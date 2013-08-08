@@ -11,6 +11,7 @@ object ApplicationBuild extends Build {
     // Add your project dependencies here,
     javaCore,
     "uk.co.recipes" % "recipes-domain" % "0.0.1-SNAPSHOT",
+    "com.squareup.dagger" % "dagger-compiler" % "1.1.0",
     "com.codahale.metrics" % "metrics-core" % "3.0.1",
     "com.codahale.metrics" % "metrics-servlets" % "3.0.1"
   )

@@ -4,7 +4,7 @@
 
 # Home page
 GET     /                           controllers.Application.index()
-GET     /stats.html                 controllers.Application.stats()
+GET     /stats.html                 @controllers.Application.stats()
 GET     /items/:name                controllers.Items.display(name: String)
 GET     /items.html                 controllers.Items.test()
 GET     /recipes/:name              controllers.Recipes.display(name: String)
