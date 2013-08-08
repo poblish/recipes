@@ -10,7 +10,9 @@ object ApplicationBuild extends Build {
   val appDependencies = Seq(
     // Add your project dependencies here,
     javaCore,
-    "uk.co.recipes" % "recipes-domain" % "0.0.1-SNAPSHOT"
+    "uk.co.recipes" % "recipes-domain" % "0.0.1-SNAPSHOT",
+    "com.codahale.metrics" % "metrics-core" % "3.0.1",
+    "com.codahale.metrics" % "metrics-servlets" % "3.0.1"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
