@@ -14,7 +14,6 @@ import org.apache.mahout.cf.taste.common.TasteException;
 
 import play.mvc.Controller;
 import play.mvc.Result;
-import uk.co.recipes.DaggerModule;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsUserFactory;
@@ -25,8 +24,6 @@ import uk.co.recipes.service.api.IUserPersistence;
 import com.codahale.metrics.ConsoleReporter;
 import com.codahale.metrics.MetricRegistry;
 
-import dagger.ObjectGraph;
-
 /**
  * 
  * TODO
@@ -36,21 +33,26 @@ import dagger.ObjectGraph;
  */
 public class Application extends Controller {
 
-	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
-	private final static IItemPersistence ITEMS = GRAPH.get( EsItemFactory.class );
-    private final static IRecipePersistence RECIPES = GRAPH.get( EsRecipeFactory.class );
-    private final static IUserPersistence USERS = GRAPH.get( EsUserFactory.class );
-    private final static ClientRecommender RECOMMENDER = GRAPH.get( ClientRecommender.class );
-
-    private final MetricRegistry metrics;
+    private IItemPersistence items;
+    private IUserPersistence users;
+    private IRecipePersistence recipes;
+    private MetricRegistry metrics;
+    private ClientRecommender recommender;
 
     @Inject
-    public Application(final MetricRegistry metrics) {
+    public Application( final EsItemFactory items, final EsRecipeFactory recipes, final EsUserFactory users, final ClientRecommender recommender, final MetricRegistry metrics) {
+        this.items = checkNotNull(items);
+        this.recipes = checkNotNull(recipes);
+        this.users = checkNotNull(users);
         this.metrics = checkNotNull(metrics);
+        this.recommender = checkNotNull(recommender);
     }
 
     public String getMetricsString() {
-        if (metrics.getMetrics().isEmpty()) {
+//    	System.out.println( metrics + " / " + ((EsRecipeFactory)recipes).getMetricRegistry());
+//    	metrics.counter("foop").inc();
+
+    	if (metrics.getMetrics().isEmpty()) {
             return "No Metrics in... " + metrics;
         }
 
@@ -69,7 +71,7 @@ public class Application extends Controller {
 
 	public Result stats() {
         try {
-        	return ok(views.html.stats.render( getMetricsString(), ITEMS.countAll(), RECIPES.countAll(), USERS.countAll(), /* Ugh! FIXME */ RECOMMENDER.getAllUserIDs().size(), /* Ugh! FIXME */ RECOMMENDER.getAllItemIDs().size()));
+        	return ok(views.html.stats.render( getMetricsString(), items.countAll(), recipes.countAll(), users.countAll(), /* Ugh! FIXME */ recommender.getAllUserIDs().size(), /* Ugh! FIXME */ recommender.getAllItemIDs().size()));
         }
         catch (IOException e) {  // Yuk!!!
         	return ok(views.html.stats.render( "???", -1L, -1L, -1L, -1, -1));
