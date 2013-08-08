@@ -3,6 +3,7 @@
  */
 package uk.co.recipes.persistence;
 
+import com.codahale.metrics.Timer;
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -34,7 +35,7 @@ import uk.co.recipes.service.api.IRecipePersistence;
 import static org.elasticsearch.index.query.QueryBuilders.fieldQuery;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isOneOf;
-import static uk.co.recipes.metrics.MetricNames.COUNTER_RECIPES_PUTS;
+import static uk.co.recipes.metrics.MetricNames.*;
 
 /**
  * TODO
@@ -80,6 +81,8 @@ public class EsRecipeFactory implements IRecipePersistence {
 	}
 
 	public IRecipe getById( String inName) throws IOException {
+	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_NAME_GETS).time();
+
         try {
             final SearchHit[] hits = esClient.prepareSearch("recipe").setTypes("recipes").setQuery( fieldQuery( "title", inName) ).setSize(1).execute().get().getHits().hits();
             if ( hits.length < 1) {
@@ -92,6 +95,9 @@ public class EsRecipeFactory implements IRecipePersistence {
         }
         catch (ExecutionException e) {
             Throwables.propagate(e);
+        }
+        finally {
+            timerCtxt.stop();
         }
 
         return null;
@@ -106,6 +112,8 @@ public class EsRecipeFactory implements IRecipePersistence {
 	}
 
 	public IRecipe put( final IRecipe inRecipe, String inId_Unused) throws IOException {
+        final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_PUTS).time();
+
 	    final long newId = sequences.getSeqnoForType("recipes_seqno") + Recipe.BASE_ID;
 
 	    final HttpPost req = new HttpPost( itemIndexUrl + "/" + newId);
@@ -126,6 +134,9 @@ public class EsRecipeFactory implements IRecipePersistence {
 		catch (UnsupportedEncodingException e) {
 			Throwables.propagate(e);
 		}
+        finally {
+            timerCtxt.stop();
+        }
 
 		return inRecipe;
 	}
