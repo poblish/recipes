@@ -94,16 +94,13 @@
 ---
 
 
-{canonicalName: Chilli, tags: {CHILLI, INDIAN, THAI, CHINESE}}
+{canonicalName: Chilli, tags: {CHILLI}}
 ---
 {    canonicalName: Chilli Flakes, parent: Chilli}
 ---
-# FIXME This is surely a naming, not a child
-{    canonicalName: Red Chilli, parent: Chilli}
+{    canonicalName: Red Chillies, parent: Chilli, tags: {INDIAN, THAI, CHINESE}, aliases: {Red Chilli}}
 ---
-{    canonicalName: Red Chillies, parent: Chilli}
----
-{    canonicalName: Green Chillies, parent: Chilli}
+{    canonicalName: Green Chillies, parent: Chilli, tags: {INDIAN, THAI, CHINESE}}
 ---
 {    canonicalName: Ancho Chile, parent: Chilli, tags: {MEXICAN}, aliases: {Poblano}}
 ---
