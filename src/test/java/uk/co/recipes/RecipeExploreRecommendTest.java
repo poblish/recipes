@@ -6,6 +6,7 @@ package uk.co.recipes;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Throwables;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -43,6 +44,7 @@ import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 
 import dagger.ObjectGraph;
+import static uk.co.recipes.metrics.MetricNames.COUNTER_RECIPES_PUTS;
 
 /**
  * TODO
@@ -55,6 +57,7 @@ public class RecipeExploreRecommendTest {
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
 	private Client esClient = GRAPH.get( Client.class );
+    private MetricRegistry metrics = GRAPH.get( MetricRegistry.class );
 
 	private IItemPersistence itemFactory = GRAPH.get( EsItemFactory.class );
 	private IRecipePersistence recipeFactory = GRAPH.get( EsRecipeFactory.class );
@@ -101,6 +104,8 @@ public class RecipeExploreRecommendTest {
         while ( recipeFactory.countAll() < count) {
         	Thread.sleep(200); // Wait for saves to appear...
         }
+
+        assertThat( metrics.counter(COUNTER_RECIPES_PUTS).getCount(), is((long) count));
 	}
 
 	@Test

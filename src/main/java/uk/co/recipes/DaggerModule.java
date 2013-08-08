@@ -3,6 +3,7 @@
  */
 package uk.co.recipes;
 
+import com.codahale.metrics.MetricRegistry;
 import java.io.IOException;
 
 import javax.inject.Named;
@@ -52,7 +53,8 @@ import dagger.Provides;
  */
 @Module(injects={EsItemFactory.class, EsRecipeFactory.class, ItemsLoader.class, IngredientParser.class, TestDataUtils.class, Correlations.class, ObjectMapper.class, ClientRecommender.class,
 				 MyrrixTasteRecommendationService.class, MyrrixRecommendationService.class, MyrrixTasteSimilarityService.class, MyrrixExplorerService.class,
-				 Client.class, EsSearchService.class, EsUserFactory.class, EsSequenceFactory.class, MyrrixUpdater.class, IEventService.class, UserRatings.class})
+				 Client.class, EsSearchService.class, EsUserFactory.class, EsSequenceFactory.class, MyrrixUpdater.class, IEventService.class, UserRatings.class,
+				 MetricRegistry.class})
 public class DaggerModule {
 
 	@Provides
@@ -103,6 +105,12 @@ public class DaggerModule {
     @Singleton
     IIngredientQuantityScoreBooster provideIngredientQuantityScoreBooster() {
         return new DefaultIngredientQuantityScoreBooster();
+    }
+
+    @Provides
+    @Singleton
+    MetricRegistry provideMetricRegistry() {
+        return new MetricRegistry();
     }
 
 	@Provides

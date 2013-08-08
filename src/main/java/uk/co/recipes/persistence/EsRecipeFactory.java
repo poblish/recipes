@@ -3,6 +3,7 @@
  */
 package uk.co.recipes.persistence;
 
+import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,6 +34,7 @@ import uk.co.recipes.service.api.IRecipePersistence;
 import static org.elasticsearch.index.query.QueryBuilders.fieldQuery;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isOneOf;
+import static uk.co.recipes.metrics.MetricNames.COUNTER_RECIPES_PUTS;
 
 /**
  * TODO
@@ -60,6 +62,9 @@ public class EsRecipeFactory implements IRecipePersistence {
 
 	@Inject
 	EsSequenceFactory sequences;
+
+	@Inject
+	MetricRegistry metrics;
 
     @Inject
     IEventService eventService;
@@ -113,6 +118,8 @@ public class EsRecipeFactory implements IRecipePersistence {
 			final HttpResponse resp = httpClient.execute(req);
 			assertThat( resp.getStatusLine().getStatusCode(), isOneOf(201, 200));
 			EntityUtils.consume( resp.getEntity() );
+
+	        metrics.counter(COUNTER_RECIPES_PUTS).inc();
 
 			eventService.addRecipe(inRecipe);
 		}
