@@ -200,15 +200,25 @@ public class EsRecipeFactory implements IRecipePersistence {
     }
 
     public IRecipe fork( final IRecipe inModifiedRecipe) throws IOException {
-        final String newId = toStringId(inModifiedRecipe) + "_" + System.nanoTime();
-        return put((IRecipe) inModifiedRecipe.clone(), newId);
+        return fork( inModifiedRecipe, null);
     }
 
-    public void useCopy( final IRecipe inModifiedRecipe, final Hook<IRecipe> inHook) throws IOException {
-        final IRecipe theFork = fork(inModifiedRecipe);
+    public IRecipe fork( final IRecipe inModifiedRecipe, final PreForkChange<IRecipe> inPreChange) throws IOException {
+        final String newId = toStringId(inModifiedRecipe) + "_" + System.nanoTime();
+        final IRecipe clone = (IRecipe) inModifiedRecipe.clone();
+        if ( inPreChange != null) {
+        	inPreChange.apply(clone);
+        }
+        return put( clone, newId);
+    }
+
+    public void useCopy( final IRecipe inModifiedRecipe, final PreForkChange<IRecipe> inPreChange, final PostForkChange<IRecipe> inPostChange) throws IOException {
+        final IRecipe theFork = fork( inModifiedRecipe, inPreChange);
 
         try {
-            inHook.use(theFork);
+            if ( inPostChange != null) {
+            	inPostChange.apply(theFork);
+            }
         }
         finally {
             delete(theFork);
@@ -223,7 +233,11 @@ public class EsRecipeFactory implements IRecipePersistence {
         esClient.prepareDelete( "recipe", "recipes", String.valueOf( inRecipe.getId() )).execute().actionGet();
     }
 
-    public static interface Hook<T> {
-        public void use( final T inObj) throws IOException;
+    public static interface PreForkChange<T> {
+        public void apply( final T recipe);
+    }
+
+    public static interface PostForkChange<T> {
+        public void apply( final T inObj) throws IOException;
     }
 }

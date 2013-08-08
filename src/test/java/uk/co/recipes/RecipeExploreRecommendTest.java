@@ -20,6 +20,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.api.IEventListener;
@@ -183,10 +184,25 @@ public class RecipeExploreRecommendTest {
 
         assertThat( explorerApi.similarity( recipe1, recipe1), is(1f));  // Check Recipe has 100% similarity to itself
  
-        ((EsRecipeFactory) recipeFactory).useCopy( recipe1, new EsRecipeFactory.Hook<IRecipe>() {
+        ((EsRecipeFactory) recipeFactory).useCopy( recipe1, new EsRecipeFactory.PreForkChange<IRecipe>() {
+
+			@Override
+			public void apply( final IRecipe inCopy) {
+				try {
+					assertThat( inCopy.getItems().size(), is(15));
+					assertThat( inCopy.removeItems( item("ginger"), item("coriander"), item("onion"), item("cinnamon_stick"), item("turmeric"), item("fennel_seed")), is(true));
+					assertThat( inCopy.getItems().size(), is(9));  // Check Items have actually been removed!
+				}
+				catch (IOException e) {
+					Throwables.propagate(e);
+				}
+			}
+			
+        }, new EsRecipeFactory.PostForkChange<IRecipe>() {
 
             @Override
-            public void use( final IRecipe inCopy) throws IOException {
+            public void apply( final IRecipe inCopy) throws IOException {
+				assertThat( inCopy.getItems().size(), is(9));  // Check we've actually got the one where the Items were removed!
                 assertThat( inCopy.getId(), not( recipe1.getId() ));  // Check newly persisted Recipe has different Id
 
                 try {
@@ -196,6 +212,7 @@ public class RecipeExploreRecommendTest {
                 }
 
                 assertThat( recipeFactory.countAll(), is( currNumRecipes + 1));  // Check # Recipes has gone up by 1
+                System.out.println( explorerApi.similarity( recipe1, inCopy) );
                 assertThat( explorerApi.similarity( recipe1, inCopy), lessThan(1f));  // Check Recipe has imperfect similarity to itself (could potentially be 100%, I guess...)
             }
         });
@@ -208,6 +225,10 @@ public class RecipeExploreRecommendTest {
 
         assertThat( recipeFactory.countAll(), is(currNumRecipes));  // Check # Recipes is back where it was
         assertThat( recipeFactory.get("inputs3.txt").isPresent(), is(true));  // Check the original Recipe wasn't deleted, i.e. new one was
+    }
+
+    private ICanonicalItem item( final String inName) throws IOException {
+    	return itemFactory.get(inName).get();
     }
 
 	@AfterClass
