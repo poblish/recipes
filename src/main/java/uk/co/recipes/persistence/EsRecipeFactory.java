@@ -3,31 +3,6 @@
  */
 package uk.co.recipes.persistence;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isOneOf;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.Collection;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.util.EntityUtils;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.indices.TypeMissingException;
-
-import uk.co.recipes.Recipe;
-import uk.co.recipes.api.IRecipe;
-import uk.co.recipes.events.api.IEventService;
-import uk.co.recipes.service.api.IRecipePersistence;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,6 +10,29 @@ import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import javax.inject.Inject;
+import javax.inject.Named;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.util.EntityUtils;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.indices.TypeMissingException;
+import org.elasticsearch.search.SearchHit;
+import uk.co.recipes.Recipe;
+import uk.co.recipes.api.IRecipe;
+import uk.co.recipes.events.api.IEventService;
+import uk.co.recipes.service.api.IRecipePersistence;
+import static org.elasticsearch.index.query.QueryBuilders.fieldQuery;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isOneOf;
 
 /**
  * TODO
@@ -69,15 +67,29 @@ public class EsRecipeFactory implements IRecipePersistence {
 
 	public Optional<IRecipe> get( final String inName) throws IOException {
 		try {
-			return Optional.fromNullable( getById( toId(inName) ) );
+			return Optional.fromNullable( getById(inName) );
 		}
 		catch (FileNotFoundException e) { /* Not found! */ }
 
 		return Optional.absent();
 	}
 
-	public IRecipe getById( String inId) throws IOException {
-		return mapper.readValue( esUtils.parseSource( itemIndexUrl + "/" + inId), Recipe.class);
+	public IRecipe getById( String inName) throws IOException {
+        try {
+            final SearchHit[] hits = esClient.prepareSearch("recipe").setTypes("recipes").setQuery( fieldQuery( "title", inName) ).setSize(1).execute().get().getHits().hits();
+            if ( hits.length < 1) {
+                return null;
+            }
+            return mapper.readValue( hits[0].getSourceAsString(), Recipe.class);
+        }
+        catch (InterruptedException e) {
+            Throwables.propagate(e);
+        }
+        catch (ExecutionException e) {
+            Throwables.propagate(e);
+        }
+
+        return null;
 	}
 
 	public Optional<IRecipe> getById( long inId) throws IOException {
@@ -88,11 +100,13 @@ public class EsRecipeFactory implements IRecipePersistence {
 		return esUtils.findOneByIdAndType( itemIndexUrl, inId, IRecipe.class, Recipe.class);
 	}
 
-	public IRecipe put( final IRecipe inRecipe, String inId) throws IOException {
-		final HttpPost req = new HttpPost( itemIndexUrl + "/" + inId);
+	public IRecipe put( final IRecipe inRecipe, String inId_Unused) throws IOException {
+	    final long newId = sequences.getSeqnoForType("recipes_seqno") + Recipe.BASE_ID;
+
+	    final HttpPost req = new HttpPost( itemIndexUrl + "/" + newId);
 
 		try {
-			inRecipe.setId( sequences.getSeqnoForType("recipes_seqno") + Recipe.BASE_ID);
+			inRecipe.setId(newId);
 
 			req.setEntity( new StringEntity( mapper.writeValueAsString(inRecipe) ) );
 
@@ -110,11 +124,7 @@ public class EsRecipeFactory implements IRecipePersistence {
 	}
 
 	public String toStringId( final IRecipe inRecipe) throws IOException {
-		return toId( inRecipe.getTitle() );
-	}
-
-	public static String toId( final String inCanonicalName) throws IOException {
-		return inCanonicalName.toLowerCase().replace( ' ', '_');
+        return String.valueOf( inRecipe.getId() ); // inRecipe.getTitle().toLowerCase().replace( ' ', '_');
 	}
 
     // FIXME - pretty lame!
@@ -164,16 +174,28 @@ public class EsRecipeFactory implements IRecipePersistence {
         throw new RuntimeException("unimpl");  // FIXME?
     }
 
-    public void useCopy( final IRecipe inModifiedRecipe, final Hook<IRecipe> inHook) throws IOException {
+    public IRecipe fork( final IRecipe inModifiedRecipe) throws IOException {
         final String newId = toStringId(inModifiedRecipe) + "_" + System.nanoTime();
-        final IRecipe newCopy = put((IRecipe) inModifiedRecipe.clone(), newId);
+        return put((IRecipe) inModifiedRecipe.clone(), newId);
+    }
+
+    public void useCopy( final IRecipe inModifiedRecipe, final Hook<IRecipe> inHook) throws IOException {
+        final IRecipe theFork = fork(inModifiedRecipe);
 
         try {
-            inHook.use(newCopy);
+            inHook.use(theFork);
         }
         finally {
-            esClient.prepareDelete( "recipe", "recipes", newId).execute();  // Don't need to wait for this
+            delete(theFork);
         }
+    }
+
+    public void delete( final IRecipe inRecipe) throws IOException {
+        esClient.prepareDelete( "recipe", "recipes", String.valueOf( inRecipe.getId() )).execute();  // Don't need to wait for this
+    }
+
+    public void deleteNow( final IRecipe inRecipe) throws IOException {
+        esClient.prepareDelete( "recipe", "recipes", String.valueOf( inRecipe.getId() )).execute().actionGet();
     }
 
     public static interface Hook<T> {
