@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.http.client.ClientProtocolException;
@@ -124,7 +125,7 @@ public class IngredientsTest {
 		stage1.addIngredient(lambIngredient);
 		stage1.addIngredient(baconIngredient);
 
-		final Recipe r = new Recipe("Herby Lamb Cobbler");
+		final Recipe r = new Recipe("Herby Lamb Cobbler", Locale.UK);
 		r.addStage(stage1);
 		r.addTag( CommonTags.SERVES_COUNT, "4");
 

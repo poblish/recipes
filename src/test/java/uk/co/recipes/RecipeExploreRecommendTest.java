@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.mahout.cf.taste.common.TasteException;
@@ -114,6 +115,7 @@ public class RecipeExploreRecommendTest {
     private void runSimilarity( final String inName) throws IOException {
         final IRecipe item = recipeFactory.get(inName).get();
         assertThat( inName, is( item.getTitle() ));
+        assertThat( item.getLocale(), is( Locale.UK ));  // FIXME Test is sound, but shouldn't be here!!!
         System.out.println( Strings.padEnd("Similar to " + inName + ":", 28, ' ') + explorerApi.similarRecipes( item, 10) );
     }
 

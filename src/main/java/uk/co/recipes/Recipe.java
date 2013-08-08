@@ -10,6 +10,7 @@ import static uk.co.recipes.tags.TagUtils.tagNamesTitleCase;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.elasticsearch.common.Preconditions;
@@ -40,6 +41,7 @@ public class Recipe implements IRecipe {
 
 	private long id = UNSET_ID;
 	private String title;
+	private Locale locale;
 	private final List<IRecipeStage> stages = Lists.newArrayList();
 	private final Map<ITag,Serializable> tagsMap = Maps.newHashMap();
 
@@ -47,8 +49,9 @@ public class Recipe implements IRecipe {
 	public Recipe() {
 	}
 
-	public Recipe( String inTitle) {
+	public Recipe( String inTitle, final Locale inLocale) {
 		title = checkNotNull( inTitle, "Title cannot be null");
+		locale = checkNotNull( inLocale, "Locale cannot be null");
 	}
 
 	/**
@@ -56,6 +59,14 @@ public class Recipe implements IRecipe {
 	 */
 	public String getTitle() {
 		return title;
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.co.recipes.api.IRecipe#getLocale()
+	 */
+	@Override
+	public Locale getLocale() {
+		return locale;
 	}
 
 	public void addStage( final RecipeStage inStage) {
@@ -160,7 +171,7 @@ public class Recipe implements IRecipe {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCode( title, stages, tagsMap);
+		return Objects.hashCode( title, locale, stages, tagsMap);
 	}
 
 	/* (non-Javadoc)
@@ -178,7 +189,7 @@ public class Recipe implements IRecipe {
 			return false;
 		}
 		final Recipe other = (Recipe) obj;
-		return Objects.equal( title, other.title) && Objects.equal( stages, other.stages) && Objects.equal( tagsMap, other.tagsMap);
+		return Objects.equal( title, other.title) && Objects.equal( locale, other.locale) && Objects.equal( stages, other.stages) && Objects.equal( tagsMap, other.tagsMap);
 	}
 
 	public String toString() {
@@ -187,6 +198,7 @@ public class Recipe implements IRecipe {
 						.add( "id", ( id == UNSET_ID) ? "NEW" : Long.valueOf(id))
 						.add( "stages", stages)
 						.add( "tags", tagsMap)
+						.add( "locale", locale)
 						.toString();
 	}
 }

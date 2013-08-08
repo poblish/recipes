@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -65,7 +66,7 @@ public class TestDataUtils {
 		final RecipeStage stage1 = new RecipeStage();
 		stage1.addIngredients(allIngredients);
 
-		final Recipe r = new Recipe(inFilename);
+		final Recipe r = new Recipe(inFilename, Locale.UK);
 		r.addStage(stage1);
 
 		recipeFactory.put( r, recipeFactory.toStringId(r));

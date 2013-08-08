@@ -5,6 +5,7 @@ package uk.co.recipes.api;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * TODO
@@ -18,6 +19,7 @@ public interface IRecipe extends ITagging {
 	void setId( long id);
 
 	String getTitle();
+	Locale getLocale();
 
 	Collection<IIngredient> getIngredients();
 
