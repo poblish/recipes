@@ -50,6 +50,8 @@ import com.google.common.collect.Lists;
  */
 public class EsRecipeFactory implements IRecipePersistence {
 
+//	private final static Logger LOG = LoggerFactory.getLogger( EsRecipeFactory.class );
+
 	@Inject
 	Client esClient;
 
