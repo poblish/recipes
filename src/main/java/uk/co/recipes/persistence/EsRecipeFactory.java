@@ -3,23 +3,21 @@
  */
 package uk.co.recipes.persistence;
 
-import com.codahale.metrics.Timer;
-import com.codahale.metrics.MetricRegistry;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Optional;
-import com.google.common.base.Supplier;
-import com.google.common.base.Throwables;
-import com.google.common.collect.Lists;
+import static org.elasticsearch.index.query.QueryBuilders.fieldQuery;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isOneOf;
+import static uk.co.recipes.metrics.MetricNames.*;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -28,14 +26,21 @@ import org.apache.http.util.EntityUtils;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.indices.TypeMissingException;
 import org.elasticsearch.search.SearchHit;
+
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.service.api.IRecipePersistence;
-import static org.elasticsearch.index.query.QueryBuilders.fieldQuery;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isOneOf;
-import static uk.co.recipes.metrics.MetricNames.*;
+
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Optional;
+import com.google.common.base.Supplier;
+import com.google.common.base.Throwables;
+import com.google.common.collect.Lists;
 
 /**
  * TODO

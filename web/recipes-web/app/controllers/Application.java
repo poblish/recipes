@@ -1,12 +1,13 @@
 package controllers;
 
-import java.io.PrintStream;
 import java.io.ByteArrayOutputStream;
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.ConsoleReporter;
 import java.io.IOException;
+import java.io.PrintStream;
+
 import net.myrrix.client.ClientRecommender;
+
 import org.apache.mahout.cf.taste.common.TasteException;
+
 import play.mvc.Controller;
 import play.mvc.Result;
 import uk.co.recipes.DaggerModule;
@@ -16,6 +17,10 @@ import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.IUserPersistence;
+
+import com.codahale.metrics.ConsoleReporter;
+import com.codahale.metrics.MetricRegistry;
+
 import dagger.ObjectGraph;
 
 /**

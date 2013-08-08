@@ -3,7 +3,6 @@
  */
 package uk.co.recipes;
 
-import com.codahale.metrics.MetricRegistry;
 import java.io.IOException;
 
 import javax.inject.Named;
@@ -39,6 +38,7 @@ import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
 import uk.co.recipes.service.taste.impl.MyrrixTasteSimilarityService;
 import uk.co.recipes.test.TestDataUtils;
 
+import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
 

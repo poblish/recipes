@@ -7,12 +7,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static uk.co.recipes.tags.TagUtils.findActivated;
 import static uk.co.recipes.tags.TagUtils.tagNamesTitleCase;
 
-import java.util.Map.Entry;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.elasticsearch.common.Preconditions;
 

@@ -5,9 +5,8 @@ package uk.co.recipes;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static uk.co.recipes.metrics.MetricNames.COUNTER_RECIPES_PUTS;
 
-import com.codahale.metrics.MetricRegistry;
-import com.google.common.base.Throwables;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -40,11 +39,12 @@ import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.test.TestDataUtils;
 
+import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
+import com.google.common.base.Throwables;
 
 import dagger.ObjectGraph;
-import static uk.co.recipes.metrics.MetricNames.COUNTER_RECIPES_PUTS;
 
 /**
  * TODO
