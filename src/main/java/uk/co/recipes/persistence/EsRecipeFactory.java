@@ -225,10 +225,12 @@ public class EsRecipeFactory implements IRecipePersistence {
 
     public void delete( final IRecipe inRecipe) throws IOException {
         esClient.prepareDelete( "recipe", "recipes", String.valueOf( inRecipe.getId() )).execute();  // Don't need to wait for this
+        eventService.deleteRecipe(inRecipe);
     }
 
     public void deleteNow( final IRecipe inRecipe) throws IOException {
         esClient.prepareDelete( "recipe", "recipes", String.valueOf( inRecipe.getId() )).execute().actionGet();
+        eventService.deleteRecipe(inRecipe);
     }
 
     public interface PreForkChange<T> {

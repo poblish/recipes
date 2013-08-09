@@ -60,26 +60,51 @@ public class MyrrixUpdater implements IEventListener {
 
     @Override
     public void onAddItem( final ItemEvent evt) {
-    	if (LOG.isTraceEnabled()) {
-    		LOG.trace("onAddItem: " + evt);
-    	}
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("onAddItem: " + evt);
+        }
 
         final long itemId = evt.getItem().getId();
         boolean changesMade = false;
 
         try {
-        	changesMade = addItemTagsForItem( evt.getItem(), itemId, 1.0f);
-	    }
-		catch (TasteException e) {
-			Throwables.propagate(e);
-		}
+            changesMade = addItemTagsForItem( evt.getItem(), itemId, 1.0f);
+        }
+        catch (TasteException e) {
+            Throwables.propagate(e);
+        }
 
         if (changesMade) {
-        	recommender.refresh();
+            recommender.refresh();
 
-        	if (LOG.isTraceEnabled()) {
-        		LOG.trace("onAddItem: refresh done");
-        	}
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("onAddItem: refresh done");
+            }
+        }
+    }
+
+    @Override
+    public void onDeleteItem( final ItemEvent evt) {
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("onDeleteItem: " + evt);
+        }
+
+        final long itemId = evt.getItem().getId();
+        boolean changesMade = false;
+
+        try {
+            changesMade = removeItemTagsForItem( evt.getItem(), itemId);
+        }
+        catch (TasteException e) {
+            Throwables.propagate(e);
+        }
+
+        if (changesMade) {
+            recommender.refresh();
+
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("onDeleteItem: refresh done");
+            }
         }
     }
 
@@ -107,6 +132,33 @@ public class MyrrixUpdater implements IEventListener {
         	if (LOG.isTraceEnabled()) {
         		LOG.trace("onAddRecipe: refresh done");
         	}
+        }
+    }
+
+    @Override
+    public void onDeleteRecipe(RecipeEvent evt) {
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("onDeleteRecipe: " + evt);
+        }
+
+        final long recipeId = evt.getRecipe().getId();
+        boolean changesMade = false;
+
+        try {
+            for ( IIngredient eachIngr : evt.getRecipe().getIngredients()) {
+                changesMade |= removeItemTagsForItem( eachIngr.getItem(), recipeId);
+            }
+        }
+        catch (TasteException e) {
+            Throwables.propagate(e);
+        }
+
+        if (changesMade) {
+            recommender.refresh();
+
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("onDeleteRecipe: refresh done");
+            }
         }
     }
 
@@ -152,6 +204,11 @@ public class MyrrixUpdater implements IEventListener {
     	}
   
     	return changesMade;
+    }
+
+    private boolean removeItemTagsForItem( final ICanonicalItem inItem, final long inItemOrRecipeId) throws TasteException {
+        LOG.debug("removeItemTagsForItem: " + inItemOrRecipeId + " for " + inItemOrRecipeId);
+        return false;
     }
 
     @Override

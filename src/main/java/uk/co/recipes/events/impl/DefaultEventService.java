@@ -33,9 +33,21 @@ public class DefaultEventService implements IEventService {
         }
     }
 
+    public void deleteItem( final ICanonicalItem inItem) {
+        for ( IEventListener each : listeners) {
+            each.onDeleteItem( new ItemEvent( null, inItem, 1.0f) );
+        }
+    }
+
     public void addRecipe( final IRecipe inRecipe) {
         for ( IEventListener each : listeners) {
             each.onAddRecipe( new RecipeEvent( null, inRecipe, 1.0f) );
+        }
+    }
+
+    public void deleteRecipe( final IRecipe inRecipe) {
+        for ( IEventListener each : listeners) {
+            each.onDeleteRecipe( new RecipeEvent( null, inRecipe, 1.0f) );
         }
     }
 

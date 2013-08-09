@@ -171,12 +171,14 @@ public class EsItemFactory implements IItemPersistence {
     }
 
     @Override
-    public void delete( final ICanonicalItem obj) throws IOException {
+    public void delete( final ICanonicalItem inItem) throws IOException {
+        eventService.deleteItem(inItem);
         throw new RuntimeException("unimpl");
     }
 
     @Override
-    public void deleteNow( final ICanonicalItem obj) throws IOException {
+    public void deleteNow( final ICanonicalItem inItem) throws IOException {
+        eventService.deleteItem(inItem);
         throw new RuntimeException("unimpl");
     }
 

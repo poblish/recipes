@@ -19,7 +19,9 @@ public interface IEventListener {
 
     void onAddItem( final ItemEvent evt);
     void onRateItem( final ItemEvent evt);
- 
+    void onDeleteItem( final ItemEvent evt);
+
     void onAddRecipe( final RecipeEvent evt);
     void onRateRecipe( final RecipeEvent evt);
+    void onDeleteRecipe( final RecipeEvent evt);
 }

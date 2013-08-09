@@ -20,8 +20,10 @@ public interface IEventService {
     void addItem( final ICanonicalItem inItem);
     void rateItem( final IUser inUser, final ICanonicalItem inItem);
     void rateItem( final IUser inUser, final ICanonicalItem inItem, float inRating);
+    void deleteItem( final ICanonicalItem inItem);
 
     void addRecipe( final IRecipe inRecipe);
     void rateRecipe( final IUser inUser, final IRecipe inRecipe);
     void rateRecipe( final IUser inUser, final IRecipe inRecipe, float inRating);
+    void deleteRecipe( final IRecipe inRecipe);
 }
