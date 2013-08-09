@@ -197,21 +197,21 @@ public class EsRecipeFactory implements IRecipePersistence {
         throw new RuntimeException("unimpl");  // FIXME?
     }
 
-    public IRecipe fork( final IRecipe inModifiedRecipe) throws IOException {
-        return fork( inModifiedRecipe, null);
+    public IRecipe fork( final IRecipe inOriginalRecipe) throws IOException {
+        return fork( inOriginalRecipe, null);
     }
 
-    public IRecipe fork( final IRecipe inModifiedRecipe, final PreForkChange<IRecipe> inPreChange) throws IOException {
-        final String newId = toStringId(inModifiedRecipe) + "_" + System.nanoTime();
-        final IRecipe clone = (IRecipe) inModifiedRecipe.clone();
+    public IRecipe fork( final IRecipe inOriginalRecipe, final PreForkChange<IRecipe> inPreChange) throws IOException {
+        final String newId = toStringId(inOriginalRecipe) + "_" + System.nanoTime();
+        final IRecipe clone = (IRecipe) inOriginalRecipe.clone();
         if ( inPreChange != null) {
         	inPreChange.apply(clone);
         }
         return put( clone, newId);
     }
 
-    public void useCopy( final IRecipe inModifiedRecipe, final PreForkChange<IRecipe> inPreChange, final PostForkChange<IRecipe> inPostChange) throws IOException {
-        final IRecipe theFork = fork( inModifiedRecipe, inPreChange);
+    public void useCopy( final IRecipe inOriginalRecipe, final PreForkChange<IRecipe> inPreChange, final PostForkChange<IRecipe> inPostChange) throws IOException {
+        final IRecipe theFork = fork( inOriginalRecipe, inPreChange);
 
         try {
             if ( inPostChange != null) {
