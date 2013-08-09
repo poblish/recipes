@@ -64,6 +64,11 @@ public class Recipe implements IRecipe {
 		return title;
 	}
 
+    @Override
+    public void setTitle( final String inTitle) {
+        title = checkNotNull( inTitle, "Title cannot be null");
+    }
+
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.api.IRecipe#getLocale()
 	 */

@@ -19,6 +19,8 @@ public interface IRecipe extends ITagging, Cloneable, java.io.Serializable {
 	void setId( long id);
 
 	String getTitle();
+	void setTitle( String title);
+
 	Locale getLocale();
 
 	Object clone();
