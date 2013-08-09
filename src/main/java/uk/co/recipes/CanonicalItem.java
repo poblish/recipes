@@ -6,17 +6,21 @@ package uk.co.recipes;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static uk.co.recipes.tags.TagUtils.findActivated;
 import static uk.co.recipes.tags.TagUtils.tagNamesTitleCase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+
 import org.elasticsearch.common.Preconditions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

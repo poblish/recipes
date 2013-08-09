@@ -3,10 +3,8 @@
  */
 package uk.co.recipes;
 
-import com.codahale.metrics.Slf4jReporter;
-import org.slf4j.LoggerFactory;
-import java.util.concurrent.TimeUnit;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -19,6 +17,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.slf4j.LoggerFactory;
 
 import uk.co.recipes.corr.Correlations;
 import uk.co.recipes.events.api.IEventService;
@@ -42,6 +41,7 @@ import uk.co.recipes.service.taste.impl.MyrrixTasteSimilarityService;
 import uk.co.recipes.test.TestDataUtils;
 
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Slf4jReporter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
 

@@ -3,15 +3,18 @@
  */
 package uk.co.recipes.events.impl;
 
-import com.google.common.eventbus.AsyncEventBus;
-import com.google.common.eventbus.EventBus;
 import java.util.concurrent.Executors;
+
 import javax.inject.Inject;
+
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.api.IEventListener;
 import uk.co.recipes.events.api.IEventService;
+
+import com.google.common.eventbus.AsyncEventBus;
+import com.google.common.eventbus.EventBus;
 
 /**
  * TODO

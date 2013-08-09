@@ -6,9 +6,8 @@ package uk.co.recipes.persistence;
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.elasticsearch.index.query.QueryBuilders.matchPhraseQuery;
 import static org.elasticsearch.search.sort.SortOrder.DESC;
+import static uk.co.recipes.metrics.MetricNames.*;
 
-import com.codahale.metrics.Timer;
-import com.codahale.metrics.MetricRegistry;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -34,12 +33,13 @@ import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.service.api.IItemPersistence;
 
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
-import static uk.co.recipes.metrics.MetricNames.*;
 
 /**
  * TODO

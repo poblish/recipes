@@ -5,16 +5,20 @@ package uk.co.recipes.events.impl;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import com.google.common.eventbus.Subscribe;
+
 import java.io.Serializable;
 import java.io.StringReader;
 import java.util.Map.Entry;
+
 import javax.inject.Inject;
+
 import net.myrrix.client.ClientRecommender;
+
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.elasticsearch.common.base.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
@@ -24,6 +28,8 @@ import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
 import uk.co.recipes.service.impl.DefaultIngredientQuantityScoreBooster;
+
+import com.google.common.eventbus.Subscribe;
 
 /**
  * TODO
