@@ -3,6 +3,9 @@
  */
 package uk.co.recipes;
 
+import com.codahale.metrics.Slf4jReporter;
+import org.slf4j.LoggerFactory;
+import java.util.concurrent.TimeUnit;
 import java.io.IOException;
 
 import javax.inject.Named;
@@ -110,7 +113,14 @@ public class DaggerModule {
     @Provides
     @Singleton
     MetricRegistry provideMetricRegistry() {
-        return new MetricRegistry();
+        final MetricRegistry registry = new MetricRegistry();
+        final Slf4jReporter reporter = Slf4jReporter.forRegistry(registry)
+                .outputTo(LoggerFactory.getLogger("com.example.metrics"))
+                .convertRatesTo(TimeUnit.SECONDS)
+                .convertDurationsTo(TimeUnit.MILLISECONDS)
+                .build();
+        reporter.start( 20, TimeUnit.SECONDS);
+        return registry;
     }
 
 	@Provides
