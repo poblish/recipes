@@ -119,7 +119,7 @@ public class DaggerModule {
                 .convertRatesTo(TimeUnit.SECONDS)
                 .convertDurationsTo(TimeUnit.MILLISECONDS)
                 .build();
-        reporter.start( 20, TimeUnit.SECONDS);
+        reporter.start( 1, TimeUnit.MINUTES);
         return registry;
     }
 
