@@ -37,9 +37,16 @@ public class Recipes extends Controller {
     private final static IUserPersistence USERS = GRAPH.get( EsUserFactory.class );
     private final static IExplorerAPI EXPLORER_API = GRAPH.get( MyrrixExplorerService.class );
 
-    public static Result fork( final String name) throws IOException, IncompatibleIngredientsException {
+    public static Result fork( final String name) throws IOException, IncompatibleIngredientsException, InterruptedException {
         final IRecipe fork = RECIPES.fork( RECIPES.get(name).get() );
-        return redirect("/recipes/" + fork.getTitle());
+
+        // Wait until it appears in DB
+        do {
+        	Thread.sleep(250);
+        }
+        while (!RECIPES.getById( fork.getId() ).isPresent());  // FIXME - horrible title stuff
+
+        return redirect("/recipes/" + fork.getTitle());  // FIXME - horrible title stuff
     }
 
     public static Result display( final String name) throws IOException, IncompatibleIngredientsException {
