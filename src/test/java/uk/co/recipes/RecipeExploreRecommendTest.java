@@ -148,14 +148,14 @@ public class RecipeExploreRecommendTest {
 
 		assertThat( user2.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
 
-		events.rateRecipe( user1, recipeFactory.getById("inputs3.txt"), (float) Math.random());
-		events.rateRecipe( user1, recipeFactory.getById("bol2.txt"), (float) Math.random());
-		events.rateRecipe( user1, recipeFactory.getById("chinesebeef.txt"), (float) Math.random());
+		events.rateRecipe( user1, recipeFactory.getByName("inputs3.txt"), (float) Math.random());
+		events.rateRecipe( user1, recipeFactory.getByName("bol2.txt"), (float) Math.random());
+		events.rateRecipe( user1, recipeFactory.getByName("chinesebeef.txt"), (float) Math.random());
 
-		events.rateRecipe( user2, recipeFactory.getById("inputs3.txt"), (float) Math.random());
-		events.rateRecipe( user2, recipeFactory.getById("chcashblackspicecurry.txt"), (float) Math.random());
-		events.rateRecipe( user2, recipeFactory.getById("bol1.txt"), (float) Math.random());
-		events.rateRecipe( user2, recipeFactory.getById("bulk.txt"), (float) Math.random());
+		events.rateRecipe( user2, recipeFactory.getByName("inputs3.txt"), (float) Math.random());
+		events.rateRecipe( user2, recipeFactory.getByName("chcashblackspicecurry.txt"), (float) Math.random());
+		events.rateRecipe( user2, recipeFactory.getByName("bol1.txt"), (float) Math.random());
+		events.rateRecipe( user2, recipeFactory.getByName("bulk.txt"), (float) Math.random());
 
 		final List<IRecipe> recsFor1 = recsApi.recommendRecipes( user1, 20);
 		final List<IRecipe> recsFor2 = recsApi.recommendRecipes( user2, 20);
@@ -166,13 +166,13 @@ public class RecipeExploreRecommendTest {
 		System.out.println("Recommendations.1: " + recsFor1);
 		System.out.println("Recommendations.2: " + recsFor2);
 
-		assertThat( recsFor1, hasItem( recipeFactory.getById("bulk.txt")  ));
-		assertThat( recsFor1, not(hasItem( recipeFactory.getById("inputs3.txt")  )));
+		assertThat( recsFor1, hasItem( recipeFactory.getByName("bulk.txt")  ));
+		assertThat( recsFor1, not(hasItem( recipeFactory.getByName("inputs3.txt")  )));
 
-		assertThat( recsFor2, hasItem( recipeFactory.getById("bol2.txt")  ));
-		assertThat( recsFor2, hasItem( recipeFactory.getById("chinesebeef.txt")  ));
-		assertThat( recsFor2, not(hasItem( recipeFactory.getById("chcashblackspicecurry.txt")  )));
-		assertThat( recsFor2, not(hasItem( recipeFactory.getById("inputs3.txt")  )));
+		assertThat( recsFor2, hasItem( recipeFactory.getByName("bol2.txt")  ));
+		assertThat( recsFor2, hasItem( recipeFactory.getByName("chinesebeef.txt")  ));
+		assertThat( recsFor2, not(hasItem( recipeFactory.getByName("chcashblackspicecurry.txt")  )));
+		assertThat( recsFor2, not(hasItem( recipeFactory.getByName("inputs3.txt")  )));
 	}
 
     @Test

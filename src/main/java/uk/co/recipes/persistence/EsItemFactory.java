@@ -104,7 +104,7 @@ public class EsItemFactory implements IItemPersistence {
 		return inItem;
 	}
 
-	public ICanonicalItem getById( String inId) throws IOException {
+	public ICanonicalItem getByName( String inId) throws IOException {
         final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_NAME_GETS).time();
 
 		try {
@@ -141,7 +141,7 @@ public class EsItemFactory implements IItemPersistence {
 
 	public Optional<ICanonicalItem> get( final String inCanonicalName) throws IOException {
 		try {
-			return Optional.fromNullable( getById( toId(inCanonicalName) ) );
+			return Optional.fromNullable( getByName( toId(inCanonicalName) ) );
 		}
 		catch (FileNotFoundException e) { /* Not found! */ }
 

@@ -83,7 +83,7 @@ public class UserPersistenceTest {
 
         userFactory.put( u1, userFactory.toStringId(u1));
 
-        final IUser retrievedUser = userFactory.getById( userFactory.toStringId(u1) );
+        final IUser retrievedUser = userFactory.getByName(testUName);
         assertThat( newHashSet( u1.getItemRatings() ), is( newHashSet( retrievedUser.getItemRatings() ) ));
         assertThat( newHashSet( u1.getRecipeRatings() ), is( newHashSet( retrievedUser.getRecipeRatings() ) ));
     }

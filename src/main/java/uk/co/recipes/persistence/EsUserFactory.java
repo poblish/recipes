@@ -80,7 +80,7 @@ public class EsUserFactory implements IUserPersistence {
 		return inUser;
 	}
 
-	public IUser getById( String inId) throws IOException {
+	public IUser getByName( String inId) throws IOException {
 		return mapper.readValue( esUtils.parseSource( usersIndexUrl + "/" + inId), User.class);
 	}
 
@@ -94,7 +94,7 @@ public class EsUserFactory implements IUserPersistence {
 
 	public Optional<IUser> get( final String inCanonicalName) throws IOException {
 		try {
-			return Optional.fromNullable( getById( toId(inCanonicalName) ) );
+			return Optional.fromNullable( getByName( toId(inCanonicalName) ) );
 		}
 		catch (FileNotFoundException e) { /* Not found! */ }
 

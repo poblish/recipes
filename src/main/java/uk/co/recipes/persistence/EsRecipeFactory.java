@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
@@ -78,14 +79,14 @@ public class EsRecipeFactory implements IRecipePersistence {
 
 	public Optional<IRecipe> get( final String inName) throws IOException {
 		try {
-			return Optional.fromNullable( getById(inName) );
+			return Optional.fromNullable( getByName(inName) );
 		}
 		catch (FileNotFoundException e) { /* Not found! */ }
 
 		return Optional.absent();
 	}
 
-	public IRecipe getById( String inName) throws IOException {
+	public IRecipe getByName( String inName) throws IOException {
 	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_NAME_GETS).time();
 
         try {
@@ -202,7 +203,7 @@ public class EsRecipeFactory implements IRecipePersistence {
     }
 
     public IRecipe fork( final IRecipe inOriginalRecipe, final PreForkChange<IRecipe> inPreChange) throws IOException {
-        final String suffix = "_" + System.currentTimeMillis() + "." + System.nanoTime();
+        final String suffix = "-" + UUID.randomUUID();
         final String newId = toStringId(inOriginalRecipe) + suffix;
         final IRecipe clone = (IRecipe) inOriginalRecipe.clone();
         clone.setTitle( clone.getTitle() + suffix);
