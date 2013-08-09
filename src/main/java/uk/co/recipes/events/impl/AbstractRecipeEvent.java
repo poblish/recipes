@@ -17,7 +17,7 @@ import com.google.common.base.Objects;
  * @author andrewr
  *
  */
-public class RecipeEvent implements Serializable {
+public abstract class AbstractRecipeEvent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,7 +25,7 @@ public class RecipeEvent implements Serializable {
     private final IRecipe recipe;
     private final float rating;
 
-    public RecipeEvent(IUser user, IRecipe inItem, float inRating) {
+    public AbstractRecipeEvent(IUser user, IRecipe inItem, float inRating) {
         this.user = user;
         this.recipe = checkNotNull(inItem);
         this.rating = inRating;

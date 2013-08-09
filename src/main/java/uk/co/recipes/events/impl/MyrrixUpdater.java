@@ -5,20 +5,16 @@ package uk.co.recipes.events.impl;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-
+import com.google.common.eventbus.Subscribe;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.util.Map.Entry;
-
 import javax.inject.Inject;
-
 import net.myrrix.client.ClientRecommender;
-
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.elasticsearch.common.base.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
@@ -58,8 +54,8 @@ public class MyrrixUpdater implements IEventListener {
         checkNotNull(eventService).addListener(this);
     }
 
-    @Override
-    public void onAddItem( final ItemEvent evt) {
+    @Subscribe
+    public void onAddItem( final AddItemEvent evt) {
         if (LOG.isTraceEnabled()) {
             LOG.trace("onAddItem: " + evt);
         }
@@ -83,8 +79,8 @@ public class MyrrixUpdater implements IEventListener {
         }
     }
 
-    @Override
-    public void onDeleteItem( final ItemEvent evt) {
+    @Subscribe
+    public void onDeleteItem( final DeleteItemEvent evt) {
         if (LOG.isTraceEnabled()) {
             LOG.trace("onDeleteItem: " + evt);
         }
@@ -108,8 +104,8 @@ public class MyrrixUpdater implements IEventListener {
         }
     }
 
-    @Override
-    public void onAddRecipe( final RecipeEvent evt) {
+    @Subscribe
+    public void onAddRecipe( final AddRecipeEvent evt) {
     	if (LOG.isTraceEnabled()) {
     		LOG.trace("onAddRecipe: " + evt);
     	}
@@ -135,8 +131,8 @@ public class MyrrixUpdater implements IEventListener {
         }
     }
 
-    @Override
-    public void onDeleteRecipe(RecipeEvent evt) {
+    @Subscribe
+    public void onDeleteRecipe( final DeleteRecipeEvent evt) {
         if (LOG.isTraceEnabled()) {
             LOG.trace("onDeleteRecipe: " + evt);
         }
@@ -212,8 +208,8 @@ public class MyrrixUpdater implements IEventListener {
         return setItemTagsForItem( inItem, inItemOrRecipeId, -1.0f);
     }
 
-    @Override
-    public void onRateItem( final ItemEvent evt) {
+    @Subscribe
+    public void onRateItem( final RateItemEvent evt) {
     	checkArgument( evt.getItem().getId() >= 0 && evt.getItem().getId() < Recipe.BASE_ID, "Item has not been persisted, or Id is invalid");
 
 		if (LOG.isDebugEnabled()) {
@@ -223,8 +219,8 @@ public class MyrrixUpdater implements IEventListener {
         rateGenericItem( evt.getUser().getId(), evt.getItem().getId());
     }
 
-    @Override
-    public void onRateRecipe( final RecipeEvent evt) {
+    @Subscribe
+    public void onRateRecipe( final RateRecipeEvent evt) {
     	checkArgument( evt.getRecipe().getId() >= Recipe.BASE_ID, "Recipe has not been persisted");
 
 		if (LOG.isDebugEnabled()) {

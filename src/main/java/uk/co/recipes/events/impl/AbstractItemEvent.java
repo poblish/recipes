@@ -17,7 +17,7 @@ import com.google.common.base.Objects;
  * @author andrewr
  *
  */
-public class ItemEvent implements Serializable {
+public abstract class AbstractItemEvent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,7 +25,7 @@ public class ItemEvent implements Serializable {
     private final ICanonicalItem item;
     private final float rating;
 
-    public ItemEvent(IUser user, ICanonicalItem inItem, float inRating) {
+    public AbstractItemEvent(IUser user, ICanonicalItem inItem, float inRating) {
         this.user = user;
         this.item = checkNotNull(inItem);
         this.rating = inRating;
