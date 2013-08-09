@@ -68,7 +68,7 @@ public class MyrrixUpdater implements IEventListener {
         boolean changesMade = false;
 
         try {
-            changesMade = addItemTagsForItem( evt.getItem(), itemId, 1.0f);
+            changesMade = setItemTagsForItem( evt.getItem(), itemId, 1.0f);
         }
         catch (TasteException e) {
             Throwables.propagate(e);
@@ -119,7 +119,7 @@ public class MyrrixUpdater implements IEventListener {
 
         try {
             for ( IIngredient eachIngr : evt.getRecipe().getIngredients()) {
-            	changesMade |= addItemTagsForItem( eachIngr.getItem(), recipeId, 1.0f * booster.getBoostForQuantity( eachIngr.getItem(), eachIngr.getQuantity()));
+            	changesMade |= setItemTagsForItem( eachIngr.getItem(), recipeId, 1.0f * booster.getBoostForQuantity( eachIngr.getItem(), eachIngr.getQuantity()));
         	}
 	    }
 		catch (TasteException e) {
@@ -162,15 +162,17 @@ public class MyrrixUpdater implements IEventListener {
         }
     }
 
-    private boolean addItemTagsForItem( final ICanonicalItem inItem, final long inItemOrRecipeId, final float inBasicScore) throws TasteException {
-    	boolean changesMade = addHierarchicalSimilarityTags( inItem, inItemOrRecipeId, inBasicScore);
-  
+    private boolean setItemTagsForItem( final ICanonicalItem inItem, final long inItemOrRecipeId, final float inBasicScore) throws TasteException {
+    	boolean changesMade = setHierarchicalSimilarityTags( inItem, inItemOrRecipeId, inBasicScore);
+
+    	final String setStr = ( inBasicScore > 0 ? "SET" : "UNSET");
+
     	for ( final Entry<ITag,Serializable> eachTag : inItem.getTags().entrySet()) {
     		if ( eachTag.getValue() instanceof Boolean) {
     			if ((Boolean) eachTag.getValue()) {
     				// Don't bother setting if == FALSE
     				if (LOG.isDebugEnabled()) {
-    					LOG.debug("Set Tag '" + eachTag.getKey() + "' val=1.0 for " + inItemOrRecipeId);
+    					LOG.debug( setStr + " Tag '" + eachTag.getKey() + "' val=" + inBasicScore + " for " + inItemOrRecipeId);
     				}
     	        	recommender.setItemTag( eachTag.getKey().toString(), inItemOrRecipeId, inBasicScore);
     	        	changesMade = true;
@@ -179,7 +181,7 @@ public class MyrrixUpdater implements IEventListener {
     		else {
     			final float val = Float.valueOf((String) eachTag.getValue());
 				if (LOG.isDebugEnabled()) {
-					LOG.debug("Set Tag '" + eachTag.getKey() + "' val=" + val + " for " + inItemOrRecipeId);
+					LOG.debug( setStr + " Tag '" + eachTag.getKey() + "' val=" + val + " for " + inItemOrRecipeId);
 				}
 	        	recommender.setItemTag( eachTag.getKey().toString(), inItemOrRecipeId, val);
 	        	changesMade = true;
@@ -189,26 +191,25 @@ public class MyrrixUpdater implements IEventListener {
     	return changesMade;
     }
 
-    private boolean addHierarchicalSimilarityTags( final ICanonicalItem inItem, final long inItemOrRecipeId, final float inScore) throws TasteException {
+    private boolean setHierarchicalSimilarityTags( final ICanonicalItem inItem, final long inItemOrRecipeId, final float inScore) throws TasteException {
     	boolean changesMade = false;
 
     	final String ourPseudoParentTagName = "PARENT_" + itemFactory.toStringId(inItem);
  
     	if (LOG.isDebugEnabled()) {
-    	    LOG.debug("Set Tag '" + ourPseudoParentTagName + "' val=" + inScore + " for " + inItemOrRecipeId);
+    	    LOG.debug(( inScore > 0 ? "SET" : "UNSET") + " Tag '" + ourPseudoParentTagName + "' val=" + inScore + " for " + inItemOrRecipeId);
 		}
     	recommender.setItemTag( ourPseudoParentTagName, inItemOrRecipeId, inScore);
 
     	if ( inItem.parent().isPresent()) {
-    		changesMade |= addHierarchicalSimilarityTags( inItem.parent().get(), inItemOrRecipeId, inScore * 0.8f);
+    		changesMade |= setHierarchicalSimilarityTags( inItem.parent().get(), inItemOrRecipeId, inScore * 0.8f);
     	}
   
     	return changesMade;
     }
 
     private boolean removeItemTagsForItem( final ICanonicalItem inItem, final long inItemOrRecipeId) throws TasteException {
-        LOG.debug("removeItemTagsForItem: " + inItemOrRecipeId + " for " + inItemOrRecipeId);
-        return false;
+        return setItemTagsForItem( inItem, inItemOrRecipeId, -1.0f);
     }
 
     @Override
