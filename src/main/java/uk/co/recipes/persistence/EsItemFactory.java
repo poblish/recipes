@@ -7,6 +7,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static org.elasticsearch.index.query.QueryBuilders.matchPhraseQuery;
 import static org.elasticsearch.search.sort.SortOrder.DESC;
 
+import com.codahale.metrics.MetricRegistry;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -64,6 +65,9 @@ public class EsItemFactory implements IItemPersistence {
 
 	@Inject
 	EsSequenceFactory sequences;
+
+    @Inject
+    MetricRegistry metrics;
 
     @Inject
     IEventService eventService;
