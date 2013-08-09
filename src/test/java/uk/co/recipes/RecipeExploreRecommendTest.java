@@ -189,7 +189,9 @@ public class RecipeExploreRecommendTest {
 			@Override
 			public void apply( final IRecipe inCopy) {
 				try {
-					assertThat( inCopy.getItems().size(), is(15));
+                    assertThat( inCopy.getTitle(), not("inputs3.txt"));
+                    assertThat( inCopy.getIngredients(), is( recipe1.getIngredients() ));
+                    assertThat( inCopy.getItems().size(), is(15));
 					assertThat( inCopy.removeItems( item("ginger"), item("coriander"), item("onion"), item("cinnamon_stick"), item("turmeric"), item("fennel_seed")), is(true));
 					assertThat( inCopy.getItems().size(), is(9));  // Check Items have actually been removed!
 				}

@@ -202,8 +202,11 @@ public class EsRecipeFactory implements IRecipePersistence {
     }
 
     public IRecipe fork( final IRecipe inOriginalRecipe, final PreForkChange<IRecipe> inPreChange) throws IOException {
-        final String newId = toStringId(inOriginalRecipe) + "_" + System.nanoTime();
+        final String suffix = "_" + System.currentTimeMillis() + "." + System.nanoTime();
+        final String newId = toStringId(inOriginalRecipe) + suffix;
         final IRecipe clone = (IRecipe) inOriginalRecipe.clone();
+        clone.setTitle( clone.getTitle() + suffix);
+
         if ( inPreChange != null) {
         	inPreChange.apply(clone);
         }
