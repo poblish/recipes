@@ -37,6 +37,11 @@ public class Recipes extends Controller {
     private final static IUserPersistence USERS = GRAPH.get( EsUserFactory.class );
     private final static IExplorerAPI EXPLORER_API = GRAPH.get( MyrrixExplorerService.class );
 
+    public static Result fork( final String name) throws IOException, IncompatibleIngredientsException {
+        final IRecipe fork = RECIPES.fork( RECIPES.get(name).get() );
+        return redirect("/recipes/" + fork.getTitle());
+    }
+
     public static Result display( final String name) throws IOException, IncompatibleIngredientsException {
         final IRecipe recipe = RECIPES.get(name).get();
         final Multiset<ITag> categorisation = Categorisation.forIngredients( recipe.getIngredients() );

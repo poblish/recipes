@@ -42,7 +42,7 @@
 
 <section id="top">
     <div class="wrapper">
-        <h1>@title: @recipe.getTitle() [@recipe.getLocale()]</h1>
+        <h1>@title: @recipe.getTitle() [@recipe.getLocale()] <a href="/recipes/@recipe.getTitle()/fork">[F]</h1>
     </div>
 </section>
 
@@ -59,7 +59,7 @@
 
 <ol>
 @for( eachRecipe <- similarities) {
-  <li><a href="/recipes/@eachRecipe.getTitle()">@eachRecipe.getTitle()</a>
+  <li><a href="/recipes/@eachRecipe.getTitle()">@eachRecipe.getTitle()</a> <a href="/recipes/@eachRecipe.getTitle()/fork">[F]
   	<ol>
 @for(item <- eachRecipe.getItems()) {
 <li><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-info"><a href="/tags/@tagName">@tagName</a></span>}</li>
