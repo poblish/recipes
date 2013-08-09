@@ -111,7 +111,7 @@ public class MyrrixUpdater implements IEventListener {
     }
 
     private boolean addItemTagsForItem( final ICanonicalItem inItem, final long inItemOrRecipeId, final float inBasicScore) throws TasteException {
-    	boolean changesMade = handleHierarchicalSimilarityTags( inItem, inItemOrRecipeId, inBasicScore);
+    	boolean changesMade = addHierarchicalSimilarityTags( inItem, inItemOrRecipeId, inBasicScore);
   
     	for ( final Entry<ITag,Serializable> eachTag : inItem.getTags().entrySet()) {
     		if ( eachTag.getValue() instanceof Boolean) {
@@ -137,7 +137,7 @@ public class MyrrixUpdater implements IEventListener {
     	return changesMade;
     }
 
-    private boolean handleHierarchicalSimilarityTags( final ICanonicalItem inItem, final long inItemOrRecipeId, final float inScore) throws TasteException {
+    private boolean addHierarchicalSimilarityTags( final ICanonicalItem inItem, final long inItemOrRecipeId, final float inScore) throws TasteException {
     	boolean changesMade = false;
 
     	final String ourPseudoParentTagName = "PARENT_" + itemFactory.toStringId(inItem);
@@ -148,7 +148,7 @@ public class MyrrixUpdater implements IEventListener {
     	recommender.setItemTag( ourPseudoParentTagName, inItemOrRecipeId, inScore);
 
     	if ( inItem.parent().isPresent()) {
-    		changesMade |= handleHierarchicalSimilarityTags( inItem.parent().get(), inItemOrRecipeId, inScore * 0.8f);
+    		changesMade |= addHierarchicalSimilarityTags( inItem.parent().get(), inItemOrRecipeId, inScore * 0.8f);
     	}
   
     	return changesMade;
