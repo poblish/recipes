@@ -10,6 +10,11 @@ package uk.co.recipes.metrics;
 public interface MetricNames {
 
     String COUNTER_RECIPES_PUTS = "recipes.put.count";
-    String TIMER_RECIPES_NAME_GETS = "recipes.by_name.get.time";
-    String TIMER_RECIPES_PUTS = "recipes.put.time";
+
+    String TIMER_RECIPES_NAME_GETS = "recipes.by_name.get";
+    String TIMER_RECIPES_PUTS = "recipes.put";
+
+    String TIMER_ITEMS_NAME_GETS = "items.by_name.get";
+    String TIMER_ITEMS_ID_GETS = "items.by_id.get";
+    String TIMER_ITEMS_PUTS = "items.put";
 }

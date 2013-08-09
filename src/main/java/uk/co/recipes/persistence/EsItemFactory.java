@@ -7,6 +7,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static org.elasticsearch.index.query.QueryBuilders.matchPhraseQuery;
 import static org.elasticsearch.search.sort.SortOrder.DESC;
 
+import com.codahale.metrics.Timer;
 import com.codahale.metrics.MetricRegistry;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,6 +39,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
+import static uk.co.recipes.metrics.MetricNames.*;
 
 /**
  * TODO
@@ -74,6 +76,8 @@ public class EsItemFactory implements IItemPersistence {
 
 
 	public ICanonicalItem put( final ICanonicalItem inItem, String inId) throws IOException {
+        final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_PUTS).time();
+
 		final HttpPost req = new HttpPost( itemIndexUrl + "/" + inId); // URLEncoder.encode( inId, "UTF-8"));
 
 		try {
@@ -93,12 +97,22 @@ public class EsItemFactory implements IItemPersistence {
 		catch (UnsupportedEncodingException e) {
 			Throwables.propagate(e);
 		}
+        finally {
+            timerCtxt.stop();
+        }
 
 		return inItem;
 	}
 
 	public ICanonicalItem getById( String inId) throws IOException {
-		return mapper.readValue( esUtils.parseSource( itemIndexUrl + "/" + inId), CanonicalItem.class);
+        final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_NAME_GETS).time();
+
+		try {
+		    return mapper.readValue( esUtils.parseSource( itemIndexUrl + "/" + inId), CanonicalItem.class);
+		}
+        finally {
+            timerCtxt.stop();
+        }
 	}
 
     public Optional<ICanonicalItem> getById( long inId) throws IOException {
@@ -106,7 +120,14 @@ public class EsItemFactory implements IItemPersistence {
             return Optional.absent();
         }
 
-        return esUtils.findOneByIdAndType( itemIndexUrl, inId, ICanonicalItem.class, CanonicalItem.class);
+        final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_ID_GETS).time();
+
+        try {
+            return esUtils.findOneByIdAndType( itemIndexUrl, inId, ICanonicalItem.class, CanonicalItem.class);
+        }
+        finally {
+            timerCtxt.stop();
+        }
     }
 
     public String toStringId( final ICanonicalItem inItem) {
