@@ -34,8 +34,6 @@ import uk.co.recipes.service.api.IRecipePersistence;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
@@ -153,7 +151,7 @@ public class EsRecipeFactory implements IRecipePersistence {
 	}
 
     // FIXME - pretty lame!
-    public Collection<Recipe> listAll() throws JsonParseException, JsonMappingException, IOException {
+    public Collection<Recipe> listAll() throws IOException {
         return esUtils.listAll( itemIndexUrl, Recipe.class);
     }
 
@@ -233,11 +231,11 @@ public class EsRecipeFactory implements IRecipePersistence {
         esClient.prepareDelete( "recipe", "recipes", String.valueOf( inRecipe.getId() )).execute().actionGet();
     }
 
-    public static interface PreForkChange<T> {
-        public void apply( final T recipe);
+    public interface PreForkChange<T> {
+        void apply( final T recipe);
     }
 
-    public static interface PostForkChange<T> {
-        public void apply( final T inObj) throws IOException;
+    public interface PostForkChange<T> {
+        void apply( final T inObj) throws IOException;
     }
 }

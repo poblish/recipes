@@ -34,7 +34,7 @@ public class ItemsLoader {
 	@Inject
 	EsItemFactory itemFactory;
 
-	private final static Optional<ICanonicalItem> MISSING = Optional.absent();
+	private static final Optional<ICanonicalItem> MISSING = Optional.absent();
 
 	public void load() throws IOException {
 		for ( Object each : new Yaml().loadAll( Files.toString( new File("src/test/resources/inputs.yaml"), Charset.forName("utf-8")))) {

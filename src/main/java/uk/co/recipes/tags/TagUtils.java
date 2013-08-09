@@ -22,7 +22,9 @@ import com.google.common.collect.ComparisonChain;
  * @author andrewregan
  *
  */
-public class TagUtils {
+public final class TagUtils {
+
+    private TagUtils() {}
 
 	private static final Function<Entry<ITag,Serializable>,ITag> ENTRY_KEYS = new Function<Entry<ITag,Serializable>,ITag>() {
 		public ITag apply( Entry<ITag,Serializable> input) {

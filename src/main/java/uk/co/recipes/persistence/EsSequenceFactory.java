@@ -20,8 +20,8 @@ import com.google.common.base.Throwables;
  */
 public class EsSequenceFactory {
 
-	private final static String INDEX = "sequence";
-	private final static String TYPE = "sequence";
+	private static final String INDEX = "sequence";
+	private static final String TYPE = "sequence";
 
 	@Inject
 	Client esClient;

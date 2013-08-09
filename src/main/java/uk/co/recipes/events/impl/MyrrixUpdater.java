@@ -37,7 +37,7 @@ import uk.co.recipes.service.impl.DefaultIngredientQuantityScoreBooster;
  */
 public class MyrrixUpdater implements IEventListener {
 
-	private final static Logger LOG = LoggerFactory.getLogger( MyrrixUpdater.class );
+	private static final Logger LOG = LoggerFactory.getLogger( MyrrixUpdater.class );
 
     @Inject
     IEventService eventService;
@@ -143,7 +143,7 @@ public class MyrrixUpdater implements IEventListener {
     	final String ourPseudoParentTagName = "PARENT_" + itemFactory.toStringId(inItem);
  
     	if (LOG.isDebugEnabled()) {
-			LOG.debug("Set Tag '" + ourPseudoParentTagName + "' val=" + inScore + " for " + inItemOrRecipeId);
+    	    LOG.debug("Set Tag '" + ourPseudoParentTagName + "' val=" + inScore + " for " + inItemOrRecipeId);
 		}
     	recommender.setItemTag( ourPseudoParentTagName, inItemOrRecipeId, inScore);
 

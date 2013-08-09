@@ -26,7 +26,9 @@ import com.google.common.collect.Sets;
  */
 public class User implements IUser {
 
-	private final static long UNSET_ID = -1L;
+    private static final long serialVersionUID = 1L;
+
+	private static final long UNSET_ID = -1L;
 
 	private long id = UNSET_ID;
 

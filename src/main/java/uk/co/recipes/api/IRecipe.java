@@ -13,7 +13,7 @@ import java.util.Locale;
  * @author andrewregan
  * 
  */
-public interface IRecipe extends ITagging, Cloneable {
+public interface IRecipe extends ITagging, Cloneable, java.io.Serializable {
 
 	long getId();
 	void setId( long id);

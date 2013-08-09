@@ -43,7 +43,9 @@ import com.google.common.base.Throwables;
  * @author andrewregan
  *
  */
-public class JacksonFactory {
+public final class JacksonFactory {
+
+    private JacksonFactory() {}
 
 	public static void initialiseMapper( final ObjectMapper inMapper) {
 		SimpleModule testModule = new SimpleModule("MyModule", new Version(1, 0, 0, null, null, null));

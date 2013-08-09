@@ -23,7 +23,9 @@ import com.google.common.collect.TreeMultiset;
  * @author andrewregan
  *
  */
-public class Categorisation {
+public final class Categorisation {
+
+    private Categorisation() {}
 
 	public static Multiset<ITag> forIngredients( final Collection<IIngredient> inIngredients) throws IncompatibleIngredientsException {
 		final Multiset<ITag> tagsSet = TreeMultiset.create( TagUtils.comparator() );

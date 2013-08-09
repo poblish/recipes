@@ -32,8 +32,6 @@ import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.service.api.IItemPersistence;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
@@ -164,7 +162,7 @@ public class EsItemFactory implements IItemPersistence {
 	}
 
 	// FIXME - pretty lame!
-	public Collection<CanonicalItem> listAll() throws JsonParseException, JsonMappingException, IOException {
+	public Collection<CanonicalItem> listAll() throws IOException {
 		return esUtils.listAll( itemIndexUrl, CanonicalItem.class);
 	}
 

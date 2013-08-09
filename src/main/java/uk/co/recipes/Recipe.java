@@ -37,8 +37,10 @@ import com.google.common.collect.Sets;
  */
 public class Recipe implements IRecipe {
 
-	private final static long UNSET_ID = 0x3FFFFFFFFFFFFFFFL;  // Halfway to Long.MAX_VALUE
-	public final static long BASE_ID = UNSET_ID + 1L;
+    private static final long serialVersionUID = 1L;
+
+	private static final long UNSET_ID = 0x3FFFFFFFFFFFFFFFL;  // Halfway to Long.MAX_VALUE
+	public static final long BASE_ID = UNSET_ID + 1L;
 
 	private long id = UNSET_ID;
 	private String title;

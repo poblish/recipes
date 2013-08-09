@@ -6,19 +6,17 @@ package uk.co.recipes;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static uk.co.recipes.tags.TagUtils.findActivated;
 import static uk.co.recipes.tags.TagUtils.tagNamesTitleCase;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
-
 import org.elasticsearch.common.Preconditions;
-
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -36,8 +34,12 @@ import com.google.common.collect.Sets;
  */
 public class CanonicalItem implements ICanonicalItem {
 
-	private final static long UNSET_ID = -1L;
-	private final static long TOO_HIGH_ID = 0x4000000000000000L;
+    private static final long serialVersionUID = 1L;
+
+    private static final Logger LOG = LoggerFactory.getLogger( CanonicalItem.class );
+
+    private static final long UNSET_ID = -1L;
+	private static final long TOO_HIGH_ID = 0x4000000000000000L;
 
 
 	private long id = UNSET_ID;
@@ -148,7 +150,7 @@ public class CanonicalItem implements ICanonicalItem {
 
 		for ( Entry<ITag,Serializable> each : inTags.entrySet()) {
 			if (each.getValue() == null) {
-				System.err.println("Jackson deserialized null!");
+				LOG.warn("Jackson deserialized null!");
 				tags.put( each.getKey(), Boolean.TRUE);
 			}
 			else if (each.getValue().equals("true")) /* Ugh!!! */ {
@@ -236,13 +238,13 @@ public class CanonicalItem implements ICanonicalItem {
 	}
 
 	public String toString() {
-		final Map<ITag,Serializable> tags = getTags();
+		final Map<ITag,Serializable> tagsVal = getTags();
 
 		return Objects.toStringHelper(this).omitNullValues()
 						.add( "name", canonicalName)
 					//	.add( "id", ( id == UNSET_ID) ? "NEW" : Long.valueOf(id))
 						.add( "parent", parent)
-						.add( "tags", tags.isEmpty() ? null : tags)
+						.add( "tags", tagsVal.isEmpty() ? null : tagsVal)
 						.toString();
 	}
 }

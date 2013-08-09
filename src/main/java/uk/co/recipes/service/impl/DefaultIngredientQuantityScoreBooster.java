@@ -14,7 +14,7 @@ import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
  */
 public class DefaultIngredientQuantityScoreBooster implements IIngredientQuantityScoreBooster {
 
-    private final static float NO_BOOST = 1.0f;
+    private static final float NO_BOOST = 1.0f;
 
     @Override
     public float getBoostForQuantity( final ICanonicalItem inItem, final IQuantity inQuantity) {

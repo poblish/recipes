@@ -16,7 +16,9 @@ import com.google.common.collect.FluentIterable;
  * @author andrewregan
  *
  */
-public class MyrrixUtils {
+public final class MyrrixUtils {
+
+    private MyrrixUtils() {}
 
 	public static List<Long> getItems( final List<RecommendedItem> inItems) {
 		return FluentIterable.from(inItems).transform( new Function<RecommendedItem,Long>() {

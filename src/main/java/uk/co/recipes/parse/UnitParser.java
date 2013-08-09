@@ -12,7 +12,9 @@ import uk.co.recipes.api.Units;
  * @author andrewregan
  *
  */
-public class UnitParser {
+public final class UnitParser {
+
+    private UnitParser() {}
 
 	public static IUnit parse( final String inUnitsStr) {
 		if ( inUnitsStr == null || inUnitsStr.isEmpty()) {

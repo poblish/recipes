@@ -11,7 +11,7 @@ import com.google.common.base.Optional;
  * @author andrewregan
  * 
  */
-public interface ICanonicalItem extends ITagging {
+public interface ICanonicalItem extends ITagging, java.io.Serializable {
 
 	long getId();
 	void setId( long id);

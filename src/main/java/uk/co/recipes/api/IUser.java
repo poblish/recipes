@@ -14,7 +14,7 @@ import uk.co.recipes.api.ratings.IRecipeRating;
  * @author andrewregan
  *
  */
-public interface IUser {
+public interface IUser extends java.io.Serializable {
 
 	long getId();
 	void setId( long id);

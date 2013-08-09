@@ -48,7 +48,7 @@ public class Correlations {
 	    final Multiset<ICanonicalItem> counts = HashMultiset.create();
 		try {
 			final Collection<Recipe> all = recipeFactory.listAll();
-			System.out.println(all.size());
+
 			for ( Recipe each : all) {
 			    if (!each.containsAllOf(inInclusions)) {
 			        continue;
