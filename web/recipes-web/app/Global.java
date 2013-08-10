@@ -13,7 +13,7 @@ import dagger.ObjectGraph;
  */
 public class Global extends GlobalSettings {
 
-	private ObjectGraph graph = ObjectGraph.create( new RecipesWebAppModule() );
+	private static ObjectGraph graph = ObjectGraph.create( new RecipesWebAppModule() );
 
 	@Override
 	public void onStart( final Application app) {
@@ -30,7 +30,7 @@ public class Global extends GlobalSettings {
 		return graph.get(inClass);
 	}
 
-	@Module( includes=DaggerModule.class, injects={controllers.Application.class}, overrides=true)
+	@Module( includes=DaggerModule.class, injects={controllers.Application.class, controllers.Recipes.class}, overrides=true)
 	static class RecipesWebAppModule {
 		
 	}
