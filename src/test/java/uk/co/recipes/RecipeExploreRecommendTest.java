@@ -21,6 +21,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.IForkDetails;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.api.IEventListener;
@@ -206,6 +207,11 @@ public class RecipeExploreRecommendTest {
             public void apply( final IRecipe inCopy) throws IOException {
 				assertThat( inCopy.getItems().size(), is(9));  // Check we've actually got the one where the Items were removed!
                 assertThat( inCopy.getId(), not( recipe1.getId() ));  // Check newly persisted Recipe has different Id
+
+                final IForkDetails forkDetails = inCopy.getForkDetails();
+                assertThat( forkDetails.getOriginalId(), is( recipe1.getId() ));
+                assertThat( forkDetails.getOriginalTitle(), is( recipe1.getTitle() ));
+//                assertThat( forkDetails.getOriginalUser(), is( recipe1.getTitle() ));
 
                 try {
                     Thread.sleep(1000);
