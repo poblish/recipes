@@ -23,6 +23,8 @@ public interface IRecipe extends ITagging, Cloneable, java.io.Serializable {
 
 	Locale getLocale();
 
+	IUser getCreator();
+
 	Object clone();
 
 	IForkDetails getForkDetails();

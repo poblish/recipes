@@ -125,7 +125,15 @@ public class IngredientsTest {
 		stage1.addIngredient(lambIngredient);
 		stage1.addIngredient(baconIngredient);
 
-		final Recipe r = new Recipe("Herby Lamb Cobbler", Locale.UK);
+		final IUser user1 = userFactory.getOrCreate( "Andrew Regan", new Supplier<IUser>() {
+
+			@Override
+			public IUser get() {
+				return new User( "aregan", "Andrew Regan");
+			}
+		} );
+
+		final Recipe r = new Recipe(user1, "Herby Lamb Cobbler", Locale.UK);
 		r.addStage(stage1);
 		r.addTag( CommonTags.SERVES_COUNT, "4");
 

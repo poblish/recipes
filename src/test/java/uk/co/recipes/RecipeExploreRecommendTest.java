@@ -211,7 +211,7 @@ public class RecipeExploreRecommendTest {
                 final IForkDetails forkDetails = inCopy.getForkDetails();
                 assertThat( forkDetails.getOriginalId(), is( recipe1.getId() ));
                 assertThat( forkDetails.getOriginalTitle(), is( recipe1.getTitle() ));
-//                assertThat( forkDetails.getOriginalUser(), is( recipe1.getTitle() ));
+                assertThat( forkDetails.getOriginalUser(), is( recipe1.getCreator() ));
 
                 try {
                     Thread.sleep(1000);

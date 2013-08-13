@@ -30,27 +30,29 @@ public class RecipeTest {
 		final ICanonicalItem ingr1 = new CanonicalItem("Lamb");
 		final ICanonicalItem ingr2 = new CanonicalItem("Beef");
 
+		final User user = new User( "aregan", "Andrew R");
+
 		final RecipeStage rs1 = new RecipeStage();
 		rs1.addIngredients( new Ingredient( ingr1, q1), new Ingredient( ingr2, q1) );
 
-		final Recipe r1 = new Recipe("1", Locale.UK);
+		final Recipe r1 = new Recipe(user, "1", Locale.UK);
 		r1.addStage(rs1);
 
-		final Recipe r2 = new Recipe("1", Locale.UK);
+		final Recipe r2 = new Recipe(user, "1", Locale.UK);
 		r2.addStage(rs1);
 
-		final Recipe r3 = new Recipe("1", Locale.UK);
+		final Recipe r3 = new Recipe(user, "1", Locale.UK);
 
-		final Recipe r4 = new Recipe("4", Locale.UK);
+		final Recipe r4 = new Recipe(user, "4", Locale.UK);
 		r4.addStage(rs1);
 
-		final Recipe r5 = new Recipe("1", Locale.UK);
+		final Recipe r5 = new Recipe(user, "1", Locale.UK);
 		r5.addStage(rs1);
 		r5.addTag( CommonTags.SERVES_COUNT, 4);
 
 		TestUtils.testEqualsHashcode(r1, r2, r3, r4, r5);
 
-		assertThat( r5.toString(), is("Recipe{title=1, id=NEW, stages=[RecipeStage{ingredients=[Ingredient{q=100 GRAMMES, item=CanonicalItem{name=Lamb}}, Ingredient{q=100 GRAMMES, item=CanonicalItem{name=Beef}}]}], tags={SERVES_COUNT=4}, locale=en_GB}"));
+		assertThat( r5.toString(), is("Recipe{title=1, id=NEW, creator=User{id=NEW, username=aregan, displayName=Andrew R}, stages=[RecipeStage{ingredients=[Ingredient{q=100 GRAMMES, item=CanonicalItem{name=Lamb}}, Ingredient{q=100 GRAMMES, item=CanonicalItem{name=Beef}}]}], tags={SERVES_COUNT=4}, locale=en_GB}"));
 
         assertThat((Recipe) r1.clone(), is(r1));
         assertThat((Recipe) r2.clone(), is(r2));

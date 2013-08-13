@@ -24,7 +24,7 @@ public class ForkDetails implements IForkDetails {
 	public ForkDetails( final IRecipe inOriginal) {
 		originalId = inOriginal.getId();
 		originalTitle = inOriginal.getTitle();
-		originalUser = null; // inOriginal.getCreator();
+		originalUser = inOriginal.getCreator();
 	}
 
 	/* (non-Javadoc)

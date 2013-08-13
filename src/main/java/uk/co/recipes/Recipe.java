@@ -22,6 +22,7 @@ import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IRecipeStage;
 import uk.co.recipes.api.ITag;
+import uk.co.recipes.api.IUser;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Objects;
@@ -44,9 +45,12 @@ public class Recipe implements IRecipe {
 	public static final long BASE_ID = UNSET_ID + 1L;
 
 	private long id = UNSET_ID;
+
+	private IUser creator;
 	private String title;
 	private Locale locale;
 	private IForkDetails forkDetails;
+
 	private final List<IRecipeStage> stages = Lists.newArrayList();
 	private final Map<ITag,Serializable> tagsMap = Maps.newHashMap();
 
@@ -54,7 +58,8 @@ public class Recipe implements IRecipe {
 	public Recipe() {
 	}
 
-	public Recipe( String inTitle, final Locale inLocale) {
+	public Recipe( final IUser inCreator, String inTitle, final Locale inLocale) {
+		creator = checkNotNull( inCreator, "Creator cannot be null");
 		title = checkNotNull( inTitle, "Title cannot be null");
 		locale = checkNotNull( inLocale, "Locale cannot be null");
 	}
@@ -171,6 +176,14 @@ public class Recipe implements IRecipe {
 		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see uk.co.recipes.api.IRecipe#getCreator()
+	 */
+	@Override
+	public IUser getCreator() {
+		return creator;
+	}
+
 	@Override
 	public IForkDetails getForkDetails() {
 		return forkDetails;
@@ -200,7 +213,7 @@ public class Recipe implements IRecipe {
 	}
 
     public Object clone() {
-        final Recipe theClone = new Recipe(title, locale);
+        final Recipe theClone = new Recipe(creator, title, locale);
         for (IRecipeStage eachStage : stages) {
             theClone.addStage(eachStage);
         }
@@ -218,7 +231,7 @@ public class Recipe implements IRecipe {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCode( title, locale, stages, tagsMap, forkDetails);
+		return Objects.hashCode( title, locale, stages, tagsMap, creator, forkDetails);
 	}
 
 	/* (non-Javadoc)
@@ -239,13 +252,14 @@ public class Recipe implements IRecipe {
 		final Recipe other = (Recipe) obj;
 		return Objects.equal( title, other.title) && Objects.equal( locale, other.locale) &&
 			   Objects.equal( stages, other.stages) && Objects.equal( tagsMap, other.tagsMap) &&
-			   Objects.equal( forkDetails, other.forkDetails);
+			   Objects.equal( creator, other.creator) && Objects.equal( forkDetails, other.forkDetails);
 	}
 
 	public String toString() {
 		return Objects.toStringHelper(this).omitNullValues()
 						.add( "title", title)
 						.add( "id", ( id == UNSET_ID) ? "NEW" : Long.valueOf(id))
+						.add( "creator", creator)
 						.add( "fork", forkDetails)
 						.add( "stages", stages)
 						.add( "tags", tagsMap)

@@ -7,17 +7,21 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import uk.co.recipes.CanonicalItem;
+import uk.co.recipes.ForkDetails;
 import uk.co.recipes.Ingredient;
 import uk.co.recipes.Quantity;
 import uk.co.recipes.Recipe;
 import uk.co.recipes.RecipeStage;
+import uk.co.recipes.User;
 import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.IForkDetails;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IQuantity;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IRecipeStage;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.IUnit;
+import uk.co.recipes.api.IUser;
 import uk.co.recipes.api.Units;
 import uk.co.recipes.api.ratings.IItemRating;
 import uk.co.recipes.api.ratings.IRecipeRating;
@@ -82,6 +86,8 @@ public final class JacksonFactory {
         testModule.addAbstractTypeMapping( IQuantity.class, Quantity.class);
         testModule.addAbstractTypeMapping( IItemRating.class, ItemRating.class);
         testModule.addAbstractTypeMapping( IRecipeRating.class, RecipeRating.class);
+        testModule.addAbstractTypeMapping( IForkDetails.class, ForkDetails.class);
+        testModule.addAbstractTypeMapping( IUser.class, User.class);
 
         inMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);  // When reading in ES hits, e.g. _index
         inMapper.configure(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS, false);
