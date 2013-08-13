@@ -25,6 +25,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.indices.IndexMissingException;
 import org.elasticsearch.indices.TypeMissingException;
 import org.elasticsearch.search.SearchHit;
 
@@ -165,6 +166,9 @@ public class EsRecipeFactory implements IRecipePersistence {
 			esClient.admin().indices().prepareDeleteMapping().setIndices("recipe").setType("recipes").execute().actionGet();
 		}
 		catch (TypeMissingException e) {
+			// Ignore
+		}
+		catch (IndexMissingException e) {
 			// Ignore
 		}
 	}

@@ -24,6 +24,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.indices.IndexMissingException;
 import org.elasticsearch.indices.TypeMissingException;
 import org.elasticsearch.search.SearchHit;
 
@@ -212,6 +213,9 @@ public class EsItemFactory implements IItemPersistence {
 			esClient.admin().indices().prepareDeleteMapping().setIndices("recipe").setType("items").execute().actionGet();
 		}
 		catch (TypeMissingException e) {
+			// Ignore
+		}
+		catch (IndexMissingException e) {
 			// Ignore
 		}
 	}
