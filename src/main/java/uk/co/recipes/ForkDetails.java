@@ -3,10 +3,13 @@
  */
 package uk.co.recipes;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import uk.co.recipes.api.IForkDetails;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
 
 /**
@@ -20,6 +23,13 @@ public class ForkDetails implements IForkDetails {
 	private long originalId;
 	private String originalTitle;
 	private IUser originalUser;
+
+    @JsonCreator
+	public ForkDetails( @JsonProperty("originalId") final long inOriginalId, @JsonProperty("originalTitle") final String inTitle, @JsonProperty("originalUser") final IUser inUser) {
+		originalId = inOriginalId;
+		originalTitle = checkNotNull(inTitle);
+		originalUser = checkNotNull(inUser);
+	}
 
 	public ForkDetails( final IRecipe inOriginal) {
 		originalId = inOriginal.getId();
