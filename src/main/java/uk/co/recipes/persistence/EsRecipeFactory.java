@@ -29,6 +29,7 @@ import org.elasticsearch.indices.IndexMissingException;
 import org.elasticsearch.indices.TypeMissingException;
 import org.elasticsearch.search.SearchHit;
 
+import uk.co.recipes.ForkDetails;
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.events.api.IEventService;
@@ -211,6 +212,7 @@ public class EsRecipeFactory implements IRecipePersistence {
         final String newId = toStringId(inOriginalRecipe) + suffix;
         final IRecipe clone = (IRecipe) inOriginalRecipe.clone();
         clone.setTitle( clone.getTitle() + suffix);
+        clone.setForkDetails( new ForkDetails(inOriginalRecipe) );
 
         if ( inPreChange != null) {
         	inPreChange.apply(clone);

@@ -17,6 +17,7 @@ import java.util.Map.Entry;
 import org.elasticsearch.common.Preconditions;
 
 import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.IForkDetails;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IRecipeStage;
@@ -45,6 +46,7 @@ public class Recipe implements IRecipe {
 	private long id = UNSET_ID;
 	private String title;
 	private Locale locale;
+	private IForkDetails forkDetails;
 	private final List<IRecipeStage> stages = Lists.newArrayList();
 	private final Map<ITag,Serializable> tagsMap = Maps.newHashMap();
 
@@ -170,6 +172,17 @@ public class Recipe implements IRecipe {
 	}
 
 	@Override
+	public IForkDetails getForkDetails() {
+		return forkDetails;
+	}
+
+	@Override
+	public void setForkDetails( final IForkDetails inForkDetails) {
+		// Can't check null - probably called by Jackson
+		forkDetails = inForkDetails;
+	}
+
+	@Override
 	public long getId() {
 		return id;
 	}
@@ -194,6 +207,9 @@ public class Recipe implements IRecipe {
         for (Entry<ITag, Serializable> eachTag : tagsMap.entrySet()) {
             theClone.addTag(eachTag.getKey(), eachTag.getValue());
         }
+
+        theClone.setForkDetails( getForkDetails() );
+
         return theClone;
     }
 
@@ -202,7 +218,7 @@ public class Recipe implements IRecipe {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCode( title, locale, stages, tagsMap);
+		return Objects.hashCode( title, locale, stages, tagsMap, forkDetails);
 	}
 
 	/* (non-Javadoc)
@@ -219,14 +235,18 @@ public class Recipe implements IRecipe {
 		if (!(obj instanceof Recipe)) {
 			return false;
 		}
+
 		final Recipe other = (Recipe) obj;
-		return Objects.equal( title, other.title) && Objects.equal( locale, other.locale) && Objects.equal( stages, other.stages) && Objects.equal( tagsMap, other.tagsMap);
+		return Objects.equal( title, other.title) && Objects.equal( locale, other.locale) &&
+			   Objects.equal( stages, other.stages) && Objects.equal( tagsMap, other.tagsMap) &&
+			   Objects.equal( forkDetails, other.forkDetails);
 	}
 
 	public String toString() {
 		return Objects.toStringHelper(this).omitNullValues()
 						.add( "title", title)
 						.add( "id", ( id == UNSET_ID) ? "NEW" : Long.valueOf(id))
+						.add( "fork", forkDetails)
 						.add( "stages", stages)
 						.add( "tags", tagsMap)
 						.add( "locale", locale)
