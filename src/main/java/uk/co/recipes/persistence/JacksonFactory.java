@@ -39,6 +39,7 @@ import com.fasterxml.jackson.databind.KeyDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.common.base.Throwables;
 
 /**
@@ -93,5 +94,6 @@ public final class JacksonFactory {
         inMapper.configure(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS, false);
 
         inMapper.registerModule(testModule);
+        inMapper.registerModule(new JodaModule());
 	}
 }

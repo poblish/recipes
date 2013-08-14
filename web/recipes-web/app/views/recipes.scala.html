@@ -46,6 +46,10 @@
     </div>
 </section>
 
+@if( recipe.getForkDetails() != null) {
+<p>@recipe.getForkDetails()</p>
+}
+
 <ol>
 @for(item <- recipe.getItems()) {
 <li><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-info"><a href="/tags/@tagName">@tagName</a></span>}</li>
