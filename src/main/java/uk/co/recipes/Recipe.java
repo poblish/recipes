@@ -183,6 +183,24 @@ public class Recipe implements IRecipe {
 		return result;
 	}
 
+	@Override
+	public boolean addIngredients( final IIngredient... inIngredients) {
+		boolean result = false;
+		for ( final IRecipeStage each : stages) {
+			result |= each.addIngredients(inIngredients);
+		}
+		return result;
+	}
+
+	@Override
+	public boolean removeIngredients( final IIngredient... inIngredients) {
+		boolean result = false;
+		for ( final IRecipeStage each : stages) {
+			result |= each.removeIngredients(inIngredients);
+		}
+		return result;
+	}
+
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.api.IRecipe#getCreator()
 	 */

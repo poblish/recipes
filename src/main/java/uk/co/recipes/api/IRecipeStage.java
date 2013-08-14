@@ -17,4 +17,6 @@ public interface IRecipeStage {
     Collection<ICanonicalItem> getItems();
 
     boolean removeItems( final ICanonicalItem... inItems);
+	boolean addIngredients( final IIngredient... inIngredients);
+	boolean removeIngredients( final IIngredient... inIngredients);
 }

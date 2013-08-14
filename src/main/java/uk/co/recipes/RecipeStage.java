@@ -34,12 +34,12 @@ public class RecipeStage implements IRecipeStage {
 		ingredients.add(ingredient);
 	}
 
-	public void addIngredients( final IIngredient... inIngredients) {
-		ingredients.addAll( Arrays.asList(inIngredients) );
+	public boolean addIngredients( final IIngredient... inIngredients) {
+		return ingredients.addAll( Arrays.asList(inIngredients) );
 	}
 
-	public void addIngredients( final Collection<IIngredient> inIngredients) {
-		ingredients.addAll(inIngredients);
+	public boolean addIngredients( final Collection<IIngredient> inIngredients) {
+		return ingredients.addAll(inIngredients);
 	}
 
 	/* (non-Javadoc)
@@ -80,6 +80,11 @@ public class RecipeStage implements IRecipeStage {
 		}
 
 		return ingredients.removeAll(deletions);
+	}
+
+	@Override
+	public boolean removeIngredients( final IIngredient... inIngredients) {
+		return ingredients.removeAll( Arrays.asList(inIngredients) );
 	}
 
 	@Override
