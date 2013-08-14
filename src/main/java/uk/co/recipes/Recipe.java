@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.elasticsearch.common.Preconditions;
+import org.joda.time.DateTime;
 
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IForkDetails;
@@ -49,6 +50,7 @@ public class Recipe implements IRecipe {
 	private IUser creator;
 	private String title;
 	private Locale locale;
+	private DateTime creationTime = new DateTime();
 	private IForkDetails forkDetails;
 
 	private final List<IRecipeStage> stages = Lists.newArrayList();
@@ -62,6 +64,11 @@ public class Recipe implements IRecipe {
 		creator = checkNotNull( inCreator, "Creator cannot be null");
 		title = checkNotNull( inTitle, "Title cannot be null");
 		locale = checkNotNull( inLocale, "Locale cannot be null");
+	}
+
+	public Recipe( final IUser inCreator, String inTitle, final Locale inLocale, final DateTime inCreationTime) {
+		this( inCreator, inTitle,  inLocale);
+		creationTime = checkNotNull( inCreationTime, "CreationTime cannot be null");
 	}
 
 	/**
@@ -196,6 +203,11 @@ public class Recipe implements IRecipe {
 	}
 
 	@Override
+	public DateTime getCreationTime() {
+		return creationTime;
+	}
+
+	@Override
 	public long getId() {
 		return id;
 	}
@@ -213,7 +225,7 @@ public class Recipe implements IRecipe {
 	}
 
     public Object clone() {
-        final Recipe theClone = new Recipe(creator, title, locale);
+        final Recipe theClone = new Recipe(creator, title, locale, creationTime);
         for (IRecipeStage eachStage : stages) {
             theClone.addStage(eachStage);
         }
@@ -231,7 +243,7 @@ public class Recipe implements IRecipe {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCode( title, locale, stages, tagsMap, creator, forkDetails);
+		return Objects.hashCode( title, locale, stages, tagsMap, creator, /* creationTime, */ forkDetails);
 	}
 
 	/* (non-Javadoc)
@@ -252,7 +264,8 @@ public class Recipe implements IRecipe {
 		final Recipe other = (Recipe) obj;
 		return Objects.equal( title, other.title) && Objects.equal( locale, other.locale) &&
 			   Objects.equal( stages, other.stages) && Objects.equal( tagsMap, other.tagsMap) &&
-			   Objects.equal( creator, other.creator) && Objects.equal( forkDetails, other.forkDetails);
+			   Objects.equal( creator, other.creator) && /* Objects.equal( creationTime, other.creationTime) && */
+			   Objects.equal( forkDetails, other.forkDetails);
 	}
 
 	public String toString() {

@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+import org.joda.time.DateTime;
+
 /**
  * TODO
  * 
@@ -24,6 +26,7 @@ public interface IRecipe extends ITagging, Cloneable, java.io.Serializable {
 	Locale getLocale();
 
 	IUser getCreator();
+	DateTime getCreationTime();
 
 	Object clone();
 
