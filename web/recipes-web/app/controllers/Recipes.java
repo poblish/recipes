@@ -71,8 +71,7 @@ public class Recipes extends Controller {
         final ICanonicalItem theItemToRemove = checkNotNull( items.get(ingredient).get() );
 
         recipes.removeItems( recipe, theItemToRemove);
-
-        Thread.sleep(500);
+        recipes.waitUntilRefreshed();
 
         return redirect("/recipes/" + recipe.getTitle());  // FIXME - horrible title stuff
     }

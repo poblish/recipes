@@ -24,6 +24,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
+import org.elasticsearch.action.admin.indices.stats.IndicesStatsRequestBuilder;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.indices.IndexMissingException;
 import org.elasticsearch.indices.TypeMissingException;
@@ -239,6 +240,25 @@ public class EsRecipeFactory implements IRecipePersistence {
 		}
 		catch (IndexMissingException e) {
 			// Ignore
+		}
+	}
+
+	public void waitUntilRefreshed() throws InterruptedException {
+		final IndicesStatsRequestBuilder reqBuilder = esClient.admin().indices().prepareStats("recipe").setRefresh(true).setTypes("recipes");
+		final long currCount = reqBuilder.execute().actionGet().getTotal().getRefresh().getTotal();
+		int waitsToGo = 10;
+
+//		LOG.info("Is... "  + currCount);
+
+		do {
+			Thread.sleep(250);
+//			LOG.info("Now... "  + reqBuilder.execute().actionGet().getTotal().getRefresh().getTotal() + ", waitsToGo = " + waitsToGo);
+			waitsToGo--;
+		}
+		while ( waitsToGo > 0 && reqBuilder.execute().actionGet().getTotal().getRefresh().getTotal() == currCount);
+
+		if ( waitsToGo <= 0) {
+			throw new RuntimeException("Timeout exceeded!");
 		}
 	}
 
