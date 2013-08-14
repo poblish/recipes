@@ -4,6 +4,7 @@
 package uk.co.recipes.events.api;
 
 import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
 
@@ -25,5 +26,8 @@ public interface IEventService {
     void addRecipe( final IRecipe inRecipe);
     void rateRecipe( final IUser inUser, final IRecipe inRecipe);
     void rateRecipe( final IUser inUser, final IRecipe inRecipe, float inRating);
+    void addRecipeIngredients( final IRecipe inRecipe, final IIngredient... inIngredients);
+    void removeRecipeIngredients( final IRecipe inRecipe, final IIngredient... inIngredients);
+    void removeRecipeItems( final IRecipe inRecipe, final ICanonicalItem... inItems);
     void deleteRecipe( final IRecipe inRecipe);
 }

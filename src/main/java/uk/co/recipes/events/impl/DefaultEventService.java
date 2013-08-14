@@ -8,6 +8,7 @@ import java.util.concurrent.Executors;
 import javax.inject.Inject;
 
 import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.api.IEventListener;
@@ -64,5 +65,26 @@ public class DefaultEventService implements IEventService {
 	@Override
 	public void rateRecipe( IUser inUser, IRecipe inRecipe, float inRating) {
 	    eventBus.post( new RateRecipeEvent( inUser, inRecipe, inRating) );
+	}
+
+	@Override
+	public void addRecipeIngredients( IRecipe inRecipe, IIngredient... inIngredients) {
+	    for ( IIngredient item : inIngredients) {
+	    	eventBus.post( new RecipeAddIngredientsEvent( inRecipe, item) );
+	    }
+	}
+
+	@Override
+	public void removeRecipeIngredients( IRecipe inRecipe, final IIngredient... inIngredients) {
+	    for ( IIngredient item : inIngredients) {
+	    	eventBus.post( new RecipeRemoveIngredientsEvent( inRecipe, item) );
+	    }
+	}
+
+	@Override
+	public void removeRecipeItems( IRecipe inRecipe, final ICanonicalItem... inItems) {
+	    for ( ICanonicalItem item : inItems) {
+	    	eventBus.post( new RecipeRemoveItemsEvent( inRecipe, item) );
+	    }
 	}
 }

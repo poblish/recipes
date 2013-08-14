@@ -31,6 +31,8 @@ import org.elasticsearch.search.SearchHit;
 
 import uk.co.recipes.ForkDetails;
 import uk.co.recipes.Recipe;
+import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.service.api.IRecipePersistence;
@@ -147,6 +149,72 @@ public class EsRecipeFactory implements IRecipePersistence {
         }
 
 		return inRecipe;
+	}
+
+	@Override
+	public void addIngredients( final IRecipe inRecipe, final IIngredient... inIngredients) throws IOException {
+
+		if (!inRecipe.addIngredients(inIngredients) ) {
+        	throw new RuntimeException("Ingredient(s) could not be added");
+        }
+
+		handledChangedItems( inRecipe, new Runnable() {
+
+			@Override
+			public void run() {
+				eventService.addRecipeIngredients( inRecipe, inIngredients);
+			}
+		});
+	}
+
+	@Override
+	public void removeIngredients( final IRecipe inRecipe, final IIngredient... inIngredients) throws IOException {
+
+		if (!inRecipe.removeIngredients(inIngredients) ) {
+        	throw new RuntimeException("Ingredient(s) could not be removed");
+        }
+
+		handledChangedItems( inRecipe, new Runnable() {
+
+			@Override
+			public void run() {
+				eventService.removeRecipeIngredients( inRecipe, inIngredients);
+			}
+		});
+	}
+
+	@Override
+	public void removeItems( final IRecipe inRecipe, final ICanonicalItem... inItems) throws IOException {
+
+		if (!inRecipe.removeItems(inItems) ) {
+        	throw new RuntimeException("Item(s) could not be removed");
+        }
+
+		handledChangedItems( inRecipe, new Runnable() {
+
+			@Override
+			public void run() {
+				eventService.removeRecipeItems( inRecipe, inItems);
+			}
+		});
+	}
+
+	private void handledChangedItems( final IRecipe inRecipe, final Runnable inEventServiceCallback) throws IOException {
+		// FIXME FIXME Duplication vs. put()
+	    final HttpPost req = new HttpPost( itemIndexUrl + "/" + inRecipe.getId());
+
+		try {
+			req.setEntity( new StringEntity( mapper.writeValueAsString(inRecipe) ) );
+
+			final HttpResponse resp = httpClient.execute(req);
+			assertThat( resp.getStatusLine().getStatusCode(), isOneOf(201, 200));
+			EntityUtils.consume( resp.getEntity() );
+
+			inEventServiceCallback.run();
+		}
+		catch (UnsupportedEncodingException e) {
+			Throwables.propagate(e);
+		}
 	}
 
 	public String toStringId( final IRecipe inRecipe) throws IOException {

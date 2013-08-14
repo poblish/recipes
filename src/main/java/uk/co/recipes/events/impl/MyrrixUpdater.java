@@ -8,6 +8,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.Serializable;
 import java.io.StringReader;
+import java.util.Collection;
 import java.util.Map.Entry;
 
 import javax.inject.Inject;
@@ -29,6 +30,7 @@ import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
 import uk.co.recipes.service.impl.DefaultIngredientQuantityScoreBooster;
 
+import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
 
 /**
@@ -116,12 +118,42 @@ public class MyrrixUpdater implements IEventListener {
     		LOG.trace("onAddRecipe: " + evt);
     	}
 
-        final long recipeId = evt.getRecipe().getId();
+        addRecipeIngredients( evt.getRecipe().getId(), evt.getRecipe().getIngredients());
+    }
+
+    @Subscribe
+    public void onDeleteRecipe( final DeleteRecipeEvent evt) {
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("onDeleteRecipe: " + evt);
+        }
+
+        removeRecipeIngredients( evt.getRecipe().getId(), evt.getRecipe().getIngredients());
+    }
+
+    @Subscribe
+    public void onAddRecipeIngredients( final RecipeAddIngredientsEvent evt) {
+    	if (LOG.isTraceEnabled()) {
+    		LOG.trace("onAddRecipeIngredients: " + evt);
+    	}
+
+        addRecipeIngredients( evt.getRecipe().getId(), Lists.newArrayList( evt.getIngredient() ));
+    }
+
+    @Subscribe
+    public void onRemoveRecipeIngredients( final RecipeRemoveIngredientsEvent evt) {
+    	if (LOG.isTraceEnabled()) {
+    		LOG.trace("onDeleteRecipeIngredients: " + evt);
+    	}
+
+        removeRecipeIngredients( evt.getRecipe().getId(), Lists.newArrayList( evt.getIngredient() ));
+    }
+
+    public void addRecipeIngredients( final long inRecipeId, final Collection<IIngredient> inIngredients) {
         boolean changesMade = false;
 
         try {
-            for ( IIngredient eachIngr : evt.getRecipe().getIngredients()) {
-            	changesMade |= setItemTagsForItem( eachIngr.getItem(), recipeId, 1.0f * booster.getBoostForQuantity( eachIngr.getItem(), eachIngr.getQuantity()));
+            for ( IIngredient eachIngr : inIngredients) {
+            	changesMade |= setItemTagsForItem( eachIngr.getItem(), inRecipeId, 1.0f * booster.getBoostForQuantity( eachIngr.getItem(), eachIngr.getQuantity()));
         	}
 	    }
 		catch (TasteException e) {
@@ -132,23 +164,17 @@ public class MyrrixUpdater implements IEventListener {
         	recommender.refresh();
 
         	if (LOG.isTraceEnabled()) {
-        		LOG.trace("onAddRecipe: refresh done");
+        		LOG.trace("addRecipeIngredients: refresh done");
         	}
         }
     }
 
-    @Subscribe
-    public void onDeleteRecipe( final DeleteRecipeEvent evt) {
-        if (LOG.isTraceEnabled()) {
-            LOG.trace("onDeleteRecipe: " + evt);
-        }
-
-        final long recipeId = evt.getRecipe().getId();
+    public void removeRecipeIngredients( final long inRecipeId, final Collection<IIngredient> inIngredients) {
         boolean changesMade = false;
 
         try {
-            for ( IIngredient eachIngr : evt.getRecipe().getIngredients()) {
-                changesMade |= removeItemTagsForItem( eachIngr.getItem(), recipeId);
+            for ( IIngredient eachIngr : inIngredients) {
+                changesMade |= removeItemTagsForItem( eachIngr.getItem(), inRecipeId);
             }
         }
         catch (TasteException e) {
@@ -159,7 +185,31 @@ public class MyrrixUpdater implements IEventListener {
             recommender.refresh();
 
             if (LOG.isTraceEnabled()) {
-                LOG.trace("onDeleteRecipe: refresh done");
+                LOG.trace("deleteRecipeIngredients: refresh done");
+            }
+        }
+    }
+
+    @Subscribe
+    public void onRemoveRecipeItems( final RecipeRemoveItemsEvent evt) {
+    	if (LOG.isTraceEnabled()) {
+    		LOG.trace("onRemoveRecipeItems: " + evt);
+    	}
+
+        boolean changesMade = false;
+
+        try {
+            changesMade = removeItemTagsForItem( evt.getItem(), evt.getRecipe().getId());
+        }
+        catch (TasteException e) {
+            Throwables.propagate(e);
+        }
+
+        if (changesMade) {
+            recommender.refresh();
+
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("deleteRecipeIngredients: refresh done");
             }
         }
     }

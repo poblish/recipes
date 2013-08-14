@@ -8,13 +8,16 @@ import javax.inject.Inject;
 
 import play.mvc.Controller;
 import play.mvc.Result;
+import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.cats.Categorisation;
 import uk.co.recipes.events.impl.MyrrixUpdater;
+import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.service.api.IExplorerAPI;
+import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.similarity.IncompatibleIngredientsException;
@@ -30,12 +33,14 @@ import com.google.common.collect.Multiset;
  */
 public class Recipes extends Controller {
 
+    private IItemPersistence items;
     private IRecipePersistence recipes;
     private IExplorerAPI explorer;
 
     @Inject
-    public Recipes( final MyrrixUpdater updater, final MyrrixExplorerService explorer, final EsRecipeFactory recipes, final EsUserFactory users) {
+    public Recipes( final MyrrixUpdater updater, final MyrrixExplorerService explorer, final EsItemFactory items, final EsRecipeFactory recipes, final EsUserFactory users) {
     	updater.startListening();
+        this.items = checkNotNull(items);
         this.recipes = checkNotNull(recipes);
         this.explorer = checkNotNull(explorer);
     }
@@ -43,7 +48,7 @@ public class Recipes extends Controller {
     public Result fork( final String name) throws IOException, IncompatibleIngredientsException, InterruptedException {
         final IRecipe fork = recipes.fork( recipes.get(name).get() );
 
-        // Wait until it appears in DB
+        // Wait until it appears in Elasticsearch!
         do {
         	Thread.sleep(250);
         }
@@ -57,6 +62,19 @@ public class Recipes extends Controller {
         final Multiset<ITag> categorisation = Categorisation.forIngredients( recipe.getIngredients() );
 
         return ok(views.html.recipe.render( recipe, categorisation, explorer.similarRecipes( recipe, 10), ( recipe != null) ? "Found" : "Not Found"));
+    }
+
+    public Result removeIngredient( final String name, final String ingredient) throws IOException, IncompatibleIngredientsException, InterruptedException {
+        final IRecipe recipe = recipes.get(name).get();
+        // FIXME Check recipe.getForkDetails(), also creator vs. current user for permissions!
+
+        final ICanonicalItem theItemToRemove = checkNotNull( items.get(ingredient).get() );
+
+        recipes.removeItems( recipe, theItemToRemove);
+
+        Thread.sleep(500);
+
+        return redirect("/recipes/" + recipe.getTitle());  // FIXME - horrible title stuff
     }
 
     public Result test() throws IOException, IncompatibleIngredientsException {
