@@ -15,7 +15,6 @@ import uk.co.recipes.cats.Categorisation;
 import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
-import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.service.api.IExplorerAPI;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
@@ -38,7 +37,7 @@ public class Recipes extends Controller {
     private IExplorerAPI explorer;
 
     @Inject
-    public Recipes( final MyrrixUpdater updater, final MyrrixExplorerService explorer, final EsItemFactory items, final EsRecipeFactory recipes, final EsUserFactory users) {
+    public Recipes( final MyrrixUpdater updater, final MyrrixExplorerService explorer, final EsItemFactory items, final EsRecipeFactory recipes) {
     	updater.startListening();
         this.items = checkNotNull(items);
         this.recipes = checkNotNull(recipes);
