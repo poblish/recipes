@@ -1,11 +1,14 @@
 package controllers;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.IOException;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import play.mvc.Controller;
 import play.mvc.Result;
-import uk.co.recipes.DaggerModule;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
@@ -13,7 +16,6 @@ import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.api.IUserPersistence;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
-import dagger.ObjectGraph;
 
 /**
  * 
@@ -24,14 +26,19 @@ import dagger.ObjectGraph;
  */
 public class Users extends Controller {
 
-	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
-    private final static IUserPersistence USERS = GRAPH.get( EsUserFactory.class );
-    private final static IRecommendationsAPI RECS_API = GRAPH.get( MyrrixRecommendationService.class );
+    private IUserPersistence users;
+    private IRecommendationsAPI recsApi;
 
-    public static Result display( final String id) throws IOException {
-        final IUser user = USERS.get(id).get();
-        final List<IRecipe> recommendedRecipes = RECS_API.recommendRecipes( user, 10);
-        final List<ICanonicalItem> recommendedItems = RECS_API.recommendIngredients( user, 10);
+    @Inject
+    public Users( final EsUserFactory inUsers, final MyrrixRecommendationService inRecService) {
+        this.users = checkNotNull(inUsers);
+        this.recsApi = checkNotNull(inRecService);
+    }
+
+    public Result display( final String id) throws IOException {
+        final IUser user = users.get(id).get();
+        final List<IRecipe> recommendedRecipes = recsApi.recommendRecipes( user, 10);
+        final List<ICanonicalItem> recommendedItems = recsApi.recommendIngredients( user, 10);
         return ok(views.html.user.render( user, recommendedRecipes, recommendedItems));
     }
 }
