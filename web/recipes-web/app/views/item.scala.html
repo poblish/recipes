@@ -46,6 +46,25 @@
 
 <p><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-info"><a href="/tags/@tagName">@tagName</a></span>}</p>
 
+<div class="btn-group">
+  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+    Your Rating
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu">
+    <li><a href="/items/@item.getCanonicalName()/rate/1">1/10</a></li>
+    <li><a href="/items/@item.getCanonicalName()/rate/2">2/10</a></li>
+    <li><a href="/items/@item.getCanonicalName()/rate/3">3/10</a></li>
+    <li><a href="/items/@item.getCanonicalName()/rate/4">4/10</a></li>
+    <li><a href="/items/@item.getCanonicalName()/rate/5">5/10</a></li>
+    <li><a href="/items/@item.getCanonicalName()/rate/6">6/10</a></li>
+    <li><a href="/items/@item.getCanonicalName()/rate/7">7/10</a></li>
+    <li><a href="/items/@item.getCanonicalName()/rate/8">8/10</a></li>
+    <li><a href="/items/@item.getCanonicalName()/rate/9">9/10</a></li>
+    <li><a href="/items/@item.getCanonicalName()/rate/10">10/10</a></li>
+  </ul>
+</div>
+
 <hr />
 
 <p>Similar Items</p>

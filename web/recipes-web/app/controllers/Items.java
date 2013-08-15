@@ -38,4 +38,8 @@ public class Items extends Controller {
         final List<ICanonicalItem> similarities = explorerService.similarIngredients( item, 20);
         return ok(views.html.item.render( item, similarities, ( item != null) ? "Found" : "Not Found"));
     }
+
+    public Result rate( final String name, final int inScore) throws IOException {
+        return display(name);
+    }
 }

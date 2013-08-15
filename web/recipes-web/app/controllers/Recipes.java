@@ -64,6 +64,10 @@ public class Recipes extends Controller {
         return ok(views.html.recipe.render( recipe, categorisation, explorer.similarRecipes( recipe, 10), ( recipe != null) ? "Found" : "Not Found"));
     }
 
+    public Result rate( final String name, final int inScore) throws IOException, IncompatibleIngredientsException {
+        return display(name);
+    }
+
     public Result removeIngredient( final String name, final String ingredient) throws IOException, IncompatibleIngredientsException, InterruptedException {
         final IRecipe recipe = recipes.get(name).get();
         // FIXME Check recipe.getForkDetails(), also creator vs. current user for permissions!
