@@ -31,10 +31,4 @@ public class Items extends Controller {
         final List<ICanonicalItem> similarities = EXPLORER_API.similarIngredients( item, 20);
         return ok(views.html.item.render( item, similarities, ( item != null) ? "Found" : "Not Found"));
     }
-
-    public static Result test() throws IOException {
-        final String[] theInputs = request().queryString().get("input");
-        final boolean gotInput = ( theInputs != null && theInputs.length > 0 && !theInputs[0].isEmpty());
-        return display(gotInput ? theInputs[0] : "ginger");
-    }
 }
