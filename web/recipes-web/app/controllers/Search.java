@@ -1,13 +1,15 @@
 package controllers;
 
-import com.google.common.collect.Lists;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.IOException;
+
 import javax.inject.Inject;
+
 import play.mvc.Controller;
 import play.mvc.Result;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.impl.EsSearchService;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * 
