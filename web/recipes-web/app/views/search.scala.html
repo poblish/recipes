@@ -1,6 +1,6 @@
-@(metrics: String, itemsCount: Long, recipesCount: Long, usersCount: Long, myrrixUsersCount: Integer, myrrixItemsCount: Integer)
+@(foundRecipes: List[uk.co.recipes.api.IRecipe], foundItems: List[uk.co.recipes.api.ICanonicalItem])
 
-@main("Statistics") {
+@main("Search Results") {
 }
 <!DOCTYPE html>
 
@@ -41,22 +41,23 @@
 
 <section id="top">
     <div class="wrapper">
-        <h1>Statistics</h1>
+        <h1>Search Results</h1>
     </div>
 </section>
 
-<p><em>If low, run RecipeExploreRecommendTest to install all Recipes and set up similarities</em></p>
+<p>Recipes:</p>
+<ol>
+@for( eachRecipe <- foundRecipes) {
+  <li><a href="/recipes/@eachRecipe.getTitle()">@eachRecipe.getTitle()</a> <a href="/recipes/@eachRecipe.getTitle()/fork">[F]</a></li>
+}
+</ol>
 
-<p>ES Items: <span class="badge label-default">@itemsCount</span></p>
-<p>ES Recipes: <span class="badge">@recipesCount</span></p>
-<p>ES Users: <span class="badge">@usersCount</span></p>
-<p>Ratings: <span class="badge">-</span></p>
-<p>Myrrix Items: <span class="badge">@myrrixItemsCount</span></p>
-<p>Myrrix Users: <span class="badge">@myrrixUsersCount</span> (almost certainly wrong - <a href="http://localhost:8080/">check here</a>)</p>
-
-<hr />
-<h3>Metrics</h3>
-<pre style="color:#933">@metrics</pre>
+<p>Items:</p>
+<ol>
+@for(item <- foundItems) {
+  <li><a href="/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-info"><a href="/tags/@tagName">@tagName</a></span>}</li>
+}
+</ol>
 
 </body>
 </html>
