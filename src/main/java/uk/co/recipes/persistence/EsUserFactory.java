@@ -82,7 +82,7 @@ public class EsUserFactory implements IUserPersistence {
 
 	// FIXME - must reconcile with put!!!
 	public void update( final IUser inUser) throws IOException {
-		final HttpPost req = new HttpPost( usersIndexUrl + "/" + inUser.getId());
+		final HttpPost req = new HttpPost( usersIndexUrl + "/" + toStringId(inUser));
 
 		try {
 			req.setEntity( new StringEntity( mapper.writeValueAsString(inUser) ) );
