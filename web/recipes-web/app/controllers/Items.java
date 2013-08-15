@@ -1,17 +1,19 @@
 package controllers;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.IOException;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import play.mvc.Controller;
 import play.mvc.Result;
-import uk.co.recipes.DaggerModule;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.service.api.IExplorerAPI;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
-import dagger.ObjectGraph;
 
 /**
  * 
@@ -22,13 +24,18 @@ import dagger.ObjectGraph;
  */
 public class Items extends Controller {
 
-	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
-	private final static IItemPersistence ITEMS = GRAPH.get( EsItemFactory.class );
-    private final static IExplorerAPI EXPLORER_API = GRAPH.get( MyrrixExplorerService.class );
+    private IItemPersistence items;
+    private IExplorerAPI explorerService;
 
-    public static Result display( final String name) throws IOException {
-        final ICanonicalItem item = ITEMS.get(name).get();
-        final List<ICanonicalItem> similarities = EXPLORER_API.similarIngredients( item, 20);
+    @Inject
+    public Items( final EsItemFactory items, final MyrrixExplorerService inExplorerService) {
+        this.items = checkNotNull(items);
+        this.explorerService = checkNotNull(inExplorerService);
+    }
+
+    public Result display( final String name) throws IOException {
+        final ICanonicalItem item = items.get(name).get();
+        final List<ICanonicalItem> similarities = explorerService.similarIngredients( item, 20);
         return ok(views.html.item.render( item, similarities, ( item != null) ? "Found" : "Not Found"));
     }
 }
