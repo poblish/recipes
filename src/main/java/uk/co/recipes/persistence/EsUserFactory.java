@@ -80,6 +80,22 @@ public class EsUserFactory implements IUserPersistence {
 		return inUser;
 	}
 
+	// FIXME - must reconcile with put!!!
+	public void update( final IUser inUser) throws IOException {
+		final HttpPost req = new HttpPost( usersIndexUrl + "/" + inUser.getId());
+
+		try {
+			req.setEntity( new StringEntity( mapper.writeValueAsString(inUser) ) );
+
+			final HttpResponse resp = httpClient.execute(req);
+			assertThat( resp.getStatusLine().getStatusCode(), is(200));
+			EntityUtils.consume( resp.getEntity() );
+		}
+		catch (UnsupportedEncodingException e) {
+			Throwables.propagate(e);
+		}
+	}
+
 	public IUser getByName( String inId) throws IOException {
 		return mapper.readValue( esUtils.parseSource( usersIndexUrl + "/" + inId), User.class);
 	}
