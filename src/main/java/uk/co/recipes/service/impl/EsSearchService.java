@@ -78,7 +78,9 @@ public class EsSearchService implements ISearchAPI {
 	public List<IRecipe> findRecipesByName( String inName) throws IOException {
 		try
 		{
-			final JsonNode jn = mapper.readTree( new URL( recipesIndexUrl + "/_search?q=" + inName + "&size=9999") ).path("hits").path("hits");
+            // esClient.prepareSearch("recipe").setTypes("items").setQuery("ginger").setSize(50).execute().get().getHits().toXContent( JsonXContent.contentBuilder(), ToXContent.EMPTY_PARAMS);
+
+            final JsonNode jn = mapper.readTree( new URL( recipesIndexUrl + "/_search?q=" + inName + "&size=9999") ).path("hits").path("hits");
 	
 			final List<IRecipe> results = Lists.newArrayList();
 	
