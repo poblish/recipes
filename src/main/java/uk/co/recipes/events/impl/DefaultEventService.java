@@ -7,6 +7,9 @@ import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IRecipe;
@@ -25,10 +28,13 @@ import com.google.common.eventbus.EventBus;
  */
 public class DefaultEventService implements IEventService {
 
+	private static final Logger LOG = LoggerFactory.getLogger( DefaultEventService.class );
+
     @Inject
     EventBus eventBus = /* FIXME - inject properly */ new AsyncEventBus( /* This will do for now! */ Executors.newSingleThreadExecutor() );
 
     public void addListener( final IEventListener inL) {
+    	LOG.info("=> Adding Listener " + inL + " to " + eventBus);
         eventBus.register(inL);
     }
 
