@@ -60,17 +60,38 @@
 
 <p>Similar Recipes:</p>
 
-<ol>
-@for( eachRecipe <- similarities) {
-  <li><a href="/recipes/@eachRecipe.getTitle()">@eachRecipe.getTitle()</a> <a href="/recipes/@eachRecipe.getTitle()/fork">[F]
-  	<ol>
+<div class="container-fluid">
+
+@for(( eachRecipe, index) <- similarities.zipWithIndex) {
+
+@if((index % 3) == 0) {
+	@if( index >= 3) {
+	  </div>  <!-- <div class="row-fluid"> -->
+	}
+ <div class="row-fluid">
+}
+
+<div class="span4">
+  <div class="hero-unit"><a href="/recipes/@eachRecipe.getTitle()">@eachRecipe.getTitle()</a> <a href="/recipes/@eachRecipe.getTitle()/fork">[F]   <a id="toggle_@index" class="btn" href="#"><i class="icon-chevron-down"></i></a></div>
+  	<div style="display: none" id="ingredients_@index"><ol>
 @for(item <- eachRecipe.getItems()) {
 <li><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-info"><a href="/tags/@tagName">@tagName</a></span>}</li>
 }
-  	</ol>
-  </li>
+  	</ol></div>
+</div>  <!-- <div class="span4"> -->
+
+<script>
+$('#toggle_@index').click(function() {
+  $('#ingredients_@index').slideToggle(function() {
+    // Should toggle chevron
+  });
+});
+</script>
+
 }
-</ol>
+
+</div>  <!-- <div class="container-fluid"> -->
+
 
 </body>
 </html>
