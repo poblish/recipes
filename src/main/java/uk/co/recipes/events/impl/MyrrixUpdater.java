@@ -28,7 +28,6 @@ import uk.co.recipes.events.api.IEventListener;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
-import uk.co.recipes.service.impl.DefaultIngredientQuantityScoreBooster;
 
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
@@ -53,9 +52,12 @@ public class MyrrixUpdater implements IEventListener {
     ClientRecommender recommender;
 
     @Inject
-    // FIXME FIXME - Why doesn't injection work here?
-    IIngredientQuantityScoreBooster booster = new DefaultIngredientQuantityScoreBooster();
+    IIngredientQuantityScoreBooster booster;
 
+
+    public MyrrixUpdater() {
+    	// For Dagger
+    }
 
     // Yuk: why can't Dagger do @PostConstruct ?
     public void startListening() {
