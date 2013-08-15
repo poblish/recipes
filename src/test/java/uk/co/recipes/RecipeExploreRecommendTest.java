@@ -5,7 +5,7 @@ package uk.co.recipes;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static uk.co.recipes.metrics.MetricNames.COUNTER_RECIPES_PUTS;
+import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_PUTS;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -107,7 +107,7 @@ public class RecipeExploreRecommendTest {
         	Thread.sleep(200); // Wait for saves to appear...
         }
 
-        assertThat( metrics.counter(COUNTER_RECIPES_PUTS).getCount(), is((long) count));
+        assertThat( metrics.timer(TIMER_RECIPES_PUTS).getCount(), is((long) count));
 	}
 
 	@Test

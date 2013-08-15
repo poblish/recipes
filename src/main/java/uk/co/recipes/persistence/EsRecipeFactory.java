@@ -138,8 +138,6 @@ public class EsRecipeFactory implements IRecipePersistence {
 			assertThat( resp.getStatusLine().getStatusCode(), isOneOf(201, 200));
 			EntityUtils.consume( resp.getEntity() );
 
-	        metrics.counter(COUNTER_RECIPES_PUTS).inc();
-
 			eventService.addRecipe(inRecipe);
 		}
 		catch (UnsupportedEncodingException e) {
