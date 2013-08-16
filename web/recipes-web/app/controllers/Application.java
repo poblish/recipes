@@ -80,4 +80,9 @@ public class Application extends Controller {
         	return ok(views.html.stats.render( "???", -1L, -1L, -1L, -1, -1));
         }
     }
+
+	public static Result oAuthDenied(final String providerKey) {
+		flash(/* FLASH_ERROR_KEY, */ "You need to accept the OAuth connection in order to use this website!");
+		return redirect(routes.Application.index());
+	}
 }
