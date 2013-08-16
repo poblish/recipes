@@ -1,61 +1,22 @@
 @(metrics: String, itemsCount: Long, recipesCount: Long, usersCount: Long, myrrixUsersCount: Integer, myrrixItemsCount: Integer)
 
 @main("Statistics") {
+	<section id="top">
+	    <div class="wrapper">
+	        <h1>Statistics</h1>
+	    </div>
+	</section>
+	
+	<p><em>If low, run RecipeExploreRecommendTest to install all Recipes and set up similarities</em></p>
+	
+	<p>ES Items: <span class="badge label-default">@itemsCount</span></p>
+	<p>ES Recipes: <span class="badge">@recipesCount</span></p>
+	<p>ES Users: <span class="badge">@usersCount</span></p>
+	<p>Ratings: <span class="badge">-</span></p>
+	<p>Myrrix Items: <span class="badge">@myrrixItemsCount</span></p>
+	<p>Myrrix Users: <span class="badge">@myrrixUsersCount</span> (almost certainly wrong - <a href="http://localhost:8080/">check here</a>)</p>
+	
+	<hr />
+	<h3>Metrics</h3>
+	<pre style="color:#933">@metrics</pre>
 }
-<!DOCTYPE html>
-
-<html>
-    <head>
-        <link rel="shortcut icon" type="image/png" href="/assets/images/favicon.png">
-		<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-		<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
-		<style>body { padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */ } span.label a { color: white; font-weight: normal; }</style>
-    </head>
-
-    <body>
-
-    <div class="navbar navbar-fixed-top navbar-inverse">
-	<div class="navbar-inner">
-		<div class="container">
-			<a class="btn btn-navbar">
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</a>
-			<a class="brand" href="index.jsp">Recipes 2013</a>
-			<ul class="nav">
-				<li class="active"><a href="index.jsp">Home</a></li>
-				<li><a href="/users/andrew_regan">User #1</a></li>
-				<li><a href="/recipes/noodles.txt">Recipes: One</a></li>
-				<li><a href="/recipes.html">Test 1</a></li>
-				<li><a href="/items/cognac">Items: One</a></li>
-				<li><a href="/stats.html">Stats</a></li>
-			</ul>
-			<form action="/search" class="navbar-search pull-right">
-			  <input type="text" name="input" class="search-query" placeholder="Search..." />
-			</form>
-		</div>
-	</div>
-	</div>
-
-<section id="top">
-    <div class="wrapper">
-        <h1>Statistics</h1>
-    </div>
-</section>
-
-<p><em>If low, run RecipeExploreRecommendTest to install all Recipes and set up similarities</em></p>
-
-<p>ES Items: <span class="badge label-default">@itemsCount</span></p>
-<p>ES Recipes: <span class="badge">@recipesCount</span></p>
-<p>ES Users: <span class="badge">@usersCount</span></p>
-<p>Ratings: <span class="badge">-</span></p>
-<p>Myrrix Items: <span class="badge">@myrrixItemsCount</span></p>
-<p>Myrrix Users: <span class="badge">@myrrixUsersCount</span> (almost certainly wrong - <a href="http://localhost:8080/">check here</a>)</p>
-
-<hr />
-<h3>Metrics</h3>
-<pre style="color:#933">@metrics</pre>
-
-</body>
-</html>
