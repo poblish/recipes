@@ -22,9 +22,9 @@ object ApplicationBuild extends Build {
 
     // See: https://github.com/joscha/play-authenticate/blob/master/samples/java/Getting%20Started.md
 
-    resolvers += "play-easymail (release)" at "http://joscha.github.com/play-easymail/repo/releases/",
-    resolvers += "play-easymail (snapshot)" at "http://joscha.github.com/play-easymail/repo/snapshots/",
-    resolvers += "play-authenticate (release)" at "http://joscha.github.com/play-authenticate/repo/releases/",
-    resolvers += "play-authenticate (snapshot)" at "http://joscha.github.com/play-authenticate/repo/snapshots/"
+    resolvers += Resolver.url("play-easymail (release)", url("http://joscha.github.com/play-easymail/repo/releases/"))(Resolver.ivyStylePatterns),
+    resolvers += Resolver.url("play-easymail (snapshot)", url("http://joscha.github.com/play-easymail/repo/snapshots/"))(Resolver.ivyStylePatterns),
+    resolvers += Resolver.url("play-authenticate (release)", url("http://joscha.github.com/play-authenticate/repo/releases/"))(Resolver.ivyStylePatterns),
+    resolvers += Resolver.url("play-authenticate (snapshot)", url("http://joscha.github.com/play-authenticate/repo/snapshots/"))(Resolver.ivyStylePatterns)
   )
 }
