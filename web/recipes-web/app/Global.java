@@ -47,9 +47,10 @@ public class Global extends GlobalSettings {
 
             @Override
             public Call auth(final String provider) {
-                // You can provide your own authentication implementation,
-                // however the default should be sufficient for most cases
-            	Logger.info("*** Calling Auth...");
+                // You can provide your own authentication implementation, however the default should be sufficient for most cases
+            	if (Logger.isTraceEnabled()) {
+            		Logger.trace("*** Calling Auth for '" + provider + "'");
+            	}
                 return com.feth.play.module.pa.controllers.routes.Authenticate.authenticate(provider);
             }
 
