@@ -6,8 +6,8 @@
         </encoder>
     </appender>
 
-    <logger name="com.example.metrics" level="ALL"/>
-    <logger name="uk.co.recipes" level="ALL"/>
+    <logger name="com.example.metrics" level="WARN"/>
+    <logger name="uk.co.recipes" level="DEBUG"/>
 
     <!-- Root Logger -->
     <root level="ALL">
