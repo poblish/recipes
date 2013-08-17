@@ -90,7 +90,7 @@ public class Global extends GlobalSettings {
 		return graph.get(inClass);
 	}
 
-	@Module( includes=DaggerModule.class, injects={controllers.Application.class, controllers.Recipes.class, controllers.Search.class, controllers.Tags.class, controllers.Users.class, controllers.Items.class}, overrides=true)
+	@Module( includes=DaggerModule.class, injects={controllers.Application.class, controllers.Recipes.class, controllers.Search.class, controllers.Tags.class, controllers.Users.class, controllers.Items.class})
 	static class RecipesWebAppModule {
 		
 	}
