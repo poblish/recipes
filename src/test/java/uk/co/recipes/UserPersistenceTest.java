@@ -71,17 +71,33 @@ public class UserPersistenceTest {
     }
 
     @Test
-    public void testPersistence() throws IOException {
+    public void testPersistenceWithAuth() throws IOException {
         final String testUName = "aregan_" + System.nanoTime();
         final String testDName = "Andrew Regan #" + System.nanoTime();
 
         final IUser u1 = new User( testUName, testDName);
+        u1.addAuth( new UserAuth( "google", "12345") );
+        u1.addAuth( new UserAuth( "google", "56789") );
+        u1.removeAuth( new UserAuth( "google", "12345") );
+        assertThat( u1.getAuths().size(), is(1));
+        assertThat( u1.getAuths().iterator().next().getId(), is("56789"));
+        userFactory.put( u1, userFactory.toStringId(u1));
+
+        final IUser retrievedUser = userFactory.getByName(testUName);
+        assertThat( newHashSet( u1.getAuths() ), is( newHashSet( retrievedUser.getAuths() ) ));
+    }
+
+    @Test
+    public void testPersistenceWithRatings() throws IOException {
+        final String testUName = "aregan_" + System.nanoTime();
+        final String testDName = "Andrew Regan #" + System.nanoTime();
+
+        final IUser u1 = new User( testUName, testDName);
+        userFactory.put( u1, userFactory.toStringId(u1));
         userRatings.addRating( u1, new ItemRating( itemFactory.get("ginger").get(), 8) );
         userRatings.addRating( u1, new RecipeRating( recipeFactory.get(TEST_RECIPE).get(), 6) );
         assertThat( u1.getItemRatings().size(), is(1));
         assertThat( u1.getRecipeRatings().size(), is(1));
-
-        userFactory.put( u1, userFactory.toStringId(u1));
 
         final IUser retrievedUser = userFactory.getByName(testUName);
         assertThat( newHashSet( u1.getItemRatings() ), is( newHashSet( retrievedUser.getItemRatings() ) ));

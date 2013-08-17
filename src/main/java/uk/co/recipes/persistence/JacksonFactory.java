@@ -13,6 +13,7 @@ import uk.co.recipes.Quantity;
 import uk.co.recipes.Recipe;
 import uk.co.recipes.RecipeStage;
 import uk.co.recipes.User;
+import uk.co.recipes.UserAuth;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IForkDetails;
 import uk.co.recipes.api.IIngredient;
@@ -22,6 +23,7 @@ import uk.co.recipes.api.IRecipeStage;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.IUnit;
 import uk.co.recipes.api.IUser;
+import uk.co.recipes.api.IUserAuth;
 import uk.co.recipes.api.Units;
 import uk.co.recipes.api.ratings.IItemRating;
 import uk.co.recipes.api.ratings.IRecipeRating;
@@ -89,6 +91,7 @@ public final class JacksonFactory {
         testModule.addAbstractTypeMapping( IRecipeRating.class, RecipeRating.class);
         testModule.addAbstractTypeMapping( IForkDetails.class, ForkDetails.class);
         testModule.addAbstractTypeMapping( IUser.class, User.class);
+        testModule.addAbstractTypeMapping( IUserAuth.class, UserAuth.class);
 
         inMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);  // When reading in ES hits, e.g. _index
         inMapper.configure(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS, false);

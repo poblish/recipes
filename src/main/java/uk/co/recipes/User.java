@@ -6,10 +6,12 @@ package uk.co.recipes;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Collection;
+import java.util.Set;
 
 import org.elasticsearch.common.Preconditions;
 
 import uk.co.recipes.api.IUser;
+import uk.co.recipes.api.IUserAuth;
 import uk.co.recipes.api.ratings.IItemRating;
 import uk.co.recipes.api.ratings.IRecipeRating;
 
@@ -36,6 +38,7 @@ public class User implements IUser {
     private String displayName;
     private final Collection<IItemRating> itemRatings = Sets.newHashSet();  // FIXME Be careful loading this, could be big
     private final Collection<IRecipeRating> recipeRatings = Sets.newHashSet();  // FIXME Be careful loading this, could be big
+	private final Set<IUserAuth> auths = Sets.newHashSet();
 
     @JsonCreator
     public User( @JsonProperty("userName") final String inUName, @JsonProperty("displayName") final String inDName) {
@@ -90,6 +93,28 @@ public class User implements IUser {
         recipeRatings.add(inRating);
     }
 
+
+	/* (non-Javadoc)
+	 * @see uk.co.recipes.api.IUser#addAuth(uk.co.recipes.api.IUserAuth)
+	 */
+	@Override
+	public void addAuth( final IUserAuth inAuth) {
+		auths.add(inAuth);
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.co.recipes.api.IUser#removeAuth(uk.co.recipes.api.IUserAuth)
+	 */
+	@Override
+	public boolean removeAuth( final IUserAuth inAuth) {
+		return auths.remove(inAuth);
+	}
+
+	@Override
+	public Set<IUserAuth> getAuths() {
+		return auths;
+	}
+
 //    @Override
 //    public void removeRating(IRating inRating) {
 //        ratings.remove(inRating);
@@ -120,6 +145,7 @@ public class User implements IUser {
                         .add( "id", ( id == UNSET_ID) ? "NEW" : Long.valueOf(id))
                         .add( "username", getUserName())
                         .add( "displayName", getDisplayName())
+                        .add( "auths", auths.isEmpty() ? null : auths)
 						.toString();
 	}
 }

@@ -4,6 +4,7 @@
 package uk.co.recipes.api;
 
 import java.util.Collection;
+import java.util.Set;
 
 import uk.co.recipes.api.ratings.IItemRating;
 import uk.co.recipes.api.ratings.IRecipeRating;
@@ -21,6 +22,10 @@ public interface IUser extends java.io.Serializable {
 
 	String getUserName();
     String getDisplayName();
+
+    void addAuth( IUserAuth auth);
+    boolean removeAuth( IUserAuth auth);
+    Set<IUserAuth> getAuths();
 
     void addRating( IItemRating inRating);
 	Collection<IItemRating> getItemRatings();
