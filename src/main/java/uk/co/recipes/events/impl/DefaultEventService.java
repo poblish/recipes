@@ -36,7 +36,9 @@ public class DefaultEventService implements IEventService {
     EventBus eventBus = /* FIXME - inject properly */ new AsyncEventBus( /* This will do for now! */ Executors.newSingleThreadExecutor() );
 
     public void addListener( final IEventListener inL) {
-    	LOG.info("=> Adding Listener " + inL + " to " + eventBus);
+    	if (LOG.isTraceEnabled()) {
+    		LOG.trace("=> Adding Listener " + inL + " to " + eventBus);
+    	}
         eventBus.register(inL);
     }
 
