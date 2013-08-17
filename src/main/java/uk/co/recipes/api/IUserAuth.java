@@ -11,6 +11,6 @@ package uk.co.recipes.api;
  */
 public interface IUserAuth {
 
-	String getId();
-	String getProvider();
+	String getAuthId();
+	String getAuthProvider();
 }

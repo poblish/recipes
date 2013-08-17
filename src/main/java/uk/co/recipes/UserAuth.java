@@ -26,16 +26,16 @@ public class UserAuth implements IUserAuth {
 	 * @param provider
 	 */
 	@JsonCreator
-	public UserAuth( @JsonProperty("provider") final String inProvider, @JsonProperty("id") final String inId) {
+	public UserAuth( @JsonProperty("authProvider") final String inProvider, @JsonProperty("authId") final String inId) {
 		this.provider = checkNotNull(inProvider);
 		this.id = checkNotNull(inId);
 	}
 
-	public String getId() {
+	public String getAuthId() {
 		return id;
 	}
 
-	public String getProvider() {
+	public String getAuthProvider() {
 		return provider;
 	}
 
