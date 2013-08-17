@@ -10,12 +10,14 @@ import java.util.Iterator;
 
 import javax.inject.Inject;
 
+import org.elasticsearch.action.admin.indices.stats.IndicesStatsRequestBuilder;
 import org.elasticsearch.client.Client;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
+import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 
 /**
@@ -66,4 +68,28 @@ public class EsUtils {
         return mapper.readTree( new URL( inBaseUrl + "/_count") ).get("count").asLong();
     	// FIXME Throws weird errors: return esClient.prepareCount(inIndex).execute().actionGet().count();
     }
+
+	public void waitUntilTypesRefreshed( final String... inTypes) {
+		final IndicesStatsRequestBuilder reqBuilder = esClient.admin().indices().prepareStats("recipe").setRefresh(true).setTypes(inTypes);
+		final long currCount = reqBuilder.execute().actionGet().getTotal().getRefresh().getTotal();
+		int waitsToGo = 10;
+
+//		LOG.info("Is... "  + currCount);
+
+		try {
+			do {
+				Thread.sleep(250);
+	//			LOG.info("Now... "  + reqBuilder.execute().actionGet().getTotal().getRefresh().getTotal() + ", waitsToGo = " + waitsToGo);
+				waitsToGo--;
+			}
+			while ( waitsToGo > 0 && reqBuilder.execute().actionGet().getTotal().getRefresh().getTotal() == currCount);
+		}
+		catch (InterruptedException e) {
+			Throwables.propagate(e)
+;		}
+
+		if ( waitsToGo <= 0) {
+			throw new RuntimeException("Timeout exceeded!");
+		}
+	}
 }
