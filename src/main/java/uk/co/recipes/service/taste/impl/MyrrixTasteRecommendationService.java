@@ -6,6 +6,7 @@ package uk.co.recipes.service.taste.impl;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import net.myrrix.client.ClientRecommender;
 
@@ -21,6 +22,7 @@ import uk.co.recipes.service.taste.api.ITasteRecommendationsAPI;
  * @author andrewregan
  *
  */
+@Singleton
 public class MyrrixTasteRecommendationService implements ITasteRecommendationsAPI {
 
 	@Inject

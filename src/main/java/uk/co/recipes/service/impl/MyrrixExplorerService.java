@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import net.myrrix.client.ClientRecommender;
 
@@ -29,6 +30,7 @@ import uk.co.recipes.service.taste.impl.MyrrixTasteSimilarityService;
  * @author andrewregan
  *
  */
+@Singleton
 public class MyrrixExplorerService implements IExplorerAPI {
 
 	@Inject

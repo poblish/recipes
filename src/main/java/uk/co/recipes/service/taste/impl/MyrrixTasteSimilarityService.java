@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import net.myrrix.client.ClientRecommender;
 
@@ -23,6 +24,7 @@ import uk.co.recipes.service.taste.api.ITasteSimilarityAPI;
  * @author andrewregan
  *
  */
+@Singleton
 public class MyrrixTasteSimilarityService implements ITasteSimilarityAPI {
 
 	@Inject

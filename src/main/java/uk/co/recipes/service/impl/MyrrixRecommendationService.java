@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import net.myrrix.client.ClientRecommender;
 
@@ -29,6 +30,7 @@ import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
  * @author andrewregan
  *
  */
+@Singleton
 public class MyrrixRecommendationService implements IRecommendationsAPI {
 
 	@Inject

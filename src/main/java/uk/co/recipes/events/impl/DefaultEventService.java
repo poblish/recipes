@@ -6,6 +6,7 @@ package uk.co.recipes.events.impl;
 import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ import com.google.common.eventbus.EventBus;
  * @author andrewregan
  *
  */
+@Singleton
 public class DefaultEventService implements IEventService {
 
 	private static final Logger LOG = LoggerFactory.getLogger( DefaultEventService.class );

@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Map.Entry;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import net.myrrix.client.ClientRecommender;
 
@@ -38,6 +39,7 @@ import com.google.common.eventbus.Subscribe;
  * @author andrewregan
  *
  */
+@Singleton
 public class MyrrixUpdater implements IEventListener {
 
 	private static final Logger LOG = LoggerFactory.getLogger( MyrrixUpdater.class );
