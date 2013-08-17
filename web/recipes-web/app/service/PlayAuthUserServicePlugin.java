@@ -4,6 +4,7 @@
 package service;
 
 import play.Application;
+import play.Logger;
 import uk.co.recipes.User;
 
 import com.feth.play.module.pa.service.UserServicePlugin;
@@ -29,6 +30,7 @@ public class PlayAuthUserServicePlugin extends UserServicePlugin {
 	 */
 	@Override
 	public Object getLocalIdentity( final AuthUserIdentity inUser) {
+		Logger.info("getLocalIdentity() for " + inUser);
 		return new User("aregan", "Andrew Regan");
 	}
 
