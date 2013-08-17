@@ -1,6 +1,9 @@
 package uk.co.recipes.service.api;
 
+import java.io.IOException;
+
 import uk.co.recipes.api.IUser;
+import uk.co.recipes.api.IUserAuth;
 
 import com.google.common.base.Optional;
 
@@ -12,5 +15,7 @@ import com.google.common.base.Optional;
  */
 public interface IUserPersistence extends IPersistenceAPI<IUser> {
 
-	Optional<IUser> findWithAuth( final String inProvider, final String inId);
+    void waitUntilRefreshed();
+
+	Optional<IUser> findWithAuth( final IUserAuth inAuth) throws IOException;
 }

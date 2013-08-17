@@ -3,6 +3,7 @@
  */
 package uk.co.recipes.persistence;
 
+import static org.elasticsearch.index.query.QueryBuilders.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -22,9 +24,11 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.indices.TypeMissingException;
+import org.elasticsearch.search.SearchHit;
 
 import uk.co.recipes.User;
 import uk.co.recipes.api.IUser;
+import uk.co.recipes.api.IUserAuth;
 import uk.co.recipes.service.api.IUserPersistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -187,4 +191,30 @@ public class EsUserFactory implements IUserPersistence {
     public long countAll() throws IOException {
         return esUtils.countAll(usersIndexUrl);
     }
+
+	public void waitUntilRefreshed() {
+		esUtils.waitUntilTypesRefreshed("users");
+	}
+
+	@Override
+	public Optional<IUser> findWithAuth( final IUserAuth inAuth) throws IOException {
+        try {
+			final SearchHit[] hits = esClient.prepareSearch("recipe").setTypes("users").setQuery( boolQuery().must( fieldQuery( "authId", inAuth.getAuthId() )).must( fieldQuery( "authProvider", inAuth.getAuthProvider()) ) ).setSize(2).execute().get().getHits().hits();
+			if ( hits.length > 1) {
+				throw new RuntimeException("Too many matches for " + inAuth);
+			}
+
+			if ( hits.length == 0) {
+				return Optional.absent();
+			}
+
+            return Optional.of((IUser) mapper.readValue( hits[0].getSourceAsString(), User.class) );
+		}
+        catch (InterruptedException e) {
+        	throw Throwables.propagate(e);
+		}
+        catch (ExecutionException e) {
+			throw Throwables.propagate(e);
+		}
+	}
 }

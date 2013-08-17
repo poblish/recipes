@@ -46,16 +46,13 @@ public class UserPersistenceTest {
     private IUserPersistence userFactory = GRAPH.get( EsUserFactory.class );
     private EsSequenceFactory sequenceFactory = GRAPH.get( EsSequenceFactory.class );
 
-    private IEventListener updater = GRAPH.get( MyrrixUpdater.class );
 	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
 	private UserRatings userRatings = GRAPH.get( UserRatings.class );
 
 
     @BeforeClass
     public void cleanIndices() throws ClientProtocolException, IOException {
-        updater.startListening();
-
-        itemFactory.deleteAll();
+        userFactory.deleteAll();
         sequenceFactory.deleteAll();
     }
 
@@ -80,8 +77,12 @@ public class UserPersistenceTest {
         u1.addAuth( new UserAuth( "google", "56789") );
         u1.removeAuth( new UserAuth( "google", "12345") );
         assertThat( u1.getAuths().size(), is(1));
-        assertThat( u1.getAuths().iterator().next().getId(), is("56789"));
+        assertThat( u1.getAuths().iterator().next().getAuthId(), is("56789"));
         userFactory.put( u1, userFactory.toStringId(u1));
+
+        userFactory.waitUntilRefreshed();
+
+        assertThat( userFactory.findWithAuth( u1.getAuths().iterator().next() ).isPresent(), is(true));
 
         final IUser retrievedUser = userFactory.getByName(testUName);
         assertThat( newHashSet( u1.getAuths() ), is( newHashSet( retrievedUser.getAuths() ) ));
