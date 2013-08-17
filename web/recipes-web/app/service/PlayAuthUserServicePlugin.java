@@ -3,13 +3,25 @@
  */
 package service;
 
+import java.io.IOException;
+
 import play.Application;
 import play.Logger;
+import uk.co.recipes.DaggerModule;
 import uk.co.recipes.User;
+import uk.co.recipes.UserAuth;
+import uk.co.recipes.api.IUser;
+import uk.co.recipes.persistence.EsUserFactory;
+import uk.co.recipes.service.api.IUserPersistence;
 
 import com.feth.play.module.pa.service.UserServicePlugin;
 import com.feth.play.module.pa.user.AuthUser;
 import com.feth.play.module.pa.user.AuthUserIdentity;
+import com.google.common.base.Optional;
+import com.google.common.base.Throwables;
+
+import dagger.Module;
+import dagger.ObjectGraph;
 
 /**
  * "The combination of getId and getProvider from AuthUser can be used to identify an user"
@@ -18,6 +30,10 @@ import com.feth.play.module.pa.user.AuthUserIdentity;
  *
  */
 public class PlayAuthUserServicePlugin extends UserServicePlugin {
+
+	private static final ObjectGraph GRAPH = ObjectGraph.create( new RecipesWebAppModule() );  // FIXME Yuk!
+    private static final IUserPersistence USERS = GRAPH.get( EsUserFactory.class );  // FIXME Yuk!
+
 
 	public PlayAuthUserServicePlugin( final Application app) {
 		super(app);
@@ -30,8 +46,15 @@ public class PlayAuthUserServicePlugin extends UserServicePlugin {
 	 */
 	@Override
 	public Object getLocalIdentity( final AuthUserIdentity inUser) {
-		Logger.info("getLocalIdentity() for " + inUser);
-		return new User("aregan", "Andrew Regan");
+		try {
+			final Optional<IUser> theUser = USERS.findWithAuth( new UserAuth( inUser.getProvider(), inUser.getId() ) );
+			Logger.info("*** Loaded " + theUser);
+			return theUser.orNull();
+		}
+		catch (IOException e) {
+			Logger.error("ERROR: " + e);
+			return null;
+		}
 	}
 
 	/**
@@ -57,6 +80,7 @@ public class PlayAuthUserServicePlugin extends UserServicePlugin {
 	 */
 	@Override
 	public AuthUser update( final AuthUser inUser) {
+		Logger.info("*** Update for " + inUser);
 		return inUser;
 	}
 
@@ -66,6 +90,21 @@ public class PlayAuthUserServicePlugin extends UserServicePlugin {
 	 */
 	@Override
 	public Object save( final AuthUser inUser) {
-		throw new RuntimeException("unimpl");
+		final User newUser = new User( inUser.getId(), inUser.getId());
+		newUser.addAuth( new UserAuth( inUser.getProvider(), inUser.getId() ) );
+
+		try {
+			Logger.info("*** Try to save: " + inUser + " with " + newUser);
+			USERS.put( newUser, null);
+			return newUser;
+		}
+		catch (IOException e) {
+			throw Throwables.propagate(e);
+		}
+	}
+
+	@Module( includes=DaggerModule.class, injects={})
+	static class RecipesWebAppModule {
+		
 	}
 }
