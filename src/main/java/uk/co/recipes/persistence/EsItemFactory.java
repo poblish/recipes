@@ -80,18 +80,17 @@ public class EsItemFactory implements IItemPersistence {
         final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_PUTS).time();
 
 		final HttpPost req = new HttpPost( itemIndexUrl + "/" + inId); // URLEncoder.encode( inId, "UTF-8"));
+		HttpResponse resp = null;
 
 		try {
 			inItem.setId( sequences.getSeqnoForType("items_seqno") );
 
 			req.setEntity( new StringEntity( mapper.writeValueAsString(inItem) ) );
 
-			final HttpResponse resp = httpClient.execute(req);
+			resp = httpClient.execute(req);
 			if ( resp.getStatusLine().getStatusCode() != 201) {
 				throw new RuntimeException("Failure for '" + inId + "', code = " + resp.getStatusLine().getStatusCode());
 			}
-
-			EntityUtils.consume( resp.getEntity() );
 
 			eventService.addItem(inItem);
 		}
@@ -99,6 +98,7 @@ public class EsItemFactory implements IItemPersistence {
 			Throwables.propagate(e);
 		}
         finally {
+			EntityUtils.consume( resp.getEntity() );
             timerCtxt.stop();
         }
 

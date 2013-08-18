@@ -128,15 +128,18 @@ public class EsRecipeFactory implements IRecipePersistence {
 	    final long newId = sequences.getSeqnoForType("recipes_seqno") + Recipe.BASE_ID;
 
 	    final HttpPost req = new HttpPost( itemIndexUrl + "/" + newId);
+	    HttpResponse resp = null;
 
 		try {
 			inRecipe.setId(newId);
 
 			req.setEntity( new StringEntity( mapper.writeValueAsString(inRecipe) ) );
 
-			final HttpResponse resp = httpClient.execute(req);
-			assertThat( resp.getStatusLine().getStatusCode(), isOneOf(201, 200));
-			EntityUtils.consume( resp.getEntity() );
+			resp = httpClient.execute(req);
+
+			if ( resp.getStatusLine().getStatusCode() != 200 && resp.getStatusLine().getStatusCode() != 201) {
+				throw new RuntimeException("Unexpected status (" + resp.getStatusLine().getStatusCode() + ") for " + inRecipe);
+			}
 
 			eventService.addRecipe(inRecipe);
 		}
@@ -144,6 +147,7 @@ public class EsRecipeFactory implements IRecipePersistence {
 			Throwables.propagate(e);
 		}
         finally {
+			EntityUtils.consume( resp.getEntity() );
             timerCtxt.stop();
         }
 
