@@ -48,9 +48,13 @@ public class TestDataUtils {
 	}
 
 	public List<IIngredient> parseIngredientsFrom( final String inFilename) throws IOException {
+		return parseIngredientsFrom("src/test/resources/ingredients/" + inFilename);
+	}
+
+	public List<IIngredient> parseIngredientsFrom( final String inDir, final String inFilename) throws IOException {
 		final List<IIngredient> allIngredients = Lists.newArrayList();
 
-		for ( String eachLine : Files.readLines( new File("src/test/resources/ingredients/" + inFilename), Charset.forName("utf-8"))) {
+		for ( String eachLine : Files.readLines( new File( inDir + inFilename), Charset.forName("utf-8"))) {
 
 			if (eachLine.isEmpty() || eachLine.startsWith("// ")) {
 				continue;
