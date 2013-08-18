@@ -72,9 +72,7 @@ public class RecipeCrawlTest {
                                                           + "|rm|smil|wmv|swf|wma|zip|rar|gz))$");
 
         /**
-         * You should implement this function to specify whether
-         * the given url should be crawled or not (based on your
-         * crawling logic).
+         * You should implement this function to specify whether the given url should be crawled or not (based on your crawling logic).
          */
         @Override
         public boolean shouldVisit(WebURL url) {
@@ -83,16 +81,13 @@ public class RecipeCrawlTest {
         }
 
         /**
-         * This function is called when a page is fetched and ready 
-         * to be processed by your program.
+         * This function is called when a page is fetched and ready to be processed by your program.
          */
         @Override
         public void visit(Page page) {          
-            String url = page.getWebURL().getURL();
-//            System.out.println("URL: " + url);
-
             try {
-            	Document doc = Jsoup.connect(url).get();
+                final String url = page.getWebURL().getURL();
+                final Document doc = Jsoup.connect(url).get();
 
             	final String title = doc.select("header.recipe-header h1").text();
             	if (title.isEmpty()) {
@@ -102,12 +97,10 @@ public class RecipeCrawlTest {
             	final StringBuilder sb = new StringBuilder(800);
             	sb.append("// ").append(title).append("\n");
             	sb.append("// ").append(url).append("\n");
-//            	System.out.println("Head: " + doc.select("header.recipe-header h1").text() );
+
             	for ( Element each : doc.select("section#recipe-ingredients div li")) {
-//                	System.out.println("Text: " + each.text() );
                 	sb.append( each.text() ).append("\n");
             	}
-//            	System.out.println("Text: " + doc.select("section#recipe-ingredients div li").text() );
 
             	Files.write( sb.toString(), new File("/Users/andrewregan/Development/java/recipe_explorer/src/test/resources/ingredients/bbcgoodfood/" + title.toLowerCase().replace(' ', '_') + ".txt"), Charset.forName("utf-8"));
 			}
