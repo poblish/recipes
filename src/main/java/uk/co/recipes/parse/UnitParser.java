@@ -75,6 +75,10 @@ public final class UnitParser {
 			return Units.STICK;
 		}
 
+		if (s.startsWith("DROP")) {
+			return Units.DROP;
+		}
+
 		return Units.valueOf( s.replace(' ', '_') );
 	}
 }

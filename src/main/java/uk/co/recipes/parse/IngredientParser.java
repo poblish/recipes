@@ -38,8 +38,8 @@ public class IngredientParser {
 	private static final String	SUFFIX = "([\\p{L}- ]*)" + NOTES;
 
 	private static final Pattern	A = Pattern.compile( DEC_FRAC_NUMBER_PATTERN + "( ?kg|g|gms| ?pounds?| ?lbs?\\.?| ?oz\\.?|cm|-in|-inch|mm|ml| litres?| ?quarts?| cups?| ?bunch(?:es)?| sticks?| heaped tbsps?| tablespoons?| tbsp[s\\.]?| tsp[s\\.]?| teaspoons?| ?handfuls?| cloves?)? " + SUFFIX, Pattern.CASE_INSENSITIVE);
-	private static final Pattern	B = Pattern.compile("((generous|small|large|thumb-sized?) (splash|bunch|glass|piece|knob of?)) " + SUFFIX, Pattern.CASE_INSENSITIVE);
-	private static final Pattern	C = Pattern.compile("(juice|zest|zest and juice) ([0-9]+) " + SUFFIX, Pattern.CASE_INSENSITIVE);
+	private static final Pattern	B = Pattern.compile("((?:a )?(few |generous |good |large |small |thumb-sized? )?(splash|bunch|drops?|glass|handful|piece|knob|pinch|splash)(?: of)?) " + SUFFIX, Pattern.CASE_INSENSITIVE);
+	private static final Pattern	C = Pattern.compile("(juice|zest|zest of|zest and juice) ([0-9]+) " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	D = Pattern.compile("(nutmeg|parmesan|salt|salt and pepper.*|beaten egg|.*cream)" + NOTES, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	E = Pattern.compile("((?:dressed|steamed|cooked|sliced|sweet|roughly chopped) [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);
 
@@ -71,7 +71,18 @@ public class IngredientParser {
 			m = B.matcher(adjustedStr);
 			if (m.matches()) {
 				final NameAdjuster na = new NameAdjuster();
-				final Ingredient ingr = new Ingredient( findItem( na.adjust( m.group(4).trim() ) ), new Quantity( UnitParser.parse( m.group(3) ), NonNumericQuantityParser.parse( m.group(2).trim().toUpperCase() )));
+
+				final Quantity q;
+
+				final String nonNumericQ = m.group(2);
+				if ( nonNumericQ == null) {
+					q = new Quantity( UnitParser.parse( m.group(3) ), 1);
+				}
+				else {
+					q = new Quantity( UnitParser.parse( m.group(3) ), NonNumericQuantityParser.parse( nonNumericQ.trim().toUpperCase() ));
+				}
+
+				final Ingredient ingr = new Ingredient( findItem( na.adjust( m.group(4).trim() ) ), q);
 
 				final String note = m.group(5);
 				if ( note != null) {
