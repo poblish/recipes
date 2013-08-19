@@ -98,7 +98,7 @@ public class IngredientParser {
 				if (m.matches()) {
 					final NameAdjuster na = new NameAdjuster();
 					final Ingredient ingr = new Ingredient( findItem( na.adjust( m.group(3).trim() ) ), new Quantity( Units.INSTANCES, NumericAmountParser.parse( m.group(2) )));
-					ingr.addNote( ENGLISH, "Juice of");
+					ingr.addNote( ENGLISH, m.group(1).trim());
 					ingr.addNotes( ENGLISH, na.getExtraNotes());
 
 					return Optional.of(ingr);
