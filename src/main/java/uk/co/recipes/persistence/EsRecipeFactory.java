@@ -9,6 +9,7 @@ import static org.hamcrest.Matchers.isOneOf;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_NAME_GETS;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_PUTS;
 
+import org.apache.http.entity.ContentType;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -133,7 +134,7 @@ public class EsRecipeFactory implements IRecipePersistence {
 		try {
 			inRecipe.setId(newId);
 
-			req.setEntity( new StringEntity( mapper.writeValueAsString(inRecipe) ) );
+			req.setEntity( new StringEntity( mapper.writeValueAsString(inRecipe), ContentType.APPLICATION_JSON) );
 
 			resp = httpClient.execute(req);
 

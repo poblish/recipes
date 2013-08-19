@@ -8,6 +8,8 @@ import static org.elasticsearch.index.query.QueryBuilders.matchPhraseQuery;
 import static org.elasticsearch.search.sort.SortOrder.DESC;
 import static uk.co.recipes.metrics.MetricNames.*;
 
+import org.apache.http.entity.ContentType;
+import java.net.URLEncoder;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -79,13 +81,13 @@ public class EsItemFactory implements IItemPersistence {
 	public ICanonicalItem put( final ICanonicalItem inItem, String inId) throws IOException {
         final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_PUTS).time();
 
-		final HttpPost req = new HttpPost( itemIndexUrl + "/" + inId); // URLEncoder.encode( inId, "UTF-8"));
+		final HttpPost req = new HttpPost( itemIndexUrl + "/" + URLEncoder.encode( inId, "UTF-8"));
 		HttpResponse resp = null;
 
 		try {
 			inItem.setId( sequences.getSeqnoForType("items_seqno") );
 
-			req.setEntity( new StringEntity( mapper.writeValueAsString(inItem) ) );
+			req.setEntity( new StringEntity( mapper.writeValueAsString(inItem), ContentType.APPLICATION_JSON) );
 
 			resp = httpClient.execute(req);
 			if ( resp.getStatusLine().getStatusCode() != 201) {

@@ -35,7 +35,7 @@ public class IngredientParser {
 
 	private static final String	DEC_FRAC_NUMBER_PATTERN = "([0-9\\.]*(?: ?[0-9]/[0-9])?)";
 	private static final String	NOTES = "([,;\\(].*)?";
-	private static final String	SUFFIX = "([\\w- ]*)" + NOTES;
+	private static final String	SUFFIX = "([\\p{L}- ]*)" + NOTES;
 
 	private static final Pattern	A = Pattern.compile( DEC_FRAC_NUMBER_PATTERN + "( ?kg|g|gms| ?pounds?| ?lbs?\\.?| ?oz\\.?|cm|-in|-inch|mm|ml| litres?| ?quarts?| cups?| ?bunch(?:es)?| sticks?| heaped tbsps?| tablespoons?| tbsp[s\\.]?| tsp[s\\.]?| teaspoons?| ?handfuls?| cloves?)? " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	B = Pattern.compile("((generous|small|large|thumb-sized?) (splash|bunch|glass|piece|knob of?)) " + SUFFIX, Pattern.CASE_INSENSITIVE);
