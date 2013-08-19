@@ -3,16 +3,16 @@ package uk.co.recipes;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static uk.co.recipes.tags.CommonTags.*;
-
+import java.io.File;
+import java.nio.charset.Charset;
+import com.google.common.io.Files;
 import java.io.IOException;
 import java.util.List;
-
 import org.apache.http.client.ClientProtocolException;
 import org.elasticsearch.client.Client;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.cats.Categorisation;
@@ -164,64 +164,23 @@ public class ParseIngredientsTest {
 	}
 
     @Test
-    public void testParseFailures() {
-    	int numSuccesses = 0;
-    	numSuccesses += dataUtils.parseIngredient("100g beef or lamb").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("- 4 whole allspice berries").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("100g orzo pasta").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("salt and pepper to taste").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("x 400g cans chopped tomatoes").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("poached salmon fillets").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("bag watercress").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("1 tsp clear honey").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("1 tbsp mild curry powder").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("100g smooth peanut butter").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("pack skinless chicken breast fillets").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("100ml coconut milk").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("rice and lime wedges").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("sweet chilli sauce (optional)").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("100g caster sugar or vanilla sugar").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("1 tsp vanilla extract").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("brown rice noodles").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("chicken or fish stock").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("Thai red curry paste").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("or fresh kaffir lime leaves").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("100g white fish").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("100g espresso or strong instant coffee").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("tub mascarpone").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("pot double cream").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("1 tbsp wholegrain mustard").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("shoulder of lamb").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("2.5 kg British pork loin").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("sprigs fresh oregano").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("x 130g twin-pack cubetti di pancetta").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("100ml Water or Chicken Stock").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("100g white onions finely chopped").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("1 tbsp Ginger Puree").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("1 tbsp Garlic Puree").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("100g Carrots boiled and pureed").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("1 tbsp Pureed Onion").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("Water or Prawn Stock").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("Pineapple Juice and 100ml Mango Chutney").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("1 tbsp Pureed Lentils").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("coriander leaves to garnish").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("100g coconut grated").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("piece of fresh ginger").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("Chinese cooking wine or dry sherry").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("steamed bok choi and steamed basmati rice").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("lamb neck fillets").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("lamb or beef stock").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("pack coriander").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("100g white breadcrumbs").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("100g egg noodles").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("sliced chillies to taste (optional)").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("bunch basil").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("white fish fillets").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("100g strong beef stock").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("venison chuck").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("plus 1 tablespoon softened butter").isPresent() ? 1 : 0;
-    	numSuccesses += dataUtils.parseIngredient("100g all-purpose flour").isPresent() ? 1 : 0;
-    	// assertThat( numSuccesses, is(55));
+    public void testParseFailures() throws IOException {
+        int numSuccesses = 0;
+        for ( String eachLine : Files.readLines( new File("src/test/resources/parse_failures.txt"), Charset.forName("utf-8"))) {
+            try {
+                if (dataUtils.parseIngredient(eachLine).isPresent()) {
+                    numSuccesses++;
+                }
+                else {
+                    System.err.println("Could not parse: " + eachLine);
+                }
+            }
+            catch (RuntimeException e) {
+                System.err.println("Actual error: " + e);
+            }
+        }
+
+    	assertThat( numSuccesses, is(420));
     }
 
 	@AfterClass
