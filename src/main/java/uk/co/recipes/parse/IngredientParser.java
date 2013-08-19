@@ -43,9 +43,11 @@ public class IngredientParser {
 	private static final Pattern	D = Pattern.compile("(nutmeg|parmesan|salt|salt and pepper.*|beaten egg|.*cream)" + NOTES, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	E = Pattern.compile("((?:dressed|steamed|cooked|sliced|sweet|roughly chopped) [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);
 
-	public Optional<Ingredient> parse( final String inStr) {
+	public Optional<Ingredient> parse( final String inRawStr) {
 
-		Matcher m = A.matcher(inStr);
+	    final String adjustedStr = new FractionReplacer().replaceFractions(inRawStr);
+
+		Matcher m = A.matcher(adjustedStr);
 		if (m.matches()) {
 			final NameAdjuster na = new NameAdjuster();
 
@@ -66,7 +68,7 @@ public class IngredientParser {
 			return Optional.of(ingr);
 		}
 		else {
-			m = B.matcher(inStr);
+			m = B.matcher(adjustedStr);
 			if (m.matches()) {
 				final NameAdjuster na = new NameAdjuster();
 				final Ingredient ingr = new Ingredient( findItem( na.adjust( m.group(4).trim() ) ), new Quantity( UnitParser.parse( m.group(3) ), NonNumericQuantityParser.parse( m.group(2).trim().toUpperCase() )));
@@ -81,7 +83,7 @@ public class IngredientParser {
 				return Optional.of(ingr);
 			}
 			else {
-				m = C.matcher(inStr);
+				m = C.matcher(adjustedStr);
 				if (m.matches()) {
 					final NameAdjuster na = new NameAdjuster();
 					final Ingredient ingr = new Ingredient( findItem( na.adjust( m.group(3).trim() ) ), new Quantity( Units.INSTANCES, NumericAmountParser.parse( m.group(2) )));
@@ -91,7 +93,7 @@ public class IngredientParser {
 					return Optional.of(ingr);
 				}
 				else {
-					m = D.matcher(inStr);
+					m = D.matcher(adjustedStr);
 					if (m.matches()) {
 						final NameAdjuster na = new NameAdjuster();
 						final Ingredient ingr = new Ingredient( findItem( na.adjust( m.group(1).trim() ) ), new Quantity( Units.INSTANCES, 1));
@@ -106,7 +108,7 @@ public class IngredientParser {
 						return Optional.of(ingr);
 					}
 					else {
-						m = E.matcher(inStr);
+						m = E.matcher(adjustedStr);
 						if (m.matches()) {
 							final NameAdjuster na = new NameAdjuster();
 							final Ingredient ingr = new Ingredient( findItem( na.adjust( m.group(1).trim() ) ), new Quantity( Units.INSTANCES, NonNumericQuantities.ANY_AMOUNT));
