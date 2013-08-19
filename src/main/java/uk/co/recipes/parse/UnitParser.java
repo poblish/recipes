@@ -47,6 +47,10 @@ public final class UnitParser {
 			return Units.OUNCES;
 		}
 
+		if (s.equals("L")) {
+			return Units.LITRE;
+		}
+
 		if (s.equals("IN")) {
 			return Units.INCH;
 		}
