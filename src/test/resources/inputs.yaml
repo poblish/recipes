@@ -60,10 +60,7 @@
 ---
 {    canonicalName: Mild Curry Powder, parent: Curry Powder}
 ---
-{canonicalName: Fennel Seed, tags: {SPICE, SEED}}
----
-# FIXME Got to handle plurals properly!
-{canonicalName: Fennel Seeds, tags: {SPICE, SEED}}
+{canonicalName: Fennel Seeds, tags: {SPICE, SEED}, aliases: {Fennel Seed}}
 ---
 {canonicalName: Garam Masala, tags: {SPICE, INDIAN}, aliases: {Garam Masala Powder}}
 ---
@@ -132,17 +129,11 @@
 ---
 {canonicalName: Cabbage, tags: VEGETABLE, aliases: {Green Cabbage}}
 ---
-{canonicalName: Carrot, tags: VEGETABLE}
----
-# FIXME Got to handle plurals properly!
-{    canonicalName: Carrots, tags: VEGETABLE}
+{canonicalName: Carrot, tags: VEGETABLE, aliases: {Carrots}}
 ---
 {canonicalName: Celeriac, tags: VEGETABLE}
 ---
-{canonicalName: Celery, tags: VEGETABLE}
----
-# FIXME Got to handle plurals properly!
-{    canonicalName: Celery Sticks, parent: Celery}
+{canonicalName: Celery, tags: VEGETABLE, aliases: {Celery Stick, Celery Sticks}}
 ---
 {canonicalName: Courgette, tags: VEGETABLE}
 ---
@@ -162,10 +153,7 @@
 ---
 {    canonicalName: White Mushrooms, parent: Mushrooms}
 ---
-{canonicalName: Onion, tags: VEGETABLE}
----
-# FIXME Got to handle plurals properly!
-{    canonicalName: Onions, tags: VEGETABLE}
+{canonicalName: Onion, tags: VEGETABLE, aliases: {Onions}}
 ---
 {    canonicalName: Baby Onions, parent: Onion}
 ---
@@ -177,7 +165,6 @@
 ---
 {    canonicalName: Shallot, parent: Onion, aliases: {Shallots}}
 ---
-# FIXME Got to handle plurals properly!
 {    canonicalName: Spring Onions, parent: Onion}
 ---
 {canonicalName: Pak Choi, tags: {VEGETABLE, CHINESE}}
@@ -210,7 +197,7 @@
 ---
 {canonicalName: Grapefruit, tags: {FRUIT, CITRUS}}
 ---
-{canonicalName: Lemon, tags: {FRUIT, CITRUS}}
+{canonicalName: Lemon, tags: {FRUIT, CITRUS}, aliases: {Lemons}}
 ---
 {canonicalName: Lime, tags: {FRUIT, CITRUS}}
 ---
