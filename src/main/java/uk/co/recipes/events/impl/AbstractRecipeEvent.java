@@ -25,9 +25,9 @@ public abstract class AbstractRecipeEvent implements Serializable {
     private final IRecipe recipe;
     private final float rating;
 
-    public AbstractRecipeEvent(IUser user, IRecipe inItem, float inRating) {
+    public AbstractRecipeEvent(IUser user, IRecipe inRecipe, float inRating) {
         this.user = user;
-        this.recipe = checkNotNull(inItem);
+        this.recipe = checkNotNull( inRecipe, "Recipe cannot be null");
         this.rating = inRating;
     }
 
