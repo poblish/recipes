@@ -8,6 +8,8 @@
 
 {canonicalName: Chocolate}
 ---
+{    canonicalName: Plain Chocolate, parent: Chocolate}
+---
 
 
 {canonicalName: Baking Powder, aliases: {Cocoa Powder}}
@@ -17,6 +19,8 @@
 
 
 {canonicalName: Basil, tags: {HERB, ITALIAN}}
+---
+{    canonicalName: Fresh Basil, parent: Basil, aliases: {Basil Leaves}}
 ---
 {canonicalName: Bay Leaf, tags: HERB, aliases: {Bay Leaves}}
 ---
@@ -36,7 +40,11 @@
 ---
 {canonicalName: Rosemary, tags: HERB, aliases: {Rosemary Sprigs}}
 ---
+{canonicalName: Tarragon, tags: HERB}
+---
 {canonicalName: Thyme, tags: HERB}
+---
+{    canonicalName: Fresh Thyme, parent: Thyme, aliases: {Thyme Leaves, Thyme Sprig, Thyme Sprigs}}
 ---
 
 
@@ -51,6 +59,8 @@
 {    canonicalName: Green Cardamom, parent: Cardamom, aliases: {Green Cardamom Pods}}
 ---
 {canonicalName: Chilli Powder, tags: {SPICE, INDIAN}}
+---
+{    canonicalName: Red Chilli Powder, parent: Chilli Powder}
 ---
 {canonicalName: Chinese five-spice powder, tags: {SPICE, CHINESE}}
 ---
@@ -76,6 +86,8 @@
 ---
 {canonicalName: Ginger, tags: {SPICE, INDIAN, CHINESE}, aliases: {Root Ginger}}
 ---
+{    canonicalName: Ginger Paste, parent: Ginger}
+---
 {canonicalName: Mace, tags: SPICE}
 ---
 {canonicalName: Nutmeg, tags: SPICE}
@@ -97,6 +109,12 @@
 
 
 {canonicalName: Mustard Seeds, tags: {SEED}}
+---
+{    canonicalName: Black Mustard Seeds, parent: Mustard Seeds}
+---
+{    canonicalName: Brown Mustard Seeds, parent: Mustard Seeds}
+---
+{    canonicalName: Yellow Mustard Seeds, parent: Mustard Seeds, aliases: {White Mustard Seeds}}
 ---
 {canonicalName: Sizzling Seeds, tags: {SEED, INDIAN}}
 ---
@@ -134,6 +152,8 @@
 ---
 {    canonicalName: Basmati Rice, parent: Rice, tags: {INDIAN}}
 ---
+{    canonicalName: Risotto Rice, parent: Rice, tags: {ITALIAN, SPANISH}}
+---
 
 
 {canonicalName: Broccoli, tags: VEGETABLE}
@@ -152,15 +172,21 @@
 ---
 {canonicalName: Garlic Cloves, tags: VEGETABLE, aliases: {Garlic, Garlic Clove}}
 ---
+{    canonicalName: Garlic Paste, parent: Garlic Cloves}
+---
 {canonicalName: Green Beans, tags: VEGETABLE}
 ---
-{canonicalName: Leek, tags: VEGETABLE}
+{canonicalName: Leek, tags: VEGETABLE, aliases: {Leeks}}
+---
+{canonicalName: Mangetout, tags: VEGETABLE}
 ---
 {canonicalName: Mixed Leaves, tags: VEGETABLE}
 ---
 {canonicalName: Mushrooms, tags: VEGETABLE}
 ---
 {    canonicalName: Button Mushrooms, parent: Mushrooms}
+---
+{    canonicalName: Chestnut Mushrooms, parent: Mushrooms}
 ---
 {    canonicalName: White Mushrooms, parent: Mushrooms}
 ---
@@ -192,6 +218,8 @@
 ---
 {canonicalName: Potato, tags: VEGETABLE, aliases: {Potatoes}}
 ---
+{    canonicalName: New Potato, parent: Potato, aliases: {New Potatoes}}
+---
 {canonicalName: Spinach, tags: VEGETABLE}
 ---
 {    canonicalName: Baby Spinach, parent: Spinach}
@@ -208,11 +236,21 @@
 ---
 {    canonicalName: Tomato Paste, parent: Tomato, aliases: {Tomato Puree}}
 ---
+{canonicalName: Turnip, tags: VEGETABLE, aliases: {Turnips}}
+---
+
+
+{canonicalName: Chickpeas, tags: PULSE, aliases: {Chickpea, Garbanzo Bean}}
+---
+{canonicalName: Lentils, tags: PULSE, aliases: {Lentil}}
+---
 
 
 {canonicalName: Apple, tags: {FRUIT}}
 ---
-{canonicalName: Avocado, tags: {FRUIT, MEXICAN}}
+{canonicalName: Avocado, tags: {FRUIT, MEXICAN}, aliases: {Avocados}}
+---
+{canonicalName: Banana, tags: {FRUIT}, aliases: {Bananas}}
 ---
 {canonicalName: Coconut, tags: {FRUIT, NUT, INDIAN, THAI, VIETNAMESE}, aliases: {Coconut grated}}
 ---
@@ -222,9 +260,19 @@
 ---
 {canonicalName: Lemon, tags: {FRUIT, CITRUS}, aliases: {Lemons}}
 ---
+{    canonicalName: Lemon Juice, parent: Lemon}
+---
+{    canonicalName: Lemon Zest, parent: Lemon}
+---
 {canonicalName: Lime, tags: {FRUIT, CITRUS}}
 ---
+{    canonicalName: Lime Juice, parent: Lime}
+---
 {canonicalName: Orange, tags: {FRUIT, CITRUS}}
+---
+{    canonicalName: Orange Juice, parent: Orange}
+---
+{    canonicalName: Orange Zest, parent: Orange}
 ---
 {canonicalName: Pear, tags: {FRUIT}}
 ---
@@ -258,6 +306,12 @@
 ---
 
 
+{canonicalName: Couscous, tags: GRAIN}
+---
+{canonicalName: Quinoa, tags: GRAIN}
+---
+
+
 {canonicalName: Salt, tags: SALT}
 ---
 
@@ -270,7 +324,11 @@
 ---
 {    canonicalName: Granulated Sugar, parent: Sugar}
 ---
+{    canonicalName: Icing Sugar, parent: Sugar}
+---
 {    canonicalName: Brown Sugar, parent: Sugar}
+---
+{        canonicalName: Muscovado Sugar, parent: Brown Sugar}
 ---
 {        canonicalName: Light Muscovado Sugar, parent: Brown Sugar}
 ---
@@ -288,17 +346,21 @@
 ---
 
 
+{canonicalName: Feta, tags: {DAIRY, CHEESE, GREEK}, aliases: {Feta Cheese}}
+---
 {canonicalName: Mascarpone, tags: {DAIRY, CHEESE, ITALIAN}}
 ---
 {canonicalName: Parmesan, tags: {DAIRY, CHEESE, ITALIAN}}
 ---
 {canonicalName: Paneer, tags: {DAIRY, CHEESE, INDIAN}, aliases: {Paneer Cheese}}
 ---
+{canonicalName: Taleggio, tags: {DAIRY, CHEESE, ITALIAN}, aliases: {Taleggio Cheese}}
+---
 
 
 {canonicalName: Eggs, tags: EGG, aliases: {Egg}}
 ---
-{    canonicalName: Egg Yolks, parent: Egg}
+{    canonicalName: Egg Yolks, parent: Egg, aliases: {Egg Yolk}}
 ---
 
 
@@ -364,13 +426,19 @@
 ---
 {    canonicalName: Dijon Mustard, parent: Mustard}
 ---
+{    canonicalName: Wholegrain Mustard, parent: Mustard, aliases: {Grainy Mustard}}
+---
 {canonicalName: Vegetable Stock, tags: {VEGETABLE, SAUCE}}
 ---
 
 
 {canonicalName: Gnocchi, tags: {PASTA, ITALIAN}}
 ---
+{canonicalName: Linguine, tags: {PASTA, ITALIAN}}
+---
 {canonicalName: Orzo, tags: {PASTA, ITALIAN}, aliases: {Orzo Pasta}}
+---
+{canonicalName: Spaghetti, tags: {PASTA, ITALIAN}}
 ---
 
 
@@ -380,6 +448,10 @@
 ---
 
 
+{canonicalName: Anchovy, tags: {FISH,SEAFOOD}}
+---
+{canonicalName: Salmon, tags: {FISH,SEAFOOD}}
+---
 {canonicalName: Sea Bass, tags: {FISH,SEAFOOD}}
 ---
 {canonicalName: Sea Bream, tags: {FISH,SEAFOOD}}
@@ -398,6 +470,8 @@
 ---
 {    canonicalName: Minced Beef, parent: Beef, aliases: {Beef Mince}}
 ---
+{    canonicalName: Sirloin Steak, parent: Beef}
+---
 {canonicalName: Chicken, tags: {MEAT, POULTRY}}
 ---
 {    canonicalName: Chicken Mince, parent: Chicken}
@@ -411,6 +485,8 @@
 {canonicalName: Lamb, tags: MEAT}
 ---
 {    canonicalName: Lamb Shoulder, parent: Lamb, aliases: {Shoulder of Lamb}}
+---
+{    canonicalName: Leg of Lamb, parent: Lamb}
 ---
 {canonicalName: Pork, tags: MEAT}
 ---
