@@ -54,9 +54,21 @@ public class TestDataUtils {
 	public List<IIngredient> parseIngredientsFrom( final String inDir, final String inFilename) throws IOException {
 		final List<IIngredient> allIngredients = Lists.newArrayList();
 
+		String recipeTitle = null;
+		int lineNum = 0;
+
 		for ( String eachLine : Files.readLines( new File( inDir, inFilename), Charset.forName("utf-8"))) {
 
-			if (eachLine.isEmpty() || eachLine.startsWith("// ")) {
+			if (eachLine.isEmpty()) {
+				continue;
+			}
+
+			lineNum++;
+
+			if (eachLine.startsWith("// ")) {
+				if ( lineNum == 1) {
+					recipeTitle = eachLine.substring(3).trim();
+				}
 				continue;
 			}
 
@@ -87,6 +99,10 @@ public class TestDataUtils {
 
 		final Recipe r = new Recipe(adminUser, inFilename, Locale.UK);
 		r.addStage(stage1);
+
+		if ( recipeTitle != null) {
+			r.setTitle(recipeTitle);
+		}
 
 		recipeFactory.put( r, recipeFactory.toStringId(r));
 
