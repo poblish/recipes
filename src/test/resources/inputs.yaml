@@ -22,7 +22,11 @@
 ---
 {canonicalName: Coriander, tags: HERB, aliases: {Cilantro, Coriander Leaves}}
 ---
+{canonicalName: Curry Leaves, tags: {HERB, INDIAN}, aliases: {Curry Leaf}}
+---
 {canonicalName: Dill, tags: HERB}
+---
+{canonicalName: Fenugreek, tags: {HERB, INDIAN}}
 ---
 {canonicalName: Mixed Herbs, tags: HERB}
 ---
@@ -38,7 +42,13 @@
 
 {canonicalName: Allspice, tags: SPICE, aliases: {Allspice Berries}}
 ---
+{canonicalName: Asafoetida, tags: {SPICE, INDIAN}}
+---
 {canonicalName: Caraway Seeds, tags: {SPICE}}
+---
+{canonicalName: Cardamom, tags: {SPICE, INDIAN}, aliases: {Cardamom Pods}}
+---
+{    canonicalName: Green Cardamom, parent: Cardamom, aliases: {Green Cardamom Pods}}
 ---
 {canonicalName: Chilli Powder, tags: {SPICE, INDIAN}}
 ---
@@ -64,10 +74,9 @@
 ---
 {canonicalName: Garam Masala, tags: {SPICE, INDIAN}, aliases: {Garam Masala Powder}}
 ---
-{canonicalName: Ginger, tags: {SPICE, INDIAN, CHINESE}}
+{canonicalName: Ginger, tags: {SPICE, INDIAN, CHINESE}, aliases: {Root Ginger}}
 ---
-# FIXME This is surely a naming, not a child
-{canonicalName: Root Ginger, parent: Ginger}
+{canonicalName: Mace, tags: SPICE}
 ---
 {canonicalName: Nutmeg, tags: SPICE}
 ---
@@ -78,6 +87,8 @@
 {canonicalName: Black Pepper, tags: SPICE, parent: Pepper, aliases: {Pepper Powder, Black Pepper, Black Peppercorns, Ground Black Pepper}}
 ---
 {canonicalName: White Peppercorns, tags: SPICE, parent: Pepper}
+---
+{canonicalName: Saffron, tags: SPICE}
 ---
 {canonicalName: Star Anise, tags: {SPICE, CHINESE}}
 ---
@@ -97,7 +108,7 @@
 ---
 {    canonicalName: Red Chillies, parent: Chilli, tags: {INDIAN, THAI, CHINESE}, aliases: {Red Chilli}}
 ---
-{    canonicalName: Green Chillies, parent: Chilli, tags: {INDIAN, THAI, CHINESE}}
+{    canonicalName: Green Chillies, parent: Chilli, tags: {INDIAN, THAI, CHINESE}, aliases: {Green Chilli}}
 ---
 {    canonicalName: Ancho Chile, parent: Chilli, tags: {MEXICAN}, aliases: {Poblano}}
 ---
@@ -159,6 +170,8 @@
 ---
 {    canonicalName: Pearl Onions, parent: Onion}
 ---
+{    canonicalName: Red Onion, parent: Onion}
+---
 {    canonicalName: Spring Onion, parent: Onion}
 ---
 {    canonicalName: Yellow Onion, parent: Onion}
@@ -169,6 +182,8 @@
 ---
 {canonicalName: Pak Choi, tags: {VEGETABLE, CHINESE}}
 ---
+{canonicalName: Parsnip, tags: VEGETABLE, aliases: {Parsnips}}
+---
 {canonicalName: Red Pepper, tags: VEGETABLE}
 ---
 {canonicalName: Green Pepper, tags: VEGETABLE}
@@ -176,6 +191,14 @@
 {canonicalName: Yellow Pepper, tags: VEGETABLE}
 ---
 {canonicalName: Potato, tags: VEGETABLE, aliases: {Potatoes}}
+---
+{canonicalName: Spinach, tags: VEGETABLE}
+---
+{    canonicalName: Baby Spinach, parent: Spinach}
+---
+{canonicalName: Swede, tags: VEGETABLE}
+---
+{canonicalName: Sweet Potato, tags: VEGETABLE, aliases: {Sweet Potatoes}}
 ---
 {canonicalName: Tomato, tags: VEGETABLE, aliases: {Tomatoes}}
 ---
@@ -231,6 +254,8 @@
 ---
 {        canonicalName: Smooth Peanut Butter, parent: Peanut Butter}
 ---
+{canonicalName: Pistachios, tags: NUT, aliases: {Pistachio}}
+---
 
 
 {canonicalName: Salt, tags: SALT}
@@ -266,6 +291,8 @@
 {canonicalName: Mascarpone, tags: {DAIRY, CHEESE, ITALIAN}}
 ---
 {canonicalName: Parmesan, tags: {DAIRY, CHEESE, ITALIAN}}
+---
+{canonicalName: Paneer, tags: {DAIRY, CHEESE, INDIAN}, aliases: {Paneer Cheese}}
 ---
 
 
@@ -337,6 +364,8 @@
 ---
 {    canonicalName: Dijon Mustard, parent: Mustard}
 ---
+{canonicalName: Vegetable Stock, tags: {VEGETABLE, SAUCE}}
+---
 
 
 {canonicalName: Gnocchi, tags: {PASTA, ITALIAN}}
@@ -348,6 +377,18 @@
 {canonicalName: Prawns, tags: SEAFOOD}
 ---
 {    canonicalName: King Prawns, parent: Prawns}
+---
+
+
+{canonicalName: Sea Bass, tags: {FISH,SEAFOOD}}
+---
+{canonicalName: Sea Bream, tags: {FISH,SEAFOOD}}
+---
+{    canonicalName: Sea Bream Fillets, parent: Sea Bass}
+---
+{canonicalName: Tuna, tags: {FISH,SEAFOOD}}
+---
+{    canonicalName: Tuna Steaks, parent: Tuna}
 ---
 
 
