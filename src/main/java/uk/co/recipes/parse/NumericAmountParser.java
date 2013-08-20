@@ -15,7 +15,13 @@ public class NumericAmountParser {
 
 	// FIXME Should use http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math3/fraction/Fraction.html
 	public static int parse( final String inStr) {
-		if (inStr.contains(".")) {
+        if (inStr.contains("-")) {  // OK, we've got a numeric range. For now (FIXME!) just use the average
+            final int dashPos = inStr.indexOf("-");
+            final String left = inStr.substring( 0, dashPos).trim();
+            final String right = inStr.substring( dashPos + 1).trim();
+            return (int) Math.round(( Double.valueOf(left) + Double.valueOf(right)) / 2);
+        }
+        else if (inStr.contains(".")) {
 			Fraction f = new Fraction( Double.parseDouble(inStr) );
 			return f.intValue();  // FIXME FIXME
 		}

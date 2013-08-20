@@ -33,11 +33,13 @@ public class IngredientParser {
 	@Inject
 	EsItemFactory itemFactory;
 
-	private static final String	DEC_FRAC_NUMBER_PATTERN = "([0-9\\.]*(?: ?[0-9]/[0-9])?)";
+    private static final String DEC_FRAC_NUMBER_BIT = "[0-9\\.]*(?: ?[0-9]/[0-9])?";
+    private static final String DEC_FRAC_NUMBER_PATTERN = "(" + DEC_FRAC_NUMBER_BIT + ")";
+    private static final String DEC_FRAC_NUMBER_RANGE_PATTERN = "(" + DEC_FRAC_NUMBER_BIT + "(?: ?- ?" + DEC_FRAC_NUMBER_BIT + ")?)";
 	private static final String	NOTES = "([,;\\(].*)?";
 	private static final String	SUFFIX = "([\\p{L}- ]*)" + NOTES;
 
-	private static final Pattern	A = Pattern.compile( DEC_FRAC_NUMBER_PATTERN + "( ?kg|g|gms| ?pounds?| ?lbs?\\.?| ?oz\\.?|cm|-in|-inch|mm|ml|l| litres?| ?quarts?| cups?| ?bunch(?:es)?| sticks?| heaped tbsps?| tablespoons?| tbsp[s\\.]?| tsp[s\\.]?| teaspoons?| ?handfuls?| cloves?)? " + SUFFIX, Pattern.CASE_INSENSITIVE);
+	private static final Pattern	A = Pattern.compile( DEC_FRAC_NUMBER_RANGE_PATTERN + "( ?kg|g|gms| ?pounds?| ?lbs?\\.?| ?oz\\.?|cm|-in|-inch|mm|ml|l| litres?| ?quarts?| cups?| ?bunch(?:es)?| sticks?| heaped tbsps?| tablespoons?| tbsp[s\\.]?| tsp[s\\.]?| teaspoons?| ?handfuls?| cloves?)? " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	B = Pattern.compile("((?:a )?(few |generous |good |large |small |thumb-sized? )?(splash|bunch|dash|drizzle|drops?|few|glass|handful|little|piece|knob|pinch|splash|squeeze)(?: of)?) " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	C = Pattern.compile("(juice|juice and zest|(?:finely )?(?:grated )?zest|zest and juice)(?: of)? " + DEC_FRAC_NUMBER_PATTERN + " " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	D = Pattern.compile("(icing sugar|nutmeg|parmesan|salt|salt and pepper.*|beaten egg|.*cream)" + NOTES, Pattern.CASE_INSENSITIVE);
