@@ -3,6 +3,9 @@
  */
 package uk.co.recipes.service.impl;
 
+import static uk.co.recipes.metrics.MetricNames.TIMER_ITEMS_RECOMMENDATIONS;
+import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_RECOMMENDATIONS;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -23,6 +26,9 @@ import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
+
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
 
 /**
  * TODO
@@ -48,11 +54,17 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 	@Inject
 	MyrrixUpdater myrrixUpdater;
 
+	@Inject
+	MetricRegistry metrics;
+
+
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.service.api.IRecommendationsAPI#recommendIngredients(uk.co.recipes.api.IUser, int)
 	 */
 	@Override
 	public List<ICanonicalItem> recommendIngredients( IUser inUser, int inNumRecs) {
+	    final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_RECOMMENDATIONS).time();
+
 		try {
 			return itemsFactory.getAll( MyrrixUtils.getItems( recommender.recommend( inUser.getId(), inNumRecs, false, new String[]{"ITEM"}) ) );
 		}
@@ -62,6 +74,9 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
         catch (IOException e) {
             throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
         }
+        finally {
+            timerCtxt.stop();
+        }
 	}
 
 	/* (non-Javadoc)
@@ -69,6 +84,8 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 	 */
 	@Override
 	public List<IRecipe> recommendRecipes( IUser inUser, int inNumRecs) {
+	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_RECOMMENDATIONS).time();
+
 		try {
 			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.recommend( inUser.getId(), inNumRecs, false, new String[]{"RECIPE"}) ) );
 		}
@@ -78,6 +95,9 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 		catch (IOException e) {
 			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
 		}
+        finally {
+            timerCtxt.stop();
+        }
 	}		
 
 	@Override

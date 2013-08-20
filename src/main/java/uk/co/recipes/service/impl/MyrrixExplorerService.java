@@ -3,6 +3,9 @@
  */
 package uk.co.recipes.service.impl;
 
+import static uk.co.recipes.metrics.MetricNames.TIMER_ITEMS_MOSTSIMILAR;
+import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_MOSTSIMILAR;
+
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +26,9 @@ import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.service.api.IExplorerAPI;
 import uk.co.recipes.service.taste.impl.MyrrixTasteSimilarityService;
+
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
 
 /**
  * TODO
@@ -45,12 +51,17 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	@Inject
 	EsRecipeFactory recipesFactory;
 
+	@Inject
+	MetricRegistry metrics;
+
 
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.service.api.IExplorerAPI#similarIngredients(uk.co.recipes.api.IUser, int)
 	 */
 	@Override
 	public List<ICanonicalItem> similarIngredients( final ICanonicalItem inTarget, int inNumRecs) {
+	    final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_MOSTSIMILAR).time();
+
 		try {
 			return itemsFactory.getAll( MyrrixUtils.getItems( recommender.mostSimilarItems( new long[]{ inTarget.getId() }, inNumRecs, new String[]{"ITEM"}, /* "contextUserID" */ 0L) ) );
 		}
@@ -63,6 +74,9 @@ public class MyrrixExplorerService implements IExplorerAPI {
         catch (IOException e) {
             throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
         }
+        finally {
+            timerCtxt.stop();
+        }
 	}
 
 	/* (non-Javadoc)
@@ -70,6 +84,8 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	 */
 	@Override
 	public List<IRecipe> similarRecipes( final IRecipe inTarget, int inNumRecs) {
+	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_MOSTSIMILAR).time();
+
 		try {
 			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.mostSimilarItems( new long[]{ inTarget.getId() }, inNumRecs, new String[]{"RECIPE"}, /* "contextUserID" */ 0L) ) );
 		}
@@ -82,6 +98,9 @@ public class MyrrixExplorerService implements IExplorerAPI {
 		catch (IOException e) {
 			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
 		}
+        finally {
+            timerCtxt.stop();
+        }
 	}
 
 	/* (non-Javadoc)
