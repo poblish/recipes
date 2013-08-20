@@ -43,7 +43,8 @@ public class IngredientParser {
 	private static final Pattern	B = Pattern.compile("((?:a )?(few |generous |good |large |small |thumb-sized? )?(splash|bunch|dash|drizzle|drops?|few|glass|handful|little|piece|knob|pinch|splash|squeeze)(?: of)?) " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	C = Pattern.compile("(juice|juice and zest|(?:finely )?(?:grated )?zest|zest and juice)(?: of)? " + DEC_FRAC_NUMBER_PATTERN + " " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	D = Pattern.compile("(icing sugar|nutmeg|parmesan|salt|salt and pepper.*|beaten egg|.*cream)" + NOTES, Pattern.CASE_INSENSITIVE);
-	private static final Pattern	E = Pattern.compile("((?:dressed|steamed|cooked|sliced|sweet|roughly chopped) [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);
+    private static final Pattern    E = Pattern.compile("((?:dressed|steamed|cooked|sliced|sweet|roughly chopped) [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);
+    private static final Pattern    F = Pattern.compile(SUFFIX, Pattern.CASE_INSENSITIVE);
 
 	public Optional<Ingredient> parse( final String inRawStr) {
 
@@ -135,6 +136,23 @@ public class IngredientParser {
 
 							return Optional.of(ingr);
 						}
+	                    else {
+	                        m = F.matcher(adjustedStr);
+	                        if (m.matches()) {
+	                            final NameAdjuster na = new NameAdjuster();
+	                            final Ingredient ingr = new Ingredient( findItem( na.adjust( m.group(1).trim() ) ), new Quantity( Units.INSTANCES, NonNumericQuantities.ANY_AMOUNT));
+
+	                            final String note = m.group(2);
+	                            if ( note != null) {
+	                                ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
+	                            }
+
+	                            ingr.addNotes( ENGLISH, na.getExtraNotes());
+	                            System.out.println("... " + ingr);
+
+	                            return Optional.of(ingr);
+	                        }
+	                    }
 					}
 				}
 			}
