@@ -9,7 +9,6 @@ import static org.hamcrest.Matchers.isOneOf;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_NAME_GETS;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_PUTS;
 
-import org.apache.http.entity.ContentType;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -24,6 +23,7 @@ import javax.inject.Named;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 import org.elasticsearch.client.Client;

@@ -8,11 +8,10 @@ import static org.elasticsearch.index.query.QueryBuilders.matchPhraseQuery;
 import static org.elasticsearch.search.sort.SortOrder.DESC;
 import static uk.co.recipes.metrics.MetricNames.*;
 
-import org.apache.http.entity.ContentType;
-import java.net.URLEncoder;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,6 +21,7 @@ import javax.inject.Named;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 import org.elasticsearch.action.search.SearchResponse;

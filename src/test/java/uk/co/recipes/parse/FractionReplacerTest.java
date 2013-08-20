@@ -3,9 +3,10 @@
  */
 package uk.co.recipes.parse;
 
-import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+
+import org.testng.annotations.Test;
 
 
 /**
