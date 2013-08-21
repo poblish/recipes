@@ -15,6 +15,8 @@ public interface MetricNames {
 	String TIMER_RECIPES_RECOMMENDATIONS = "recipes.recommendations";
 	String TIMER_RECIPES_MOSTSIMILAR = "recipes.mostsimilar";
 
+    String TIMER_RECIPE_PARSE = "recipe.parse";
+
     String TIMER_ITEMS_NAME_GETS = "items.by_name.get";
     String TIMER_ITEMS_ID_GETS = "items.by_id.get";
     String TIMER_ITEMS_PUTS = "items.put";

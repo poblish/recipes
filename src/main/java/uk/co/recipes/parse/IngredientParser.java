@@ -4,6 +4,7 @@
 package uk.co.recipes.parse;
 
 import static java.util.Locale.ENGLISH;
+import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPE_PARSE;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,6 +20,8 @@ import uk.co.recipes.api.Units;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.tags.CommonTags;
 
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 
@@ -33,6 +36,9 @@ public class IngredientParser {
 	@Inject
 	EsItemFactory itemFactory;
 
+	@Inject
+	MetricRegistry metrics;
+
     private static final String DEC_FRAC_NUMBER_BIT = "[0-9\\.]*(?: ?[0-9]/[0-9])?";
     private static final String DEC_FRAC_NUMBER_PATTERN = "(" + DEC_FRAC_NUMBER_BIT + ")";
     private static final String DEC_FRAC_NUMBER_RANGE_PATTERN = "(" + DEC_FRAC_NUMBER_BIT + "(?: ?- ?" + DEC_FRAC_NUMBER_BIT + ")?)";
@@ -46,7 +52,19 @@ public class IngredientParser {
     private static final Pattern    E = Pattern.compile("((?:dressed|steamed|cooked|sliced|sweet|roughly chopped) [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);
     private static final Pattern    F = Pattern.compile(SUFFIX, Pattern.CASE_INSENSITIVE);
 
+
 	public Optional<Ingredient> parse( final String inRawStr) {
+	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPE_PARSE).time();
+
+        try {
+            return timedParse(inRawStr);
+        }
+        finally {
+            timerCtxt.stop();
+        }
+	}
+
+	private Optional<Ingredient> timedParse( final String inRawStr) {
 
 	    final String adjustedStr = new FractionReplacer().replaceFractions(inRawStr);
 
