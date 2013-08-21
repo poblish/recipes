@@ -3,17 +3,15 @@
  */
 package uk.co.recipes.service.impl;
 
+import org.apache.mahout.cf.taste.common.NoSuchUserException;
+import java.util.Collections;
 import com.google.common.base.Throwables;
 import java.io.IOException;
 import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import net.myrrix.client.ClientRecommender;
-
 import org.apache.mahout.cf.taste.common.TasteException;
-
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
@@ -56,6 +54,9 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 		try {
 			return itemsFactory.getAll( MyrrixUtils.getItems( recommender.recommend( inUser.getId(), inNumRecs, false, new String[]{"ITEM"}) ) );
 		}
+        catch (NoSuchUserException e) {
+            return Collections.emptyList();
+        }
         catch (TasteException e) {
             throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
         }
@@ -72,9 +73,12 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 		try {
 			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.recommend( inUser.getId(), inNumRecs, false, new String[]{"RECIPE"}) ) );
 		}
-		catch (TasteException e) {
-			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
-		}
+        catch (NoSuchUserException e) {
+            return Collections.emptyList();
+        }
+        catch (TasteException e) {
+            throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+        }
 		catch (IOException e) {
 			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
 		}
