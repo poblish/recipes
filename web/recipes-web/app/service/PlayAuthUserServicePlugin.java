@@ -147,8 +147,8 @@ public class PlayAuthUserServicePlugin extends UserServicePlugin {
 
 		try {
 			Logger.info("*** Try to save: " + inUser + " with " + newUser);
-			USERS.put( newUser, null);
 
+			USERS.put( newUser, /* Yuk: */ USERS.toStringId(newUser));
 			USERS.waitUntilRefreshed();  // Yuk, but if we don't do this, we might redirect to page + try to show Login details before User exists in index
 
 			return newUser;

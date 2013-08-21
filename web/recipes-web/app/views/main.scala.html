@@ -40,7 +40,7 @@
 		<p>
 		@defining(service.PlayAuthUserServicePlugin.getLocalUser(session())) { user =>
 			@if( user != null) {
-				Welcome, <strong>@user.getDisplayName()</strong>
+				Welcome, <a href="/users/@user.getUserName()">@user.getDisplayName()</a>
 			}
 		}
 		
