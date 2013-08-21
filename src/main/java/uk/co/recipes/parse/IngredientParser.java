@@ -174,6 +174,12 @@ public class IngredientParser {
 				if ( lcase.endsWith("seeds") || lcase.endsWith("seed")) {
 					item.addTag( CommonTags.SPICE );
 				}
+				else if (lcase.endsWith(" flour")) {
+					item.addTag( CommonTags.FLOUR );
+				}
+				else if (lcase.endsWith(" cheese")) {
+					item.addTag( CommonTags.CHEESE );
+				}
 
 				return item;
 			}
