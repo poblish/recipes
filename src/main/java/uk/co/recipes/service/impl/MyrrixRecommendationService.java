@@ -3,6 +3,7 @@
  */
 package uk.co.recipes.service.impl;
 
+import com.google.common.base.Throwables;
 import java.io.IOException;
 import java.util.List;
 
@@ -12,7 +13,6 @@ import javax.inject.Singleton;
 import net.myrrix.client.ClientRecommender;
 
 import org.apache.mahout.cf.taste.common.TasteException;
-import org.elasticsearch.common.base.Throwables;
 
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
