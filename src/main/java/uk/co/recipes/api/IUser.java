@@ -26,6 +26,7 @@ public interface IUser extends java.io.Serializable {
     String getDisplayName();
 
     String getEmail();
+    void setEmail( String email);
     boolean getEmailValidated();
 
     boolean isActive();

@@ -3,8 +3,10 @@
  */
 package service;
 
+import com.feth.play.module.pa.user.FirstLastNameIdentity;
+import com.feth.play.module.pa.user.NameIdentity;
+import com.feth.play.module.pa.user.EmailIdentity;
 import java.io.IOException;
-
 import play.Application;
 import play.Logger;
 import uk.co.recipes.DaggerModule;
@@ -13,13 +15,11 @@ import uk.co.recipes.UserAuth;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.service.api.IUserPersistence;
-
 import com.feth.play.module.pa.service.UserServicePlugin;
 import com.feth.play.module.pa.user.AuthUser;
 import com.feth.play.module.pa.user.AuthUserIdentity;
 import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
-
 import dagger.Module;
 import dagger.ObjectGraph;
 
@@ -92,6 +92,38 @@ public class PlayAuthUserServicePlugin extends UserServicePlugin {
 	public Object save( final AuthUser inUser) {
 		final User newUser = new User( inUser.getId(), inUser.getId());
 		newUser.addAuth( new UserAuth( inUser.getProvider(), inUser.getId() ) );
+
+		newUser.initLastLoginTime();
+
+        if (inUser instanceof EmailIdentity) {
+            final EmailIdentity identity = (EmailIdentity) inUser;
+            // Remember, even when getting them from FB & Co., emails should be verified within the application as a
+            // security breach there might break your security as well!
+            final String emailStr = identity.getEmail();
+            if ( emailStr != null && !emailStr.isEmpty()) {
+                newUser.setEmail(emailStr);
+            }
+        }
+
+        if (inUser instanceof NameIdentity) {
+            final NameIdentity identity = (NameIdentity) inUser;
+            final String name = identity.getName();
+            if (name != null) {
+//                newUser.name = name;
+            }
+        }
+
+        if (inUser instanceof FirstLastNameIdentity) {
+            final FirstLastNameIdentity identity = (FirstLastNameIdentity) inUser;
+            final String firstName = identity.getFirstName();
+            final String lastName = identity.getLastName();
+            if ( firstName != null && !firstName.isEmpty()) {
+                newUser.setFirstName(lastName);
+            }
+            if ( lastName != null && !lastName.isEmpty()) {
+                newUser.setLastName(lastName);
+            }
+        }
 
 		try {
 			Logger.info("*** Try to save: " + inUser + " with " + newUser);

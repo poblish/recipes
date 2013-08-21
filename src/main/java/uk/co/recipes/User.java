@@ -121,6 +121,57 @@ public class User implements IUser {
 		return auths;
 	}
 
+    @Override
+    public String getFirstName() {
+        return firstName;
+    }
+
+//    @Override
+    public void setFirstName( final String inName) {
+        firstName = inName;
+    }
+
+    @Override
+    public String getLastName() {
+        return lastName;
+    }
+
+//  @Override
+    public void setLastName(final String inName) {
+        lastName = inName;
+    }
+
+    @Override
+    public String getEmail() {
+        return email;
+    }
+
+    @Override
+    public void setEmail( final String inEmail) {
+        email = inEmail;
+        emailValidated = false;
+    }
+
+    @Override
+    public boolean getEmailValidated() {
+        return emailValidated;
+    }
+
+    @Override
+    public boolean isActive() {
+        return isActive;
+    }
+
+    @Override
+    public DateTime getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+//    @Override
+    public void initLastLoginTime() {
+        lastLoginTime = new DateTime();
+    }
+
 //    @Override
 //    public void removeRating(IRating inRating) {
 //        ratings.remove(inRating);
@@ -154,34 +205,4 @@ public class User implements IUser {
                         .add( "auths", auths.isEmpty() ? null : auths)
 						.toString();
 	}
-
-    @Override
-    public String getFirstName() {
-        return firstName;
-    }
-
-    @Override
-    public String getLastName() {
-        return lastName;
-    }
-
-    @Override
-    public String getEmail() {
-        return email;
-    }
-
-    @Override
-    public boolean getEmailValidated() {
-        return emailValidated;
-    }
-
-    @Override
-    public boolean isActive() {
-        return isActive;
-    }
-
-    @Override
-    public DateTime getLastLoginTime() {
-        return lastLoginTime;
-    }
 }
