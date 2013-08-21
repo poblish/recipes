@@ -108,8 +108,8 @@ public class PlayAuthUserServicePlugin extends UserServicePlugin {
         if (inUser instanceof NameIdentity) {
             final NameIdentity identity = (NameIdentity) inUser;
             final String name = identity.getName();
-            if (name != null) {
-//                newUser.name = name;
+            if ( name != null && !name.isEmpty()) {
+                newUser.setDisplayName(name);
             }
         }
 
@@ -118,7 +118,7 @@ public class PlayAuthUserServicePlugin extends UserServicePlugin {
             final String firstName = identity.getFirstName();
             final String lastName = identity.getLastName();
             if ( firstName != null && !firstName.isEmpty()) {
-                newUser.setFirstName(lastName);
+                newUser.setFirstName(firstName);
             }
             if ( lastName != null && !lastName.isEmpty()) {
                 newUser.setLastName(lastName);
@@ -128,6 +128,9 @@ public class PlayAuthUserServicePlugin extends UserServicePlugin {
 		try {
 			Logger.info("*** Try to save: " + inUser + " with " + newUser);
 			USERS.put( newUser, null);
+
+			USERS.waitUntilRefreshed();  // Yuk, but if we don't do this, we might redirect to page + try to show Login details before User exists in index
+
 			return newUser;
 		}
 		catch (IOException e) {
