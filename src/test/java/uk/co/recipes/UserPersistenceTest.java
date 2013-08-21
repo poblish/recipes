@@ -83,6 +83,7 @@ public class UserPersistenceTest {
         assertThat( userFactory.findWithAuth( u1.getAuths().iterator().next() ).isPresent(), is(true));
 
         final IUser retrievedUser = userFactory.getByName(testUName);
+        assertThat( retrievedUser.isActive(), is(true));
         assertThat( newHashSet( u1.getAuths() ), is( newHashSet( retrievedUser.getAuths() ) ));
     }
 
@@ -101,5 +102,9 @@ public class UserPersistenceTest {
         final IUser retrievedUser = userFactory.getByName(testUName);
         assertThat( newHashSet( u1.getItemRatings() ), is( newHashSet( retrievedUser.getItemRatings() ) ));
         assertThat( newHashSet( u1.getRecipeRatings() ), is( newHashSet( retrievedUser.getRecipeRatings() ) ));
+
+        userRatings.addRating( retrievedUser, new ItemRating( itemFactory.get("turmeric").get(), 7) );
+        assertThat( retrievedUser.getItemRatings().size(), is(2));
+        assertThat( retrievedUser.getRecipeRatings().size(), is(1));
     }
 }

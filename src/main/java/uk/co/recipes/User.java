@@ -4,17 +4,14 @@
 package uk.co.recipes;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-
+import org.joda.time.DateTime;
 import java.util.Collection;
 import java.util.Set;
-
 import org.elasticsearch.common.Preconditions;
-
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.api.IUserAuth;
 import uk.co.recipes.api.ratings.IItemRating;
 import uk.co.recipes.api.ratings.IRecipeRating;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
@@ -35,7 +32,16 @@ public class User implements IUser {
 	private long id = UNSET_ID;
 
     private String username;
+    private String firstName;
+    private String lastName;
     private String displayName;
+
+    private String email;
+    private boolean emailValidated;
+
+    private boolean isActive = true;
+    private DateTime lastLoginTime;
+
     private final Collection<IItemRating> itemRatings = Sets.newHashSet();  // FIXME Be careful loading this, could be big
     private final Collection<IRecipeRating> recipeRatings = Sets.newHashSet();  // FIXME Be careful loading this, could be big
 	private final Set<IUserAuth> auths = Sets.newHashSet();
@@ -71,6 +77,11 @@ public class User implements IUser {
     @Override
     public String getDisplayName() {
         return displayName;
+    }
+
+    // @Override
+    public void setDisplayName( final String inName) {
+        displayName = inName;
     }
 
     @Override
@@ -114,6 +125,57 @@ public class User implements IUser {
 	public Set<IUserAuth> getAuths() {
 		return auths;
 	}
+
+    @Override
+    public String getFirstName() {
+        return firstName;
+    }
+
+//    @Override
+    public void setFirstName( final String inName) {
+        firstName = inName;
+    }
+
+    @Override
+    public String getLastName() {
+        return lastName;
+    }
+
+//  @Override
+    public void setLastName(final String inName) {
+        lastName = inName;
+    }
+
+    @Override
+    public String getEmail() {
+        return email;
+    }
+
+    @Override
+    public void setEmail( final String inEmail) {
+        email = inEmail;
+        emailValidated = false;
+    }
+
+    @Override
+    public boolean getEmailValidated() {
+        return emailValidated;
+    }
+
+    @Override
+    public boolean isActive() {
+        return isActive;
+    }
+
+    @Override
+    public DateTime getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+//    @Override
+    public void initLastLoginTime() {
+        lastLoginTime = new DateTime();
+    }
 
 //    @Override
 //    public void removeRating(IRating inRating) {

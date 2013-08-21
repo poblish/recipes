@@ -37,10 +37,11 @@
 			</div>
 		</div>
 
-		<p>@currentAuth() { auth =>
-		    @if(auth != null) {
-			    Logged in with provider '@auth.getProvider()' and the user ID '@auth.getId()'&nbsp;<a href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout">Logout</a>
-		    } else {
+		<p>
+		@defining(service.PlayAuthUserServicePlugin.getLocalUser(session())) { user =>
+			@if( user != null) {
+				Welcome, <a href="/users/@user.getUserName()">@user.getDisplayName()</a>&nbsp;&nbsp;<a href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout">Logout</a>
+			} else {
 				Providers: @forProviders() { p =>
 				    <a href="@p.getUrl()">@p.getKey()</a>
 				}

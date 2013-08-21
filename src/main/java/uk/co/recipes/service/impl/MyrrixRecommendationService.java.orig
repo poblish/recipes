@@ -1,13 +1,17 @@
 /**
- *
+ * 
  */
 package uk.co.recipes.service.impl;
 
+<<<<<<< HEAD
 import static uk.co.recipes.metrics.MetricNames.TIMER_ITEMS_RECOMMENDATIONS;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_RECOMMENDATIONS;
+
+=======
 import org.apache.mahout.cf.taste.common.NoSuchUserException;
 import java.util.Collections;
 import com.google.common.base.Throwables;
+>>>>>>> 043edf71194e8604f970929517c3c89b5141ad8e
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
@@ -101,7 +105,7 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
         finally {
             timerCtxt.stop();
         }
-	}
+	}		
 
 	@Override
 	public List<Long> recommendIngredients( long inUser, int inNumRecs) {

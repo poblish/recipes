@@ -3,8 +3,12 @@
  */
 package service;
 
+import com.feth.play.module.pa.PlayAuthenticate;
+import play.mvc.Http.Session;
+import com.feth.play.module.pa.user.FirstLastNameIdentity;
+import com.feth.play.module.pa.user.NameIdentity;
+import com.feth.play.module.pa.user.EmailIdentity;
 import java.io.IOException;
-
 import play.Application;
 import play.Logger;
 import uk.co.recipes.DaggerModule;
@@ -13,13 +17,11 @@ import uk.co.recipes.UserAuth;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.service.api.IUserPersistence;
-
 import com.feth.play.module.pa.service.UserServicePlugin;
 import com.feth.play.module.pa.user.AuthUser;
 import com.feth.play.module.pa.user.AuthUserIdentity;
 import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
-
 import dagger.Module;
 import dagger.ObjectGraph;
 
@@ -38,6 +40,24 @@ public class PlayAuthUserServicePlugin extends UserServicePlugin {
 	public PlayAuthUserServicePlugin( final Application app) {
 		super(app);
 	}
+
+    public static IUser getLocalUser(final Session session) {
+        try {
+            final AuthUser currentAuthUser = PlayAuthenticate.getUser(session);
+            Logger.info("currentAuthUser: " + currentAuthUser);
+            if ( currentAuthUser == null) {
+                return null;
+            }
+
+            final Optional<IUser> theUser = USERS.findWithAuth( new UserAuth( currentAuthUser.getProvider(), currentAuthUser.getId() ) );
+            Logger.info("theUser: " + theUser);
+            return theUser.orNull();
+        }
+        catch (IOException e) {
+            Logger.error("ERROR: " + e);
+            return null;
+        }
+    }
 
 	/**
 	 * The getLocalIdentity function gets called on any login to check whether the session user still has a valid corresponding local
@@ -93,9 +113,44 @@ public class PlayAuthUserServicePlugin extends UserServicePlugin {
 		final User newUser = new User( inUser.getId(), inUser.getId());
 		newUser.addAuth( new UserAuth( inUser.getProvider(), inUser.getId() ) );
 
+		newUser.initLastLoginTime();
+
+        if (inUser instanceof EmailIdentity) {
+            final EmailIdentity identity = (EmailIdentity) inUser;
+            // Remember, even when getting them from FB & Co., emails should be verified within the application as a
+            // security breach there might break your security as well!
+            final String emailStr = identity.getEmail();
+            if ( emailStr != null && !emailStr.isEmpty()) {
+                newUser.setEmail(emailStr);
+            }
+        }
+
+        if (inUser instanceof NameIdentity) {
+            final NameIdentity identity = (NameIdentity) inUser;
+            final String name = identity.getName();
+            if ( name != null && !name.isEmpty()) {
+                newUser.setDisplayName(name);
+            }
+        }
+
+        if (inUser instanceof FirstLastNameIdentity) {
+            final FirstLastNameIdentity identity = (FirstLastNameIdentity) inUser;
+            final String firstName = identity.getFirstName();
+            final String lastName = identity.getLastName();
+            if ( firstName != null && !firstName.isEmpty()) {
+                newUser.setFirstName(firstName);
+            }
+            if ( lastName != null && !lastName.isEmpty()) {
+                newUser.setLastName(lastName);
+            }
+        }
+
 		try {
 			Logger.info("*** Try to save: " + inUser + " with " + newUser);
-			USERS.put( newUser, null);
+
+			USERS.put( newUser, /* Yuk: */ USERS.toStringId(newUser));
+			USERS.waitUntilRefreshed();  // Yuk, but if we don't do this, we might redirect to page + try to show Login details before User exists in index
+
 			return newUser;
 		}
 		catch (IOException e) {
