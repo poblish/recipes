@@ -3,6 +3,8 @@
  */
 package service;
 
+import com.feth.play.module.pa.PlayAuthenticate;
+import play.mvc.Http.Session;
 import com.feth.play.module.pa.user.FirstLastNameIdentity;
 import com.feth.play.module.pa.user.NameIdentity;
 import com.feth.play.module.pa.user.EmailIdentity;
@@ -38,6 +40,24 @@ public class PlayAuthUserServicePlugin extends UserServicePlugin {
 	public PlayAuthUserServicePlugin( final Application app) {
 		super(app);
 	}
+
+    public static IUser getLocalUser(final Session session) {
+        try {
+            final AuthUser currentAuthUser = PlayAuthenticate.getUser(session);
+            Logger.info("currentAuthUser: " + currentAuthUser);
+            if ( currentAuthUser == null) {
+                return null;
+            }
+
+            final Optional<IUser> theUser = USERS.findWithAuth( new UserAuth( currentAuthUser.getProvider(), currentAuthUser.getId() ) );
+            Logger.info("theUser: " + theUser);
+            return theUser.orNull();
+        }
+        catch (IOException e) {
+            Logger.error("ERROR: " + e);
+            return null;
+        }
+    }
 
 	/**
 	 * The getLocalIdentity function gets called on any login to check whether the session user still has a valid corresponding local
