@@ -3,9 +3,9 @@
  */
 package uk.co.recipes.api;
 
+import org.joda.time.DateTime;
 import java.util.Collection;
 import java.util.Set;
-
 import uk.co.recipes.api.ratings.IItemRating;
 import uk.co.recipes.api.ratings.IRecipeRating;
 
@@ -20,8 +20,16 @@ public interface IUser extends java.io.Serializable {
 	long getId();
 	void setId( long id);
 
-	String getUserName();
+    String getUserName();
+    String getFirstName();
+    String getLastName();
     String getDisplayName();
+
+    String getEmail();
+    boolean getEmailValidated();
+
+    boolean isActive();
+    DateTime getLastLoginTime();
 
     void addAuth( IUserAuth auth);
     boolean removeAuth( IUserAuth auth);
