@@ -4,14 +4,18 @@
 package uk.co.recipes;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import org.joda.time.DateTime;
+
 import java.util.Collection;
 import java.util.Set;
+
 import org.elasticsearch.common.Preconditions;
+import org.joda.time.DateTime;
+
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.api.IUserAuth;
 import uk.co.recipes.api.ratings.IItemRating;
 import uk.co.recipes.api.ratings.IRecipeRating;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;

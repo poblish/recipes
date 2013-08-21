@@ -5,15 +5,19 @@ package uk.co.recipes.service.impl;
 
 import static uk.co.recipes.metrics.MetricNames.TIMER_ITEMS_RECOMMENDATIONS;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_RECOMMENDATIONS;
-import org.apache.mahout.cf.taste.common.NoSuchUserException;
-import java.util.Collections;
-import com.google.common.base.Throwables;
+
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
 import net.myrrix.client.ClientRecommender;
+
+import org.apache.mahout.cf.taste.common.NoSuchUserException;
 import org.apache.mahout.cf.taste.common.TasteException;
+
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
@@ -26,6 +30,7 @@ import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
+import com.google.common.base.Throwables;
 
 /**
  * TODO
