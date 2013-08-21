@@ -79,6 +79,11 @@ public class User implements IUser {
         return displayName;
     }
 
+    // @Override
+    public void setDisplayName( final String inName) {
+        displayName = inName;
+    }
+
     @Override
     public Collection<IItemRating> getItemRatings() {
         return itemRatings;  // FIXME Be careful loading this, could be big
