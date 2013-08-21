@@ -1,7 +1,6 @@
 @(title: String)(content: Html)
 
 @import com.feth.play.module.pa.views.html._
-@import com.feth.play.module.pa.providers.oauth2.google._
 
 <!DOCTYPE html>
 <html>
@@ -47,12 +46,6 @@
 		
 		@currentAuth() { auth =>
 		    @if(auth != null) {
-				@auth match {
-				  case googleUser: GoogleAuthUser => {
-				  }
-				  case other => {
-				  }
-				}
 			    : Logged in with provider '@auth.getProvider()' and the user ID '@auth.getId()'&nbsp;<a href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout">Logout</a>
 		    } else {
 				Providers: @forProviders() { p =>
