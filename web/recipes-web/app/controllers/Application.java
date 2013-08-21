@@ -1,11 +1,6 @@
 package controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import uk.co.recipes.User;
-import play.mvc.Http.Session;
-import com.feth.play.module.pa.user.AuthUser;
-import com.feth.play.module.pa.PlayAuthenticate;
-import uk.co.recipes.api.IUser;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -45,12 +40,6 @@ public class Application extends Controller {
         this.users = checkNotNull(users);
         this.metrics = checkNotNull(metrics);
         this.recommender = checkNotNull(recommender);
-    }
-
-    public static IUser getLocalUser(final Session session) {
-        final AuthUser currentAuthUser = PlayAuthenticate.getUser(session);
-//        final User localUser = User.findByAuthUserIdentity(currentAuthUser);
-        return new User( "aregan", "aregan"); // FIXME!
     }
 
     public String getMetricsString() {
