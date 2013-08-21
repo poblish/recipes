@@ -27,7 +27,7 @@ public final class UnitParser {
 			s = s.substring(1);
 		}
 
-		if (s.equals("G") || s.equals("GMS")) {
+		if (s.equals("G") || s.equals("GMS") || s.equals("G SACHET") || s.equals("G PACK") || s.equals("G TUB") || s.equals("G CARTON")) {
 			return Units.GRAMMES;
 		}
 
@@ -69,6 +69,10 @@ public final class UnitParser {
 
 		if (s.equals("SPLASH")) {
 			return Units.SPLASHES;
+		}
+
+		if (s.startsWith("HANDFUL")) {
+			return Units.HANDFUL;
 		}
 
 		if (s.startsWith("KNOB")) {

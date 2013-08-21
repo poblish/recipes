@@ -12,9 +12,13 @@
 ---
 
 
-{canonicalName: Baking Powder, aliases: {Cocoa Powder}}
+{canonicalName: Almond Essence, parent: Almond, tags: {FLAVOURING,BAKING}, aliases: {Almond Extract}}
 ---
-{canonicalName: Cocoa, aliases: {Cocoa Powder}}
+{canonicalName: Baking Powder, tags: BAKING}
+---
+{canonicalName: Cocoa, tags: BAKING, aliases: {Cocoa Powder}}
+---
+{canonicalName: Vanilla Extract, tags: {FLAVOURING,BAKING}}
 ---
 
 
@@ -32,6 +36,8 @@
 ---
 {canonicalName: Fenugreek, tags: {HERB, INDIAN}}
 ---
+{canonicalName: Lemon grass, tags: {HERB, THAI, VIETNAMESE}, aliases: {Lemongrass}}
+---
 {canonicalName: Mixed Herbs, tags: HERB}
 ---
 {canonicalName: Oregano, tags: {HERB, ITALIAN}, aliases: {Oregano Sprigs}}
@@ -40,11 +46,17 @@
 ---
 {canonicalName: Rosemary, tags: HERB, aliases: {Rosemary Sprigs}}
 ---
+{canonicalName: Sage, tags: HERB}
+---
 {canonicalName: Tarragon, tags: HERB}
 ---
 {canonicalName: Thyme, tags: HERB}
 ---
 {    canonicalName: Fresh Thyme, parent: Thyme, aliases: {Thyme Leaves, Thyme Sprig, Thyme Sprigs}}
+---
+
+
+{canonicalName: Capers, aliases: Caper}
 ---
 
 
@@ -56,6 +68,8 @@
 ---
 {canonicalName: Cardamom, tags: {SPICE, INDIAN}, aliases: {Cardamom Pods}}
 ---
+{canonicalName: Cayenne Pepper, tags: {SPICE}}
+---
 {    canonicalName: Green Cardamom, parent: Cardamom, aliases: {Green Cardamom Pods}}
 ---
 {canonicalName: Chilli Powder, tags: {SPICE, INDIAN}}
@@ -66,7 +80,7 @@
 ---
 {canonicalName: Cinnamon, tags: SPICE}
 ---
-{canonicalName: Cinnamon Stick, parent: Cinnamon, tags: INDIAN}
+{canonicalName: Cinnamon Stick, parent: Cinnamon, tags: INDIAN, aliases: {Cinnamon Sticks}}
 ---
 {canonicalName: Cloves, tags: {SPICE, INDIAN}}
 ---
@@ -156,6 +170,8 @@
 ---
 
 
+{canonicalName: Aubergine, tags: VEGETABLE}
+---
 {canonicalName: Broccoli, tags: VEGETABLE}
 ---
 {canonicalName: Cabbage, tags: VEGETABLE, aliases: {Green Cabbage}}
@@ -166,7 +182,7 @@
 ---
 {canonicalName: Celery, tags: VEGETABLE, aliases: {Celery Stick, Celery Sticks}}
 ---
-{canonicalName: Courgette, tags: VEGETABLE}
+{canonicalName: Courgette, tags: VEGETABLE, aliases: {Courgettes}}
 ---
 {canonicalName: Cucumber, tags: VEGETABLE}
 ---
@@ -210,19 +226,21 @@
 ---
 {canonicalName: Parsnip, tags: VEGETABLE, aliases: {Parsnips}}
 ---
-{canonicalName: Red Pepper, tags: VEGETABLE}
+{canonicalName: Red Pepper, tags: VEGETABLE, aliases: {Red Peppers}}
 ---
-{canonicalName: Green Pepper, tags: VEGETABLE}
+{canonicalName: Green Pepper, tags: VEGETABLE, aliases: {Green Peppers}}
 ---
-{canonicalName: Yellow Pepper, tags: VEGETABLE}
+{canonicalName: Yellow Pepper, tags: VEGETABLE, aliases: {Yellow Peppers}}
 ---
 {canonicalName: Potato, tags: VEGETABLE, aliases: {Potatoes}}
 ---
 {    canonicalName: New Potato, parent: Potato, aliases: {New Potatoes}}
 ---
-{canonicalName: Spinach, tags: VEGETABLE}
+{canonicalName: Spinach, tags: VEGETABLE, aliases: {Spinach Leaves}}
 ---
-{    canonicalName: Baby Spinach, parent: Spinach}
+{    canonicalName: Baby Spinach, parent: Spinach, aliases: {Baby Spinach Leaves}}
+---
+{canonicalName: Spring Greens, tags: VEGETABLE}
 ---
 {canonicalName: Swede, tags: VEGETABLE}
 ---
@@ -238,15 +256,25 @@
 ---
 {canonicalName: Turnip, tags: VEGETABLE, aliases: {Turnips}}
 ---
+{canonicalName: Watercress, tags: VEGETABLE}
+---
 
 
 {canonicalName: Chickpeas, tags: PULSE, aliases: {Chickpea, Garbanzo Bean}}
 ---
 {canonicalName: Lentils, tags: PULSE, aliases: {Lentil}}
 ---
+{    canonicalName: Green Lentils, parent: Lentils}
+---
+{    canonicalName: Red Lentils, parent: Lentils}
+---
 
 
 {canonicalName: Apple, tags: {FRUIT}}
+---
+{canonicalName: Apricot, tags: {FRUIT}, aliases: {Apricots}}
+---
+{    canonicalName: Apricot Conserve, parent: Apricot, tags: {FRUIT, CONDIMENT}}
 ---
 {canonicalName: Avocado, tags: {FRUIT, MEXICAN}, aliases: {Avocados}}
 ---
@@ -276,7 +304,15 @@
 ---
 {canonicalName: Pear, tags: {FRUIT}}
 ---
+{canonicalName: Raspberries, tags: FRUIT, aliases: Raspberry}
+---
+{    canonicalName: Raspberry Jam, parent: Raspberries, tags: {FRUIT, CONDIMENT}, aliases: Raspberry Conserve}
+---
 {canonicalName: Satsuma, tags: {FRUIT, CITRUS}}
+---
+{canonicalName: Strawberries, tags: FRUIT, aliases: Strawberry}
+---
+{    canonicalName: Strawberry Jam, parent: Strawberries, tags: {FRUIT, CONDIMENT}, aliases: Strawberry Conserve}
 ---
 {canonicalName: Tangerine, tags: {FRUIT, CITRUS}}
 ---
@@ -292,6 +328,10 @@
 ---
 
 
+{canonicalName: Almond, tags: NUT, aliases: Almonds}
+---
+{    canonicalName: Flaked Almonds, parent: Almond, tags: {NUT,BAKING}, aliases: {Flaked Almond}}
+---
 {canonicalName: Cashew Nuts, tags: NUT, aliases: {Cashew, Cashew Nut}}
 ---
 {canonicalName: Hazelnuts, tags: NUT, aliases: Hazelnut}
@@ -324,7 +364,7 @@
 ---
 {    canonicalName: Granulated Sugar, parent: Sugar}
 ---
-{    canonicalName: Icing Sugar, parent: Sugar}
+{    canonicalName: Icing Sugar, parent: Sugar, aliases: {White Icing Sugar}}
 ---
 {    canonicalName: Brown Sugar, parent: Sugar}
 ---
@@ -360,11 +400,21 @@
 
 {canonicalName: Eggs, tags: EGG, aliases: {Egg}}
 ---
-{    canonicalName: Egg Yolks, parent: Egg, aliases: {Egg Yolk}}
+{    canonicalName: Egg Yolks, parent: Egg, tags: BAKING, aliases: {Egg Yolk}}
+---
+{    canonicalName: Egg White, parent: Egg, tags: BAKING, aliases: {Egg Whites}}
 ---
 
 
 {canonicalName: Milk, tags: DAIRY}
+---
+{    canonicalName: Condensed Milk, parent: Milk}
+---
+{    canonicalName: Skimmed Milk, parent: Milk}
+---
+{    canonicalName: Soya Milk, parent: Milk}
+---
+{    canonicalName: Semi-skimmed Milk, parent: Milk}
 ---
 {canonicalName: Cream, tags: DAIRY}
 ---
@@ -375,6 +425,8 @@
 {    canonicalName: Soured Cream, parent: Cream}
 ---
 {canonicalName: Yogurt, tags: DAIRY}
+---
+{    canonicalName: Greek Yogurt, parent: Yogurt, tags: GREEK}
 ---
 {    canonicalName: Natural Yogurt, parent: Yogurt}
 ---
@@ -396,9 +448,11 @@
 
 {canonicalName: Vinegar, tags: VINEGAR}
 ---
-{canonicalName: Red Wine Vinegar, parent: Vinegar}
+{    canonicalName: Balsamic Vinegar, parent: Vinegar, tags: ITALIAN}
 ---
-{canonicalName: White Wine Vinegar, parent: Vinegar}
+{    canonicalName: Red Wine Vinegar, parent: Vinegar}
+---
+{    canonicalName: White Wine Vinegar, parent: Vinegar}
 ---
 
 
@@ -420,6 +474,8 @@
 ---
 {canonicalName: Fish Sauce, tags: {FISH, SAUCE, THAI, VIETNAMESE}}
 ---
+{canonicalName: Mayonnaise, tags: {EGG, SAUCE}}
+---
 {canonicalName: Tamarind Paste, tags: {FRUIT, SAUCE}}
 ---
 {canonicalName: Mustard, tags: SAUCE}
@@ -440,8 +496,14 @@
 ---
 {canonicalName: Spaghetti, tags: {PASTA, ITALIAN}}
 ---
+{canonicalName: Tagliatelle, tags: {PASTA, ITALIAN}}
+---
 
 
+{canonicalName: Mussels, tags: SEAFOOD}
+---
+{canonicalName: Oysters, tags: SEAFOOD, aliases: Oyster}
+---
 {canonicalName: Prawns, tags: SEAFOOD}
 ---
 {    canonicalName: King Prawns, parent: Prawns}
@@ -473,6 +535,8 @@
 {    canonicalName: Sirloin Steak, parent: Beef}
 ---
 {canonicalName: Chicken, tags: {MEAT, POULTRY}}
+---
+{    canonicalName: Chicken Breast, parent: Chicken, aliases: {Chicken Breasts}}
 ---
 {    canonicalName: Chicken Mince, parent: Chicken}
 ---
