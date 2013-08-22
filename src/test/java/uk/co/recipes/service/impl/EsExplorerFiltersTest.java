@@ -50,6 +50,8 @@ public class EsExplorerFiltersTest {
 	public void loadIngredientsAndOneRecipe() throws InterruptedException, IOException {
 		GRAPH.get( ItemsLoader.class ).load();
 //		dataUtils.parseIngredientsFrom("bulk.txt");
+
+		Thread.sleep(900);  // FIXME Ensure everything's in ES index
 	}
 
 	@Test
