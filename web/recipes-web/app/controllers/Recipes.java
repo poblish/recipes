@@ -1,14 +1,11 @@
 package controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-
+import service.PlayAuthUserServicePlugin;
 import java.io.IOException;
-
 import javax.inject.Inject;
-
 import play.mvc.Controller;
 import play.mvc.Result;
-import uk.co.recipes.User;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.ITag;
@@ -23,11 +20,8 @@ import uk.co.recipes.ratings.UserRatings;
 import uk.co.recipes.service.api.IExplorerAPI;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
-import uk.co.recipes.service.api.IUserPersistence;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.similarity.IncompatibleIngredientsException;
-
-import com.google.common.base.Supplier;
 import com.google.common.collect.Multiset;
 
 /**
@@ -41,7 +35,7 @@ public class Recipes extends Controller {
 
     private IItemPersistence items;
     private IRecipePersistence recipes;
-    private IUserPersistence users;
+//    private IUserPersistence users;
     private IExplorerAPI explorer;
     private UserRatings ratings;
 
@@ -50,7 +44,7 @@ public class Recipes extends Controller {
     	updater.startListening();
         this.items = checkNotNull(items);
         this.recipes = checkNotNull(recipes);
-        this.users = checkNotNull(users);
+//        this.users = checkNotNull(users);
         this.explorer = checkNotNull(explorer);
         this.ratings = checkNotNull(inRatings);
     }
@@ -77,13 +71,10 @@ public class Recipes extends Controller {
     public Result rate( final String name, final int inScore) throws IOException, IncompatibleIngredientsException {
         final IRecipe recipe = recipes.get(name).get();
 
-		final IUser user1 = users.getOrCreate( "Andrew Regan", new Supplier<IUser>() {  // FIXME Need actual user!
-
-			@Override
-			public IUser get() {
-				return new User( "aregan", "Andrew Regan");
-			}
-		} );
+		final IUser user1 = /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( session() );
+		if ( user1 == null) {
+		    return unauthorized("Not logged-in");
+		}
 
 		ratings.addRating( user1, new RecipeRating( recipe, inScore) );
   
