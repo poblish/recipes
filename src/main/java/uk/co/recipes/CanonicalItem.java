@@ -6,21 +6,18 @@ package uk.co.recipes;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static uk.co.recipes.tags.TagUtils.findActivated;
 import static uk.co.recipes.tags.TagUtils.tagNamesTitleCase;
-
+import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
-
 import org.elasticsearch.common.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -135,6 +132,12 @@ public class CanonicalItem implements ICanonicalItem {
 		}
 
 		return allTags;
+	}
+
+	public boolean hasOverlappingTags() {
+	    final List<ITag> copy = Lists.newArrayList( tags.keySet() );
+	    copy.retainAll( ((CanonicalItem) parent).tags.keySet() );
+	    return !copy.isEmpty();
 	}
 
 	@JsonIgnore  // Prevent Jackson insanity

@@ -112,9 +112,9 @@
 ---
 {canonicalName: Pepper, tags: SPICE}
 ---
-{canonicalName: Black Pepper, tags: SPICE, parent: Pepper, aliases: {Pepper Powder, Black Pepper, Black Peppercorns, Ground Black Pepper}}
+{    canonicalName: Black Pepper, parent: Pepper, aliases: {Pepper Powder, Black Pepper, Black Peppercorns, Ground Black Pepper}}
 ---
-{canonicalName: White Peppercorns, tags: SPICE, parent: Pepper}
+{    canonicalName: White Peppercorns, parent: Pepper}
 ---
 {canonicalName: Saffron, tags: SPICE}
 ---
@@ -276,7 +276,7 @@
 ---
 {canonicalName: Apricot, tags: {FRUIT}, aliases: {Apricots}}
 ---
-{    canonicalName: Apricot Conserve, parent: Apricot, tags: {FRUIT, CONDIMENT}}
+{    canonicalName: Apricot Conserve, parent: Apricot, tags: {CONDIMENT}}
 ---
 {canonicalName: Avocado, tags: {FRUIT, MEXICAN}, aliases: {Avocados}}
 ---
@@ -308,13 +308,13 @@
 ---
 {canonicalName: Raspberries, tags: FRUIT, aliases: Raspberry}
 ---
-{    canonicalName: Raspberry Jam, parent: Raspberries, tags: {FRUIT, CONDIMENT}, aliases: Raspberry Conserve}
+{    canonicalName: Raspberry Jam, parent: Raspberries, tags: {CONDIMENT}, aliases: Raspberry Conserve}
 ---
 {canonicalName: Satsuma, tags: {FRUIT, CITRUS}}
 ---
 {canonicalName: Strawberries, tags: FRUIT, aliases: Strawberry}
 ---
-{    canonicalName: Strawberry Jam, parent: Strawberries, tags: {FRUIT, CONDIMENT}, aliases: Strawberry Conserve}
+{    canonicalName: Strawberry Jam, parent: Strawberries, tags: {CONDIMENT}, aliases: Strawberry Conserve}
 ---
 {canonicalName: Tangerine, tags: {FRUIT, CITRUS}}
 ---
@@ -332,7 +332,7 @@
 
 {canonicalName: Almond, tags: NUT, aliases: Almonds}
 ---
-{    canonicalName: Flaked Almonds, parent: Almond, tags: {NUT,BAKING}, aliases: {Flaked Almond}}
+{    canonicalName: Flaked Almonds, parent: Almond, tags: {BAKING}, aliases: {Flaked Almond}}
 ---
 {canonicalName: Cashew Nuts, tags: NUT, aliases: {Cashew, Cashew Nut}}
 ---

@@ -3,6 +3,8 @@
  */
 package uk.co.recipes.persistence;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +33,7 @@ public class ItemsLoader {
 	@Inject
 	EsItemFactory itemFactory;
 
+	private static final Logger LOG = LoggerFactory.getLogger( ItemsLoader.class );
 	private static final Optional<ICanonicalItem> MISSING = Optional.absent();
 
 	public void load() throws IOException {
@@ -83,6 +86,10 @@ public class ItemsLoader {
                     else {
                         newItem.addTag( TagUtils.forName(eachTag) );
                     }
+                }
+
+                if ( inParent.isPresent() && ((CanonicalItem) newItem).hasOverlappingTags()) {
+                    LOG.warn( "Overlapping Tags for: " + newItem);
                 }
 
                 for ( String eachAlias : yamlObjectToStrings( inMap.get("aliases") )) {
