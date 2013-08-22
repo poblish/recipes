@@ -23,8 +23,10 @@ import uk.co.recipes.ratings.UserRatings;
 import uk.co.recipes.service.api.IExplorerAPI;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
+import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.similarity.IncompatibleIngredientsException;
+import uk.co.recipes.tags.CommonTags;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Multiset;
@@ -42,15 +44,17 @@ public class Recipes extends Controller {
     private IRecipePersistence recipes;
 //    private IUserPersistence users;
     private IExplorerAPI explorer;
+    private EsExplorerFilters explorerFilters;
     private UserRatings ratings;
 
     @Inject
-    public Recipes( final MyrrixUpdater updater, final MyrrixExplorerService explorer, final EsItemFactory items, final EsRecipeFactory recipes, final EsUserFactory users, final UserRatings inRatings) {
+    public Recipes( final MyrrixUpdater updater, final EsExplorerFilters explorerFilters, final MyrrixExplorerService explorer, final EsItemFactory items, final EsRecipeFactory recipes, final EsUserFactory users, final UserRatings inRatings) {
     	updater.startListening();
         this.items = checkNotNull(items);
         this.recipes = checkNotNull(recipes);
 //        this.users = checkNotNull(users);
         this.explorer = checkNotNull(explorer);
+        this.explorerFilters = checkNotNull(explorerFilters);
         this.ratings = checkNotNull(inRatings);
     }
 
