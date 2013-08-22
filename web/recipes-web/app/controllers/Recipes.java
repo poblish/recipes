@@ -80,6 +80,7 @@ public class Recipes extends Controller {
         final Multiset<ITag> categorisation = Categorisation.forIngredients( recipe.getIngredients() );
 
         return ok(views.html.recipe.render( recipe, categorisation, explorer.similarRecipes( recipe, 10)));
+        /* return ok(views.html.recipe.render( recipe, categorisation, explorer.similarRecipes( recipe, explorerFilters.includeTags( CommonTags.MEAT ), 10))); */
     }
 
     public Result rate( final String name, final int inScore) throws IOException, IncompatibleIngredientsException {
