@@ -3,20 +3,24 @@
  */
 package uk.co.recipes.persistence;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.util.List;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
+
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.tags.TagUtils;
+
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
