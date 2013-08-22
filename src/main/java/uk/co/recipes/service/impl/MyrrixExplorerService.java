@@ -25,10 +25,12 @@ import uk.co.recipes.myrrix.MyrrixUtils;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.service.api.IExplorerAPI;
+import uk.co.recipes.service.api.IExplorerFilter;
 import uk.co.recipes.service.taste.impl.MyrrixTasteSimilarityService;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
+import com.google.common.primitives.Longs;
 
 /**
  * TODO
@@ -54,16 +56,26 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	@Inject
 	MetricRegistry metrics;
 
+	private static final IExplorerFilter NULL_FILTER = new NullFilter();
+
 
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.service.api.IExplorerAPI#similarIngredients(uk.co.recipes.api.IUser, int)
 	 */
 	@Override
-	public List<ICanonicalItem> similarIngredients( final ICanonicalItem inTarget, int inNumRecs) {
+	public List<ICanonicalItem> similarIngredients( final ICanonicalItem item, int inNumRecs) {
+		return similarIngredients( item, NULL_FILTER, inNumRecs);
+	}
+
+	@Override
+	public List<ICanonicalItem> similarIngredients( final ICanonicalItem item, final IExplorerFilter inFilter, final int inNumRecs) {
 	    final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_MOSTSIMILAR).time();
 
 		try {
-			return itemsFactory.getAll( MyrrixUtils.getItems( recommender.mostSimilarItems( new long[]{ inTarget.getId() }, inNumRecs, new String[]{"ITEM"}, /* "contextUserID" */ 0L) ) );
+			final String includeIdsStr = inFilter.idsToInclude().length > 0 ? Longs.join( ",", inFilter.idsToInclude()) : ""; // FIXME - this is going to get big!
+			final String excludeIdsStr = inFilter.idsToExclude().length > 0 ? Longs.join( ",", inFilter.idsToExclude()) : ""; // FIXME - this is going to get big!
+
+			return itemsFactory.getAll( MyrrixUtils.getItems( recommender.mostSimilarItems( new long[]{ item.getId() }, inNumRecs, new String[]{"ITEM", includeIdsStr, excludeIdsStr}, /* "contextUserID" */ 0L) ) );
 		}
 		catch (NoSuchItemException e) {
 			return Collections.emptyList();
@@ -84,10 +96,18 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	 */
 	@Override
 	public List<IRecipe> similarRecipes( final IRecipe inTarget, int inNumRecs) {
+		return similarRecipes( inTarget, NULL_FILTER, inNumRecs);
+	}
+
+	@Override
+	public List<IRecipe> similarRecipes( final IRecipe recipe, final IExplorerFilter inFilter, final int inNumRecs) {
 	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_MOSTSIMILAR).time();
 
 		try {
-			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.mostSimilarItems( new long[]{ inTarget.getId() }, inNumRecs, new String[]{"RECIPE"}, /* "contextUserID" */ 0L) ) );
+			final String includeIdsStr = inFilter.idsToInclude().length > 0 ? Longs.join( ",", inFilter.idsToInclude()) : ""; // FIXME - this is going to get big!
+			final String excludeIdsStr = inFilter.idsToExclude().length > 0 ? Longs.join( ",", inFilter.idsToExclude()) : ""; // FIXME - this is going to get big!
+
+			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.mostSimilarItems( new long[]{ recipe.getId() }, inNumRecs, new String[]{"RECIPE", includeIdsStr, excludeIdsStr}, /* "contextUserID" */ 0L) ) );
 		}
 		catch (NoSuchItemException e) {
 			return Collections.emptyList();
@@ -141,5 +161,18 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	@Override
 	public float similarityToItem( final long item1, final long item2) {
 		return tasteSimilarity.similarityToItem( item1, item2);
+	}
+
+	private static class NullFilter implements IExplorerFilter {
+
+		@Override
+		public long[] idsToInclude() {
+			return new long[0];
+		}
+
+		@Override
+		public long[] idsToExclude() {
+			return new long[0];
+		}
 	}
 }

@@ -14,6 +14,9 @@ import org.apache.mahout.common.LongPair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.FluentIterable;
+
 /**
  * TODO
  * 
@@ -25,6 +28,9 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 	private static final Logger LOG = LoggerFactory.getLogger( RecipesRescorer.class );
 
 	private final static long RECIPE_BASE_ID = 0x4000000000000000L;
+	private static final Splitter ID_SPLITTER = Splitter.on(',');
+	private static final long[] EMPTY_ARRAY = new long[0];
+
 
 	@Override
 	public IDRescorer getRecommendRescorer( long[] userIDs, final MyrrixRecommender recommender, final String... inArgs) {
@@ -70,6 +76,9 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 		final boolean isRecipe = desiredType.equals("RECIPE");
 		final boolean isItem = desiredType.equals("ITEM");
 
+		final long[] includeIds = ( inArgs != null) ? parseLongArrayString((String) inArgs[1]) : EMPTY_ARRAY;
+		final long[] excludeIds = ( inArgs != null) ? parseLongArrayString((String) inArgs[2]) : EMPTY_ARRAY;
+
 		return new Rescorer<LongPair>() {
 
 			@Override
@@ -101,5 +110,21 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 				return originalScore;
 			}
 		};
+	}
+
+	private long[] parseLongArrayString( final String inStr) {
+		if ( inStr == null || inStr.isEmpty()) {
+			return EMPTY_ARRAY;
+		}
+
+		final String[] indivStrs = FluentIterable.from( ID_SPLITTER.split(inStr) ).toArray( String.class );  // Yuk!
+
+		final long[] longs = new long[ indivStrs.length ];
+
+		for ( int i = 0; i < indivStrs.length; i++) {
+			longs[i] = Long.parseLong( indivStrs[i] );
+		}
+
+		return longs;
 	}
 }
