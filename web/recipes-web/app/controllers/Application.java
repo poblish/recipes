@@ -1,12 +1,17 @@
 package controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+
 import javax.inject.Inject;
+
 import net.myrrix.client.ClientRecommender;
+
 import org.apache.mahout.cf.taste.common.TasteException;
+
 import play.mvc.Controller;
 import play.mvc.Result;
 import uk.co.recipes.persistence.EsItemFactory;
@@ -15,6 +20,7 @@ import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.IUserPersistence;
+
 import com.codahale.metrics.ConsoleReporter;
 import com.codahale.metrics.MetricRegistry;
 

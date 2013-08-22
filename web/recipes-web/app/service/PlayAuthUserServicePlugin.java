@@ -3,25 +3,28 @@
  */
 package service;
 
-import com.feth.play.module.pa.PlayAuthenticate;
-import play.mvc.Http.Session;
-import com.feth.play.module.pa.user.FirstLastNameIdentity;
-import com.feth.play.module.pa.user.NameIdentity;
-import com.feth.play.module.pa.user.EmailIdentity;
 import java.io.IOException;
+
 import play.Application;
 import play.Logger;
+import play.mvc.Http.Session;
 import uk.co.recipes.DaggerModule;
 import uk.co.recipes.User;
 import uk.co.recipes.UserAuth;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.service.api.IUserPersistence;
+
+import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.service.UserServicePlugin;
 import com.feth.play.module.pa.user.AuthUser;
 import com.feth.play.module.pa.user.AuthUserIdentity;
+import com.feth.play.module.pa.user.EmailIdentity;
+import com.feth.play.module.pa.user.FirstLastNameIdentity;
+import com.feth.play.module.pa.user.NameIdentity;
 import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
+
 import dagger.Module;
 import dagger.ObjectGraph;
 

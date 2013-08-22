@@ -1,12 +1,14 @@
 package controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import com.google.common.base.Optional;
-import service.PlayAuthUserServicePlugin;
+
 import java.io.IOException;
+
 import javax.inject.Inject;
+
 import play.mvc.Controller;
 import play.mvc.Result;
+import service.PlayAuthUserServicePlugin;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.ITag;
@@ -23,6 +25,8 @@ import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.similarity.IncompatibleIngredientsException;
+
+import com.google.common.base.Optional;
 import com.google.common.collect.Multiset;
 
 /**

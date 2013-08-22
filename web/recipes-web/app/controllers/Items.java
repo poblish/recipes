@@ -1,13 +1,15 @@
 package controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import com.google.common.base.Optional;
-import service.PlayAuthUserServicePlugin;
+
 import java.io.IOException;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import play.mvc.Controller;
 import play.mvc.Result;
+import service.PlayAuthUserServicePlugin;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.persistence.EsItemFactory;
@@ -17,6 +19,8 @@ import uk.co.recipes.ratings.UserRatings;
 import uk.co.recipes.service.api.IExplorerAPI;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
+
+import com.google.common.base.Optional;
 
 /**
  * 
