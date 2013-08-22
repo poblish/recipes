@@ -276,7 +276,7 @@ public class MyrrixUpdater implements IEventListener {
 			LOG.debug("Rate: " + evt);
 		}
 
-        rateGenericItem( evt.getUser().getId(), evt.getItem().getId());
+        rateGenericItem( evt.getUser().getId(), evt.getItem().getId(), /* Attempt to 'penalise' low ratings */ 2 * (evt.getRating() - 5.0f));
     }
 
     @Subscribe
@@ -287,12 +287,12 @@ public class MyrrixUpdater implements IEventListener {
 			LOG.debug("Rate: " + evt);
 		}
 
-        rateGenericItem( evt.getUser().getId(), evt.getRecipe().getId());
+        rateGenericItem( evt.getUser().getId(), evt.getRecipe().getId(), /* Attempt to 'penalise' low ratings */ 2 * (evt.getRating() - 5.0f));
     }
 
-    private void rateGenericItem( final long inUserId, final long inGenericItemId) {
+    private void rateGenericItem( final long inUserId, final long inGenericItemId, final float inRating) {
 		try {
-			recommender.ingest( new StringReader( inUserId + "," + inGenericItemId) );
+			recommender.ingest( new StringReader( inUserId + "," + inGenericItemId + "," + inRating) );
 			recommender.refresh();
 		}
 		catch (TasteException e) {
