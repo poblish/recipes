@@ -74,8 +74,8 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 		final boolean isRecipe = desiredType.equals("RECIPE");
 		final boolean isItem = desiredType.equals("ITEM");
 
-		final long[] includeIdsSorted = ( inArgs != null) ? parseLongArrayString((String) inArgs[1]) : EMPTY_ARRAY;
-		final long[] excludeIdsSorted = ( inArgs != null) ? parseLongArrayString((String) inArgs[2]) : EMPTY_ARRAY;
+		final long[] includeIdsSorted = ( inArgs != null && inArgs.length > 1) ? parseLongArrayString((String) inArgs[1]) : EMPTY_ARRAY;
+		final long[] excludeIdsSorted = ( inArgs != null && inArgs.length > 2) ? parseLongArrayString((String) inArgs[2]) : EMPTY_ARRAY;
 
 		return new Rescorer<LongPair>() {
 
