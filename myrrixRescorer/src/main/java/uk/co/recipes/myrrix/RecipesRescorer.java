@@ -74,13 +74,23 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 		final boolean isRecipe = desiredType.equals("RECIPE");
 		final boolean isItem = desiredType.equals("ITEM");
 
-		final long[] includeIds = ( inArgs != null) ? parseLongArrayString((String) inArgs[1]) : EMPTY_ARRAY;
-		final long[] excludeIds = ( inArgs != null) ? parseLongArrayString((String) inArgs[2]) : EMPTY_ARRAY;
+		final long[] includeIdsSorted = ( inArgs != null) ? parseLongArrayString((String) inArgs[1]) : EMPTY_ARRAY;
+		final long[] excludeIdsSorted = ( inArgs != null) ? parseLongArrayString((String) inArgs[2]) : EMPTY_ARRAY;
 
 		return new Rescorer<LongPair>() {
 
 			@Override
 			public boolean isFiltered( final LongPair inPair) {
+
+				if ( includeIdsSorted.length > 0 && ( !isLongInArray( includeIdsSorted, inPair.getFirst()) || !isLongInArray( includeIdsSorted, inPair.getSecond()) ) ) {
+					LOG.info("RecipesRescorer: one value (" + inPair.getFirst() + "," + inPair.getSecond() + ") not in include list: " + Arrays.toString(includeIdsSorted));
+					return false;
+				}
+				else if ( excludeIdsSorted.length > 0 && ( isLongInArray( excludeIdsSorted, inPair.getFirst()) || isLongInArray( excludeIdsSorted, inPair.getSecond()) ) ) {
+					LOG.info("RecipesRescorer: one value (" + inPair.getFirst() + "," + inPair.getSecond() + ") not in exclude list: " + Arrays.toString(includeIdsSorted));
+					return false;
+				}
+
 				if (isRecipe) {
 					if ( inPair.getFirst() < RECIPE_BASE_ID || inPair.getSecond() < RECIPE_BASE_ID) {
 						LOG.trace("RecipesRescorer: Stripping out invalid {RECIPE,RECIPE}... " + inPair);
@@ -110,10 +120,16 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 		};
 	}
 
+	private boolean isLongInArray( final long[] inArray, final long inVal) {
+		return Arrays.binarySearch( inArray, inVal) >= 0;
+	}
+
 	private long[] parseLongArrayString( final String inStr) {
 		if ( inStr == null || inStr.isEmpty()) {
 			return EMPTY_ARRAY;
 		}
+
+		// It should go without saying that this must be a *sorted* list
 
 		final String[] indivStrs = FluentIterable.from( ID_SPLITTER.split(inStr) ).toArray( String.class );  // Yuk!
 
