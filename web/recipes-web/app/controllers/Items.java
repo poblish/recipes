@@ -1,6 +1,7 @@
 package controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.base.Optional;
 import service.PlayAuthUserServicePlugin;
 import java.io.IOException;
 import java.util.List;
@@ -40,9 +41,14 @@ public class Items extends Controller {
     }
 
     public Result display( final String name) throws IOException {
-        final ICanonicalItem item = items.get(name).get();
+        final Optional<ICanonicalItem> optItem = items.get(name);
+        if (!optItem.isPresent()) {
+            return notFound("'" + name + "' not found!");
+        }
+
+        final ICanonicalItem item = optItem.get();
         final List<ICanonicalItem> similarities = explorerService.similarIngredients( item, 20);
-        return ok(views.html.item.render( item, similarities, ( item != null) ? "Found" : "Not Found"));
+        return ok(views.html.item.render( item, similarities));
     }
 
     public Result rate( final String name, final int inScore) throws IOException {

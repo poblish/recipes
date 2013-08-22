@@ -1,6 +1,7 @@
 package controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.base.Optional;
 import service.PlayAuthUserServicePlugin;
 import java.io.IOException;
 import javax.inject.Inject;
@@ -62,10 +63,15 @@ public class Recipes extends Controller {
     }
 
     public Result display( final String name) throws IOException, IncompatibleIngredientsException {
-        final IRecipe recipe = recipes.get(name).get();
+        final Optional<IRecipe> optRecipe = recipes.get(name);
+        if (!optRecipe.isPresent()) {
+            return notFound("'" + name + "' not found!");
+        }
+
+        final IRecipe recipe = optRecipe.get();
         final Multiset<ITag> categorisation = Categorisation.forIngredients( recipe.getIngredients() );
 
-        return ok(views.html.recipe.render( recipe, categorisation, explorer.similarRecipes( recipe, 10), ( recipe != null) ? "Found" : "Not Found"));
+        return ok(views.html.recipe.render( recipe, categorisation, explorer.similarRecipes( recipe, 10)));
     }
 
     public Result rate( final String name, final int inScore) throws IOException, IncompatibleIngredientsException {

@@ -1,9 +1,9 @@
-@(recipe: uk.co.recipes.api.IRecipe, categorisation: com.google.common.collect.Multiset[uk.co.recipes.api.ITag], similarities: List[uk.co.recipes.api.IRecipe], title: String)
+@(recipe: uk.co.recipes.api.IRecipe, categorisation: com.google.common.collect.Multiset[uk.co.recipes.api.ITag], similarities: List[uk.co.recipes.api.IRecipe])
 
-@main("Recipe page") {
+@main("Recipe: " + recipe.getTitle() ) {
 	<section id="top">
 	    <div class="wrapper">
-	        <h1><span class="label label-success">@recipe.getId()</span>&nbsp;@title: @recipe.getTitle() <span class="label label-error">@recipe.getLocale()</span> <a href="/recipes/@recipe.getTitle()/fork">[F]</a></h1>
+	        <h1><span class="label label-success">@recipe.getId()</span>&nbsp;@recipe.getTitle() <span class="label label-error">@recipe.getLocale()</span> <a href="/recipes/@recipe.getTitle()/fork">[F]</a></h1>
 	    </div>
 	</section>
 	

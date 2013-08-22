@@ -1,13 +1,13 @@
-@(item: uk.co.recipes.api.ICanonicalItem, similarities: List[uk.co.recipes.api.ICanonicalItem], title: String)
+@(item: uk.co.recipes.api.ICanonicalItem, similarities: List[uk.co.recipes.api.ICanonicalItem])
 
-@main("Item page") {
+@main("Item: " + item.getCanonicalName() ) {
 	<section id="top">
 	    <div class="wrapper">
-	        <h1>@title</h1>
+	        <h1>@item.getCanonicalName()</h1>
 	    </div>
 	</section>
 	
-	<p><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-info"><a href="/tags/@tagName">@tagName</a></span>}</p>
+	<p>@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-info"><a href="/tags/@tagName">@tagName</a></span>}</p>
 	
 	<div class="btn-group">
 	  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
