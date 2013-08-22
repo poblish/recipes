@@ -88,9 +88,11 @@
 ---
 {canonicalName: Coriander Seeds, parent: Coriander, tags: {-HERB, SPICE, INDIAN}}
 ---
-{canonicalName: Cumin Seeds, parent: Cumin, tags: {SPICE, INDIAN}}
+{canonicalName: Cumin, tags: {SPICE, INDIAN}, aliases: {Ground Cumin, Cumin Powder}}
 ---
-{canonicalName: Curry Powder, parent: Cumin, tags: {SPICE, INDIAN}}
+{    canonicalName: Cumin Seeds, parent: Cumin}
+---
+{canonicalName: Curry Powder, tags: {SPICE, INDIAN}}
 ---
 {    canonicalName: Mild Curry Powder, parent: Curry Powder}
 ---
@@ -400,9 +402,9 @@
 
 {canonicalName: Eggs, tags: EGG, aliases: {Egg}}
 ---
-{    canonicalName: Egg Yolks, parent: Egg, tags: BAKING, aliases: {Egg Yolk}}
+{    canonicalName: Egg Yolks, parent: Eggs, tags: BAKING, aliases: {Egg Yolk}}
 ---
-{    canonicalName: Egg White, parent: Egg, tags: BAKING, aliases: {Egg Whites}}
+{    canonicalName: Egg White, parent: Eggs, tags: BAKING, aliases: {Egg Whites}}
 ---
 
 
