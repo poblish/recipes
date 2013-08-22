@@ -82,28 +82,37 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 			@Override
 			public boolean isFiltered( final LongPair inPair) {
 
-				if ( includeIdsSorted.length > 0 && ( !isLongInArray( includeIdsSorted, inPair.getFirst()) || !isLongInArray( includeIdsSorted, inPair.getSecond()) ) ) {
-					LOG.info("RecipesRescorer: one value (" + inPair.getFirst() + "," + inPair.getSecond() + ") not in include list: " + Arrays.toString(includeIdsSorted));
-					return false;
-				}
-				else if ( excludeIdsSorted.length > 0 && ( isLongInArray( excludeIdsSorted, inPair.getFirst()) || isLongInArray( excludeIdsSorted, inPair.getSecond()) ) ) {
-					LOG.info("RecipesRescorer: one value (" + inPair.getFirst() + "," + inPair.getSecond() + ") not in exclude list: " + Arrays.toString(includeIdsSorted));
-					return false;
-				}
-
 				if (isRecipe) {
 					if ( inPair.getFirst() < RECIPE_BASE_ID || inPair.getSecond() < RECIPE_BASE_ID) {
+
+						if (!includesOK( includeIdsSorted, inPair.getFirst(), inPair.getSecond() ) ||
+							!excludesOK( excludeIdsSorted, inPair.getFirst(), inPair.getSecond() )) {
+							return false;
+						}
+
 						LOG.trace("RecipesRescorer: Stripping out invalid {RECIPE,RECIPE}... " + inPair);
 						return true;
 					}
 				}
 				else if (isItem) {
 					if ( inPair.getFirst() >= RECIPE_BASE_ID || inPair.getSecond() >= RECIPE_BASE_ID) {
+
+						if (!includesOK( includeIdsSorted, inPair.getFirst(), inPair.getSecond() ) ||
+						    !excludesOK( excludeIdsSorted, inPair.getFirst(), inPair.getSecond() )) {
+							return false;
+						}
+
 						LOG.trace("RecipesRescorer: Stripping out invalid {ITEM,ITEM}... " + inPair);
 						return true;
 					}
 				}
 				else if (( inPair.getFirst() >= RECIPE_BASE_ID && inPair.getSecond() < RECIPE_BASE_ID) || ( inPair.getFirst() < RECIPE_BASE_ID && inPair.getSecond() >= RECIPE_BASE_ID)) {
+
+					if (!includesOK( includeIdsSorted, inPair.getFirst(), inPair.getSecond() ) ||
+						!excludesOK( excludeIdsSorted, inPair.getFirst(), inPair.getSecond() )) {
+						return false;
+					}
+
 					LOG.trace("RecipesRescorer: Stripping out invalid {ITEM,RECIPE}... " + inPair);
 					return true;
 				}
@@ -118,6 +127,32 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 				return originalScore;
 			}
 		};
+	}
+
+	private boolean includesOK( final long[] inIncludes, final long... inIdsToCheck) {
+		if ( inIncludes.length > 0) {
+			for ( long eachLong : inIdsToCheck) {
+				if (!isLongInArray( inIncludes, eachLong)) {
+					LOG.info("RecipesRescorer: value (" + eachLong + ") not in include list: " + Arrays.toString(inIncludes));
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	private boolean excludesOK( final long[] inExcludes, final long... inIdsToCheck) {
+		if ( inExcludes.length > 0) {
+			for ( long eachLong : inIdsToCheck) {
+				if (isLongInArray( inExcludes, eachLong)) {
+					LOG.info("RecipesRescorer: value (" + eachLong + ") not in exclude list: " + Arrays.toString(inExcludes));
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	private boolean isLongInArray( final long[] inArray, final long inVal) {
