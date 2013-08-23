@@ -3,14 +3,13 @@
  */
 package uk.co.recipes.events.impl;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
 import dagger.Module;
 import dagger.ObjectGraph;
 import dagger.Provides;
 import java.io.Serializable;
+import java.util.Locale;
 import java.util.Map;
 import javax.inject.Singleton;
 import net.myrrix.client.ClientRecommender;
@@ -19,9 +18,17 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.testng.annotations.Test;
 import uk.co.recipes.DaggerModule;
+import uk.co.recipes.Ingredient;
+import uk.co.recipes.Quantity;
+import uk.co.recipes.Recipe;
+import uk.co.recipes.RecipeStage;
+import uk.co.recipes.User;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
+import uk.co.recipes.api.Units;
 import uk.co.recipes.tags.CommonTags;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
@@ -53,6 +60,8 @@ public class MyrrixUpdaterTest {
         when( item.getTags() ).thenReturn(tags);
         when( item.parent() ).thenReturn(ABSENT);
 
+        /////////////////////////////////////////////////
+
         assertThat( COUNT, is(0));
 
         MU.onAddItem( new AddItemEvent(item) );
@@ -60,7 +69,35 @@ public class MyrrixUpdaterTest {
         assertThat( COUNT, is(3)); // Parent tag + two Tags
     }
 
-    @Module( includes=DaggerModule.class, injects={}, overrides=true)
+    @Test
+    public void testAddRecipe() {
+        final Map<ITag,Serializable> tags = Maps.newHashMap();
+        tags.put( CommonTags.SPICE, Boolean.TRUE);
+        tags.put( CommonTags.INDIAN, "3.0");  // Try boosting
+
+        final ICanonicalItem item = mock( ICanonicalItem.class );
+        when( item.getCanonicalName() ).thenReturn("ginger");
+        when( item.getTags() ).thenReturn(tags);
+        when( item.parent() ).thenReturn(ABSENT);
+
+        final User user = new User( "aregan", "Andrew R");
+
+        final RecipeStage rs1 = new RecipeStage();
+        rs1.addIngredients( new Ingredient( item, new Quantity( Units.TSP, 1)) );
+
+        final Recipe r1 = new Recipe(user, "1", Locale.UK);
+        r1.addStage(rs1);
+
+        /////////////////////////////////////////////////
+
+        assertThat( COUNT, is(3));
+
+        MU.onAddRecipe( new AddRecipeEvent(r1) );
+
+        assertThat( COUNT, is(6)); // Parent tag + two Tags
+    }
+
+    @Module( includes=DaggerModule.class, overrides=true)
     static class TestModule {
 
         @Provides
