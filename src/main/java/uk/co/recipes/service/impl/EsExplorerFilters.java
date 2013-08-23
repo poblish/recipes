@@ -3,19 +3,24 @@
  */
 package uk.co.recipes.service.impl;
 
-import com.codahale.metrics.Timer;
 import static uk.co.recipes.metrics.MetricNames.TIMER_EXPLORER_FILTER_IDS_GET;
-import com.codahale.metrics.MetricRegistry;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.service.api.IExplorerFilter;
+
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
 
 /**
  * TODO

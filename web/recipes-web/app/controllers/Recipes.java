@@ -26,7 +26,6 @@ import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.similarity.IncompatibleIngredientsException;
-import uk.co.recipes.tags.CommonTags;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Multiset;

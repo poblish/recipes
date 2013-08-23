@@ -3,21 +3,24 @@
  */
 package uk.co.recipes.events.impl;
 
-import com.google.common.base.Optional;
-import com.google.common.base.Throwables;
-import com.google.common.collect.Maps;
-import dagger.Module;
-import dagger.ObjectGraph;
-import dagger.Provides;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
+
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.Map;
+
 import javax.inject.Singleton;
+
 import net.myrrix.client.ClientRecommender;
+
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.testng.annotations.Test;
+
 import uk.co.recipes.DaggerModule;
 import uk.co.recipes.Ingredient;
 import uk.co.recipes.Quantity;
@@ -28,10 +31,14 @@ import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.Units;
 import uk.co.recipes.tags.CommonTags;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+
+import com.google.common.base.Optional;
+import com.google.common.base.Throwables;
+import com.google.common.collect.Maps;
+
+import dagger.Module;
+import dagger.ObjectGraph;
+import dagger.Provides;
 
 
 /**
