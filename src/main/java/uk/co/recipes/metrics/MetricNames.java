@@ -23,4 +23,6 @@ public interface MetricNames {
 	String TIMER_ITEMS_SEARCHES = "items.searches";
 	String TIMER_ITEMS_RECOMMENDATIONS = "items.recommendations";
 	String TIMER_ITEMS_MOSTSIMILAR = "items.mostsimilar";
+
+    String TIMER_EXPLORER_FILTER_IDS_GET = "recipe.explorer_filter.ids.get";
 }

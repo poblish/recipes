@@ -3,15 +3,15 @@
  */
 package uk.co.recipes.service.impl;
 
+import com.codahale.metrics.Timer;
+import static uk.co.recipes.metrics.MetricNames.TIMER_EXPLORER_FILTER_IDS_GET;
+import com.codahale.metrics.MetricRegistry;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.ITag;
@@ -32,26 +32,16 @@ public class EsExplorerFilters {
 	@Inject
 	EsSearchService search;
 
+    @Inject
+    MetricRegistry metrics;
+
 
 	public IExplorerFilter includeTags( final ITag... inTags) throws IOException {
 
 		final List<ICanonicalItem> items = search.findItemsByTag( inTags[0] );
 		final List<IRecipe> recipes = search.findRecipesByTag( inTags[0] );
 
-		final long[] ids = new long[ items.size() + recipes.size()];
-		int i = 0;
-
-		for ( ICanonicalItem each : items) {
-			ids[i++] = each.getId();
-		}
-
-		for ( IRecipe each : recipes) {
-			ids[i++] = each.getId();
-		}
- 
-		Arrays.sort(ids);
- 
-		LOG.info("Ids = " + Arrays.toString(ids));
+        final long[] ids = getIdsForResults( items, recipes);
 
 		return new IExplorerFilter() {
 
@@ -71,20 +61,7 @@ public class EsExplorerFilters {
 		final List<ICanonicalItem> items = search.findItemsByTag( inTags[0] );
 		final List<IRecipe> recipes = search.findRecipesByTag( inTags[0] );
 
-		final long[] ids = new long[ items.size() + recipes.size()];
-		int i = 0;
-
-		for ( ICanonicalItem each : items) {
-			ids[i++] = each.getId();
-		}
-
-		for ( IRecipe each : recipes) {
-			ids[i++] = each.getId();
-		}
- 
-		Arrays.sort(ids);
- 
-		LOG.info("Ids = " + Arrays.toString(ids));
+		final long[] ids = getIdsForResults( items, recipes);
 
 		return new IExplorerFilter() {
 
@@ -98,4 +75,27 @@ public class EsExplorerFilters {
 				return ids;
 			}};
 	}
+
+    private long[] getIdsForResults( final List<ICanonicalItem> inItems, final List<IRecipe> inRecipes) {
+        final Timer.Context timerCtxt = metrics.timer(TIMER_EXPLORER_FILTER_IDS_GET).time();
+
+        final long[] ids = new long[ inItems.size() + inRecipes.size()];
+        int i = 0;
+
+        for (ICanonicalItem each : inItems) {
+            ids[i++] = each.getId();
+        }
+
+        for (IRecipe each : inRecipes) {
+            ids[i++] = each.getId();
+        }
+        
+        // Arrays.sort(ids);  // Do *not* bother with this. See http://bit.ly/187WEvC - we don't search enough times to make binary search worthwhile
+ 
+        timerCtxt.close();
+
+        LOG.info("Ids = " + Arrays.toString(ids));
+
+        return ids;
+    }
 }
