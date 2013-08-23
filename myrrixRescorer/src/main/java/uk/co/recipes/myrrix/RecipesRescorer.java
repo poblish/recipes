@@ -3,6 +3,7 @@
  */
 package uk.co.recipes.myrrix;
 
+import com.google.common.primitives.Longs;
 import java.util.Arrays;
 
 import net.myrrix.common.MyrrixRecommender;
@@ -156,7 +157,8 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 	}
 
 	private boolean isLongInArray( final long[] inArray, final long inVal) {
-		return Arrays.binarySearch( inArray, inVal) >= 0;
+	    return Longs.contains( inArray, inVal);
+		// return Arrays.binarySearch( inArray, inVal) >= 0;  // Do *not* bother with this. See http://bit.ly/187WEvC - we don't search enough times to make binary search worthwhile
 	}
 
 	private long[] parseLongArrayString( final String inStr) {
