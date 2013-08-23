@@ -4,6 +4,7 @@
 package uk.co.recipes.events.impl;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
 import dagger.Module;
 import dagger.ObjectGraph;
@@ -102,18 +103,23 @@ public class MyrrixUpdaterTest {
 
         @Provides
         @Singleton
-        ClientRecommender provideClientRecommender() throws TasteException {
-            final ClientRecommender mr = mock( ClientRecommender.class );
-
-            doAnswer( new Answer<Object>() {
-                public Object answer(InvocationOnMock invocation) {
-                    Object[] args = invocation.getArguments();
-                    COUNT++;
-                    return "called with arguments: " + args;
-                }
-            }).when(mr).setItemTag( anyString(), anyLong(), anyFloat());
-
-            return mr;
+        ClientRecommender provideClientRecommender() {
+        	try {
+	            final ClientRecommender mr = mock( ClientRecommender.class );
+	
+	            doAnswer( new Answer<Object>() {
+	                public Object answer(InvocationOnMock invocation) {
+	                    Object[] args = invocation.getArguments();
+	                    COUNT++;
+	                    return "called with arguments: " + args;
+	                }
+	            }).when(mr).setItemTag( anyString(), anyLong(), anyFloat());
+	
+	            return mr;
+        	}
+        	catch (TasteException e) {
+        		throw Throwables.propagate(e);
+        	}
         }
     }
 }
