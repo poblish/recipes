@@ -83,20 +83,35 @@ public class Recipes extends Controller {
     }
 
     public Result rate( final String name, final int inScore) throws IOException, IncompatibleIngredientsException {
-        final IRecipe recipe = recipes.get(name).get();
-
 		final IUser user1 = /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( session() );
 		if ( user1 == null) {
 		    return unauthorized("Not logged-in");
 		}
 
+        final Optional<IRecipe> optRecipe = recipes.get(name);
+        if (!optRecipe.isPresent()) {
+            return notFound("'" + name + "' not found!");
+        }
+
+        final IRecipe recipe = optRecipe.get();
 		ratings.addRating( user1, new RecipeRating( recipe, inScore) );
   
         return redirect("/recipes/" + recipe.getTitle());  // FIXME - horrible way to reload!
     }
 
     public Result removeIngredient( final String name, final String ingredient) throws IOException, IncompatibleIngredientsException, InterruptedException {
-        final IRecipe recipe = recipes.get(name).get();
+		final IUser user1 = /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( session() );
+		if ( user1 == null) {
+		    return unauthorized("Not logged-in");
+		}
+
+        final Optional<IRecipe> optRecipe = recipes.get(name);
+        if (!optRecipe.isPresent()) {
+            return notFound("'" + name + "' not found!");
+        }
+
+        final IRecipe recipe = optRecipe.get();
+
         // FIXME Check recipe.getForkDetails(), also creator vs. current user for permissions!
 
         final ICanonicalItem theItemToRemove = checkNotNull( items.get(ingredient).get() );
