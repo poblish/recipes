@@ -34,4 +34,6 @@ public interface IPersistenceAPI<T> {
     void delete( final T obj) throws IOException;
     void deleteNow( final T obj) throws IOException;
     void deleteAll() throws IOException;
+
+    void waitUntilRefreshed() throws InterruptedException;
 }

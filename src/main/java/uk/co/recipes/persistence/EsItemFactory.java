@@ -239,4 +239,8 @@ public class EsItemFactory implements IItemPersistence {
 
         return results;
 	}
+
+	public void waitUntilRefreshed() {
+		esUtils.waitUntilTypesRefreshed("items");
+	}
 }
