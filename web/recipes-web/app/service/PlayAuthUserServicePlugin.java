@@ -159,6 +159,9 @@ public class PlayAuthUserServicePlugin extends UserServicePlugin {
 		catch (IOException e) {
 			throw Throwables.propagate(e);
 		}
+		catch (InterruptedException e) {
+			throw Throwables.propagate(e);
+		}
 	}
 
 	@Module( includes=DaggerModule.class, injects={})
