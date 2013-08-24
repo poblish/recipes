@@ -39,7 +39,19 @@
 	<hr />
 	<p><span class="label label-default">Created:</span> @recipe.getCreationTime() </p>
 	<p><span class="label label-default">Categorisation:</span> @categorisation</p>
-	
+
+	<div class="btn-group">
+	  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+	    Filter
+	    <span class="caret"></span>
+	  </a>
+	  <ul class="dropdown-menu">
+		@for( eachTag <- controllers.Application.allTags().iterator) {
+	    <li><a href="/user/filter?set=@eachTag">@eachTag</a></li>
+	    }
+	  </ul>
+	</div>
+
 	<p>Similar Recipes:</p>
 	
 	<div class="container-fluid">

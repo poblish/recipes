@@ -29,7 +29,19 @@
 	</div>
 	
 	<hr />
-	
+
+	<div class="btn-group">
+	  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+	    Filter
+	    <span class="caret"></span>
+	  </a>
+	  <ul class="dropdown-menu">
+		@for( eachTag <- controllers.Application.allTags().iterator) {
+	    <li><a href="/user/filter?set=@eachTag">@eachTag</a></li>
+	    }
+	  </ul>
+	</div>
+
 	<p>Similar Items</p>
 	
 	<ol>

@@ -5,7 +5,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.EnumSet;
+import java.util.Set;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 import net.myrrix.client.ClientRecommender;
@@ -14,15 +17,20 @@ import org.apache.mahout.cf.taste.common.TasteException;
 
 import play.mvc.Controller;
 import play.mvc.Result;
+import uk.co.recipes.api.ITag;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.IUserPersistence;
+import uk.co.recipes.tags.CommonTags;
 
 import com.codahale.metrics.ConsoleReporter;
 import com.codahale.metrics.MetricRegistry;
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Ordering;
 
 /**
  * 
@@ -84,5 +92,16 @@ public class Application extends Controller {
 	public static Result oAuthDenied(final String providerKey) {
 		flash(/* FLASH_ERROR_KEY, */ "You need to accept the OAuth connection in order to use this website!");
 		return redirect(routes.Application.index());
+	}
+
+	public static Set<ITag> allTags() {
+		return FluentIterable.from( EnumSet.allOf( CommonTags.class ) ).transform( new Function<CommonTags,ITag>() {
+
+			@Override
+			@Nullable
+			public ITag apply( @Nullable CommonTags inTag) {
+				return inTag;
+			}
+		} ).toSortedSet( Ordering.usingToString() );
 	}
 }
