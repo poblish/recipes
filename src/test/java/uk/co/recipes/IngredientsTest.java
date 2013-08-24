@@ -123,26 +123,6 @@ public class IngredientsTest {
 
 		///////////////////////////////////////////////////
 
-//		final RecipeStage stage1 = new RecipeStage();
-//		stage1.addIngredient(lambIngredient);
-//		stage1.addIngredient(baconIngredient);
-//
-//		final IUser user1 = userFactory.getOrCreate( "Andrew Regan", new Supplier<IUser>() {
-//
-//			@Override
-//			public IUser get() {
-//				return new User( "aregan", "Andrew Regan");
-//			}
-//		} );
-//
-//		final Recipe r = new Recipe(user1, "Herby Lamb Cobbler", Locale.UK);
-//		r.addStage(stage1);
-//		r.addTag( CommonTags.SERVES_COUNT, "4");
-//
-//		recipeFactory.put( r, recipeFactory.toStringId(r));
-//
-//		///////////////////////////////////////////////////
-//
 		itemFactory.waitUntilRefreshed();
 
 		final List<ICanonicalItem> results = searchService.findItemsByTag( CommonTags.MEAT );
@@ -154,6 +134,10 @@ public class IngredientsTest {
 		final IExplorerFilter filter = explorerFilters.includeTags( CommonTags.MEAT );
 		assertThat( filter.idsToInclude().length, is( results.size() ));
 		assertThat( filter.idsToExclude().length, is(0));
+
+		final IExplorerFilter filter2 = explorerFilters.excludeTags( CommonTags.MEAT );
+		assertThat( filter2.idsToInclude().length, is(0));
+		assertThat( filter2.idsToExclude().length, is( results.size() ));
 
 		///////////////////////////////////////////////////
 
