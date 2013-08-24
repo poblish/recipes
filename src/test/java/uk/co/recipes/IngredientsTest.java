@@ -7,7 +7,6 @@ import static org.hamcrest.Matchers.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.apache.http.client.ClientProtocolException;
@@ -28,11 +27,12 @@ import uk.co.recipes.persistence.EsSequenceFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.service.api.IExplorerAPI;
+import uk.co.recipes.service.api.IExplorerFilter;
 import uk.co.recipes.service.api.IItemPersistence;
-import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.api.IUserPersistence;
+import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.EsSearchService;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
@@ -50,7 +50,6 @@ public class IngredientsTest {
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
 	private IItemPersistence itemFactory = GRAPH.get( EsItemFactory.class );
-	private IRecipePersistence recipeFactory = GRAPH.get( EsRecipeFactory.class );
 	private IUserPersistence userFactory = GRAPH.get( EsUserFactory.class );
     private EsSequenceFactory sequenceFactory = GRAPH.get( EsSequenceFactory.class );
 
@@ -58,6 +57,7 @@ public class IngredientsTest {
 
 	private ISearchAPI searchService = GRAPH.get( EsSearchService.class );
     private IExplorerAPI explorerApi = GRAPH.get( MyrrixExplorerService.class );
+    private EsExplorerFilters explorerFilters = GRAPH.get( EsExplorerFilters.class );
     private IRecommendationsAPI recsApi = GRAPH.get( MyrrixRecommendationService.class );
 
     private IEventService events = GRAPH.get( IEventService.class );
@@ -68,6 +68,8 @@ public class IngredientsTest {
 		updater.startListening();
 
 		itemFactory.deleteAll();
+		GRAPH.get( EsRecipeFactory.class ).deleteAll();
+
         sequenceFactory.deleteAll();
 	}
 
@@ -121,33 +123,37 @@ public class IngredientsTest {
 
 		///////////////////////////////////////////////////
 
-		final RecipeStage stage1 = new RecipeStage();
-		stage1.addIngredient(lambIngredient);
-		stage1.addIngredient(baconIngredient);
-
-		final IUser user1 = userFactory.getOrCreate( "Andrew Regan", new Supplier<IUser>() {
-
-			@Override
-			public IUser get() {
-				return new User( "aregan", "Andrew Regan");
-			}
-		} );
-
-		final Recipe r = new Recipe(user1, "Herby Lamb Cobbler", Locale.UK);
-		r.addStage(stage1);
-		r.addTag( CommonTags.SERVES_COUNT, "4");
-
-		recipeFactory.put( r, recipeFactory.toStringId(r));
-
-		///////////////////////////////////////////////////
-
-		Thread.sleep(1000);  // Time for indexing to happen!
+//		final RecipeStage stage1 = new RecipeStage();
+//		stage1.addIngredient(lambIngredient);
+//		stage1.addIngredient(baconIngredient);
+//
+//		final IUser user1 = userFactory.getOrCreate( "Andrew Regan", new Supplier<IUser>() {
+//
+//			@Override
+//			public IUser get() {
+//				return new User( "aregan", "Andrew Regan");
+//			}
+//		} );
+//
+//		final Recipe r = new Recipe(user1, "Herby Lamb Cobbler", Locale.UK);
+//		r.addStage(stage1);
+//		r.addTag( CommonTags.SERVES_COUNT, "4");
+//
+//		recipeFactory.put( r, recipeFactory.toStringId(r));
+//
+//		///////////////////////////////////////////////////
+//
+		itemFactory.waitUntilRefreshed();
 
 		final List<ICanonicalItem> results = searchService.findItemsByTag( CommonTags.MEAT );
-		assertThat( results.size(), greaterThanOrEqualTo(19));
+		assertThat( results.size(), greaterThanOrEqualTo(22));
 		assertThat( results, hasItem( itemFactory.getByName("beef_stock") ));
 		assertThat( results, hasItem( itemFactory.getByName("lamb") ));
 		assertThat( results, hasItem( itemFactory.getByName("diced_chicken") ));
+
+		final IExplorerFilter filter = explorerFilters.includeTags( CommonTags.MEAT );
+		assertThat( filter.idsToInclude().length, is( results.size() ));
+		assertThat( filter.idsToExclude().length, is(0));
 
 		///////////////////////////////////////////////////
 
