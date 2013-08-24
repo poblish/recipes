@@ -66,7 +66,7 @@ public class UserPersistenceTest {
     }
 
     @Test
-    public void testPersistenceWithAuth() throws IOException {
+    public void testPersistenceWithAuth() throws IOException, InterruptedException {
         final String testUName = "aregan_" + System.nanoTime();
         final String testDName = "Andrew Regan #" + System.nanoTime();
 
