@@ -14,6 +14,7 @@ import uk.co.recipes.Recipe;
 import uk.co.recipes.RecipeStage;
 import uk.co.recipes.User;
 import uk.co.recipes.UserAuth;
+import uk.co.recipes.UserPreferences;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IForkDetails;
 import uk.co.recipes.api.IIngredient;
@@ -24,14 +25,17 @@ import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.IUnit;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.api.IUserAuth;
+import uk.co.recipes.api.IUserPreferences;
 import uk.co.recipes.api.Units;
 import uk.co.recipes.api.ratings.IItemRating;
 import uk.co.recipes.api.ratings.IRecipeRating;
 import uk.co.recipes.ratings.ItemRating;
 import uk.co.recipes.ratings.RecipeRating;
+import uk.co.recipes.tags.CommonTags;
 import uk.co.recipes.tags.TagUtils;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -92,6 +96,18 @@ public final class JacksonFactory {
         testModule.addAbstractTypeMapping( IForkDetails.class, ForkDetails.class);
         testModule.addAbstractTypeMapping( IUser.class, User.class);
         testModule.addAbstractTypeMapping( IUserAuth.class, UserAuth.class);
+        testModule.addAbstractTypeMapping( IUserPreferences.class, UserPreferences.class);
+
+        testModule.addDeserializer( ITag.class, new JsonDeserializer<ITag>() {
+
+			@Override
+			public ITag deserialize( JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+                try {
+                    return CommonTags.valueOf( jp.getText() );
+                } catch (IOException e) {
+                    throw Throwables.propagate(e);
+                }
+			}});
 
         inMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);  // When reading in ES hits, e.g. _index
         inMapper.configure(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS, false);
