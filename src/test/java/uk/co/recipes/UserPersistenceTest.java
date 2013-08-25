@@ -5,6 +5,7 @@ package uk.co.recipes;
 
 import static com.google.common.collect.Sets.newHashSet;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ import uk.co.recipes.ratings.UserRatings;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.IUserPersistence;
+import uk.co.recipes.tags.CommonTags;
 import uk.co.recipes.test.TestDataUtils;
 import dagger.ObjectGraph;
 
@@ -63,6 +65,23 @@ public class UserPersistenceTest {
         while ( recipeFactory.countAll() < 1) {
         	Thread.sleep(200); // Wait for saves to appear...
         }
+    }
+
+    @Test
+    public void testPersistenceWithPrefs() throws IOException, InterruptedException {
+        final String testUName = "aregan_" + System.nanoTime();
+        final String testDName = "Andrew Regan #" + System.nanoTime();
+
+        final IUser u1 = new User( testUName, testDName);
+        u1.getPrefs().explorerInclude( CommonTags.VEGETABLE );
+        u1.getPrefs().explorerExclude( CommonTags.MEAT );
+        userFactory.put( u1, userFactory.toStringId(u1));
+
+        userFactory.waitUntilRefreshed();
+
+        final IUser retrievedUser = userFactory.getByName(testUName);
+        assertThat( retrievedUser.getPrefs().getExplorerIncludeTags(), hasItem( CommonTags.VEGETABLE ));
+        assertThat( retrievedUser.getPrefs().getExplorerExcludeTags(), hasItem( CommonTags.MEAT ));
     }
 
     @Test

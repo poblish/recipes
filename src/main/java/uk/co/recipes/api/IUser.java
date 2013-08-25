@@ -34,6 +34,8 @@ public interface IUser extends java.io.Serializable {
     boolean isActive();
     DateTime getLastLoginTime();
 
+    IUserPreferences getPrefs();
+
     void addAuth( IUserAuth auth);
     boolean removeAuth( IUserAuth auth);
     Set<IUserAuth> getAuths();

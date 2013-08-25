@@ -13,6 +13,7 @@ import org.joda.time.DateTime;
 
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.api.IUserAuth;
+import uk.co.recipes.api.IUserPreferences;
 import uk.co.recipes.api.ratings.IItemRating;
 import uk.co.recipes.api.ratings.IRecipeRating;
 
@@ -49,6 +50,7 @@ public class User implements IUser {
     private final Collection<IItemRating> itemRatings = Sets.newHashSet();  // FIXME Be careful loading this, could be big
     private final Collection<IRecipeRating> recipeRatings = Sets.newHashSet();  // FIXME Be careful loading this, could be big
 	private final Set<IUserAuth> auths = Sets.newHashSet();
+	private final IUserPreferences prefs = new UserPreferences();
 
     @JsonCreator
     public User( @JsonProperty("userName") final String inUName, @JsonProperty("displayName") final String inDName) {
@@ -185,6 +187,14 @@ public class User implements IUser {
 //    public void removeRating(IRating inRating) {
 //        ratings.remove(inRating);
 //    }
+
+	/* (non-Javadoc)
+	 * @see uk.co.recipes.api.IUser#getPrefs()
+	 */
+	@Override
+	public IUserPreferences getPrefs() {
+		return prefs;
+	}
 
 	@Override
 	public int hashCode() {
