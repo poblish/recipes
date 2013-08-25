@@ -5,6 +5,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -17,19 +19,24 @@ import org.apache.mahout.cf.taste.common.TasteException;
 
 import play.mvc.Controller;
 import play.mvc.Result;
+import service.PlayAuthUserServicePlugin;
 import uk.co.recipes.api.ITag;
+import uk.co.recipes.api.IUser;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsUserFactory;
+import uk.co.recipes.service.api.IExplorerFilter;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.IUserPersistence;
+import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.tags.CommonTags;
 
 import com.codahale.metrics.ConsoleReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 
 /**
@@ -103,5 +110,37 @@ public class Application extends Controller {
 				return inTag;
 			}
 		} ).toSortedSet( Ordering.usingToString() );
+	}
+
+	public static Collection<ITag> getExplorerIncludeTags() {
+        final IUser currUser = /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( session() );
+        if ( currUser == null) {
+            return Collections.emptyList();
+        }
+
+        return currUser.getPrefs().getExplorerIncludeTags();
+	}
+
+	public static Collection<ITag> getExplorerExcludeTags() {
+        final IUser currUser = /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( session() );
+        if ( currUser == null) {
+            return Collections.emptyList();
+        }
+
+        return currUser.getPrefs().getExplorerExcludeTags();
+	}
+
+	public static IExplorerFilter getExplorerFilter( final EsExplorerFilters inFilters) {
+        final IUser currUser = /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( session() );
+        if ( currUser == null) {
+            return EsExplorerFilters.nullFilter();
+        }
+
+        try {
+			return inFilters.includeExcludeTags( Iterables.get( getExplorerIncludeTags(), 0, null), Iterables.get( getExplorerExcludeTags(), 0, null) );
+		}
+        catch (Exception e) {
+			return EsExplorerFilters.nullFilter();
+		}
 	}
 }

@@ -56,15 +56,13 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	@Inject
 	MetricRegistry metrics;
 
-	private static final IExplorerFilter NULL_FILTER = new NullFilter();
-
 
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.service.api.IExplorerAPI#similarIngredients(uk.co.recipes.api.IUser, int)
 	 */
 	@Override
 	public List<ICanonicalItem> similarIngredients( final ICanonicalItem item, int inNumRecs) {
-		return similarIngredients( item, NULL_FILTER, inNumRecs);
+		return similarIngredients( item, EsExplorerFilters.nullFilter(), inNumRecs);
 	}
 
 	@Override
@@ -96,7 +94,7 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	 */
 	@Override
 	public List<IRecipe> similarRecipes( final IRecipe inTarget, int inNumRecs) {
-		return similarRecipes( inTarget, NULL_FILTER, inNumRecs);
+		return similarRecipes( inTarget, EsExplorerFilters.nullFilter(), inNumRecs);
 	}
 
 	@Override
@@ -161,18 +159,5 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	@Override
 	public float similarityToItem( final long item1, final long item2) {
 		return tasteSimilarity.similarityToItem( item1, item2);
-	}
-
-	private static class NullFilter implements IExplorerFilter {
-
-		@Override
-		public long[] idsToInclude() {
-			return new long[0];
-		}
-
-		@Override
-		public long[] idsToExclude() {
-			return new long[0];
-		}
 	}
 }

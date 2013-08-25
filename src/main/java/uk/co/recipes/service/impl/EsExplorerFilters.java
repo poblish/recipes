@@ -32,6 +32,8 @@ public class EsExplorerFilters {
 
 	private static final Logger LOG = LoggerFactory.getLogger( EsExplorerFilters.class );
 
+	private static final IExplorerFilter NULL_FILTER = new NullFilter();
+
 	private static final long[] EMPTY_ARRAY = new long[0];
 
 	@Inject
@@ -40,6 +42,27 @@ public class EsExplorerFilters {
     @Inject
     MetricRegistry metrics;
 
+
+    // FIXME
+	public IExplorerFilter includeExcludeTags( final ITag incl, final ITag excl) throws IOException {
+
+		final List<ICanonicalItem> items = search.findItemsByTag(incl);
+		final List<IRecipe> recipes = search.findRecipesByTag(excl);
+
+        final long[] ids = getIdsForResults( items, recipes);
+
+		return new IExplorerFilter() {
+
+			@Override
+			public long[] idsToInclude() {
+				return ids;
+			}
+
+			@Override
+			public long[] idsToExclude() {
+				return EMPTY_ARRAY;
+			}};
+	}
 
 	public IExplorerFilter includeTags( final ITag... inTags) throws IOException {
 
@@ -103,4 +126,21 @@ public class EsExplorerFilters {
 
         return ids;
     }
+
+    public static IExplorerFilter nullFilter() {
+    	return NULL_FILTER;
+    }
+
+	private static class NullFilter implements IExplorerFilter {
+
+		@Override
+		public long[] idsToInclude() {
+			return new long[0];
+		}
+
+		@Override
+		public long[] idsToExclude() {
+			return new long[0];
+		}
+	}
 }
