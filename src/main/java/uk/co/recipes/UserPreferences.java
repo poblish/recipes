@@ -9,6 +9,7 @@ import java.util.Set;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.IUserPreferences;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 
 /**
@@ -52,5 +53,12 @@ public class UserPreferences implements IUserPreferences {
 	@Override
 	public void explorerExclude( ITag inTag) {
 		excludeTags.add(inTag);
+	}
+
+	public String toString() {
+		return Objects.toStringHelper(this)
+						.add("includes", includeTags)
+						.add("excludes", excludeTags)
+						.toString();
 	}
 }
