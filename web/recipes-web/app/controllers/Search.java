@@ -39,10 +39,10 @@ public class Search extends Controller {
         final boolean gotInput = ( theInputs != null && theInputs.length > 0 && !theInputs[0].isEmpty());
 
         if (!gotInput) {
-            return ok(views.html.search.render( EMPTY_RECIPES, EMPTY_ITEMS));
+            return ok(views.html.search.render( "-", EMPTY_RECIPES, EMPTY_ITEMS));
         }
 
         final String termToUse = theInputs[0].trim();
-        return ok(views.html.search.render( search.findRecipesByName(termToUse), search.findItemsByName(termToUse) ));
+        return ok(views.html.search.render( "'" + termToUse + "'", search.findRecipesByName(termToUse), search.findItemsByName(termToUse) ));
     }
 }

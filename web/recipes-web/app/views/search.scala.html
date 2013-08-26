@@ -1,6 +1,6 @@
-@(foundRecipes: List[uk.co.recipes.api.IRecipe], foundItems: List[uk.co.recipes.api.ICanonicalItem])
+@(searchQuery: String, foundRecipes: List[uk.co.recipes.api.IRecipe], foundItems: List[uk.co.recipes.api.ICanonicalItem])
 
-@main("Search Results") {
+@main("Search Results: " + searchQuery) {
 	<section id="top">
 	    <div class="wrapper">
 	        <h1>Search Results</h1>
