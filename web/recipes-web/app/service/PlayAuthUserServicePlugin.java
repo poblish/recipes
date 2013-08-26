@@ -47,7 +47,11 @@ public class PlayAuthUserServicePlugin extends UserServicePlugin {
     public static IUser getLocalUser(final Session session) {
         try {
             final AuthUser currentAuthUser = PlayAuthenticate.getUser(session);
-            Logger.info("currentAuthUser: " + currentAuthUser);
+
+            if (Logger.isTraceEnabled()) {
+            	Logger.trace("currentAuthUser: " + currentAuthUser);
+            }
+
             if ( currentAuthUser == null) {
                 return null;
             }
