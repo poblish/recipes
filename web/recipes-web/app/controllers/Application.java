@@ -34,10 +34,10 @@ import uk.co.recipes.tags.CommonTags;
 
 import com.codahale.metrics.ConsoleReporter;
 import com.codahale.metrics.MetricRegistry;
+import com.feth.play.module.pa.PlayAuthenticate;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 
 /**
@@ -100,6 +100,10 @@ public class Application extends Controller {
 	public static Result oAuthDenied(final String providerKey) {
 		flash(/* FLASH_ERROR_KEY, */ "You need to accept the OAuth connection in order to use this website!");
 		return redirect(routes.Application.index());
+	}
+
+	public static void storeLoginRedirectUrl() {
+		PlayAuthenticate.storeOriginalUrl( ctx() );
 	}
 
 	public static Set<ITag> allTags() {
