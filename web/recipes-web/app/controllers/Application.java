@@ -138,7 +138,7 @@ public class Application extends Controller {
         }
 
         try {
-			return inFilters.includeExcludeTags( Iterables.get( getExplorerIncludeTags(), 0, null), Iterables.get( getExplorerExcludeTags(), 0, null) );
+			return inFilters.build().includeTags( getExplorerIncludeTags() ).excludeTags( getExplorerExcludeTags() ).toFilter();
 		}
         catch (Exception e) {
 			return EsExplorerFilters.nullFilter();
@@ -149,8 +149,8 @@ public class Application extends Controller {
         return handleUserPreference( new UserTask() {
 
 			@Override
-			public void run( IUser inUser) {
-				inUser.getPrefs().explorerIncludeAdd( CommonTags.valueOf(inTag) );
+			public boolean makeChanges( IUser inUser) {
+				return inUser.getPrefs().explorerIncludeAdd( CommonTags.valueOf(inTag) );
 			}} );
     }
 
@@ -158,8 +158,8 @@ public class Application extends Controller {
         return handleUserPreference( new UserTask() {
 
 			@Override
-			public void run( IUser inUser) {
-				inUser.getPrefs().explorerIncludeRemove( CommonTags.valueOf(inTag) );
+			public boolean makeChanges( IUser inUser) {
+				return inUser.getPrefs().explorerIncludeRemove( CommonTags.valueOf(inTag) );
 			}} );
     }
 
@@ -167,8 +167,8 @@ public class Application extends Controller {
         return handleUserPreference( new UserTask() {
 
 			@Override
-			public void run( IUser inUser) {
-				inUser.getPrefs().explorerExcludeAdd( CommonTags.valueOf(inTag) );
+			public boolean makeChanges( IUser inUser) {
+				return inUser.getPrefs().explorerExcludeAdd( CommonTags.valueOf(inTag) );
 			}} );
     }
 
@@ -176,8 +176,17 @@ public class Application extends Controller {
         return handleUserPreference( new UserTask() {
 
 			@Override
-			public void run( IUser inUser) {
-				inUser.getPrefs().explorerExcludeRemove( CommonTags.valueOf(inTag) );
+			public boolean makeChanges( IUser inUser) {
+				return inUser.getPrefs().explorerExcludeRemove( CommonTags.valueOf(inTag) );
+			}} );
+    }
+
+	public Result explorerClearAll() {
+        return handleUserPreference( new UserTask() {
+
+			@Override
+			public boolean makeChanges( IUser inUser) {
+				return inUser.getPrefs().explorerClearAll();
 			}} );
     }
 
@@ -187,7 +196,9 @@ public class Application extends Controller {
 		    return unauthorized("Not logged-in");
         }
 
-        inTask.run(currUser);
+        if (!inTask.makeChanges(currUser)) {
+        	return ok();
+        }
 
         try {
 			((EsUserFactory) users).update(currUser);
@@ -196,10 +207,18 @@ public class Application extends Controller {
 			throw Throwables.propagate(e);
 		}
 
+        try {
+			users.waitUntilRefreshed();
+		}
+        catch (InterruptedException e) {
+			// NOOP
+		}
+
         return ok();
     }
 
 	private interface UserTask {
-		void run( final IUser inUser);
+		// Return false if no change
+		boolean makeChanges( final IUser inUser);
 	}
 }

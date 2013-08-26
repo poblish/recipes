@@ -40,23 +40,31 @@ public class UserPreferences implements IUserPreferences {
 	}
 
 	@Override
-	public void explorerIncludeAdd( ITag inTag) {
-		includeTags.add(inTag);
+	public boolean explorerIncludeAdd( ITag inTag) {
+		return includeTags.add(inTag);
 	}
 
 	@Override
-	public void explorerExcludeAdd( ITag inTag) {
-		excludeTags.add(inTag);
+	public boolean explorerExcludeAdd( ITag inTag) {
+		return excludeTags.add(inTag);
 	}
 
 	@Override
-	public void explorerIncludeRemove( ITag inTag) {
-		includeTags.remove(inTag);
+	public boolean explorerIncludeRemove( ITag inTag) {
+		return includeTags.remove(inTag);
 	}
 
 	@Override
-	public void explorerExcludeRemove( ITag inTag) {
-		excludeTags.remove(inTag);
+	public boolean explorerExcludeRemove( ITag inTag) {
+		return excludeTags.remove(inTag);
+	}
+
+	@Override
+	public boolean explorerClearAll() {
+		boolean gotSome = !includeTags.isEmpty() || !excludeTags.isEmpty();
+		includeTags.clear();
+		excludeTags.clear();
+		return gotSome;
 	}
 
 	public String toString() {

@@ -86,11 +86,11 @@ public class RecipeSearchTest {
 		final List<IRecipe> foundRecipes = searchApi.findRecipesByTag( CommonTags.MEAT );
 		assertThat( foundRecipes.size(), greaterThanOrEqualTo(4));  // Surely 5 ?!?
 
-		final IExplorerFilter filter = explorerFilters.includeTags( CommonTags.MEAT );
+		final IExplorerFilter filter = explorerFilters.build().includeTags( CommonTags.MEAT ).toFilter();
 		assertThat( filter.idsToInclude().length, is( foundRecipes.size() + numItems));
 		assertThat( filter.idsToExclude().length, is(0));
 
-		final IExplorerFilter filter2 = explorerFilters.excludeTags( CommonTags.MEAT );
+		final IExplorerFilter filter2 = explorerFilters.build().excludeTags( CommonTags.MEAT ).toFilter();
 		assertThat( filter2.idsToInclude().length, is(0));
 		assertThat( filter2.idsToExclude().length, is( foundRecipes.size() + numItems));
 	}

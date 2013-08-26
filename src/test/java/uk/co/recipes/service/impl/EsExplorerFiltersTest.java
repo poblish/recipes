@@ -56,14 +56,14 @@ public class EsExplorerFiltersTest {
 
 	@Test
 	public void testIncludeTags() throws IOException {
-		final IExplorerFilter filter = filters.includeTags( CommonTags.FRUIT );
+		final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT ).toFilter();
 		assertThat( filter.idsToInclude().length, is(24));
 		assertThat( filter.idsToExclude().length, is(0));
 	}
 
 	@Test
 	public void testExcludeTags() throws IOException {
-		final IExplorerFilter filter = filters.excludeTags( CommonTags.FRUIT );
+		final IExplorerFilter filter = filters.build().excludeTags( CommonTags.FRUIT ).toFilter();
 		assertThat( filter.idsToInclude().length, is(0));
 		assertThat( filter.idsToExclude().length, is(24));
 	}

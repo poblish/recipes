@@ -131,11 +131,11 @@ public class IngredientsTest {
 		assertThat( results, hasItem( itemFactory.getByName("lamb") ));
 		assertThat( results, hasItem( itemFactory.getByName("diced_chicken") ));
 
-		final IExplorerFilter filter = explorerFilters.includeTags( CommonTags.MEAT );
+		final IExplorerFilter filter = explorerFilters.build().includeTags( CommonTags.MEAT ).toFilter();
 		assertThat( filter.idsToInclude().length, is( results.size() ));
 		assertThat( filter.idsToExclude().length, is(0));
 
-		final IExplorerFilter filter2 = explorerFilters.excludeTags( CommonTags.MEAT );
+		final IExplorerFilter filter2 = explorerFilters.build().excludeTags( CommonTags.MEAT ).toFilter();
 		assertThat( filter2.idsToInclude().length, is(0));
 		assertThat( filter2.idsToExclude().length, is( results.size() ));
 

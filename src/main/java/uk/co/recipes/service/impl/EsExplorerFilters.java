@@ -7,6 +7,7 @@ import static uk.co.recipes.metrics.MetricNames.TIMER_EXPLORER_FILTER_IDS_GET;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -21,6 +22,7 @@ import uk.co.recipes.service.api.IExplorerFilter;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
+import com.google.common.primitives.Longs;
 
 /**
  * TODO
@@ -43,88 +45,99 @@ public class EsExplorerFilters {
     MetricRegistry metrics;
 
 
-    // FIXME
-	public IExplorerFilter includeExcludeTags( final ITag incl, final ITag excl) throws IOException {
+    public Builder build() {
+    	return new Builder();
+    }
 
-		final List<ICanonicalItem> items = search.findItemsByTag(incl);
-		final List<IRecipe> recipes = search.findRecipesByTag(excl);
+    public class Builder {
 
-        final long[] ids = getIdsForResults( items, recipes);
+    	private long[] includeIds = EMPTY_ARRAY;
+    	private long[] excludeIds = EMPTY_ARRAY;
 
-		return new IExplorerFilter() {
+    	public Builder includeTag( final ITag inTag) throws IOException {
 
-			@Override
-			public long[] idsToInclude() {
-				return ids;
-			}
+    		final List<ICanonicalItem> items = search.findItemsByTag(inTag);
+    		final List<IRecipe> recipes = search.findRecipesByTag(inTag);
+            includeIds = Longs.concat( includeIds, getIdsForResults( items, recipes));
+            return this;
+    	}
 
-			@Override
-			public long[] idsToExclude() {
-				return EMPTY_ARRAY;
-			}};
-	}
+    	// FIXME - very inefficient
+    	public Builder includeTags( final ITag... inTags) throws IOException {
+    		for ( ITag each : inTags) {
+    			includeTag(each);
+    		}
+            return this;
+    	}
 
-	public IExplorerFilter includeTags( final ITag... inTags) throws IOException {
+    	// FIXME - very inefficient
+    	public Builder includeTags( final Collection<ITag> inTags) throws IOException {
+    		for ( ITag each : inTags) {
+    			includeTag(each);
+    		}
+            return this;
+    	}
 
-		final List<ICanonicalItem> items = search.findItemsByTag( inTags[0] );
-		final List<IRecipe> recipes = search.findRecipesByTag( inTags[0] );
+    	public Builder excludeTag( final ITag inTag) throws IOException {
 
-        final long[] ids = getIdsForResults( items, recipes);
+    		final List<ICanonicalItem> items = search.findItemsByTag(inTag);
+    		final List<IRecipe> recipes = search.findRecipesByTag(inTag);
+            excludeIds = Longs.concat( excludeIds, getIdsForResults( items, recipes));
+            return this;
+    	}
 
-		return new IExplorerFilter() {
+    	// FIXME - very inefficient
+    	public Builder excludeTags( final ITag... inTags) throws IOException {
+    		for ( ITag each : inTags) {
+    			excludeTag(each);
+    		}
+            return this;
+    	}
 
-			@Override
-			public long[] idsToInclude() {
-				return ids;
-			}
+    	// FIXME - very inefficient
+    	public Builder excludeTags( final Collection<ITag> inTags) throws IOException {
+    		for ( ITag each : inTags) {
+    			excludeTag(each);
+    		}
+            return this;
+    	}
 
-			@Override
-			public long[] idsToExclude() {
-				return EMPTY_ARRAY;
-			}};
-	}
+        private long[] getIdsForResults( final List<ICanonicalItem> inItems, final List<IRecipe> inRecipes) {
+            final Timer.Context timerCtxt = metrics.timer(TIMER_EXPLORER_FILTER_IDS_GET).time();
 
-	public IExplorerFilter excludeTags( final ITag... inTags) throws IOException {
+            final long[] ids = new long[ inItems.size() + inRecipes.size()];
+            int i = 0;
 
-		final List<ICanonicalItem> items = search.findItemsByTag( inTags[0] );
-		final List<IRecipe> recipes = search.findRecipesByTag( inTags[0] );
+            for (ICanonicalItem each : inItems) {
+                ids[i++] = each.getId();
+            }
 
-		final long[] ids = getIdsForResults( items, recipes);
+            for (IRecipe each : inRecipes) {
+                ids[i++] = each.getId();
+            }
+            
+            // Arrays.sort(ids);  // Do *not* bother with this. See http://bit.ly/187WEvC - we don't search enough times to make binary search worthwhile
+     
+            timerCtxt.close();
 
-		return new IExplorerFilter() {
+            LOG.info("Ids = " + Arrays.toString(ids));
 
-			@Override
-			public long[] idsToInclude() {
-				return EMPTY_ARRAY;
-			}
-
-			@Override
-			public long[] idsToExclude() {
-				return ids;
-			}};
-	}
-
-    private long[] getIdsForResults( final List<ICanonicalItem> inItems, final List<IRecipe> inRecipes) {
-        final Timer.Context timerCtxt = metrics.timer(TIMER_EXPLORER_FILTER_IDS_GET).time();
-
-        final long[] ids = new long[ inItems.size() + inRecipes.size()];
-        int i = 0;
-
-        for (ICanonicalItem each : inItems) {
-            ids[i++] = each.getId();
+            return ids;
         }
 
-        for (IRecipe each : inRecipes) {
-            ids[i++] = each.getId();
-        }
-        
-        // Arrays.sort(ids);  // Do *not* bother with this. See http://bit.ly/187WEvC - we don't search enough times to make binary search worthwhile
- 
-        timerCtxt.close();
+    	public IExplorerFilter toFilter() {
+    		return new IExplorerFilter() {
 
-        LOG.info("Ids = " + Arrays.toString(ids));
+				@Override
+				public long[] idsToInclude() {
+					return includeIds;
+				}
 
-        return ids;
+				@Override
+				public long[] idsToExclude() {
+					return excludeIds;
+				}};
+    	}
     }
 
     public static IExplorerFilter nullFilter() {
@@ -135,12 +148,12 @@ public class EsExplorerFilters {
 
 		@Override
 		public long[] idsToInclude() {
-			return new long[0];
+			return EMPTY_ARRAY;
 		}
 
 		@Override
 		public long[] idsToExclude() {
-			return new long[0];
+			return EMPTY_ARRAY;
 		}
 	}
 }
