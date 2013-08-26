@@ -14,8 +14,10 @@ import java.util.Collection;
 public interface IUserPreferences {
 
 	// FIXME These are pretty rubbish
-	void explorerInclude( final ITag inTag);
-	void explorerExclude( final ITag inTag);
+	void explorerIncludeAdd( final ITag inTag);
+	void explorerIncludeRemove( final ITag inTag);
+	void explorerExcludeAdd( final ITag inTag);
+	void explorerExcludeRemove( final ITag inTag);
 
 	Collection<ITag> getExplorerIncludeTags();
 	Collection<ITag> getExplorerExcludeTags();

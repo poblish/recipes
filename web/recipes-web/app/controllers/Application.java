@@ -35,6 +35,7 @@ import uk.co.recipes.tags.CommonTags;
 import com.codahale.metrics.ConsoleReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Function;
+import com.google.common.base.Throwables;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
@@ -142,5 +143,63 @@ public class Application extends Controller {
         catch (Exception e) {
 			return EsExplorerFilters.nullFilter();
 		}
+	}
+
+	public Result explorerIncludeAddTag( final String inTag) {
+        return handleUserPreference( new UserTask() {
+
+			@Override
+			public void run( IUser inUser) {
+				inUser.getPrefs().explorerIncludeAdd( CommonTags.valueOf(inTag) );
+			}} );
+    }
+
+	public Result explorerIncludeRemoveTag( final String inTag) {
+        return handleUserPreference( new UserTask() {
+
+			@Override
+			public void run( IUser inUser) {
+				inUser.getPrefs().explorerIncludeRemove( CommonTags.valueOf(inTag) );
+			}} );
+    }
+
+	public Result explorerExcludeAddTag( final String inTag) {
+        return handleUserPreference( new UserTask() {
+
+			@Override
+			public void run( IUser inUser) {
+				inUser.getPrefs().explorerExcludeAdd( CommonTags.valueOf(inTag) );
+			}} );
+    }
+
+	public Result explorerExcludeRemoveTag( final String inTag) {
+        return handleUserPreference( new UserTask() {
+
+			@Override
+			public void run( IUser inUser) {
+				inUser.getPrefs().explorerExcludeRemove( CommonTags.valueOf(inTag) );
+			}} );
+    }
+
+	public Result handleUserPreference( final UserTask inTask) {
+        final IUser currUser = /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( session() );
+        if ( currUser == null) {
+		    return unauthorized("Not logged-in");
+        }
+
+        inTask.run(currUser);
+
+        try {
+			((EsUserFactory) users).update(currUser);
+		}
+        catch (IOException e) {
+			throw Throwables.propagate(e);
+		}
+
+        return ok();
+    }
+
+	private interface UserTask {
+		void run( final IUser inUser);
 	}
 }

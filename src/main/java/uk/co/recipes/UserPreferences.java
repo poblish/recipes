@@ -39,20 +39,24 @@ public class UserPreferences implements IUserPreferences {
 		return excludeTags;
 	}
 
-	/* (non-Javadoc)
-	 * @see uk.co.recipes.api.IUserPreferences#explorerInclude(uk.co.recipes.api.ITag)
-	 */
 	@Override
-	public void explorerInclude( ITag inTag) {
+	public void explorerIncludeAdd( ITag inTag) {
 		includeTags.add(inTag);
 	}
 
-	/* (non-Javadoc)
-	 * @see uk.co.recipes.api.IUserPreferences#explorerExclude(uk.co.recipes.api.ITag)
-	 */
 	@Override
-	public void explorerExclude( ITag inTag) {
+	public void explorerExcludeAdd( ITag inTag) {
 		excludeTags.add(inTag);
+	}
+
+	@Override
+	public void explorerIncludeRemove( ITag inTag) {
+		includeTags.remove(inTag);
+	}
+
+	@Override
+	public void explorerExcludeRemove( ITag inTag) {
+		excludeTags.remove(inTag);
 	}
 
 	public String toString() {

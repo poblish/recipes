@@ -73,8 +73,8 @@ public class UserPersistenceTest {
         final String testDName = "Andrew Regan #" + System.nanoTime();
 
         final IUser u1 = new User( testUName, testDName);
-        u1.getPrefs().explorerInclude( CommonTags.VEGETABLE );
-        u1.getPrefs().explorerExclude( CommonTags.MEAT );
+        u1.getPrefs().explorerIncludeAdd( CommonTags.VEGETABLE );
+        u1.getPrefs().explorerExcludeAdd( CommonTags.MEAT );
         userFactory.put( u1, userFactory.toStringId(u1));
 
         userFactory.waitUntilRefreshed();

@@ -14,6 +14,10 @@ GET     /recipes.html               @controllers.Recipes.test()
 GET     /search                     @controllers.Search.doSearch()
 GET     /tags/:name                 @controllers.Tags.display(name: String)
 GET     /users/:id                  @controllers.Users.display(id: String)
+GET     /user/filter/inc/addTag=:tag  @controllers.Application.explorerIncludeAddTag(tag: String)
+GET     /user/filter/inc/remTag=:tag  @controllers.Application.explorerIncludeRemoveTag(tag: String)
+GET     /user/filter/exc/addTag=:tag  @controllers.Application.explorerExcludeAddTag(tag: String)
+GET     /user/filter/exc/remTag=:tag  @controllers.Application.explorerExcludeRemoveTag(tag: String)
 
 GET     /logout                     com.feth.play.module.pa.controllers.Authenticate.logout
 GET     /authenticate/:prv          com.feth.play.module.pa.controllers.Authenticate.authenticate(prv: String)
