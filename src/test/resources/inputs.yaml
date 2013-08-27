@@ -64,7 +64,7 @@
 ---
 {canonicalName: Asafoetida, tags: {SPICE, INDIAN}}
 ---
-{canonicalName: Caraway Seeds, tags: {SPICE}}
+{canonicalName: Caraway Seeds, tags: {SPICE, ANISEED}}
 ---
 {canonicalName: Cardamom, tags: {SPICE, INDIAN}, aliases: {Cardamom Pods}}
 ---
@@ -96,7 +96,7 @@
 ---
 {    canonicalName: Mild Curry Powder, parent: Curry Powder}
 ---
-{canonicalName: Fennel Seeds, tags: {SPICE, SEED}, aliases: {Fennel Seed}}
+{canonicalName: Fennel Seeds, tags: {SPICE, SEED, ANISEED}, aliases: {Fennel Seed}}
 ---
 {canonicalName: Garam Masala, tags: {SPICE, INDIAN}, aliases: {Garam Masala Powder}}
 ---
@@ -188,7 +188,7 @@
 ---
 {canonicalName: Cucumber, tags: VEGETABLE}
 ---
-{canonicalName: Fennel Bulb, tags: {VEGETABLE, ITALIAN}, aliases: {Fennel, Fennel Bulbs}}
+{canonicalName: Fennel Bulb, tags: {VEGETABLE, GERMAN, ITALIAN, ANISEED}, aliases: {Fennel, Fennel Bulbs}}
 ---
 {canonicalName: Garlic Cloves, tags: VEGETABLE, aliases: {Garlic, Garlic Clove}}
 ---
