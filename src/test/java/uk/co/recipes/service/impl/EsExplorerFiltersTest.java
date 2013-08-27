@@ -83,6 +83,13 @@ public class EsExplorerFiltersTest {
     }
 
     @Test
+    public void testIncludeMultipleInclAndExclTags() throws IOException {
+        final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT, CommonTags.CITRUS ).excludeTags( CommonTags.MEAT, CommonTags.VEGETABLE ).toFilter();
+        assertThat( filter.idsToInclude().length, is(11));
+        assertThat( filter.idsToExclude().length, is(82));
+    }
+
+    @Test
     public void testIncludeMultipleTagsReordered() throws IOException {
         final IExplorerFilter filter = filters.build().includeTags( CommonTags.CITRUS, CommonTags.FRUIT ).toFilter();
         assertThat( filter.idsToInclude().length, is(11));
