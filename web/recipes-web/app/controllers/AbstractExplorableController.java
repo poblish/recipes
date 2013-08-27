@@ -1,8 +1,10 @@
 package controllers;
 
-import com.codahale.metrics.MetricRegistry;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.Collection;
 import java.util.Collections;
+
 import play.mvc.Controller;
 import service.PlayAuthUserServicePlugin;
 import uk.co.recipes.api.ITag;
@@ -13,7 +15,8 @@ import uk.co.recipes.service.api.IExplorerFilter;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
-import static com.google.common.base.Preconditions.checkNotNull;
+
+import com.codahale.metrics.MetricRegistry;
 
 /**
  * 

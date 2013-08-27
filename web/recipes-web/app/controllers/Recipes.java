@@ -1,9 +1,11 @@
 package controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import com.codahale.metrics.MetricRegistry;
+
 import java.io.IOException;
+
 import javax.inject.Inject;
+
 import play.mvc.Result;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
@@ -21,6 +23,8 @@ import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.similarity.IncompatibleIngredientsException;
+
+import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Optional;
 import com.google.common.collect.Multiset;
 

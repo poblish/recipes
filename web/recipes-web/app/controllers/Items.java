@@ -1,10 +1,12 @@
 package controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import com.codahale.metrics.MetricRegistry;
+
 import java.io.IOException;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import play.mvc.Result;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IUser;
@@ -14,6 +16,8 @@ import uk.co.recipes.ratings.ItemRating;
 import uk.co.recipes.ratings.UserRatings;
 import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
+
+import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Optional;
 
 /**
