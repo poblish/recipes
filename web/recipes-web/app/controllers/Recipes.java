@@ -16,7 +16,6 @@ import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.ratings.RecipeRating;
 import uk.co.recipes.ratings.UserRatings;
-import uk.co.recipes.service.api.IExplorerAPI;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.impl.EsExplorerFilters;
@@ -36,20 +35,15 @@ public class Recipes extends AbstractExplorableController {
 
     private IItemPersistence items;
     private IRecipePersistence recipes;
-    private IExplorerAPI explorer;
-    private EsExplorerFilters explorerFilters;
     private UserRatings ratings;
 
     @Inject
-    public Recipes( final MyrrixUpdater updater, final EsExplorerFilters explorerFilters, final MyrrixExplorerService explorer, final EsItemFactory items,
+    public Recipes( final MyrrixUpdater updater, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService, final EsItemFactory items,
                     final EsRecipeFactory recipes, final EsUserFactory users, final UserRatings inRatings, final MetricRegistry metrics) {
-    	super(metrics);
+    	super( items, explorerFilters, inExplorerService, metrics);
 
     	updater.startListening();
-        this.items = checkNotNull(items);
         this.recipes = checkNotNull(recipes);
-        this.explorer = checkNotNull(explorer);
-        this.explorerFilters = checkNotNull(explorerFilters);
         this.ratings = checkNotNull(inRatings);
     }
 

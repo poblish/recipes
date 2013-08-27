@@ -7,8 +7,12 @@ import play.mvc.Controller;
 import service.PlayAuthUserServicePlugin;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.IUser;
+import uk.co.recipes.persistence.EsItemFactory;
+import uk.co.recipes.service.api.IExplorerAPI;
 import uk.co.recipes.service.api.IExplorerFilter;
+import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.impl.EsExplorerFilters;
+import uk.co.recipes.service.impl.MyrrixExplorerService;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -20,9 +24,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public abstract class AbstractExplorableController extends Controller {
 
+	protected IItemPersistence items;
+    protected IExplorerAPI explorer;
+    protected EsExplorerFilters explorerFilters;
     protected MetricRegistry metrics;
 
-    public AbstractExplorableController( final MetricRegistry metrics) {
+    public AbstractExplorableController( final EsItemFactory items, final EsExplorerFilters explorerFilters, final MyrrixExplorerService explorer, final MetricRegistry metrics) {
+        this.items = checkNotNull(items);
+        this.explorer = checkNotNull(explorer);
+        this.explorerFilters = checkNotNull(explorerFilters);
         this.metrics = checkNotNull(metrics);
     }
 

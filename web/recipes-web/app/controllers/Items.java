@@ -12,8 +12,6 @@ import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.ratings.ItemRating;
 import uk.co.recipes.ratings.UserRatings;
-import uk.co.recipes.service.api.IExplorerAPI;
-import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import com.google.common.base.Optional;
@@ -27,19 +25,12 @@ import com.google.common.base.Optional;
  */
 public class Items extends AbstractExplorableController {
 
-    private IItemPersistence items;
-    private IExplorerAPI explorerService;
-    private EsExplorerFilters explorerFilters;
     private UserRatings ratings;
 
     @Inject
     public Items( final EsItemFactory items, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService, final EsUserFactory users,
                   final UserRatings inRatings, final MetricRegistry metrics) {
-        super(metrics);
-
-        this.items = checkNotNull(items);
-        this.explorerService = checkNotNull(inExplorerService);
-        this.explorerFilters = checkNotNull(explorerFilters);
+        super( items, explorerFilters, inExplorerService, metrics);
         this.ratings = checkNotNull(inRatings);
     }
 
@@ -50,7 +41,7 @@ public class Items extends AbstractExplorableController {
         }
 
         final ICanonicalItem item = optItem.get();
-        final List<ICanonicalItem> similarities = explorerService.similarIngredients( item, getExplorerFilter(explorerFilters), 20);
+        final List<ICanonicalItem> similarities = explorer.similarIngredients( item, getExplorerFilter(explorerFilters), 20);
         return ok(views.html.item.render( item, similarities));
     }
 
