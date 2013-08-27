@@ -15,24 +15,31 @@
             }
         },
         "loggers": {
-            "logger": {
-                "name": "EventLogger",
-                "level": "info",
-                "additivity": "false",
-                "appender-ref": {
-                    "ref": "Routing"
+            "logger": [
+                {
+                    "name": "EventLogger",
+                    "level": "info",
+                    "additivity": "false",
+                    "appender-ref": {
+                        "ref": "Routing"
+                    }
+                },
+                {
+                    "name": "uk.co.recipes",
+                    "level": "debug",
+                    "additivity": "true"
+                },
+                {
+                    "name": "uk.co.recipes.events.impl.MyrrixUpdater",
+                    "level": "info",
+                    "additivity": "true"
+                },
+                {
+                    "name": "net.myrrix",
+                    "level": "info",
+                    "additivity": "true"
                 }
-            },
-            "logger": {
-                "name": "uk.co.recipes",
-                "level": "debug",
-                "additivity": "true"
-            },
-            "logger": {
-                "name": "net.myrrix",
-                "level": "info",
-                "additivity": "true"
-            },
+            ],
             "root": {
                 "level": "debug",
                 "appender-ref": {
