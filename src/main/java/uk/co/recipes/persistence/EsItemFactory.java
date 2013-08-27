@@ -111,7 +111,7 @@ public class EsItemFactory implements IItemPersistence {
         final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_NAME_GETS).time();
 
 		try {
-		    return mapper.readValue( esUtils.parseSource( itemIndexUrl + "/" + inId), CanonicalItem.class);
+		    return mapper.readValue( esUtils.parseSource( itemIndexUrl + "/" + URLEncoder.encode( inId, "utf-8")), CanonicalItem.class);
 		}
         finally {
             timerCtxt.stop();

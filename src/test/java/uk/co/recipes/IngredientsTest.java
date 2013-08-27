@@ -78,6 +78,19 @@ public class IngredientsTest {
 		GRAPH.get( ItemsLoader.class ).load();
 	}
 
+	@Test
+	public void accentsTest() throws IOException {
+		assertThat( itemFactory.get("Glacé Cherries").isPresent(), is(false));
+
+		final ICanonicalItem newItem = new CanonicalItem("Glacé Cherries");
+		itemFactory.put( newItem, itemFactory.toStringId(newItem));
+
+		final Optional<ICanonicalItem> loaded = itemFactory.get("Glacé Cherries");
+		assertThat( loaded.get(), is(newItem));
+
+//		itemFactory.put( gCherries, inId)
+	}
+
 	// See: http://www.bbcgoodfood.com/recipes/5533/herby-lamb-cobbler
 	@Test
 	public void initialTest() throws IOException, InterruptedException {
