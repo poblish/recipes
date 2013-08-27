@@ -188,6 +188,8 @@
 ---
 {canonicalName: Cucumber, tags: VEGETABLE}
 ---
+{canonicalName: Fennel Bulb, tags: {VEGETABLE, ITALIAN}, aliases: {Fennel, Fennel Bulbs}}
+---
 {canonicalName: Garlic Cloves, tags: VEGETABLE, aliases: {Garlic, Garlic Clove}}
 ---
 {    canonicalName: Garlic Paste, parent: Garlic Cloves}
@@ -208,13 +210,19 @@
 ---
 {    canonicalName: White Mushrooms, parent: Mushrooms}
 ---
+{canonicalName: Olives, tags: VEGETABLE}
+---
+{    canonicalName: Black Olives, parent: Olives}
+---
+{    canonicalName: Green Olives, parent: Olives}
+---
 {canonicalName: Onion, tags: VEGETABLE, aliases: {Onions}}
 ---
 {    canonicalName: Baby Onions, parent: Onion}
 ---
 {    canonicalName: Pearl Onions, parent: Onion}
 ---
-{    canonicalName: Red Onion, parent: Onion}
+{    canonicalName: Red Onion, parent: Onion, aliases: {Red Onions}}
 ---
 {    canonicalName: Spring Onion, parent: Onion}
 ---
@@ -238,7 +246,9 @@
 ---
 {    canonicalName: New Potato, parent: Potato, aliases: {New Potatoes}}
 ---
-{canonicalName: Spinach, tags: VEGETABLE, aliases: {Spinach Leaves}}
+{canonicalName: Rocket, tags: {VEGETABLE, SALAD_LEAF, ITALIAN}, aliases: {Rocket Leaves}}
+---
+{canonicalName: Spinach, tags: {VEGETABLE, SALAD_LEAF}, aliases: {Spinach Leaves}}
 ---
 {    canonicalName: Baby Spinach, parent: Spinach, aliases: {Baby Spinach Leaves}}
 ---
@@ -262,7 +272,15 @@
 ---
 
 
+{canonicalName: Broad Beans, tags: PULSE, aliases: {Fava Bean, Faba Bean}}
+---
+{canonicalName: Butter Beans, tags: PULSE, aliases: {Lima Bean}}
+---
+{canonicalName: Cannellini Beans, tags: {PULSE, ITALIAN}}
+---
 {canonicalName: Chickpeas, tags: PULSE, aliases: {Chickpea, Garbanzo Bean}}
+---
+{canonicalName: Haricot Beans, tags: PULSE, aliases: {Navy Bean}}
 ---
 {canonicalName: Lentils, tags: PULSE, aliases: {Lentil}}
 ---
@@ -438,13 +456,29 @@
 ---
 {    canonicalName: Vegetable Oil, parent: Oil}
 ---
+{        canonicalName: Coconut Oil, parent: Vegetable Oil}
+---
+{        canonicalName: Coconut Oil, parent: Vegetable Oil}
+---
+{        canonicalName: Groundnut Oil, parent: Vegetable Oil, tags: {NUT}}
+---
 {        canonicalName: Olive Oil, parent: Vegetable Oil}
+---
+{            canonicalName: Extra Virgin Olive Oil, parent: Olive Oil, aliases: {Extra-Virgin Olive Oil}}
+---
+{            canonicalName: Fruity Olive Oil, parent: Olive Oil}
+---
+{            canonicalName: Light Olive Oil, parent: Olive Oil}
+---
+{            canonicalName: Mild Olive Oil, parent: Olive Oil}
 ---
 {        canonicalName: Rapeseed Oil, parent: Vegetable Oil}
 ---
 {        canonicalName: Sesame Oil, parent: Vegetable Oil, tags: {CHINESE}}
 ---
 {        canonicalName: Sunflower Oil, parent: Vegetable Oil}
+---
+{        canonicalName: Walnut Oil, parent: Vegetable Oil, tags: {NUT}}
 ---
 
 
@@ -470,11 +504,13 @@
 ---
 {canonicalName: Worcestershire Sauce, tags: {FISH, SAUCE}}
 ---
-{canonicalName: Beef Stock, tags: {MEAT, SAUCE}}
+{canonicalName: Beef Stock, tags: {MEAT, STOCK}}
 ---
-{canonicalName: Chicken Stock, tags: {MEAT, SAUCE}}
+{canonicalName: Chicken Stock, tags: {MEAT, STOCK}}
 ---
 {canonicalName: Fish Sauce, tags: {FISH, SAUCE, THAI, VIETNAMESE}}
+---
+{canonicalName: Lamb Stock, tags: {MEAT, STOCK}}
 ---
 {canonicalName: Mayonnaise, tags: {EGG, SAUCE}}
 ---
@@ -512,7 +548,7 @@
 ---
 
 
-{canonicalName: Anchovy, tags: {FISH,SEAFOOD}}
+{canonicalName: Anchovy, tags: {FISH,SEAFOOD}, aliases: {Anchovies}}
 ---
 {canonicalName: Salmon, tags: {FISH,SEAFOOD}}
 ---
@@ -521,6 +557,10 @@
 {canonicalName: Sea Bream, tags: {FISH,SEAFOOD}}
 ---
 {    canonicalName: Sea Bream Fillets, parent: Sea Bass}
+---
+{canonicalName: Tilapia, tags: {FISH,SEAFOOD,INDIAN}}
+---
+{    canonicalName: Tilapia Fillets, parent: Tilapia}
 ---
 {canonicalName: Tuna, tags: {FISH,SEAFOOD}}
 ---
@@ -540,9 +580,13 @@
 ---
 {    canonicalName: Chicken Breast, parent: Chicken, aliases: {Chicken Breasts}}
 ---
+{        canonicalName: Chicken Breast Fillets, parent: Chicken Breast}
+---
 {    canonicalName: Chicken Mince, parent: Chicken}
 ---
 {    canonicalName: Chicken Thighs, parent: Chicken}
+---
+{    canonicalName: Chicken Thigh Fillets, parent: Chicken}
 ---
 {    canonicalName: Diced Chicken, parent: Chicken}
 ---
@@ -550,7 +594,17 @@
 ---
 {canonicalName: Lamb, tags: MEAT}
 ---
+{    canonicalName: Lamb Chops, parent: Lamb, aliases: {Lamb Chop}}
+---
+{    canonicalName: Lamb Cutlets, parent: Lamb, aliases: {Lamb Cutlet}}
+---
+{    canonicalName: Lamb Fillets, parent: Lamb, aliases: {Lamb Fillet}}
+---
+{    canonicalName: Lamb Neck Fillets, parent: Lamb, aliases: {Lamb Neck Fillet}}
+---
 {    canonicalName: Lamb Shoulder, parent: Lamb, aliases: {Shoulder of Lamb}}
+---
+{    canonicalName: Lamb Steaks, parent: Lamb, aliases: {Lamb Steak}}
 ---
 {    canonicalName: Leg of Lamb, parent: Lamb}
 ---
@@ -558,7 +612,13 @@
 ---
 {    canonicalName: Pork Loin, parent: Pork, aliases: {British Pork Loin}}
 ---
-{    canonicalName: Pork Shoulder, parent: Pork}
+{    canonicalName: Pork Fillet, parent: Pork}
+---
+{    canonicalName: Pork Sausages, parent: Pork, tags: {SAUSAGE}}
+---
+{        canonicalName: Chorizo, parent: Pork Sausages, tags: {SPANISH, MEXICAN}}
+---
+{    canonicalName: Pork Shoulder Steaks, parent: Pork}
 ---
 {canonicalName: Bacon, tags: MEAT}
 ---

@@ -13,7 +13,7 @@ import uk.co.recipes.api.ITag;
  */
 public enum CommonTags implements ITag {
 
-	SERVES_COUNT, VEGETARIAN, VEGAN, NUT_FREE, VEGETABLE, OIL, FAT, DAIRY,
+	SERVES_COUNT, VEGETARIAN, VEGAN, NUT_FREE, VEGETABLE, OIL, SALAD_LEAF, FAT, DAIRY,
 
 	// Spices are obtained from roots, flowers, fruits, seeds or bark
 	SPICE, // Cinnamon, Ginger, Cloves, Saffron, Nutmeg, Vanilla, Cumin
@@ -23,7 +23,7 @@ public enum CommonTags implements ITag {
 
 	SUGAR, SALT, FLOUR, BREAD, PASTA, SEED, NUT, PULSE, FRUIT, CITRUS, CHEESE, CHILLI, EGG,
 
-	MEAT, OFFAL, POULTRY, GAME, FISH, SEAFOOD,
+	MEAT, OFFAL, POULTRY, GAME, FISH, SEAFOOD, STOCK, SAUSAGE,
 
 	WINE, ALCOHOL, VINEGAR, SAUCE, CONDIMENT, RICE, NOODLES, WHEAT, GRAIN,
 
