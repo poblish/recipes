@@ -54,17 +54,52 @@ public class EsExplorerFiltersTest {
 		Thread.sleep(900);  // FIXME Ensure everything's in ES index
 	}
 
-	@Test
-	public void testIncludeTags() throws IOException {
-		final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT ).toFilter();
-		assertThat( filter.idsToInclude().length, is(24));
-		assertThat( filter.idsToExclude().length, is(0));
-	}
+    @Test
+    public void testEmptyFilter() throws IOException {
+        final IExplorerFilter filter = EsExplorerFilters.nullFilter();
+        assertThat( filter.idsToInclude().length, is(0));
+        assertThat( filter.idsToExclude().length, is(0));
+    }
 
-	@Test
-	public void testExcludeTags() throws IOException {
-		final IExplorerFilter filter = filters.build().excludeTags( CommonTags.FRUIT ).toFilter();
-		assertThat( filter.idsToInclude().length, is(0));
-		assertThat( filter.idsToExclude().length, is(24));
-	}
+    @Test
+    public void testIncludeTags() throws IOException {
+        final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT ).toFilter();
+        assertThat( filter.idsToInclude().length, is(24));
+        assertThat( filter.idsToExclude().length, is(0));
+    }
+
+    @Test
+    public void testIncludeMultipleTags() throws IOException {
+        final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT, CommonTags.CITRUS ).toFilter();
+        assertThat( filter.idsToInclude().length, is(11));
+        assertThat( filter.idsToExclude().length, is(0));
+    }
+
+    @Test
+    public void testIncludeMultipleTags2() throws IOException {
+        final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT, CommonTags.CITRUS, CommonTags.MEAT ).toFilter();
+        assertThat( filter.idsToInclude().length, is(0));
+        assertThat( filter.idsToExclude().length, is(0));
+    }
+
+    @Test
+    public void testIncludeMultipleTagsReordered() throws IOException {
+        final IExplorerFilter filter = filters.build().includeTags( CommonTags.CITRUS, CommonTags.FRUIT ).toFilter();
+        assertThat( filter.idsToInclude().length, is(11));
+        assertThat( filter.idsToExclude().length, is(0));
+    }
+
+    @Test
+    public void testExcludeTags() throws IOException {
+        final IExplorerFilter filter = filters.build().excludeTags( CommonTags.FRUIT ).toFilter();
+        assertThat( filter.idsToInclude().length, is(0));
+        assertThat( filter.idsToExclude().length, is(24));
+    }
+
+    @Test
+    public void testExcludeMultipleTags() throws IOException {
+        final IExplorerFilter filter = filters.build().excludeTags( CommonTags.FRUIT, CommonTags.MEAT ).toFilter();
+        assertThat( filter.idsToInclude().length, is(0));
+        assertThat( filter.idsToExclude().length, is(56));
+    }
 }

@@ -3,26 +3,23 @@
  */
 package uk.co.recipes.service.impl;
 
-import static uk.co.recipes.metrics.MetricNames.TIMER_EXPLORER_FILTER_IDS_GET;
-
+import java.util.Set;
+import com.google.common.collect.Sets;
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
+import com.google.common.primitives.Longs;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.service.api.IExplorerFilter;
-
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
-import com.google.common.primitives.Longs;
+import static uk.co.recipes.metrics.MetricNames.TIMER_EXPLORER_FILTER_IDS_GET;
 
 /**
  * TODO
@@ -58,7 +55,24 @@ public class EsExplorerFilters {
 
     		final List<ICanonicalItem> items = search.findItemsByTag(inTag);
     		final List<IRecipe> recipes = search.findRecipesByTag(inTag);
-            includeIds = Longs.concat( includeIds, getIdsForResults( items, recipes));
+    		final long[] newIds = getIdsForResults( items, recipes);
+
+    		if ( includeIds.length == 0) {
+    		    includeIds = newIds;
+    		}
+    		else {
+        		// INTERSECTION: Include things in all of the categories
+        		final Set<Long> union = Sets.newHashSet( Longs.asList(includeIds) );
+        		union.retainAll( Longs.asList(newIds) );
+    
+        		includeIds = new long[ union.size() ];
+                int i = 0;
+    
+                for ( Long each : union) {
+                    includeIds[i++] = each;
+                }
+    		}
+
             return this;
     	}
 
@@ -82,7 +96,7 @@ public class EsExplorerFilters {
 
     		final List<ICanonicalItem> items = search.findItemsByTag(inTag);
     		final List<IRecipe> recipes = search.findRecipesByTag(inTag);
-            excludeIds = Longs.concat( excludeIds, getIdsForResults( items, recipes));
+            excludeIds = Longs.concat( excludeIds, getIdsForResults( items, recipes));  // UNION: Exclude anything in any of the categories
             return this;
     	}
 
