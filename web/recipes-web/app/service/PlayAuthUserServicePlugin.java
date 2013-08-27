@@ -3,8 +3,10 @@
  */
 package service;
 
+import uk.co.recipes.metrics.MetricNames;
+import com.codahale.metrics.Timer;
+import com.codahale.metrics.MetricRegistry;
 import java.io.IOException;
-
 import play.Application;
 import play.Logger;
 import play.mvc.Http.Session;
@@ -14,7 +16,6 @@ import uk.co.recipes.UserAuth;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.service.api.IUserPersistence;
-
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.service.UserServicePlugin;
 import com.feth.play.module.pa.user.AuthUser;
@@ -24,7 +25,6 @@ import com.feth.play.module.pa.user.FirstLastNameIdentity;
 import com.feth.play.module.pa.user.NameIdentity;
 import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
-
 import dagger.Module;
 import dagger.ObjectGraph;
 
@@ -44,7 +44,21 @@ public class PlayAuthUserServicePlugin extends UserServicePlugin {
 		super(app);
 	}
 
+    public static IUser getLocalUser(final MetricRegistry inMetrics, final Session session) {
+        final Timer.Context timerCtxt = inMetrics.timer( MetricNames.TIMER_USER_LOCAL_GET ).time();
+        try {
+            return getUntimedLocalUser(session);
+        }
+        finally {
+            timerCtxt.close();
+        }
+    }
+
     public static IUser getLocalUser(final Session session) {
+        return getUntimedLocalUser(session);
+    }
+
+    private static IUser getUntimedLocalUser(final Session session) {
         try {
             final AuthUser currentAuthUser = PlayAuthenticate.getUser(session);
 
@@ -57,7 +71,11 @@ public class PlayAuthUserServicePlugin extends UserServicePlugin {
             }
 
             final Optional<IUser> theUser = USERS.findWithAuth( new UserAuth( currentAuthUser.getProvider(), currentAuthUser.getId() ) );
-            Logger.info("theUser: " + theUser);
+
+            if (Logger.isTraceEnabled()) {
+                Logger.trace("theUser: " + theUser);
+            }
+
             return theUser.orNull();
         }
         catch (IOException e) {

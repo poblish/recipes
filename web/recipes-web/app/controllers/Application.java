@@ -5,8 +5,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -25,11 +23,9 @@ import uk.co.recipes.api.IUser;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsUserFactory;
-import uk.co.recipes.service.api.IExplorerFilter;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.IUserPersistence;
-import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.tags.CommonTags;
 
 import com.codahale.metrics.ConsoleReporter;
@@ -65,9 +61,6 @@ public class Application extends Controller {
     }
 
     public String getMetricsString() {
-//    	System.out.println( metrics + " / " + ((EsRecipeFactory)recipes).getMetricRegistry());
-//    	metrics.counter("foop").inc();
-
     	if (metrics.getMetrics().isEmpty()) {
             return "No Metrics in... " + metrics;
         }
@@ -117,38 +110,6 @@ public class Application extends Controller {
 		} ).toSortedSet( Ordering.usingToString() );
 	}
 
-	public static Collection<ITag> getExplorerIncludeTags() {
-        final IUser currUser = /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( session() );
-        if ( currUser == null) {
-            return Collections.emptyList();
-        }
-
-        return currUser.getPrefs().getExplorerIncludeTags();
-	}
-
-	public static Collection<ITag> getExplorerExcludeTags() {
-        final IUser currUser = /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( session() );
-        if ( currUser == null) {
-            return Collections.emptyList();
-        }
-
-        return currUser.getPrefs().getExplorerExcludeTags();
-	}
-
-	public static IExplorerFilter getExplorerFilter( final EsExplorerFilters inFilters) {
-        final IUser currUser = /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( session() );
-        if ( currUser == null) {
-            return EsExplorerFilters.nullFilter();
-        }
-
-        try {
-			return inFilters.build().includeTags( getExplorerIncludeTags() ).excludeTags( getExplorerExcludeTags() ).toFilter();
-		}
-        catch (Exception e) {
-			return EsExplorerFilters.nullFilter();
-		}
-	}
-
 	public Result explorerIncludeAddTag( final String inTag) {
         return handleUserPreference( new UserTask() {
 
@@ -195,7 +156,7 @@ public class Application extends Controller {
     }
 
 	public Result handleUserPreference( final UserTask inTask) {
-        final IUser currUser = /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( session() );
+        final IUser currUser = /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( metrics, session());
         if ( currUser == null) {
 		    return unauthorized("Not logged-in");
         }

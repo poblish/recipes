@@ -25,4 +25,6 @@ public interface MetricNames {
 	String TIMER_ITEMS_MOSTSIMILAR = "items.mostsimilar";
 
     String TIMER_EXPLORER_FILTER_IDS_GET = "recipe.explorer_filter.ids.get";
+
+    String TIMER_USER_LOCAL_GET = "recipe.getLocalUser";
 }

@@ -1,14 +1,10 @@
 package controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-
+import com.codahale.metrics.MetricRegistry;
 import java.io.IOException;
-
 import javax.inject.Inject;
-
-import play.mvc.Controller;
 import play.mvc.Result;
-import service.PlayAuthUserServicePlugin;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.ITag;
@@ -26,7 +22,6 @@ import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.similarity.IncompatibleIngredientsException;
-
 import com.google.common.base.Optional;
 import com.google.common.collect.Multiset;
 
@@ -37,21 +32,22 @@ import com.google.common.collect.Multiset;
  * @author andrewregan
  *
  */
-public class Recipes extends Controller {
+public class Recipes extends AbstractExplorableController {
 
     private IItemPersistence items;
     private IRecipePersistence recipes;
-//    private IUserPersistence users;
     private IExplorerAPI explorer;
     private EsExplorerFilters explorerFilters;
     private UserRatings ratings;
 
     @Inject
-    public Recipes( final MyrrixUpdater updater, final EsExplorerFilters explorerFilters, final MyrrixExplorerService explorer, final EsItemFactory items, final EsRecipeFactory recipes, final EsUserFactory users, final UserRatings inRatings) {
+    public Recipes( final MyrrixUpdater updater, final EsExplorerFilters explorerFilters, final MyrrixExplorerService explorer, final EsItemFactory items,
+                    final EsRecipeFactory recipes, final EsUserFactory users, final UserRatings inRatings, final MetricRegistry metrics) {
+    	super(metrics);
+
     	updater.startListening();
         this.items = checkNotNull(items);
         this.recipes = checkNotNull(recipes);
-//        this.users = checkNotNull(users);
         this.explorer = checkNotNull(explorer);
         this.explorerFilters = checkNotNull(explorerFilters);
         this.ratings = checkNotNull(inRatings);
@@ -78,11 +74,11 @@ public class Recipes extends Controller {
         final IRecipe recipe = optRecipe.get();
         final Multiset<ITag> categorisation = Categorisation.forIngredients( recipe.getIngredients() );
 
-        return ok(views.html.recipe.render( recipe, categorisation, explorer.similarRecipes( recipe, Application.getExplorerFilter(explorerFilters), 10)));
+        return ok(views.html.recipe.render( recipe, categorisation, explorer.similarRecipes( recipe, getExplorerFilter(explorerFilters), 10)));
     }
 
     public Result rate( final String name, final int inScore) throws IOException, IncompatibleIngredientsException {
-		final IUser user1 = /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( session() );
+		final IUser user1 = getLocalUser();
 		if ( user1 == null) {
 		    return unauthorized("Not logged-in");
 		}
@@ -99,7 +95,7 @@ public class Recipes extends Controller {
     }
 
     public Result removeIngredient( final String name, final String ingredient) throws IOException, IncompatibleIngredientsException, InterruptedException {
-		final IUser user1 = /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( session() );
+		final IUser user1 = getLocalUser();
 		if ( user1 == null) {
 		    return unauthorized("Not logged-in");
 		}
