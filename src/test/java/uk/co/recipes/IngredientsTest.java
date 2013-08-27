@@ -87,8 +87,6 @@ public class IngredientsTest {
 
 		final Optional<ICanonicalItem> loaded = itemFactory.get("Glacé Cherries");
 		assertThat( loaded.get(), is(newItem));
-
-//		itemFactory.put( gCherries, inId)
 	}
 
 	// See: http://www.bbcgoodfood.com/recipes/5533/herby-lamb-cobbler
