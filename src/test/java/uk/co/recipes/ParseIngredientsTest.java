@@ -3,18 +3,20 @@ package uk.co.recipes;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static uk.co.recipes.tags.CommonTags.*;
-
+import java.util.Collection;
+import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse.AnalyzeToken;
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
-
 import org.apache.http.client.ClientProtocolException;
 import org.elasticsearch.client.Client;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.cats.Categorisation;
@@ -26,9 +28,7 @@ import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.similarity.IncompatibleIngredientsException;
 import uk.co.recipes.similarity.Similarity;
 import uk.co.recipes.test.TestDataUtils;
-
 import com.google.common.io.Files;
-
 import dagger.ObjectGraph;
 
 /**
@@ -58,6 +58,20 @@ public class ParseIngredientsTest {
 		GRAPH.get( ItemsLoader.class ).load();
 		Thread.sleep(1000);
 	}
+
+    @Test
+    public void testAutocompleteAnalyzer() {
+        // See: http://jontai.me/blog/2013/02/adding-autocomplete-to-an-elasticsearch-search-application/
+        final AnalyzeResponse resp = esClient.admin().indices().prepareAnalyze( "recipe", "red onion").setAnalyzer("autocomplete").execute().actionGet();
+        final Collection<String> strs = FluentIterable.from( resp.getTokens() ).transform( new Function<AnalyzeResponse.AnalyzeToken,String>() {
+
+            @Override
+            public String apply(AnalyzeToken input) {
+                return input.getTerm();
+            }} ).toList();
+
+        assertThat( strs.toString(), is("[red, oni, nio, ion, onio, nion, onion]"));
+    }
 
 	@Test
 	public void parseIngredientsBulk() throws IOException {
