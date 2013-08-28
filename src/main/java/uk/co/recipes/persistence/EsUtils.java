@@ -10,12 +10,15 @@ import java.util.Iterator;
 
 import javax.inject.Inject;
 
+import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
+import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse.AnalyzeToken;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsRequestBuilder;
 import org.elasticsearch.client.Client;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
@@ -91,5 +94,15 @@ public class EsUtils {
 		if ( waitsToGo <= 0) {
 			throw new RuntimeException("Timeout exceeded!");
 		}
+	}
+
+	public static Function<AnalyzeResponse.AnalyzeToken,String> getAnalyzeTokenToStringFunc() {
+		return new Function<AnalyzeResponse.AnalyzeToken,String>() {
+
+            @Override
+            public String apply( final AnalyzeToken input) {
+                return input.getTerm();
+            }
+        };
 	}
 }

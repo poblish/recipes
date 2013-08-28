@@ -12,8 +12,8 @@ import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
-import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse.AnalyzeToken;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.common.collect.Ordering;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -23,6 +23,7 @@ import uk.co.recipes.api.ITag;
 import uk.co.recipes.cats.Categorisation;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
+import uk.co.recipes.persistence.EsUtils;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
@@ -30,7 +31,6 @@ import uk.co.recipes.similarity.IncompatibleIngredientsException;
 import uk.co.recipes.similarity.Similarity;
 import uk.co.recipes.test.TestDataUtils;
 
-import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.io.Files;
 
@@ -65,17 +65,19 @@ public class ParseIngredientsTest {
 	}
 
     @Test
-    public void testAutocompleteAnalyzer() {
+    public void testAutocompleteAnalyzer1() {
         // See: http://jontai.me/blog/2013/02/adding-autocomplete-to-an-elasticsearch-search-application/
         final AnalyzeResponse resp = esClient.admin().indices().prepareAnalyze( "recipe", "red onion").setAnalyzer("autocomplete").execute().actionGet();
-        final Collection<String> strs = FluentIterable.from( resp.getTokens() ).transform( new Function<AnalyzeResponse.AnalyzeToken,String>() {
+        final Collection<String> strs = FluentIterable.from( resp.getTokens() ).transform( EsUtils.getAnalyzeTokenToStringFunc() ).toSortedList( Ordering.natural() );
+        assertThat( strs.toString(), is("[ion, nio, nion, oni, onio, onion, red]"));
+    }
 
-            @Override
-            public String apply(AnalyzeToken input) {
-                return input.getTerm();
-            }} ).toList();
-
-        assertThat( strs.toString(), is("[red, oni, nio, ion, onio, nion, onion]"));
+    @Test
+    public void testAutocompleteAnalyzer2() {
+        // See: http://jontai.me/blog/2013/02/adding-autocomplete-to-an-elasticsearch-search-application/
+        final AnalyzeResponse resp = esClient.admin().indices().prepareAnalyze( "recipe", "chCashBlackSpiceCurry.txt").setAnalyzer("autocomplete").execute().actionGet();
+        final Collection<String> strs = FluentIterable.from( resp.getTokens() ).transform( EsUtils.getAnalyzeTokenToStringFunc() ).toSortedList( Ordering.natural() );
+        assertThat( strs.toString(), is("[.tx, .txt, ack, acks, acksp, ackspi, ackspic, ackspice, ackspicec, ackspicecu, ackspicecur, ackspicecurr, ackspicecurry, ackspicecurry., ackspicecurry.t, ash, ashb, ashbl, ashbla, ashblac, ashblack, ashblacks, ashblacksp, ashblackspi, ashblackspic, ashblackspice, ashblackspicec, ashblackspicecu, bla, blac, black, blacks, blacksp, blackspi, blackspic, blackspice, blackspicec, blackspicecu, blackspicecur, blackspicecurr, blackspicecurry, cas, cash, cashb, cashbl, cashbla, cashblac, cashblack, cashblacks, cashblacksp, cashblackspi, cashblackspic, cashblackspice, cashblackspicec, cec, cecu, cecur, cecurr, cecurry, cecurry., cecurry.t, cecurry.tx, cecurry.txt, chc, chca, chcas, chcash, chcashb, chcashbl, chcashbla, chcashblac, chcashblack, chcashblacks, chcashblacksp, chcashblackspi, chcashblackspic, cks, cksp, ckspi, ckspic, ckspice, ckspicec, ckspicecu, ckspicecur, ckspicecurr, ckspicecurry, ckspicecurry., ckspicecurry.t, ckspicecurry.tx, cur, curr, curry, curry., curry.t, curry.tx, curry.txt, ecu, ecur, ecurr, ecurry, ecurry., ecurry.t, ecurry.tx, ecurry.txt, hbl, hbla, hblac, hblack, hblacks, hblacksp, hblackspi, hblackspic, hblackspice, hblackspicec, hblackspicecu, hblackspicecur, hblackspicecurr, hca, hcas, hcash, hcashb, hcashbl, hcashbla, hcashblac, hcashblack, hcashblacks, hcashblacksp, hcashblackspi, hcashblackspic, hcashblackspice, ice, icec, icecu, icecur, icecurr, icecurry, icecurry., icecurry.t, icecurry.tx, icecurry.txt, ksp, kspi, kspic, kspice, kspicec, kspicecu, kspicecur, kspicecurr, kspicecurry, kspicecurry., kspicecurry.t, kspicecurry.tx, kspicecurry.txt, lac, lack, lacks, lacksp, lackspi, lackspic, lackspice, lackspicec, lackspicecu, lackspicecur, lackspicecurr, lackspicecurry, lackspicecurry., pic, pice, picec, picecu, picecur, picecurr, picecurry, picecurry., picecurry.t, picecurry.tx, picecurry.txt, rry, rry., rry.t, rry.tx, rry.txt, ry., ry.t, ry.tx, ry.txt, shb, shbl, shbla, shblac, shblack, shblacks, shblacksp, shblackspi, shblackspic, shblackspice, shblackspicec, shblackspicecu, shblackspicecur, spi, spic, spice, spicec, spicecu, spicecur, spicecurr, spicecurry, spicecurry., spicecurry.t, spicecurry.tx, spicecurry.txt, txt, urr, urry, urry., urry.t, urry.tx, urry.txt, y.t, y.tx, y.txt]"));
     }
 
 	@Test
