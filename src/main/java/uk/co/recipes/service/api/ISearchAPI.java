@@ -31,4 +31,5 @@ public interface ISearchAPI {
     int countRecipesByTag( final ITag inTag) throws IOException;
 
     List<ISearchResult<?>> findPartial( final String inStr) throws IOException;
+    List<ISearchResult<?>> findPartial( final String inStr, final int inSize) throws IOException;
 }

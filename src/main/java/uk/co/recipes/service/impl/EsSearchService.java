@@ -34,6 +34,7 @@ import com.codahale.metrics.Timer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 /**
@@ -185,7 +186,12 @@ public class EsSearchService implements ISearchAPI {
 
     @Override
     public List<ISearchResult<?>> findPartial( final String inStr) throws IOException {
-        final SearchResponse resp = esClient.prepareSearch("recipe").setTypes("items","recipes").setQuery( matchPhraseQuery( "nameAutoComplete", inStr) )/* .addSort( "_score", DESC) */.execute().actionGet();
+    	return findPartial( inStr, 10);
+    }
+
+    @Override
+    public List<ISearchResult<?>> findPartial( final String inStr, final int inSize) throws IOException {
+        final SearchResponse resp = esClient.prepareSearch("recipe").setTypes("items","recipes").setQuery( matchPhraseQuery( "autoCompleteTerms", inStr) ).setSize(inSize)/* .addSort( "_score", DESC) */.execute().actionGet();
         final SearchHit[] hits = resp.getHits().hits();
 
         if ( hits.length == 0) {
@@ -196,22 +202,48 @@ public class EsSearchService implements ISearchAPI {
 
         for ( final SearchHit eachHit : hits) {
             if ( eachHit.getType().equals("items")) {
-                results.add( new ISearchResult<ICanonicalItem>() {
-
-                    @Override
-                    public ICanonicalItem getEntity() {
-                        try {
-                            return mapper.readValue( eachHit.getSourceAsString(), CanonicalItem.class);
-                        }
-                        catch (IOException e) {
-                            throw Throwables.propagate(e);  // Yuk! FIXME
-                        }
-                    }} );
+                results.add( new ItemSearchResult( mapper.readValue( eachHit.getSourceAsString(), CanonicalItem.class) ));
             }
             else {
-                // Do Recipes too!
+                results.add( new RecipeSearchResult( mapper.readValue( eachHit.getSourceAsString(), Recipe.class) ));
             }
         }
         return results;
+    }
+
+    private static class ItemSearchResult implements ISearchResult<ICanonicalItem> {
+
+		private ICanonicalItem item;
+
+		public ItemSearchResult( final ICanonicalItem item) {
+			this.item = item;
+		}
+
+		@Override
+		public ICanonicalItem getEntity() {
+			return item;
+		}
+
+		public String toString() {
+			return Objects.toStringHelper(this).add( "itemName", getEntity().getCanonicalName()).toString();
+		}
+    }
+
+    private static class RecipeSearchResult implements ISearchResult<IRecipe> {
+
+		private IRecipe recipe;
+
+		public RecipeSearchResult( final IRecipe recipe) {
+			this.recipe = recipe;
+		}
+
+		@Override
+		public IRecipe getEntity() {
+			return recipe;
+		}
+
+		public String toString() {
+			return Objects.toStringHelper(this).add( "recipeName", getEntity().getTitle()).toString();
+		}
     }
 }

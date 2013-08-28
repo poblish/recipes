@@ -1,5 +1,5 @@
 {
-    "items": {
+    "recipes": {
         "properties": {
             "autoCompleteTerms": {
 				"analyzer": "autocomplete",

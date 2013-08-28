@@ -9,6 +9,7 @@ import static uk.co.recipes.tags.TagUtils.tagNamesTitleCase;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -230,7 +231,12 @@ public class Recipe implements IRecipe {
 		return id;
 	}
 
-	@Override
+    // Strictly for Jackson only. Must be public
+    public Collection<String> getAutoCompleteTerms() {
+        return Lists.newArrayList( getTitle() );  // Jackson barfs if we use Collections.singletonList()
+    }
+
+    @Override
 	public void setId( long inId) {
 		if ( id == UNSET_ID && inId == UNSET_ID) {
 			// Let Jackson off...

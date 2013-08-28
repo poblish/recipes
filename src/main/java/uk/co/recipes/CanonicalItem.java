@@ -179,13 +179,10 @@ public class CanonicalItem implements ICanonicalItem {
 	}
 
     // Strictly for Jackson only. Must be public
-    public String getNameAutoComplete() {
-        return canonicalName;
-    }
-
-    // Strictly for Jackson only. Must be public
-    public Collection<String> getAliasAutoComplete() {
-        return this.aliases;
+    public Collection<String> getAutoCompleteTerms() {
+        final Collection<String> terms = Sets.newHashSet( this.aliases );
+        terms.add( this.canonicalName);
+        return terms;
     }
 
 	/* (non-Javadoc)

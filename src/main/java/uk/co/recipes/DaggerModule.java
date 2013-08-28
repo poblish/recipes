@@ -20,6 +20,7 @@ import org.elasticsearch.ElasticSearchIllegalArgumentException;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.indices.IndexMissingException;
 import org.slf4j.LoggerFactory;
 
 import uk.co.recipes.corr.Correlations;
@@ -85,20 +86,25 @@ public class DaggerModule {
 		final Client c = new TransportClient().addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
 
         try {
-            final String str = Files.toString( new File("src/main/resources/index.yaml"), Charset.forName("utf-8"));
+            final String settingsStr = Files.toString( new File("src/main/resources/index.yaml"), Charset.forName("utf-8"));
 
             try {
-                c.admin().indices().prepareUpdateSettings("recipe").setSettings(str).execute().actionGet();
+                c.admin().indices().prepareUpdateSettings("recipe").setSettings(settingsStr).execute().actionGet();
             }
             catch (ElasticSearchIllegalArgumentException e) {
                 c.admin().indices().prepareClose("recipe").execute().actionGet();
-                c.admin().indices().prepareUpdateSettings("recipe").setSettings(str).execute().actionGet();
+                c.admin().indices().prepareUpdateSettings("recipe").setSettings(settingsStr).execute().actionGet();
             }
             finally {
-                c.admin().indices().prepareOpen("recipe").execute().actionGet();
+                try {
+                	c.admin().indices().prepareOpen("recipe").execute().actionGet();
+                }
+                catch (IndexMissingException e) {
+                	c.admin().indices().prepareCreate("recipe").setSettings(settingsStr).execute().actionGet();
+                }
 
-                final String ss1 = Files.toString( new File("src/main/resources/esItemsMappingsAutocomplete.json"), Charset.forName("utf-8"));
-                c.admin().indices().preparePutMapping("recipe").setType("items").setSource(ss1).execute().actionGet();
+                c.admin().indices().preparePutMapping("recipe").setType("items").setSource( Files.toString( new File("src/main/resources/esItemsMappingsAutocomplete.json"), Charset.forName("utf-8")) ).execute().actionGet();
+                c.admin().indices().preparePutMapping("recipe").setType("recipes").setSource( Files.toString( new File("src/main/resources/esRecipesMappingsAutocomplete.json"), Charset.forName("utf-8")) ).execute().actionGet();
             }
         }
         catch (IOException e) {
