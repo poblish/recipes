@@ -181,7 +181,16 @@ public class EsItemFactory implements IItemPersistence {
 						}
 					}
 					else if ( hits.length > 1) {
-						LOG.warn("Too many matches for Alias '" + inCanonicalName + "' - ignoring '" + mapper.readValue( hits[0].getSourceAsString(), CanonicalItem.class) + "' and '" + mapper.readValue( hits[1].getSourceAsString(), CanonicalItem.class) + "'");
+                        final ICanonicalItem firstMatch = mapper.readValue( hits[0].getSourceAsString(), CanonicalItem.class);
+
+                        // Yuk - check for *exact* alias match
+                        for ( String eachAlias : ((CanonicalItem) firstMatch).getAliases()) {
+                            if (eachAlias.equalsIgnoreCase(inCanonicalName)) {
+                                return firstMatch;
+                            }
+                        }
+
+						LOG.warn("Too many matches for Alias '" + inCanonicalName + "' - ignoring '" + firstMatch + "' and '" + mapper.readValue( hits[1].getSourceAsString(), CanonicalItem.class) + "'");
 					}
 				}
 				catch (IOException e) { /* e.printStackTrace(); */ }
