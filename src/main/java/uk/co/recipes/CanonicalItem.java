@@ -178,6 +178,16 @@ public class CanonicalItem implements ICanonicalItem {
 		return (CanonicalItem) parent;
 	}
 
+    // Strictly for Jackson only. Must be public
+    public String getNameAutoComplete() {
+        return canonicalName;
+    }
+
+    // Strictly for Jackson only. Must be public
+    public Collection<String> getAliasAutoComplete() {
+        return this.aliases;
+    }
+
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.api.ICanonicalItem#setParent(uk.co.recipes.api.ICanonicalItem)
 	 */

@@ -1,0 +1,14 @@
+{
+    "items": {
+        "properties": {
+            "nameAutoComplete": {
+				"analyzer": "autocomplete",
+				"type": "string"
+            },
+            "aliasAutoComplete": {
+				"analyzer": "autocomplete",
+				"type": "string"
+            }
+        }
+    }
+}

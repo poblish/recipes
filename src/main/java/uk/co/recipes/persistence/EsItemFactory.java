@@ -8,6 +8,9 @@ import static org.elasticsearch.index.query.QueryBuilders.matchPhraseQuery;
 import static org.elasticsearch.search.sort.SortOrder.DESC;
 import static uk.co.recipes.metrics.MetricNames.*;
 
+import com.google.common.io.Files;
+import java.io.File;
+import java.nio.charset.Charset;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -229,6 +232,9 @@ public class EsItemFactory implements IItemPersistence {
 	public void deleteAll() throws IOException {
 		try {
 			esClient.admin().indices().prepareDeleteMapping().setIndices("recipe").setType("items").execute().actionGet();
+
+			final String ss1 = Files.toString( new File("src/main/resources/esItemsMappingsAutocomplete.json"), Charset.forName("utf-8"));
+            esClient.admin().indices().preparePutMapping("recipe").setType("items").setSource(ss1).execute().actionGet();
 		}
 		catch (TypeMissingException e) {
 			// Ignore

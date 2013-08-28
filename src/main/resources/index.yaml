@@ -1,0 +1,8 @@
+index.analysis.analyzer.autocomplete:
+  type: custom
+  tokenizer: standard
+  filter: standard, lowercase, stop, kstem, ngram
+index.analysis.filter.ngram:
+  type: ngram
+  min_gram: 2
+  max_gram: 15

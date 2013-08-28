@@ -3,6 +3,10 @@
  */
 package uk.co.recipes;
 
+import org.elasticsearch.ElasticSearchIllegalArgumentException;
+import java.io.File;
+import java.nio.charset.Charset;
+import com.google.common.io.Files;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -78,7 +82,30 @@ public class DaggerModule {
 	@Provides
 	@Singleton
 	Client provideEsClient() {
-		return new TransportClient().addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
+		final Client c = new TransportClient().addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
+
+        try {
+            final String str = Files.toString( new File("src/main/resources/index.yaml"), Charset.forName("utf-8"));
+
+            try {
+                c.admin().indices().prepareUpdateSettings("recipe").setSettings(str).execute().actionGet();
+            }
+            catch (ElasticSearchIllegalArgumentException e) {
+                c.admin().indices().prepareClose("recipe").execute().actionGet();
+                c.admin().indices().prepareUpdateSettings("recipe").setSettings(str).execute().actionGet();
+            }
+            finally {
+                c.admin().indices().prepareOpen("recipe").execute().actionGet();
+
+                final String ss1 = Files.toString( new File("src/main/resources/esItemsMappingsAutocomplete.json"), Charset.forName("utf-8"));
+                c.admin().indices().preparePutMapping("recipe").setType("items").setSource(ss1).execute().actionGet();
+            }
+        }
+        catch (IOException e) {
+           Throwables.propagate(e);
+        }
+
+		return c;
 	}
 
 	@Provides
