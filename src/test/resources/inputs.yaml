@@ -16,6 +16,8 @@
 ---
 {canonicalName: Baking Powder, tags: BAKING}
 ---
+{canonicalName: Bicarbonate of Soda, tags: BAKING}
+---
 {canonicalName: Cocoa, tags: BAKING, aliases: {Cocoa Powder}}
 ---
 {canonicalName: Vanilla Extract, tags: {FLAVOURING,BAKING}}
@@ -105,6 +107,8 @@
 {    canonicalName: Ginger Paste, parent: Ginger}
 ---
 {canonicalName: Mace, tags: SPICE}
+---
+{canonicalName: Mixed Spice, tags: {SPICE, BAKING}}
 ---
 {canonicalName: Nutmeg, tags: SPICE}
 ---
@@ -322,7 +326,7 @@
 ---
 {    canonicalName: Orange Zest, parent: Orange}
 ---
-{canonicalName: Pear, tags: {FRUIT}}
+{canonicalName: Pear, tags: {FRUIT}, aliases: {Pears}}
 ---
 {canonicalName: Raspberries, tags: FRUIT, aliases: Raspberry}
 ---
@@ -362,7 +366,11 @@
 ---
 {        canonicalName: Smooth Peanut Butter, parent: Peanut Butter}
 ---
+{canonicalName: Pecans, tags: NUT, aliases: {Pecan}}
+---
 {canonicalName: Pistachios, tags: NUT, aliases: {Pistachio}}
+---
+{canonicalName: Walnuts, tags: NUT, aliases: {Walnut}}
 ---
 
 
