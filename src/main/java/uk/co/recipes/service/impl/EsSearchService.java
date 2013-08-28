@@ -5,24 +5,25 @@ package uk.co.recipes.service.impl;
 
 import static uk.co.recipes.metrics.MetricNames.TIMER_ITEMS_SEARCHES;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_SEARCHES;
-
+import java.util.Collections;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.action.search.SearchResponse;
+import static org.elasticsearch.index.query.QueryBuilders.matchPhraseQuery;
+import uk.co.recipes.service.api.ISearchResult;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import org.elasticsearch.common.base.Throwables;
-
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.service.api.ISearchAPI;
-
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -37,6 +38,9 @@ import com.google.common.collect.Lists;
  *
  */
 public class EsSearchService implements ISearchAPI {
+
+    @Inject
+    Client esClient;
 
 	@Inject
 	ObjectMapper mapper;
@@ -172,5 +176,37 @@ public class EsSearchService implements ISearchAPI {
 
     private String tagString( final ITag inTag) {
         return inTag + ":true";
+    }
+
+    @Override
+    public List<ISearchResult<?>> findPartial( final String inStr) throws IOException {
+        final SearchResponse resp = esClient.prepareSearch("recipe").setTypes("items","recipes").setQuery( matchPhraseQuery( "nameAutoComplete", inStr) )/* .addSort( "_score", DESC) */.execute().actionGet();
+        final SearchHit[] hits = resp.getHits().hits();
+
+        if ( hits.length == 0) {
+            return Collections.emptyList();
+        }
+
+        final List<ISearchResult<?>> results = Lists.newArrayList();
+
+        for ( final SearchHit eachHit : hits) {
+            if ( eachHit.getType().equals("items")) {
+                results.add( new ISearchResult<ICanonicalItem>() {
+
+                    @Override
+                    public ICanonicalItem getEntity() {
+                        try {
+                            return mapper.readValue( eachHit.getSourceAsString(), CanonicalItem.class);
+                        }
+                        catch (IOException e) {
+                            throw Throwables.propagate(e);  // Yuk! FIXME
+                        }
+                    }} );
+            }
+            else {
+                // Do Recipes too!
+            }
+        }
+        return results;
     }
 }
