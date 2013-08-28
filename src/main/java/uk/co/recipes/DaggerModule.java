@@ -3,11 +3,9 @@
  */
 package uk.co.recipes;
 
-import org.elasticsearch.ElasticSearchIllegalArgumentException;
 import java.io.File;
-import java.nio.charset.Charset;
-import com.google.common.io.Files;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Named;
@@ -18,6 +16,7 @@ import net.myrrix.client.MyrrixClientConfiguration;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.elasticsearch.ElasticSearchIllegalArgumentException;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
@@ -49,6 +48,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
+import com.google.common.io.Files;
 
 import dagger.Module;
 import dagger.Provides;
