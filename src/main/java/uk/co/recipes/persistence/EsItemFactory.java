@@ -29,6 +29,8 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.indices.IndexMissingException;
 import org.elasticsearch.indices.TypeMissingException;
 import org.elasticsearch.search.SearchHit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Recipe;
@@ -51,6 +53,8 @@ import com.google.common.collect.Lists;
  *
  */
 public class EsItemFactory implements IItemPersistence {
+
+	private final static Logger LOG = LoggerFactory.getLogger( EsItemFactory.class );
 
 	@Inject
 	Client esClient;
@@ -175,6 +179,9 @@ public class EsItemFactory implements IItemPersistence {
 //							System.out.println("Successfully mapped Alias '" + inCanonicalName + "' => " + mappedAlias);
 							return mappedAlias;
 						}
+					}
+					else if ( hits.length > 1) {
+						LOG.warn("Too many matches for Alias '" + inCanonicalName + "' - ignoring '" + mapper.readValue( hits[0].getSourceAsString(), CanonicalItem.class) + "' and '" + mapper.readValue( hits[1].getSourceAsString(), CanonicalItem.class) + "'");
 					}
 				}
 				catch (IOException e) { /* e.printStackTrace(); */ }
