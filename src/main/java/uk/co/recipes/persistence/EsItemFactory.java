@@ -82,28 +82,14 @@ public class EsItemFactory implements IItemPersistence {
 	public ICanonicalItem put( final ICanonicalItem inItem, String inId) throws IOException {
         final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_PUTS).time();
 
-//		final HttpPost req = new HttpPost( itemIndexUrl + "/" + URLEncoder.encode( inId, "UTF-8"));
-//		HttpResponse resp = null;
-
 		try {
 			inItem.setId( sequences.getSeqnoForType("items_seqno") );
 
-//			req.setEntity( new StringEntity( mapper.writeValueAsString(inItem), ContentType.APPLICATION_JSON) );
-
 			/* IndexResponse esResp = */ esClient.prepareIndex( "recipe", "items", inId)/*.setCreate(true) */.setSource( mapper.writeValueAsString(inItem) ).execute().actionGet();
-
-//			resp = httpClient.execute(req);
-//			if ( resp.getStatusLine().getStatusCode() != 201) {
-//				throw new RuntimeException("Failure for '" + inId + "', code = " + resp.getStatusLine().getStatusCode());
-//			}
 
 			eventService.addItem(inItem);
 		}
-//		catch (UnsupportedEncodingException e) {
-//			Throwables.propagate(e);
-//		}
         finally {
-//			EntityUtils.consume( resp.getEntity() );
             timerCtxt.stop();
         }
 
