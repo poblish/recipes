@@ -7,25 +7,16 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static org.elasticsearch.index.query.QueryBuilders.matchPhraseQuery;
 import static org.elasticsearch.search.sort.SortOrder.DESC;
 import static uk.co.recipes.metrics.MetricNames.*;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.util.EntityUtils;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.indices.IndexMissingException;
@@ -33,13 +24,11 @@ import org.elasticsearch.indices.TypeMissingException;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.service.api.IItemPersistence;
-
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -88,26 +77,28 @@ public class EsItemFactory implements IItemPersistence {
 	public ICanonicalItem put( final ICanonicalItem inItem, String inId) throws IOException {
         final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_PUTS).time();
 
-		final HttpPost req = new HttpPost( itemIndexUrl + "/" + URLEncoder.encode( inId, "UTF-8"));
-		HttpResponse resp = null;
+//		final HttpPost req = new HttpPost( itemIndexUrl + "/" + URLEncoder.encode( inId, "UTF-8"));
+//		HttpResponse resp = null;
 
 		try {
 			inItem.setId( sequences.getSeqnoForType("items_seqno") );
 
-			req.setEntity( new StringEntity( mapper.writeValueAsString(inItem), ContentType.APPLICATION_JSON) );
+//			req.setEntity( new StringEntity( mapper.writeValueAsString(inItem), ContentType.APPLICATION_JSON) );
 
-			resp = httpClient.execute(req);
-			if ( resp.getStatusLine().getStatusCode() != 201) {
-				throw new RuntimeException("Failure for '" + inId + "', code = " + resp.getStatusLine().getStatusCode());
-			}
+			/* IndexResponse esResp = */ esClient.prepareIndex( "recipe", "items", inId)/*.setCreate(true) */.setSource( mapper.writeValueAsString(inItem) ).execute().actionGet();
+
+//			resp = httpClient.execute(req);
+//			if ( resp.getStatusLine().getStatusCode() != 201) {
+//				throw new RuntimeException("Failure for '" + inId + "', code = " + resp.getStatusLine().getStatusCode());
+//			}
 
 			eventService.addItem(inItem);
 		}
-		catch (UnsupportedEncodingException e) {
-			Throwables.propagate(e);
-		}
+//		catch (UnsupportedEncodingException e) {
+//			Throwables.propagate(e);
+//		}
         finally {
-			EntityUtils.consume( resp.getEntity() );
+//			EntityUtils.consume( resp.getEntity() );
             timerCtxt.stop();
         }
 

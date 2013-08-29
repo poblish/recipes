@@ -25,7 +25,6 @@ import javax.inject.Named;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 import org.elasticsearch.client.Client;
@@ -131,27 +130,29 @@ public class EsRecipeFactory implements IRecipePersistence {
 
 	    final long newId = sequences.getSeqnoForType("recipes_seqno") + Recipe.BASE_ID;
 
-	    final HttpPost req = new HttpPost( itemIndexUrl + "/" + newId);
-	    HttpResponse resp = null;
+//	    final HttpPost req = new HttpPost( itemIndexUrl + "/" + newId);
+//	    HttpResponse resp = null;
 
 		try {
 			inRecipe.setId(newId);
 
-			req.setEntity( new StringEntity( mapper.writeValueAsString(inRecipe), ContentType.APPLICATION_JSON) );
+//			req.setEntity( new StringEntity( mapper.writeValueAsString(inRecipe), ContentType.APPLICATION_JSON) );
 
-			resp = httpClient.execute(req);
+            /* IndexResponse esResp = */ esClient.prepareIndex( "recipe", "recipes", String.valueOf(newId))/*.setCreate(true) */.setSource( mapper.writeValueAsString(inRecipe) ).execute().actionGet();
 
-			if ( resp.getStatusLine().getStatusCode() != 200 && resp.getStatusLine().getStatusCode() != 201) {
-				throw new RuntimeException("Unexpected status (" + resp.getStatusLine().getStatusCode() + ") for " + inRecipe);
-			}
+//            resp = httpClient.execute(req);
+//
+//			if ( resp.getStatusLine().getStatusCode() != 200 && resp.getStatusLine().getStatusCode() != 201) {
+//				throw new RuntimeException("Unexpected status (" + resp.getStatusLine().getStatusCode() + ") for " + inRecipe);
+//			}
 
 			eventService.addRecipe(inRecipe);
 		}
-		catch (UnsupportedEncodingException e) {
-			Throwables.propagate(e);
-		}
+//		catch (UnsupportedEncodingException e) {
+//			Throwables.propagate(e);
+//		}
         finally {
-			EntityUtils.consume( resp.getEntity() );
+//			EntityUtils.consume( resp.getEntity() );
             timerCtxt.stop();
         }
 
