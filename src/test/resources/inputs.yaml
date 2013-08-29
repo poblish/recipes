@@ -1,8 +1,8 @@
 {canonicalName: Water}
 ---
-{canonicalName: Coffee}
+{canonicalName: Coffee, tags: {COFFEE}}
 ---
-{canonicalName: Instant Coffee, parent: Coffee}
+{    canonicalName: Instant Coffee, parent: Coffee}
 ---
 
 
@@ -12,7 +12,7 @@
 ---
 
 
-{canonicalName: Almond Essence, parent: Almond, tags: {FLAVOURING,BAKING}, aliases: {Almond Extract}}
+{canonicalName: Almond Essence, parent: Almond, tags: {FLAVOURING, BAKING}, aliases: {Almond Extract}}
 ---
 {canonicalName: Baking Powder, tags: BAKING}
 ---
@@ -38,7 +38,7 @@
 ---
 {canonicalName: Fenugreek, tags: {HERB, INDIAN}}
 ---
-{canonicalName: Lemon grass, tags: {HERB, THAI, VIETNAMESE}, aliases: {Lemongrass}}
+{canonicalName: Lemon grass, tags: {HERB, THAI, VIETNAMESE, LEMON}, aliases: {Lemongrass}}
 ---
 {canonicalName: Mixed Herbs, tags: HERB}
 ---
@@ -314,7 +314,7 @@
 ---
 {canonicalName: Grapefruit, tags: {FRUIT, CITRUS}}
 ---
-{canonicalName: Lemon, tags: {FRUIT, CITRUS}, aliases: {Lemons}}
+{canonicalName: Lemon, tags: {FRUIT, CITRUS, LEMON}, aliases: {Lemons}}
 ---
 {    canonicalName: Lemon Juice, parent: Lemon}
 ---
@@ -324,7 +324,7 @@
 ---
 {    canonicalName: Lime Juice, parent: Lime}
 ---
-{canonicalName: Orange, tags: {FRUIT, CITRUS}}
+{canonicalName: Orange, tags: {FRUIT, CITRUS, ORANGE}}
 ---
 {    canonicalName: Orange Juice, parent: Orange}
 ---
@@ -358,7 +358,7 @@
 ---
 
 
-{canonicalName: Almond, tags: NUT, aliases: Almonds}
+{canonicalName: Almond, tags: {NUT, ALMOND}, aliases: Almonds}
 ---
 {    canonicalName: Flaked Almonds, parent: Almond, tags: {BAKING}, aliases: {Flaked Almond}}
 ---
@@ -656,18 +656,28 @@
 ---
 
 
+{canonicalName: Amaretto, tags: {SPIRIT, ALCOHOL, ITALIAN, ALMOND}}
+---
+{canonicalName: Brandy, tags: {SPIRIT, ALCOHOL, FRENCH}}
+---
+{    canonicalName: Cognac, parent: Brandy}
+---
+{    canonicalName: Grand Marnier, parent: Brandy, tags: {ORANGE}}
+---
+{canonicalName: Chinese Cooking Wine, tags: {WINE, ALCOHOL, CHINESE}}
+---
+{canonicalName: Cointreau, tags: {SPIRIT, ALCOHOL, FRENCH, ORANGE}}
+---
+{canonicalName: Curaçao, tags: {SPIRIT, ALCOHOL, DUTCH, ORANGE}}
+---
+{canonicalName: Dry Sherry, tags: {SPIRIT, ALCOHOL, SPANISH}}
+---
+{canonicalName: Limoncello, tags: {SPIRIT, ALCOHOL, ITALIAN, LEMON}}
+---
 {canonicalName: Red Wine, tags: {WINE, ALCOHOL}}
 ---
+{canonicalName: Tia Maria, tags: {SPIRIT, ALCOHOL, COFFEE}}
+---
+{canonicalName: Triple Sec, tags: {SPIRIT, ALCOHOL, FRENCH, ORANGE}}
+---
 {canonicalName: White Wine, tags: {WINE, ALCOHOL}}
----
-{canonicalName: Chinese Cooking Wine, tags: {WINE, ALCOHOL}}
----
-{canonicalName: Dry Sherry, tags: {WINE, ALCOHOL, SPANISH}}
----
-{canonicalName: Amaretto, tags: {ALCOHOL}}
----
-{canonicalName: Brandy, tags: {WINE, ALCOHOL, FRENCH}}
----
-{canonicalName: Cognac, parent: Brandy}
----
-{canonicalName: Tia Maria, tags: {ALCOHOL}}
