@@ -6,7 +6,7 @@
 ---
 
 
-{canonicalName: Chocolate}
+{canonicalName: Chocolate, tags: SWEET}
 ---
 {    canonicalName: Plain Chocolate, parent: Chocolate}
 ---
@@ -51,6 +51,8 @@
 {canonicalName: Sage, tags: HERB}
 ---
 {canonicalName: Tarragon, tags: HERB}
+---
+{    canonicalName: Fresh Tarragon, parent: Tarragon, aliases: {Tarragon Leaves}}
 ---
 {canonicalName: Thyme, tags: HERB}
 ---
@@ -212,6 +214,8 @@
 ---
 {    canonicalName: Chestnut Mushrooms, parent: Mushrooms}
 ---
+{    canonicalName: Shiitake Mushrooms, parent: Mushrooms, tags: JAPANESE}
+---
 {    canonicalName: White Mushrooms, parent: Mushrooms}
 ---
 {canonicalName: Olives, tags: VEGETABLE}
@@ -344,11 +348,13 @@
 
 {canonicalName: Flour, tags: FLOUR}
 ---
-{canonicalName: Plain Flour, parent: Flour}
+{    canonicalName: Cornflour, parent: Flour}
 ---
-{canonicalName: Self-raising Flour, parent: Flour}
+{    canonicalName: Plain Flour, parent: Flour}
 ---
-{canonicalName: Semolina, parent: Flour}
+{    canonicalName: Self-raising Flour, parent: Flour}
+---
+{    canonicalName: Semolina, parent: Flour}
 ---
 
 
@@ -357,6 +363,8 @@
 {    canonicalName: Flaked Almonds, parent: Almond, tags: {BAKING}, aliases: {Flaked Almond}}
 ---
 {canonicalName: Cashew Nuts, tags: NUT, aliases: {Cashew, Cashew Nut}}
+---
+{canonicalName: Chestnuts, tags: NUT, aliases: {Chestnut}}
 ---
 {canonicalName: Hazelnuts, tags: NUT, aliases: Hazelnut}
 ---
@@ -414,13 +422,23 @@
 ---
 
 
+{canonicalName: Brie, tags: {DAIRY, CHEESE, FRENCH}}
+---
+{canonicalName: Camembert, tags: {DAIRY, CHEESE, FRENCH}}
+---
 {canonicalName: Feta, tags: {DAIRY, CHEESE, GREEK}, aliases: {Feta Cheese}}
+---
+{canonicalName: Gruyère, tags: {DAIRY, CHEESE, SWISS}}
+---
+{canonicalName: Halloumi, tags: {DAIRY, CHEESE, GREEK}, aliases: {Halloumi Cheese}}
 ---
 {canonicalName: Mascarpone, tags: {DAIRY, CHEESE, ITALIAN}}
 ---
 {canonicalName: Parmesan, tags: {DAIRY, CHEESE, ITALIAN}}
 ---
 {canonicalName: Paneer, tags: {DAIRY, CHEESE, INDIAN}, aliases: {Paneer Cheese}}
+---
+{canonicalName: Roquefort, tags: {DAIRY, CHEESE, BLUE_CHEESE, FRENCH}, aliases: {Roquefort Cheese}}
 ---
 {canonicalName: Taleggio, tags: {DAIRY, CHEESE, ITALIAN}, aliases: {Taleggio Cheese}}
 ---
@@ -631,6 +649,8 @@
 {canonicalName: Bacon, tags: MEAT}
 ---
 {    canonicalName: Bacon Rashers, parent: Bacon}
+---
+{    canonicalName: Lardons, parent: Bacon, aliases: {Lardon}}
 ---
 {    canonicalName: Streaky Bacon, parent: Bacon}
 ---

@@ -21,7 +21,7 @@ public enum CommonTags implements ITag {
 	// Herbs are obtained from the leaves of herbaceous (non-woody) plants.
 	HERB, // Thyme, Sage, Oregano, Parsley, Marjoram, Basil, Chives, Rosemary, Mint
 
-	SUGAR, SALT, FLOUR, BREAD, PASTA, SEED, NUT, PULSE, FRUIT, CITRUS, CHEESE, CHILLI, EGG,
+	SUGAR, SALT, FLOUR, BREAD, PASTA, SEED, NUT, PULSE, FRUIT, CITRUS, CHEESE, BLUE_CHEESE, CHILLI, EGG,
 
 	MEAT, OFFAL, POULTRY, GAME, FISH, SEAFOOD, STOCK, SAUSAGE,
 
@@ -30,8 +30,8 @@ public enum CommonTags implements ITag {
 	FLAVOURING, BAKING,
 
 	// Should be in FlavourTags
-	ANISEED,
+	ANISEED, SWEET, SOUR,
 
 	// Should be in NationalCuisineTags...
-	INDIAN, CHINESE, JAPANESE, THAI, VIETNAMESE, FRENCH, ITALIAN, GREEK, ENGLISH, SPANISH, HUNGARIAN, MEXICAN, GERMAN
+	INDIAN, CHINESE, JAPANESE, THAI, VIETNAMESE, FRENCH, ITALIAN, GREEK, ENGLISH, SPANISH, HUNGARIAN, MEXICAN, GERMAN, SWISS
 }
