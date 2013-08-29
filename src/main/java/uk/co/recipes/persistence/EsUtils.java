@@ -3,13 +3,16 @@
  */
 package uk.co.recipes.persistence;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Iterator;
 
 import javax.inject.Inject;
 
+import org.elasticsearch.ElasticSearchException;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse.AnalyzeToken;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsRequestBuilder;
@@ -22,6 +25,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
+import com.google.common.io.Files;
 
 /**
  * TODO
@@ -94,6 +98,12 @@ public class EsUtils {
 		if ( waitsToGo <= 0) {
 			throw new RuntimeException("Timeout exceeded!");
 		}
+	}
+
+	public static void addPartialMatchMappings( final Client inClient) throws ElasticSearchException, IOException {
+		// FIXME - hardcoded paths!
+		inClient.admin().indices().preparePutMapping("recipe").setType("items").setSource( Files.toString( new File("/Users/andrewregan/Development/java/recipe_explorer/src/main/resources/esItemsMappingsAutocomplete.json"), Charset.forName("utf-8")) ).execute().actionGet();
+		inClient.admin().indices().preparePutMapping("recipe").setType("recipes").setSource( Files.toString( new File("/Users/andrewregan/Development/java/recipe_explorer/src/main/resources/esRecipesMappingsAutocomplete.json"), Charset.forName("utf-8")) ).execute().actionGet();
 	}
 
 	public static Function<AnalyzeResponse.AnalyzeToken,String> getAnalyzeTokenToStringFunc() {

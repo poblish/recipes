@@ -233,7 +233,7 @@ public class EsItemFactory implements IItemPersistence {
 		try {
 			esClient.admin().indices().prepareDeleteMapping().setIndices("recipe").setType("items").execute().actionGet();
 
-			esClient.admin().indices().preparePutMapping("recipe").setType("items").setSource( Files.toString( new File("src/main/resources/esItemsMappingsAutocomplete.json"), Charset.forName("utf-8")) ).execute().actionGet();
+            EsUtils.addPartialMatchMappings(esClient);
 		}
 		catch (TypeMissingException e) {
 			// Ignore

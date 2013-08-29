@@ -227,7 +227,7 @@ public class EsRecipeFactory implements IRecipePersistence {
 		try {
 			esClient.admin().indices().prepareDeleteMapping().setIndices("recipe").setType("recipes").execute().actionGet();
 
-			esClient.admin().indices().preparePutMapping("recipe").setType("recipes").setSource( Files.toString( new File("src/main/resources/esRecipesMappingsAutocomplete.json"), Charset.forName("utf-8")) ).execute().actionGet();
+            EsUtils.addPartialMatchMappings(esClient);
 		}
 		catch (TypeMissingException e) {
 			// Ignore

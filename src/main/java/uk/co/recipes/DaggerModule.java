@@ -33,6 +33,7 @@ import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsSequenceFactory;
 import uk.co.recipes.persistence.EsUserFactory;
+import uk.co.recipes.persistence.EsUtils;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.persistence.JacksonFactory;
 import uk.co.recipes.ratings.UserRatings;
@@ -89,7 +90,7 @@ public class DaggerModule {
 		final Client c = new TransportClient().addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
 
         try {
-            final String settingsStr = Files.toString( new File("src/main/resources/index.yaml"), Charset.forName("utf-8"));
+            final String settingsStr = Files.toString( new File("/Users/andrewregan/Development/java/recipe_explorer/src/main/resources/index.yaml"), Charset.forName("utf-8"));
 
             try {
                 c.admin().indices().prepareUpdateSettings("recipe").setSettings(settingsStr).execute().actionGet();
@@ -106,8 +107,7 @@ public class DaggerModule {
                 	c.admin().indices().prepareCreate("recipe").setSettings(settingsStr).execute().actionGet();
                 }
 
-                c.admin().indices().preparePutMapping("recipe").setType("items").setSource( Files.toString( new File("src/main/resources/esItemsMappingsAutocomplete.json"), Charset.forName("utf-8")) ).execute().actionGet();
-                c.admin().indices().preparePutMapping("recipe").setType("recipes").setSource( Files.toString( new File("src/main/resources/esRecipesMappingsAutocomplete.json"), Charset.forName("utf-8")) ).execute().actionGet();
+                EsUtils.addPartialMatchMappings(c);
             }
         }
         catch (IOException e) {
