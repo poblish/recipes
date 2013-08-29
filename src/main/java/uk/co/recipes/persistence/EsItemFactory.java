@@ -7,6 +7,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static org.elasticsearch.index.query.QueryBuilders.matchPhraseQuery;
 import static org.elasticsearch.search.sort.SortOrder.DESC;
 import static uk.co.recipes.metrics.MetricNames.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -14,8 +15,10 @@ import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import org.apache.http.client.HttpClient;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
@@ -24,11 +27,13 @@ import org.elasticsearch.indices.TypeMissingException;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.service.api.IItemPersistence;
+
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.fasterxml.jackson.databind.ObjectMapper;
