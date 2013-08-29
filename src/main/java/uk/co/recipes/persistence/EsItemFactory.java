@@ -40,6 +40,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
+import com.google.common.cache.Cache;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 
@@ -78,6 +79,9 @@ public class EsItemFactory implements IItemPersistence {
     @Inject
     IEventService eventService;
 
+    @Inject
+    Cache<String,ICanonicalItem> itemsCache;
+
 
 	public ICanonicalItem put( final ICanonicalItem inItem, String inId) throws IOException {
         final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_PUTS).time();
@@ -86,6 +90,8 @@ public class EsItemFactory implements IItemPersistence {
 			inItem.setId( sequences.getSeqnoForType("items_seqno") );
 
 			/* IndexResponse esResp = */ esClient.prepareIndex( "recipe", "items", inId)/*.setCreate(true) */.setSource( mapper.writeValueAsString(inItem) ).execute().actionGet();
+
+		    itemsCache.put( inId, inItem);
 
 			eventService.addItem(inItem);
 		}
@@ -99,8 +105,20 @@ public class EsItemFactory implements IItemPersistence {
 	public ICanonicalItem getByName( String inId) throws IOException {
         final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_NAME_GETS).time();
 
+        final ICanonicalItem cachedItem = itemsCache.getIfPresent(inId);
+        if ( cachedItem != null) {
+        	return cachedItem;  // Cache HIT
+        }
+
 		try {
-		    return mapper.readValue( esUtils.parseSource( itemIndexUrl + "/" + URLEncoder.encode( inId, "utf-8")), CanonicalItem.class);
+		    final ICanonicalItem item = mapper.readValue( esUtils.parseSource( itemIndexUrl + "/" + URLEncoder.encode( inId, "utf-8")), CanonicalItem.class);
+
+		    if ( item == null || itemsCache == null) {
+		    	return item;
+		    }
+
+		    itemsCache.put( inId, item);  // Cache MISS
+		    return item;
 		}
         finally {
             timerCtxt.stop();

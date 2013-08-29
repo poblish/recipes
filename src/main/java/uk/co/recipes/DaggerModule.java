@@ -23,6 +23,7 @@ import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.indices.IndexMissingException;
 import org.slf4j.LoggerFactory;
 
+import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.corr.Correlations;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.events.impl.DefaultEventService;
@@ -49,6 +50,8 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.io.Files;
 
 import dagger.Module;
@@ -172,4 +175,11 @@ public class DaggerModule {
 			throw Throwables.propagate(e);
 		}
 	}
+
+    @Provides
+    @Singleton
+    Cache<String,ICanonicalItem> provideItemCache() {
+    	// Can't actually think of anything else useful...
+    	return CacheBuilder.newBuilder().maximumSize(1000).build();
+    }
 }
