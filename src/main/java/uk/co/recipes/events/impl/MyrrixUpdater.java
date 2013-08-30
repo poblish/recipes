@@ -255,7 +255,7 @@ public class MyrrixUpdater implements IEventListener {
     	if (LOG.isDebugEnabled()) {
     	    LOG.debug(( inScore > 0 ? "SET" : "UNSET") + " Tag '" + ourPseudoParentTagName + "' val=" + inScore + " for " + inItemOrRecipeId);
 		}
-    	recommender.setItemTag( ourPseudoParentTagName, inItemOrRecipeId, inScore);
+    	// recommender.setItemTag( ourPseudoParentTagName, inItemOrRecipeId, inScore);
 
     	if ( inItem.parent().isPresent()) {
     		changesMade |= setHierarchicalSimilarityTags( inItem.parent().get(), inItemOrRecipeId, inScore * 0.8f);
