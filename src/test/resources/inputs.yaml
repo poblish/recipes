@@ -300,6 +300,10 @@
 
 {canonicalName: Apple, tags: {FRUIT}}
 ---
+{    canonicalName: Bramley apples, tags: BAKING, parent: Apple}
+---
+{    canonicalName: Braeburn apples, parent: Apple}
+---
 {canonicalName: Apricot, tags: {FRUIT}, aliases: {Apricots}}
 ---
 {    canonicalName: Apricot Conserve, parent: Apricot, tags: {CONDIMENT}}
@@ -307,6 +311,8 @@
 {canonicalName: Avocado, tags: {FRUIT, MEXICAN}, aliases: {Avocados}}
 ---
 {canonicalName: Banana, tags: {FRUIT}, aliases: {Bananas}}
+---
+{canonicalName: Blackberries, tags: {FRUIT}, aliases: {Blackberry}}
 ---
 {canonicalName: Coconut, tags: {FRUIT, NUT, INDIAN, THAI, VIETNAMESE}, aliases: {Coconut grated}}
 ---
@@ -425,6 +431,8 @@
 {canonicalName: Brie, tags: {DAIRY, CHEESE, FRENCH}}
 ---
 {canonicalName: Camembert, tags: {DAIRY, CHEESE, FRENCH}}
+---
+{canonicalName: Cheddar, tags: {DAIRY, CHEESE, ENGLISH}, aliases: {Cheddar Cheese}}
 ---
 {canonicalName: Feta, tags: {DAIRY, CHEESE, GREEK}, aliases: {Feta Cheese}}
 ---
