@@ -2,7 +2,6 @@ package uk.co.recipes;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static uk.co.recipes.tags.NationalCuisineTags.*;
 
 import java.io.File;
 import java.io.IOException;
