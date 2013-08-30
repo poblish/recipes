@@ -91,7 +91,7 @@ public class DaggerModule {
 
         try {
             final String homeDir = System.getProperty("user.home");
-            final String settingsStr = Files.toString( new File( homeDir + "/Development/recipe_explorer/src/main/resources/index.yaml"), Charset.forName("utf-8"));
+            final String settingsStr = Files.toString( new File( homeDir + "/Development/java/recipe_explorer/src/main/resources/index.yaml"), Charset.forName("utf-8"));
 
             try {
                 c.admin().indices().prepareUpdateSettings("recipe").setSettings(settingsStr).execute().actionGet();

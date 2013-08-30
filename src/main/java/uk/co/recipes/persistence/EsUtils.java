@@ -103,8 +103,8 @@ public class EsUtils {
 	public static void addPartialMatchMappings( final Client inClient) throws ElasticSearchException, IOException {
 		// FIXME - absolute paths!
 	    final String homeDir = System.getProperty("user.home");
-		inClient.admin().indices().preparePutMapping("recipe").setType("items").setSource( Files.toString( new File( homeDir + "/Development/recipe_explorer/src/main/resources/esItemsMappingsAutocomplete.json"), Charset.forName("utf-8")) ).execute().actionGet();
-		inClient.admin().indices().preparePutMapping("recipe").setType("recipes").setSource( Files.toString( new File( homeDir + "/Development/recipe_explorer/src/main/resources/esRecipesMappingsAutocomplete.json"), Charset.forName("utf-8")) ).execute().actionGet();
+		inClient.admin().indices().preparePutMapping("recipe").setType("items").setSource( Files.toString( new File( homeDir + "/Development/java/recipe_explorer/src/main/resources/esItemsMappingsAutocomplete.json"), Charset.forName("utf-8")) ).execute().actionGet();
+		inClient.admin().indices().preparePutMapping("recipe").setType("recipes").setSource( Files.toString( new File( homeDir + "/Development/java/recipe_explorer/src/main/resources/esRecipesMappingsAutocomplete.json"), Charset.forName("utf-8")) ).execute().actionGet();
 	}
 
 	public static Function<AnalyzeResponse.AnalyzeToken,String> getAnalyzeTokenToStringFunc() {
