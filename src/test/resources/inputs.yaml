@@ -22,6 +22,12 @@
 ---
 {canonicalName: Vanilla Extract, tags: {FLAVOURING,BAKING}}
 ---
+{canonicalName: Yeast, tags: {BAKING}}
+---
+{    canonicalName: Easy-blend Yeast, tags: {BAKING}, aliases: {Easy blend yeast, Easy-blend dried yeast}}
+---
+{    canonicalName: Fast-action Yeast, tags: {BAKING}, aliases: {fast-action dried yeast}}
+---
 
 
 {canonicalName: Basil, tags: {HERB, ITALIAN}}
@@ -48,9 +54,15 @@
 ---
 {canonicalName: Parsley, tags: HERB}
 ---
+{    canonicalName: Curly Parsley, parent: Parsley}
+---
+{    canonicalName: Flat-leaf Parsley, parent: Parsley}
+---
 {canonicalName: Rosemary, tags: HERB, aliases: {Rosemary Sprigs}}
 ---
 {canonicalName: Sage, tags: HERB}
+---
+{    canonicalName: Fresh Sage, parent: Sage, aliases: {Sage Leaves}}
 ---
 {canonicalName: Tarragon, tags: HERB}
 ---
@@ -117,6 +129,8 @@
 {canonicalName: Nutmeg, tags: SPICE}
 ---
 {canonicalName: Paprika, tags: {SPICE, HUNGARIAN, SPANISH}}
+---
+{    canonicalName: Sweet Paprika, parent: Paprika}
 ---
 {canonicalName: Pepper, tags: SPICE}
 ---
@@ -194,7 +208,9 @@
 ---
 {canonicalName: Broccoli, tags: VEGETABLE}
 ---
-{canonicalName: Cabbage, tags: VEGETABLE, aliases: {Green Cabbage}}
+{canonicalName: Butternut Squash, tags: VEGETABLE}
+---
+{canonicalName: Cabbage, tags: VEGETABLE, aliases: {Green Cabbage, Cabbage Leaves}}
 ---
 {canonicalName: Carrot, tags: VEGETABLE, aliases: {Carrots}}
 ---
@@ -284,11 +300,17 @@
 ---
 {    canonicalName: Cherry Tomatoes, parent: Tomato}
 ---
+{    canonicalName: Passata, parent: Tomato, tags: {SAUCE, ITALIAN}}
+---
 {    canonicalName: Plum Tomatoes, parent: Tomato}
 ---
 {    canonicalName: Tomato Chutney, parent: Tomato, tags: {SAUCE}}
 ---
-{    canonicalName: Tomato Paste, parent: Tomato, aliases: {Tomato Puree}}
+{    canonicalName: Tomato Paste, parent: Tomato, tags: {SAUCE}}
+---
+{        canonicalName: Sundried Tomato Paste, parent: Tomato Paste}
+---
+{    canonicalName: Tomato Purée, parent: Tomato, tags: {SAUCE}, aliases: {Tomato Puree}}
 ---
 {canonicalName: Turnip, tags: VEGETABLE, aliases: {Turnips}}
 ---
@@ -386,6 +408,12 @@
 ---
 
 
+{canonicalName: Ciabatta, tags: {BREAD, ITALIAN}}
+---
+{canonicalName: Focaccia, tags: {BREAD, ITALIAN}}
+---
+
+
 {canonicalName: Almond, tags: {NUT, ALMOND}, aliases: Almonds}
 ---
 {    canonicalName: Flaked Almonds, parent: Almond, tags: {BAKING}, aliases: {Flaked Almond}}
@@ -419,6 +447,8 @@
 
 
 {canonicalName: Salt, tags: SALT}
+---
+{    canonicalName: Sea Salt, parent: Salt}
 ---
 
 
@@ -467,6 +497,8 @@
 {canonicalName: Halloumi, tags: {DAIRY, CHEESE, GREEK}, aliases: {Halloumi Cheese}}
 ---
 {canonicalName: Mascarpone, tags: {DAIRY, CHEESE, ITALIAN}}
+---
+{canonicalName: Mozzarella, tags: {DAIRY, CHEESE, ITALIAN}}
 ---
 {canonicalName: Parmesan, tags: {DAIRY, CHEESE, ITALIAN}}
 ---
@@ -576,6 +608,8 @@
 ---
 {    canonicalName: Balti Curry Paste, parent: Curry Paste}
 ---
+{    canonicalName: Korma Paste, parent: Curry Paste}
+---
 {    canonicalName: Mild Curry Paste, parent: Curry Paste}
 ---
 {canonicalName: Fish Sauce, tags: {FISH, SAUCE, THAI, VIETNAMESE}}
@@ -622,11 +656,15 @@
 ---
 {    canonicalName: King Prawns, parent: Prawns}
 ---
+{    canonicalName: Tiger Prawns, parent: Prawns}
+---
 
 
 {canonicalName: Anchovy, tags: {FISH,SEAFOOD}, aliases: {Anchovies}}
 ---
 {canonicalName: Salmon, tags: {FISH,SEAFOOD}}
+---
+{    canonicalName: Salmon Fillet, parent: Salmon, aliases: {Salmon Fillets}}
 ---
 {canonicalName: Sea Bass, tags: {FISH,SEAFOOD}}
 ---
@@ -636,7 +674,11 @@
 ---
 {canonicalName: Tilapia, tags: {FISH,SEAFOOD,INDIAN}}
 ---
-{    canonicalName: Tilapia Fillets, parent: Tilapia}
+{    canonicalName: Tilapia Fillet, parent: Tilapia, aliases: {Tilapia Fillets}}
+---
+{canonicalName: Trout, tags: {FISH,SEAFOOD}}
+---
+{    canonicalName: Trout Fillet, parent: Trout, aliases: {Trout Fillets}}
 ---
 {canonicalName: Tuna, tags: {FISH,SEAFOOD}}
 ---
@@ -650,7 +692,7 @@
 ---
 {    canonicalName: Minced Beef, parent: Beef, aliases: {Beef Mince}}
 ---
-{    canonicalName: Sirloin Steak, parent: Beef}
+{    canonicalName: Sirloin Steak, parent: Beef, aliases: {Sirloin Steaks}}
 ---
 {canonicalName: Chicken, tags: {MEAT, POULTRY}}
 ---
@@ -662,11 +704,13 @@
 ---
 {    canonicalName: Chicken Thighs, parent: Chicken}
 ---
-{    canonicalName: Chicken Thigh Fillets, parent: Chicken}
+{    canonicalName: Chicken Thigh Fillets, parent: Chicken, aliases: {Chicken Thighs Fillets}}
 ---
 {    canonicalName: Diced Chicken, parent: Chicken}
 ---
 {canonicalName: Chicken Liver, tags: {MEAT, POULTRY, OFFAL}}
+---
+{canonicalName: Ham, tags: MEAT}
 ---
 {canonicalName: Lamb, tags: MEAT}
 ---
