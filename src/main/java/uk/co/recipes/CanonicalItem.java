@@ -7,6 +7,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static uk.co.recipes.tags.TagUtils.findActivated;
 import static uk.co.recipes.tags.TagUtils.tagNamesTitleCase;
 
+import com.google.common.collect.Ordering;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -52,7 +53,7 @@ public class CanonicalItem implements ICanonicalItem {
 	private ICanonicalItem parent = null; // Can't use Optional<> as it screws with JSON serialization
 	public Collection<String> aliases = Sets.newHashSet();
 
-	private Map<ITag,Serializable> tags = new TreeMap<>();  // Try to keep the order regular. This will *not* sort enums by name, only by index
+	private Map<ITag,Serializable> tags = new TreeMap<>( Ordering.usingToString() );  // Try to keep the order regular. This will *not* sort enums by name, only by index
 
 	/**
 	 * @param canonicalName
@@ -123,7 +124,7 @@ public class CanonicalItem implements ICanonicalItem {
 			return tags;
 		}
 
-		final Map<ITag,Serializable> allTags = new TreeMap<>();  // Try to keep the order regular. This will *not* sort enums by name, only by index
+		final Map<ITag,Serializable> allTags = new TreeMap<>( Ordering.usingToString() );  // Try to keep the order regular
 		allTags.putAll( parent.getTags() );
 
 		for ( Entry<ITag,Serializable> each : tags.entrySet()) {

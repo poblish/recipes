@@ -3,6 +3,7 @@
  */
 package uk.co.recipes.tags;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
@@ -27,6 +28,8 @@ public final class TagUtils {
     @SuppressWarnings("serial")
     static final Map<String, ITag> ALL_TAGS = new LinkedHashMap<String, ITag>() {{
         for( CommonTags each : CommonTags.values()) put( each.name(), each);
+        for( FlavourTags each : FlavourTags.values()) put( each.name(), each);
+        for( NationalCuisineTags each : NationalCuisineTags.values()) put( each.name(), each);
     }};
 
     private TagUtils() {}
@@ -71,7 +74,7 @@ public final class TagUtils {
 	}
 
 	public static ITag forName( final String inName) {
-		return ALL_TAGS.get(inName);
+		return checkNotNull( ALL_TAGS.get(inName), "No Tag registered with name '" + inName + "'");
 	}
 
 	public static Comparator<ITag> comparator() {
