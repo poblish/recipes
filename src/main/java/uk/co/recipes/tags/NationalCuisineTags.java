@@ -14,4 +14,11 @@ import uk.co.recipes.api.ITag;
 public enum NationalCuisineTags implements ITag {
 
 	INDIAN, CHINESE, JAPANESE, THAI, VIETNAMESE, FRENCH, ITALIAN, GREEK, ENGLISH, SPANISH, HUNGARIAN, MEXICAN, GERMAN, SWISS, DUTCH
+
+	;
+
+    @Override
+    public float getBoost() {
+        return 1.0f;
+    }
 }

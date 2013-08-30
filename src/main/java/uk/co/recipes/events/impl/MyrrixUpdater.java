@@ -5,22 +5,17 @@ package uk.co.recipes.events.impl;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.io.Serializable;
 import java.io.StringReader;
 import java.util.Collection;
 import java.util.Map.Entry;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import net.myrrix.client.ClientRecommender;
-
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.elasticsearch.common.base.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
@@ -29,7 +24,6 @@ import uk.co.recipes.events.api.IEventListener;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
-
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
 
@@ -227,19 +221,22 @@ public class MyrrixUpdater implements IEventListener {
     		if ( eachTag.getValue() instanceof Boolean) {
     			if ((Boolean) eachTag.getValue()) {
     				// Don't bother setting if == FALSE
+
+    			    final float scoreToUse = eachTag.getKey().getBoost() * inBasicScore;
+
     				if (LOG.isDebugEnabled()) {
-    					LOG.debug( setStr + " Tag '" + eachTag.getKey() + "' val=" + inBasicScore + " for " + inItemOrRecipeId);
+    					LOG.debug( setStr + " Tag '" + eachTag.getKey() + "' val=" + scoreToUse + " for " + inItemOrRecipeId);
     				}
-    	        	recommender.setItemTag( eachTag.getKey().toString(), inItemOrRecipeId, inBasicScore);
+    	        	recommender.setItemTag( eachTag.getKey().toString(), inItemOrRecipeId, scoreToUse);
     	        	changesMade = true;
     			}
     		}
     		else {
-    			final float val = Float.valueOf((String) eachTag.getValue());
+    			final float scoreToUse = /* Think we need the boost...? */ eachTag.getKey().getBoost() * Float.valueOf((String) eachTag.getValue());
 				if (LOG.isDebugEnabled()) {
-					LOG.debug( setStr + " Tag '" + eachTag.getKey() + "' val=" + val + " for " + inItemOrRecipeId);
+					LOG.debug( setStr + " Tag '" + eachTag.getKey() + "' val=" + scoreToUse + " for " + inItemOrRecipeId);
 				}
-	        	recommender.setItemTag( eachTag.getKey().toString(), inItemOrRecipeId, val);
+	        	recommender.setItemTag( eachTag.getKey().toString(), inItemOrRecipeId, scoreToUse);
 	        	changesMade = true;
     		}
     	}

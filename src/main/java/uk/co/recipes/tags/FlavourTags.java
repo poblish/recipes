@@ -14,4 +14,11 @@ import uk.co.recipes.api.ITag;
 public enum FlavourTags implements ITag {
 
 	ANISEED, SWEET, SOUR, ORANGE, LEMON, ALMOND, COFFEE
+
+	;
+
+    @Override
+    public float getBoost() {
+        return 1.0f;
+    }
 }

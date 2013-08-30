@@ -27,5 +27,12 @@ public enum CommonTags implements ITag {
 
 	WINE, ALCOHOL, SPIRIT, VINEGAR, SAUCE, CONDIMENT, RICE, NOODLES, WHEAT, GRAIN,
 
-	FLAVOURING, BAKING,
+	FLAVOURING, BAKING
+
+	;
+
+    @Override
+    public float getBoost() {
+        return 1.0f;
+    }
 }
