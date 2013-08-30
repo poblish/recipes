@@ -3,18 +3,18 @@
  */
 package uk.co.recipes.tags;
 
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Map.Entry;
-
-import uk.co.recipes.api.ITag;
-
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ComparisonChain;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import uk.co.recipes.api.ITag;
 
 /**
  * TODO
@@ -23,6 +23,11 @@ import com.google.common.collect.ComparisonChain;
  *
  */
 public final class TagUtils {
+
+    @SuppressWarnings("serial")
+    static final Map<String, ITag> ALL_TAGS = new LinkedHashMap<String, ITag>() {{
+        for( CommonTags each : CommonTags.values()) put( each.name(), each);
+    }};
 
     private TagUtils() {}
 
@@ -66,12 +71,7 @@ public final class TagUtils {
 	}
 
 	public static ITag forName( final String inName) {
-//		try {
-			return CommonTags.valueOf(inName);
-//		}
-//		catch (IllegalArgumentException e) {
-//			return NationalCuisineTags.valueOf(inName);
-//		}
+		return ALL_TAGS.get(inName);
 	}
 
 	public static Comparator<ITag> comparator() {

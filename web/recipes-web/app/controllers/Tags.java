@@ -13,7 +13,6 @@ import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.impl.EsSearchService;
-import uk.co.recipes.tags.CommonTags;
 
 /**
  * 
@@ -32,7 +31,7 @@ public class Tags extends Controller {
     }
 
     public Result display( final String name) throws IOException {
-        final ITag theTag = CommonTags.valueOf( name.toUpperCase() );
+        final ITag theTag = TagUtils.valueOf( name.toUpperCase() );
         final List<ICanonicalItem> results = search.findItemsByTag(theTag);
         return ok(views.html.tags.render( theTag, results));
     }

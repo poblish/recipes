@@ -31,7 +31,6 @@ import uk.co.recipes.api.ratings.IItemRating;
 import uk.co.recipes.api.ratings.IRecipeRating;
 import uk.co.recipes.ratings.ItemRating;
 import uk.co.recipes.ratings.RecipeRating;
-import uk.co.recipes.tags.CommonTags;
 import uk.co.recipes.tags.TagUtils;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -103,7 +102,7 @@ public final class JacksonFactory {
 			@Override
 			public ITag deserialize( JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
                 try {
-                    return CommonTags.valueOf( jp.getText() );
+                    return TagUtils.forName( jp.getText() );
                 } catch (IOException e) {
                     throw Throwables.propagate(e);
                 }

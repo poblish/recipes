@@ -2,6 +2,7 @@ package controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import uk.co.recipes.tags.TagUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -115,7 +116,7 @@ public class Application extends Controller {
 
 			@Override
 			public boolean makeChanges( IUser inUser) {
-				return inUser.getPrefs().explorerIncludeAdd( CommonTags.valueOf(inTag) );
+				return inUser.getPrefs().explorerIncludeAdd( TagUtils.valueOf(inTag) );
 			}} );
     }
 
@@ -124,7 +125,7 @@ public class Application extends Controller {
 
 			@Override
 			public boolean makeChanges( IUser inUser) {
-				return inUser.getPrefs().explorerIncludeRemove( CommonTags.valueOf(inTag) );
+				return inUser.getPrefs().explorerIncludeRemove( TagUtils.forName(inTag) );
 			}} );
     }
 
@@ -133,7 +134,7 @@ public class Application extends Controller {
 
 			@Override
 			public boolean makeChanges( IUser inUser) {
-				return inUser.getPrefs().explorerExcludeAdd( CommonTags.valueOf(inTag) );
+				return inUser.getPrefs().explorerExcludeAdd( TagUtils.valueOf(inTag) );
 			}} );
     }
 
@@ -142,7 +143,7 @@ public class Application extends Controller {
 
 			@Override
 			public boolean makeChanges( IUser inUser) {
-				return inUser.getPrefs().explorerExcludeRemove( CommonTags.valueOf(inTag) );
+				return inUser.getPrefs().explorerExcludeRemove( TagUtils.valueOf(inTag) );
 			}} );
     }
 

@@ -108,7 +108,7 @@ public class Similarity {
 		return score;
 	}
 
-	private static boolean entriesHaveTag( final Set<Entry<ITag,Serializable>> inEntries, final CommonTags inTag) {
+	private static boolean entriesHaveTag( final Set<Entry<ITag,Serializable>> inEntries, final ITag inTag) {
 		return !FluentIterable.from(inEntries).filter( TagUtils.findActivated(inTag) ).isEmpty();
 	}
 
