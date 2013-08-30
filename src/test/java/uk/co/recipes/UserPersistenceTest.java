@@ -27,11 +27,14 @@ import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.IUserPersistence;
 import uk.co.recipes.tags.CommonTags;
+import uk.co.recipes.tags.MeatAndFishTags;
 import uk.co.recipes.test.TestDataUtils;
 import dagger.ObjectGraph;
 
 
 /**
+ * TODO
+ * 
  * @author andrewr
  *
  */
@@ -74,14 +77,14 @@ public class UserPersistenceTest {
 
         final IUser u1 = new User( testUName, testDName);
         u1.getPrefs().explorerIncludeAdd( CommonTags.VEGETABLE );
-        u1.getPrefs().explorerExcludeAdd( CommonTags.MEAT );
+        u1.getPrefs().explorerExcludeAdd( MeatAndFishTags.MEAT );
         userFactory.put( u1, userFactory.toStringId(u1));
 
         userFactory.waitUntilRefreshed();
 
         final IUser retrievedUser = userFactory.getByName(testUName);
         assertThat( retrievedUser.getPrefs().getExplorerIncludeTags(), hasItem( CommonTags.VEGETABLE ));
-        assertThat( retrievedUser.getPrefs().getExplorerExcludeTags(), hasItem( CommonTags.MEAT ));
+        assertThat( retrievedUser.getPrefs().getExplorerExcludeTags(), hasItem( MeatAndFishTags.MEAT ));
     }
 
     @Test

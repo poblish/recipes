@@ -21,6 +21,7 @@ import uk.co.recipes.service.api.IExplorerFilter;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.tags.CommonTags;
+import uk.co.recipes.tags.MeatAndFishTags;
 import dagger.ObjectGraph;
 
 /**
@@ -78,14 +79,14 @@ public class EsExplorerFiltersTest {
 
     @Test
     public void testIncludeMultipleTags2() throws IOException {
-        final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT, CommonTags.CITRUS, CommonTags.MEAT ).toFilter();
+        final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT, CommonTags.CITRUS, MeatAndFishTags.MEAT ).toFilter();
         assertThat( filter.idsToInclude().length, is(0));
         assertThat( filter.idsToExclude().length, is(0));
     }
 
     @Test
     public void testIncludeMultipleInclAndExclTags() throws IOException {
-        final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT, CommonTags.CITRUS ).excludeTags( CommonTags.MEAT, CommonTags.VEGETABLE ).toFilter();
+        final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT, CommonTags.CITRUS ).excludeTags( MeatAndFishTags.MEAT, CommonTags.VEGETABLE ).toFilter();
         assertThat( filter.idsToInclude().length, is(11));
         assertThat( filter.idsToExclude().length, greaterThan(84));
     }
@@ -106,7 +107,7 @@ public class EsExplorerFiltersTest {
 
     @Test
     public void testExcludeMultipleTags() throws IOException {
-        final IExplorerFilter filter = filters.build().excludeTags( CommonTags.FRUIT, CommonTags.MEAT ).toFilter();
+        final IExplorerFilter filter = filters.build().excludeTags( CommonTags.FRUIT, MeatAndFishTags.MEAT ).toFilter();
         assertThat( filter.idsToInclude().length, is(0));
         assertThat( filter.idsToExclude().length, greaterThan(60));
     }

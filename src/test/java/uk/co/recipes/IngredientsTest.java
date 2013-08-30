@@ -36,7 +36,7 @@ import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.EsSearchService;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
-import uk.co.recipes.tags.CommonTags;
+import uk.co.recipes.tags.MeatAndFishTags;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Strings;
@@ -45,6 +45,13 @@ import com.google.common.collect.Maps;
 
 import dagger.ObjectGraph;
 
+/**
+ * 
+ * TODO
+ *
+ * @author andrewregan
+ *
+ */
 public class IngredientsTest {
 
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
@@ -97,7 +104,7 @@ public class IngredientsTest {
 			@Override
 			public ICanonicalItem get() {
 				final ICanonicalItem meat = new CanonicalItem("Lamb");
-				meat.addTag( CommonTags.MEAT );
+				meat.addTag( MeatAndFishTags.MEAT );
 				return meat;
 			}});
 
@@ -118,7 +125,7 @@ public class IngredientsTest {
 			@Override
 			public ICanonicalItem get() {
 				final ICanonicalItem meat = new CanonicalItem("Bacon");
-				meat.addTag( CommonTags.MEAT );
+				meat.addTag( MeatAndFishTags.MEAT );
 				return meat;
 			}});
 
@@ -136,24 +143,24 @@ public class IngredientsTest {
 
 		itemFactory.waitUntilRefreshed();
 
-		final List<ICanonicalItem> results = searchService.findItemsByTag( CommonTags.MEAT );
+		final List<ICanonicalItem> results = searchService.findItemsByTag( MeatAndFishTags.MEAT );
 		assertThat( results.size(), greaterThanOrEqualTo(22));
 		assertThat( results, hasItem( itemFactory.getByName("beef_stock") ));
 		assertThat( results, hasItem( itemFactory.getByName("lamb") ));
 		assertThat( results, hasItem( itemFactory.getByName("diced_chicken") ));
 
-		final IExplorerFilter filter = explorerFilters.build().includeTags( CommonTags.MEAT ).toFilter();
+		final IExplorerFilter filter = explorerFilters.build().includeTags( MeatAndFishTags.MEAT ).toFilter();
 		assertThat( filter.idsToInclude().length, is( results.size() ));
 		assertThat( filter.idsToExclude().length, is(0));
 
-		final IExplorerFilter filter2 = explorerFilters.build().excludeTags( CommonTags.MEAT ).toFilter();
+		final IExplorerFilter filter2 = explorerFilters.build().excludeTags( MeatAndFishTags.MEAT ).toFilter();
 		assertThat( filter2.idsToInclude().length, is(0));
 		assertThat( filter2.idsToExclude().length, is( results.size() ));
 
 		///////////////////////////////////////////////////
 
 		final Map<ITag,Serializable> expectedTags = Maps.newHashMap();
-		expectedTags.put( CommonTags.MEAT, true);
+		expectedTags.put( MeatAndFishTags.MEAT, true);
 
 		assertThat( lamb.getTags(), is(expectedTags));
 		assertThat( lambNeck.getTags(), is(expectedTags));

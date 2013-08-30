@@ -34,6 +34,7 @@ public final class TagUtils {
         for( FlavourTags each : FlavourTags.values()) put( each.name(), each);
         for( NationalCuisineTags each : NationalCuisineTags.values()) put( each.name(), each);
         for( RecipeTags each : RecipeTags.values()) put( each.name(), each);
+        for( MeatAndFishTags each : MeatAndFishTags.values()) put( each.name(), each);
     }};
 
     private TagUtils() {}

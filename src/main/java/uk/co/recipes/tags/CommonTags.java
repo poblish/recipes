@@ -6,7 +6,7 @@ package uk.co.recipes.tags;
 import uk.co.recipes.api.ITag;
 
 /**
- * TODO
+ * No non-vegetarian items should appear here
  *
  * @author andrewregan
  *
@@ -22,8 +22,6 @@ public enum CommonTags implements ITag {
 	HERB, // Thyme, Sage, Oregano, Parsley, Marjoram, Basil, Chives, Rosemary, Mint
 
 	SUGAR, SALT, FLOUR, BREAD, PASTA, SEED, NUT, PULSE, FRUIT, CITRUS, CHEESE, BLUE_CHEESE, CHILLI, EGG,
-
-	MEAT, OFFAL, POULTRY, GAME, FISH, SEAFOOD, STOCK, SAUSAGE,
 
 	WINE, ALCOHOL, SPIRIT, VINEGAR, SAUCE, CONDIMENT, RICE, NOODLES, WHEAT, GRAIN,
 
