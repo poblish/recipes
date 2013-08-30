@@ -1,12 +1,10 @@
 package controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-
+import uk.co.recipes.tags.TagUtils;
 import java.io.IOException;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import play.mvc.Controller;
 import play.mvc.Result;
 import uk.co.recipes.api.ICanonicalItem;
@@ -31,7 +29,7 @@ public class Tags extends Controller {
     }
 
     public Result display( final String name) throws IOException {
-        final ITag theTag = TagUtils.valueOf( name.toUpperCase() );
+        final ITag theTag = TagUtils.forName( name.toUpperCase() );
         final List<ICanonicalItem> results = search.findItemsByTag(theTag);
         return ok(views.html.tags.render( theTag, results));
     }

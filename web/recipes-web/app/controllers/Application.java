@@ -116,7 +116,7 @@ public class Application extends Controller {
 
 			@Override
 			public boolean makeChanges( IUser inUser) {
-				return inUser.getPrefs().explorerIncludeAdd( TagUtils.valueOf(inTag) );
+				return inUser.getPrefs().explorerIncludeAdd( TagUtils.forName(inTag) );
 			}} );
     }
 
@@ -134,7 +134,7 @@ public class Application extends Controller {
 
 			@Override
 			public boolean makeChanges( IUser inUser) {
-				return inUser.getPrefs().explorerExcludeAdd( TagUtils.valueOf(inTag) );
+				return inUser.getPrefs().explorerExcludeAdd( TagUtils.forName(inTag) );
 			}} );
     }
 
@@ -143,7 +143,7 @@ public class Application extends Controller {
 
 			@Override
 			public boolean makeChanges( IUser inUser) {
-				return inUser.getPrefs().explorerExcludeRemove( TagUtils.valueOf(inTag) );
+				return inUser.getPrefs().explorerExcludeRemove( TagUtils.forName(inTag) );
 			}} );
     }
 
