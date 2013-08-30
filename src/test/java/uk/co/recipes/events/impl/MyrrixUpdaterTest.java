@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import uk.co.recipes.tags.NationalCuisineTags;
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.Map;
@@ -61,7 +62,7 @@ public class MyrrixUpdaterTest {
     public void testAddItem() {
         final Map<ITag,Serializable> tags = Maps.newHashMap();
         tags.put( CommonTags.SPICE, Boolean.TRUE);
-        tags.put( CommonTags.INDIAN, "3.0");  // Try boosting
+        tags.put( NationalCuisineTags.INDIAN, "3.0");  // Try boosting
 
         final ICanonicalItem item = mock( ICanonicalItem.class );
         when( item.getCanonicalName() ).thenReturn("ginger");
@@ -81,7 +82,7 @@ public class MyrrixUpdaterTest {
     public void testAddRecipe() {
         final Map<ITag,Serializable> tags = Maps.newHashMap();
         tags.put( CommonTags.SPICE, Boolean.TRUE);
-        tags.put( CommonTags.INDIAN, "3.0");  // Try boosting
+        tags.put( NationalCuisineTags.INDIAN, "3.0");  // Try boosting
 
         final ICanonicalItem item = mock( ICanonicalItem.class );
         when( item.getCanonicalName() ).thenReturn("ginger");
