@@ -36,7 +36,9 @@ import com.google.common.eventbus.Subscribe;
 @Singleton
 public class MyrrixUpdater implements IEventListener {
 
-	private static final Logger LOG = LoggerFactory.getLogger( MyrrixUpdater.class );
+    private static final Logger LOG = LoggerFactory.getLogger( MyrrixUpdater.class );
+
+    private static final float MIN_MYRRIX_SCORE = 0.01f;
 
     @Inject
     IEventService eventService;
@@ -223,6 +225,9 @@ public class MyrrixUpdater implements IEventListener {
     				// Don't bother setting if == FALSE
 
     			    final float scoreToUse = eachTag.getKey().getBoost() * inBasicScore;
+    			    if ( scoreToUse < MIN_MYRRIX_SCORE) {
+    			        continue;
+    			    }
 
     				if (LOG.isDebugEnabled()) {
     					LOG.debug( setStr + " Tag '" + eachTag.getKey() + "' val=" + scoreToUse + " for " + inItemOrRecipeId);
@@ -233,7 +238,11 @@ public class MyrrixUpdater implements IEventListener {
     		}
     		else {
     			final float scoreToUse = /* Think we need the boost...? */ eachTag.getKey().getBoost() * Float.valueOf((String) eachTag.getValue());
-				if (LOG.isDebugEnabled()) {
+                if ( scoreToUse < MIN_MYRRIX_SCORE) {
+                    continue;
+                }
+
+                if (LOG.isDebugEnabled()) {
 					LOG.debug( setStr + " Tag '" + eachTag.getKey() + "' val=" + scoreToUse + " for " + inItemOrRecipeId);
 				}
 	        	recommender.setItemTag( eachTag.getKey().toString(), inItemOrRecipeId, scoreToUse);
@@ -245,7 +254,12 @@ public class MyrrixUpdater implements IEventListener {
     }
 
     private boolean setHierarchicalSimilarityTags( final ICanonicalItem inItem, final long inItemOrRecipeId, final float inScore) throws TasteException {
-    	boolean changesMade = false;
+
+        if ( inScore < MIN_MYRRIX_SCORE) {
+            return false;
+        }
+
+        boolean changesMade = false;
 
     	final String ourPseudoParentTagName = "PARENT_" + itemFactory.toStringId(inItem);
  
