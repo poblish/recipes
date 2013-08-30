@@ -21,7 +21,6 @@ import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
-import uk.co.recipes.similarity.IncompatibleIngredientsException;
 import uk.co.recipes.test.TestDataUtils;
 
 import com.google.common.collect.Multiset;
@@ -57,7 +56,7 @@ public class CorrelationsTest {
 	}
 
 	@Test
-	public void testCorrelations() throws IOException, IncompatibleIngredientsException, InterruptedException {
+	public void testCorrelations() throws IOException, InterruptedException {
 		dataUtils.parseIngredientsFrom("venisonBurgundy.txt");
 		dataUtils.parseIngredientsFrom("bol1.txt");
 		dataUtils.parseIngredientsFrom("bol2.txt");

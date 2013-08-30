@@ -10,7 +10,6 @@ import java.util.Collection;
 
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.ITag;
-import uk.co.recipes.similarity.IncompatibleIngredientsException;
 import uk.co.recipes.tags.TagUtils;
 
 import com.google.common.collect.FluentIterable;
@@ -27,7 +26,7 @@ public final class Categorisation {
 
     private Categorisation() {}
 
-	public static Multiset<ITag> forIngredients( final Collection<IIngredient> inIngredients) throws IncompatibleIngredientsException {
+	public static Multiset<ITag> forIngredients( final Collection<IIngredient> inIngredients) {
 		final Multiset<ITag> tagsSet = TreeMultiset.create( TagUtils.comparator() );
 
 		for ( IIngredient each : inIngredients) {
@@ -37,7 +36,7 @@ public final class Categorisation {
 		return tagsSet;
 	}
 
-	public static Multiset<ITag> forIngredients( final Collection<IIngredient> inIngredients, final ITag... inTagsToCheck) throws IncompatibleIngredientsException {
+	public static Multiset<ITag> forIngredients( final Collection<IIngredient> inIngredients, final ITag... inTagsToCheck) {
 		final Multiset<ITag> tagsSet = TreeMultiset.create( TagUtils.comparator() );
 
 		for ( IIngredient each : inIngredients) {

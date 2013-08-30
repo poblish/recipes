@@ -22,7 +22,6 @@ import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
-import uk.co.recipes.similarity.IncompatibleIngredientsException;
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Optional;
@@ -51,7 +50,7 @@ public class Recipes extends AbstractExplorableController {
         this.ratings = checkNotNull(inRatings);
     }
 
-    public Result fork( final String name) throws IOException, IncompatibleIngredientsException, InterruptedException {
+    public Result fork( final String name) throws IOException, InterruptedException {
         final IRecipe fork = recipes.fork( recipes.get(name).get() );
 
         // Wait until it appears in Elasticsearch!
@@ -63,7 +62,7 @@ public class Recipes extends AbstractExplorableController {
         return redirect("/recipes/" + fork.getTitle());  // FIXME - horrible title stuff
     }
 
-    public Result display( final String name) throws IOException, IncompatibleIngredientsException {
+    public Result display( final String name) throws IOException {
         final Optional<IRecipe> optRecipe = recipes.get(name);
         if (!optRecipe.isPresent()) {
             return notFound("'" + name + "' not found!");
@@ -75,7 +74,7 @@ public class Recipes extends AbstractExplorableController {
         return ok(views.html.recipe.render( recipe, categorisation, explorer.similarRecipes( recipe, getExplorerFilter(explorerFilters), 10)));
     }
 
-    public Result rate( final String name, final int inScore) throws IOException, IncompatibleIngredientsException {
+    public Result rate( final String name, final int inScore) throws IOException {
 		final IUser user1 = getLocalUser();
 		if ( user1 == null) {
 		    return unauthorized("Not logged-in");
@@ -92,7 +91,7 @@ public class Recipes extends AbstractExplorableController {
         return redirect("/recipes/" + recipe.getTitle());  // FIXME - horrible way to reload!
     }
 
-    public Result removeIngredient( final String name, final String ingredient) throws IOException, IncompatibleIngredientsException, InterruptedException {
+    public Result removeIngredient( final String name, final String ingredient) throws IOException, InterruptedException {
 		final IUser user1 = getLocalUser();
 		if ( user1 == null) {
 		    return unauthorized("Not logged-in");
@@ -115,7 +114,7 @@ public class Recipes extends AbstractExplorableController {
         return redirect("/recipes/" + recipe.getTitle());  // FIXME - horrible way to reload!
     }
 
-    public Result test() throws IOException, IncompatibleIngredientsException {
+    public Result test() throws IOException {
         final String[] theInputs = request().queryString().get("input");
         final boolean gotInput = ( theInputs != null && theInputs.length > 0 && !theInputs[0].isEmpty());
         return display( gotInput ? theInputs[0] : "inputs3.txt");

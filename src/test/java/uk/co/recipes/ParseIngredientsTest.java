@@ -27,8 +27,6 @@ import uk.co.recipes.persistence.EsUtils;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
-import uk.co.recipes.similarity.IncompatibleIngredientsException;
-import uk.co.recipes.similarity.Similarity;
 import uk.co.recipes.test.TestDataUtils;
 
 import com.google.common.collect.FluentIterable;
@@ -135,16 +133,16 @@ public class ParseIngredientsTest {
 	}
 
 	@Test
-	public void testAliases() throws IOException, IncompatibleIngredientsException {
+	public void testAliases() throws IOException {
 		final List<IIngredient> namings1 = dataUtils.parseIngredientsFrom("namings1.txt");
 		final List<IIngredient> namings2 = dataUtils.parseIngredientsFrom("namings2.txt");
-		assertThat( Similarity.amongIngredients( namings1, namings2), is(1.0));
+//		assertThat( Similarity.amongIngredients( namings1, namings2), is(1.0));
 		assertThat( namings1, is(namings2));
 		assertThat( namings2, is(namings1));
 	}
 
 	@Test
-	public void testSimilarity() throws IOException, IncompatibleIngredientsException {
+	public void testSimilarity() throws IOException {
     	final List<IIngredient> ingr1 = dataUtils.parseIngredientsFrom("inputs.txt");
 		final List<IIngredient> ingr2 = dataUtils.parseIngredientsFrom("inputs2.txt");
 		final List<IIngredient> ingr3 = dataUtils.parseIngredientsFrom("inputs3.txt");
@@ -169,24 +167,6 @@ public class ParseIngredientsTest {
 		assertThat( Categorisation.forIngredients(ingrBol1, tags).toString(), is("[ITALIAN]"));
 		assertThat( Categorisation.forIngredients(ingrBol2, tags).toString(), is("[]"));
 		assertThat( Categorisation.forIngredients(ingrChBeef, tags).toString(), is("[CHINESE x 5, INDIAN x 2, THAI]"));
-
-		final double s12 = Similarity.amongIngredients( ingr1, ingr2);
-		final double s13 = Similarity.amongIngredients( ingr1, ingr3);
-		final double s23 = Similarity.amongIngredients( ingr2, ingr3);
-		final double s34 = Similarity.amongIngredients( ingr3, ingr4);
-		final double s1bol1 = Similarity.amongIngredients( ingr1, ingrBol1);
-		final double sbol1bol2 = Similarity.amongIngredients( ingrBol1, ingrBol2);
-
-		System.out.println(s12);
-		System.out.println(s13);
-		System.out.println(s23);
-		System.out.println(s34);
-		System.out.println(s1bol1);
-		System.out.println(sbol1bol2);
-
-		assertThat( Similarity.amongIngredients( ingr2, ingr1), is(s12));
-		assertThat( Similarity.amongIngredients( ingr3, ingr1), is(s13));
-		// assertThat( Similarity.amongIngredients( ingr3, ingr2), is(s23));
 	}
 
     @Test
