@@ -7,7 +7,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static uk.co.recipes.tags.TagUtils.findActivated;
 import static uk.co.recipes.tags.TagUtils.tagNamesTitleCase;
 
-import com.google.common.collect.Ordering;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -30,6 +29,7 @@ import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
 /**

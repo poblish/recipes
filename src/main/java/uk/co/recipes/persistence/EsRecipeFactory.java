@@ -9,11 +9,9 @@ import static org.hamcrest.Matchers.isOneOf;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_NAME_GETS;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_PUTS;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -47,7 +45,6 @@ import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
-import com.google.common.io.Files;
 
 /**
  * TODO

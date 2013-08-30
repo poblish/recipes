@@ -1,16 +1,19 @@
 package controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import uk.co.recipes.tags.TagUtils;
+
 import java.io.IOException;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import play.mvc.Controller;
 import play.mvc.Result;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.impl.EsSearchService;
+import uk.co.recipes.tags.TagUtils;
 
 /**
  * 

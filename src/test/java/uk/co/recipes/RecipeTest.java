@@ -5,12 +5,15 @@ package uk.co.recipes;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import uk.co.recipes.tags.RecipeTags;
+
 import java.util.Locale;
+
 import org.testng.annotations.Test;
+
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IQuantity;
 import uk.co.recipes.api.Units;
+import uk.co.recipes.tags.RecipeTags;
 
 /**
  * TODO

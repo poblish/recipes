@@ -4,10 +4,7 @@
 package uk.co.recipes.tags;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import com.google.common.base.CaseFormat;
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ComparisonChain;
+
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
@@ -15,7 +12,13 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import uk.co.recipes.api.ITag;
+
+import com.google.common.base.CaseFormat;
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.ComparisonChain;
 
 /**
  * TODO

@@ -8,7 +8,6 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
-import uk.co.recipes.tags.NationalCuisineTags;
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.Map;
@@ -32,6 +31,7 @@ import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.Units;
 import uk.co.recipes.tags.CommonTags;
+import uk.co.recipes.tags.NationalCuisineTags;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Throwables;

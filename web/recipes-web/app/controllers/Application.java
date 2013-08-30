@@ -2,7 +2,6 @@ package controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import uk.co.recipes.tags.TagUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -28,6 +27,7 @@ import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.IUserPersistence;
 import uk.co.recipes.tags.CommonTags;
+import uk.co.recipes.tags.TagUtils;
 
 import com.codahale.metrics.ConsoleReporter;
 import com.codahale.metrics.MetricRegistry;
