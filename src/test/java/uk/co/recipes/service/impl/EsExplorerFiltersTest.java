@@ -4,6 +4,7 @@
 package uk.co.recipes.service.impl;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
@@ -64,7 +65,7 @@ public class EsExplorerFiltersTest {
     @Test
     public void testIncludeTags() throws IOException {
         final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT ).toFilter();
-        assertThat( filter.idsToInclude().length, is(27));
+        assertThat( filter.idsToInclude().length, greaterThan(27));
         assertThat( filter.idsToExclude().length, is(0));
     }
 
@@ -86,7 +87,7 @@ public class EsExplorerFiltersTest {
     public void testIncludeMultipleInclAndExclTags() throws IOException {
         final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT, CommonTags.CITRUS ).excludeTags( CommonTags.MEAT, CommonTags.VEGETABLE ).toFilter();
         assertThat( filter.idsToInclude().length, is(11));
-        assertThat( filter.idsToExclude().length, is(84));
+        assertThat( filter.idsToExclude().length, greaterThan(84));
     }
 
     @Test
@@ -100,13 +101,13 @@ public class EsExplorerFiltersTest {
     public void testExcludeTags() throws IOException {
         final IExplorerFilter filter = filters.build().excludeTags( CommonTags.FRUIT ).toFilter();
         assertThat( filter.idsToInclude().length, is(0));
-        assertThat( filter.idsToExclude().length, is(27));
+        assertThat( filter.idsToExclude().length, greaterThan(27));
     }
 
     @Test
     public void testExcludeMultipleTags() throws IOException {
         final IExplorerFilter filter = filters.build().excludeTags( CommonTags.FRUIT, CommonTags.MEAT ).toFilter();
         assertThat( filter.idsToInclude().length, is(0));
-        assertThat( filter.idsToExclude().length, is(60));
+        assertThat( filter.idsToExclude().length, greaterThan(60));
     }
 }

@@ -38,6 +38,8 @@
 ---
 {canonicalName: Fenugreek, tags: {HERB, INDIAN}}
 ---
+{canonicalName: Fresh Mint, tags: HERB, aliases: {Mint Leaves}}
+---
 {canonicalName: Lemon grass, tags: {HERB, THAI, VIETNAMESE, LEMON}, aliases: {Lemongrass}}
 ---
 {canonicalName: Mixed Herbs, tags: HERB}
@@ -68,7 +70,7 @@
 ---
 {canonicalName: Asafoetida, tags: {SPICE, INDIAN}}
 ---
-{canonicalName: Caraway Seeds, tags: {SPICE, ANISEED}}
+{canonicalName: Caraway Seeds, tags: {SPICE, ANISEED}, aliases: {Caraway Seed}}
 ---
 {canonicalName: Cardamom, tags: {SPICE, INDIAN}, aliases: {Cardamom Pods}}
 ---
@@ -94,7 +96,7 @@
 ---
 {canonicalName: Cumin, tags: {SPICE, INDIAN}, aliases: {Ground Cumin, Cumin Powder}}
 ---
-{    canonicalName: Cumin Seeds, parent: Cumin}
+{    canonicalName: Cumin Seeds, parent: Cumin, aliases: {Cumin Seed}}
 ---
 {canonicalName: Curry Powder, tags: {SPICE, INDIAN}}
 ---
@@ -138,7 +140,15 @@
 ---
 {    canonicalName: Yellow Mustard Seeds, parent: Mustard Seeds, aliases: {White Mustard Seeds}}
 ---
+{canonicalName: Pine Nuts, tags: {BAKING, SEED}}
+---
+{canonicalName: Poppy Seeds, tags: {BAKING, SEED}}
+---
+{canonicalName: Pumpkin Seeds, tags: {SEED}}
+---
 {canonicalName: Sizzling Seeds, tags: {SEED, INDIAN}}
+---
+{canonicalName: Sunflower Seeds, tags: {SEED}}
 ---
 
 
@@ -178,6 +188,8 @@
 ---
 
 
+{canonicalName: Asparagus, tags: VEGETABLE, aliases: {Asparagus Spears}}
+---
 {canonicalName: Aubergine, tags: VEGETABLE}
 ---
 {canonicalName: Broccoli, tags: VEGETABLE}
@@ -201,6 +213,8 @@
 {    canonicalName: Garlic Paste, parent: Garlic Cloves}
 ---
 {canonicalName: Green Beans, tags: VEGETABLE}
+---
+{    canonicalName: Fine Green Beans, parent: Green Beans}
 ---
 {canonicalName: Leek, tags: VEGETABLE, aliases: {Leeks}}
 ---
@@ -272,6 +286,8 @@
 ---
 {    canonicalName: Plum Tomatoes, parent: Tomato}
 ---
+{    canonicalName: Tomato Chutney, parent: Tomato, tags: {SAUCE}}
+---
 {    canonicalName: Tomato Paste, parent: Tomato, aliases: {Tomato Puree}}
 ---
 {canonicalName: Turnip, tags: VEGETABLE, aliases: {Turnips}}
@@ -295,6 +311,8 @@
 {    canonicalName: Green Lentils, parent: Lentils}
 ---
 {    canonicalName: Red Lentils, parent: Lentils}
+---
+{canonicalName: Pea, tags: {PULSE, VEGETABLE}, aliases: {Peas}}
 ---
 
 
@@ -330,6 +348,10 @@
 ---
 {    canonicalName: Lime Juice, parent: Lime}
 ---
+{canonicalName: Mango, tags: {FRUIT}}
+---
+{    canonicalName: Mango Chutney, parent: Mango, tags: {INDIAN, SAUCE}}
+---
 {canonicalName: Orange, tags: {FRUIT, CITRUS, ORANGE}}
 ---
 {    canonicalName: Orange Juice, parent: Orange}
@@ -352,7 +374,7 @@
 ---
 
 
-{canonicalName: Flour, tags: FLOUR}
+{canonicalName: Flour, tags: {BAKING, FLOUR}}
 ---
 {    canonicalName: Cornflour, parent: Flour}
 ---
@@ -388,6 +410,8 @@
 ---
 
 
+{canonicalName: Bulgar Wheat, tags: GRAIN}
+---
 {canonicalName: Couscous, tags: GRAIN}
 ---
 {canonicalName: Quinoa, tags: GRAIN}
@@ -398,7 +422,7 @@
 ---
 
 
-{canonicalName: Sugar, tags: SUGAR}
+{canonicalName: Sugar, tags: {BAKING, SUGAR}}
 ---
 {    canonicalName: Caster Sugar, parent: Sugar}
 ---
@@ -434,6 +458,8 @@
 ---
 {canonicalName: Cheddar, tags: {DAIRY, CHEESE, ENGLISH}, aliases: {Cheddar Cheese}}
 ---
+{    canonicalName: Mature Cheddar, parent: Cheddar}
+---
 {canonicalName: Feta, tags: {DAIRY, CHEESE, GREEK}, aliases: {Feta Cheese}}
 ---
 {canonicalName: Gruyère, tags: {DAIRY, CHEESE, SWISS}}
@@ -460,23 +486,27 @@
 ---
 
 
-{canonicalName: Milk, tags: DAIRY}
----
-{    canonicalName: Condensed Milk, parent: Milk}
----
-{    canonicalName: Skimmed Milk, parent: Milk}
----
-{    canonicalName: Soya Milk, parent: Milk}
----
-{    canonicalName: Semi-skimmed Milk, parent: Milk}
----
 {canonicalName: Cream, tags: DAIRY}
+---
+{    canonicalName: Crème Fraîche, parent: Cream}
 ---
 {    canonicalName: Double Cream, parent: Cream}
 ---
 {    canonicalName: Single Cream, parent: Cream}
 ---
 {    canonicalName: Soured Cream, parent: Cream}
+---
+{canonicalName: Milk, tags: DAIRY}
+---
+{    canonicalName: Condensed Milk, parent: Milk}
+---
+{    canonicalName: Full Fat Milk, parent: Milk}
+---
+{    canonicalName: Skimmed Milk, parent: Milk}
+---
+{    canonicalName: Soya Milk, parent: Milk}
+---
+{    canonicalName: Semi-skimmed Milk, parent: Milk}
 ---
 {canonicalName: Yogurt, tags: DAIRY}
 ---
@@ -520,7 +550,11 @@
 ---
 {    canonicalName: Balsamic Vinegar, parent: Vinegar, tags: ITALIAN}
 ---
+{    canonicalName: Cider Vinegar, parent: Vinegar}
+---
 {    canonicalName: Red Wine Vinegar, parent: Vinegar}
+---
+{    canonicalName: Sherry Vinegar, parent: Vinegar, tags: SPANISH}
 ---
 {    canonicalName: White Wine Vinegar, parent: Vinegar}
 ---
@@ -534,13 +568,15 @@
 ---
 
 
-{canonicalName: Soy Sauce, tags: {SAUCE, CHINESE}}
----
-{canonicalName: Worcestershire Sauce, tags: {FISH, SAUCE}}
----
 {canonicalName: Beef Stock, tags: {MEAT, STOCK}}
 ---
 {canonicalName: Chicken Stock, tags: {MEAT, STOCK}}
+---
+{canonicalName: Curry Paste, tags: {INDIAN, SAUCE}}
+---
+{    canonicalName: Balti Curry Paste, parent: Curry Paste}
+---
+{    canonicalName: Mild Curry Paste, parent: Curry Paste}
 ---
 {canonicalName: Fish Sauce, tags: {FISH, SAUCE, THAI, VIETNAMESE}}
 ---
@@ -548,13 +584,19 @@
 ---
 {canonicalName: Mayonnaise, tags: {EGG, SAUCE}}
 ---
-{canonicalName: Tamarind Paste, tags: {FRUIT, SAUCE}}
----
 {canonicalName: Mustard, tags: SAUCE}
 ---
 {    canonicalName: Dijon Mustard, parent: Mustard}
 ---
 {    canonicalName: Wholegrain Mustard, parent: Mustard, aliases: {Grainy Mustard}}
+---
+{canonicalName: Pesto, tags: {SAUCE, ITALIAN}}
+---
+{canonicalName: Soy Sauce, tags: {SAUCE, CHINESE}}
+---
+{canonicalName: Tamarind Paste, tags: {FRUIT, SAUCE}}
+---
+{canonicalName: Worcestershire Sauce, tags: {FISH, SAUCE}}
 ---
 {canonicalName: Vegetable Stock, tags: {VEGETABLE, SAUCE}}
 ---
@@ -658,7 +700,7 @@
 ---
 {    canonicalName: Bacon Rashers, parent: Bacon}
 ---
-{    canonicalName: Lardons, parent: Bacon, aliases: {Lardon}}
+{    canonicalName: Lardons, parent: Bacon, aliases: {Bacon Lardons, Lardon}}
 ---
 {    canonicalName: Streaky Bacon, parent: Bacon}
 ---
