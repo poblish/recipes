@@ -5,15 +5,12 @@ package uk.co.recipes;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-
+import uk.co.recipes.tags.RecipeTags;
 import java.util.Locale;
-
 import org.testng.annotations.Test;
-
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IQuantity;
 import uk.co.recipes.api.Units;
-import uk.co.recipes.tags.CommonTags;
 
 /**
  * TODO
@@ -48,7 +45,7 @@ public class RecipeTest {
 
 		final Recipe r5 = new Recipe(user, "1", Locale.UK);
 		r5.addStage(rs1);
-		r5.addTag( CommonTags.SERVES_COUNT, 4);
+		r5.addTag( RecipeTags.SERVES_COUNT, 4);
 
 		TestUtils.testEqualsHashcode(r1, r2, r3, r4, r5);
 

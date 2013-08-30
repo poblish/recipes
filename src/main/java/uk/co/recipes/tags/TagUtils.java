@@ -30,6 +30,7 @@ public final class TagUtils {
         for( CommonTags each : CommonTags.values()) put( each.name(), each);
         for( FlavourTags each : FlavourTags.values()) put( each.name(), each);
         for( NationalCuisineTags each : NationalCuisineTags.values()) put( each.name(), each);
+        for( RecipeTags each : RecipeTags.values()) put( each.name(), each);
     }};
 
     private TagUtils() {}

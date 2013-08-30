@@ -3,18 +3,17 @@
  */
 package uk.co.recipes.similarity;
 
+import uk.co.recipes.tags.RecipeTags;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.tags.CommonTags;
 import uk.co.recipes.tags.TagUtils;
-
 import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
@@ -95,7 +94,7 @@ public class Similarity {
 
 		final Set<Entry<ITag,Serializable>> union = Sets.union( inA.entrySet(), inB.entrySet());
 
-		if ( entriesHaveTag( union, CommonTags.MEAT) && ( entriesHaveTag( union, CommonTags.VEGETARIAN) || entriesHaveTag( union, CommonTags.VEGAN))) {
+		if ( entriesHaveTag( union, CommonTags.MEAT) && ( entriesHaveTag( union, RecipeTags.VEGETARIAN) || entriesHaveTag( union, RecipeTags.VEGAN))) {
 			throw new IncompatibleIngredientsException();
 		}
 
