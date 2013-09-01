@@ -31,6 +31,7 @@ import uk.co.recipes.service.api.ISearchResult;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -219,6 +220,17 @@ public class EsSearchService implements ISearchAPI {
 			this.item = item;
 		}
 
+		// For Jackon only
+		public String getName() {
+			return item.getCanonicalName();
+		}
+
+		// For Jackon only
+		public String getType() {
+			return "item";
+		}
+
+		@JsonIgnore
 		@Override
 		public ICanonicalItem getEntity() {
 			return item;
@@ -237,6 +249,22 @@ public class EsSearchService implements ISearchAPI {
 			this.recipe = recipe;
 		}
 
+		// For Jackon only
+		public long getId() {
+			return recipe.getId();
+		}
+
+		// For Jackon only
+		public String getTitle() {
+			return recipe.getTitle();
+		}
+
+		// For Jackon only
+		public String getType() {
+			return "recipe";
+		}
+
+		@JsonIgnore
 		@Override
 		public IRecipe getEntity() {
 			return recipe;

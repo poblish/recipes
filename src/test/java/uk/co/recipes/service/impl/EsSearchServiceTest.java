@@ -4,6 +4,7 @@
 package uk.co.recipes.service.impl;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
@@ -22,6 +23,9 @@ import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.api.ISearchResult;
 import uk.co.recipes.test.TestDataUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import dagger.ObjectGraph;
 
 /**
@@ -34,6 +38,7 @@ public class EsSearchServiceTest {
 
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
+	private ObjectMapper mapper = GRAPH.get( ObjectMapper.class );
 	private IItemPersistence items = GRAPH.get( EsItemFactory.class );
 	private IRecipePersistence recipes = GRAPH.get( EsRecipeFactory.class );
 	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
@@ -110,5 +115,16 @@ public class EsSearchServiceTest {
 		final List<ISearchResult<?>> results1 = searchService.findPartial("curr", 4);
 		assertThat( results1.toString(), is("[RecipeSearchResult{recipeName=chCashBlackSpiceCurry.txt}, ItemSearchResult{itemName=Curry Leaves}, ItemSearchResult{itemName=Curry Powder}, ItemSearchResult{itemName=Curry Paste}]"));
 		assertThat( results1.size(), is(4));
+	}
+
+	@Test
+	public void testSerializeResults() throws IOException {
+		final List<ISearchResult<?>> results1 = searchService.findPartial("curr", 4);
+		final String stringOutput = mapper.writeValueAsString(results1);
+		assertThat( stringOutput, containsString("\"name\":\"Curry Leaves\""));
+		assertThat( stringOutput, containsString("\"title\":\"chCashBlackSpiceCurry.txt\""));
+		assertThat( stringOutput, containsString("\"type\":\"item\""));
+		assertThat( stringOutput, containsString("\"type\":\"recipe\""));
+		assertThat( /* Produce JsonNode */ mapper.valueToTree(results1).toString(), is(stringOutput));
 	}
 }
