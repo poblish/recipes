@@ -11,6 +11,7 @@ GET     /recipes/:name/:ing/remove    @controllers.Recipes.removeIngredient(name
 GET     /recipes/:name                @controllers.Recipes.display(name: String)
 GET     /recipes/:name/rate/:score    @controllers.Recipes.rate(name: String, score: Int)
 GET     /recipes.html                 @controllers.Recipes.test()
+GET     /search/partial               @controllers.Search.findPartial()
 GET     /search                       @controllers.Search.doSearch()
 GET     /tags/:name                   @controllers.Tags.display(name: String)
 GET     /users/:id                    @controllers.Users.display(id: String)
