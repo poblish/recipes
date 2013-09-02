@@ -11,7 +11,7 @@
 	<p>@recipe.getForkDetails()</p>
 	}
 	
-	<div class="btn-group">
+	<div class="btn-group" style="margin: 6px 0 12px 0">
 	  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
 	    Your Rating
 	    <span class="caret"></span>
@@ -30,10 +30,93 @@
 	  </ul>
 	</div>
 
-<hr/>
-<input type="hidden" style="width: 250px" id="addIngredient" />
+	<p><span class="label label-default">Created:</span> @recipe.getCreationTime() </p>
+	<p><span class="label label-default">Categorisation:</span> @categorisation</p>
+
+	<!-- Explorer Filter Stuff starts -->
+	<div class="btn-group">
+	  <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#">
+	    Must Include
+	    <span class="caret"></span>
+	  </a>
+	  <ul class="dropdown-menu">
+		@for( eachTag <- controllers.Application.allTags().iterator) {<li><a href="#" onclick="addInclTag('@eachTag')">@eachTag</a></li>}
+	  </ul>
+	</div>
+	<div class="btn-group">
+	  <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#">
+	    Must Exclude
+	    <span class="caret"></span>
+	  </a>
+	  <ul class="dropdown-menu">
+		@for( eachTag <- controllers.Application.allTags().iterator) {<li><a href="#" onclick="addExclTag('@eachTag')">@eachTag</a></li>}
+	  </ul>
+	</div>
+	<button class="btn btn-danger" type="button" onclick="clearFilters()">Clear All</button>
+
+	<div style="margin-top: 15px"><input type="hidden" style="width: 250px" id="addIngredient" /></div>
+	<hr/>
+
+	<!-- Explorer Filter Stuff ends -->
+
+	<div class="row">
+	  <div class="col-md-3">
+		<h3>Ingredients:</h3>
+		<ul class="list-group">
+		@for(item <- recipe.getItems()) {
+		<li class="list-group-item"><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}&nbsp;<a href="/recipes/@recipe.getTitle()/@item.getCanonicalName()/remove">[x]</a></li>
+		}
+		</ul>
+	  </div>
+	  <div class="col-md-9">
+		<div class="container">
+		<h3>Similar Recipes:</h3>
+		@for(( eachRecipe, index) <- similarities.zipWithIndex) {
+		
+		@if((index % 3) == 0) {
+			@if( index >= 3) {
+			  </div>  <!-- <div class="row-fluid"> -->
+			}
+		 <div class="row">
+		}
+		
+		<div class="col-md-4">
+			<div class="panel panel-default">
+		  		<div class="panel-heading"><a href="/recipes/@eachRecipe.getTitle()">@eachRecipe.getTitle()</a>&nbsp;<a href="/recipes/@eachRecipe.getTitle()/fork">[F]</a>&nbsp;<a id="toggle_@index" class="btn btn-default" href="#"><i class="glyphicon glyphicon-chevron-down"></i></a></div>
+		  		<div class="panel-body" style="display: none" id="ingredients_@index"><ol>
+		@for(item <- eachRecipe.getItems()) {
+		<li><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}</li>
+		}
+		  			</ol>
+		  		</div>
+			</div>
+		</div>  <!-- <div class="span4"> -->
+		
+		<script>
+		$('#toggle_@index').click(function() {
+		  $('#ingredients_@index').slideToggle(function() {
+		    // Should toggle chevron
+		  });
+		});
+		</script>
+		
+		}
+		
+		</div>  <!-- <div class="container"> -->
+	  </div>
+	</div>
 
 <script>
+function addInclTag(inTag) {
+    $.post("/user/filter/inc/addTag=" + inTag, function(data) { location.reload(false); });
+}
+function addExclTag(inTag) {
+    $.post("/user/filter/exc/addTag=" + inTag, function(data) { location.reload(false); });
+}
+function clearFilters() {
+    $.post("/user/filter/clearAll", function(data) { location.reload(false); });
+}
+
 $("#addIngredient").select2({
     placeholder: "Find Ingredient...",
     minimumInputLength: 2,
@@ -80,87 +163,4 @@ function doFormatSelection(inRec) {
     return inRec.displayName;  // FIXME What is this?
 }
 </script>
-<hr/>
-
-	<h3>Ingredients:</h3>
-	<ul class="list-group">
-	@for(item <- recipe.getItems()) {
-	<li class="list-group-item"><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}&nbsp;<a href="/recipes/@recipe.getTitle()/@item.getCanonicalName()/remove">[x]</a></li>
-	}
-	</ul>
-	
-	<hr />
-	<p><span class="label label-default">Created:</span> @recipe.getCreationTime() </p>
-	<p><span class="label label-default">Categorisation:</span> @categorisation</p>
-
-	<!-- Explorer Filter Stuff starts -->
-	<div class="btn-group">
-	  <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#">
-	    Must Include
-	    <span class="caret"></span>
-	  </a>
-	  <ul class="dropdown-menu">
-		@for( eachTag <- controllers.Application.allTags().iterator) {<li><a href="#" onclick="addInclTag('@eachTag')">@eachTag</a></li>}
-	  </ul>
-	</div>
-	<div class="btn-group">
-	  <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#">
-	    Must Exclude
-	    <span class="caret"></span>
-	  </a>
-	  <ul class="dropdown-menu">
-		@for( eachTag <- controllers.Application.allTags().iterator) {<li><a href="#" onclick="addExclTag('@eachTag')">@eachTag</a></li>}
-	  </ul>
-	</div>
-	<button class="btn btn-danger" type="button" onclick="clearFilters()">Clear All</button>
-
-<script>
-function addInclTag(inTag) {
-    $.post("/user/filter/inc/addTag=" + inTag, function(data) { location.reload(false); });
-}
-function addExclTag(inTag) {
-    $.post("/user/filter/exc/addTag=" + inTag, function(data) { location.reload(false); });
-}
-function clearFilters() {
-    $.post("/user/filter/clearAll", function(data) { location.reload(false); });
-}</script>
-	<!-- Explorer Filter Stuff ends -->
-
-	<hr />
-	<h3>Similar Recipes:</h3>
-	
-	<div class="container">
-	
-	@for(( eachRecipe, index) <- similarities.zipWithIndex) {
-	
-	@if((index % 3) == 0) {
-		@if( index >= 3) {
-		  </div>  <!-- <div class="row-fluid"> -->
-		}
-	 <div class="row">
-	}
-	
-	<div class="col-md-4">
-		<div class="panel panel-default">
-	  		<div class="panel-heading"><a href="/recipes/@eachRecipe.getTitle()">@eachRecipe.getTitle()</a>&nbsp;<a href="/recipes/@eachRecipe.getTitle()/fork">[F]</a>&nbsp;<a id="toggle_@index" class="btn btn-default" href="#"><i class="glyphicon glyphicon-chevron-down"></i></a></div>
-	  		<div class="panel-body" style="display: none" id="ingredients_@index"><ol>
-	@for(item <- eachRecipe.getItems()) {
-	<li><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}</li>
-	}
-	  			</ol>
-	  		</div>
-		</div>
-	</div>  <!-- <div class="span4"> -->
-	
-	<script>
-	$('#toggle_@index').click(function() {
-	  $('#ingredients_@index').slideToggle(function() {
-	    // Should toggle chevron
-	  });
-	});
-	</script>
-	
-	}
-	
-	</div>  <!-- <div class="container-fluid"> -->
 }
