@@ -20,6 +20,8 @@
 ---
 {canonicalName: Cocoa, tags: BAKING, aliases: {Cocoa Powder}}
 ---
+{canonicalName: Rosewater, tags: FLAVOURING}
+---
 {canonicalName: Vanilla Extract, tags: {FLAVOURING,BAKING}}
 ---
 {canonicalName: Yeast, tags: {BAKING}}
@@ -214,6 +216,8 @@
 ---
 {canonicalName: Carrot, tags: VEGETABLE, aliases: {Carrots}}
 ---
+{canonicalName: Cauliflower, tags: VEGETABLE}
+---
 {canonicalName: Celeriac, tags: VEGETABLE}
 ---
 {canonicalName: Celery, tags: VEGETABLE, aliases: {Celery Stick, Celery Sticks}}
@@ -338,7 +342,7 @@
 ---
 
 
-{canonicalName: Apple, tags: {FRUIT}}
+{canonicalName: Apple, tags: {FRUIT}, aliases: {Apples}}
 ---
 {    canonicalName: Bramley apples, tags: BAKING, parent: Apple}
 ---
@@ -357,6 +361,14 @@
 {canonicalName: Coconut, tags: {FRUIT, NUT, INDIAN, THAI, VIETNAMESE}, aliases: {Coconut grated}}
 ---
 {    canonicalName: Coconut Milk, parent: Coconut}
+---
+{canonicalName: Grape, tags: {FRUIT}}
+---
+{    canonicalName: Currant, parent: Grape, aliases: {Zante currant, Currants}}
+---
+{    canonicalName: Raisin, parent: Grape, aliases: {Raisins}}
+---
+{    canonicalName: Sultana, parent: Grape, aliases: {Sultanas}}
 ---
 {canonicalName: Grapefruit, tags: {FRUIT, CITRUS}}
 ---
@@ -446,7 +458,7 @@
 ---
 
 
-{canonicalName: Salt, tags: SALT}
+{canonicalName: Salt, tags: SALT, aliases: {Fine Salt}}
 ---
 {    canonicalName: Sea Salt, parent: Salt}
 ---
@@ -464,9 +476,13 @@
 ---
 {    canonicalName: Brown Sugar, parent: Sugar}
 ---
+{        canonicalName: Demerara Sugar, parent: Brown Sugar}
+---
 {        canonicalName: Muscovado Sugar, parent: Brown Sugar}
 ---
 {        canonicalName: Light Muscovado Sugar, parent: Brown Sugar}
+---
+{        canonicalName: Light Soft Brown Sugar, parent: Brown Sugar}
 ---
 {        canonicalName: Dark Muscovado Sugar, parent: Brown Sugar}
 ---
@@ -530,6 +546,8 @@
 ---
 {canonicalName: Milk, tags: DAIRY}
 ---
+{    canonicalName: Buttermilk, parent: Milk}
+---
 {    canonicalName: Condensed Milk, parent: Milk}
 ---
 {    canonicalName: Full Fat Milk, parent: Milk}
@@ -543,6 +561,8 @@
 {canonicalName: Yogurt, tags: DAIRY}
 ---
 {    canonicalName: Greek Yogurt, parent: Yogurt, tags: GREEK}
+---
+{    canonicalName: Low Fat Yogurt, parent: Yogurt}
 ---
 {    canonicalName: Natural Yogurt, parent: Yogurt}
 ---
