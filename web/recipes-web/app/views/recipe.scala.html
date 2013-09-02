@@ -35,7 +35,7 @@
 
 <script>
 $("#addIngredient").select2({
-    placeholder: "Search for a movie",
+    placeholder: "Find Ingredient...",
     minimumInputLength: 2,
     ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
         url: "http://localhost:9000/search/partial",
@@ -48,7 +48,7 @@ $("#addIngredient").select2({
         },
         results: function (data, page) { // parse the results into the format expected by Select2.
             // since we are using custom formatting functions we do not need to alter remote JSON data
-            return {results: data.movies};
+            return {results: data};
         }
     },
     initSelection: function(element, callback) {
@@ -65,30 +65,24 @@ $("#addIngredient").select2({
             }).done(function(data) { callback(data); });
         }
     },
-    formatResult: movieFormatResult, // omitted for brevity, see the source of this page
-    formatSelection: movieFormatSelection,  // omitted for brevity, see the source of this page
+    formatResult: doFormatResult,
+    formatSelection: doFormatSelection,
     dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
     escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
 });
 
-function movieFormatResult(movie) {
-    var markup = "<table class='movie-result'><tr>";
-    if (movie.posters !== undefined && movie.posters.thumbnail !== undefined) {
-        markup += "<td class='movie-image'><img src='" + movie.posters.thumbnail + "'/></td>";
-    }
-    markup += "<td class='movie-info'><div class='movie-title'>" + movie.title + "</div>";
-    if (movie.critics_consensus !== undefined) {
-        markup += "<div class='movie-synopsis'>" + movie.critics_consensus + "</div>";
-    }
-    else if (movie.synopsis !== undefined) {
-        markup += "<div class='movie-synopsis'>" + movie.synopsis + "</div>";
-    }
-    markup += "</td></tr></table>"
-    return markup;
+function doFormatResult(inRec) {
+	if (inRec.type === 'item') {
+		return inRec.name;
+	}
+	else if (inRec.type === 'recipe') {
+		return inRec.title;
+	}
+	return '???';
 }
 
-function movieFormatSelection(movie) {
-    return movie.title;
+function doFormatSelection(inRec) {
+    return inRec.title;  // FIXME What is this?
 }
 </script>
 <hr/>
