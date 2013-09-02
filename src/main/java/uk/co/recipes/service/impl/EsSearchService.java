@@ -220,12 +220,15 @@ public class EsSearchService implements ISearchAPI {
 			this.item = item;
 		}
 
-		@SuppressWarnings("unused")  // For Jackon only
-		public String getName() {
+		public long getId() {
+			return item.getId();
+		}
+
+		@Override
+		public String getDisplayName() {
 			return item.getCanonicalName();
 		}
 
-		@SuppressWarnings("unused")  // For Jackon only
 		public String getType() {
 			return "item";
 		}
@@ -249,17 +252,15 @@ public class EsSearchService implements ISearchAPI {
 			this.recipe = recipe;
 		}
 
-		@SuppressWarnings("unused")  // For Jackon only
 		public long getId() {
 			return recipe.getId();
 		}
 
-		@SuppressWarnings("unused")  // For Jackon only
-		public String getTitle() {
+		@Override
+		public String getDisplayName() {
 			return recipe.getTitle();
 		}
 
-		@SuppressWarnings("unused")  // For Jackon only
 		public String getType() {
 			return "recipe";
 		}

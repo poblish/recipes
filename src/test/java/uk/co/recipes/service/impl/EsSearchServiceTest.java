@@ -121,8 +121,9 @@ public class EsSearchServiceTest {
 	public void testSerializeResults() throws IOException {
 		final List<ISearchResult<?>> results1 = searchService.findPartial("curr", 4);
 		final String stringOutput = mapper.writeValueAsString(results1);
-		assertThat( stringOutput, containsString("\"name\":\"Curry Leaves\""));
-		assertThat( stringOutput, containsString("\"title\":\"chCashBlackSpiceCurry.txt\""));
+		assertThat( stringOutput, containsString("\"id\":"));  // at least one Id
+		assertThat( stringOutput, containsString("\"displayName\":\"Curry Leaves\""));
+		assertThat( stringOutput, containsString("\"displayName\":\"chCashBlackSpiceCurry.txt\""));
 		assertThat( stringOutput, containsString("\"type\":\"item\""));
 		assertThat( stringOutput, containsString("\"type\":\"recipe\""));
 		assertThat( /* Produce JsonNode */ mapper.valueToTree(results1).toString(), is(stringOutput));

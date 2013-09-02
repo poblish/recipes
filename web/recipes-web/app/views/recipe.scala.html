@@ -72,17 +72,12 @@ $("#addIngredient").select2({
 });
 
 function doFormatResult(inRec) {
-	if (inRec.type === 'item') {
-		return inRec.name;
-	}
-	else if (inRec.type === 'recipe') {
-		return inRec.title;
-	}
-	return '???';
+	/* if (inRec.type === 'item') ... */
+	return inRec.displayName;
 }
 
 function doFormatSelection(inRec) {
-    return inRec.title;  // FIXME What is this?
+    return inRec.displayName;  // FIXME What is this?
 }
 </script>
 <hr/>

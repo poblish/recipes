@@ -12,5 +12,10 @@ package uk.co.recipes.service.api;
  */
 public interface ISearchResult<T> {
 
+	long getId();
+
+	String getDisplayName();
+	String getType();
+
     T getEntity();
 }
