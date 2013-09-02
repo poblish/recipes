@@ -68,7 +68,7 @@ function clearFilters() {
 	
 	<ul class="list-group">
 	@for( eachItem <- similarities) {
-	  <li class="list-group-item"><a href="http://localhost:9000/items/@eachItem.getCanonicalName()">@eachItem.getCanonicalName()</a>&nbsp;@for(tagName <- eachItem.getTagNamesForDisplay()){&nbsp;<span class="label label-primary"><a href="/tags/@tagName">@tagName</a></span>}</li>  <!-- Parent stuff -->
+	  <li class="list-group-item"><a href="http://localhost:9000/items/@eachItem.getCanonicalName()">@eachItem.getCanonicalName()</a>&nbsp;@for(tagName <- eachItem.getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}</li>  <!-- Parent stuff -->
 	}
 	</ul>
 }

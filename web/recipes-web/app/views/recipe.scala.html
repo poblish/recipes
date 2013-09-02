@@ -85,7 +85,7 @@ function doFormatSelection(inRec) {
 	<h3>Ingredients:</h3>
 	<ul class="list-group">
 	@for(item <- recipe.getItems()) {
-	<li class="list-group-item"><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-primary"><a href="/tags/@tagName">@tagName</a></span>}&nbsp;<a href="/recipes/@recipe.getTitle()/@item.getCanonicalName()/remove">[x]</a></li>
+	<li class="list-group-item"><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}&nbsp;<a href="/recipes/@recipe.getTitle()/@item.getCanonicalName()/remove">[x]</a></li>
 	}
 	</ul>
 	
@@ -145,7 +145,7 @@ function clearFilters() {
 	  		<div class="panel-heading"><a href="/recipes/@eachRecipe.getTitle()">@eachRecipe.getTitle()</a>&nbsp;<a href="/recipes/@eachRecipe.getTitle()/fork">[F]</a>&nbsp;<a id="toggle_@index" class="btn btn-default" href="#"><i class="glyphicon glyphicon-chevron-down"></i></a></div>
 	  		<div class="panel-body" style="display: none" id="ingredients_@index"><ol>
 	@for(item <- eachRecipe.getItems()) {
-	<li><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-primary"><a href="/tags/@tagName">@tagName</a></span>}</li>
+	<li><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}</li>
 	}
 	  			</ol>
 	  		</div>

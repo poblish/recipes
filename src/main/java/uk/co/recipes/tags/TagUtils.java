@@ -82,6 +82,11 @@ public final class TagUtils {
 		return checkNotNull( ALL_TAGS.get(inName), "No Tag registered with name '" + inName + "'");
 	}
 
+	public static String getStyle( final String inName) {
+		final ITag tag = ALL_TAGS.get( inName.toUpperCase() );
+		return ( tag != null) ? "label-" + tag.getClass().getSimpleName() : "label-primary";
+	}
+
 	public static Comparator<ITag> comparator() {
 		return new Comparator<ITag>() {
 
