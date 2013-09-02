@@ -3,7 +3,7 @@
 @main("Recipe: " + recipe.getTitle() ) {
 	<section id="top">
 	    <div class="wrapper">
-	        <h1><span class="label label-success">@recipe.getId()</span>&nbsp;@recipe.getTitle() <span class="label label-error">@recipe.getLocale()</span> <a href="/recipes/@recipe.getTitle()/fork">[F]</a></h1>
+	        <h1><!-- <span>@recipe.getId()</span>&nbsp; -->@recipe.getTitle()&nbsp;<!-- <span class="label label-warning">@recipe.getLocale()</span> --><a href="/recipes/@recipe.getTitle()/fork">[F]</a></h1>
 	    </div>
 	</section>
 	
@@ -12,7 +12,7 @@
 	}
 	
 	<div class="btn-group">
-	  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+	  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
 	    Your Rating
 	    <span class="caret"></span>
 	  </a>
@@ -82,11 +82,12 @@ function doFormatSelection(inRec) {
 </script>
 <hr/>
 
-	<ol>
+	<h3>Ingredients:</h3>
+	<ul class="list-group">
 	@for(item <- recipe.getItems()) {
-	<li><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-info"><a href="/tags/@tagName">@tagName</a></span>}&nbsp;<a href="/recipes/@recipe.getTitle()/@item.getCanonicalName()/remove">[x]</a></li>
+	<li class="list-group-item"><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-primary"><a href="/tags/@tagName">@tagName</a></span>}&nbsp;<a href="/recipes/@recipe.getTitle()/@item.getCanonicalName()/remove">[x]</a></li>
 	}
-	</ol>
+	</ul>
 	
 	<hr />
 	<p><span class="label label-default">Created:</span> @recipe.getCreationTime() </p>
@@ -125,9 +126,10 @@ function clearFilters() {
 }</script>
 	<!-- Explorer Filter Stuff ends -->
 
-	<p>Similar Recipes:</p>
+	<hr />
+	<h3>Similar Recipes:</h3>
 	
-	<div class="container-fluid">
+	<div class="container">
 	
 	@for(( eachRecipe, index) <- similarities.zipWithIndex) {
 	
@@ -135,16 +137,19 @@ function clearFilters() {
 		@if( index >= 3) {
 		  </div>  <!-- <div class="row-fluid"> -->
 		}
-	 <div class="row-fluid">
+	 <div class="row">
 	}
 	
-	<div class="span4">
-	  <div class="hero-unit"><a href="/recipes/@eachRecipe.getTitle()">@eachRecipe.getTitle()</a> <a href="/recipes/@eachRecipe.getTitle()/fork">[F]   <a id="toggle_@index" class="btn" href="#"><i class="icon-chevron-down"></i></a></div>
-	  	<div style="display: none" id="ingredients_@index"><ol>
+	<div class="col-md-4">
+		<div class="panel panel-default">
+	  		<div class="panel-heading"><a href="/recipes/@eachRecipe.getTitle()">@eachRecipe.getTitle()</a>&nbsp;<a href="/recipes/@eachRecipe.getTitle()/fork">[F]</a>&nbsp;<a id="toggle_@index" class="btn btn-default" href="#"><i class="glyphicon glyphicon-chevron-down"></i></a></div>
+	  		<div class="panel-body" style="display: none" id="ingredients_@index"><ol>
 	@for(item <- eachRecipe.getItems()) {
-	<li><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-info"><a href="/tags/@tagName">@tagName</a></span>}</li>
+	<li><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-primary"><a href="/tags/@tagName">@tagName</a></span>}</li>
 	}
-	  	</ol></div>
+	  			</ol>
+	  		</div>
+		</div>
 	</div>  <!-- <div class="span4"> -->
 	
 	<script>

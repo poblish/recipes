@@ -7,10 +7,10 @@
 	    </div>
 	</section>
 	
-	<p>@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-info"><a href="/tags/@tagName">@tagName</a></span>}</p>
+	<p>@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-primary"><a href="/tags/@tagName">@tagName</a></span>}</p>
 	
 	<div class="btn-group">
-	  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+	  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
 	    Your Rating
 	    <span class="caret"></span>
 	  </a>
@@ -63,11 +63,12 @@ function clearFilters() {
 }</script>
 	<!-- Explorer Filter Stuff ends -->
 
-	<p>Similar Items</p>
+	<hr />
+	<h3>Similar Items:</h3>
 	
-	<ol>
+	<ul class="list-group">
 	@for( eachItem <- similarities) {
-	  <li><a href="http://localhost:9000/items/@eachItem.getCanonicalName()">@eachItem.getCanonicalName()</a>&nbsp;@for(tagName <- eachItem.getTagNamesForDisplay()){&nbsp;<span class="label label-info"><a href="/tags/@tagName">@tagName</a></span>}</li>  <!-- Parent stuff -->
+	  <li class="list-group-item"><a href="http://localhost:9000/items/@eachItem.getCanonicalName()">@eachItem.getCanonicalName()</a>&nbsp;@for(tagName <- eachItem.getTagNamesForDisplay()){&nbsp;<span class="label label-primary"><a href="/tags/@tagName">@tagName</a></span>}</li>  <!-- Parent stuff -->
 	}
-	</ol>
+	</ul>
 }
