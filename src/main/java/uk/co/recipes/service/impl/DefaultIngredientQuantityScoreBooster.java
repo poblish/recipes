@@ -21,6 +21,9 @@ public class DefaultIngredientQuantityScoreBooster implements IIngredientQuantit
 
     @Override
     public float getBoostForQuantity( final ICanonicalItem inItem, final IQuantity inQuantity) {
+    	if ( inItem.getBaseAmount() != null /* FIXME null check */) {
+    		// System.out.println(inItem);
+    	}
         return NO_BOOST;
     }
 }

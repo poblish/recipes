@@ -18,7 +18,9 @@ import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 import uk.co.recipes.CanonicalItem;
+import uk.co.recipes.Quantity;
 import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.parse.IngredientParser;
 import uk.co.recipes.tags.TagUtils;
 
 import com.google.common.base.Optional;
@@ -36,6 +38,8 @@ public class ItemsLoader {
 
 	@Inject
 	EsItemFactory itemFactory;
+
+	@Inject IngredientParser parser;
 
 	private static final Logger LOG = LoggerFactory.getLogger( ItemsLoader.class );
 	private static final Optional<ICanonicalItem> MISSING = Optional.absent();
@@ -98,6 +102,14 @@ public class ItemsLoader {
 
                 for ( String eachAlias : yamlObjectToStrings( inMap.get("aliases") )) {
                     ((CanonicalItem) newItem).aliases.add(eachAlias);
+                }
+
+                final String baseAmt = (String) inMap.get("baseAmt");
+                if ( baseAmt != null) {
+                	final Optional<Quantity> parsedQ = parser.parseQuantity(baseAmt);
+                    if (parsedQ.isPresent()) {
+                    	((CanonicalItem) newItem).setBaseAmount( parsedQ.get() );
+                    }
                 }
 
                 return newItem;

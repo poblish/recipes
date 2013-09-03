@@ -19,10 +19,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.IQuantity;
 import uk.co.recipes.api.ITag;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.base.Objects;
@@ -38,6 +40,7 @@ import com.google.common.collect.Sets;
  * @author andrewregan
  *
  */
+@JsonInclude( JsonInclude.Include.NON_NULL )  // Mainly to avoid null baseAmount being serialized
 public class CanonicalItem implements ICanonicalItem {
 
     private static final long serialVersionUID = 1L;
@@ -52,6 +55,7 @@ public class CanonicalItem implements ICanonicalItem {
 	private String canonicalName;
 	private ICanonicalItem parent = null; // Can't use Optional<> as it screws with JSON serialization
 	public Collection<String> aliases = Sets.newHashSet();
+	private IQuantity baseAmount;
 
 	private Map<ITag,Serializable> tags = new TreeMap<>( Ordering.usingToString() );  // Try to keep the order regular. This will *not* sort enums by name, only by index
 
@@ -186,6 +190,11 @@ public class CanonicalItem implements ICanonicalItem {
         return terms;
     }
 
+    // Strictly for Jackson only. Must be public
+    public void setAutoCompleteTerms( Collection<String> terms) {
+    	this.aliases = terms;  // Yuk FIXME
+    }
+
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.api.ICanonicalItem#setParent(uk.co.recipes.api.ICanonicalItem)
 	 */
@@ -206,6 +215,19 @@ public class CanonicalItem implements ICanonicalItem {
 
         return false;
     }
+
+	public void setBaseAmount( final IQuantity inQuantity) {
+		// Horrible Jackson hack to avoid throwing NPE during deser
+		if ( baseAmount == null && inQuantity == null) {
+			return;
+		}
+
+		baseAmount = checkNotNull(inQuantity);
+	}
+
+	public IQuantity getBaseAmount() {
+		return baseAmount;
+	}
 
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.api.ICanonicalItem#getId()

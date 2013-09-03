@@ -112,7 +112,7 @@
 ---
 {canonicalName: Cumin, tags: {SPICE, INDIAN}, aliases: {Ground Cumin, Cumin Powder}}
 ---
-{    canonicalName: Cumin Seeds, parent: Cumin, aliases: {Cumin Seed}}
+{    canonicalName: Cumin Seeds, parent: Cumin, aliases: {Cumin Seed}, baseAmt: 1 tsp}
 ---
 {canonicalName: Curry Powder, tags: {SPICE, INDIAN}}
 ---

@@ -43,7 +43,11 @@ public class IngredientParser {
 	private static final String	NOTES = "([,;\\(].*)?";
 	private static final String	SUFFIX = "([\\p{L}- ]*)" + NOTES;
 
-	private static final Pattern	A = Pattern.compile( DEC_FRAC_NUMBER_RANGE_PATTERN + "( ?kg|g(?: )?(?:sachet|pack|tub|carton)?|gms| ?pounds?| ?lbs?\\.?| ?oz\\.?|cm|-in|-inch|mm|ml|l| litres?| ?quarts?| cups?| pots?| ?bunch(?:es)?| sticks?| heaped tbsps?| heaped tsps?| rounded tbsps?| rounded tsps?| tablespoons?| tbsp[s\\.]?| tsp[s\\.]?| teaspoons?| ?handfuls?| cloves?)? " + SUFFIX, Pattern.CASE_INSENSITIVE);
+    private static final String NUMBER_AND_UNITS = DEC_FRAC_NUMBER_RANGE_PATTERN + "( ?kg|g(?: )?(?:sachet|pack|tub|carton)?|gms| ?pounds?| ?lbs?\\.?| ?oz\\.?|cm|-in|-inch|mm|ml|l| litres?| ?quarts?| cups?| pots?| ?bunch(?:es)?| sticks?| heaped tbsps?| heaped tsps?| rounded tbsps?| rounded tsps?| tablespoons?| tbsp[s\\.]?| tsp[s\\.]?| teaspoons?| ?handfuls?| cloves?)?";
+
+	private static final Pattern	NUMBER_AND_UNITS_PATTERN = Pattern.compile( NUMBER_AND_UNITS, Pattern.CASE_INSENSITIVE);
+
+	private static final Pattern	A = Pattern.compile( NUMBER_AND_UNITS + " " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	B = Pattern.compile("((?:a )?(few |generous |good |large |small |thumb-sized? )?(splash|bunch|dash|drizzle|drops?|few|glass|handful|little|piece|knob|pinch|splash|squeeze)(?: of)?) " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	C = Pattern.compile("(juice|juice and zest|(?:finely )?(?:grated )?zest|zest and juice)(?: of)? " + DEC_FRAC_NUMBER_PATTERN + " " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	D = Pattern.compile("(icing sugar|nutmeg|parmesan|salt|salt and pepper.*|beaten egg|.*cream)" + NOTES, Pattern.CASE_INSENSITIVE);
@@ -174,6 +178,22 @@ public class IngredientParser {
 
 		return Optional.absent();
 	}
+
+	// For parsing a Quantity only
+    public Optional<Quantity> parseQuantity( final String inRawStr) {
+	    final String adjustedStr = new FractionReplacer().replaceFractions(inRawStr);
+
+		Matcher m = NUMBER_AND_UNITS_PATTERN.matcher(adjustedStr);
+		if (m.matches()) {
+			String numericQuantityStr = m.group(1);
+			if (numericQuantityStr.isEmpty()) {  // "handful" == "1 handful"
+				numericQuantityStr = "1";
+			}
+			return Optional.of( new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse(numericQuantityStr)) );
+		}
+
+		return Optional.absent();
+    }
 
 	private ICanonicalItem findItem( final String inName) {
 		return itemFactory.getOrCreate( inName, new Supplier<ICanonicalItem>() {
