@@ -88,9 +88,11 @@
 ---
 {canonicalName: Cardamom, tags: {SPICE, INDIAN}, aliases: {Cardamom Pods}}
 ---
+{    canonicalName: Green Cardamom, parent: Cardamom, aliases: {Green Cardamom Pods}}
+---
 {canonicalName: Cayenne Pepper, tags: {SPICE}}
 ---
-{    canonicalName: Green Cardamom, parent: Cardamom, aliases: {Green Cardamom Pods}}
+{canonicalName: Celery Salt, tags: {SPICE}}
 ---
 {canonicalName: Chilli Powder, tags: {SPICE, INDIAN}}
 ---
@@ -113,6 +115,8 @@
 {    canonicalName: Cumin Seeds, parent: Cumin, aliases: {Cumin Seed}}
 ---
 {canonicalName: Curry Powder, tags: {SPICE, INDIAN}}
+---
+{    canonicalName: Madras Curry Powder, parent: Curry Powder}
 ---
 {    canonicalName: Mild Curry Powder, parent: Curry Powder}
 ---
@@ -182,6 +186,10 @@
 ---
 {    canonicalName: Bird's eye chili, parent: Chilli, tags: {THAI, VIETNAMESE}, aliases: {Thai chili, Birds eye chillies}}
 ---
+{    canonicalName: Chipotle, parent: Chilli, tags: {MEXICAN}, aliases: {Chipotle chili, Chilpotle}}
+---
+{        canonicalName: Chipotle Paste, parent: Chipotle, tags: {SAUCE}}
+---
 
 
 {canonicalName: Noodles, tags: NOODLES}
@@ -198,7 +206,13 @@
 ---
 {canonicalName: Rice, tags: RICE}
 ---
+{    canonicalName: Arborio Rice, parent: Rice, tags: {ITALIAN}}
+---
 {    canonicalName: Basmati Rice, parent: Rice, tags: {INDIAN}}
+---
+{    canonicalName: Camargue red rice, parent: Rice, tags: {FRENCH}}
+---
+{    canonicalName: Carnaroli Rice, parent: Rice, tags: {ITALIAN}}
 ---
 {    canonicalName: Risotto Rice, parent: Rice, tags: {ITALIAN, SPANISH}}
 ---
@@ -302,9 +316,11 @@
 ---
 {canonicalName: Tomato, tags: VEGETABLE, aliases: {Tomatoes}}
 ---
+{    canonicalName: Beef Tomatoes, parent: Tomato}
+---
 {    canonicalName: Cherry Tomatoes, parent: Tomato}
 ---
-{    canonicalName: Passata, parent: Tomato, tags: {SAUCE, ITALIAN}}
+{    canonicalName: Passata, parent: Tomato, tags: {SAUCE, ITALIAN}, aliases: {Tomato Passata}}
 ---
 {    canonicalName: Plum Tomatoes, parent: Tomato}
 ---
@@ -606,6 +622,8 @@
 ---
 {    canonicalName: Red Wine Vinegar, parent: Vinegar}
 ---
+{    canonicalName: Rice Vinegar, parent: Vinegar, tags: {CHINESE, JAPANESE}}
+---
 {    canonicalName: Sherry Vinegar, parent: Vinegar, tags: SPANISH}
 ---
 {    canonicalName: White Wine Vinegar, parent: Vinegar}
@@ -624,13 +642,17 @@
 ---
 {canonicalName: Chicken Stock, tags: {MEAT, STOCK}}
 ---
-{canonicalName: Curry Paste, tags: {INDIAN, SAUCE}}
+{canonicalName: Curry Paste, tags: {SAUCE}}
 ---
-{    canonicalName: Balti Curry Paste, parent: Curry Paste}
+{    canonicalName: Balti Curry Paste, tags: INDIAN, parent: Curry Paste}
 ---
-{    canonicalName: Korma Paste, parent: Curry Paste}
+{    canonicalName: Korma Paste, tags: INDIAN, parent: Curry Paste, aliases: {Korma Curry Paste}}
 ---
-{    canonicalName: Mild Curry Paste, parent: Curry Paste}
+{    canonicalName: Mild Curry Paste, tags: INDIAN, parent: Curry Paste}
+---
+{    canonicalName: Thai Green Curry Paste, tags: THAI, parent: Curry Paste}
+---
+{    canonicalName: Thai Red Curry Paste, tags: THAI, parent: Curry Paste}
 ---
 {canonicalName: Fish Sauce, tags: {FISH, SAUCE, THAI, VIETNAMESE}}
 ---
@@ -731,6 +753,10 @@
 {canonicalName: Chicken Liver, tags: {MEAT, POULTRY, OFFAL}}
 ---
 {canonicalName: Ham, tags: MEAT}
+---
+{    canonicalName: Prosciutto, parent: Ham, tags: ITALIAN}
+---
+{        canonicalName: Parma Ham, parent: Prosciutto}
 ---
 {canonicalName: Lamb, tags: MEAT}
 ---
