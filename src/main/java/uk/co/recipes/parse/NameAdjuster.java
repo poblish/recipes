@@ -3,6 +3,7 @@
  */
 package uk.co.recipes.parse;
 
+import javax.inject.Singleton;
 import javax.inject.Named;
 import com.google.common.collect.Lists;
 import java.util.Collection;
@@ -15,16 +16,16 @@ import javax.inject.Inject;
  * @author andrewregan
  *
  */
+@Singleton
 public class NameAdjuster {
 
     @Inject
     @Named("prefixAdjustments")
     List<String> badPrefixes;
 
-	private final Collection<String> notesToAdd = Lists.newArrayList();
-
 	// FIXME Can probably replace with one big regex
-	public String adjust( final String inName) {
+	public AdjustedName adjust( final String inName) {
+	    Collection<String> notesToAdd = Lists.newArrayList();
 		String theNameToUse = inName.toLowerCase();
 		int incr = 0;
 
@@ -44,10 +45,6 @@ public class NameAdjuster {
 			}
 		}
 
-		return inName.substring(incr);
-	}
-
-	public Collection<String> getExtraNotes() {
-		return notesToAdd;
+		return new AdjustedName( inName.substring(incr), notesToAdd);
 	}
 }

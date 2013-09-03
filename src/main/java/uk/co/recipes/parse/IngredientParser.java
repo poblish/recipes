@@ -5,12 +5,9 @@ package uk.co.recipes.parse;
 
 import static java.util.Locale.ENGLISH;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPE_PARSE;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.inject.Inject;
-
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Ingredient;
 import uk.co.recipes.Quantity;
@@ -19,7 +16,6 @@ import uk.co.recipes.api.NonNumericQuantities;
 import uk.co.recipes.api.Units;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.tags.CommonTags;
-
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.google.common.base.Optional;
@@ -35,6 +31,8 @@ public class IngredientParser {
 
 	@Inject
 	EsItemFactory itemFactory;
+
+	@Inject NameAdjuster nameAdjuster;
 
 	@Inject
 	MetricRegistry metrics;
@@ -70,29 +68,26 @@ public class IngredientParser {
 
 		Matcher m = A.matcher(adjustedStr);
 		if (m.matches()) {
-			final NameAdjuster na = new NameAdjuster();
-
 			String numericQuantityStr = m.group(1);
 			if (numericQuantityStr.isEmpty()) {  // "handful" == "1 handful"
 				numericQuantityStr = "1";
 			}
 
-			final Ingredient ingr = new Ingredient( findItem( na.adjust( m.group(3).trim() ) ), new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse(numericQuantityStr)));
+            final AdjustedName adjusted = nameAdjuster.adjust( m.group(3).trim() );
+			final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse(numericQuantityStr)));
 
 			final String note = m.group(4);
 			if ( note != null) {
 				ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
 			}
 
-			ingr.addNotes( ENGLISH, na.getExtraNotes());
+			ingr.addNotes( ENGLISH, adjusted.getNotes());
 
 			return Optional.of(ingr);
 		}
 		else {
 			m = B.matcher(adjustedStr);
 			if (m.matches()) {
-				final NameAdjuster na = new NameAdjuster();
-
 				final Quantity q;
 
 				final String nonNumericQ = m.group(2);
@@ -103,69 +98,70 @@ public class IngredientParser {
 					q = new Quantity( UnitParser.parse( m.group(3) ), NonNumericQuantityParser.parse( nonNumericQ.trim().toUpperCase() ));
 				}
 
-				final Ingredient ingr = new Ingredient( findItem( na.adjust( m.group(4).trim() ) ), q);
+                final AdjustedName adjusted = nameAdjuster.adjust( m.group(4).trim() );
+				final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), q);
 
 				final String note = m.group(5);
 				if ( note != null) {
 					ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
 				}
 
-				ingr.addNotes( ENGLISH, na.getExtraNotes());
+				ingr.addNotes( ENGLISH, adjusted.getNotes());
 
 				return Optional.of(ingr);
 			}
 			else {
 				m = C.matcher(adjustedStr);
 				if (m.matches()) {
-					final NameAdjuster na = new NameAdjuster();
-					final Ingredient ingr = new Ingredient( findItem( na.adjust( m.group(3).trim() ) ), new Quantity( Units.INSTANCES, NumericAmountParser.parse( m.group(2) )));
+                    final AdjustedName adjusted = nameAdjuster.adjust( m.group(3).trim() );
+					final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), new Quantity( Units.INSTANCES, NumericAmountParser.parse( m.group(2) )));
 					ingr.addNote( ENGLISH, m.group(1).trim());
-					ingr.addNotes( ENGLISH, na.getExtraNotes());
+					ingr.addNotes( ENGLISH, adjusted.getNotes());
 
 					return Optional.of(ingr);
 				}
 				else {
 					m = D.matcher(adjustedStr);
 					if (m.matches()) {
-						final NameAdjuster na = new NameAdjuster();
-						final Ingredient ingr = new Ingredient( findItem( na.adjust( m.group(1).trim() ) ), new Quantity( Units.INSTANCES, 1));
+                        final AdjustedName adjusted = nameAdjuster.adjust( m.group(1).trim() );
+						final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), new Quantity( Units.INSTANCES, 1));
 
 						final String note = m.group(2);
 						if ( note != null) {
 							ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
 						}
 
-						ingr.addNotes( ENGLISH, na.getExtraNotes());
+						ingr.addNotes( ENGLISH, adjusted.getNotes());
 
 						return Optional.of(ingr);
 					}
 					else {
 						m = E.matcher(adjustedStr);
 						if (m.matches()) {
-							final NameAdjuster na = new NameAdjuster();
-							final Ingredient ingr = new Ingredient( findItem( na.adjust( m.group(1).trim() ) ), new Quantity( Units.INSTANCES, NonNumericQuantities.ANY_AMOUNT));
+                            final AdjustedName adjusted = nameAdjuster.adjust( m.group(1).trim() );
+							final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), new Quantity( Units.INSTANCES, NonNumericQuantities.ANY_AMOUNT));
 
 							final String note = m.group(2);
 							if ( note != null) {
 								ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
 							}
 
-							ingr.addNotes( ENGLISH, na.getExtraNotes());
+							ingr.addNotes( ENGLISH, adjusted.getNotes());
 
 							return Optional.of(ingr);
 						}
 	                    else {
 	                        m = F.matcher(adjustedStr);
 	                        if (m.matches()) {
-	                            final NameAdjuster na = new NameAdjuster();
-	                            final Ingredient ingr = new Ingredient( findItem( na.adjust( m.group(1).trim() ) ), new Quantity( Units.INSTANCES, NonNumericQuantities.ANY_AMOUNT));
+	                            final AdjustedName adjusted = nameAdjuster.adjust( m.group(1).trim() );
+	                            final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), new Quantity( Units.INSTANCES, NonNumericQuantities.ANY_AMOUNT));
 
 	                            final String note = m.group(2);
 	                            if ( note != null) {
 	                                ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
 	                            }
 
-	                            ingr.addNotes( ENGLISH, na.getExtraNotes());
+	                            ingr.addNotes( ENGLISH, adjusted.getNotes());
 //	                            System.out.println("... " + ingr);
 
 	                            return Optional.of(ingr);

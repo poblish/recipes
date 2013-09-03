@@ -18,39 +18,40 @@ import org.testng.annotations.Test;
 public class NameAdjusterTest {
 
     private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
+    private final static NameAdjuster ADJUSTER = GRAPH.get( NameAdjuster.class );
 
     @Test
     public void testAdjust1() {
-        final NameAdjuster na = GRAPH.get( NameAdjuster.class );
-        assertThat( na.adjust("dressed mixed leaves"), is("mixed leaves"));
-        assertThat( na.getExtraNotes(), hasItems("dressed"));
+        final AdjustedName na = ADJUSTER.adjust("dressed mixed leaves");
+        assertThat( na.getName(), is("mixed leaves"));
+        assertThat( na.getNotes(), hasItems("dressed"));
     }
 
     @Test
     public void testAdjust2() {
-        final NameAdjuster na = GRAPH.get( NameAdjuster.class );
-        assertThat( na.adjust("freshly grated nutmeg"), is("nutmeg"));
-        assertThat( na.getExtraNotes(), hasItems("freshly grated"));
+        final AdjustedName na = ADJUSTER.adjust("freshly grated nutmeg");
+        assertThat( na.getName(), is("nutmeg"));
+        assertThat( na.getNotes(), hasItems("freshly grated"));
     }
 
     @Test
     public void testAdjust3() {
-        final NameAdjuster na = GRAPH.get( NameAdjuster.class );
-        assertThat( na.adjust("whole mango"), is("mango"));
-        assertThat( na.getExtraNotes(), hasItems("whole"));
+        final AdjustedName na = ADJUSTER.adjust("whole mango");
+        assertThat( na.getName(), is("mango"));
+        assertThat( na.getNotes(), hasItems("whole"));
     }
 
     @Test
     public void testAdjust4() {
-        final NameAdjuster na = GRAPH.get( NameAdjuster.class );
-        assertThat( na.adjust("FuLL-bODIEd RED WINE"), is("RED WINE"));
-        assertThat( na.getExtraNotes(), hasItems("full-bodied"));
+        final AdjustedName na = ADJUSTER.adjust("FuLL-bODIEd RED WINE");
+        assertThat( na.getName(), is("RED WINE"));
+        assertThat( na.getNotes(), hasItems("full-bodied"));
     }
 
     @Test
     public void testAdjust5() {
-        final NameAdjuster na = GRAPH.get( NameAdjuster.class );
-        assertThat( na.adjust("100g coriander seeds"), is("100g coriander seeds"));
-        assertThat( na.getExtraNotes(), empty());
+        final AdjustedName na = ADJUSTER.adjust("100g coriander seeds");
+        assertThat( na.getName(), is("100g coriander seeds"));
+        assertThat( na.getNotes(), empty());
     }
 }
