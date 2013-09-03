@@ -5,9 +5,12 @@ package uk.co.recipes.parse;
 
 import static java.util.Locale.ENGLISH;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPE_PARSE;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.inject.Inject;
+
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Ingredient;
 import uk.co.recipes.Quantity;
@@ -16,6 +19,7 @@ import uk.co.recipes.api.NonNumericQuantities;
 import uk.co.recipes.api.Units;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.tags.CommonTags;
+
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.google.common.base.Optional;

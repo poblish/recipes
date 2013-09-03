@@ -3,11 +3,10 @@
  */
 package uk.co.recipes;
 
-import uk.co.recipes.parse.NameAdjuster;
-import java.util.List;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Named;
@@ -31,6 +30,7 @@ import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.events.impl.DefaultEventService;
 import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.parse.IngredientParser;
+import uk.co.recipes.parse.NameAdjuster;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsSequenceFactory;

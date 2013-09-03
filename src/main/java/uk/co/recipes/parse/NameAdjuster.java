@@ -3,12 +3,14 @@
  */
 package uk.co.recipes.parse;
 
-import javax.inject.Singleton;
-import javax.inject.Named;
-import com.google.common.collect.Lists;
 import java.util.Collection;
 import java.util.List;
+
 import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
+import com.google.common.collect.Lists;
 
 /**
  * FIXME This needs to be in a DSL, configurable, or something

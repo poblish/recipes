@@ -1,12 +1,12 @@
 package uk.co.recipes.parse;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.empty;
-import dagger.ObjectGraph;
-import uk.co.recipes.DaggerModule;
+import static org.hamcrest.Matchers.*;
+
 import org.testng.annotations.Test;
+
+import uk.co.recipes.DaggerModule;
+import dagger.ObjectGraph;
 
 /**
  * 
