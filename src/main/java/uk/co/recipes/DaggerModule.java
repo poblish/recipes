@@ -3,6 +3,8 @@
  */
 package uk.co.recipes;
 
+import uk.co.recipes.parse.NameAdjuster;
+import java.util.List;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -67,7 +69,7 @@ import dagger.Provides;
 @Module(injects={EsItemFactory.class, EsRecipeFactory.class, ItemsLoader.class, IngredientParser.class, TestDataUtils.class, Correlations.class, ObjectMapper.class, ClientRecommender.class,
 				 MyrrixTasteRecommendationService.class, MyrrixRecommendationService.class, MyrrixTasteSimilarityService.class, MyrrixExplorerService.class,
 				 Client.class, EsSearchService.class, EsUserFactory.class, EsSequenceFactory.class, MyrrixUpdater.class, IEventService.class, UserRatings.class,
-				 MetricRegistry.class, EsExplorerFilters.class})
+				 MetricRegistry.class, EsExplorerFilters.class, NameAdjuster.class})
 public class DaggerModule {
 
 	@Provides
@@ -182,5 +184,17 @@ public class DaggerModule {
     Cache<String,ICanonicalItem> provideItemCache() {
     	// Can't actually think of anything else useful...
     	return CacheBuilder.newBuilder().maximumSize(1000).build();
+    }
+
+    @Provides
+    @Singleton
+    @Named("prefixAdjustments")
+    List<String> providePrefixAdjustments() {
+        try {
+            final String homeDir = System.getProperty("user.home");
+            return Files.readLines( new File( homeDir + "/Development/java/recipe_explorer/src/main/resources/prefixAdjustments.txt"), Charset.forName("utf-8"));
+        } catch (IOException e) {
+            throw Throwables.propagate(e);
+        }
     }
 }

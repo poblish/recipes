@@ -3,9 +3,11 @@
  */
 package uk.co.recipes.parse;
 
-import java.util.Collection;
-
+import javax.inject.Named;
 import com.google.common.collect.Lists;
+import java.util.Collection;
+import java.util.List;
+import javax.inject.Inject;
 
 /**
  * FIXME This needs to be in a DSL, configurable, or something
@@ -14,9 +16,10 @@ import com.google.common.collect.Lists;
  *
  */
 public class NameAdjuster {
-	private static final String[]	BAD_PREFIXES = {"beaten", "boneless", "can", "chilled", "chopped", "coarse", "coarsely", "cold", "cooked", "cooking", "crushed", "dark", "dressed", "dry", "dried", "firm",
-													"fresh", "freshly grated", "frozen", "full-bodied", "grated", "ground", "half-fat", "hot", "large", "lean", "long", "low-fat", "medium", "peeled", "pitted",
-													"plump", "quality", "raw", "ripe", "roughly", "shelled", "skinless", "slices", "small", "smoked", "sustainable", "thick", "tin", "tinned", "toasted", "whole"};
+
+    @Inject
+    @Named("prefixAdjustments")
+    List<String> badPrefixes;
 
 	private final Collection<String> notesToAdd = Lists.newArrayList();
 
@@ -27,7 +30,7 @@ public class NameAdjuster {
 
 		while (true) {
 			boolean anyDoneThisRound = false;
-			for ( String eachPrefix : BAD_PREFIXES) {
+			for ( String eachPrefix : badPrefixes) {
 				if (theNameToUse.startsWith(eachPrefix + " ")) {
 					incr += eachPrefix.length() + 1;
 					theNameToUse = theNameToUse.substring( eachPrefix.length() + 1);
