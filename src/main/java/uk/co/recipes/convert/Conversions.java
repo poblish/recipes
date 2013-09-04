@@ -38,6 +38,6 @@ public class Conversions {
 	}
 
 	private Optional<Amount<Volume>> amountInUnits( final IQuantity inQuantity, final Unit<Volume> inUnits) {
-        return Optional.of( Amount.valueOf( inQuantity.getNumber(), TSP_US) );
+        return Optional.of( Amount.valueOf( inQuantity.getNumber(), inUnits) );
 	}
 }
