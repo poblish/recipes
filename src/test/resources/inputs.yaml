@@ -20,6 +20,8 @@
 ---
 {canonicalName: Cocoa, tags: BAKING, aliases: {Cocoa Powder}}
 ---
+{canonicalName: Marzipan, parent: Almond, tags: {BAKING}}
+---
 {canonicalName: Rosewater, tags: FLAVOURING}
 ---
 {canonicalName: Vanilla Extract, tags: {FLAVOURING,BAKING}}
@@ -88,6 +90,10 @@
 ---
 {canonicalName: Cardamom, tags: {SPICE, INDIAN}, aliases: {Cardamom Pods}}
 ---
+{    canonicalName: Black Cardamom, parent: Cardamom}
+---
+{    canonicalName: Cardamom Powder, parent: Cardamom, aliases: {Ground Cardamom}}
+---
 {    canonicalName: Green Cardamom, parent: Cardamom, aliases: {Green Cardamom Pods}}
 ---
 {canonicalName: Cayenne Pepper, tags: {SPICE}}
@@ -98,7 +104,7 @@
 ---
 {    canonicalName: Red Chilli Powder, parent: Chilli Powder}
 ---
-{canonicalName: Chinese five-spice powder, tags: {SPICE, CHINESE}}
+{canonicalName: Chinese five-spice powder, tags: {SPICE, CHINESE, ANISEED}}
 ---
 {canonicalName: Cinnamon, tags: SPICE}
 ---
@@ -378,6 +384,10 @@
 ---
 {    canonicalName: Coconut Milk, parent: Coconut}
 ---
+{    canonicalName: Coconut Cream, parent: Coconut}
+---
+{    canonicalName: Desiccated Coconut, parent: Coconut, tags: BAKING}
+---
 {canonicalName: Grape, tags: {FRUIT}}
 ---
 {    canonicalName: Currant, parent: Grape, aliases: {Zante currant, Currants}}
@@ -402,11 +412,13 @@
 ---
 {    canonicalName: Mango Chutney, parent: Mango, tags: {INDIAN, SAUCE}}
 ---
-{canonicalName: Orange, tags: {FRUIT, CITRUS, ORANGE}}
+{canonicalName: Orange, tags: {FRUIT, CITRUS, ORANGE}, aliases: {Oranges}}
 ---
 {    canonicalName: Orange Juice, parent: Orange}
 ---
 {    canonicalName: Orange Zest, parent: Orange}
+---
+{canonicalName: Peach, tags: {FRUIT}, aliases: {Peaches}}
 ---
 {canonicalName: Pear, tags: {FRUIT}, aliases: {Pears}}
 ---
@@ -428,6 +440,8 @@
 ---
 {    canonicalName: Cornflour, parent: Flour}
 ---
+{    canonicalName: Maize Flour, parent: Flour, aliases: Cornmeal}
+---
 {    canonicalName: Plain Flour, parent: Flour}
 ---
 {    canonicalName: Self-raising Flour, parent: Flour}
@@ -439,6 +453,20 @@
 {canonicalName: Ciabatta, tags: {BREAD, ITALIAN}}
 ---
 {canonicalName: Focaccia, tags: {BREAD, ITALIAN}}
+---
+
+
+{canonicalName: Porridge, tags: {PORRIDGE}}
+---
+{    canonicalName: Maize Porridge, parent: Porridge}
+---
+{        canonicalName: Grits, parent: Maize Porridge, tags: USA}
+---
+{        canonicalName: Polenta, parent: Maize Porridge, tags: ITALIAN}
+---
+{    canonicalName: Rice Porridge, parent: Porridge}
+---
+{        canonicalName: Congee, parent: Rice Porridge, tags: ASIAN}
 ---
 
 
@@ -492,6 +520,8 @@
 ---
 {    canonicalName: Brown Sugar, parent: Sugar}
 ---
+{        canonicalName: Dark Muscovado Sugar, parent: Brown Sugar}
+---
 {        canonicalName: Demerara Sugar, parent: Brown Sugar}
 ---
 {        canonicalName: Muscovado Sugar, parent: Brown Sugar}
@@ -500,7 +530,17 @@
 ---
 {        canonicalName: Light Soft Brown Sugar, parent: Brown Sugar}
 ---
-{        canonicalName: Dark Muscovado Sugar, parent: Brown Sugar}
+{        canonicalName: Soft Brown Sugar, parent: Brown Sugar}
+---
+{    canonicalName: Syrup, parent: Sugar, tags: SYRUP}
+---
+{        canonicalName: Black Treacle, parent: Syrup}
+---
+{        canonicalName: Golden Syrup, parent: Syrup}
+---
+{        canonicalName: Maple Syrup, parent: Syrup}
+---
+{        canonicalName: Treacle, parent: Syrup}
 ---
 
 
@@ -576,19 +616,19 @@
 ---
 {canonicalName: Yogurt, tags: DAIRY}
 ---
-{    canonicalName: Greek Yogurt, parent: Yogurt, tags: GREEK}
+{    canonicalName: Greek Yogurt, parent: Yogurt, tags: GREEK, aliases: {Greek-style yogurt}}
 ---
 {    canonicalName: Low Fat Yogurt, parent: Yogurt}
 ---
 {    canonicalName: Natural Yogurt, parent: Yogurt}
+---
+{    canonicalName: Soya Yogurt, parent: Yogurt}
 ---
 
 
 {canonicalName: Oil, tags: {OIL, FAT}}
 ---
 {    canonicalName: Vegetable Oil, parent: Oil}
----
-{        canonicalName: Coconut Oil, parent: Vegetable Oil}
 ---
 {        canonicalName: Coconut Oil, parent: Vegetable Oil}
 ---
@@ -633,6 +673,8 @@
 {canonicalName: Honey, tags: {CONDIMENT}}
 ---
 {    canonicalName: Clear Honey, parent: Honey}
+---
+{    canonicalName: Manuka Honey, parent: Honey}
 ---
 {canonicalName: Jam, tags: {CONDIMENT}}
 ---
@@ -813,6 +855,8 @@
 {canonicalName: Dry Sherry, tags: {SPIRIT, ALCOHOL, SPANISH}}
 ---
 {canonicalName: Limoncello, tags: {SPIRIT, ALCOHOL, ITALIAN, LEMON}}
+---
+{canonicalName: Pernod, tags: {SPIRIT, ALCOHOL, FRENCH, ANISEED}}
 ---
 {canonicalName: Red Wine, tags: {WINE, ALCOHOL}}
 ---

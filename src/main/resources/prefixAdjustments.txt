@@ -11,8 +11,8 @@ cooking
 crushed
 dark
 dressed
-dry
 dried
+dry
 firm
 fresh
 freshly grated
@@ -33,7 +33,9 @@ plump
 quality
 raw
 ripe
+roasted
 roughly
+salted
 shelled
 skinless
 slices
@@ -44,4 +46,5 @@ thick
 tin
 tinned
 toasted
+unsweetened
 whole
