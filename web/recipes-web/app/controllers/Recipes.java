@@ -18,7 +18,6 @@ import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.ratings.RecipeRating;
 import uk.co.recipes.ratings.UserRatings;
-import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
@@ -36,7 +35,6 @@ import com.google.common.collect.Multiset;
  */
 public class Recipes extends AbstractExplorableController {
 
-    private IItemPersistence items;
     private IRecipePersistence recipes;
     private UserRatings ratings;
 
@@ -106,7 +104,7 @@ public class Recipes extends AbstractExplorableController {
 
         // FIXME Check recipe.getForkDetails(), also creator vs. current user for permissions!
 
-        final ICanonicalItem theItemToRemove = checkNotNull( items.get(ingredient).get() );
+        final ICanonicalItem theItemToRemove = checkNotNull( items.get(ingredient).get(), "Could not load Item");
 
         recipes.removeItems( recipe, theItemToRemove);
         recipes.waitUntilRefreshed();
