@@ -37,9 +37,9 @@ public class DefaultIngredientQuantityScoreBooster implements IIngredientQuantit
         }
 
     	if ( inItem.getBaseAmount() != null /* FIXME null check */) {
-			final Optional<Amount<Volume>> actualAmount = new Conversions().getUnitOfVolume( Locale.UK, inQuantity);
+			final Optional<Amount<Volume>> actualAmount = new Conversions().toJsrAmount( Locale.UK, inQuantity);
     		if (actualAmount.isPresent()) {
-    			final Optional<Amount<Volume>> baseAmount = new Conversions().getUnitOfVolume( Locale.UK, inItem.getBaseAmount());
+    			final Optional<Amount<Volume>> baseAmount = new Conversions().toJsrAmount( Locale.UK, inItem.getBaseAmount());
         		if (baseAmount.isPresent()) {
         			final Amount<?> ratio = actualAmount.get().divide( baseAmount.get() );
                     // System.out.println( "Boost = " + ratio.getEstimatedValue() + " for " + inItem);

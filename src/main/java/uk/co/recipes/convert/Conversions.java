@@ -46,7 +46,7 @@ public class Conversions {
         VOLUME_UNITS_TABLE.put( Units.TBSP, /* Override */ Locale.US, TBSP_US);
     }
 
-	public Optional<Amount<Volume>> getUnitOfVolume( final Locale inLocale, final IQuantity inQuantity) {
+	public Optional<Amount<Volume>> toJsrAmount( final Locale inLocale, final IQuantity inQuantity) {
 
 	    final Unit<Volume> unitForLocale = VOLUME_UNITS_TABLE.get( inQuantity.getUnits(), inLocale);
 	    if ( unitForLocale != null) {
