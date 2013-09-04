@@ -3,10 +3,13 @@
  */
 package uk.co.recipes.convert;
 
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import java.util.Locale;
+
 import org.testng.annotations.Test;
+
 import uk.co.recipes.Quantity;
 import uk.co.recipes.api.Units;
 

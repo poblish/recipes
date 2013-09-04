@@ -4,17 +4,21 @@
 package uk.co.recipes.convert;
 
 
-import com.google.common.collect.HashBasedTable;
-import uk.co.recipes.api.IUnit;
-import com.google.common.collect.Table;
-import org.jscience.physics.amount.Amount;
 import java.util.Locale;
+
 import javax.measure.quantity.Volume;
 import javax.measure.unit.NonSI;
 import javax.measure.unit.Unit;
+
+import org.jscience.physics.amount.Amount;
+
 import uk.co.recipes.api.IQuantity;
+import uk.co.recipes.api.IUnit;
 import uk.co.recipes.api.Units;
+
 import com.google.common.base.Optional;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 
 /**
  * See http://www.traditionaloven.com/conversions_of_measures/flour_volume_weight.html any many others.

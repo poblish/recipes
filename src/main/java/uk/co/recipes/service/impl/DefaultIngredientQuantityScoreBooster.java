@@ -3,14 +3,18 @@
  */
 package uk.co.recipes.service.impl;
 
-import org.jscience.physics.amount.Amount;
 import java.util.Locale;
+
 import javax.inject.Singleton;
 import javax.measure.quantity.Volume;
+
+import org.jscience.physics.amount.Amount;
+
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IQuantity;
 import uk.co.recipes.convert.Conversions;
 import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
+
 import com.google.common.base.Optional;
 
 
