@@ -3,18 +3,14 @@
  */
 package uk.co.recipes.service.impl;
 
+import org.jscience.physics.amount.Amount;
 import java.util.Locale;
-
 import javax.inject.Singleton;
-import javax.measure.converter.RationalConverter;
 import javax.measure.quantity.Volume;
-import javax.measure.unit.Unit;
-
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IQuantity;
 import uk.co.recipes.convert.Conversions;
 import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
-
 import com.google.common.base.Optional;
 
 
@@ -26,25 +22,28 @@ import com.google.common.base.Optional;
 public class DefaultIngredientQuantityScoreBooster implements IIngredientQuantityScoreBooster {
 
     private static final float NO_BOOST = 1.0f;
+//    private static final float FILTER_OUT = 0;
 
     @Override
     public float getBoostForQuantity( final ICanonicalItem inItem, final IQuantity inQuantity) {
+
+        if ( inQuantity.getNumber() <= 0) {
+            return NO_BOOST;  // Safe, but wrong (see below)
+            // FIXME Should do this, once parsing is much improved... return FILTER_OUT;  // Zero quantity passed-in, no point continuing with that. Quantities shouldn't be zero.
+        }
+
     	if ( inItem.getBaseAmount() != null /* FIXME null check */) {
-			System.out.println( "=> " + inQuantity );
-
-			final Optional<Unit<Volume>> units = new Conversions().getUnitOfVolume( Locale.UK, inQuantity);
-    		if (units.isPresent()) {
-
-    			Optional<Unit<Volume>> baseUnits = new Conversions().getUnitOfVolume( Locale.UK, inItem.getBaseAmount());
-        		if (baseUnits.isPresent()) {
-        			System.out.println( units.get() + " / " + baseUnits.get() );
-        			Unit<?> ratio = units.get().divide( baseUnits.get() );
-        			System.out.println( "Boost = " + ratio.getDimension() );
-        			int x = 1;
+			final Optional<Amount<Volume>> actualAmount = new Conversions().getUnitOfVolume( Locale.UK, inQuantity);
+    		if (actualAmount.isPresent()) {
+    			final Optional<Amount<Volume>> baseAmount = new Conversions().getUnitOfVolume( Locale.UK, inItem.getBaseAmount());
+        		if (baseAmount.isPresent()) {
+        			final Amount<?> ratio = actualAmount.get().divide( baseAmount.get() );
+                    // System.out.println( "Boost = " + ratio.getEstimatedValue() + " for " + inItem);
+                    return (float) ratio.getEstimatedValue();
         		}
     		}
-    		// System.out.println(inItem);
     	}
-        return NO_BOOST;
+
+    	return NO_BOOST;
     }
-}
+}   
