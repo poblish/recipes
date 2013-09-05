@@ -1,17 +1,16 @@
 @(tag: uk.co.recipes.api.ITag, matches: List[uk.co.recipes.api.ICanonicalItem])
 
-@main("Tags") {
+@main("Tag: " + tag) {
 	<section id="top">
 	    <div class="wrapper">
 	        <h1>@tag</h1>
 	    </div>
 	</section>
 	
-	<p>Matching Items:</p>
-	
-	<ol>
+	<h3>Matching Items:</h3>
+	<ul class="list-group">
 	@for( eachItem <- matches) {
-	  <li><a href="http://localhost:9000/items/@eachItem.getCanonicalName()">@eachItem.getCanonicalName()</a>&nbsp;@for(tagName <- eachItem.getTagNamesForDisplay()){&nbsp;<span class="label label-info"><a href="/tags/@tagName">@tagName</a></span>}</li>  <!-- Parent stuff -->
+	  <li class="list-group-item"><a href="http://localhost:9000/items/@eachItem.getCanonicalName()">@eachItem.getCanonicalName()</a>&nbsp;@for(tagName <- eachItem.getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}</li>  <!-- Parent stuff -->
 	}
-	</ol>
+	</ul>
 }
