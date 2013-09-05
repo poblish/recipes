@@ -216,6 +216,8 @@
 ---
 {    canonicalName: Basmati Rice, parent: Rice, tags: {INDIAN}}
 ---
+{        canonicalName: Brown Basmati Rice, parent: Basmati Rice}
+---
 {    canonicalName: Camargue red rice, parent: Rice, tags: {FRENCH}}
 ---
 {    canonicalName: Carnaroli Rice, parent: Rice, tags: {ITALIAN}}
@@ -474,7 +476,7 @@
 ---
 {    canonicalName: Flaked Almonds, parent: Almond, tags: {BAKING}, aliases: {Flaked Almond}}
 ---
-{canonicalName: Cashew Nuts, tags: NUT, aliases: {Cashew, Cashew Nut}}
+{canonicalName: Cashew Nuts, tags: NUT, aliases: {Cashew, Cashews, Cashew Nut}}
 ---
 {canonicalName: Chestnuts, tags: NUT, aliases: {Chestnut}}
 ---
@@ -807,6 +809,8 @@
 {    canonicalName: Lamb Cutlets, parent: Lamb, aliases: {Lamb Cutlet}}
 ---
 {    canonicalName: Lamb Fillets, parent: Lamb, aliases: {Lamb Fillet}}
+---
+{    canonicalName: Lamb Leg Steaks, parent: Lamb, aliases: {Lamb Leg Steak}}
 ---
 {    canonicalName: Lamb Neck Fillets, parent: Lamb, aliases: {Lamb Neck Fillet}}
 ---
