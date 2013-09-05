@@ -44,8 +44,6 @@ public class MyrrixUpdater implements IEventListener {
 
     private static final Logger LOG = LoggerFactory.getLogger( MyrrixUpdater.class );
 
-    private static final float MIN_MYRRIX_SCORE = 0.01f;
-
     @Inject
     IEventService eventService;
 
@@ -231,7 +229,7 @@ public class MyrrixUpdater implements IEventListener {
     				// Don't bother setting if == FALSE
 
     			    final float scoreToUse = eachTag.getKey().getBoost() * inBasicScore;
-    			    if ( scoreToUse < MIN_MYRRIX_SCORE) {
+    			    if (isPointlessScore(scoreToUse)) {
     			        continue;
     			    }
 
@@ -244,7 +242,7 @@ public class MyrrixUpdater implements IEventListener {
     		}
     		else {
     			final float scoreToUse = /* Think we need the boost...? */ eachTag.getKey().getBoost() * Float.valueOf((String) eachTag.getValue());
-                if ( scoreToUse < MIN_MYRRIX_SCORE) {
+                if (isPointlessScore(scoreToUse)) {
                     continue;
                 }
 
@@ -261,7 +259,7 @@ public class MyrrixUpdater implements IEventListener {
 
     private boolean setHierarchicalSimilarityTags( final ICanonicalItem inItem, final long inItemOrRecipeId, final float inScore) throws TasteException {
 
-        if ( inScore < MIN_MYRRIX_SCORE) {
+        if (isPointlessScore(inScore)) {
             return false;
         }
 
@@ -279,6 +277,10 @@ public class MyrrixUpdater implements IEventListener {
     	}
   
     	return changesMade;
+    }
+
+    private boolean isPointlessScore( final float inScore) {
+    	return inScore > -0.01f && inScore < 0.01f;
     }
 
     private boolean removeItemTagsForItem( final ICanonicalItem inItem, final long inItemOrRecipeId) throws TasteException {
