@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
@@ -16,6 +17,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
@@ -28,6 +30,10 @@ import uk.co.recipes.service.impl.EsSearchService;
 import uk.co.recipes.tags.CommonTags;
 import uk.co.recipes.tags.MeatAndFishTags;
 import uk.co.recipes.test.TestDataUtils;
+
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+
 import dagger.ObjectGraph;
 
 /**
@@ -78,6 +84,22 @@ public class RecipeSearchTest {
 	@Test
 	public void testUnusedTag() throws IOException {
 		assertThat( searchApi.findRecipesByTag( CommonTags.CITRUS ).size(), is(0));
+	}
+
+	@Test
+	public void testSearchByTagWithSorting() throws IOException {
+		final List<ICanonicalItem> matches = searchApi.findItemsByTag( MeatAndFishTags.MEAT );
+
+		final String[] returnedNames = FluentIterable.from(matches).transform( new Function<ICanonicalItem, String>() {
+			public String apply( ICanonicalItem input) {
+				return input.getCanonicalName();
+			}
+		}).toArray( String.class );
+
+		final String[] sortedNames = returnedNames.clone();
+		Arrays.sort(sortedNames);
+
+		assertThat( returnedNames, is(sortedNames));
 	}
 
 	@Test

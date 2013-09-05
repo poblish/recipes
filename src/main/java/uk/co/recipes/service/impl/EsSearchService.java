@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -69,18 +70,42 @@ public class EsSearchService implements ISearchAPI {
 	 */
 	@Override
 	public List<ICanonicalItem> findItemsByName( String inName) throws IOException {
+	    return findItemsByName( inName, false);
+	}
+
+	private List<ICanonicalItem> findItemsByName( String inName, boolean inSortByName) throws IOException {
 	    final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_SEARCHES).time();
 
 		try
 		{
+/*			FIXME No, I don't know why this doesn't work...
+
+			if (inSortByName) {
+				final SearchHit[] sortedHits = esClient.prepareSearch("recipe").setTypes("items").setSize(9999).setQuery( multiMatchQuery( "tags", inName) ).addSort( "canonicalName", SortOrder.ASC).setTrackScores(false).execute().get().getHits().hits();
+
+				for ( SearchHit each : sortedHits) {
+					results.add( mapper.readValue( each.getSourceAsString(), CanonicalItem.class) );
+				}
+			} */
+
 			final JsonNode jn = mapper.readTree( new URL( itemIndexUrl + "/_search?q=" + inName + "&size=9999") ).path("hits").path("hits");
 	
-			final List<ICanonicalItem> results = Lists.newArrayList();
-	
+ 			final List<ICanonicalItem> results = Lists.newArrayList();
+			
 			for ( final JsonNode each : jn) {
 				results.add( mapper.readValue( each.path("_source").traverse(), CanonicalItem.class) );  // FIXME Remove _source stuff where possible
 			}
+
+			// Yuk FIXME by letting ES do this right!
+			if (inSortByName) {
+				Collections.sort( results, new Comparator<ICanonicalItem>() {
 	
+					@Override
+					public int compare( ICanonicalItem o1, ICanonicalItem o2) {
+						return o1.getCanonicalName().compareTo( o2.getCanonicalName() );
+					}} );
+			}
+
 			return results;
 		}
 		catch (MalformedURLException e) {
@@ -93,7 +118,6 @@ public class EsSearchService implements ISearchAPI {
             timerCtxt.stop();
         }
 	}
-
 
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.service.api.ISearchAPI#findRecipesByName(java.lang.String)
@@ -129,7 +153,7 @@ public class EsSearchService implements ISearchAPI {
 
     @Override
     public List<ICanonicalItem> findItemsByTag( final ITag inTag) throws IOException {
-        return findItemsByName( tagString(inTag) );
+        return findItemsByName( tagString(inTag), true);
     }
 
     @Override
