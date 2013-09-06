@@ -45,7 +45,7 @@ public class IngredientParser {
     private static final String DEC_FRAC_NUMBER_PATTERN = "(" + DEC_FRAC_NUMBER_BIT + ")";
     private static final String DEC_FRAC_NUMBER_RANGE_PATTERN = "(" + DEC_FRAC_NUMBER_BIT + "(?: ?- ?" + DEC_FRAC_NUMBER_BIT + ")?)";
 	private static final String	NOTES = "([,;\\(].*)?";
-    private static final String ITEM_NAME = "([\\p{L}- ]*)";
+    private static final String ITEM_NAME = "([\\p{L}- ']*)";
     private static final String SUFFIX = ITEM_NAME + NOTES;
 
     private static final String NUMBER_AND_UNITS = DEC_FRAC_NUMBER_RANGE_PATTERN + "( ?(?:kg|ml|g) ?(?:sachet|pack|tub|carton)?|gms| ?pounds?| ?lbs?\\.?| ?oz\\.?|cm|-in|-inch|mm|ml| ?l| litres?| ?quarts?| cups?| pots?| jars?| packets?| ?bunch(?:es)?| sticks?| heaped tbsps?| heaped tsps?| rounded tbsps?| rounded tsps?| tablespoons?| tbsp[s\\.]?| tsp[s\\.]?| teaspoons?| ?handfuls?| cloves?)?";

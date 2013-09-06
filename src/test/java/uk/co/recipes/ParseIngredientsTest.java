@@ -203,7 +203,7 @@ public class ParseIngredientsTest {
             }
         }
 
-    	assertThat( numSuccesses, greaterThanOrEqualTo(345));  // Need this to hit 420 eventually!
+    	assertThat( numSuccesses, greaterThanOrEqualTo(352));  // Need this to hit 420 eventually!
     }
 
 	@AfterClass
