@@ -73,6 +73,13 @@ public class ParseIngredientsTest {
 	}
 
     @Test
+    public void testItemNameParsing() {
+        assertThat( parser.parseItemName("Coriander Seeds"), is(true));
+        assertThat( parser.parseItemName("Puréed Lung"), is(true));
+        // assertThat( parser.parseItemName("Goat's Cheese"), is(true));
+    }
+
+    @Test
     public void testAutocompleteAnalyzer1() {
         // See: http://jontai.me/blog/2013/02/adding-autocomplete-to-an-elasticsearch-search-application/
         final AnalyzeResponse resp = esClient.admin().indices().prepareAnalyze( "recipe", "red onion").setAnalyzer("autocomplete").execute().actionGet();

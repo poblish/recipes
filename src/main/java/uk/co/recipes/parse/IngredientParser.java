@@ -45,11 +45,13 @@ public class IngredientParser {
     private static final String DEC_FRAC_NUMBER_PATTERN = "(" + DEC_FRAC_NUMBER_BIT + ")";
     private static final String DEC_FRAC_NUMBER_RANGE_PATTERN = "(" + DEC_FRAC_NUMBER_BIT + "(?: ?- ?" + DEC_FRAC_NUMBER_BIT + ")?)";
 	private static final String	NOTES = "([,;\\(].*)?";
-	private static final String	SUFFIX = "([\\p{L}- ]*)" + NOTES;
+    private static final String ITEM_NAME = "([\\p{L}- ]*)";
+    private static final String SUFFIX = ITEM_NAME + NOTES;
 
     private static final String NUMBER_AND_UNITS = DEC_FRAC_NUMBER_RANGE_PATTERN + "( ?(?:kg|ml|g) ?(?:sachet|pack|tub|carton)?|gms| ?pounds?| ?lbs?\\.?| ?oz\\.?|cm|-in|-inch|mm|ml| ?l| litres?| ?quarts?| cups?| pots?| jars?| packets?| ?bunch(?:es)?| sticks?| heaped tbsps?| heaped tsps?| rounded tbsps?| rounded tsps?| tablespoons?| tbsp[s\\.]?| tsp[s\\.]?| teaspoons?| ?handfuls?| cloves?)?";
 
-	private static final Pattern	NUMBER_AND_UNITS_PATTERN = Pattern.compile( NUMBER_AND_UNITS, Pattern.CASE_INSENSITIVE);
+    private static final Pattern    NUMBER_AND_UNITS_PATTERN = Pattern.compile( NUMBER_AND_UNITS, Pattern.CASE_INSENSITIVE);
+    private static final Pattern    ITEM_NAME_PATTERN = Pattern.compile( ITEM_NAME, Pattern.CASE_INSENSITIVE);
 
 	private static final Pattern	A = Pattern.compile( NUMBER_AND_UNITS + " " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	B = Pattern.compile("((?:a )?(few |generous |good |large |small |thumb-sized? )?(splash|bunch|dash|drizzle|drops?|few|glass|handful|little|piece|knob|pinch|splash|squeeze)(?: of)?) " + SUFFIX, Pattern.CASE_INSENSITIVE);
@@ -199,6 +201,11 @@ public class IngredientParser {
 		return Optional.absent();
     }
 
+    // For parsing an ingredient name only
+    public boolean parseItemName( final String inRawStr) {
+        return ITEM_NAME_PATTERN.matcher(inRawStr).matches();
+    }
+    
 	private ICanonicalItem findItem( final String inName) {
 		return itemFactory.getOrCreate( inName, new Supplier<ICanonicalItem>() {
 
