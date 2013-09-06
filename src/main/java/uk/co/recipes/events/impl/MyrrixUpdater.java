@@ -5,22 +5,18 @@ package uk.co.recipes.events.impl;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-
+import com.google.common.primitives.Floats;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.util.Collection;
 import java.util.Map.Entry;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import net.myrrix.client.ClientRecommender;
-
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.elasticsearch.common.base.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
@@ -29,7 +25,6 @@ import uk.co.recipes.events.api.IEventListener;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
-
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
 
@@ -233,28 +228,39 @@ public class MyrrixUpdater implements IEventListener {
     			        continue;
     			    }
 
-    				if (LOG.isDebugEnabled()) {
-    					LOG.debug( setStr + " Tag '" + eachTag.getKey() + "' val=" + scoreToUse + " for " + inItemOrRecipeId);
-    				}
-    	        	recommender.setItemTag( eachTag.getKey().toString(), inItemOrRecipeId, scoreToUse);
-    	        	changesMade = true;
+                    changesMade = doSetTag( eachTag.getKey(), setStr, inItemOrRecipeId, scoreToUse);
     			}
     		}
     		else {
-    			final float scoreToUse = /* Think we need the boost...? */ eachTag.getKey().getBoost() * Float.valueOf((String) eachTag.getValue());
-                if (isPointlessScore(scoreToUse)) {
-                    continue;
-                }
+    		    final Float fVal = Floats.tryParse((String) eachTag.getValue());
+    		    if ( fVal != null) {  // Got a float - treat it as a score
+                    final float scoreToUse = /* Think we need the boost...? */ eachTag.getKey().getBoost() * fVal;
+                    if (isPointlessScore(scoreToUse)) {
+                        continue;
+                    }
 
-                if (LOG.isDebugEnabled()) {
-					LOG.debug( setStr + " Tag '" + eachTag.getKey() + "' val=" + scoreToUse + " for " + inItemOrRecipeId);
-				}
-	        	recommender.setItemTag( eachTag.getKey().toString(), inItemOrRecipeId, scoreToUse);
-	        	changesMade = true;
+                    changesMade = doSetTag( eachTag.getKey(), setStr, inItemOrRecipeId, scoreToUse);
+    		    }
+    		    else {  // It's a String value, e.g. scoville - ignore the value and just use basicScore
+                    final float scoreToUse = eachTag.getKey().getBoost() * inBasicScore;
+                    if (isPointlessScore(scoreToUse)) {
+                        continue;
+                    }
+
+                    changesMade = doSetTag( eachTag.getKey(), setStr, inItemOrRecipeId, scoreToUse);
+    		    }
     		}
     	}
  
     	return changesMade;
+    }
+
+    private boolean doSetTag( final ITag inTag, final String inSetStr, final long inItemOrRecipeId, final float inScoreToUse) throws TasteException {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug( inSetStr + " Tag '" + inTag + "' val=" + inScoreToUse + " for " + inItemOrRecipeId);
+        }
+        recommender.setItemTag( inTag.toString(), inItemOrRecipeId, inScoreToUse);
+        return true;
     }
 
     private boolean setHierarchicalSimilarityTags( final ICanonicalItem inItem, final long inItemOrRecipeId, final float inScore) throws TasteException {
