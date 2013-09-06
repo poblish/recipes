@@ -50,6 +50,8 @@
 ---
 {canonicalName: Fresh Mint, tags: HERB, aliases: {Mint Leaves}}
 ---
+{canonicalName: Herbes de Provence, tags: {HERB, FRENCH}}
+---
 {canonicalName: Lemon grass, tags: {HERB, THAI, VIETNAMESE, LEMON}, aliases: {Lemongrass}}
 ---
 {canonicalName: Mixed Herbs, tags: HERB}
@@ -60,7 +62,7 @@
 ---
 {    canonicalName: Curly Parsley, parent: Parsley}
 ---
-{    canonicalName: Flat-leaf Parsley, parent: Parsley}
+{    canonicalName: Flat-leaf Parsley, parent: Parsley, aliases: {Flatleaf Parsley}}
 ---
 {canonicalName: Rosemary, tags: HERB, aliases: {Rosemary Sprigs}}
 ---
@@ -248,7 +250,7 @@
 ---
 {canonicalName: Celeriac, tags: VEGETABLE}
 ---
-{canonicalName: Celery, tags: VEGETABLE, aliases: {Celery Stick, Celery Sticks}}
+{canonicalName: Celery, tags: VEGETABLE, aliases: {Celery Stick, Celery Sticks, Celery Stalks}}
 ---
 {canonicalName: Courgette, tags: VEGETABLE, aliases: {Courgettes}}
 ---
@@ -337,6 +339,8 @@
 {    canonicalName: Passata, parent: Tomato, tags: {SAUCE, ITALIAN}, aliases: {Tomato Passata}}
 ---
 {    canonicalName: Plum Tomatoes, parent: Tomato}
+---
+{    canonicalName: Sundried Tomatoes, parent: Tomato}
 ---
 {    canonicalName: Tomato Chutney, parent: Tomato, tags: {SAUCE}}
 ---
@@ -584,6 +588,8 @@
 ---
 {canonicalName: Paneer, tags: {DAIRY, CHEESE, INDIAN}, aliases: {Paneer Cheese}}
 ---
+{canonicalName: Ricotta, tags: {DAIRY, CHEESE, ITALIAN}}
+---
 {canonicalName: Roquefort, tags: {DAIRY, CHEESE, BLUE_CHEESE, FRENCH}, aliases: {Roquefort Cheese}}
 ---
 {canonicalName: Taleggio, tags: {DAIRY, CHEESE, ITALIAN}, aliases: {Taleggio Cheese}}
@@ -776,6 +782,8 @@
 ---
 {    canonicalName: Tuna Steaks, parent: Tuna}
 ---
+{canonicalName: White Fish Fillet, tags: {FISH,SEAFOOD}}
+---
 
 
 {canonicalName: Beef, tags: MEAT}
@@ -843,6 +851,8 @@
 {    canonicalName: Bacon Rashers, parent: Bacon}
 ---
 {    canonicalName: Lardons, parent: Bacon, aliases: {Bacon Lardons, Lardon}}
+---
+{    canonicalName: Pancetta, parent: Bacon, tags: {ITALIAN}}
 ---
 {    canonicalName: Streaky Bacon, parent: Bacon}
 ---
