@@ -76,7 +76,7 @@ public class ParseIngredientsTest {
     public void testItemNameParsing() {
         assertThat( parser.parseItemName("Coriander Seeds"), is(true));
         assertThat( parser.parseItemName("Puréed Lung"), is(true));
-        // assertThat( parser.parseItemName("Goat's Cheese"), is(true));
+        assertThat( parser.parseItemName("Goat's Cheese"), is(true));
     }
 
     @Test
