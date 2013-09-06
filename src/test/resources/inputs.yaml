@@ -186,15 +186,21 @@
 ---
 {    canonicalName: Green Chillies, parent: Chilli, tags: {INDIAN, THAI, CHINESE}, aliases: {Green Chilli}}
 ---
-{    canonicalName: Ancho Chile, parent: Chilli, tags: {MEXICAN}, aliases: {Poblano}}
+{    canonicalName: Ancho Chile, parent: Chilli, tags: {MEXICAN, {SCOVILLE: 1000–1500, HEAT_5: 1}}, aliases: {Poblano}}
 ---
-{    canonicalName: Chile de arbol, parent: Chilli, tags: {MEXICAN}, aliases: {Arbol Chili}}
+{    canonicalName: Cayenne Pepper, parent: Chilli, tags: {{SCOVILLE: 30000–50000, HEAT_5: 3}}}
 ---
-{    canonicalName: Bird's eye chili, parent: Chilli, tags: {THAI, VIETNAMESE}, aliases: {Thai chili, Birds eye chillies}}
+{    canonicalName: Chile de árbol, parent: Chilli, tags: {MEXICAN, {SCOVILLE: 15000-30000, HEAT_5: 3}}, aliases: {Arbol Chili, Chile de arbol}}
 ---
-{    canonicalName: Chipotle, parent: Chilli, tags: {MEXICAN}, aliases: {Chipotle chili, Chilpotle}}
+{    canonicalName: Bird's eye chili, parent: Chilli, tags: {THAI, VIETNAMESE, {SCOVILLE: 50000–100000, HEAT_5: 4}}, aliases: {Thai chili, Birds eye chillies}}
+---
+{    canonicalName: Chipotle, parent: Chilli, tags: {MEXICAN, {SCOVILLE: 3000-10000, HEAT_5: 3}}, aliases: {Chipotle chili, Chilpotle}}
 ---
 {        canonicalName: Chipotle Paste, parent: Chipotle, tags: {SAUCE}}
+---
+{    canonicalName: Jalapeño, parent: Chilli, tags: {MEXICAN, {SCOVILLE: 2500–10000, HEAT_5: 2}}, aliases: {Jalapeno}}
+---
+{    canonicalName: Scotch Bonnet, parent: Chilli, tags: {CARIBBEAN, {SCOVILLE: 100000–350000, HEAT_5: 5}}}
 ---
 
 

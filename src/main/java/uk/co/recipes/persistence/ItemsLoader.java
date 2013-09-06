@@ -5,11 +5,13 @@ package uk.co.recipes.persistence;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.inject.Inject;
 
@@ -83,17 +85,20 @@ public class ItemsLoader {
 
         itemFactory.getOrCreate( name, new Supplier<ICanonicalItem>() {
 
-            @Override
+            @SuppressWarnings("unchecked")
+			@Override
             public ICanonicalItem get() {
                 final ICanonicalItem newItem = new CanonicalItem( name, inParent);
 
-                for ( String eachTag : yamlObjectToStrings( inMap.get("tags") )) {
-                    if (eachTag.startsWith("-")) {
-                        newItem.addTag( TagUtils.forName( eachTag.substring(1)), Boolean.FALSE);
-                    }
-                    else {
-                        newItem.addTag( TagUtils.forName(eachTag) );
-                    }
+                for ( Object eachTag : yamlObjectToStrings( inMap.get("tags") )) {
+                	if ( eachTag instanceof Map) {
+                		for ( Entry<Object,Object> eachEntry : ((Map<Object,Object>) eachTag).entrySet()) {
+                        	processTagValue( newItem, (String) eachEntry.getKey(), String.valueOf( eachEntry.getValue() ));
+                		}
+                	}
+                	else {
+                		processTagValue( newItem, (String) eachTag, Boolean.TRUE);
+                	}
                 }
 
                 if ( inParent.isPresent() && ((CanonicalItem) newItem).hasOverlappingTags()) {
@@ -114,6 +119,15 @@ public class ItemsLoader {
 
                 return newItem;
             }});
+	}
+
+	private void processTagValue( final ICanonicalItem ioItem, final String inTagName, final Serializable inValue) {
+        if (inTagName.startsWith("-")) {
+        	ioItem.addTag( TagUtils.forName( inTagName.substring(1)), Boolean.FALSE);
+        }
+        else {
+        	ioItem.addTag( TagUtils.forName(inTagName), inValue);
+        }
 	}
 
 	@SuppressWarnings("unchecked")
