@@ -27,17 +27,21 @@ public final class UnitParser {
 			s = s.substring(1);
 		}
 
-		if (s.equals("G") || s.equals("GMS") || s.equals("G SACHET") || s.equals("G PACK") || s.equals("G TUB") || s.equals("G CARTON")) {
-			return Units.GRAMMES;
-		}
+        if (s.equals("G") || s.equals("GMS") || s.equals("G SACHET") || s.equals("G PACK") || s.equals("G TUB") || s.equals("G CARTON")) {
+            return Units.GRAMMES;
+        }
 
 		if (s.startsWith("TABLESPOON")) {
 			return Units.TBSP;
 		}
 
-		if (s.startsWith("TSP") || s.startsWith("TEASPOON")) {
-			return Units.TSP;
-		}
+        if (s.startsWith("TSP") || s.startsWith("TEASPOON")) {
+            return Units.TSP;
+        }
+
+        if (s.startsWith("HEAPED TSP")) {
+            return Units.HEAPED_TSP;
+        }
 
 		if (s.startsWith("LB") || s.startsWith("POUND")) {
 			return Units.POUNDS;
@@ -50,6 +54,14 @@ public final class UnitParser {
 		if (s.equals("L")) {
 			return Units.LITRE;
 		}
+
+        if (s.equals("ML TUB") || s.equals("ML CARTON")) {
+            return Units.ML;
+        }
+
+        if (s.equals("KG TUB")) {
+            return Units.KG;
+        }
 
 		if (s.equals("IN")) {
 			return Units.INCH;
