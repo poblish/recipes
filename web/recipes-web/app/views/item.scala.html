@@ -7,7 +7,7 @@
 	    </div>
 	</section>
 	
-	<p>@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label label-primary"><a href="/tags/@tagName">@tagName</a></span>}</p>
+	<p>@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}</p>
 	
 	<div class="btn-group">
 	  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
