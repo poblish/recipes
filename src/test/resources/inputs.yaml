@@ -20,6 +20,16 @@
 ---
 {canonicalName: Cocoa, tags: BAKING, aliases: {Cocoa Powder}}
 ---
+{canonicalName: Food Colouring, tags: BAKING, aliases: {Edible Food Colouring}}
+---
+{    canonicalName: Green Food Colouring, parent: Food Colouring}
+---
+{    canonicalName: Pink Food Colouring, parent: Food Colouring}
+---
+{    canonicalName: Red Food Colouring, parent: Food Colouring}
+---
+{    canonicalName: Yellow Food Colouring, parent: Food Colouring}
+---
 {canonicalName: Marzipan, parent: Almond, tags: {BAKING}}
 ---
 {canonicalName: Rosewater, tags: FLAVOURING}
@@ -392,6 +402,10 @@
 ---
 {canonicalName: Blackberries, tags: {FRUIT}, aliases: {Blackberry}}
 ---
+{canonicalName: Cherries, tags: {FRUIT}, aliases: {Cherry}}
+---
+{    canonicalName: Sour Cherries, parent: Cherries}
+---
 {canonicalName: Coconut, tags: {FRUIT, NUT, INDIAN, THAI, VIETNAMESE}, aliases: {Coconut grated}}
 ---
 {    canonicalName: Coconut Milk, parent: Coconut}
@@ -558,6 +572,8 @@
 
 {canonicalName: Butter, tags: {DAIRY, FAT}}
 ---
+{    canonicalName: Slightly Salted Butter, parent: Butter}
+---
 {    canonicalName: Unsalted Butter, parent: Butter}
 ---
 {canonicalName: Ghee, tags: {DAIRY, FAT, INDIAN}, aliases: {Butter Ghee}}
@@ -620,7 +636,7 @@
 ---
 {    canonicalName: Condensed Milk, parent: Milk}
 ---
-{    canonicalName: Full Fat Milk, parent: Milk}
+{    canonicalName: Full Fat Milk, parent: Milk, aliases: {Full-Fat Milk}}
 ---
 {    canonicalName: Skimmed Milk, parent: Milk}
 ---
@@ -694,9 +710,9 @@
 ---
 
 
-{canonicalName: Beef Stock, tags: {MEAT, STOCK}}
+{canonicalName: Beef Stock, tags: {MEAT, RED_MEAT, STOCK}}
 ---
-{canonicalName: Chicken Stock, tags: {MEAT, STOCK}}
+{canonicalName: Chicken Stock, tags: {MEAT, POULTRY, STOCK}}
 ---
 {canonicalName: Curry Paste, tags: {SAUCE}}
 ---
@@ -786,7 +802,9 @@
 ---
 
 
-{canonicalName: Beef, tags: MEAT}
+{canonicalName: Beef, tags: {MEAT, RED_MEAT}}
+---
+{    canonicalName: Beef stir-fry strips, parent: Beef}
 ---
 {    canonicalName: Braising Beef, parent: Beef}
 ---
@@ -855,6 +873,10 @@
 {    canonicalName: Pancetta, parent: Bacon, tags: {ITALIAN}}
 ---
 {    canonicalName: Streaky Bacon, parent: Bacon}
+---
+{canonicalName: Venison, tags: {MEAT, RED_MEAT}}
+---
+{    canonicalName: Venison Steaks, parent: Venison}
 ---
 
 
