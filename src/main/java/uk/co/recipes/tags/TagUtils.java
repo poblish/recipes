@@ -13,9 +13,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.elasticsearch.common.base.Splitter;
+
 import uk.co.recipes.api.ITag;
 
-import com.google.common.base.CaseFormat;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ComparisonChain;
@@ -48,7 +49,16 @@ public final class TagUtils {
 
 	private static final Function<Entry<ITag,Serializable>,String> TAG_NAMES_TITLECASE = new Function<Entry<ITag,Serializable>,String>() {
 		public String apply( Entry<ITag,Serializable> input) {
-			return CaseFormat.UPPER_UNDERSCORE.to( CaseFormat.UPPER_CAMEL, input.getKey().toString());
+			final StringBuilder sb = new StringBuilder();  // Yuk, but Guava CaseFormat just didn't cut it
+
+			for ( String word : Splitter.on('_').split( input.getKey().toString() )) {
+				if (sb.length() > 0) {
+					sb.append(" ");
+				}
+				sb.append( word.charAt(0) ).append( word.substring(1).toLowerCase() );
+			}
+
+			return sb.toString();
 		}
 	};
 
@@ -84,7 +94,7 @@ public final class TagUtils {
 	}
 
 	public static String getStyle( final String inName) {
-		final ITag tag = ALL_TAGS.get( inName.toUpperCase() );
+		final ITag tag = ALL_TAGS.get( inName.toUpperCase().replace(' ', '_') );
 		return ( tag != null) ? "label-" + tag.getClass().getSimpleName() : "label-primary";
 	}
 
