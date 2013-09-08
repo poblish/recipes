@@ -15,6 +15,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import uk.co.recipes.DaggerModule;
+import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.ItemsLoader;
@@ -61,6 +62,20 @@ public class EsSearchServiceTest {
 		dataUtils.parseIngredientsFrom("bol2.txt");
 
 		Thread.sleep(900);
+	}
+
+	@Test
+	public void findRecipeByName1Word() throws IOException {
+		final List<IRecipe> results1 = searchService.findRecipesByName("chicken");
+		assertThat( results1.size(), is(2));
+		assertThat( searchService.countRecipesByName("chicken"), is(2));
+	}
+
+	@Test
+	public void findRecipeByName2Words() throws IOException {
+		final List<IRecipe> results1 = searchService.findRecipesByName("minced beef");
+		assertThat( results1.size(), is(2));
+		assertThat( searchService.countRecipesByName("minced beef"), is(2));
 	}
 
 	@Test

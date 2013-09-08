@@ -10,6 +10,7 @@ import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_SEARCHES;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -130,7 +131,7 @@ public class EsSearchService implements ISearchAPI {
 		{
             // esClient.prepareSearch("recipe").setTypes("items").setQuery("ginger").setSize(50).execute().get().getHits().toXContent( JsonXContent.contentBuilder(), ToXContent.EMPTY_PARAMS);
 
-            final JsonNode jn = mapper.readTree( new URL( recipesIndexUrl + "/_search?q=" + inName + "&size=9999") ).path("hits").path("hits");
+            final JsonNode jn = mapper.readTree( new URL( recipesIndexUrl + "/_search?q=" + URLEncoder.encode( inName, "utf-8") + "&size=9999") ).path("hits").path("hits");
 	
 			final List<IRecipe> results = Lists.newArrayList();
 	
@@ -185,7 +186,7 @@ public class EsSearchService implements ISearchAPI {
 	public int countRecipesByName( String inName) throws IOException {
 		try
 		{
-			return mapper.readTree( new URL( recipesIndexUrl + "/_search?q=" + inName) ).path("hits").path("hits").size();
+			return mapper.readTree( new URL( recipesIndexUrl + "/_search?q=" + URLEncoder.encode( inName, "utf-8")) ).path("hits").path("hits").size();
 		}
 		catch (MalformedURLException e) {
 			throw Throwables.propagate(e);
