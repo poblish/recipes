@@ -17,7 +17,7 @@ public class RateItemEvent extends AbstractItemEvent {
 
     private static final long serialVersionUID = 1L;
 
-    public RateItemEvent( final IUser user, final ICanonicalItem inItem, final float inRating) {
-        super(user, inItem, inRating);
+    public RateItemEvent( final IUser user, final ICanonicalItem inItem, final float inScore) {
+        super(user, inItem, inScore);
     }
 }

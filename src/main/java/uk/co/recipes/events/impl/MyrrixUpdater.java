@@ -301,7 +301,7 @@ public class MyrrixUpdater implements IEventListener {
 			LOG.debug("Rate: " + evt);
 		}
 
-        rateGenericItem( evt.getUser().getId(), evt.getItem().getId(), /* Attempt to 'penalise' low ratings */ 2 * (evt.getRating() - 5.0f));
+        rateGenericItem( evt.getUser().getId(), evt.getItem().getId(), evt.getScore());
     }
 
     @Subscribe
@@ -312,7 +312,7 @@ public class MyrrixUpdater implements IEventListener {
 			LOG.debug("Rate: " + evt);
 		}
 
-        rateGenericItem( evt.getUser().getId(), evt.getRecipe().getId(), /* Attempt to 'penalise' low ratings */ 2 * (evt.getRating() - 5.0f));
+        rateGenericItem( evt.getUser().getId(), evt.getRecipe().getId(), evt.getScore());
     }
 
     private void rateGenericItem( final long inUserId, final long inGenericItemId, final float inRating) {

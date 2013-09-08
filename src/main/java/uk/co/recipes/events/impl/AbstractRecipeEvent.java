@@ -23,12 +23,12 @@ public abstract class AbstractRecipeEvent implements Serializable {
 
     private final IUser user;
     private final IRecipe recipe;
-    private final float rating;
+    private final float score;
 
-    public AbstractRecipeEvent(IUser user, IRecipe inRecipe, float inRating) {
+    public AbstractRecipeEvent(IUser user, IRecipe inRecipe, float inScore) {
         this.user = user;
         this.recipe = checkNotNull( inRecipe, "Recipe cannot be null");
-        this.rating = inRating;
+        this.score = inScore;
     }
 
 	public IUser getUser() {
@@ -39,15 +39,15 @@ public abstract class AbstractRecipeEvent implements Serializable {
 		return recipe;
 	}
 
-	public float getRating() {
-		return rating;
+	public float getScore() {
+		return score;
 	}
 
 	public String toString() {
 		return Objects.toStringHelper(this).omitNullValues()
 						.add( "user", user)
 						.add( "recipe", recipe.getId())
-						.add( "rating", rating)
+						.add( "score", score)
 						.toString();
 	}
 }

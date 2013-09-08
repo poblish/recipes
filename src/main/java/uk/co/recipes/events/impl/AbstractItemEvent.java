@@ -23,12 +23,12 @@ public abstract class AbstractItemEvent implements Serializable {
 
     private final IUser user;
     private final ICanonicalItem item;
-    private final float rating;
+    private final float score;
 
-    public AbstractItemEvent(IUser user, ICanonicalItem inItem, float inRating) {
+    public AbstractItemEvent(IUser user, ICanonicalItem inItem, float inScore) {
         this.user = user;
         this.item = checkNotNull(inItem);
-        this.rating = inRating;
+        this.score = inScore;
     }
 
 	public IUser getUser() {
@@ -39,15 +39,15 @@ public abstract class AbstractItemEvent implements Serializable {
 		return item;
 	}
 
-	public float getRating() {
-		return rating;
+	public float getScore() {
+		return score;
 	}
 
 	public String toString() {
 		return Objects.toStringHelper(this).omitNullValues()
 						.add( "user", user)
 						.add( "item", item.getId())
-						.add( "rating", rating)
+						.add( "score", score)
 						.toString();
 	}
 }
