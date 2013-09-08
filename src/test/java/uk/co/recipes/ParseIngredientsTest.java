@@ -77,6 +77,9 @@ public class ParseIngredientsTest {
         assertThat( parser.parseItemName("Coriander Seeds"), is(true));
         assertThat( parser.parseItemName("Puréed Lung"), is(true));
         assertThat( parser.parseItemName("Goat's Cheese"), is(true));
+        assertThat( parser.parseItemName("Green & Black's white chocolate"), is(true));
+        assertThat( parser.parseItemName("1855 Cabernet Wine"), is(false));  // *Should* work, but we're not ready to deal with numbers mixed up with names (yet)
+        assertThat( parser.parseItemName("70% plain chocolate"), is(false));  // *Should* work, but we're not ready to deal with numbers mixed up with names (yet)
     }
 
     @Test
