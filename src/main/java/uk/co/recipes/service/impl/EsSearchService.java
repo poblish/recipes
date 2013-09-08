@@ -89,7 +89,7 @@ public class EsSearchService implements ISearchAPI {
 				}
 			} */
 
-			final JsonNode jn = mapper.readTree( new URL( itemIndexUrl + "/_search?q=" + inName + "&size=9999") ).path("hits").path("hits");
+			final JsonNode jn = mapper.readTree( new URL( itemIndexUrl + "/_search?q=" + URLEncoder.encode( inName, "utf-8") + "&size=9999") ).path("hits").path("hits");
 	
  			final List<ICanonicalItem> results = Lists.newArrayList();
 			
@@ -169,7 +169,7 @@ public class EsSearchService implements ISearchAPI {
 	public int countItemsByName( String inName) throws IOException {
 		try
 		{
-			return mapper.readTree( new URL( itemIndexUrl + "/_search?q=" + inName) ).path("hits").path("hits").size();
+			return mapper.readTree( new URL( itemIndexUrl + "/_search?q=" + URLEncoder.encode( inName, "utf-8")) ).path("hits").path("hits").size();
 		}
 		catch (MalformedURLException e) {
 			throw Throwables.propagate(e);
