@@ -1,4 +1,4 @@
-@(metrics: String, itemsCount: Long, recipesCount: Long, usersCount: Long, myrrixUsersCount: Integer, myrrixItemsCount: Integer)
+@(metrics: String, itemsCount: Long, recipesCount: Long, usersCount: Long, cacheStats: com.google.common.cache.CacheStats, myrrixUsersCount: Integer, myrrixItemsCount: Integer)
 
 @main("Statistics") {
 	<section id="top">
@@ -12,9 +12,10 @@
 	<p>ES Items: <span class="badge label-default">@itemsCount</span></p>
 	<p>ES Recipes: <span class="badge">@recipesCount</span></p>
 	<p>ES Users: <span class="badge">@usersCount</span></p>
-	<p>Ratings: <span class="badge">-</span></p>
+	<!-- <p>Ratings: <span class="badge">-</span></p> -->
 	<p>Myrrix Items: <span class="badge">@myrrixItemsCount</span></p>
 	<p>Myrrix Users: <span class="badge">@myrrixUsersCount</span> (almost certainly wrong - <a href="http://localhost:8080/">check here</a>)</p>
+	<pre>@cacheStats</pre>
 	
 	<hr />
 	<h3>Metrics</h3>

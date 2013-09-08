@@ -18,6 +18,7 @@ import org.apache.mahout.cf.taste.common.TasteException;
 import play.mvc.Controller;
 import play.mvc.Result;
 import service.PlayAuthUserServicePlugin;
+import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.persistence.EsItemFactory;
@@ -34,6 +35,8 @@ import com.codahale.metrics.MetricRegistry;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheStats;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Ordering;
 
@@ -51,14 +54,16 @@ public class Application extends Controller {
     private IRecipePersistence recipes;
     private MetricRegistry metrics;
     private ClientRecommender recommender;
+    private Cache<String,ICanonicalItem> itemsCache;
 
     @Inject
-    public Application( final EsItemFactory items, final EsRecipeFactory recipes, final EsUserFactory users, final ClientRecommender recommender, final MetricRegistry metrics) {
+    public Application( final EsItemFactory items, final EsRecipeFactory recipes, final EsUserFactory users, final ClientRecommender recommender, final MetricRegistry metrics, final Cache<String,ICanonicalItem> inItemsCache) {
         this.items = checkNotNull(items);
         this.recipes = checkNotNull(recipes);
         this.users = checkNotNull(users);
         this.metrics = checkNotNull(metrics);
         this.recommender = checkNotNull(recommender);
+        this.itemsCache = checkNotNull(inItemsCache);
     }
 
     public String getMetricsString() {
@@ -81,13 +86,13 @@ public class Application extends Controller {
 
 	public Result stats() {
         try {
-        	return ok(views.html.stats.render( getMetricsString(), items.countAll(), recipes.countAll(), users.countAll(), /* Ugh! FIXME */ recommender.getAllUserIDs().size(), /* Ugh! FIXME */ recommender.getAllItemIDs().size()));
+        	return ok(views.html.stats.render( getMetricsString(), items.countAll(), recipes.countAll(), users.countAll(), itemsCache.stats(), /* Ugh! FIXME */ recommender.getAllUserIDs().size(), /* Ugh! FIXME */ recommender.getAllItemIDs().size()));
         }
         catch (IOException e) {  // Yuk!!!
-        	return ok(views.html.stats.render( "???", -1L, -1L, -1L, -1, -1));
+        	return ok(views.html.stats.render( "???", -1L, -1L, -1L, null, -1, -1));
         }
         catch (TasteException e) {  // Yuk!!!
-        	return ok(views.html.stats.render( "???", -1L, -1L, -1L, -1, -1));
+        	return ok(views.html.stats.render( "???", -1L, -1L, -1L, null, -1, -1));
         }
     }
 
