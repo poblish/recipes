@@ -3,13 +3,13 @@ package uk.co.recipes;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
-import uk.co.recipes.api.Units;
-import uk.co.recipes.parse.IngredientParser;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.List;
+
 import org.apache.http.client.ClientProtocolException;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
 import org.elasticsearch.client.Client;
@@ -17,9 +17,12 @@ import org.elasticsearch.common.collect.Ordering;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.ITag;
+import uk.co.recipes.api.Units;
 import uk.co.recipes.cats.Categorisation;
+import uk.co.recipes.parse.IngredientParser;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsUtils;
@@ -28,8 +31,10 @@ import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.tags.NationalCuisineTags;
 import uk.co.recipes.test.TestDataUtils;
+
 import com.google.common.collect.FluentIterable;
 import com.google.common.io.Files;
+
 import dagger.ObjectGraph;
 
 /**
