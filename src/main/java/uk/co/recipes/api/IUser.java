@@ -11,6 +11,8 @@ import org.joda.time.DateTime;
 import uk.co.recipes.api.ratings.IItemRating;
 import uk.co.recipes.api.ratings.IRecipeRating;
 
+import com.google.common.base.Optional;
+
 /**
  * TODO
  *
@@ -40,10 +42,10 @@ public interface IUser extends java.io.Serializable {
     boolean removeAuth( IUserAuth auth);
     Set<IUserAuth> getAuths();
 
-    void addRating( IItemRating inRating);
+    Optional<IItemRating> addRating( IItemRating inRating);
 	Collection<IItemRating> getItemRatings();
 
-    void addRating( IRecipeRating inRating);
+	Optional<IRecipeRating> addRating( IRecipeRating inRating);
     Collection<IRecipeRating> getRecipeRatings();
 
 //    void removeRating( IRating inRating);

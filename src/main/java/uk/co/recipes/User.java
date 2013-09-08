@@ -20,6 +20,7 @@ import uk.co.recipes.api.ratings.IRecipeRating;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
+import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 
 /**
@@ -101,13 +102,49 @@ public class User implements IUser {
     }
 
     @Override
-    public void addRating(IItemRating inRating) {
-        itemRatings.add(inRating);
+    public Optional<IItemRating> addRating(IItemRating inRating) {
+    	IItemRating prevRating = null;
+
+    	// Yuk, FIXME
+    	for ( IItemRating each : itemRatings) {
+    		if ( each.getItem().equals( inRating.getItem() )) {
+    			prevRating = each;
+    			break;
+    		}
+    	}
+
+		itemRatings.add(inRating);
+
+		if ( prevRating == null) {
+    		return Optional.absent();
+    	}
+
+		// Remove old rating and return it
+    	itemRatings.remove(prevRating);
+        return Optional.of(prevRating);
     }
 
     @Override
-    public void addRating(IRecipeRating inRating) {
-        recipeRatings.add(inRating);
+    public Optional<IRecipeRating> addRating(IRecipeRating inRating) {
+    	IRecipeRating prevRating = null;
+
+    	// Yuk, FIXME
+    	for ( IRecipeRating each : recipeRatings) {
+    		if ( each.getRecipe().equals( inRating.getRecipe() )) {
+    			prevRating = each;
+    			break;
+    		}
+    	}
+
+    	recipeRatings.add(inRating);
+
+		if ( prevRating == null) {
+    		return Optional.absent();
+    	}
+
+		// Remove old rating and return it
+		recipeRatings.remove(prevRating);
+        return Optional.of(prevRating);
     }
 
 
