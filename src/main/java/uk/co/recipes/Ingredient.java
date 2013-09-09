@@ -26,6 +26,7 @@ public class Ingredient implements IIngredient {
 
 	private ICanonicalItem item;
 	private IQuantity quantity;
+	private boolean optional = false;
 	private final Map<Locale,List<String>> notes = Maps.newHashMap();
 
 	// Purely for Jackson deserialization
@@ -100,11 +101,19 @@ public class Ingredient implements IIngredient {
 	}
 
 	/* (non-Javadoc)
+	 * @see uk.co.recipes.api.IIngredient#isOptional()
+	 */
+	@Override
+	public boolean isOptional() {
+		return optional;
+	}
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCode( item, quantity, notes);
+		return Objects.hashCode( item, quantity, optional, notes);
 	}
 
 	/* (non-Javadoc)
@@ -122,7 +131,7 @@ public class Ingredient implements IIngredient {
 			return false;
 		}
 		final Ingredient other = (Ingredient) obj;
-		return Objects.equal( item, other.item) && Objects.equal( quantity, other.quantity) && Objects.equal( notes, other.notes);
+		return Objects.equal( item, other.item) && Objects.equal( quantity, other.quantity) && Objects.equal( optional, other.optional) && Objects.equal( notes, other.notes);
 	}
 
 	public String toString() {
