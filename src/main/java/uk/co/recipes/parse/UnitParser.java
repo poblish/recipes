@@ -27,7 +27,7 @@ public final class UnitParser {
 			s = s.substring(1);
 		}
 
-        if (s.equals("G") || s.equals("GMS") || s.equals("G SACHET") || s.equals("G PACK") || s.equals("G TUB") || s.equals("G CARTON")) {
+        if (s.equals("G") || s.equals("GMS") || s.equals("G SACHET") || s.equals("G PACK") || s.equals("G TUB") || s.equals("G CARTON") || s.equals("G PUNNET")) {
             return Units.GRAMMES;
         }
 

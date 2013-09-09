@@ -70,6 +70,7 @@ public class ParseIngredientsTest {
 	public void testQuantityParsing() {
         assertThat( parser.parseQuantity("150g tub").get(), is( new Quantity( Units.GRAMMES, 150) ));
         assertThat( parser.parseQuantity("150 g tub").get(), is( new Quantity( Units.GRAMMES, 150) ));
+        assertThat( parser.parseQuantity("150 g punnet").get(), is( new Quantity( Units.GRAMMES, 150) ));
         assertThat( parser.parseQuantity("150ml tub").get(), is( new Quantity( Units.ML, 150) ));
         assertThat( parser.parseQuantity("150 ml tub").get(), is( new Quantity( Units.ML, 150) ));
         assertThat( parser.parseQuantity("2kg tub").get(), is( new Quantity( Units.KG, 2) ));
