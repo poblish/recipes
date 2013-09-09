@@ -336,7 +336,7 @@
 ---
 {canonicalName: Spring Greens, tags: VEGETABLE}
 ---
-{canonicalName: Swede, tags: VEGETABLE}
+{canonicalName: Swede, tags: VEGETABLE, aliases: {Swedes}}
 ---
 {canonicalName: Sweet Potato, tags: VEGETABLE, aliases: {Sweet Potatoes}}
 ---
@@ -590,11 +590,15 @@
 ---
 {    canonicalName: Mature Cheddar, parent: Cheddar}
 ---
+{canonicalName: Cheshire Cheese, tags: {DAIRY, CHEESE, ENGLISH}}
+---
 {canonicalName: Feta, tags: {DAIRY, CHEESE, GREEK}, aliases: {Feta Cheese}}
 ---
 {canonicalName: Gruyère, tags: {DAIRY, CHEESE, SWISS}}
 ---
 {canonicalName: Halloumi, tags: {DAIRY, CHEESE, GREEK}, aliases: {Halloumi Cheese}}
+---
+{canonicalName: Lancashire Cheese, tags: {DAIRY, CHEESE, ENGLISH}}
 ---
 {canonicalName: Mascarpone, tags: {DAIRY, CHEESE, ITALIAN}}
 ---
