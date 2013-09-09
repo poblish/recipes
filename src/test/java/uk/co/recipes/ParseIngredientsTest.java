@@ -198,7 +198,7 @@ public class ParseIngredientsTest {
         int numSuccesses = 0;
         for ( String eachLine : Files.readLines( new File("src/test/resources/parse_failures.txt"), Charset.forName("utf-8"))) {
             try {
-                if (dataUtils.parseIngredient(eachLine).isPresent()) {
+                if (dataUtils.parseIngredient(eachLine)) {
                     numSuccesses++;
                 }
                 else {

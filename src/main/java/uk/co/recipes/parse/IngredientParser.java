@@ -61,18 +61,18 @@ public class IngredientParser {
     private static final Pattern    F = Pattern.compile(SUFFIX, Pattern.CASE_INSENSITIVE);
 
 
-	public Optional<Ingredient> parse( final String inRawStr) {
+	public boolean parse( final String inRawStr, final IParsedIngredientHandler inHandler) {
 	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPE_PARSE).time();
 
         try {
-            return timedParse(inRawStr);
+            return timedParse(inRawStr, inHandler);
         }
         finally {
             timerCtxt.stop();
         }
 	}
 
-	private Optional<Ingredient> timedParse( final String inRawStr) {
+	private boolean timedParse( final String inRawStr, final IParsedIngredientHandler inHandler) {
 
 	    final String adjustedStr = new FractionReplacer().replaceFractions(inRawStr);
 
@@ -84,6 +84,11 @@ public class IngredientParser {
 			}
 
             final AdjustedName adjusted = nameAdjuster.adjust( m.group(3).trim() );
+
+//            if ( adjusted.getName().contains(" or ")) {
+//            	System.out.println( adjusted.getName() );
+//            }
+
 			final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse(numericQuantityStr)));
 
 			final String note = m.group(4);
@@ -93,7 +98,8 @@ public class IngredientParser {
 
 			ingr.addNotes( ENGLISH, adjusted.getNotes());
 
-			return Optional.of(ingr);
+			inHandler.foundIngredient(ingr);
+			return true;
 		}
 		else {
 			m = B.matcher(adjustedStr);
@@ -118,7 +124,8 @@ public class IngredientParser {
 
 				ingr.addNotes( ENGLISH, adjusted.getNotes());
 
-				return Optional.of(ingr);
+				inHandler.foundIngredient(ingr);
+				return true;
 			}
 			else {
 				m = C.matcher(adjustedStr);
@@ -128,7 +135,8 @@ public class IngredientParser {
 					ingr.addNote( ENGLISH, m.group(1).trim());
 					ingr.addNotes( ENGLISH, adjusted.getNotes());
 
-					return Optional.of(ingr);
+					inHandler.foundIngredient(ingr);
+					return true;
 				}
 				else {
 					m = D.matcher(adjustedStr);
@@ -143,7 +151,8 @@ public class IngredientParser {
 
 						ingr.addNotes( ENGLISH, adjusted.getNotes());
 
-						return Optional.of(ingr);
+						inHandler.foundIngredient(ingr);
+						return true;
 					}
 					else {
 						m = E.matcher(adjustedStr);
@@ -158,7 +167,8 @@ public class IngredientParser {
 
 							ingr.addNotes( ENGLISH, adjusted.getNotes());
 
-							return Optional.of(ingr);
+							inHandler.foundIngredient(ingr);
+							return true;
 						}
 	                    else {
 	                        m = F.matcher(adjustedStr);
@@ -174,7 +184,8 @@ public class IngredientParser {
 	                            ingr.addNotes( ENGLISH, adjusted.getNotes());
 //	                            System.out.println("... " + ingr);
 
-	                            return Optional.of(ingr);
+	                			inHandler.foundIngredient(ingr);
+	                			return true;
 	                        }
 	                    }
 					}
@@ -182,7 +193,7 @@ public class IngredientParser {
 			}
 		}
 
-		return Optional.absent();
+		return false;
 	}
 
 	// For parsing a Quantity only

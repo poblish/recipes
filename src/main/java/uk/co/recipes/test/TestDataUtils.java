@@ -11,17 +11,16 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import uk.co.recipes.Ingredient;
 import uk.co.recipes.Recipe;
 import uk.co.recipes.RecipeStage;
 import uk.co.recipes.User;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IUser;
+import uk.co.recipes.parse.IParsedIngredientHandler;
 import uk.co.recipes.parse.IngredientParser;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
@@ -43,8 +42,18 @@ public class TestDataUtils {
 	@Inject
 	EsRecipeFactory recipeFactory;
 
-	public Optional<Ingredient> parseIngredient( final String inStr) {
-		return parser.parse(inStr);
+	private final static IParsedIngredientHandler NULL_HANDLER = new IParsedIngredientHandler() {
+		@Override
+		public void foundIngredient( IIngredient ingr) { }
+	};
+
+
+	public boolean parseIngredient( final String inStr) {
+		return parser.parse(inStr, NULL_HANDLER);
+	}
+
+	public boolean parseIngredient( final String inStr, final IParsedIngredientHandler inHandler) {
+		return parser.parse(inStr, inHandler);
 	}
 
 	public List<IIngredient> parseIngredientsFrom( final String inFilename) throws IOException {
@@ -72,14 +81,16 @@ public class TestDataUtils {
 				continue;
 			}
 
-			final Optional<Ingredient> theIngr = parser.parse(eachLine);
-			if (theIngr.isPresent()) {
+			boolean matched = parser.parse( eachLine, new IParsedIngredientHandler() {
 
-				// System.out.println( JacksonFactory.getMapper().writeValueAsString( theIngr.get() ) );
+				@Override
+				public void foundIngredient( final IIngredient ingr) {
+					// System.out.println( JacksonFactory.getMapper().writeValueAsString( theIngr.get() ) );
+					allIngredients.add(ingr);
+				}
+			} );
 
-				allIngredients.add( theIngr.get() );
-			}
-			else {
+			if (!matched) {
 				throw new RuntimeException(eachLine + " not matched");
 			}
 		}
