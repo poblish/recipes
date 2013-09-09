@@ -183,7 +183,7 @@ public class DaggerModule {
     @Singleton
     Cache<String,ICanonicalItem> provideItemCache() {
     	// Can't actually think of anything else useful...
-    	return CacheBuilder.newBuilder().maximumSize(1000).build();
+    	return CacheBuilder.newBuilder().recordStats().maximumSize(1000).build();
     }
 
     @Provides
