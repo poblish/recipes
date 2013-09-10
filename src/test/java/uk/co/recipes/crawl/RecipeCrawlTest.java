@@ -40,7 +40,7 @@ public class RecipeCrawlTest {
 
         CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(crawlStorageFolder);
-        config.setMaxPagesToFetch(1000);
+        config.setMaxPagesToFetch(2000);
 
         /*
          * Instantiate the controller for this crawl.
@@ -94,6 +94,11 @@ public class RecipeCrawlTest {
             		return;
             	}
 
+            	final File theFile = new File("/Users/andrewregan/Development/java/recipe_explorer/src/test/resources/ingredients/bbcgoodfood/" + title.toLowerCase().replace(' ', '_') + ".txt");
+            	if (theFile.exists()) {
+            		return;  // Skip
+            	}
+
             	final StringBuilder sb = new StringBuilder(800);
             	sb.append("// ").append(title).append("\n");
             	sb.append("// ").append(url).append("\n");
@@ -102,7 +107,7 @@ public class RecipeCrawlTest {
                 	sb.append( each.text() ).append("\n");
             	}
 
-            	Files.write( sb.toString(), new File("/Users/andrewregan/Development/java/recipe_explorer/src/test/resources/ingredients/bbcgoodfood/" + title.toLowerCase().replace(' ', '_') + ".txt"), Charset.forName("utf-8"));
+            	Files.write( sb.toString(), theFile, Charset.forName("utf-8"));
 			}
             catch (IOException e) {
 				Throwables.propagate(e);
