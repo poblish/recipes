@@ -261,6 +261,9 @@ public class IngredientParser {
 				else if (lcase.endsWith(" cheese")) {
 					item.addTag( CommonTags.CHEESE );
 				}
+				else if (lcase.endsWith(" beans") || lcase.endsWith(" bean")) {
+					item.addTag( CommonTags.PULSE );
+				}
 
 				return item;
 			}

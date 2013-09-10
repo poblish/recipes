@@ -92,6 +92,8 @@
 
 {canonicalName: Capers, aliases: Caper}
 ---
+{canonicalName: Kaffir Lime leaves, tags: {LIME}}
+---
 
 
 {canonicalName: Allspice, tags: SPICE, aliases: {Allspice Berries}}
@@ -116,7 +118,7 @@
 ---
 {    canonicalName: Red Chilli Powder, parent: Chilli Powder}
 ---
-{canonicalName: Chinese five-spice powder, tags: {SPICE, CHINESE, ANISEED}}
+{canonicalName: Chinese five-spice powder, tags: {SPICE, CHINESE, ANISEED}, aliases: {Five Spice powder}}
 ---
 {canonicalName: Cinnamon, tags: SPICE}
 ---
@@ -126,7 +128,7 @@
 ---
 {canonicalName: Coriander Powder, parent: Coriander, tags: {-HERB, SPICE, INDIAN}, aliases: {Ground Coriander}}
 ---
-{canonicalName: Coriander Seeds, parent: Coriander, tags: {-HERB, SPICE, INDIAN}}
+{canonicalName: Coriander Seeds, parent: Coriander, tags: {-HERB, SPICE, INDIAN}, aliases: {Coriander Seed}}
 ---
 {canonicalName: Cumin, tags: {SPICE, INDIAN}, aliases: {Ground Cumin, Cumin Powder}}
 ---
@@ -139,6 +141,8 @@
 {    canonicalName: Mild Curry Powder, parent: Curry Powder}
 ---
 {canonicalName: Fennel Seeds, tags: {SPICE, SEED, ANISEED}, aliases: {Fennel Seed}}
+---
+{canonicalName: Fenugreek Seeds, parent: Fenugreek, tags: {-HERB, SPICE}, aliases: {Fenugreek Seed}}
 ---
 {canonicalName: Garam Masala, tags: {SPICE, INDIAN}, aliases: {Garam Masala Powder}}
 ---
@@ -170,7 +174,7 @@
 ---
 
 
-{canonicalName: Mustard Seeds, tags: {SEED}}
+{canonicalName: Mustard Seeds, tags: {SEED}, aliases: {Mustard Seed}}
 ---
 {    canonicalName: Black Mustard Seeds, parent: Mustard Seeds}
 ---
@@ -180,7 +184,7 @@
 ---
 {canonicalName: Pine Nuts, tags: {SEED}}
 ---
-{canonicalName: Poppy Seeds, tags: {BAKING, SEED}}
+{canonicalName: Poppy Seeds, tags: {BAKING, SEED}, aliases: {Poppy Seed}}
 ---
 {canonicalName: Pumpkin Seeds, tags: {SEED}}
 ---
@@ -194,25 +198,27 @@
 ---
 {    canonicalName: Chilli Flakes, parent: Chilli}
 ---
-{    canonicalName: Red Chillies, parent: Chilli, tags: {INDIAN, THAI, CHINESE}, aliases: {Red Chilli}}
----
-{    canonicalName: Green Chillies, parent: Chilli, tags: {INDIAN, THAI, CHINESE}, aliases: {Green Chilli}}
----
-{    canonicalName: Ancho Chile, parent: Chilli, tags: {MEXICAN, {SCOVILLE: 1000–1500, HEAT_5: 1}}, aliases: {Poblano}}
+{    canonicalName: Ancho Chile, parent: Chilli, tags: {MEXICAN, {SCOVILLE: 1000–1500, HEAT_5: 1}}, aliases: {Ancho Chilli, Poblano}}
 ---
 {    canonicalName: Cayenne Pepper, parent: Chilli, tags: {{SCOVILLE: 30000–50000, HEAT_5: 3}}}
 ---
 {    canonicalName: Chile de árbol, parent: Chilli, tags: {MEXICAN, {SCOVILLE: 15000-30000, HEAT_5: 3}}, aliases: {Arbol Chili, Chile de arbol}}
 ---
-{    canonicalName: Bird's eye chili, parent: Chilli, tags: {THAI, VIETNAMESE, {SCOVILLE: 50000–100000, HEAT_5: 4}}, aliases: {Thai chili, Birds eye chillies}}
+{    canonicalName: Bird's eye chili, parent: Chilli, tags: {THAI, VIETNAMESE, {SCOVILLE: 50000–100000, HEAT_5: 4}}, aliases: {Bird's eye chilli, Thai chili, Birds eye chillies}}
 ---
 {    canonicalName: Chipotle, parent: Chilli, tags: {MEXICAN, {SCOVILLE: 3000-10000, HEAT_5: 3}}, aliases: {Chipotle chili, Chilpotle}}
 ---
 {        canonicalName: Chipotle Paste, parent: Chipotle, tags: {SAUCE}}
 ---
+{    canonicalName: Green Chillies, parent: Chilli, tags: {INDIAN, THAI, CHINESE}, aliases: {Green Chilli}}
+---
+{    canonicalName: Green Thai chilli, parent: Chilli, tags: {THAI}}
+---
 {    canonicalName: Jalapeño, parent: Chilli, tags: {MEXICAN, {SCOVILLE: 2500–10000, HEAT_5: 2}}, aliases: {Jalapeno}}
 ---
-{    canonicalName: Scotch Bonnet, parent: Chilli, tags: {CARIBBEAN, {SCOVILLE: 100000–350000, HEAT_5: 5}}}
+{    canonicalName: Red Chillies, parent: Chilli, tags: {INDIAN, THAI, CHINESE}, aliases: {Red Chilli}}
+---
+{    canonicalName: Scotch Bonnet, parent: Chilli, tags: {CARIBBEAN, {SCOVILLE: 100000–350000, HEAT_5: 5}}, aliases: {Scotch Bonnet Chillies, Red scotch bonnet chilli}}
 ---
 
 
@@ -235,6 +241,8 @@
 {    canonicalName: Basmati Rice, parent: Rice, tags: {INDIAN}}
 ---
 {        canonicalName: Brown Basmati Rice, parent: Basmati Rice}
+---
+{    canonicalName: Brown rice, parent: Rice}
 ---
 {    canonicalName: Camargue red rice, parent: Rice, tags: {FRENCH}}
 ---
@@ -276,7 +284,17 @@
 ---
 {    canonicalName: Fine Green Beans, parent: Green Beans}
 ---
+{canonicalName: Kale, tags: VEGETABLE}
+---
 {canonicalName: Leek, tags: VEGETABLE, aliases: {Leeks}}
+---
+{canonicalName: Lettuce, tags: VEGETABLE}
+---
+{    canonicalName: Cos Lettuce, parent: Lettuce}
+---
+{    canonicalName: Gem Lettuce, parent: Lettuce, aliases: {Little Gem Lettuce, Baby Gem Lettuces}}
+---
+{    canonicalName: Iceberg Lettuce, parent: Lettuce}
 ---
 {canonicalName: Mangetout, tags: VEGETABLE}
 ---
@@ -328,6 +346,10 @@
 ---
 {    canonicalName: New Potato, parent: Potato, aliases: {New Potatoes}}
 ---
+{    canonicalName: Baby New Potato, parent: New Potato, aliases: {Baby New Potatoes}}
+---
+{    canonicalName: Roasting Potatoes, parent: Potato, aliases: {Roasting Potato}}
+---
 {canonicalName: Rocket, tags: {VEGETABLE, SALAD_LEAF, ITALIAN}, aliases: {Rocket Leaves}}
 ---
 {canonicalName: Spinach, tags: {VEGETABLE, SALAD_LEAF}, aliases: {Spinach Leaves}}
@@ -342,9 +364,11 @@
 ---
 {canonicalName: Tomato, tags: VEGETABLE, aliases: {Tomatoes}}
 ---
-{    canonicalName: Beef Tomatoes, parent: Tomato}
+{    canonicalName: Beef Tomatoes, parent: Tomato, aliases: {Beef Tomato}}
 ---
 {    canonicalName: Cherry Tomatoes, parent: Tomato}
+---
+{    canonicalName: Tomato Ketchup, parent: Tomato, tags: {SAUCE}, aliases: {Ketchup}}
 ---
 {    canonicalName: Passata, parent: Tomato, tags: {SAUCE, ITALIAN}, aliases: {Tomato Passata}}
 ---
@@ -366,6 +390,10 @@
 ---
 
 
+{canonicalName: Beansprouts, tags: {PULSE, ASIAN}, aliases: Beansprout}
+---
+{canonicalName: Borlotti Beans, tags: {PULSE, ITALIAN}}
+---
 {canonicalName: Broad Beans, tags: PULSE, aliases: {Fava Bean, Faba Bean}}
 ---
 {canonicalName: Butter Beans, tags: PULSE, aliases: {Lima Bean}}
@@ -375,6 +403,8 @@
 {canonicalName: Chickpeas, tags: PULSE, aliases: {Chickpea, Garbanzo Bean}}
 ---
 {canonicalName: Haricot Beans, tags: PULSE, aliases: {Navy Bean}}
+---
+{canonicalName: Kidney Beans, tags: PULSE}
 ---
 {canonicalName: Lentils, tags: PULSE, aliases: {Lentil}}
 ---
@@ -430,7 +460,7 @@
 ---
 {    canonicalName: Lemon Zest, parent: Lemon}
 ---
-{canonicalName: Lime, tags: {FRUIT, CITRUS}}
+{canonicalName: Lime, tags: {FRUIT, CITRUS, LIME}, aliases: {Limes}}
 ---
 {    canonicalName: Lime Juice, parent: Lime}
 ---
@@ -640,8 +670,6 @@
 ---
 {    canonicalName: Condensed Milk, parent: Milk}
 ---
-{    canonicalName: Full Fat Milk, parent: Milk, aliases: {Full-Fat Milk}}
----
 {    canonicalName: Skimmed Milk, parent: Milk}
 ---
 {    canonicalName: Soya Milk, parent: Milk}
@@ -661,6 +689,8 @@
 
 
 {canonicalName: Oil, tags: {OIL, FAT}}
+---
+{    canonicalName: Chilli Oil, parent: Oil, tags: {CHILLI}}
 ---
 {    canonicalName: Vegetable Oil, parent: Oil}
 ---
@@ -694,6 +724,8 @@
 ---
 {    canonicalName: Cider Vinegar, parent: Vinegar}
 ---
+{    canonicalName: Malt Vinegar, parent: Vinegar}
+---
 {    canonicalName: Red Wine Vinegar, parent: Vinegar}
 ---
 {    canonicalName: Rice Vinegar, parent: Vinegar, tags: {CHINESE, JAPANESE}}
@@ -714,15 +746,23 @@
 ---
 
 
-{canonicalName: Beef Stock, tags: {MEAT, RED_MEAT, STOCK}}
+{canonicalName: Beef Stock, tags: {MEAT, RED_MEAT, STOCK}, aliases: {Beef Stock Cube, Beef Stock Cubes}}
 ---
-{canonicalName: Chicken Stock, tags: {MEAT, POULTRY, STOCK}}
+{canonicalName: Chicken Stock, tags: {MEAT, POULTRY, STOCK}, aliases: {Chicken Stock Cube}}
+---
+{canonicalName: Chilli Sauce, tags: {SAUCE, CHILLI}}
+---
+{    canonicalName: Hot Chilli Sauce, parent: Chilli Sauce}
+---
+{    canonicalName: Sweet Chilli Sauce, parent: Chilli Sauce}
 ---
 {canonicalName: Curry Paste, tags: {SAUCE}}
 ---
 {    canonicalName: Balti Curry Paste, tags: INDIAN, parent: Curry Paste}
 ---
 {    canonicalName: Korma Paste, tags: INDIAN, parent: Curry Paste, aliases: {Korma Curry Paste}}
+---
+{    canonicalName: Madras Curry Paste, tags: INDIAN, parent: Curry Paste}
 ---
 {    canonicalName: Mild Curry Paste, tags: INDIAN, parent: Curry Paste}
 ---
@@ -780,6 +820,16 @@
 
 {canonicalName: Anchovy, tags: {FISH,SEAFOOD}, aliases: {Anchovies}}
 ---
+{canonicalName: Cod, tags: {FISH,SEAFOOD}}
+---
+{    canonicalName: Cod Fillet, parent: Cod}
+---
+{        canonicalName: Icelandic Cod Fillet, parent: Cod Fillet}
+---
+{canonicalName: Plaice, tags: {FISH,SEAFOOD}}
+---
+{    canonicalName: Plaice Fillet, parent: Plaice, aliases: {Plaice Fillets}}
+---
 {canonicalName: Salmon, tags: {FISH,SEAFOOD}}
 ---
 {    canonicalName: Salmon Fillet, parent: Salmon, aliases: {Salmon Fillets}}
@@ -806,7 +856,19 @@
 ---
 
 
+{canonicalName: Bacon, tags: MEAT}
+---
+{    canonicalName: Bacon Rashers, parent: Bacon}
+---
+{    canonicalName: Lardons, parent: Bacon, aliases: {Bacon Lardons, Lardon}}
+---
+{    canonicalName: Pancetta, parent: Bacon, tags: {ITALIAN}}
+---
+{    canonicalName: Streaky Bacon, parent: Bacon}
+---
 {canonicalName: Beef, tags: {MEAT, RED_MEAT}}
+---
+{    canonicalName: Beef cheek, parent: Beef}
 ---
 {    canonicalName: Beef stir-fry strips, parent: Beef}
 ---
@@ -816,11 +878,15 @@
 ---
 {    canonicalName: Sirloin Steak, parent: Beef, aliases: {Sirloin Steaks}}
 ---
-{canonicalName: Chicken, tags: {MEAT, POULTRY}}
+{    canonicalName: Stewing Beef, parent: Beef}
+---
+{canonicalName: Chicken, tags: {MEAT, POULTRY}, aliases: {Chicken Portions}}
 ---
 {    canonicalName: Chicken Breast, parent: Chicken, aliases: {Chicken Breasts}}
 ---
 {        canonicalName: Chicken Breast Fillets, parent: Chicken Breast}
+---
+{    canonicalName: Chicken Drumsticks, parent: Chicken}
 ---
 {    canonicalName: Chicken Mince, parent: Chicken}
 ---
@@ -828,9 +894,11 @@
 ---
 {    canonicalName: Chicken Thigh Fillets, parent: Chicken, aliases: {Chicken Thighs Fillets}}
 ---
+{    canonicalName: Chicken Wings, parent: Chicken}
+---
 {    canonicalName: Diced Chicken, parent: Chicken}
 ---
-{canonicalName: Chicken Liver, tags: {MEAT, POULTRY, OFFAL}}
+{canonicalName: Chicken Liver, tags: {MEAT, POULTRY, OFFAL}, aliases: {Chicken Livers}}
 ---
 {canonicalName: Ham, tags: MEAT}
 ---
@@ -848,6 +916,8 @@
 ---
 {    canonicalName: Lamb Leg Steaks, parent: Lamb, aliases: {Lamb Leg Steak}}
 ---
+{    canonicalName: Lamb Mince, parent: Lamb, aliases: {Minced Lamb}}
+---
 {    canonicalName: Lamb Neck Fillets, parent: Lamb, aliases: {Lamb Neck Fillet}}
 ---
 {    canonicalName: Lamb Shoulder, parent: Lamb, aliases: {Shoulder of Lamb}}
@@ -856,27 +926,37 @@
 ---
 {    canonicalName: Leg of Lamb, parent: Lamb}
 ---
+{    canonicalName: Stewing Lamb, parent: Lamb}
+---
+{canonicalName: Goat, tags: MEAT}
+---
+{    canonicalName: Goat Shoulder, parent: Goat}
+---
+{canonicalName: Mutton, tags: MEAT}
+---
 {canonicalName: Pork, tags: MEAT}
+---
+{    canonicalName: Pork Belly, parent: Pork}
 ---
 {    canonicalName: Pork Loin, parent: Pork, aliases: {British Pork Loin}}
 ---
 {    canonicalName: Pork Fillet, parent: Pork}
 ---
+{    canonicalName: Pork Mince, parent: Pork, aliases: {Minced Pork}}
+---
 {    canonicalName: Pork Sausages, parent: Pork, tags: {SAUSAGE}}
 ---
 {        canonicalName: Chorizo, parent: Pork Sausages, tags: {SPANISH, MEXICAN}}
 ---
-{    canonicalName: Pork Shoulder Steaks, parent: Pork}
+{    canonicalName: Pork Shoulder, parent: Pork}
 ---
-{canonicalName: Bacon, tags: MEAT}
+{        canonicalName: Pork Shoulder Steaks, parent: Pork Shoulder}
 ---
-{    canonicalName: Bacon Rashers, parent: Bacon}
+{    canonicalName: Pork Tenderloin, parent: Pork, aliases: {Pork Tenderloins}}
 ---
-{    canonicalName: Lardons, parent: Bacon, aliases: {Bacon Lardons, Lardon}}
+{canonicalName: Turkey, tags: {MEAT, POULTRY}}
 ---
-{    canonicalName: Pancetta, parent: Bacon, tags: {ITALIAN}}
----
-{    canonicalName: Streaky Bacon, parent: Bacon}
+{    canonicalName: Turkey Mince, parent: Turkey}
 ---
 {canonicalName: Venison, tags: {MEAT, RED_MEAT}}
 ---

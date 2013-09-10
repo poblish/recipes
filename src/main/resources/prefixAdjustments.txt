@@ -14,13 +14,19 @@ diced
 dressed
 dried
 dry
+extra-lean
+extra lean
+fat-free
 finely chopped
 finely grated
+finely sliced
 firm
 fresh
 freshly grated
 frozen
 full-bodied
+full-fat
+good-quality
 grated
 ground
 half-fat
@@ -29,12 +35,15 @@ large
 lean
 long
 low-fat
+low salt
 medium
 peeled
 pitted
 plump
 quality
 raw
+reduced-fat
+reduced-salt
 ripe
 roasted
 roughly
@@ -49,5 +58,6 @@ thick
 tin
 tinned
 toasted
+top-quality
 unsweetened
 whole
