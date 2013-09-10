@@ -38,8 +38,17 @@ public class Ingredient implements IIngredient {
 	 * @param quantity
 	 */
 	public Ingredient(ICanonicalItem item, IQuantity quantity) {
+		this( item, quantity, false);
+	}
+
+	/**
+	 * @param item
+	 * @param quantity
+	 */
+	public Ingredient(ICanonicalItem item, IQuantity quantity, boolean isOptional) {
 		this.item = item;
 		this.quantity = quantity;
+		this.optional = isOptional;
 	}
 
 	/* (non-Javadoc)

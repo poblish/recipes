@@ -85,20 +85,45 @@ public class IngredientParser {
 
             final AdjustedName adjusted = nameAdjuster.adjust( m.group(3).trim() );
 
-//            if ( adjusted.getName().contains(" or ")) {
-//            	System.out.println( adjusted.getName() );
-//            }
+            // Yuk, refactor!
 
-			final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse(numericQuantityStr)));
+            if ( adjusted.getName().contains(" or ")) {
+            	int idx = adjusted.getName().indexOf(" or ");
+            	final String name1 = adjusted.getName().substring( 0, idx);
+            	final String name2 = adjusted.getName().substring( idx + 4 );
 
-			final String note = m.group(4);
-			if ( note != null) {
-				ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
-			}
+            	final Quantity q = new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse(numericQuantityStr));
 
-			ingr.addNotes( ENGLISH, adjusted.getNotes());
+    			final Ingredient ingr1 = new Ingredient( findItem(name1), q, Boolean.TRUE);
+    			final Ingredient ingr2 = new Ingredient( findItem(name2), q, Boolean.TRUE);
 
-			inHandler.foundIngredient(ingr);
+//    			System.out.println( ingr1 + " / " + ingr2);
+
+    			final String note = m.group(4);
+    			if ( note != null) {
+    				ingr1.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
+    				ingr2.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
+    			}
+
+    			ingr1.addNotes( ENGLISH, adjusted.getNotes());
+    			ingr2.addNotes( ENGLISH, adjusted.getNotes());
+
+    			inHandler.foundIngredient(ingr1);
+    			inHandler.foundIngredient(ingr2);
+            }
+            else {
+				final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse(numericQuantityStr)));
+	
+				final String note = m.group(4);
+				if ( note != null) {
+					ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
+				}
+	
+				ingr.addNotes( ENGLISH, adjusted.getNotes());
+	
+				inHandler.foundIngredient(ingr);
+            }
+
 			return true;
 		}
 		else {
