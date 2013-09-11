@@ -267,25 +267,27 @@ public class EsRecipeFactory implements IRecipePersistence {
         throw new RuntimeException("unimpl");  // FIXME?
     }
 
-    public IRecipe fork( final IRecipe inOriginalRecipe) throws IOException {
-        return fork( inOriginalRecipe, null);
+    public IRecipe fork( final IRecipe inOriginalRecipe, final String inNewName) throws IOException {
+        return fork( inOriginalRecipe, inNewName, null);
     }
 
-    public IRecipe fork( final IRecipe inOriginalRecipe, final PreForkChange<IRecipe> inPreChange) throws IOException {
-        final String suffix = "-" + UUID.randomUUID();
-        final String newId = toStringId(inOriginalRecipe) + suffix;
+    public IRecipe fork( final IRecipe inOriginalRecipe, final String inNewName, final PreForkChange<IRecipe> inPreChange) throws IOException {
         final IRecipe clone = (IRecipe) inOriginalRecipe.clone();
-        clone.setTitle( clone.getTitle() + suffix);
+
+        final boolean inNameSpecified = ( inNewName != null && !inNewName.isEmpty());
+        final String newTitle = inNameSpecified ? inNewName : clone.getTitle() + "-" + UUID.randomUUID();
+
+        clone.setTitle(newTitle);
         clone.setForkDetails( new ForkDetails(inOriginalRecipe) );
 
         if ( inPreChange != null) {
         	inPreChange.apply(clone);
         }
-        return put( clone, newId);
+        return put( clone, /* Unused */ null);
     }
 
     public void useCopy( final IRecipe inOriginalRecipe, final PreForkChange<IRecipe> inPreChange, final PostForkChange<IRecipe> inPostChange) throws IOException {
-        final IRecipe theFork = fork( inOriginalRecipe, inPreChange);
+        final IRecipe theFork = fork( inOriginalRecipe, null, inPreChange);
 
         try {
             if ( inPostChange != null) {

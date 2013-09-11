@@ -14,7 +14,7 @@ import uk.co.recipes.api.IRecipe;
  */
 public interface IRecipePersistence extends IPersistenceAPI<IRecipe> {
 
-    IRecipe fork( final IRecipe inOriginalRecipe) throws IOException;
+    IRecipe fork( final IRecipe inOriginalRecipe, final String inNewName) throws IOException;
 
     void addIngredients( final IRecipe inRecipe, final IIngredient... inIngredients) throws IOException;
     void removeIngredients( final IRecipe inRecipe, final IIngredient... inIngredients) throws IOException;

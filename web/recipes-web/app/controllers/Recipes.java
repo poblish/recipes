@@ -49,7 +49,13 @@ public class Recipes extends AbstractExplorableController {
     }
 
     public Result fork( final String name) throws IOException, InterruptedException {
-        final IRecipe fork = recipes.fork( recipes.get(name).get() );
+        final String[] newName = request().queryString().get("newName");
+        final boolean gotNewName = ( newName != null && newName.length > 0 && !newName[0].isEmpty());
+        if (!gotNewName) {
+            return status( 400, "New name not set!");
+        }
+
+        final IRecipe fork = recipes.fork( recipes.get(name).get(), newName[0]);
 
         // Wait until it appears in Elasticsearch!
         do {
