@@ -3,7 +3,7 @@
 @main("Recipe: " + recipe.getTitle() ) {
 	<section id="top">
 	    <div class="wrapper">
-	        <h1><!-- <span>@recipe.getId()</span>&nbsp; -->@recipe.getTitle()&nbsp;<!-- <span class="label label-warning">@recipe.getLocale()</span> --><a onclick="bootbox.prompt('Please name your new recipe', function(res) { if ( res != null && res != '') { document.location.href = '/recipes/@recipe.getTitle()/fork?newName=' + res; } }); return false" href="#">[F]</a></h1>
+	        <h1><!-- <span>@recipe.getId()</span>&nbsp; -->@recipe.getTitle()&nbsp;<!-- <span class="label label-warning">@recipe.getLocale()</span> --><a onclick="getForkName('@recipe.getTitle()')" href="#">[F]</a></h1>
 	    </div>
 	</section>
 	
