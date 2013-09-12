@@ -148,10 +148,4 @@ public class Recipes extends AbstractExplorableController {
     private interface RecipeAction {
 		Result doAction( IUser loggedInUser, IRecipe recipe) throws IOException, InterruptedException;
     }
-
-    public Result test() throws IOException {
-        final String[] theInputs = request().queryString().get("input");
-        final boolean gotInput = ( theInputs != null && theInputs.length > 0 && !theInputs[0].isEmpty());
-        return display( gotInput ? theInputs[0] : "inputs3.txt");
-    }
 }
