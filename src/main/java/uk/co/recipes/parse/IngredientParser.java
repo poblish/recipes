@@ -6,6 +6,8 @@ package uk.co.recipes.parse;
 import static java.util.Locale.ENGLISH;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPE_PARSE;
 
+import java.io.IOException;
+import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,6 +17,7 @@ import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Ingredient;
 import uk.co.recipes.Quantity;
 import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.IQuantity;
 import uk.co.recipes.api.NonNumericQuantities;
 import uk.co.recipes.api.Units;
 import uk.co.recipes.persistence.EsItemFactory;
@@ -24,6 +27,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
+import com.google.common.base.Throwables;
 
 /**
  * TODO
@@ -61,18 +65,18 @@ public class IngredientParser {
     private static final Pattern    F = Pattern.compile(SUFFIX, Pattern.CASE_INSENSITIVE);
 
 
-	public boolean parse( final String inRawStr, final IParsedIngredientHandler inHandler) {
+	public boolean parse( final String inRawStr, final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) {
 	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPE_PARSE).time();
 
         try {
-            return timedParse(inRawStr, inHandler);
+            return timedParse(inRawStr, inHandler, inDeferHandler);
         }
         finally {
             timerCtxt.stop();
         }
 	}
 
-	private boolean timedParse( final String inRawStr, final IParsedIngredientHandler inHandler) {
+	private boolean timedParse( final String inRawStr, final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) {
 
 	    final String adjustedStr = new FractionReplacer().replaceFractions(inRawStr);
 
@@ -89,27 +93,22 @@ public class IngredientParser {
 
             if ( adjusted.getName().contains(" or ")) {
             	int idx = adjusted.getName().indexOf(" or ");
+
+            	// FIXME: should use Ngrams to prevent " lamb or beef stock" problem!
             	final String name1 = adjusted.getName().substring( 0, idx);
             	final String name2 = adjusted.getName().substring( idx + 4 );
 
+            	// System.out.println( name1 + " / " + name2);
+            	
             	final Quantity q = new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse(numericQuantityStr));
 
-    			final Ingredient ingr1 = new Ingredient( findItem(name1), q, Boolean.TRUE);
-    			final Ingredient ingr2 = new Ingredient( findItem(name2), q, Boolean.TRUE);
-
-//    			System.out.println( ingr1 + " / " + ingr2);
-
-    			final String note = m.group(4);
-    			if ( note != null) {
-    				ingr1.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
-    				ingr2.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
-    			}
-
-    			ingr1.addNotes( ENGLISH, adjusted.getNotes());
-    			ingr2.addNotes( ENGLISH, adjusted.getNotes());
-
-    			inHandler.foundIngredient(ingr1);
-    			inHandler.foundIngredient(ingr2);
+            	try {
+            		handleOptionalIngredient( name1, q, m.group(4), adjusted.getNotes(), inHandler, inDeferHandler);
+            		handleOptionalIngredient( name2, q, m.group(4), adjusted.getNotes(), inHandler, inDeferHandler);
+				}
+            	catch (IOException e) {
+					Throwables.propagate(e);  // Ugh FIXME
+				}
             }
             else {
 				final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse(numericQuantityStr)));
@@ -221,6 +220,30 @@ public class IngredientParser {
 		return false;
 	}
 
+	private void handleOptionalIngredient( final String inItemName, final IQuantity inQuantity,
+										   final String inNote, final Collection<String> inExtraNotes,
+										   final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) throws IOException {
+    	final Optional<ICanonicalItem> item1 = itemFactory.get(inItemName);
+    	
+    	if (item1.isPresent()) {
+			final Ingredient ingr1 = new Ingredient( item1.get(), inQuantity, Boolean.TRUE);
+
+			if ( inNote != null) {
+				ingr1.addNote( ENGLISH, /* FIXME: comma rubbish */ inNote.startsWith(",") ? inNote.substring(1).trim() : inNote);
+			}
+
+			ingr1.addNotes( ENGLISH, inExtraNotes);
+			
+			inHandler.foundIngredient(ingr1);
+    	}
+    	else if ( inDeferHandler != null) {
+			inDeferHandler.deferIngredient( new DeferralStatus( inItemName, inQuantity, inNote, inExtraNotes) );
+    	}
+    	else {
+    		// Create???
+    	}
+	}
+
 	// For parsing a Quantity only
     public Optional<Quantity> parseQuantity( final String inRawStr) {
 	    final String adjustedStr = new FractionReplacer().replaceFractions(inRawStr);
@@ -242,7 +265,7 @@ public class IngredientParser {
         return ITEM_NAME_PATTERN.matcher(inRawStr).matches();
     }
     
-	private ICanonicalItem findItem( final String inName) {
+	public ICanonicalItem findItem( final String inName) {
 		return itemFactory.getOrCreate( inName, new Supplier<ICanonicalItem>() {
 
 			@Override

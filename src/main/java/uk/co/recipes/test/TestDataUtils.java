@@ -3,6 +3,8 @@
  */
 package uk.co.recipes.test;
 
+import static java.util.Locale.ENGLISH;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -11,11 +13,15 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import uk.co.recipes.Ingredient;
 import uk.co.recipes.Recipe;
 import uk.co.recipes.RecipeStage;
 import uk.co.recipes.User;
+import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IUser;
+import uk.co.recipes.parse.DeferralStatus;
+import uk.co.recipes.parse.IDeferredIngredientHandler;
 import uk.co.recipes.parse.IParsedIngredientHandler;
 import uk.co.recipes.parse.IngredientParser;
 import uk.co.recipes.persistence.EsRecipeFactory;
@@ -33,27 +39,29 @@ import com.google.common.io.Files;
  */
 public class TestDataUtils {
 
-	@Inject
-	IngredientParser parser;
+	@Inject IngredientParser parser;
+	@Inject EsUserFactory userFactory;
+	@Inject EsRecipeFactory recipeFactory;
 
-	@Inject
-	EsUserFactory userFactory;
-
-	@Inject
-	EsRecipeFactory recipeFactory;
+//	private final static Logger LOG = LoggerFactory.getLogger( TestDataUtils.class );
 
 	private final static IParsedIngredientHandler NULL_HANDLER = new IParsedIngredientHandler() {
 		@Override
 		public void foundIngredient( IIngredient ingr) { }
 	};
 
+	private final static IDeferredIngredientHandler NULL_DEFER_HANDLER = new IDeferredIngredientHandler() {
+		@Override
+		public void deferIngredient( final DeferralStatus x) { }
+	};
+
 
 	public boolean parseIngredient( final String inStr) {
-		return parser.parse(inStr, NULL_HANDLER);
+		return parser.parse(inStr, NULL_HANDLER, NULL_DEFER_HANDLER);
 	}
 
-	public boolean parseIngredient( final String inStr, final IParsedIngredientHandler inHandler) {
-		return parser.parse(inStr, inHandler);
+	public boolean parseIngredient( final String inStr, final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) {
+		return parser.parse(inStr, inHandler, inDeferHandler);
 	}
 
 	public List<IIngredient> parseIngredientsFrom( final String inFilename) throws IOException {
@@ -65,6 +73,8 @@ public class TestDataUtils {
 
 		String recipeTitle = null;
 		int lineNum = 0;
+
+		final List<DeferralStatus> deferredItems = Lists.newArrayList();
 
 		for ( String eachLine : Files.readLines( new File( inDir, inFilename), Charset.forName("utf-8"))) {
 
@@ -85,13 +95,36 @@ public class TestDataUtils {
 
 				@Override
 				public void foundIngredient( final IIngredient ingr) {
-					// System.out.println( JacksonFactory.getMapper().writeValueAsString( theIngr.get() ) );
 					allIngredients.add(ingr);
+				}
+			}, new IDeferredIngredientHandler() {
+
+				@Override
+				public void deferIngredient( DeferralStatus status) {
+					deferredItems.add(status);
 				}
 			} );
 
 			if (!matched) {
 				throw new RuntimeException(eachLine + " not matched");
+			}
+		}
+
+		////////////////////////////////////////////////////////////  Handle deferred...
+
+		if (!deferredItems.isEmpty()) {
+			for ( DeferralStatus eachItem : deferredItems) {
+
+		    	final ICanonicalItem gotOrCreatedItem = this.parser.findItem( eachItem.getName() );
+				final Ingredient ingr = new Ingredient( gotOrCreatedItem, eachItem.getQuantity(), Boolean.TRUE);
+
+				if ( eachItem.getNote() != null) {
+					ingr.addNote( ENGLISH, eachItem.getNote().startsWith(",") ? eachItem.getNote().substring(1).trim() : eachItem.getNote());
+				}
+
+				ingr.addNotes( ENGLISH, eachItem.getExtraNotes());
+				
+				allIngredients.add(ingr);
 			}
 		}
 
