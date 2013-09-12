@@ -54,7 +54,7 @@
 	</div>
 	<button class="btn btn-danger" type="button" onclick="clearFilters()">Clear All</button>
 
-	<div style="margin-top: 15px"><input type="hidden" style="width: 250px" id="addIngredient" /></div>
+	<div style="margin-top: 15px"><input type="hidden" style="width: 250px" id="addIngredient" /></div><button type="button" class="btn btn-default" onclick="addIngredient('@recipe.getTitle()',$('#addIngredient'))">Add Ingredient</button>
 	<hr/>
 
 	<!-- Explorer Filter Stuff ends -->
