@@ -116,6 +116,8 @@
 ---
 {canonicalName: Chilli Powder, tags: {SPICE, INDIAN}}
 ---
+{    canonicalName: Mild Chilli Powder, parent: Chilli Powder}
+---
 {    canonicalName: Red Chilli Powder, parent: Chilli Powder}
 ---
 {canonicalName: Chinese five-spice powder, tags: {SPICE, CHINESE, ANISEED}, aliases: {Five Spice powder}}
@@ -254,13 +256,15 @@
 
 {canonicalName: Asparagus, tags: VEGETABLE, aliases: {Asparagus Spears}}
 ---
-{canonicalName: Aubergine, tags: VEGETABLE}
+{canonicalName: Aubergine, tags: VEGETABLE, aliases: {Aubergines}}
 ---
 {canonicalName: Broccoli, tags: VEGETABLE}
 ---
 {canonicalName: Butternut Squash, tags: VEGETABLE}
 ---
 {canonicalName: Cabbage, tags: VEGETABLE, aliases: {Green Cabbage, Cabbage Leaves}}
+---
+{    canonicalName: Savoy Cabbage, parent: Cabbage}
 ---
 {canonicalName: Carrot, tags: VEGETABLE, aliases: {Carrots}}
 ---
@@ -269,6 +273,8 @@
 {canonicalName: Celeriac, tags: VEGETABLE}
 ---
 {canonicalName: Celery, tags: VEGETABLE, aliases: {Celery Stick, Celery Sticks, Celery Stalks}}
+---
+{canonicalName: Chard, tags: VEGETABLE}
 ---
 {canonicalName: Courgette, tags: VEGETABLE, aliases: {Courgettes}}
 ---
@@ -336,6 +342,8 @@
 ---
 {canonicalName: Parsnip, tags: VEGETABLE, aliases: {Parsnips}}
 ---
+{canonicalName: Pumpkin, tags: VEGETABLE, aliases: {Pumpkins}}
+---
 {canonicalName: Red Pepper, tags: VEGETABLE, aliases: {Red Peppers}}
 ---
 {canonicalName: Green Pepper, tags: VEGETABLE, aliases: {Green Peppers}}
@@ -344,11 +352,19 @@
 ---
 {canonicalName: Potato, tags: VEGETABLE, aliases: {Potatoes}}
 ---
+{    canonicalName: Baking Potatoes, parent: Potato, aliases: {Baking Potato}}
+---
+{    canonicalName: Desirée Potatoes, parent: Potato}
+---
+{    canonicalName: Floury Potatoes, parent: Potato}
+---
 {    canonicalName: New Potato, parent: Potato, aliases: {New Potatoes}}
 ---
 {    canonicalName: Baby New Potato, parent: New Potato, aliases: {Baby New Potatoes}}
 ---
 {    canonicalName: Roasting Potatoes, parent: Potato, aliases: {Roasting Potato}}
+---
+{    canonicalName: Waxy Potatoes, parent: Potato}
 ---
 {canonicalName: Rocket, tags: {VEGETABLE, SALAD_LEAF, ITALIAN}, aliases: {Rocket Leaves}}
 ---
@@ -411,6 +427,8 @@
 {    canonicalName: Green Lentils, parent: Lentils}
 ---
 {    canonicalName: Red Lentils, parent: Lentils}
+---
+{        canonicalName: Split Red Lentils, parent: Red Lentils}
 ---
 {canonicalName: Pea, tags: {PULSE, VEGETABLE}, aliases: {Peas}}
 ---
@@ -874,7 +892,11 @@
 ---
 {    canonicalName: Braising Beef, parent: Beef}
 ---
+{    canonicalName: Braising Steak, parent: Beef, aliases: {Braising Steaks}}
+---
 {    canonicalName: Minced Beef, parent: Beef, aliases: {Beef Mince}}
+---
+{    canonicalName: Rump Steak, parent: Beef, aliases: {Rump Steaks}}
 ---
 {    canonicalName: Sirloin Steak, parent: Beef, aliases: {Sirloin Steaks}}
 ---
@@ -899,6 +921,10 @@
 {    canonicalName: Diced Chicken, parent: Chicken}
 ---
 {canonicalName: Chicken Liver, tags: {MEAT, POULTRY, OFFAL}, aliases: {Chicken Livers}}
+---
+{canonicalName: Duck, tags: {MEAT, POULTRY}}
+---
+{    canonicalName: Duck Legs, parent: Duck}
 ---
 {canonicalName: Ham, tags: MEAT}
 ---
