@@ -9,11 +9,11 @@ import static org.hamcrest.Matchers.is;
 import java.util.Collection;
 import java.util.List;
 
-import org.elasticsearch.common.base.Joiner;
-import org.elasticsearch.common.collect.Iterables;
 import org.testng.annotations.Test;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 /**
