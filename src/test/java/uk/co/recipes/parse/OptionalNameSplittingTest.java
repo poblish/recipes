@@ -24,77 +24,77 @@ import com.google.common.collect.Lists;
  */
 public class OptionalNameSplittingTest {
 
-    @Test
-    public void testSplitting() {
-        assertThat( split("beef", "lamb"), is(new String[]{"beef", "lamb"}));
-        assertThat( split("Chinese cooking wine", "dry sherry"), is(new String[]{"Chinese cooking wine", "dry sherry", "Chinese cooking dry sherry", "Chinese cooking wine sherry", "Chinese dry sherry"}));
-        assertThat( split("Grated Kefalotyri cheese", "Pecorino Romano"), is(new String[]{"Grated Kefalotyri cheese", "Pecorino Romano", "Grated Kefalotyri Pecorino Romano", "Grated Kefalotyri cheese Romano", "Grated Pecorino Romano"}));
-        assertThat( split("caster sugar", "vanilla sugar"), is(new String[]{"caster sugar", "vanilla sugar"}));
-        assertThat( split("caster cane sugar", "vanilla cane sugar"), is(new String[]{"caster cane sugar", "vanilla cane sugar"}));
-        assertThat( split("red wine", "red blood"), is(new String[]{"red wine", "red blood"}));
-        assertThat( split("Water", "Chicken Stock"), is(new String[]{"Water", "Chicken Stock", "Water Stock"}));
-        assertThat( split("dried", "fresh kaffir lime leaves"), is(new String[]{"dried", "fresh kaffir lime leaves", "dried kaffir lime leaves", "dried lime leaves", "dried leaves"}));
-        assertThat( split("espresso", "strong instant coffee"), is(new String[]{"espresso", "strong instant coffee", "espresso instant coffee", "espresso coffee"}));
-    }
+	@Test
+	public void testSplitting() {
+		assertThat( split("beef", "lamb"), is(new String[]{"beef", "lamb"}));
+		assertThat( split("Chinese cooking wine", "dry sherry"), is(new String[]{"Chinese cooking wine", "dry sherry", "Chinese cooking dry sherry", "Chinese cooking wine sherry", "Chinese dry sherry"}));
+		assertThat( split("Grated Kefalotyri cheese", "Pecorino Romano"), is(new String[]{"Grated Kefalotyri cheese", "Pecorino Romano", "Grated Kefalotyri Pecorino Romano", "Grated Kefalotyri cheese Romano", "Grated Pecorino Romano"}));
+		assertThat( split("caster sugar", "vanilla sugar"), is(new String[]{"caster sugar", "vanilla sugar"}));
+		assertThat( split("caster cane sugar", "vanilla cane sugar"), is(new String[]{"caster cane sugar", "vanilla cane sugar"}));
+		assertThat( split("red wine", "red blood"), is(new String[]{"red wine", "red blood"}));
+		assertThat( split("Water", "Chicken Stock"), is(new String[]{"Water", "Chicken Stock", "Water Stock"}));
+		assertThat( split("dried", "fresh kaffir lime leaves"), is(new String[]{"dried", "fresh kaffir lime leaves", "dried kaffir lime leaves", "dried lime leaves", "dried leaves"}));
+		assertThat( split("espresso", "strong instant coffee"), is(new String[]{"espresso", "strong instant coffee", "espresso instant coffee", "espresso coffee"}));
+	}
 
-    private String[] split( final String s1, final String s2) {
-        // FIXME Factor out constant
-        final Collection<String> wordsColl1 = Splitter.on(' ').trimResults().splitToList(s1);
-        final Collection<String> wordsColl2 = Splitter.on(' ').trimResults().splitToList(s2);
+	private String[] split( final String s1, final String s2) {
+		// FIXME Factor out constant
+		final Collection<String> wordsColl1 = Splitter.on(' ').trimResults().splitToList(s1);
+		final Collection<String> wordsColl2 = Splitter.on(' ').trimResults().splitToList(s2);
 
-        final String[] words1 = Iterables.toArray( wordsColl1, String.class);
-        final String[] words2 = Iterables.toArray( wordsColl2, String.class);
- 
-        final List<String> possibilities = Lists.newArrayList( s1, s2);
+		final String[] words1 = Iterables.toArray( wordsColl1, String.class);
+		final String[] words2 = Iterables.toArray( wordsColl2, String.class);
 
-    	int maxNumWordsToSkip  = Math.max( words1.length, words2.length);
-    	int startIndex = 0;
+		final List<String> possibilities = Lists.newArrayList( s1, s2);
 
-    	// Skip shared prefix words
-    	while (words1[startIndex].equalsIgnoreCase( words2[startIndex] )) {
-    		startIndex++;
-    	}
+		int maxNumWordsToSkip  = Math.max( words1.length, words2.length);
+		int startIndex = 0;
 
-    	// Skip shared Suffix words
-    	int k = 1;
-    	while (words1[ words1.length - k].equalsIgnoreCase( words2[ words2.length - k] )) {
-    		maxNumWordsToSkip--;
-    		k++;
-    	}
+		// Skip shared prefix words
+		while (words1[startIndex].equalsIgnoreCase( words2[startIndex] )) {
+			startIndex++;
+		}
 
-        for ( int numWordsToSkip = 1; numWordsToSkip < maxNumWordsToSkip; numWordsToSkip++)
-        {
-        	if ( numWordsToSkip + startIndex < words1.length) {
-	        	StringBuilder each = new StringBuilder();
+		// Skip shared Suffix words
+		int k = 1;
+		while (words1[ words1.length - k].equalsIgnoreCase( words2[ words2.length - k] )) {
+			maxNumWordsToSkip--;
+			k++;
+		}
 
-	        	for ( int i = startIndex; i < words1.length - numWordsToSkip; i++) {
-	        		if ( each.length() > 0) {
-	        			each.append(" ");
-	        		}
-	        		each.append( words1[i] );
-	        	}
+		for ( int numWordsToSkip = 1; numWordsToSkip < maxNumWordsToSkip; numWordsToSkip++)
+		{
+			if ( numWordsToSkip + startIndex < words1.length) {
+				StringBuilder each = new StringBuilder();
 
-	        	each.append( " " + Joiner.on(' ').join(wordsColl2) );
+				for ( int i = startIndex; i < words1.length - numWordsToSkip; i++) {
+					if ( each.length() > 0) {
+						each.append(" ");
+					}
+					each.append( words1[i] );
+				}
 
-	        	possibilities.add(each.toString());
-        	}
+				each.append( " " + Joiner.on(' ').join(wordsColl2) );
 
-        	if ( numWordsToSkip + startIndex < words2.length) {
-            	StringBuilder each = new StringBuilder();
+				possibilities.add(each.toString());
+			}
 
-	        	each.append( Joiner.on(' ').join(wordsColl1) );
+			if ( numWordsToSkip + startIndex < words2.length) {
+				StringBuilder each = new StringBuilder();
 
-	        	for ( int i = numWordsToSkip; i < words2.length - startIndex; i++) {
-	        		if ( each.length() > 0) {
-	        			each.append(" ");
-	        		}
-	        		each.append( words2[i] );
-	        	}
+				each.append( Joiner.on(' ').join(wordsColl1) );
 
-	        	possibilities.add(each.toString());
-        	}
-        }
+				for ( int i = numWordsToSkip; i < words2.length - startIndex; i++) {
+					if ( each.length() > 0) {
+						each.append(" ");
+					}
+					each.append( words2[i] );
+				}
 
-        return Iterables.toArray( possibilities, String.class);
-    }
+				possibilities.add(each.toString());
+			}
+		}
+
+		return Iterables.toArray( possibilities, String.class);
+	}
 }
