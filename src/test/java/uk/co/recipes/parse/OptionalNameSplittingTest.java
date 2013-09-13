@@ -29,7 +29,9 @@ public class OptionalNameSplittingTest {
         assertThat( split("beef", "lamb"), is(new String[]{"beef", "lamb"}));
         assertThat( split("Chinese cooking wine", "dry sherry"), is(new String[]{"Chinese cooking wine", "dry sherry", "Chinese cooking dry sherry", "Chinese cooking wine sherry", "Chinese dry sherry"}));
         assertThat( split("Grated Kefalotyri cheese", "Pecorino Romano"), is(new String[]{"Grated Kefalotyri cheese", "Pecorino Romano", "Grated Kefalotyri Pecorino Romano", "Grated Kefalotyri cheese Romano", "Grated Pecorino Romano"}));
-        assertThat( split("caster sugar", "vanilla sugar"), is(new String[]{"caster sugar", "vanilla sugar", "caster vanilla sugar", "caster sugar sugar"}));
+        assertThat( split("caster sugar", "vanilla sugar"), is(new String[]{"caster sugar", "vanilla sugar"}));
+        assertThat( split("caster cane sugar", "vanilla cane sugar"), is(new String[]{"caster cane sugar", "vanilla cane sugar"}));
+        assertThat( split("red wine", "red blood"), is(new String[]{"red wine", "red blood"}));
         assertThat( split("Water", "Chicken Stock"), is(new String[]{"Water", "Chicken Stock", "Water Stock"}));
         assertThat( split("dried", "fresh kaffir lime leaves"), is(new String[]{"dried", "fresh kaffir lime leaves", "dried kaffir lime leaves", "dried lime leaves", "dried leaves"}));
         assertThat( split("espresso", "strong instant coffee"), is(new String[]{"espresso", "strong instant coffee", "espresso instant coffee", "espresso coffee"}));
@@ -48,12 +50,27 @@ public class OptionalNameSplittingTest {
     	s.add(s1);
     	s.add(s2);
 
-        for ( int num = 1; num < Math.max( words1.length, words2.length); num++)
+    	int maxNumWordsToSkip  = Math.max( words1.length, words2.length);
+    	int startIndex = 0;
+
+    	// Skip shared prefix words
+    	while (words1[startIndex].equalsIgnoreCase( words2[startIndex] )) {
+    		startIndex++;
+    	}
+
+    	// Skip shared Suffix words
+    	int k = 1;
+    	while (words1[ words1.length - k].equalsIgnoreCase( words2[ words2.length - k] )) {
+    		maxNumWordsToSkip--;
+    		k++;
+    	}
+
+        for ( int numWordsToSkip = 1; numWordsToSkip < maxNumWordsToSkip; numWordsToSkip++)
         {
-        	if ( num < words1.length) {
+        	if ( numWordsToSkip + startIndex < words1.length) {
 	        	StringBuilder each = new StringBuilder();
 
-	        	for ( int i = 0; i < words1.length - num; i++) {
+	        	for ( int i = startIndex; i < words1.length - numWordsToSkip; i++) {
 	        		if ( each.length() > 0) {
 	        			each.append(" ");
 	        		}
@@ -65,23 +82,20 @@ public class OptionalNameSplittingTest {
 	        	s.add(each.toString());
         	}
 
-        	if ( num < words2.length) {
+        	if ( numWordsToSkip + startIndex < words2.length) {
             	StringBuilder each = new StringBuilder();
 
 	        	each.append( Joiner.on(' ').join(wordsColl1) );
 
-	        	for ( int j = num; j < words2.length; j++) {
+	        	for ( int i = numWordsToSkip; i < words2.length - startIndex; i++) {
 	        		if ( each.length() > 0) {
 	        			each.append(" ");
 	        		}
-	        		each.append( words2[j] );
+	        		each.append( words2[i] );
 	        	}
 
 	        	s.add(each.toString());
         	}
-        }
-        for ( int i = 0; i < words1.length; i++) {
-            
         }
 
         return Iterables.toArray( s, String.class);
