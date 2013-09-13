@@ -18,6 +18,8 @@
 ---
 {canonicalName: Bicarbonate of Soda, tags: BAKING}
 ---
+{canonicalName: Candied Orange Peel, tags: {BAKING, ORANGE}}
+---
 {canonicalName: Cocoa, tags: BAKING, aliases: {Cocoa Powder}}
 ---
 {canonicalName: Food Colouring, tags: BAKING, aliases: {Edible Food Colouring}}
@@ -528,6 +530,8 @@
 ---
 {canonicalName: Focaccia, tags: {BREAD, ITALIAN}}
 ---
+{canonicalName: Rye Bread, tags: {BREAD}}
+---
 
 
 {canonicalName: Porridge, tags: {PORRIDGE}}
@@ -553,6 +557,8 @@
 {canonicalName: Chestnuts, tags: NUT, aliases: {Chestnut}}
 ---
 {canonicalName: Hazelnuts, tags: NUT, aliases: Hazelnut}
+---
+{canonicalName: Mixed Nuts, tags: NUT}
 ---
 {canonicalName: Peanuts, tags: NUT}
 ---
@@ -591,6 +597,8 @@
 {    canonicalName: Granulated Sugar, parent: Sugar}
 ---
 {    canonicalName: Icing Sugar, parent: Sugar, aliases: {White Icing Sugar}}
+---
+{    canonicalName: Nibbed Sugar, parent: Sugar}
 ---
 {    canonicalName: Brown Sugar, parent: Sugar}
 ---
@@ -758,6 +766,8 @@
 ---
 {    canonicalName: Clear Honey, parent: Honey}
 ---
+{    canonicalName: English Honey, parent: Honey, tags: ENGLISH}
+---
 {    canonicalName: Manuka Honey, parent: Honey}
 ---
 {canonicalName: Jam, tags: {CONDIMENT}}
@@ -843,6 +853,14 @@
 {    canonicalName: Cod Fillet, parent: Cod}
 ---
 {        canonicalName: Icelandic Cod Fillet, parent: Cod Fillet}
+---
+{canonicalName: Haddock, tags: {FISH,SEAFOOD}}
+---
+{    canonicalName: Haddock Fillet, parent: Mackerel, aliases: {Haddock Fillets}}
+---
+{canonicalName: Mackerel, tags: {FISH,SEAFOOD}}
+---
+{    canonicalName: Mackerel Fillet, parent: Mackerel, aliases: {Mackerel Fillets}}
 ---
 {canonicalName: Plaice, tags: {FISH,SEAFOOD}}
 ---
