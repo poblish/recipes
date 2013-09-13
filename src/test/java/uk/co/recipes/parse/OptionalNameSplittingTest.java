@@ -45,10 +45,7 @@ public class OptionalNameSplittingTest {
         final String[] words1 = Iterables.toArray( wordsColl1, String.class);
         final String[] words2 = Iterables.toArray( wordsColl2, String.class);
  
-        List<String> s = Lists.newArrayList();
-
-    	s.add(s1);
-    	s.add(s2);
+        final List<String> possibilities = Lists.newArrayList( s1, s2);
 
     	int maxNumWordsToSkip  = Math.max( words1.length, words2.length);
     	int startIndex = 0;
@@ -79,7 +76,7 @@ public class OptionalNameSplittingTest {
 
 	        	each.append( " " + Joiner.on(' ').join(wordsColl2) );
 
-	        	s.add(each.toString());
+	        	possibilities.add(each.toString());
         	}
 
         	if ( numWordsToSkip + startIndex < words2.length) {
@@ -94,10 +91,10 @@ public class OptionalNameSplittingTest {
 	        		each.append( words2[i] );
 	        	}
 
-	        	s.add(each.toString());
+	        	possibilities.add(each.toString());
         	}
         }
 
-        return Iterables.toArray( s, String.class);
+        return Iterables.toArray( possibilities, String.class);
     }
 }
