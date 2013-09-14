@@ -23,7 +23,7 @@ public class OptionalNameSplitter {
 	private final static Joiner WORD_JOINER = Joiner.on(' ');
 
 
-	public String[] split( final String s1, final String s2) {
+	public SplitResults split( final String s1, final String s2) {
 
 		final Collection<String> wordsColl1 = WORD_SPLITTER.splitToList(s1);
 		final Collection<String> wordsColl2 = WORD_SPLITTER.splitToList(s2);
@@ -31,7 +31,8 @@ public class OptionalNameSplitter {
 		final String[] words1 = Iterables.toArray( wordsColl1, String.class);
 		final String[] words2 = Iterables.toArray( wordsColl2, String.class);
 
-		final List<String> possibilities = Lists.newArrayList( s1, s2);
+		final List<String> poss1 = Lists.newArrayList();
+		final List<String> poss2 = Lists.newArrayList();
 
 		int maxNumWordsToSkip  = Math.max( words1.length, words2.length);
 		int startIndex = 0;
@@ -62,7 +63,7 @@ public class OptionalNameSplitter {
 
 				each.append( " " + WORD_JOINER.join(wordsColl2) );
 
-				possibilities.add(each.toString());
+				poss1.add(each.toString());
 			}
 
 			if ( numWordsToSkip + startIndex < words2.length) {
@@ -77,10 +78,13 @@ public class OptionalNameSplitter {
 					each.append( words2[i] );
 				}
 
-				possibilities.add(each.toString());
+				poss2.add(each.toString());
 			}
 		}
 
-		return Iterables.toArray( possibilities, String.class);
+		poss1.add(s1);
+		poss2.add(s2);
+
+		return new SplitResults( Iterables.toArray( poss1, String.class), Iterables.toArray( poss2, String.class));
 	}
 }
