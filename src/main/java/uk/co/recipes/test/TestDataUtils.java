@@ -24,9 +24,11 @@ import uk.co.recipes.parse.DeferralStatus;
 import uk.co.recipes.parse.IDeferredIngredientHandler;
 import uk.co.recipes.parse.IParsedIngredientHandler;
 import uk.co.recipes.parse.IngredientParser;
+import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
@@ -41,6 +43,7 @@ public class TestDataUtils {
 
 	@Inject IngredientParser parser;
 	@Inject EsUserFactory userFactory;
+	@Inject EsItemFactory itemFactory;
 	@Inject EsRecipeFactory recipeFactory;
 
 //	private final static Logger LOG = LoggerFactory.getLogger( TestDataUtils.class );
@@ -115,7 +118,10 @@ public class TestDataUtils {
 		if (!deferredItems.isEmpty()) {
 			for ( DeferralStatus eachItem : deferredItems) {
 
-		    	final ICanonicalItem gotOrCreatedItem = this.parser.findItem( eachItem.getName() );
+				final Optional<ICanonicalItem> matchedItem = itemFactory.findBestMatchByName( eachItem.getNamePossibilities() );
+
+		    	final ICanonicalItem gotOrCreatedItem = matchedItem.isPresent() ? matchedItem.get() : parser.findItem( eachItem.getOriginalName() );
+
 				final Ingredient ingr = new Ingredient( gotOrCreatedItem, eachItem.getQuantity(), Boolean.TRUE);
 
 				if ( eachItem.getNote() != null) {
@@ -123,7 +129,9 @@ public class TestDataUtils {
 				}
 
 				ingr.addNotes( ENGLISH, eachItem.getExtraNotes());
-				
+
+				System.out.println("*** " + ingr);
+
 				allIngredients.add(ingr);
 			}
 		}

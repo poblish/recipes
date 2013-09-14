@@ -102,9 +102,12 @@ public class IngredientParser {
             	
             	final Quantity q = new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse(numericQuantityStr));
 
+            	// Get all the possible combinations of names
+            	final SplitResults splitResults = new OptionalNameSplitter().split( name1, name2);
+
             	try {
-            		handleOptionalIngredient( name1, q, m.group(4), adjusted.getNotes(), inHandler, inDeferHandler);
-            		handleOptionalIngredient( name2, q, m.group(4), adjusted.getNotes(), inHandler, inDeferHandler);
+            		handleOptionalIngredient( splitResults.getFirstResults(), q, m.group(4), adjusted.getNotes(), inHandler, inDeferHandler);
+            		handleOptionalIngredient( splitResults.getSecondResults(), q, m.group(4), adjusted.getNotes(), inHandler, inDeferHandler);
 				}
             	catch (IOException e) {
 					Throwables.propagate(e);  // Ugh FIXME
@@ -220,10 +223,13 @@ public class IngredientParser {
 		return false;
 	}
 
-	private void handleOptionalIngredient( final String inItemName, final IQuantity inQuantity,
+	private void handleOptionalIngredient( final String[] namePossibilities, final IQuantity inQuantity,
 										   final String inNote, final Collection<String> inExtraNotes,
 										   final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) throws IOException {
-    	final Optional<ICanonicalItem> item1 = itemFactory.get(inItemName);
+
+		// Try the potentially best (longest) name only. If no match, defer, and then retry all possibilities (from best to worst) to maximise chance of getting match
+
+    	final Optional<ICanonicalItem> item1 = itemFactory.get( namePossibilities[0] );
     	
     	if (item1.isPresent()) {
 			final Ingredient ingr1 = new Ingredient( item1.get(), inQuantity, Boolean.TRUE);
@@ -237,7 +243,7 @@ public class IngredientParser {
 			inHandler.foundIngredient(ingr1);
     	}
     	else if ( inDeferHandler != null) {
-			inDeferHandler.deferIngredient( new DeferralStatus( inItemName, inQuantity, inNote, inExtraNotes) );
+			inDeferHandler.deferIngredient( new DeferralStatus( namePossibilities, inQuantity, inNote, inExtraNotes) );
     	}
     	else {
     		// Create???

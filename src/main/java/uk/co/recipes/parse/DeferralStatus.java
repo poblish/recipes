@@ -15,20 +15,24 @@ import uk.co.recipes.api.IQuantity;
  */
 public class DeferralStatus {
 
-	private String name;
+	private String[] names;
 	private IQuantity q;
 	private String note;
 	private Collection<String> notes;
 
-	public DeferralStatus( final String inItemName, final IQuantity inQuantity, final String inNote, final Collection<String> inExtraNotes) {
-		name = inItemName;
+	public DeferralStatus( final String[] inNamePossibilities, final IQuantity inQuantity, final String inNote, final Collection<String> inExtraNotes) {
+		names = inNamePossibilities;
 		q = inQuantity;
 		note = inNote;
 		notes = inExtraNotes;
 	}
 
-	public String getName() {
-		return name;
+	public String[] getNamePossibilities() {
+		return names;
+	}
+
+	public String getOriginalName() {
+		return names[ names.length - 1];
 	}
 
 	public IQuantity getQuantity() {
