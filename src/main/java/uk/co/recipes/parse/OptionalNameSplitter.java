@@ -63,7 +63,7 @@ public class OptionalNameSplitter {
 
 				each.append( " " + WORD_JOINER.join(wordsColl2) );
 
-				poss1.add(each.toString());
+				poss2.add(each.toString());
 			}
 
 			if ( numWordsToSkip + startIndex < words2.length) {
@@ -78,7 +78,7 @@ public class OptionalNameSplitter {
 					each.append( words2[i] );
 				}
 
-				poss2.add(each.toString());
+				poss1.add(each.toString());
 			}
 		}
 
