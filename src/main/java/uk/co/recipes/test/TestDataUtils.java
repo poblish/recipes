@@ -130,8 +130,6 @@ public class TestDataUtils {
 
 				ingr.addNotes( ENGLISH, eachItem.getExtraNotes());
 
-				System.out.println("*** " + ingr);
-
 				allIngredients.add(ingr);
 			}
 		}
