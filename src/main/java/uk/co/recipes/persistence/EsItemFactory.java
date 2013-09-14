@@ -258,6 +258,17 @@ public class EsItemFactory implements IItemPersistence {
         return results;
 	}
 
+	public Optional<ICanonicalItem> findBestMatchByName( final String[] inNames) throws IOException {
+		for ( String eachName : inNames) {
+			Optional<ICanonicalItem> optItem = get(eachName);
+			if (optItem.isPresent()) {
+				return optItem;
+			}
+		}
+
+		return Optional.absent();
+	}
+
 	public void waitUntilRefreshed() {
 		esUtils.waitUntilTypesRefreshed("items");
 	}
