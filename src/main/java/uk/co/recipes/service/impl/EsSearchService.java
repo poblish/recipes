@@ -30,6 +30,7 @@ import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.api.ISearchResult;
+import uk.co.recipes.tags.TagUtils;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
@@ -209,6 +210,17 @@ public class EsSearchService implements ISearchAPI {
     private String tagString( final ITag inTag) {
         return inTag + ":true";
     }
+
+	@Override
+	public List<ITag> findTagsByName( String inName) throws IOException {
+		// A bit of a cheat...
+		return TagUtils.findTagsByName(inName);
+	}
+
+	@Override
+	public int countTagsByName( String inName) throws IOException {
+		return findTagsByName(inName).size();
+	}
 
     @Override
     public List<ISearchResult<?>> findPartial( final String inStr) throws IOException {

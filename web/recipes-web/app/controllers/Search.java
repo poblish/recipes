@@ -13,6 +13,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
+import uk.co.recipes.api.ITag;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.api.ISearchResult;
 import uk.co.recipes.service.impl.EsSearchService;
@@ -32,6 +33,7 @@ public class Search extends Controller {
 	private ISearchAPI search;
 
     private static final List<IRecipe> EMPTY_RECIPES = Collections.emptyList();
+    private static final List<ITag> EMPTY_TAGS = Collections.emptyList();
     private static final List<ICanonicalItem> EMPTY_ITEMS = Collections.emptyList();
 
     @Inject
@@ -45,11 +47,11 @@ public class Search extends Controller {
         final boolean gotInput = ( theInputs != null && theInputs.length > 0 && !theInputs[0].isEmpty());
 
         if (!gotInput) {
-            return ok(views.html.search.render( "-", EMPTY_RECIPES, EMPTY_ITEMS));
+            return ok(views.html.search.render( "-", EMPTY_RECIPES, EMPTY_TAGS, EMPTY_ITEMS));
         }
 
         final String termToUse = theInputs[0].trim();
-        return ok(views.html.search.render( "'" + termToUse + "'", search.findRecipesByName(termToUse), search.findItemsByName(termToUse) ));
+        return ok(views.html.search.render( "'" + termToUse + "'", search.findRecipesByName(termToUse), search.findTagsByName(termToUse), search.findItemsByName(termToUse) ));
     }
 
     public Result findPartial() throws IOException {
