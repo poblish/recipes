@@ -25,7 +25,6 @@ import org.elasticsearch.indices.IndexMissingException;
 import org.slf4j.LoggerFactory;
 
 import uk.co.recipes.api.ICanonicalItem;
-import uk.co.recipes.corr.Correlations;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.events.impl.DefaultEventService;
 import uk.co.recipes.events.impl.MyrrixUpdater;
@@ -66,7 +65,7 @@ import dagger.Provides;
  * @author andrewregan
  * 
  */
-@Module(injects={EsItemFactory.class, EsRecipeFactory.class, ItemsLoader.class, IngredientParser.class, TestDataUtils.class, Correlations.class, ObjectMapper.class, ClientRecommender.class,
+@Module(injects={EsItemFactory.class, EsRecipeFactory.class, ItemsLoader.class, IngredientParser.class, TestDataUtils.class, ObjectMapper.class, ClientRecommender.class,
 				 MyrrixTasteRecommendationService.class, MyrrixRecommendationService.class, MyrrixTasteSimilarityService.class, MyrrixExplorerService.class,
 				 Client.class, EsSearchService.class, EsUserFactory.class, EsSequenceFactory.class, MyrrixUpdater.class, IEventService.class, UserRatings.class,
 				 MetricRegistry.class, EsExplorerFilters.class, NameAdjuster.class})
