@@ -53,6 +53,7 @@ skinless
 slices
 small
 smoked
+softened
 sustainable
 thick
 tin

@@ -75,8 +75,20 @@ public final class UnitParser {
 			return Units.POT;
 		}
 
-		if (s.equals("BUNCH")) {
+		if (s.startsWith("BUNCH")) {
 			return Units.BUNCHES;
+		}
+
+		if (s.startsWith("BIG BUNCH") || s.startsWith("LARGE BUNCH")) {
+			return Units.BIG_BUNCHES;
+		}
+
+		if (s.startsWith("SMALL BUNCH")) {
+			return Units.SMALL_BUNCHES;
+		}
+
+		if (s.startsWith("BIG PINCH")) {
+			return Units.BIG_PINCH;
 		}
 
 		if (s.equals("SPLASH")) {
