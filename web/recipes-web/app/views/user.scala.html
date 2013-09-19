@@ -36,16 +36,8 @@
 			}
 			
 		<div class="col-md-4">
-			<div class="panel panel-default">
-		  		<div class="panel-heading"><a href="/recipes/@eachRecipe.getTitle()">@eachRecipe.getTitle()</a>&nbsp;<a onclick="getForkName('@eachRecipe.getTitle()')" href="#">[F]</a>&nbsp;<a id="toggle_@index" class="btn btn-default" href="#"><i class="glyphicon glyphicon-chevron-down"></i></a></div>
-		  		<div class="panel-body" style="display: none" id="ingredients_@index"><ol>
-		@for(item <- eachRecipe.getItems()) {
-		<li><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}</li>
-		}
-		  			</ol>
-		  		</div>
-			</div>
-		</div>  <!-- <div class="span4"> -->
+			@_displayRecipe( eachRecipe, index)
+		</div>  <!-- <div class="col-md-4"> -->
 		
 		<script>
 		$('#toggle_@index').click(function() {

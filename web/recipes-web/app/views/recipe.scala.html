@@ -30,9 +30,6 @@
 	  </ul>
 	</div>
 
-	<p><span class="label label-default">Created:</span> @recipe.getCreationTime() </p>
-	<p><span class="label label-default">Categorisation:</span> @categorisation</p>
-
 	<!-- Explorer Filter Stuff starts -->
 	<div class="btn-group">
 	  <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#">
@@ -61,12 +58,56 @@
 
 	<div class="row">
 	  <div class="col-md-3">
-		<h3>Ingredients:</h3>
-		<ul class="list-group">
-		@for(item <- recipe.getItems()) {
-		<li class="list-group-item"><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}&nbsp;<a href="/recipes/@recipe.getTitle()/@item.getCanonicalName()/remove">[x]</a></li>
-		}
-		</ul>
+
+		<div class="panel-group" id="accordion">
+		  <div class="panel panel-default">
+		    <div class="panel-heading">
+		      <h4 class="panel-title">
+		        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+		          Ingredients:
+		        </a>
+		      </h4>
+		    </div>
+		    <div id="collapse1" class="panel-collapse collapse in">
+		      <div class="panel-body">
+				<ul class="list-group">
+				@for(ingr <- recipe.getIngredients()) {
+				<li class="list-group-item"><a href="http://localhost:9000/items/@ingr.getItem().getCanonicalName()">@ingr.getItem().getCanonicalName()</a>&nbsp;@if(ingr.isOptional()) { <span>(optional)</span>&nbsp;}@for(tagName <- ingr.getItem().getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}&nbsp;<a href="/recipes/@recipe.getTitle()/@ingr.getItem().getCanonicalName()/remove">[x]</a></li>
+				}
+				</ul>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="panel panel-default">
+		    <div class="panel-heading">
+		      <h4 class="panel-title">
+		        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+		          Categories:
+		        </a>
+		      </h4>
+		    </div>
+		    <div id="collapse2" class="panel-collapse collapse">
+		      <div class="panel-body">
+				@categorisation
+		      </div>
+		    </div>
+		  </div>
+		  <div class="panel panel-default">
+		    <div class="panel-heading">
+		      <h4 class="panel-title">
+		        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+		          Details:
+		        </a>
+		      </h4>
+		    </div>
+		    <div id="collapse3" class="panel-collapse collapse">
+		      <div class="panel-body">
+				Created by <a href="http://localhost:9000/users/@recipe.getCreator().getUserName()">@recipe.getCreator().getDisplayName()</a> on @org.joda.time.format.DateTimeFormat.forPattern("dd MMMM yyyy 'at' HH:mm").withLocale( Locale.UK ).print( recipe.getCreationTime() )
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
 	  </div>
 	  <div class="col-md-9">
 		<div class="container">
@@ -79,18 +120,10 @@
 			}
 		 <div class="row">
 		}
-		
+
 		<div class="col-md-4">
-			<div class="panel panel-default">
-		  		<div class="panel-heading"><a href="/recipes/@eachRecipe.getTitle()">@eachRecipe.getTitle()</a>&nbsp;<a href="/recipes/@eachRecipe.getTitle()/fork">[F]</a>&nbsp;<a id="toggle_@index" class="btn btn-default" href="#"><i class="glyphicon glyphicon-chevron-down"></i></a></div>
-		  		<div class="panel-body" style="display: none" id="ingredients_@index"><ol>
-		@for(item <- eachRecipe.getItems()) {
-		<li><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}</li>
-		}
-		  			</ol>
-		  		</div>
-			</div>
-		</div>  <!-- <div class="span4"> -->
+			@_displayRecipe( eachRecipe, index)
+		</div>  <!-- <div class="col-md-4"> -->
 		
 		<script>
 		$('#toggle_@index').click(function() {
