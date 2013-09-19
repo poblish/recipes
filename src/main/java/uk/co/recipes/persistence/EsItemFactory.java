@@ -109,9 +109,8 @@ public class EsItemFactory implements IItemPersistence {
 
 		try {
 		    final ICanonicalItem item = mapper.readValue( esUtils.parseSource( itemIndexUrl + "/" + URLEncoder.encode( inId, "utf-8")), CanonicalItem.class);
-
-		    if ( item == null || itemsCache == null) {
-		    	return item;
+		    if ( item == null) {
+		    	return null;  // Nothing to do - cannot cache value of null anyway. Can this actually happen?!?
 		    }
 
 		    itemsCache.put( inId, item);  // Cache MISS
