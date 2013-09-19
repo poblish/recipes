@@ -24,6 +24,7 @@ import uk.co.recipes.ratings.UserRatings;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
+import uk.co.recipes.tags.NationalCuisineTags;
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Optional;
@@ -76,7 +77,7 @@ public class Recipes extends AbstractExplorableController {
         }
 
         final IRecipe recipe = optRecipe.get();
-        final Multiset<ITag> categorisation = Categorisation.forIngredients( recipe.getIngredients() );
+        final Multiset<ITag> categorisation = Categorisation.forIngredients( recipe.getIngredients(), NationalCuisineTags.values());
 
         return ok(views.html.recipe.render( recipe, categorisation, explorer.similarRecipes( recipe, getExplorerFilter(explorerFilters), 10)));
     }
