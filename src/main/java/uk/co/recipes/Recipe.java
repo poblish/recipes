@@ -112,7 +112,7 @@ public class Recipe implements IRecipe {
 	@JsonIgnore
 	@Override
     public Collection<ICanonicalItem> getItems() {
-        final Collection<ICanonicalItem> is = Sets.newHashSet();
+        final Collection<ICanonicalItem> is = Sets.newLinkedHashSet();
 
         for ( IRecipeStage eachStage : stages) {
             is.addAll( eachStage.getItems() );
