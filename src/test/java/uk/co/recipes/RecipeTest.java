@@ -4,6 +4,7 @@
 package uk.co.recipes;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 
 import java.util.Locale;
@@ -29,11 +30,13 @@ public class RecipeTest {
 
 		final ICanonicalItem ingr1 = new CanonicalItem("Lamb");
 		final ICanonicalItem ingr2 = new CanonicalItem("Beef");
+		final ICanonicalItem ingr3 = new CanonicalItem("Carrot");
+		final ICanonicalItem ingr4 = new CanonicalItem("Aubergine");
 
 		final User user = new User( "aregan", "Andrew R");
 
 		final RecipeStage rs1 = new RecipeStage();
-		rs1.addIngredients( new Ingredient( ingr1, q1), new Ingredient( ingr2, q1) );
+		rs1.addIngredients( new Ingredient( ingr1, q1), new Ingredient( ingr2, q1), new Ingredient( ingr3, q1) , new Ingredient( ingr4, q1));
 
 		final Recipe r1 = new Recipe(user, "1", Locale.UK);
 		r1.addStage(rs1);
@@ -52,7 +55,10 @@ public class RecipeTest {
 
 		TestUtils.testEqualsHashcode(r1, r2, r3, r4, r5);
 
-		assertThat( r5.toString(), is("Recipe{title=1, id=NEW, creator=User{id=NEW, username=aregan, displayName=Andrew R}, stages=[RecipeStage{ingredients=[Ingredient{q=100 GRAMMES, item=CanonicalItem{name=Lamb}}, Ingredient{q=100 GRAMMES, item=CanonicalItem{name=Beef}}]}], tags={SERVES_COUNT=4}, locale=en_GB}"));
+		assertThat( r5.getItems(), contains( ingr1, ingr2, ingr3, ingr4 ));
+		assertThat( r5.getSortedItems(), contains( ingr4, ingr2, ingr3, ingr1 ));
+
+		assertThat( r5.toString(), is("Recipe{title=1, id=NEW, creator=User{id=NEW, username=aregan, displayName=Andrew R}, stages=[RecipeStage{ingredients=[Ingredient{q=100 GRAMMES, item=CanonicalItem{name=Lamb}}, Ingredient{q=100 GRAMMES, item=CanonicalItem{name=Beef}}, Ingredient{q=100 GRAMMES, item=CanonicalItem{name=Carrot}}, Ingredient{q=100 GRAMMES, item=CanonicalItem{name=Aubergine}}]}], tags={SERVES_COUNT=4}, locale=en_GB}"));
 
         assertThat((Recipe) r1.clone(), is(r1));
         assertThat((Recipe) r2.clone(), is(r2));
