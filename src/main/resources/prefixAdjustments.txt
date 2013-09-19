@@ -54,6 +54,7 @@ slices
 small
 smoked
 softened
+steamed
 sustainable
 thick
 tin
@@ -61,5 +62,7 @@ tinned
 toasted
 top-quality
 unsweetened
+very ripe
 vine-ripened
+warmed
 whole

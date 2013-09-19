@@ -150,9 +150,15 @@
 ---
 {canonicalName: Garam Masala, tags: {SPICE, INDIAN}, aliases: {Garam Masala Powder}}
 ---
-{canonicalName: Ginger, tags: {SPICE, INDIAN, CHINESE}, aliases: {Root Ginger}}
+{canonicalName: Ginger, tags: {SPICE, INDIAN, CHINESE}}
+---
+{    canonicalName: Crystallised Ginger, parent: Ginger}
 ---
 {    canonicalName: Ginger Paste, parent: Ginger}
+---
+{    canonicalName: Root Ginger, parent: Ginger}
+---
+{    canonicalName: Stem Ginger, parent: Ginger}
 ---
 {canonicalName: Mace, tags: SPICE}
 ---
@@ -252,6 +258,8 @@
 ---
 {    canonicalName: Carnaroli Rice, parent: Rice, tags: {ITALIAN}}
 ---
+{    canonicalName: Jasmine Rice, parent: Rice, tags: {ASIAN}}
+---
 {    canonicalName: Risotto Rice, parent: Rice, tags: {ITALIAN, SPANISH}}
 ---
 
@@ -267,6 +275,16 @@
 {canonicalName: Cabbage, tags: VEGETABLE, aliases: {Green Cabbage, Cabbage Leaves}}
 ---
 {    canonicalName: Savoy Cabbage, parent: Cabbage}
+---
+{canonicalName: Capsicum, tags: VEGETABLE, aliases: {Red Peppers}}
+---
+{    canonicalName: Green Pepper, parent: Capsicum, aliases: {Green Peppers}}
+---
+{    canonicalName: Orange Pepper, parent: Capsicum, aliases: {Orange Peppers}}
+---
+{    canonicalName: Red Pepper, parent: Capsicum, aliases: {Red Peppers}}
+---
+{    canonicalName: Yellow Pepper, parent: Capsicum, aliases: {Yellow Peppers}}
 ---
 {canonicalName: Carrot, tags: VEGETABLE, aliases: {Carrots}}
 ---
@@ -346,19 +364,13 @@
 ---
 {canonicalName: Pumpkin, tags: VEGETABLE, aliases: {Pumpkins}}
 ---
-{canonicalName: Red Pepper, tags: VEGETABLE, aliases: {Red Peppers}}
----
-{canonicalName: Green Pepper, tags: VEGETABLE, aliases: {Green Peppers}}
----
-{canonicalName: Yellow Pepper, tags: VEGETABLE, aliases: {Yellow Peppers}}
----
 {canonicalName: Potato, tags: VEGETABLE, aliases: {Potatoes}}
 ---
 {    canonicalName: Baking Potatoes, parent: Potato, aliases: {Baking Potato}}
 ---
 {    canonicalName: Desirée Potatoes, parent: Potato}
 ---
-{    canonicalName: Floury Potatoes, parent: Potato}
+{    canonicalName: Floury Potatoes, parent: Potato, aliases: {Floury Potato}}
 ---
 {    canonicalName: New Potato, parent: Potato, aliases: {New Potatoes}}
 ---
@@ -367,6 +379,8 @@
 {    canonicalName: Roasting Potatoes, parent: Potato, aliases: {Roasting Potato}}
 ---
 {    canonicalName: Waxy Potatoes, parent: Potato}
+---
+{canonicalName: Radish, tags: {VEGETABLE}, aliases: Radishes}
 ---
 {canonicalName: Rocket, tags: {VEGETABLE, SALAD_LEAF, ITALIAN}, aliases: {Rocket Leaves}}
 ---
@@ -444,7 +458,7 @@
 ---
 {canonicalName: Apricot, tags: {FRUIT}, aliases: {Apricots}}
 ---
-{    canonicalName: Apricot Conserve, parent: Apricot, tags: {CONDIMENT}}
+{    canonicalName: Apricot Conserve, parent: Apricot, tags: {CONDIMENT}, aliases: {Apricot Jam}}
 ---
 {canonicalName: Avocado, tags: {FRUIT, MEXICAN}, aliases: {Avocados}}
 ---
@@ -456,7 +470,7 @@
 ---
 {    canonicalName: Sour Cherries, parent: Cherries}
 ---
-{canonicalName: Coconut, tags: {FRUIT, NUT, INDIAN, THAI, VIETNAMESE}, aliases: {Coconut grated}}
+{canonicalName: Coconut, tags: {FRUIT, NUT, TROPICAL, INDIAN, THAI, VIETNAMESE}, aliases: {Coconut grated}}
 ---
 {    canonicalName: Coconut Milk, parent: Coconut}
 ---
@@ -478,11 +492,15 @@
 ---
 {    canonicalName: Lemon Juice, parent: Lemon}
 ---
+{    canonicalName: Lemon Wedge, parent: Lemon, aliases: {Lemon Wedges}}
+---
 {    canonicalName: Lemon Zest, parent: Lemon}
 ---
-{canonicalName: Lime, tags: {FRUIT, CITRUS, LIME}, aliases: {Limes}}
+{canonicalName: Lime, tags: {FRUIT, CITRUS, TROPICAL, LIME}, aliases: {Limes}}
 ---
 {    canonicalName: Lime Juice, parent: Lime}
+---
+{    canonicalName: Lime Wedge, parent: Lime, aliases: {Lime Wedges}}
 ---
 {canonicalName: Mango, tags: {FRUIT}}
 ---
@@ -498,15 +516,31 @@
 ---
 {canonicalName: Pear, tags: {FRUIT}, aliases: {Pears}}
 ---
+{canonicalName: Pineapple, tags: {FRUIT, TROPICAL}, aliases: {Pineapples}}
+---
+{canonicalName: Plum, tags: {FRUIT}, aliases: {Plums}}
+---
+{    canonicalName: Prune, parent: Plum, aliases: {Prunes}}
+---
 {canonicalName: Raspberries, tags: FRUIT, aliases: Raspberry}
 ---
 {    canonicalName: Raspberry Jam, parent: Raspberries, tags: {CONDIMENT}, aliases: Raspberry Conserve}
+---
+{canonicalName: Rhubarb, tags: FRUIT}
+---
+{    canonicalName: Forced Rhubarb, parent: Rhubarb}
 ---
 {canonicalName: Satsuma, tags: {FRUIT, CITRUS}}
 ---
 {canonicalName: Strawberries, tags: FRUIT, aliases: Strawberry}
 ---
 {    canonicalName: Strawberry Jam, parent: Strawberries, tags: {CONDIMENT}, aliases: Strawberry Conserve}
+---
+{canonicalName: Tamarind, tags: {FRUIT}}
+---
+{    canonicalName: Tamarind Paste, parent: Tamarind, tags: {SAUCE}}
+---
+{    canonicalName: Tamarind Pulp, parent: Tamarind}
 ---
 {canonicalName: Tangerine, tags: {FRUIT, CITRUS}}
 ---
@@ -530,7 +564,15 @@
 ---
 {canonicalName: Focaccia, tags: {BREAD, ITALIAN}}
 ---
+{canonicalName: Roti, tags: {BREAD, INDIAN, CARIBBEAN}}
+---
 {canonicalName: Rye Bread, tags: {BREAD}}
+---
+{canonicalName: Tortilla, tags: {BREAD, MEXICAN}, aliases: Tortillas}
+---
+{    canonicalName: Corn Tortilla, parent: Tortilla, aliases: Corn Tortillas}
+---
+{    canonicalName: Flour Tortilla, parent: Tortilla, aliases: Flour Tortillas}
 ---
 
 
@@ -574,7 +616,7 @@
 ---
 
 
-{canonicalName: Bulgar Wheat, tags: GRAIN}
+{canonicalName: Bulgur Wheat, tags: GRAIN, aliases: {Bulghar Wheat, Bulghur Wheat, Bulgar Wheat}}
 ---
 {canonicalName: Couscous, tags: GRAIN}
 ---
@@ -794,9 +836,9 @@
 ---
 {    canonicalName: Mild Curry Paste, tags: INDIAN, parent: Curry Paste}
 ---
-{    canonicalName: Thai Green Curry Paste, tags: THAI, parent: Curry Paste}
+{    canonicalName: Thai Green Curry Paste, tags: THAI, parent: Curry Paste, aliases: {Green Thai Curry Paste}}
 ---
-{    canonicalName: Thai Red Curry Paste, tags: THAI, parent: Curry Paste}
+{    canonicalName: Thai Red Curry Paste, tags: THAI, parent: Curry Paste, aliases: {Red Thai Curry Paste, Red Curry Paste}}
 ---
 {canonicalName: Fish Sauce, tags: {FISH, SAUCE, THAI, VIETNAMESE}}
 ---
@@ -810,18 +852,20 @@
 ---
 {    canonicalName: Wholegrain Mustard, parent: Mustard, aliases: {Grainy Mustard}}
 ---
+{canonicalName: Oyster Sauce, tags: {SAUCE, CHINESE, FISH}}
+---
 {canonicalName: Pesto, tags: {SAUCE, ITALIAN}}
 ---
 {canonicalName: Soy Sauce, tags: {SAUCE, CHINESE}}
 ---
-{canonicalName: Tamarind Paste, tags: {FRUIT, SAUCE}}
----
-{canonicalName: Worcestershire Sauce, tags: {FISH, SAUCE}}
+{canonicalName: Worcestershire Sauce, tags: {ENGLISH, SAUCE}, contains: Anchovy}
 ---
 {canonicalName: Vegetable Stock, tags: {VEGETABLE, SAUCE}}
 ---
 
 
+{canonicalName: Fusilli, tags: {PASTA, ITALIAN}}
+---
 {canonicalName: Gnocchi, tags: {PASTA, ITALIAN}}
 ---
 {canonicalName: Linguine, tags: {PASTA, ITALIAN}}
@@ -888,7 +932,9 @@
 ---
 {    canonicalName: Tuna Steaks, parent: Tuna}
 ---
-{canonicalName: White Fish Fillet, tags: {FISH,SEAFOOD}}
+{canonicalName: White Fish, tags: {FISH,SEAFOOD}}
+---
+{    canonicalName: White Fish Fillets, parent: White Fish, aliases: White Fish Fillet}
 ---
 
 
@@ -913,6 +959,8 @@
 {    canonicalName: Braising Steak, parent: Beef, aliases: {Braising Steaks}}
 ---
 {    canonicalName: Minced Beef, parent: Beef, aliases: {Beef Mince}}
+---
+{    canonicalName: Oxtail, parent: Beef}
 ---
 {    canonicalName: Rump Steak, parent: Beef, aliases: {Rump Steaks}}
 ---
@@ -941,6 +989,8 @@
 {canonicalName: Chicken Liver, tags: {MEAT, POULTRY, OFFAL}, aliases: {Chicken Livers}}
 ---
 {canonicalName: Duck, tags: {MEAT, POULTRY}}
+---
+{    canonicalName: Duck Breast, parent: Duck, aliases: Duck Breasts}
 ---
 {    canonicalName: Duck Legs, parent: Duck}
 ---
