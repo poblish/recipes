@@ -5,3 +5,5 @@ myrrix-serving-1.0.1.jar
 .target/
 runMyrrix.sh
 .settings/
+frontier/
+bbcgoodfood/
