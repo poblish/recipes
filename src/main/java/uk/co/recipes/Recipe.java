@@ -102,7 +102,7 @@ public class Recipe implements IRecipe {
 	 */
 	@Override
 	public Collection<IIngredient> getIngredients() {
-		final Collection<IIngredient> is = Sets.newHashSet();
+		final Collection<IIngredient> is = Sets.newLinkedHashSet();
 
 		for ( IRecipeStage eachStage : stages) {
 			is.addAll( eachStage.getIngredients() );
