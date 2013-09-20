@@ -113,6 +113,20 @@ public class Recipe implements IRecipe {
 
 	@JsonIgnore
 	@Override
+    public Collection<IIngredient> getSortedIngredients() {
+        List<IIngredient> itemsList = Lists.newArrayList( getIngredients() );
+        Collections.sort( itemsList, new Comparator<IIngredient>() {
+
+			@Override
+			public int compare( IIngredient o1, IIngredient o2) {
+				return o1.getItem().getCanonicalName().compareToIgnoreCase( o2.getItem().getCanonicalName() );
+			}} );
+
+        return itemsList;
+    }
+
+	@JsonIgnore
+	@Override
     public Collection<ICanonicalItem> getItems() {
         final Collection<ICanonicalItem> is = Sets.newLinkedHashSet();
 
@@ -130,7 +144,7 @@ public class Recipe implements IRecipe {
 
 			@Override
 			public int compare( ICanonicalItem o1, ICanonicalItem o2) {
-				return o1.getCanonicalName().compareTo( o2.getCanonicalName() );
+				return o1.getCanonicalName().compareToIgnoreCase( o2.getCanonicalName() );
 			}} );
 
         return itemsList;

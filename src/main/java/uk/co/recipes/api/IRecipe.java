@@ -34,6 +34,7 @@ public interface IRecipe extends ITagging, Cloneable, java.io.Serializable {
 	void setForkDetails( final IForkDetails inForkDetails);
 
 	Collection<IIngredient> getIngredients();
+	Collection<IIngredient> getSortedIngredients();
 
 	Collection<ICanonicalItem> getItems();
 
