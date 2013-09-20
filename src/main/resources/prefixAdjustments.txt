@@ -37,6 +37,7 @@ long
 low-fat
 low salt
 medium
+mini
 peeled
 pitted
 plump
@@ -50,6 +51,7 @@ roughly
 salted
 shelled
 skinless
+sliced
 slices
 small
 smoked

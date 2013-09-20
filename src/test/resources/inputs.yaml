@@ -676,6 +676,8 @@
 ---
 {canonicalName: Ghee, tags: {DAIRY, FAT, INDIAN}, aliases: {Butter Ghee}}
 ---
+{canonicalName: Lard, tags: {MEAT, FAT}}
+---
 {canonicalName: Margarine, tags: FAT}
 ---
 
