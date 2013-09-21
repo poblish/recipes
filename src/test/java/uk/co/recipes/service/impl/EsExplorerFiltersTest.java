@@ -73,7 +73,7 @@ public class EsExplorerFiltersTest {
     @Test
     public void testIncludeMultipleTags() throws IOException {
         final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT, CommonTags.CITRUS ).toFilter();
-        assertThat( filter.idsToInclude().length, is(11));
+        assertThat( filter.idsToInclude().length, greaterThan(12));
         assertThat( filter.idsToExclude().length, is(0));
     }
 
@@ -87,14 +87,14 @@ public class EsExplorerFiltersTest {
     @Test
     public void testIncludeMultipleInclAndExclTags() throws IOException {
         final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT, CommonTags.CITRUS ).excludeTags( MeatAndFishTags.MEAT, CommonTags.VEGETABLE ).toFilter();
-        assertThat( filter.idsToInclude().length, is(11));
+        assertThat( filter.idsToInclude().length, greaterThan(12));
         assertThat( filter.idsToExclude().length, greaterThan(84));
     }
 
     @Test
     public void testIncludeMultipleTagsReordered() throws IOException {
         final IExplorerFilter filter = filters.build().includeTags( CommonTags.CITRUS, CommonTags.FRUIT ).toFilter();
-        assertThat( filter.idsToInclude().length, is(11));
+        assertThat( filter.idsToInclude().length, greaterThan(12));
         assertThat( filter.idsToExclude().length, is(0));
     }
 
