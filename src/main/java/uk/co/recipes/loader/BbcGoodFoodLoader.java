@@ -1,7 +1,7 @@
 /**
  * 
  */
-package uk.co.recipes;
+package uk.co.recipes.loader;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -11,12 +11,9 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 
-import org.apache.http.client.ClientProtocolException;
 import org.elasticsearch.client.Client;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
 
+import uk.co.recipes.DaggerModule;
 import uk.co.recipes.events.api.IEventListener;
 import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.persistence.EsItemFactory;
@@ -30,6 +27,7 @@ import uk.co.recipes.service.api.IUserPersistence;
 import uk.co.recipes.test.TestDataUtils;
 
 import com.codahale.metrics.MetricRegistry;
+import com.google.common.base.Throwables;
 
 import dagger.ObjectGraph;
 
@@ -39,7 +37,7 @@ import dagger.ObjectGraph;
  * @author andrewregan
  *
  */
-public class BbcGoodFoodLoaderTest {
+public class BbcGoodFoodLoader {
 
 	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
@@ -55,22 +53,38 @@ public class BbcGoodFoodLoaderTest {
     private IEventListener updater = GRAPH.get( MyrrixUpdater.class );
 
 
-	@BeforeClass
-	public void cleanIndices() throws ClientProtocolException, IOException {
+	public static void main( String[] args) {
+		try {
+			long st = System.currentTimeMillis();
+			new BbcGoodFoodLoader().start();
+			System.out.println("Finished loading in " + (( System.currentTimeMillis() - st) / 1000d) + " msecs");
+			System.exit(0);
+		}
+		catch (IOException e) {
+			Throwables.propagate(e);
+		} catch (InterruptedException e) {
+			Throwables.propagate(e);
+		}
+	}
+
+	public void start() throws IOException, InterruptedException {
 		updater.startListening();
 
 	    userFactory.deleteAll();
 		itemFactory.deleteAll();
 		recipeFactory.deleteAll();
 	    sequenceFactory.deleteAll();
+
+	    loadIngredientsFromYaml();
+
+	    shutDown();
 	}
 
-	@Test
 	public void loadIngredientsFromYaml() throws InterruptedException, IOException {
 		GRAPH.get( ItemsLoader.class ).load();
 
 		int count = 0;
-		int errors = 0;
+//		int errors = 0;
 
 		for ( File each : new File("src/test/resources/ingredients/bbcgoodfood/").listFiles( new FilenameFilter() {
 
@@ -86,7 +100,7 @@ public class BbcGoodFoodLoaderTest {
 			}
 			catch (RuntimeException e) {
 				System.err.println(e);
-				errors++;
+//				errors++;
 			}
 		}
 
@@ -96,7 +110,7 @@ public class BbcGoodFoodLoaderTest {
 
         assertThat( metrics.timer(TIMER_RECIPES_PUTS).getCount(), is((long) count));
 	}
-	@AfterClass
+
 	public void shutDown() {
 		esClient.close();
 	}
