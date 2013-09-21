@@ -22,8 +22,10 @@ import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.ratings.RecipeRating;
 import uk.co.recipes.ratings.UserRatings;
 import uk.co.recipes.service.api.IRecipePersistence;
+import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
+import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.tags.NationalCuisineTags;
 
 import com.codahale.metrics.MetricRegistry;
@@ -41,15 +43,17 @@ public class Recipes extends AbstractExplorableController {
 
     private IRecipePersistence recipes;
     private UserRatings ratings;
+    private IRecommendationsAPI recsApi;
 
     @Inject
     public Recipes( final MyrrixUpdater updater, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService, final EsItemFactory items,
-                    final EsRecipeFactory recipes, final EsUserFactory users, final UserRatings inRatings, final MetricRegistry metrics) {
+                    final EsRecipeFactory recipes, final EsUserFactory users, final UserRatings inRatings, final MyrrixRecommendationService inRecService, final MetricRegistry metrics) {
     	super( items, explorerFilters, inExplorerService, metrics);
 
     	updater.startListening();
         this.recipes = checkNotNull(recipes);
         this.ratings = checkNotNull(inRatings);
+        this.recsApi = checkNotNull(inRecService);
     }
 
     public Result fork( final String name) throws IOException, InterruptedException {
@@ -79,7 +83,7 @@ public class Recipes extends AbstractExplorableController {
         final IRecipe recipe = optRecipe.get();
         final Multiset<ITag> categorisation = Categorisation.forIngredients( recipe.getIngredients(), NationalCuisineTags.values());
 
-        return ok(views.html.recipe.render( recipe, categorisation, explorer.similarRecipes( recipe, getExplorerFilter(explorerFilters), 10)));
+        return ok(views.html.recipe.render( recipe, categorisation, explorer.similarRecipes( recipe, getExplorerFilter(explorerFilters), 12), recsApi.recommendIngredients( recipe, 12) ));
     }
 
     public Result rate( final String name, final int inScore) throws IOException, InterruptedException {

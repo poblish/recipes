@@ -3,8 +3,7 @@
  */
 package uk.co.recipes.service.impl;
 
-import static uk.co.recipes.metrics.MetricNames.TIMER_ITEMS_RECOMMENDATIONS;
-import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_RECOMMENDATIONS;
+import static uk.co.recipes.metrics.MetricNames.*;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -64,11 +63,35 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 	 * @see uk.co.recipes.service.api.IRecommendationsAPI#recommendIngredients(uk.co.recipes.api.IUser, int)
 	 */
 	@Override
-	public List<ICanonicalItem> recommendIngredients( IUser inUser, int inNumRecs) {
-	    final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_RECOMMENDATIONS).time();
+	public List<ICanonicalItem> recommendIngredients( final IUser inUser, int inNumRecs) {
+	    final Timer.Context timerCtxt = metrics.timer(TIMER_USER_ITEMS_RECOMMENDATIONS).time();
 
 		try {
-			return itemsFactory.getAll( MyrrixUtils.getItems( recommender.recommend( inUser.getId(), inNumRecs, false, new String[]{"ITEM"}) ) );
+			return recommendIngredientsForId( inUser.getId(), inNumRecs);
+        }
+        finally {
+            timerCtxt.stop();
+        }
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.co.recipes.service.api.IRecommendationsAPI#recommendIngredients(uk.co.recipes.api.IRecipe, int)
+	 */
+	@Override
+	public List<ICanonicalItem> recommendIngredients( final IRecipe inRecipe, int inNumRecs) {
+	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPE_ITEMS_RECOMMENDATIONS).time();
+
+		try {
+			return recommendIngredientsForId( inRecipe.getId(), inNumRecs);
+        }
+        finally {
+            timerCtxt.stop();
+        }
+	}
+
+	private List<ICanonicalItem> recommendIngredientsForId( final long inUserOrRecipeId, int inNumRecs) {
+		try {
+			return itemsFactory.getAll( MyrrixUtils.getItems( recommender.recommend( inUserOrRecipeId, inNumRecs, false, new String[]{"ITEM"}) ) );
 		}
         catch (NoSuchUserException e) {
             return Collections.emptyList();
@@ -78,9 +101,6 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
         }
         catch (IOException e) {
             throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
-        }
-        finally {
-            timerCtxt.stop();
         }
 	}
 

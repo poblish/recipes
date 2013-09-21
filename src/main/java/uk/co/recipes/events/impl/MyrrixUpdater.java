@@ -159,7 +159,10 @@ public class MyrrixUpdater implements IEventListener {
         try {
             for ( IIngredient eachIngr : inIngredients) {
             	changesMade |= setItemTagsForItem( eachIngr.getItem(), inRecipeId, 1.0f * booster.getBoostForQuantity( eachIngr.getItem(), eachIngr.getQuantity()));
-        	}
+
+    			/* FIXME */ recommender.ingest( new StringReader( inRecipeId + "," + eachIngr.getItem().getId() + ",1.0") );
+    			/* FIXME */ changesMade = true;
+    		}
 	    }
 		catch (TasteException e) {
 			Throwables.propagate(e);
@@ -180,6 +183,9 @@ public class MyrrixUpdater implements IEventListener {
         try {
             for ( IIngredient eachIngr : inIngredients) {
                 changesMade |= removeItemTagsForItem( eachIngr.getItem(), inRecipeId);
+
+    			/* FIXME */ recommender.ingest( new StringReader( inRecipeId + "," + eachIngr.getItem().getId() + ",-1.0") );
+    			/* FIXME */ changesMade = true;
             }
         }
         catch (TasteException e) {
