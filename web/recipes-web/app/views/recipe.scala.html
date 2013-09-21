@@ -110,53 +110,62 @@
 
 	  </div>
 	  <div class="col-md-9">
-		<div class="container">
-		<h3>Why not add?</h3>
-		@for(( eachItem, index) <- recommendedItems.zipWithIndex) {
-
-		@if((index % 3) == 0) {
-			@if( index >= 3) {
-			  </div>  <!-- <div class="row"> -->
+		@if( recommendedItems.size() == 0) {
+			<p>Sorry, no Ingredient suggestions</p>
+		} else {
+			<div class="container">
+			<h3>Why not add?</h3>
+			@for(( eachItem, index) <- recommendedItems.zipWithIndex) {
+	
+			@if((index % 3) == 0) {
+				@if( index >= 3) {
+				  </div>  <!-- <div class="row"> -->
+				}
+			 <div class="row">
 			}
-		 <div class="row">
-		}
-
-		<div class="col-md-4">
-			<div class="well"><a href="http://localhost:9000/items/@eachItem.getCanonicalName()">@eachItem.getCanonicalName()</a>&nbsp;@for(tagName <- eachItem.getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}</div>
-		</div>  <!-- <div class="col-md-4"> -->		
-		}
-		
-		</div>  <!-- <div class="container"> -->
-	  </div>
-
-		<div class="container">
-		<h3>Similar Recipes:</h3>
-		@for(( eachRecipe, index) <- similarities.zipWithIndex) {
-		
-		@if((index % 3) == 0) {
-			@if( index >= 3) {
-			  </div>  <!-- <div class="row"> -->
+	
+			<div class="col-md-4">
+				<div class="well"><a href="http://localhost:9000/items/@eachItem.getCanonicalName()">@eachItem.getCanonicalName()</a>&nbsp;@for(tagName <- eachItem.getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}</div>
+			</div>  <!-- <div class="col-md-4"> -->		
 			}
-		 <div class="row">
+
+			</div>  <!-- <div class="row"> -->
+			</div>  <!-- <div class="container"> -->
 		}
 
-		<div class="col-md-4">
-			@_displayRecipe( eachRecipe, index)
-		</div>  <!-- <div class="col-md-4"> -->
-		
-		<script>
-		$('#toggle_@index').click(function() {
-		  $('#ingredients_@index').slideToggle(function() {
-		    // Should toggle chevron
-		  });
-		});
-		</script>
-		
+		@if( similarities.size() == 0) {
+			<p>Sorry, no Similar recipes could be found</p>
+		} else {
+			<div class="container">
+			<h3>Similar Recipes:</h3>
+			@for(( eachRecipe, index) <- similarities.zipWithIndex) {
+			
+			@if((index % 3) == 0) {
+				@if( index >= 3) {
+				  </div>  <!-- <div class="row"> -->
+				}
+			 <div class="row">
+			}
+	
+			<div class="col-md-4">
+				@_displayRecipe( eachRecipe, index)
+			</div>  <!-- <div class="col-md-4"> -->
+			
+			<script>
+			$('#toggle_@index').click(function() {
+			  $('#ingredients_@index').slideToggle(function() {
+			    // Should toggle chevron
+			  });
+			});
+			</script>
+			
+			}
+			
+			</div>  <!-- <div class="row"> -->
+			</div>  <!-- <div class="container"> -->
 		}
-		
-		</div>  <!-- <div class="container"> -->
-	  </div>
-	</div>
+	  </div>  <!-- <div class="col-md-9"> -->
+	</div>  <!-- <div class="row"> -->
 
 <script>
 function addInclTag(inTag) {
