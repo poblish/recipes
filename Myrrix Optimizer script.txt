@@ -1,0 +1,25 @@
+# See: http://myrrix.com/tuning-quality/
+
+/usr/bin/java -cp /Users/andrewregan/Development/java/myrrix-recommender-trunk/online/target/myrrix-online-1.0.2-SNAPSHOT.jar:/Users/andrewregan/Development/java/myrrix-recommender-trunk/common/target/myrrix-common-1.0.2-SNAPSHOT.jar:/Users/andrewregan/.m2/repository/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5.jar:/Users/andrewregan/.m2/repository/org/slf4j/slf4j-jdk14/1.7.5/slf4j-jdk14-1.7.5.jar:/Users/andrewregan/.m2/repository/com/google/guava/guava/14.0.1/guava-14.0.1.jar:/Users/andrewregan/.m2/repository/org/apache/commons/commons-math3/3.2/commons-math3-3.2.jar:/Users/andrewregan/.m2/repository/org/apache/mahout/mahout-core/0.8/mahout-core-0.8.jar:/Users/andrewregan/.m2/repository/org/apache/commons/commons-compress/1.5/commons-compress-1.5.jar:/Users/andrewregan/Development/java/myrrix-recommender-trunk/online-local/target/myrrix-online-local-1.0.2-SNAPSHOT.jar net.myrrix.online.eval.ParameterOptimizer /private/var/folders/bs/_9l47vd14k37pgbd5v63cc200000gn/T/1379889495517-0 7 1.0 model.features=19:25 model.als.lambda=0.0001:1
+
+Various runs...
+
+Sep 22, 2013 11:58:46 PM net.myrrix.online.eval.ParameterOptimizer findGoodParameterValues
+INFO: Best parameter values so far are {model.als.lambda=0.3087111111111111, model.features=20}
+Sep 22, 2013 11:58:46 PM net.myrrix.online.eval.ParameterOptimizer findGoodParameterValues
+INFO: Final best parameter values are {model.als.lambda=0.3087111111111111, model.features=20}
+{model.als.lambda=0.3087111111111111, model.features=20}
+
+Sep 23, 2013 12:12:48 AM net.myrrix.online.eval.ParameterOptimizer findGoodParameterValues
+INFO: Best parameter values so far are {model.als.lambda=0.44449999999999995, model.features=23}
+Sep 23, 2013 12:12:48 AM net.myrrix.online.eval.ParameterOptimizer findGoodParameterValues
+INFO: Final best parameter values are {model.als.lambda=0.44449999999999995, model.features=23}
+{model.als.lambda=0.44449999999999995, model.features=23}
+
+INFO: Best parameter values so far are {model.als.lambda=0.41332397959183675, model.features=22}
+Sep 23, 2013 12:30:23 AM net.myrrix.online.eval.ParameterOptimizer findGoodParameterValues
+INFO: Final best parameter values are {model.als.lambda=0.41332397959183675, model.features=22}
+
+{model.als.lambda=0.250075, model.features=22}
+
+As of 23 Sep 2013, use => lambda = 0.25, features = 22 (though 20 would be fine too)
