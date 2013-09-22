@@ -13,7 +13,7 @@ import uk.co.recipes.api.ITag;
  */
 public enum FlavourTags implements ITag {
 
-	ANISEED, SWEET, SOUR, ORANGE, LEMON, LIME, ALMOND, COFFEE
+	ANISEED, SWEET, SOUR, ORANGE, LEMON, LIME, ALMOND, COFFEE, GARLIC
 
 	;
 

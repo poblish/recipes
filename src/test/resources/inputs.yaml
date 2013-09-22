@@ -66,9 +66,11 @@
 ---
 {canonicalName: Lemon grass, tags: {HERB, THAI, VIETNAMESE, LEMON}, aliases: {Lemongrass}}
 ---
+{canonicalName: Marjoram, tags: HERB}
+---
 {canonicalName: Mixed Herbs, tags: HERB}
 ---
-{canonicalName: Oregano, tags: {HERB, ITALIAN}, aliases: {Oregano Sprigs}}
+{canonicalName: Oregano, tags: {HERB, ITALIAN}, aliases: {Oregano Sprigs, Oregano Leaves}}
 ---
 {canonicalName: Parsley, tags: HERB}
 ---
@@ -302,7 +304,9 @@
 ---
 {canonicalName: Fennel Bulb, tags: {VEGETABLE, GERMAN, ITALIAN, ANISEED}, aliases: {Fennel, Fennel Bulbs}}
 ---
-{canonicalName: Garlic Cloves, tags: VEGETABLE, aliases: {Garlic, Garlic Clove}}
+{canonicalName: Garlic Cloves, tags: {VEGETABLE, GARLIC}, aliases: {Garlic, Garlic Clove}}
+---
+{    canonicalName: Garlic Bulb, parent: Garlic Cloves}
 ---
 {    canonicalName: Garlic Paste, parent: Garlic Cloves}
 ---
@@ -321,6 +325,8 @@
 {    canonicalName: Gem Lettuce, parent: Lettuce, aliases: {Little Gem Lettuce, Baby Gem Lettuces}}
 ---
 {    canonicalName: Iceberg Lettuce, parent: Lettuce}
+---
+{    canonicalName: Lamb's Lettuce, parent: Lettuce}
 ---
 {canonicalName: Mangetout, tags: VEGETABLE}
 ---
@@ -349,6 +355,8 @@
 {    canonicalName: Pearl Onions, parent: Onion}
 ---
 {    canonicalName: Red Onion, parent: Onion, aliases: {Red Onions}}
+---
+{    canonicalName: Spanish Onion, parent: Onion}
 ---
 {    canonicalName: Spring Onion, parent: Onion}
 ---
@@ -441,6 +449,8 @@
 {canonicalName: Lentils, tags: PULSE, aliases: {Lentil}}
 ---
 {    canonicalName: Green Lentils, parent: Lentils}
+---
+{    canonicalName: Puy Lentils, parent: Lentils}
 ---
 {    canonicalName: Red Lentils, parent: Lentils}
 ---
@@ -626,7 +636,9 @@
 
 {canonicalName: Salt, tags: SALT, aliases: {Fine Salt}}
 ---
-{    canonicalName: Sea Salt, parent: Salt}
+{    canonicalName: Garlic Salt, tags: GARLIC, parent: Salt}
+---
+{    canonicalName: Sea Salt, parent: Salt, aliases: {flaky sea salt, sea salt flakes, sea salt crystals}}
 ---
 
 
@@ -824,6 +836,8 @@
 ---
 {canonicalName: Chilli Sauce, tags: {SAUCE, CHILLI}}
 ---
+{    canonicalName: Harissa, tags: {TUNISIAN}, parent: Chilli Sauce}
+---
 {    canonicalName: Hot Chilli Sauce, parent: Chilli Sauce}
 ---
 {    canonicalName: Sweet Chilli Sauce, parent: Chilli Sauce}
@@ -874,6 +888,8 @@
 ---
 {canonicalName: Orzo, tags: {PASTA, ITALIAN}, aliases: {Orzo Pasta}}
 ---
+{canonicalName: Penne, tags: {PASTA, ITALIAN}}
+---
 {canonicalName: Spaghetti, tags: {PASTA, ITALIAN}}
 ---
 {canonicalName: Tagliatelle, tags: {PASTA, ITALIAN}}
@@ -894,9 +910,11 @@
 
 {canonicalName: Anchovy, tags: {FISH,SEAFOOD}, aliases: {Anchovies}}
 ---
+{    canonicalName: Anchovy Fillet, parent: Anchovy, aliases: {Anchovy Fillets}}
+---
 {canonicalName: Cod, tags: {FISH,SEAFOOD}}
 ---
-{    canonicalName: Cod Fillet, parent: Cod}
+{    canonicalName: Cod Fillet, parent: Cod, aliases: {Cod Fillets}}
 ---
 {        canonicalName: Icelandic Cod Fillet, parent: Cod Fillet}
 ---
@@ -1070,6 +1088,8 @@
 ---
 {canonicalName: Chinese Cooking Wine, tags: {WINE, ALCOHOL, CHINESE}}
 ---
+{canonicalName: Cider, parent: Apple, tags: {ALCOHOL}}
+---
 {canonicalName: Cointreau, tags: {SPIRIT, ALCOHOL, FRENCH, ORANGE}}
 ---
 {canonicalName: Curaçao, tags: {SPIRIT, ALCOHOL, DUTCH, ORANGE}}
@@ -1080,7 +1100,13 @@
 ---
 {canonicalName: Pernod, tags: {SPIRIT, ALCOHOL, FRENCH, ANISEED}}
 ---
+{canonicalName: Pear Cider, parent: Pear, tags: {ALCOHOL}}
+---
+{canonicalName: Perry, parent: Pear, tags: {ALCOHOL}}
+---
 {canonicalName: Red Wine, tags: {WINE, ALCOHOL}}
+---
+{canonicalName: Rice Wine, tags: {WINE, ALCOHOL, ASIAN}}
 ---
 {canonicalName: Tia Maria, tags: {SPIRIT, ALCOHOL, COFFEE}}
 ---
