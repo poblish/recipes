@@ -136,7 +136,7 @@ public class EsSearchServiceTest {
 	@Test
 	public void partialTestForAlias4() throws IOException {
 		final List<ISearchResult<?>> results1 = searchService.findPartial("Bulb", 5);
-		assertThat( results1.toString(), is("[ItemSearchResult{itemName=Fennel Bulb}, ItemSearchResult{itemName=Bulgur Wheat}]"));
+		assertThat( results1.toString(), is("[ItemSearchResult{itemName=Garlic Bulb}, ItemSearchResult{itemName=Fennel Bulb}, ItemSearchResult{itemName=Bulgur Wheat}]"));
 	}
 
 	@Test

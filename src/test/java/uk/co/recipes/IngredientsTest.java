@@ -87,12 +87,12 @@ public class IngredientsTest {
 
 	@Test
 	public void accentsTest() throws IOException {
-		assertThat( itemFactory.get("Glacé Cherries").isPresent(), is(false));
+		assertThat( itemFactory.get("Lovely Glacé Cherries").isPresent(), is(false));
 
-		final ICanonicalItem newItem = new CanonicalItem("Glacé Cherries");
+		final ICanonicalItem newItem = new CanonicalItem("Lovely Glacé Cherries");
 		itemFactory.put( newItem, itemFactory.toStringId(newItem));
 
-		final Optional<ICanonicalItem> loaded = itemFactory.get("Glacé Cherries");
+		final Optional<ICanonicalItem> loaded = itemFactory.get("Lovely Glacé Cherries");
 		assertThat( loaded.get(), is(newItem));
 	}
 
@@ -105,6 +105,7 @@ public class IngredientsTest {
 			public ICanonicalItem get() {
 				final ICanonicalItem meat = new CanonicalItem("Lamb");
 				meat.addTag( MeatAndFishTags.MEAT );
+				meat.addTag( MeatAndFishTags.RED_MEAT );
 				return meat;
 			}});
 
@@ -159,12 +160,16 @@ public class IngredientsTest {
 
 		///////////////////////////////////////////////////
 
-		final Map<ITag,Serializable> expectedTags = Maps.newHashMap();
-		expectedTags.put( MeatAndFishTags.MEAT, true);
+		final Map<ITag,Serializable> expectedLambTags = Maps.newHashMap();
+		expectedLambTags.put( MeatAndFishTags.MEAT, true);
+		expectedLambTags.put( MeatAndFishTags.RED_MEAT, true);
 
-		assertThat( lamb.getTags(), is(expectedTags));
-		assertThat( lambNeck.getTags(), is(expectedTags));
-		assertThat( bacon.getTags(), is(expectedTags));
+		final Map<ITag,Serializable> expectedBaconTags = Maps.newHashMap();
+		expectedBaconTags.put( MeatAndFishTags.MEAT, true);
+
+		assertThat( lamb.getTags(), is(expectedLambTags));
+		assertThat( lambNeck.getTags(), is(expectedLambTags));
+		assertThat( bacon.getTags(), is(expectedBaconTags));
 		assertThat( lambNeck.parent(), is( Optional.of(lamb) ));
 		assertThat( lamb.parent().orNull(), nullValue());
 	}
