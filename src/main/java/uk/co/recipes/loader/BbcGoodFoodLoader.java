@@ -57,6 +57,13 @@ public class BbcGoodFoodLoader {
 		try {
 			long st = System.currentTimeMillis();
 			new BbcGoodFoodLoader().start();
+
+			int i = 0;
+			while ( i++ < 7) {
+				System.out.println("Waiting to finish...");
+				Thread.sleep(1000);  // Pretty lame
+			}
+
 			System.out.println("Finished loading in " + (( System.currentTimeMillis() - st) / 1000d) + " msecs");
 			System.exit(0);
 		}
