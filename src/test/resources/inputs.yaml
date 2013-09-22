@@ -8,6 +8,8 @@
 
 {canonicalName: Chocolate, tags: SWEET}
 ---
+{    canonicalName: Dark Chocolate, parent: Chocolate}
+---
 {    canonicalName: Plain Chocolate, parent: Chocolate}
 ---
 
@@ -36,7 +38,13 @@
 ---
 {canonicalName: Rosewater, tags: FLAVOURING}
 ---
-{canonicalName: Vanilla Extract, tags: {FLAVOURING,BAKING}}
+{canonicalName: Vanilla, tags: {FLAVOURING}}
+---
+{    canonicalName: Vanilla Essence, parent: Vanilla, tags: {BAKING}, aliases: {Vanilla Extract, Natural Vanilla Extract}}
+---
+{    canonicalName: Vanilla Paste, parent: Vanilla, aliases: {Vanilla Bean Paste}}
+---
+{    canonicalName: Vanilla Pod, parent: Vanilla}
 ---
 {canonicalName: Yeast, tags: {BAKING}}
 ---
@@ -290,6 +298,8 @@
 ---
 {canonicalName: Carrot, tags: VEGETABLE, aliases: {Carrots}}
 ---
+{    canonicalName: Baby Carrots, parent: Carrot}
+---
 {canonicalName: Cauliflower, tags: VEGETABLE}
 ---
 {canonicalName: Celeriac, tags: VEGETABLE}
@@ -317,6 +327,8 @@
 {canonicalName: Kale, tags: VEGETABLE}
 ---
 {canonicalName: Leek, tags: VEGETABLE, aliases: {Leeks}}
+---
+{    canonicalName: Baby Leeks, parent: Leek}
 ---
 {canonicalName: Lettuce, tags: VEGETABLE}
 ---
@@ -426,6 +438,8 @@
 ---
 {canonicalName: Turnip, tags: VEGETABLE, aliases: {Turnips}}
 ---
+{    canonicalName: Baby Turnips, parent: Turnip}
+---
 {canonicalName: Watercress, tags: VEGETABLE}
 ---
 
@@ -464,6 +478,8 @@
 ---
 {    canonicalName: Bramley apples, tags: BAKING, parent: Apple}
 ---
+{    canonicalName: Eating apples, parent: Apple}
+---
 {    canonicalName: Braeburn apples, parent: Apple}
 ---
 {canonicalName: Apricot, tags: {FRUIT}, aliases: {Apricots}}
@@ -476,7 +492,11 @@
 ---
 {canonicalName: Blackberries, tags: {FRUIT}, aliases: {Blackberry}}
 ---
+{canonicalName: Blueberries, tags: FRUIT, aliases: Blueberry}
+---
 {canonicalName: Cherries, tags: {FRUIT}, aliases: {Cherry}}
+---
+{    canonicalName: Glacé Cherries, tags: BAKING, parent: Cherries}
 ---
 {    canonicalName: Sour Cherries, parent: Cherries}
 ---
@@ -882,17 +902,27 @@
 
 {canonicalName: Fusilli, tags: {PASTA, ITALIAN}}
 ---
+{canonicalName: Farfalle, tags: {PASTA, ITALIAN}}
+---
 {canonicalName: Gnocchi, tags: {PASTA, ITALIAN}}
 ---
 {canonicalName: Linguine, tags: {PASTA, ITALIAN}}
 ---
 {canonicalName: Orzo, tags: {PASTA, ITALIAN}, aliases: {Orzo Pasta}}
 ---
-{canonicalName: Penne, tags: {PASTA, ITALIAN}}
+{canonicalName: Pappardelle, tags: {PASTA, ITALIAN}, aliases: {Pappardelle Pasta}}
+---
+{canonicalName: Pasta Shells, tags: {PASTA, ITALIAN}}
+---
+{canonicalName: Penne, tags: {PASTA, ITALIAN}, aliases: {Penne Pasta}}
+---
+{canonicalName: Rigatoni, tags: {PASTA, ITALIAN}}
 ---
 {canonicalName: Spaghetti, tags: {PASTA, ITALIAN}}
 ---
 {canonicalName: Tagliatelle, tags: {PASTA, ITALIAN}}
+---
+{canonicalName: Trofie, tags: {PASTA, ITALIAN}, aliases: {Trofie Pasta}}
 ---
 
 
@@ -958,16 +988,6 @@
 ---
 
 
-{canonicalName: Bacon, tags: MEAT}
----
-{    canonicalName: Bacon Rashers, parent: Bacon}
----
-{    canonicalName: Lardons, parent: Bacon, aliases: {Bacon Lardons, Lardon}}
----
-{    canonicalName: Pancetta, parent: Bacon, tags: {ITALIAN}}
----
-{    canonicalName: Streaky Bacon, parent: Bacon}
----
 {canonicalName: Beef, tags: {MEAT, RED_MEAT}}
 ---
 {    canonicalName: Beef cheek, parent: Beef}
@@ -988,7 +1008,7 @@
 ---
 {    canonicalName: Stewing Beef, parent: Beef}
 ---
-{canonicalName: Chicken, tags: {MEAT, POULTRY}, aliases: {Chicken Portions}}
+{canonicalName: Chicken, tags: {MEAT, POULTRY, WHITE_MEAT}, aliases: {Chicken Portions}}
 ---
 {    canonicalName: Chicken Breast, parent: Chicken, aliases: {Chicken Breasts}}
 ---
@@ -1008,19 +1028,13 @@
 ---
 {canonicalName: Chicken Liver, tags: {MEAT, POULTRY, OFFAL}, aliases: {Chicken Livers}}
 ---
-{canonicalName: Duck, tags: {MEAT, POULTRY}}
+{canonicalName: Duck, tags: {MEAT, POULTRY, RED_MEAT}}
 ---
 {    canonicalName: Duck Breast, parent: Duck, aliases: Duck Breasts}
 ---
 {    canonicalName: Duck Legs, parent: Duck}
 ---
-{canonicalName: Ham, tags: MEAT}
----
-{    canonicalName: Prosciutto, parent: Ham, tags: ITALIAN}
----
-{        canonicalName: Parma Ham, parent: Prosciutto}
----
-{canonicalName: Lamb, tags: MEAT}
+{canonicalName: Lamb, tags: {MEAT, RED_MEAT}}
 ---
 {    canonicalName: Lamb Chops, parent: Lamb, aliases: {Lamb Chop}}
 ---
@@ -1046,9 +1060,27 @@
 ---
 {    canonicalName: Goat Shoulder, parent: Goat}
 ---
-{canonicalName: Mutton, tags: MEAT}
+{canonicalName: Mutton, tags: {MEAT, RED_MEAT}}
 ---
 {canonicalName: Pork, tags: MEAT}
+---
+{    canonicalName: Bacon, parent: Pork}
+---
+{        canonicalName: Back Bacon, parent: Bacon}
+---
+{        canonicalName: Bacon Rashers, parent: Bacon}
+---
+{        canonicalName: Lardons, parent: Bacon, aliases: {Bacon Lardons, Lardon}}
+---
+{        canonicalName: Pancetta, parent: Bacon, tags: {ITALIAN}}
+---
+{        canonicalName: Streaky Bacon, parent: Bacon}
+---
+{    canonicalName: Ham, parent: Pork}
+---
+{        canonicalName: Prosciutto, parent: Ham, tags: ITALIAN}
+---
+{            canonicalName: Parma Ham, parent: Prosciutto}
 ---
 {    canonicalName: Pork Belly, parent: Pork}
 ---
@@ -1068,7 +1100,11 @@
 ---
 {    canonicalName: Pork Tenderloin, parent: Pork, aliases: {Pork Tenderloins}}
 ---
-{canonicalName: Turkey, tags: {MEAT, POULTRY}}
+{canonicalName: Rabbit, tags: {MEAT, WHITE_MEAT}}
+---
+{    canonicalName: Wild Rabbit, parent: Rabbit}
+---
+{canonicalName: Turkey, tags: {MEAT, POULTRY, WHITE_MEAT}}
 ---
 {    canonicalName: Turkey Mince, parent: Turkey}
 ---
@@ -1097,6 +1133,8 @@
 {canonicalName: Dry Sherry, tags: {SPIRIT, ALCOHOL, SPANISH}}
 ---
 {canonicalName: Limoncello, tags: {SPIRIT, ALCOHOL, ITALIAN, LEMON}}
+---
+{canonicalName: Marsala Wine, tags: {WINE, ALCOHOL, ITALIAN}, aliases: Marsala}
 ---
 {canonicalName: Pernod, tags: {SPIRIT, ALCOHOL, FRENCH, ANISEED}}
 ---
