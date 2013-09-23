@@ -124,9 +124,7 @@
 			 <div class="row">
 			}
 	
-			<div class="col-md-4">
-				<div class="well"><a href="http://localhost:9000/items/@eachItem.getCanonicalName()">@eachItem.getCanonicalName()</a>&nbsp;@for(tagName <- eachItem.getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}</div>
-			</div>  <!-- <div class="col-md-4"> -->		
+			<div class="col-md-4">@_itemWell(eachItem)</div>
 			}
 
 			</div>  <!-- <div class="row"> -->

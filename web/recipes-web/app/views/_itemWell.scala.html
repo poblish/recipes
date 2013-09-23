@@ -1,0 +1,2 @@
+@(item: uk.co.recipes.api.ICanonicalItem)
+<div class="well"><a href="http://localhost:9000/items/@item.getCanonicalName()">@item.getCanonicalName()</a>&nbsp;@for(tagName <- item.getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}</div>

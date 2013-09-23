@@ -64,11 +64,21 @@ function clearFilters() {
 	<!-- Explorer Filter Stuff ends -->
 
 	<hr />
+
+	<div class="container">
 	<h3>Similar Items:</h3>
-	
-	<ul class="list-group">
-	@for( eachItem <- similarities) {
-	  <li class="list-group-item"><a href="http://localhost:9000/items/@eachItem.getCanonicalName()">@eachItem.getCanonicalName()</a>&nbsp;@for(tagName <- eachItem.getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}</li>  <!-- Parent stuff -->
+	@for(( eachItem, index) <- similarities.zipWithIndex) {
+
+	@if((index % 3) == 0) {
+		@if( index >= 3) {
+		  </div>  <!-- <div class="row"> -->
+		}
+	 <div class="row">
 	}
-	</ul>
+
+	<div class="col-md-4">@_itemWell(eachItem)</div>
+	}
+
+	</div>  <!-- <div class="row"> -->
+	</div>  <!-- <div class="container"> -->
 }
