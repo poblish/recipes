@@ -104,7 +104,7 @@ public class EsSearchService implements ISearchAPI {
 	
 					@Override
 					public int compare( ICanonicalItem o1, ICanonicalItem o2) {
-						return o1.getCanonicalName().compareTo( o2.getCanonicalName() );
+						return o1.getCanonicalName().compareToIgnoreCase( o2.getCanonicalName() );
 					}} );
 			}
 
