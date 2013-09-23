@@ -136,7 +136,7 @@
 ---
 {canonicalName: Cinnamon, tags: SPICE}
 ---
-{canonicalName: Cinnamon Stick, parent: Cinnamon, tags: INDIAN, aliases: {Cinnamon Sticks}}
+{    canonicalName: Cinnamon Stick, parent: Cinnamon, tags: INDIAN, aliases: {Cinnamon Sticks}}
 ---
 {canonicalName: Cloves, tags: {SPICE, INDIAN}}
 ---
@@ -476,9 +476,11 @@
 
 {canonicalName: Apple, tags: {FRUIT}, aliases: {Apples}}
 ---
+{    canonicalName: Apple Juice, parent: Apple}
+---
 {    canonicalName: Bramley apples, tags: BAKING, parent: Apple}
 ---
-{    canonicalName: Eating apples, parent: Apple}
+{    canonicalName: Eating apples, parent: Apple, aliases: {Eating apple}}
 ---
 {    canonicalName: Braeburn apples, parent: Apple}
 ---
@@ -739,6 +741,8 @@
 {canonicalName: Parmesan, tags: {DAIRY, CHEESE, ITALIAN}}
 ---
 {canonicalName: Paneer, tags: {DAIRY, CHEESE, INDIAN}, aliases: {Paneer Cheese}}
+---
+{canonicalName: Provolone, tags: {DAIRY, CHEESE, ITALIAN}}
 ---
 {canonicalName: Ricotta, tags: {DAIRY, CHEESE, ITALIAN}}
 ---
