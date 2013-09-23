@@ -510,6 +510,10 @@
 ---
 {    canonicalName: Desiccated Coconut, parent: Coconut, tags: BAKING}
 ---
+{canonicalName: Cranberries, tags: {FRUIT}, aliases: {Cranberry}}
+---
+{    canonicalName: Cranberry Sauce, parent: Cranberries, tags: {CONDIMENT}}
+---
 {canonicalName: Grape, tags: {FRUIT}}
 ---
 {    canonicalName: Currant, parent: Grape, aliases: {Zante currant, Currants}}
@@ -592,6 +596,28 @@
 ---
 
 
+{canonicalName: Bulgur Wheat, tags: GRAIN, aliases: {Bulghar Wheat, Bulghur Wheat, Bulgar Wheat}}
+---
+{canonicalName: Couscous, tags: GRAIN}
+---
+{canonicalName: Oats, tags: GRAIN}
+---
+{    canonicalName: Jumbo Oats, parent: Oats, aliases: {jumbo rolled oats}}
+---
+{    canonicalName: Oatmeal, parent: Oats}
+---
+{    canonicalName: Rolled Oats, parent: Oats}
+---
+{    canonicalName: Porridge Oats, parent: Oats, aliases: {rolled porridge oats}}
+---
+{canonicalName: Oats, tags: GRAIN}
+---
+{canonicalName: Rye, tags: GRAIN}
+---
+{canonicalName: Quinoa, tags: GRAIN}
+---
+
+
 {canonicalName: Ciabatta, tags: {BREAD, ITALIAN}}
 ---
 {canonicalName: Focaccia, tags: {BREAD, ITALIAN}}
@@ -640,19 +666,11 @@
 ---
 {        canonicalName: Smooth Peanut Butter, parent: Peanut Butter}
 ---
-{canonicalName: Pecans, tags: NUT, aliases: {Pecan}}
+{canonicalName: Pecan Nuts, tags: NUT, aliases: {Pecan, Pecans}}
 ---
 {canonicalName: Pistachios, tags: NUT, aliases: {Pistachio}}
 ---
 {canonicalName: Walnuts, tags: NUT, aliases: {Walnut}}
----
-
-
-{canonicalName: Bulgur Wheat, tags: GRAIN, aliases: {Bulghar Wheat, Bulghur Wheat, Bulgar Wheat}}
----
-{canonicalName: Couscous, tags: GRAIN}
----
-{canonicalName: Quinoa, tags: GRAIN}
 ---
 
 
@@ -762,6 +780,8 @@
 
 {canonicalName: Cream, tags: DAIRY}
 ---
+{    canonicalName: Clotted Cream, parent: Cream}
+---
 {    canonicalName: Crème Fraîche, parent: Cream}
 ---
 {    canonicalName: Double Cream, parent: Cream}
@@ -769,6 +789,8 @@
 {    canonicalName: Single Cream, parent: Cream}
 ---
 {    canonicalName: Soured Cream, parent: Cream}
+---
+{    canonicalName: Whipping Cream, parent: Cream}
 ---
 {canonicalName: Milk, tags: DAIRY}
 ---
