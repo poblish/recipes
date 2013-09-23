@@ -86,6 +86,12 @@ public class ParseIngredientsTest {
         assertThat( parser.parseQuantity("3 small bunches").get(), is( new Quantity( Units.SMALL_BUNCHES, 3) ));
         assertThat( parser.parseQuantity("500g pack").get(), is( new Quantity( Units.GRAMMES, 500) ));
 //        assertThat( parser.parseQuantity("500g bunch").get(), is( new Quantity( Units.BUNCHES, 1) ));   FIXME This should pass!!!
+
+        assertThat( parser.parseQuantity("5 tbsp").get(), is( new Quantity( Units.TBSP, 5) ));
+        assertThat( parser.parseQuantity("7 pots").get(), is( new Quantity( Units.POT, 7) ));
+        assertThat( parser.parseQuantity("198g pot").get(), is( new Quantity( Units.GRAMMES, 198) ));
+        assertThat( parser.parseQuantity("398g jar").get(), is( new Quantity( Units.GRAMMES, 398) ));
+        assertThat( parser.parseQuantity("20g sachet").get(), is( new Quantity( Units.GRAMMES, 20) ));
 	}
 
     @Test

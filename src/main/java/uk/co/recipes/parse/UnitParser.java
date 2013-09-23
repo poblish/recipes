@@ -27,7 +27,7 @@ public final class UnitParser {
 			s = s.substring(1);
 		}
 
-        if (s.equals("G") || s.equals("GMS") || s.equals("G SACHET") || s.equals("G PACK") || s.equals("G TUB") || s.equals("G CARTON") || s.equals("G PUNNET")) {
+        if (s.equals("G") || s.equals("GMS") || s.equals("G JAR") || s.equals("G SACHET") || s.equals("G PACK") || s.equals("G TUB") || s.equals("G CARTON") || s.equals("G POT") || s.equals("G PUNNET")) {
             return Units.GRAMMES;
         }
 
@@ -55,7 +55,7 @@ public final class UnitParser {
 			return Units.LITRE;
 		}
 
-        if (s.equals("ML TUB") || s.equals("ML CARTON")) {
+        if (s.equals("ML TUB") || s.equals("ML CARTON") || s.equals("ML POT") || s.equals("ML JAR")) {
             return Units.ML;
         }
 
