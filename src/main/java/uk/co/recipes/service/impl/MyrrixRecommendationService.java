@@ -40,23 +40,12 @@ import com.google.common.base.Throwables;
 @Singleton
 public class MyrrixRecommendationService implements IRecommendationsAPI {
 
-	@Inject
-	MyrrixTasteRecommendationService tasteRecommendations;
-
-	@Inject
-	ClientRecommender recommender;
-
-	@Inject
-	EsItemFactory itemsFactory;
-
-	@Inject
-	EsRecipeFactory recipesFactory;
-
-	@Inject
-	MyrrixUpdater myrrixUpdater;
-
-	@Inject
-	MetricRegistry metrics;
+	@Inject MyrrixTasteRecommendationService tasteRecommendations;
+	@Inject ClientRecommender recommender;
+	@Inject EsItemFactory itemsFactory;
+	@Inject EsRecipeFactory recipesFactory;
+	@Inject MyrrixUpdater myrrixUpdater;
+	@Inject MetricRegistry metrics;
 
 
 	/* (non-Javadoc)
