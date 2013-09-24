@@ -67,18 +67,22 @@ function clearFilters() {
 
 	<div class="container">
 	<h3>Similar Items:</h3>
-	@for(( eachItem, index) <- similarities.zipWithIndex) {
-
-	@if((index % 3) == 0) {
-		@if( index >= 3) {
-		  </div>  <!-- <div class="row"> -->
+	@if( similarities.size() == 0) {
+		<p>Sorry, no similar items could be found. Try relaxing any filters.</p>
+	} else {
+		@for(( eachItem, index) <- similarities.zipWithIndex) {
+	
+		@if((index % 3) == 0) {
+			@if( index >= 3) {
+			  </div>  <!-- <div class="row"> -->
+			}
+		 <div class="row">
 		}
-	 <div class="row">
+	
+		<div class="col-md-4">@_itemWell(eachItem)</div>
+		}
+	
+		</div>  <!-- <div class="row"> -->
 	}
-
-	<div class="col-md-4">@_itemWell(eachItem)</div>
-	}
-
-	</div>  <!-- <div class="row"> -->
 	</div>  <!-- <div class="container"> -->
 }
