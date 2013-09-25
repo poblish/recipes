@@ -238,24 +238,20 @@ public class EsSearchService implements ISearchAPI {
 
 	@Override
 	public List<IRecipe> findRecipesByItemName( String... inNames) throws IOException {
-		try {
-			// FIXME We don't support multiple names at the moment
-			final JsonNode jn = mapper.readTree( new URL( recipesIndexUrl + "/_search?q=canonicalName:" + URLEncoder.encode( inNames[0], "utf-8") + "&size=9999") ).path("hits").path("hits");
-			
-			final List<IRecipe> results = Lists.newArrayList();
-	
-			for ( final JsonNode each : jn) {
-				results.add( mapper.readValue( each.path("_source").traverse(), Recipe.class) );  // FIXME Remove _source stuff where possible
-			}
+        final SearchResponse resp = esClient.prepareSearch("recipe").setTypes("recipes").setQuery( matchPhraseQuery( "canonicalName", inNames[0]) ).setSize(9999)/* .addSort( "_score", DESC) */.execute().actionGet();
+        final SearchHit[] hits = resp.getHits().hits();
 
-			return results;
+        if ( hits.length == 0) {
+            return Collections.emptyList();
+        }
+
+		final List<IRecipe> results = Lists.newArrayList();
+
+		for ( final SearchHit eachHit : hits) {
+            results.add( mapper.readValue( eachHit.getSourceAsString(), Recipe.class) );
 		}
-		catch (MalformedURLException e) {
-			throw Throwables.propagate(e);
-		}
-		catch (JsonProcessingException e) {
-			throw Throwables.propagate(e);
-		}
+
+		return results;
 	}
 
 	@Override
