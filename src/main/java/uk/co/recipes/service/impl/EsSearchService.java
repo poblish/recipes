@@ -238,8 +238,24 @@ public class EsSearchService implements ISearchAPI {
 
 	@Override
 	public List<IRecipe> findRecipesByItemName( String... inNames) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			// FIXME We don't support multiple names at the moment
+			final JsonNode jn = mapper.readTree( new URL( recipesIndexUrl + "/_search?q=canonicalName:" + URLEncoder.encode( inNames[0], "utf-8") + "&size=9999") ).path("hits").path("hits");
+			
+			final List<IRecipe> results = Lists.newArrayList();
+	
+			for ( final JsonNode each : jn) {
+				results.add( mapper.readValue( each.path("_source").traverse(), Recipe.class) );  // FIXME Remove _source stuff where possible
+			}
+
+			return results;
+		}
+		catch (MalformedURLException e) {
+			throw Throwables.propagate(e);
+		}
+		catch (JsonProcessingException e) {
+			throw Throwables.propagate(e);
+		}
 	}
 
 	@Override
