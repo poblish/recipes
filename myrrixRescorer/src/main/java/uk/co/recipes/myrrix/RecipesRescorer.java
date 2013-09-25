@@ -3,7 +3,6 @@
  */
 package uk.co.recipes.myrrix;
 
-import com.google.common.primitives.Longs;
 import java.util.Arrays;
 
 import net.myrrix.common.MyrrixRecommender;
@@ -17,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.FluentIterable;
+import com.google.common.primitives.Longs;
 
 /**
  * TODO
