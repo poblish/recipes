@@ -26,7 +26,6 @@ public class RecipesRescorerTest {
     public void testRecommendRecipeFilteringNoIncludes() {
         final IDRescorer rescorer = new RecipesRescorer().getRecommendRescorer( new long[]{1L}, REC, new String[]{"RECIPE"});
         assertThat( rescorer.isFiltered(100L), is(true));
-        assertThat( rescorer.isFiltered(3611686018427387904L), is(true));
         assertThat( rescorer.isFiltered(4611686018427387909L), is(false));
     }
 
@@ -34,9 +33,8 @@ public class RecipesRescorerTest {
     public void testRecommendRecipeFilteringWithIncludes() {
         final IDRescorer rescorer = new RecipesRescorer().getRecommendRescorer( new long[]{1L}, REC, new String[]{"RECIPE", "4611686018427387904,4611686018427387905,4611686018427387906"});
         assertThat( rescorer.isFiltered(100L), is(true));
-        assertThat( rescorer.isFiltered(3611686018427387904L), is(true));
-        assertThat( rescorer.isFiltered(4611686018427387904L), is(false));
-        assertThat( rescorer.isFiltered(4611686018427387909L), is(true));
+        assertThat( rescorer.isFiltered(4611686018427387904L), is(false));  // An include
+        assertThat( rescorer.isFiltered(4611686018427387909L), is(true));  // Good recipe, but not an include
 
         final double rand = Math.random();
         assertThat( rescorer.rescore( 100L, rand), is(rand));  // Test pass-thru
@@ -50,18 +48,17 @@ public class RecipesRescorerTest {
         assertThat( rescorer.isFiltered(1L), is(false));
         assertThat( rescorer.isFiltered(9000L), is(false));
         assertThat( rescorer.isFiltered(9001L), is(true));
-        assertThat( rescorer.isFiltered(4611686018427387904L), is(true));
-        assertThat( rescorer.isFiltered(4611686018427387906L), is(true));
+        assertThat( rescorer.isFiltered(4611686018427387904L), is(true));  // Filtered, because it's a Recipe Id
+        assertThat( rescorer.isFiltered(4611686018427387906L), is(true));  // Filtered, because it's a Recipe Id, even though include ^ wrongly includes it
     }
 
     @Test
     public void testSimilarityRecipeFiltering() {
-        final Rescorer<LongPair> rescorer = new RecipesRescorer().getMostSimilarItemsRescorer( REC, new String[]{"RECIPE", "4611686018427387904,4611686018427387905,4611686018427387906"});
-        assertThat( rescorer.isFiltered( new LongPair(100L,100L) ), is(true));
-        assertThat( rescorer.isFiltered( new LongPair(3611686018427387904L,3611686018427387904L)), is(true));
-        assertThat( rescorer.isFiltered( new LongPair(4611686018427387904L,4611686018427387904L)), is(false));
-        assertThat( rescorer.isFiltered( new LongPair(4611686018427387906L,4611686018427387906L)), is(false));
-        assertThat( rescorer.isFiltered( new LongPair(4611686018427387904L,14L)), is(true));
+        final Rescorer<LongPair> rescorer = new RecipesRescorer().getMostSimilarItemsRescorer( REC, new String[]{"RECIPE", "4611686018427387904,4611686018427387905"});
+        assertThat( rescorer.isFiltered( new LongPair(100L,100L) ), is(true));  // Not Recipe
+        assertThat( rescorer.isFiltered( new LongPair(4611686018427387904L,14L)), is(true));  // One is not a Recipe
+        assertThat( rescorer.isFiltered( new LongPair(4611686018427387905L,4611686018427387905L)), is(false));
+        assertThat( rescorer.isFiltered( new LongPair(5611686018427387904L,5611686018427387904L)), is(true));  // A Recipe, but not in include
 
         final double rand = Math.random();
         assertThat( rescorer.rescore( new LongPair(100L,101L), rand), is(rand));  // Test pass-thru
