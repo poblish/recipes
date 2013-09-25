@@ -11,6 +11,7 @@ import play.mvc.Result;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
+import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.ratings.ItemRating;
@@ -34,9 +35,11 @@ public class Items extends AbstractExplorableController {
     private UserRatings ratings;
 
     @Inject
-    public Items( final EsItemFactory items, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService, final MyrrixRecommendationService inRecService, final EsUserFactory users,
-                  final UserRatings inRatings, final MetricRegistry metrics) {
+    public Items( final MyrrixUpdater updater, final EsItemFactory items, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService,
+    			  final MyrrixRecommendationService inRecService, final EsUserFactory users, final UserRatings inRatings, final MetricRegistry metrics) {
         super( items, explorerFilters, inExplorerService, inRecService, metrics);
+
+    	updater.startListening();
         this.ratings = checkNotNull(inRatings);
     }
 
