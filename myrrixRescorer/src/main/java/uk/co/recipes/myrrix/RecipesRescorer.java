@@ -43,6 +43,8 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 		final boolean isRecipe = desiredType.equals("RECIPE");
 		final boolean isItem = desiredType.equals("ITEM");
 
+		final long[] includeIds = ( inArgs != null && inArgs.length > 1) ? parseLongArrayString((String) inArgs[1]) : EMPTY_ARRAY;
+
 		return new IDRescorer() {
 
 			@Override
@@ -53,6 +55,11 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 				}
 				else if ( isItem && inId >= RECIPE_BASE_ID) {
 					LOG.trace("RecipesRescorer: Stripping out invalid {ITEM}... " + inId);
+					return true;
+				}
+
+				if ( includeIds.length > 0 && !isLongInArray( includeIds, inId)) {
+					LOG.info("RecipesRescorer: Filter out " + inId);
 					return true;
 				}
 
