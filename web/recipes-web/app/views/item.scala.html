@@ -1,4 +1,4 @@
-@(item: uk.co.recipes.api.ICanonicalItem, similarities: List[uk.co.recipes.api.ICanonicalItem])
+@(item: uk.co.recipes.api.ICanonicalItem, similarities: List[uk.co.recipes.api.ICanonicalItem], recommendedRecipes: List[uk.co.recipes.api.IRecipe])
 
 @main("Item: " + item.getCanonicalName() ) {
 	<section id="top">
@@ -64,6 +64,38 @@ function clearFilters() {
 	<!-- Explorer Filter Stuff ends -->
 
 	<hr />
+
+	@if( recommendedRecipes.size() == 0) {
+		<p>Please log in / Sorry, no matching recipes could be found</p>
+	} else {
+		<div class="container">
+		<h3>Recommended Recipes containing @item.getCanonicalName():</h3>
+		@for(( eachRecipe, index) <- recommendedRecipes.zipWithIndex) {
+		
+		@if((index % 3) == 0) {
+			@if( index >= 3) {
+			  </div>  <!-- <div class="row"> -->
+			}
+		 <div class="row">
+		}
+
+		<div class="col-md-4">
+			@_displayRecipe( eachRecipe, index)
+		</div>  <!-- <div class="col-md-4"> -->
+		
+		<script>
+		$('#toggle_@index').click(function() {
+		  $('#ingredients_@index').slideToggle(function() {
+		    // Should toggle chevron
+		  });
+		});
+		</script>
+		
+		}
+		
+		</div>  <!-- <div class="row"> -->
+		</div>  <!-- <div class="container"> -->
+	}
 
 	<div class="container">
 	<h3>Similar Items:</h3>

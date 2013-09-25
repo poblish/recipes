@@ -30,6 +30,7 @@ import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.google.common.base.Throwables;
+import com.google.common.primitives.Longs;
 
 /**
  * TODO
@@ -41,6 +42,7 @@ import com.google.common.base.Throwables;
 public class MyrrixRecommendationService implements IRecommendationsAPI {
 
 	@Inject MyrrixTasteRecommendationService tasteRecommendations;
+	@Inject EsSearchService searchAPI;
 	@Inject ClientRecommender recommender;
 	@Inject EsItemFactory itemsFactory;
 	@Inject EsRecipeFactory recipesFactory;
@@ -112,6 +114,68 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 		catch (IOException e) {
 			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
 		}
+        finally {
+            timerCtxt.stop();
+        }
+	}
+
+	@Override
+	public List<IRecipe> recommendRecipes( IUser inUser, int inNumRecs, ICanonicalItem... inIncludes) {
+		if (inIncludes.length == 0) {
+			return recommendRecipes( inUser, inNumRecs);
+		}
+
+	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_FILTERED_RECOMMENDATIONS).time();
+
+		try {
+			final List<IRecipe> recipesToInclude = searchAPI.findRecipesByItemName(inIncludes);
+
+			// FIXME - Try to share with Ids-building code in EsExplorerFilters
+            final long[] ids = new long[ recipesToInclude.size() ];
+            int i = 0;
+
+            for ( IRecipe each : recipesToInclude) {
+                ids[i++] = each.getId();
+            }
+
+			final String includeIdsStr = Longs.join( ",", ids);
+			final String excludeIdsStr = "";
+
+			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.recommend( inUser.getId(), inNumRecs, false, new String[]{"RECIPE", includeIdsStr, excludeIdsStr}) ) );
+		}
+        catch (NoSuchUserException e) {
+            return Collections.emptyList();
+        }
+        catch (TasteException e) {
+            throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+        }
+		catch (IOException e) {
+			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+		}
+        finally {
+            timerCtxt.stop();
+        }
+	}
+
+	@Override
+	public List<IRecipe> recommendRecipesToAnonymous( int inNumRecs, ICanonicalItem... inIncludes) {
+	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_FILTERED_RECOMMENDATIONS).time();  // Same again - that OK?
+
+	    try {
+			return Collections.emptyList();  // FIXME!!!
+	    }
+/*		try {
+			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.recommendToAnonymous( inNumRecs, false, new String[]{"RECIPE"}) ) );
+		}
+        catch (NoSuchUserException e) {
+            return Collections.emptyList();
+        }
+        catch (TasteException e) {
+            throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+        }
+		catch (IOException e) {
+			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+		} */
         finally {
             timerCtxt.stop();
         }

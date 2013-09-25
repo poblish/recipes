@@ -13,6 +13,7 @@ public interface MetricNames {
     String TIMER_RECIPES_PUTS = "recipes.put";
 	String TIMER_RECIPES_SEARCHES = "recipes.searches";
 	String TIMER_RECIPES_RECOMMENDATIONS = "recipes.recommendations";
+	String TIMER_RECIPES_FILTERED_RECOMMENDATIONS = "recipes.recommendations.filtered";
 	String TIMER_RECIPES_MOSTSIMILAR = "recipes.mostsimilar";
 
     String TIMER_RECIPE_PARSE = "recipe.parse";

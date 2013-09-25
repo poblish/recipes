@@ -33,6 +33,10 @@ public interface ISearchAPI {
     List<IRecipe> findRecipesByTag( final ITag inTag) throws IOException;
     int countRecipesByTag( final ITag inTag) throws IOException;
 
+    List<IRecipe> findRecipesByItemName( final String... inName) throws IOException;
+    List<IRecipe> findRecipesByItemName( final ICanonicalItem... inName) throws IOException;
+    int countRecipesByItemName( final String... inName) throws IOException;
+
     List<ISearchResult<?>> findPartial( final String inStr) throws IOException;
     List<ISearchResult<?>> findPartial( final String inStr, final int inSize) throws IOException;
 }

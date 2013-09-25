@@ -13,8 +13,10 @@ import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.service.api.IExplorerAPI;
 import uk.co.recipes.service.api.IExplorerFilter;
 import uk.co.recipes.service.api.IItemPersistence;
+import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
+import uk.co.recipes.service.impl.MyrrixRecommendationService;
 
 import com.codahale.metrics.MetricRegistry;
 
@@ -31,12 +33,14 @@ public abstract class AbstractExplorableController extends Controller {
     protected IExplorerAPI explorer;
     protected EsExplorerFilters explorerFilters;
     protected MetricRegistry metrics;
+    protected IRecommendationsAPI recsApi;
 
-    public AbstractExplorableController( final EsItemFactory items, final EsExplorerFilters explorerFilters, final MyrrixExplorerService explorer, final MetricRegistry metrics) {
+    public AbstractExplorableController( final EsItemFactory items, final EsExplorerFilters explorerFilters, final MyrrixExplorerService explorer, final MyrrixRecommendationService inRecService, final MetricRegistry metrics) {
         this.items = checkNotNull(items);
         this.explorer = checkNotNull(explorer);
         this.explorerFilters = checkNotNull(explorerFilters);
         this.metrics = checkNotNull(metrics);
+        this.recsApi = checkNotNull(inRecService);
     }
 
     protected IUser getLocalUser() {

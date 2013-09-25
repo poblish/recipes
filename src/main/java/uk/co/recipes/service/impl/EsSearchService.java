@@ -14,6 +14,7 @@ import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -39,7 +40,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * TODO
@@ -220,6 +223,28 @@ public class EsSearchService implements ISearchAPI {
 	@Override
 	public int countTagsByName( String inName) throws IOException {
 		return findTagsByName(inName).size();
+	}
+
+	@Override
+	public List<IRecipe> findRecipesByItemName( final ICanonicalItem... inItems) throws IOException {
+		Set<String> cNames = Sets.newHashSet();  // FIXME Factor this out somewhere
+
+		for ( ICanonicalItem each : inItems) {
+			cNames.add( each.getCanonicalName() );
+		}
+
+		return findRecipesByItemName( Iterables.toArray( cNames, String.class));
+	}
+
+	@Override
+	public List<IRecipe> findRecipesByItemName( String... inNames) throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int countRecipesByItemName( String... inNames) throws IOException {
+		return findRecipesByItemName(inNames).size();  // FIXME, lame
 	}
 
     @Override
