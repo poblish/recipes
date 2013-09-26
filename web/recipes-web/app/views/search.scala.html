@@ -16,7 +16,7 @@
         <div class="tab-pane active" id="recipes">
 			<ol>
 			@for( eachRecipe <- foundRecipes) {
-			  <li><a href="/recipes/@eachRecipe.getTitle()">@eachRecipe.getTitle()</a> <a onclick="getForkName('@eachRecipe.getTitle()')" href="#">[F]</a></li>
+			  <li><a href="/recipes/@eachRecipe.getTitle()">@eachRecipe.getTitle()</a>&nbsp;&nbsp;@_forkRecipeDisplay( eachRecipe, "btn-xs")</li>
 			}
 			</ol>
         </div>

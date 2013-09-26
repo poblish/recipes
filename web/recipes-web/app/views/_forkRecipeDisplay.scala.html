@@ -1,0 +1,2 @@
+@(recipe: uk.co.recipes.api.IRecipe, extraStyles: String)
+<button type="button" class="btn btn-default @extraStyles" onclick="getForkName('@recipe.getTitle()')" title="Click to create your own copy of this recipe"><span class="glyphicon glyphicon-paperclip"></span> Fork</button>
