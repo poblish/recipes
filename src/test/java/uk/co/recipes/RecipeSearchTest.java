@@ -7,8 +7,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 
+import com.google.common.collect.Ordering;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
@@ -90,16 +90,13 @@ public class RecipeSearchTest {
 	public void testSearchByTagWithSorting() throws IOException {
 		final List<ICanonicalItem> matches = searchApi.findItemsByTag( MeatAndFishTags.MEAT );
 
-		final String[] returnedNames = FluentIterable.from(matches).transform( new Function<ICanonicalItem, String>() {
+		final List<String> returnedNames = FluentIterable.from(matches).transform( new Function<ICanonicalItem, String>() {
 			public String apply( ICanonicalItem input) {
 				return input.getCanonicalName();
 			}
-		}).toArray( String.class );
+		}).toList();
 
-		final String[] sortedNames = returnedNames.clone();
-		Arrays.sort(sortedNames);
-
-		assertThat( returnedNames, is(sortedNames));
+		assertThat( returnedNames, is( Ordering.from( String.CASE_INSENSITIVE_ORDER ).sortedCopy(returnedNames) ));
 	}
 
 	@Test
