@@ -1,34 +1,6 @@
 @(recipe: uk.co.recipes.api.IRecipe, categorisation: com.google.common.collect.Multiset[uk.co.recipes.api.ITag], similarities: List[uk.co.recipes.api.IRecipe], recommendedItems: List[uk.co.recipes.api.ICanonicalItem])
 
 @main("Recipe: " + recipe.getTitle() ) {
-	<section id="top">
-	    <div class="wrapper">
-	        <h1><!-- <span>@recipe.getId()</span>&nbsp; -->@recipe.getTitle()&nbsp;<!-- <span class="label label-warning">@recipe.getLocale()</span> -->@_forkRecipeDisplay( recipe, "btn-lg")</h1>
-	    </div>
-	</section>
-	
-	@if( recipe.getForkDetails() != null) {
-	<p>@recipe.getForkDetails()</p>
-	}
-	
-	<div class="btn-group" style="margin: 6px 0 12px 0">
-	  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
-	    Your Rating
-	    <span class="caret"></span>
-	  </a>
-	  <ul class="dropdown-menu">
-	    <li><a href="/recipes/@recipe.getTitle()/rate/1">1/10</a></li>
-	    <li><a href="/recipes/@recipe.getTitle()/rate/2">2/10</a></li>
-	    <li><a href="/recipes/@recipe.getTitle()/rate/3">3/10</a></li>
-	    <li><a href="/recipes/@recipe.getTitle()/rate/4">4/10</a></li>
-	    <li><a href="/recipes/@recipe.getTitle()/rate/5">5/10</a></li>
-	    <li><a href="/recipes/@recipe.getTitle()/rate/6">6/10</a></li>
-	    <li><a href="/recipes/@recipe.getTitle()/rate/7">7/10</a></li>
-	    <li><a href="/recipes/@recipe.getTitle()/rate/8">8/10</a></li>
-	    <li><a href="/recipes/@recipe.getTitle()/rate/9">9/10</a></li>
-	    <li><a href="/recipes/@recipe.getTitle()/rate/10">10/10</a></li>
-	  </ul>
-	</div>
 
 	<!-- Explorer Filter Stuff starts -->
 	<div class="btn-group">
@@ -50,13 +22,39 @@
 	  </ul>
 	</div>
 	<button class="btn btn-danger" type="button" onclick="clearFilters()">Clear All</button>
-
-	<div style="margin-top: 15px"><input type="hidden" style="width: 250px" id="addIngredient" /></div><button type="button" class="btn btn-default" onclick="addIngredient('@recipe.getTitle()',$('#addIngredient'))">Add Ingredient</button>
-	<hr/>
-
 	<!-- Explorer Filter Stuff ends -->
 
-	<div class="row">
+	<hr />
+
+	<section id="top">
+		<div class="btn-group pull-right">
+		  <a class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown" href="#">
+		    Your Rating
+		    <span class="caret"></span>
+		  </a>
+		  <ul class="dropdown-menu">
+		    <li><a href="/recipes/@recipe.getTitle()/rate/1">1/10</a></li>
+		    <li><a href="/recipes/@recipe.getTitle()/rate/2">2/10</a></li>
+		    <li><a href="/recipes/@recipe.getTitle()/rate/3">3/10</a></li>
+		    <li><a href="/recipes/@recipe.getTitle()/rate/4">4/10</a></li>
+		    <li><a href="/recipes/@recipe.getTitle()/rate/5">5/10</a></li>
+		    <li><a href="/recipes/@recipe.getTitle()/rate/6">6/10</a></li>
+		    <li><a href="/recipes/@recipe.getTitle()/rate/7">7/10</a></li>
+		    <li><a href="/recipes/@recipe.getTitle()/rate/8">8/10</a></li>
+		    <li><a href="/recipes/@recipe.getTitle()/rate/9">9/10</a></li>
+		    <li><a href="/recipes/@recipe.getTitle()/rate/10">10/10</a></li>
+		  </ul>
+		</div>
+	    <div class="wrapper">
+	        <h1><!-- <span>@recipe.getId()</span>&nbsp; -->@recipe.getTitle()&nbsp;<!-- <span class="label label-warning">@recipe.getLocale()</span> -->@_forkRecipeDisplay( recipe, "btn-lg")</h1>
+	    </div>
+	</section>
+	
+	@if( recipe.getForkDetails() != null) {
+	<p>@recipe.getForkDetails()</p>
+	}
+
+	<div class="row" style="padding-top: 20px">
 	  <div class="col-md-3">
 
 		<div class="panel-group" id="accordion">
@@ -75,6 +73,8 @@
 				<li class="list-group-item"><a href="http://localhost:9000/items/@ingr.getItem().getCanonicalName()">@ingr.getItem().getCanonicalName()</a>&nbsp;@if(ingr.isOptional()) { <span>(optional)</span>&nbsp;}@for(tagName <- ingr.getItem().getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}&nbsp;<a href="/recipes/@recipe.getTitle()/@ingr.getItem().getCanonicalName()/remove">[x]</a></li>
 				}
 				</ul>
+
+				<div><input type="hidden" style="width: 250px" id="addIngredient" /><button type="button" style="margin-left: 12px" class="btn btn-default" onclick="addIngredient('@recipe.getTitle()',$('#addIngredient'))"><span class="glyphicon glyphicon-plus"></span> Add Ingredient</button></div>
 		      </div>
 		    </div>
 		  </div>
@@ -114,7 +114,7 @@
 			<p>Sorry, no Ingredient suggestions</p>
 		} else {
 			<div class="container">
-			<h3>Why not add?</h3>
+			<h3 style="margin-top: 0">Why not add?</h3>
 			@for(( eachItem, index) <- recommendedItems.zipWithIndex) {
 	
 			@if((index % 3) == 0) {

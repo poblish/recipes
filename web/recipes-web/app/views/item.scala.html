@@ -1,31 +1,6 @@
 @(item: uk.co.recipes.api.ICanonicalItem, similarities: List[uk.co.recipes.api.ICanonicalItem], recommendedRecipes: List[uk.co.recipes.api.IRecipe])
 
 @main("Item: " + item.getCanonicalName() ) {
-	<section id="top">
-		<div class="btn-group pull-right">
-		  <a class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown" href="#">
-		    Your Rating
-		    <span class="caret"></span>
-		  </a>
-		  <ul class="dropdown-menu">
-		    <li><a href="/items/@item.getCanonicalName()/rate/1">1/10</a></li>
-		    <li><a href="/items/@item.getCanonicalName()/rate/2">2/10</a></li>
-		    <li><a href="/items/@item.getCanonicalName()/rate/3">3/10</a></li>
-		    <li><a href="/items/@item.getCanonicalName()/rate/4">4/10</a></li>
-		    <li><a href="/items/@item.getCanonicalName()/rate/5">5/10</a></li>
-		    <li><a href="/items/@item.getCanonicalName()/rate/6">6/10</a></li>
-		    <li><a href="/items/@item.getCanonicalName()/rate/7">7/10</a></li>
-		    <li><a href="/items/@item.getCanonicalName()/rate/8">8/10</a></li>
-		    <li><a href="/items/@item.getCanonicalName()/rate/9">9/10</a></li>
-		    <li><a href="/items/@item.getCanonicalName()/rate/10">10/10</a></li>
-		  </ul>
-		</div>
-	    <div class="wrapper">
-	        <h1>@item.getCanonicalName() <span style="padding-left: 30px">@for(tagName <- item.getTagNamesForDisplay()){ <span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}</span></h1>
-	    </div>
-	</section>
-	
-	<hr />
 
 	<!-- Explorer Filter Stuff starts -->
 	<div class="btn-group">
@@ -62,10 +37,36 @@ function clearFilters() {
 
 	<hr />
 
+	<section id="top">
+		<div class="btn-group pull-right">
+		  <a class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown" href="#">
+		    Your Rating
+		    <span class="caret"></span>
+		  </a>
+		  <ul class="dropdown-menu">
+		    <li><a href="/items/@item.getCanonicalName()/rate/1">1/10</a></li>
+		    <li><a href="/items/@item.getCanonicalName()/rate/2">2/10</a></li>
+		    <li><a href="/items/@item.getCanonicalName()/rate/3">3/10</a></li>
+		    <li><a href="/items/@item.getCanonicalName()/rate/4">4/10</a></li>
+		    <li><a href="/items/@item.getCanonicalName()/rate/5">5/10</a></li>
+		    <li><a href="/items/@item.getCanonicalName()/rate/6">6/10</a></li>
+		    <li><a href="/items/@item.getCanonicalName()/rate/7">7/10</a></li>
+		    <li><a href="/items/@item.getCanonicalName()/rate/8">8/10</a></li>
+		    <li><a href="/items/@item.getCanonicalName()/rate/9">9/10</a></li>
+		    <li><a href="/items/@item.getCanonicalName()/rate/10">10/10</a></li>
+		  </ul>
+		</div>
+	    <div class="wrapper">
+	        <h1>@item.getCanonicalName() <span style="padding-left: 30px">@for(tagName <- item.getTagNamesForDisplay()){ <span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}</span></h1>
+	    </div>
+	</section>
+
+	<hr />
+
+	<div class="container" style="padding-top: 20px">
 	@if( recommendedRecipes.size() == 0) {
 		<p>Please log in / Sorry, no matching recipes could be found</p>
 	} else {
-		<div class="container">
 		<h3>Recommended Recipes containing @item.getCanonicalName():</h3>
 		@for(( eachRecipe, index) <- recommendedRecipes.zipWithIndex) {
 		
@@ -91,8 +92,8 @@ function clearFilters() {
 		}
 		
 		</div>  <!-- <div class="row"> -->
-		</div>  <!-- <div class="container"> -->
 	}
+	</div>  <!-- <div class="container"> -->
 
 	<div class="container">
 	<h3>Similar Items:</h3>
