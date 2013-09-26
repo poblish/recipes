@@ -49,6 +49,8 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 	@Inject MyrrixUpdater myrrixUpdater;
 	@Inject MetricRegistry metrics;
 
+	private static final long[] ANON_EMPTYITEMS = new long[0];
+	private static final float[] ANON_EMPTYVALUES = new float[0];
 
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.service.api.IRecommendationsAPI#recommendIngredients(uk.co.recipes.api.IUser, int)
@@ -161,11 +163,8 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 	public List<IRecipe> recommendRecipesToAnonymous( int inNumRecs, ICanonicalItem... inIncludes) {
 	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_FILTERED_RECOMMENDATIONS).time();  // Same again - that OK?
 
-	    try {
-			return Collections.emptyList();  // FIXME!!!
-	    }
-/*		try {
-			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.recommendToAnonymous( inNumRecs, false, new String[]{"RECIPE"}) ) );
+		try {
+			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.recommendToAnonymous( ANON_EMPTYITEMS, ANON_EMPTYVALUES, 12, new String[]{"RECIPE"}, null) ) );
 		}
         catch (NoSuchUserException e) {
             return Collections.emptyList();
@@ -175,7 +174,7 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
         }
 		catch (IOException e) {
 			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
-		} */
+		}
         finally {
             timerCtxt.stop();
         }
