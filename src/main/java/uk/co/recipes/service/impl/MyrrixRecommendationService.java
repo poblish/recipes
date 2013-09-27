@@ -16,6 +16,8 @@ import net.myrrix.client.ClientRecommender;
 
 import org.apache.mahout.cf.taste.common.NoSuchUserException;
 import org.apache.mahout.cf.taste.common.TasteException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
@@ -49,8 +51,10 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 	@Inject MyrrixUpdater myrrixUpdater;
 	@Inject MetricRegistry metrics;
 
-	private static final long[] ANON_EMPTYITEMS = new long[0];
-	private static final float[] ANON_EMPTYVALUES = new float[0];
+	private static final long[] ANON_EMPTYITEMS = new long[]{0L};
+	private static final float[] ANON_EMPTYVALUES = new float[]{0};
+
+	private final static Logger LOG = LoggerFactory.getLogger( MyrrixRecommendationService.class );
 
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.service.api.IRecommendationsAPI#recommendIngredients(uk.co.recipes.api.IUser, int)
@@ -170,7 +174,9 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
             return Collections.emptyList();
         }
         catch (TasteException e) {
-            throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+        	LOG.error("FIXME > Ignore error for now: ", e);
+            return Collections.emptyList();
+            // FIXME throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
         }
 		catch (IOException e) {
 			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
