@@ -142,11 +142,11 @@
 ---
 {canonicalName: Coriander Powder, parent: Coriander, tags: {-HERB, SPICE, INDIAN}, aliases: {Ground Coriander}}
 ---
-{canonicalName: Coriander Seeds, parent: Coriander, tags: {-HERB, SPICE, INDIAN}, aliases: {Coriander Seed}}
+{canonicalName: Coriander Seeds, parent: Coriander, tags: {-HERB, SPICE, INDIAN}, aliases: {Coriander Seed, Dhania}}
 ---
 {canonicalName: Cumin, tags: {SPICE, INDIAN}, aliases: {Ground Cumin, Cumin Powder}}
 ---
-{    canonicalName: Cumin Seeds, parent: Cumin, aliases: {Cumin Seed}, baseAmt: 1 tsp}
+{    canonicalName: Cumin Seeds, parent: Cumin, aliases: {Cumin Seed, Jeera}, baseAmt: 1 tsp}
 ---
 {canonicalName: Curry Powder, tags: {SPICE, INDIAN}}
 ---
@@ -156,7 +156,7 @@
 ---
 {canonicalName: Fennel Seeds, tags: {SPICE, SEED, ANISEED}, aliases: {Fennel Seed}}
 ---
-{canonicalName: Fenugreek Seeds, parent: Fenugreek, tags: {-HERB, SPICE}, aliases: {Fenugreek Seed}}
+{canonicalName: Fenugreek Seeds, parent: Fenugreek, tags: {-HERB, SPICE}, aliases: {Fenugreek Seed, Methi}}
 ---
 {canonicalName: Garam Masala, tags: {SPICE, INDIAN}, aliases: {Garam Masala Powder}}
 ---
@@ -190,7 +190,7 @@
 ---
 {canonicalName: Star Anise, tags: {SPICE, CHINESE}}
 ---
-{canonicalName: Turmeric, tags: {SPICE, INDIAN}, aliases: {Turmeric Powder}}
+{canonicalName: Turmeric, tags: {SPICE, INDIAN}, aliases: {Turmeric Powder, Haldi}}
 ---
 
 
