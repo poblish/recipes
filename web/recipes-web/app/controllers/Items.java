@@ -12,6 +12,8 @@ import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.impl.MyrrixUpdater;
+import uk.co.recipes.external.WikipediaGetter;
+import uk.co.recipes.external.WikipediaResults;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.ratings.ItemRating;
@@ -21,6 +23,7 @@ import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
 
 import com.codahale.metrics.MetricRegistry;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 
 /**
@@ -33,14 +36,16 @@ import com.google.common.base.Optional;
 public class Items extends AbstractExplorableController {
 
     private UserRatings ratings;
+	private ObjectMapper mapper;
 
     @Inject
     public Items( final MyrrixUpdater updater, final EsItemFactory items, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService,
-    			  final MyrrixRecommendationService inRecService, final EsUserFactory users, final UserRatings inRatings, final MetricRegistry metrics) {
+    			  final MyrrixRecommendationService inRecService, final EsUserFactory users, final UserRatings inRatings, final MetricRegistry metrics, final ObjectMapper inMapper) {
         super( items, explorerFilters, inExplorerService, inRecService, metrics);
 
     	updater.startListening();
         this.ratings = checkNotNull(inRatings);
+        this.mapper = checkNotNull(inMapper);
     }
 
     public Result display( final String name) throws IOException {
@@ -68,5 +73,21 @@ public class Items extends AbstractExplorableController {
 		ratings.addRating( user1, new ItemRating( item, inScore) );
   
         return redirect("/items/" + item.getCanonicalName());  // FIXME - horrible way to reload!
+    }
+
+    public Result loadExternals( final String name) throws IOException {
+        final Optional<ICanonicalItem> optItem = items.get(name);
+        if (!optItem.isPresent()) {
+            return notFound("'" + name + "' not found!");
+        }
+
+		final Optional<WikipediaResults> results = new WikipediaGetter().getResultsFor("Coriander");
+
+    	if (results.isPresent()) {
+    		return ok( mapper.writeValueAsString( results.get() ) ).as("application/json");
+    	}
+    	else {
+    		return ok("").as("application/json");
+    	}
     }
 }
