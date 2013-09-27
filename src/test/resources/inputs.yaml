@@ -286,15 +286,15 @@
 ---
 {    canonicalName: Savoy Cabbage, parent: Cabbage}
 ---
-{canonicalName: Capsicum, tags: VEGETABLE, aliases: {Red Peppers}}
+{canonicalName: Peppers, tags: VEGETABLE, aliases: {Capsicum}}
 ---
-{    canonicalName: Green Pepper, parent: Capsicum, aliases: {Green Peppers}}
+{    canonicalName: Green Pepper, parent: Peppers, aliases: {Green Peppers}}
 ---
-{    canonicalName: Orange Pepper, parent: Capsicum, aliases: {Orange Peppers}}
+{    canonicalName: Orange Pepper, parent: Peppers, aliases: {Orange Peppers}}
 ---
-{    canonicalName: Red Pepper, parent: Capsicum, aliases: {Red Peppers}}
+{    canonicalName: Red Pepper, parent: Peppers, aliases: {Red Peppers}}
 ---
-{    canonicalName: Yellow Pepper, parent: Capsicum, aliases: {Yellow Peppers}}
+{    canonicalName: Yellow Pepper, parent: Peppers, aliases: {Yellow Peppers}}
 ---
 {canonicalName: Carrot, tags: VEGETABLE, aliases: {Carrots}}
 ---
