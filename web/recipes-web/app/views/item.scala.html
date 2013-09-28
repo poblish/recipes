@@ -67,7 +67,7 @@ function clearFilters() {
 	    </div>
 	  </div>
 
-	<div id="item-ext-text-ctr" class="well" style="margin-top: 20px"><p id="item-ext-text" style="margin-bottom: 0">No extra information available</p></div>
+	<div id="item-ext-text-ctr" class="well" style="margin-top: 20px"><p id="item-ext-text" style="">No extra information available</p><p style="margin-bottom: 0"><small><span id="item-ext-text2" style="display: none"></span>  <a id="item-ext-url" href="">More on Wikipedia</a></small></p></div>
 
 	<div class="container" style="padding-top: 20px">
 	@if( recommendedRecipes.size() == 0) {
@@ -128,8 +128,11 @@ function clearFilters() {
     .success( function(obj) {
         try {
         	$('#item-ext-text').text(obj.text);
+        	$('#item-ext-text2').text(obj.secondaryText);
         	$('#item-ext-img').attr('src', obj.imgUrl);
+        	$('#item-ext-url').attr('href', obj.url);
         	$('#item-ext-img-ctr').show();
+        	$('#item-ext-text2').show();
         	// $('#item-ext-text-ctr').show();
         } catch (e) { /* Just ignore */ }
     });
