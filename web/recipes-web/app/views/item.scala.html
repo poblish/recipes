@@ -61,7 +61,13 @@ function clearFilters() {
 	    </div>
 	</section>
 
-	<hr />
+	  <div id="item-ext-img-ctr" class="pull-right" style="margin-top: 10px; display: none">
+	    <div class="thumbnail">
+	      <img id="item-ext-img" src="" alt="Picture of @item.getCanonicalName()">
+	    </div>
+	  </div>
+
+	<div id="item-ext-text-ctr" class="well" style="margin-top: 20px"><p id="item-ext-text" style="margin-bottom: 0">No extra information available</p></div>
 
 	<div class="container" style="padding-top: 20px">
 	@if( recommendedRecipes.size() == 0) {
@@ -115,4 +121,17 @@ function clearFilters() {
 		</div>  <!-- <div class="row"> -->
 	}
 	</div>  <!-- <div class="container"> -->
+
+	<script>
+    $.get("/items/" + encodeURIComponent('@item.getCanonicalName()') + '/ext')
+    .error( function(xhr) { /* Anything? */ } )
+    .success( function(obj) {
+        try {
+        	$('#item-ext-text').text(obj.text);
+        	$('#item-ext-img').attr('src', obj.imgUrl);
+        	$('#item-ext-img-ctr').show();
+        	// $('#item-ext-text-ctr').show();
+        } catch (e) { /* Just ignore */ }
+    });
+	</script>
 }
