@@ -4,15 +4,19 @@
 
 GET     /                             controllers.Application.index()
 GET     /stats.html                   @controllers.Application.stats()
+
 GET     /items/:name                  @controllers.Items.display(name: String)
 GET     /items/:name/rate/:score      @controllers.Items.rate(name: String, score: Int)
 GET     /items/:name/ext              @controllers.Items.loadExternals(name: String)
+
 GET     /recipes/create               @controllers.Recipes.create()
+
 GET     /recipes/:name/fork           @controllers.Recipes.fork(name: String)
 GET     /recipes/:name/:ing/add       @controllers.Recipes.addIngredient(name: String, ing: String)
 GET     /recipes/:name/:ing/remove    @controllers.Recipes.removeIngredient(name: String, ing: String)
 GET     /recipes/:name                @controllers.Recipes.display(name: String)
 GET     /recipes/:name/rate/:score    @controllers.Recipes.rate(name: String, score: Int)
+
 GET     /search/partial               @controllers.Search.findPartial()
 GET     /search                       @controllers.Search.doSearch()
 GET     /tags/:name                   @controllers.Tags.display(name: String)
@@ -23,9 +27,9 @@ POST    /user/filter/exc/addTag=:tag  @controllers.Application.explorerExcludeAd
 POST    /user/filter/exc/remTag=:tag  @controllers.Application.explorerExcludeRemoveTag(tag: String)
 POST    /user/filter/clearAll         @controllers.Application.explorerClearAll()
 
-GET     /logout                     com.feth.play.module.pa.controllers.Authenticate.logout
-GET     /authenticate/:prv          com.feth.play.module.pa.controllers.Authenticate.authenticate(prv: String)
-GET     /authenticate/:prv/denied   controllers.Application.oAuthDenied(prv: String)
+GET     /logout                       com.feth.play.module.pa.controllers.Authenticate.logout
+GET     /authenticate/:prv            com.feth.play.module.pa.controllers.Authenticate.authenticate(prv: String)
+GET     /authenticate/:prv/denied     controllers.Application.oAuthDenied(prv: String)
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /assets/*file                 controllers.Assets.at(path="/public", file)
