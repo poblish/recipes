@@ -1,0 +1,36 @@
+@(currentUser: uk.co.recipes.api.IUser)
+
+@main("Create Recipe") {
+
+	<!-- Explorer Filter Stuff starts -->
+	<div class="btn-group">
+	  <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#">
+	    Must Include
+	    <span class="caret"></span>
+	  </a>
+	  <ul class="dropdown-menu">
+		@for( eachTag <- controllers.Application.allTags().iterator) {<li><a href="#" onclick="addInclTag('@eachTag')">@eachTag</a></li>}
+	  </ul>
+	</div>
+	<div class="btn-group">
+	  <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#">
+	    Must Exclude
+	    <span class="caret"></span>
+	  </a>
+	  <ul class="dropdown-menu">
+		@for( eachTag <- controllers.Application.allTags().iterator) {<li><a href="#" onclick="addExclTag('@eachTag')">@eachTag</a></li>}
+	  </ul>
+	</div>
+	<button class="btn btn-danger" type="button" onclick="clearFilters()">Clear All</button>
+	<!-- Explorer Filter Stuff ends -->
+
+	<hr />
+
+	<section id="top">
+	    <div class="wrapper">
+	        <h1>Recipe Creator</h1>
+	    </div>
+	</section>
+
+	<p>Hello</p>
+}

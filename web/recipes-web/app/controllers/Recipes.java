@@ -53,6 +53,11 @@ public class Recipes extends AbstractExplorableController {
         this.ratings = checkNotNull(inRatings);
     }
 
+    public Result create() throws IOException, InterruptedException {
+		final IUser user1 = getLocalUser();
+        return ok(views.html.create_recipe.render(user1));
+    }
+
     public Result fork( final String name) throws IOException, InterruptedException {
         final String[] newName = request().queryString().get("newName");
         final boolean gotNewName = ( newName != null && newName.length > 0 && !newName[0].isEmpty());
