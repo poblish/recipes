@@ -81,7 +81,7 @@ public class Items extends AbstractExplorableController {
             return notFound("'" + name + "' not found!");
         }
 
-		final Optional<WikipediaResults> results = new WikipediaGetter().getResultsFor("Coriander");
+		final Optional<WikipediaResults> results = new WikipediaGetter().getResultsFor( optItem.get().getCanonicalName() );
 
     	if (results.isPresent()) {
     		return ok( mapper.writeValueAsString( results.get() ) ).as("application/json");
