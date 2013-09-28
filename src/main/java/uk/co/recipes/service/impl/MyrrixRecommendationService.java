@@ -135,6 +135,9 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 
 		try {
 			final List<IRecipe> recipesToInclude = searchAPI.findRecipesByItemName(inIncludes);
+			if ( recipesToInclude.isEmpty()) {
+				return Collections.emptyList();  // If _no_ Recipes contain the specified Items, we cannot recommend anything. How the caller deals with that is his business.
+			}
 
 			// FIXME - Try to share with Ids-building code in EsExplorerFilters
             final long[] ids = new long[ recipesToInclude.size() ];
