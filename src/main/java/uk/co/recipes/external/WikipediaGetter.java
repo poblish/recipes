@@ -33,7 +33,7 @@ public class WikipediaGetter {
 		final Elements contentPs = doc.select("#mw-content-text p");
 		final Iterator<Element> itr = contentPs.iterator();
 		final String firstParaText = LINK_PATTERN.matcher( itr.next().text() ).replaceAll("");
-		final String secondParaText = LINK_PATTERN.matcher( itr.next().text() ).replaceAll("");
+		final String secondParaText = itr.hasNext() ? LINK_PATTERN.matcher( itr.next().text() ).replaceAll("") : "";
 
 		final Elements imgs = doc.select("img");
 		for ( Element each : imgs) {
