@@ -36,6 +36,8 @@
 ---
 {canonicalName: Marzipan, parent: Almond, tags: {BAKING}}
 ---
+{canonicalName: Mixed Peel, tags: {BAKING}}
+---
 {canonicalName: Rosewater, tags: FLAVOURING}
 ---
 {canonicalName: Vanilla, tags: {FLAVOURING}}
@@ -44,7 +46,7 @@
 ---
 {    canonicalName: Vanilla Paste, parent: Vanilla, aliases: {Vanilla Bean Paste}}
 ---
-{    canonicalName: Vanilla Pod, parent: Vanilla}
+{    canonicalName: Vanilla Pods, parent: Vanilla, aliases: {Vanilla Pod}}
 ---
 {canonicalName: Yeast, tags: {BAKING}}
 ---
@@ -218,7 +220,7 @@
 ---
 {    canonicalName: Chilli Flakes, parent: Chilli}
 ---
-{    canonicalName: Ancho Chile, parent: Chilli, tags: {MEXICAN, {SCOVILLE: 1000–1500, HEAT_5: 1}}, aliases: {Ancho Chilli, Poblano}}
+{    canonicalName: Ancho Chile, parent: Chilli, tags: {MEXICAN, {SCOVILLE: 1000–1500, HEAT_5: 1}}, aliases: {Ancho Chilli, Ancho Chillies, Poblano}}
 ---
 {    canonicalName: Cayenne Pepper, parent: Chilli, tags: {{SCOVILLE: 30000–50000, HEAT_5: 3}}}
 ---
@@ -289,6 +291,8 @@
 {canonicalName: Peppers, tags: VEGETABLE, aliases: {Capsicum}}
 ---
 {    canonicalName: Green Pepper, parent: Peppers, aliases: {Green Peppers}}
+---
+{    canonicalName: Mixed Peppers, parent: Peppers, contains: {Green Pepper, Red Pepper, Yellow Pepper}}
 ---
 {    canonicalName: Orange Pepper, parent: Peppers, aliases: {Orange Peppers}}
 ---
@@ -498,6 +502,8 @@
 ---
 {canonicalName: Cherries, tags: {FRUIT}, aliases: {Cherry}}
 ---
+{    canonicalName: Cherry Jam, parent: Cherries, tags: {CONDIMENT}}
+---
 {    canonicalName: Glacé Cherries, tags: BAKING, parent: Cherries}
 ---
 {    canonicalName: Sour Cherries, parent: Cherries}
@@ -513,6 +519,8 @@
 {canonicalName: Cranberries, tags: {FRUIT}, aliases: {Cranberry}}
 ---
 {    canonicalName: Cranberry Sauce, parent: Cranberries, tags: {CONDIMENT}}
+---
+{canonicalName: Figs, tags: {FRUIT}, aliases: {Fig}}
 ---
 {canonicalName: Grape, tags: {FRUIT}}
 ---
@@ -702,9 +710,9 @@
 ---
 {        canonicalName: Muscovado Sugar, parent: Brown Sugar}
 ---
-{        canonicalName: Light Muscovado Sugar, parent: Brown Sugar}
+{        canonicalName: Light Muscovado Sugar, parent: Brown Sugar, aliases: {light brown muscovado sugar}}
 ---
-{        canonicalName: Light Soft Brown Sugar, parent: Brown Sugar}
+{        canonicalName: Light Soft Brown Sugar, parent: Brown Sugar, aliases: {soft light brown sugar}}
 ---
 {        canonicalName: Soft Brown Sugar, parent: Brown Sugar}
 ---
@@ -882,7 +890,7 @@
 ---
 {canonicalName: Chilli Sauce, tags: {SAUCE, CHILLI}}
 ---
-{    canonicalName: Harissa, tags: {TUNISIAN}, parent: Chilli Sauce}
+{    canonicalName: Harissa, tags: {TUNISIAN}, parent: Chilli Sauce, aliases: Harissa Paste}
 ---
 {    canonicalName: Hot Chilli Sauce, parent: Chilli Sauce}
 ---
@@ -1090,17 +1098,21 @@
 ---
 {canonicalName: Pork, tags: MEAT}
 ---
-{    canonicalName: Bacon, parent: Pork}
+{    canonicalName: Bacon, parent: Pork, aliases: {Bacon Rashers}}
 ---
-{        canonicalName: Back Bacon, parent: Bacon}
+{        canonicalName: Back Bacon, parent: Bacon, aliases: {back bacon rashers}}
 ---
-{        canonicalName: Bacon Rashers, parent: Bacon}
+{            canonicalName: Smoked Back Bacon, parent: Back Bacon, aliases: {rashers smoked back bacon}}
 ---
 {        canonicalName: Lardons, parent: Bacon, aliases: {Bacon Lardons, Lardon}}
 ---
 {        canonicalName: Pancetta, parent: Bacon, tags: {ITALIAN}}
 ---
-{        canonicalName: Streaky Bacon, parent: Bacon}
+{        canonicalName: Smoked Bacon, parent: Bacon, aliases: {rashers smoked bacon}}
+---
+{        canonicalName: Streaky Bacon, parent: Bacon, aliases: {rashers streaky bacon, rashers of streaky bacon, streaky bacon rashers, rashers rindless streaky bacon}}
+---
+{            canonicalName: Smoked Streaky Bacon, parent: Streaky Bacon, aliases: {rashers smoked streaky bacon}}
 ---
 {    canonicalName: Ham, parent: Pork}
 ---
@@ -1171,6 +1183,8 @@
 {canonicalName: Red Wine, tags: {WINE, ALCOHOL}}
 ---
 {canonicalName: Rice Wine, tags: {WINE, ALCOHOL, ASIAN}}
+---
+{canonicalName: Rum, tags: {SPIRIT, ALCOHOL, CARIBBEAN}}
 ---
 {canonicalName: Tia Maria, tags: {SPIRIT, ALCOHOL, COFFEE}}
 ---
