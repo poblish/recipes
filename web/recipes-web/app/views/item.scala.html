@@ -2,40 +2,7 @@
 
 @main("Item: " + item.getCanonicalName() ) {
 
-	<!-- Explorer Filter Stuff starts -->
-	<div class="btn-group">
-	  <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#">
-	    Must Include
-	    <span class="caret"></span>
-	  </a>
-	  <ul class="dropdown-menu">
-		@for( eachTag <- controllers.Application.allTags().iterator) {<li><a href="#" onclick="addInclTag('@eachTag')">@eachTag</a></li>}
-	  </ul>
-	</div>
-	<div class="btn-group">
-	  <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#">
-	    Must Exclude
-	    <span class="caret"></span>
-	  </a>
-	  <ul class="dropdown-menu">
-		@for( eachTag <- controllers.Application.allTags().iterator) {<li><a href="#" onclick="addExclTag('@eachTag')">@eachTag</a></li>}
-	  </ul>
-	</div>
-	<button class="btn btn-danger" type="button" onclick="clearFilters()">Clear All</button>
-
-<script>
-function addInclTag(inTag) {
-    $.post("/user/filter/inc/addTag=" + inTag, function(data) { location.reload(false); });
-}
-function addExclTag(inTag) {
-    $.post("/user/filter/exc/addTag=" + inTag, function(data) { location.reload(false); });
-}
-function clearFilters() {
-    $.post("/user/filter/clearAll", function(data) { location.reload(false); });
-}</script>
-	<!-- Explorer Filter Stuff ends -->
-
-	<hr />
+	@_explorerHeader()
 
 	<section id="top">
 		<div class="btn-group pull-right">
@@ -121,6 +88,18 @@ function clearFilters() {
 		</div>  <!-- <div class="row"> -->
 	}
 	</div>  <!-- <div class="container"> -->
+
+
+<script>
+function addInclTag(inTag) {
+    $.post("/user/filter/inc/addTag=" + inTag, function(data) { location.reload(false); });
+}
+function addExclTag(inTag) {
+    $.post("/user/filter/exc/addTag=" + inTag, function(data) { location.reload(false); });
+}
+function clearFilters() {
+    $.post("/user/filter/clearAll", function(data) { location.reload(false); });
+}</script>
 
 	<script>
     $.get("/items/" + encodeURIComponent('@item.getCanonicalName()') + '/ext')
