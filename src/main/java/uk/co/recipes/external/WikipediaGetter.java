@@ -6,6 +6,7 @@ package uk.co.recipes.external;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.Iterator;
+import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -22,6 +23,8 @@ import com.google.common.base.Optional;
  */
 public class WikipediaGetter {
 
+	private final static Pattern LINK_PATTERN = Pattern.compile("\\[[0-9]+\\]");
+
 	public Optional<WikipediaResults> getResultsFor( final String inPage) throws IOException {
 		final String url = "http://en.wikipedia.org/wiki/" + URLEncoder.encode( inPage.replace( ' ', '_'), "utf-8");
 		System.out.println("Connecting to " + url);
@@ -29,8 +32,8 @@ public class WikipediaGetter {
 		final Document doc = Jsoup.connect(url).get();
 		final Elements contentPs = doc.select("#mw-content-text p");
 		final Iterator<Element> itr = contentPs.iterator();
-		final String firstParaText = itr.next().text();
-		final String secondParaText = itr.next().text();
+		final String firstParaText = LINK_PATTERN.matcher( itr.next().text() ).replaceAll("");
+		final String secondParaText = LINK_PATTERN.matcher( itr.next().text() ).replaceAll("");
 
 		final Elements imgs = doc.select("img");
 		for ( Element each : imgs) {
