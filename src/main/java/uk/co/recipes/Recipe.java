@@ -126,6 +126,16 @@ public class Recipe implements IRecipe {
         return itemsList;
     }
 
+	@Override
+	public boolean containsItem( final ICanonicalItem item) {
+        for ( IRecipeStage eachStage : stages) {
+            if (eachStage.containsItem(item)) {
+            	return true;
+            }
+        }
+        return false;
+	}
+
 	@JsonIgnore
 	@Override
     public Collection<ICanonicalItem> getItems() {

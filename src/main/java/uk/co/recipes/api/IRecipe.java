@@ -37,6 +37,7 @@ public interface IRecipe extends ITagging, Cloneable, java.io.Serializable {
 	Collection<IIngredient> getSortedIngredients();
 
 	Collection<ICanonicalItem> getItems();
+	boolean containsItem( final ICanonicalItem item);
 
 	List<IRecipeStage> getStages();
 

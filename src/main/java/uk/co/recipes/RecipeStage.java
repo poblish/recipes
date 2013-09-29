@@ -61,6 +61,16 @@ public class RecipeStage implements IRecipeStage {
             }} ).toSet();
     }
 
+	@Override
+	public boolean containsItem( final ICanonicalItem inItem) {
+        for ( IIngredient each : ingredients) {
+            if (each.getItem().equals(inItem)) {
+            	return true;
+            }
+        }
+        return false;
+	}
+
 	public void setIngredients( final Collection<IIngredient> inIngredients) {
 		ingredients.addAll(inIngredients);
 	}
