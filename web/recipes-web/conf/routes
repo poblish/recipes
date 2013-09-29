@@ -10,6 +10,8 @@ GET     /items/:name/rate/:score      @controllers.Items.rate(name: String, scor
 GET     /items/:name/ext              @controllers.Items.loadExternals(name: String)
 
 GET     /recipes/create               @controllers.Recipes.create()
+GET     /recipes/create/:ing/add      @controllers.Recipes.createAddIngredient(ing: String)
+GET     /recipes/create/:ing/remove   @controllers.Recipes.createRemoveIngredient(ing: String)
 
 GET     /recipes/:name/fork           @controllers.Recipes.fork(name: String)
 GET     /recipes/:name/:ing/add       @controllers.Recipes.addIngredient(name: String, ing: String)

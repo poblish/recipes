@@ -58,6 +58,16 @@ public class Recipes extends AbstractExplorableController {
         return ok(views.html.create_recipe.render(user1));
     }
 
+    public Result createAddIngredient( final String ingredient) throws IOException, InterruptedException {
+    	// Do stuff...
+    	return redirect("/recipes/create");
+    }
+
+    public Result createRemoveIngredient( final String ingredient) throws IOException, InterruptedException {
+    	// Do stuff...
+    	return redirect("/recipes/create");
+    }
+
     public Result fork( final String name) throws IOException, InterruptedException {
         final String[] newName = request().queryString().get("newName");
         final boolean gotNewName = ( newName != null && newName.length > 0 && !newName[0].isEmpty());
