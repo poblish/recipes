@@ -3,7 +3,7 @@
  */
 package uk.co.recipes.service.impl;
 
-import static org.elasticsearch.index.query.QueryBuilders.matchPhraseQuery;
+import static org.elasticsearch.index.query.QueryBuilders.*;
 import static uk.co.recipes.metrics.MetricNames.TIMER_ITEMS_SEARCHES;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_SEARCHES;
 
@@ -22,6 +22,7 @@ import javax.inject.Named;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.base.Throwables;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 
 import uk.co.recipes.CanonicalItem;
@@ -238,7 +239,16 @@ public class EsSearchService implements ISearchAPI {
 
 	@Override
 	public List<IRecipe> findRecipesByItemName( String... inNames) throws IOException {
-        final SearchResponse resp = esClient.prepareSearch("recipe").setTypes("recipes").setQuery( matchPhraseQuery( "canonicalName", inNames[0]) ).setSize(9999)/* .addSort( "_score", DESC) */.execute().actionGet();
+		if (inNames.length == 0) {
+			return Collections.emptyList();
+		}
+
+		final BoolQueryBuilder booleanQ = boolQuery();
+		for ( String eachName : inNames) {
+			booleanQ.must( matchPhraseQuery( "canonicalName", eachName) );
+		}
+
+        final SearchResponse resp = esClient.prepareSearch("recipe").setTypes("recipes").setQuery(booleanQ).setSize(9999)/* .addSort( "_score", DESC) */.execute().actionGet();
         final SearchHit[] hits = resp.getHits().hits();
 
         if ( hits.length == 0) {
