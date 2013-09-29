@@ -29,7 +29,7 @@ public class DefaultIngredientQuantityScoreBooster implements IIngredientQuantit
 //    private static final float FILTER_OUT = 0;
 
     @Override
-    public float getBoostForQuantity( final ICanonicalItem inItem, final IQuantity inQuantity) {
+    public float getBoostForQuantity( final Locale inRecipeLocale, final ICanonicalItem inItem, final IQuantity inQuantity) {
 
         if ( inQuantity.getNumber() <= 0) {
             return NO_BOOST;  // Safe, but wrong (see below)
@@ -37,9 +37,9 @@ public class DefaultIngredientQuantityScoreBooster implements IIngredientQuantit
         }
 
     	if ( inItem.getBaseAmount() != null /* FIXME null check */) {
-			final Optional<Amount<Volume>> actualAmount = new Conversions().toJsrAmount( Locale.UK, inQuantity);
+			final Optional<Amount<Volume>> actualAmount = new Conversions().toJsrAmount( inRecipeLocale, inQuantity);
     		if (actualAmount.isPresent()) {
-    			final Optional<Amount<Volume>> baseAmount = new Conversions().toJsrAmount( Locale.UK, inItem.getBaseAmount());
+    			final Optional<Amount<Volume>> baseAmount = new Conversions().toJsrAmount( inRecipeLocale, inItem.getBaseAmount());
         		if (baseAmount.isPresent()) {
         			final Amount<?> ratio = actualAmount.get().divide( baseAmount.get() );
                     // System.out.println( "Boost = " + ratio.getEstimatedValue() + " for " + inItem);

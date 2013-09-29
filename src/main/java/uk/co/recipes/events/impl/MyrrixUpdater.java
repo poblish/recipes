@@ -9,6 +9,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map.Entry;
 
 import javax.inject.Inject;
@@ -123,7 +124,7 @@ public class MyrrixUpdater implements IEventListener {
     		LOG.trace("onAddRecipe: " + evt);
     	}
 
-        addRecipeIngredients( evt.getRecipe().getId(), evt.getRecipe().getIngredients());
+        addRecipeIngredients( evt.getRecipe().getId(), evt.getRecipe().getLocale(), evt.getRecipe().getIngredients());
     }
 
     @Subscribe
@@ -141,7 +142,7 @@ public class MyrrixUpdater implements IEventListener {
     		LOG.trace("onAddRecipeIngredients: " + evt);
     	}
 
-        addRecipeIngredients( evt.getRecipe().getId(), Lists.newArrayList( evt.getIngredient() ));
+        addRecipeIngredients( evt.getRecipe().getId(), evt.getRecipe().getLocale(), Lists.newArrayList( evt.getIngredient() ));
     }
 
     @Subscribe
@@ -153,12 +154,12 @@ public class MyrrixUpdater implements IEventListener {
         removeRecipeIngredients( evt.getRecipe().getId(), Lists.newArrayList( evt.getIngredient() ));
     }
 
-    public void addRecipeIngredients( final long inRecipeId, final Collection<IIngredient> inIngredients) {
+    public void addRecipeIngredients( final long inRecipeId, final Locale inRecipeLocale, final Collection<IIngredient> inIngredients) {
         boolean changesMade = false;
 
         try {
             for ( IIngredient eachIngr : inIngredients) {
-            	changesMade |= setItemTagsForItem( eachIngr.getItem(), inRecipeId, 1.0f * booster.getBoostForQuantity( eachIngr.getItem(), eachIngr.getQuantity()));
+            	changesMade |= setItemTagsForItem( eachIngr.getItem(), inRecipeId, 1.0f * booster.getBoostForQuantity( inRecipeLocale, eachIngr.getItem(), eachIngr.getQuantity()));
 
     			/* FIXME */ recommender.ingest( new StringReader( inRecipeId + "," + eachIngr.getItem().getId() + ",1.0") );
     			/* FIXME */ changesMade = true;
