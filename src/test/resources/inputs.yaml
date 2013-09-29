@@ -10,7 +10,11 @@
 ---
 {    canonicalName: Dark Chocolate, parent: Chocolate}
 ---
+{    canonicalName: Milk Chocolate, parent: Chocolate}
+---
 {    canonicalName: Plain Chocolate, parent: Chocolate}
+---
+{    canonicalName: White Chocolate, parent: Chocolate}
 ---
 
 
@@ -508,7 +512,7 @@
 ---
 {    canonicalName: Sour Cherries, parent: Cherries}
 ---
-{canonicalName: Coconut, tags: {FRUIT, NUT, TROPICAL, INDIAN, THAI, VIETNAMESE}, aliases: {Coconut grated}}
+{canonicalName: Coconut, tags: {FRUIT, NUT, TROPICAL, ASIAN}, aliases: {Coconut grated}}
 ---
 {    canonicalName: Coconut Milk, parent: Coconut}
 ---
@@ -546,9 +550,11 @@
 ---
 {    canonicalName: Lime Wedge, parent: Lime, aliases: {Lime Wedges}}
 ---
-{canonicalName: Mango, tags: {FRUIT}}
+{canonicalName: Mango, tags: {FRUIT, TROPICAL}, aliases: {Mangoes}}
 ---
 {    canonicalName: Mango Chutney, parent: Mango, tags: {INDIAN, SAUCE}}
+---
+{canonicalName: Nectarine, tags: {FRUIT}, aliases: {Nectarines}}
 ---
 {canonicalName: Orange, tags: {FRUIT, CITRUS, ORANGE}, aliases: {Oranges}}
 ---
@@ -1026,7 +1032,7 @@
 ---
 {    canonicalName: Beef cheek, parent: Beef}
 ---
-{    canonicalName: Beef stir-fry strips, parent: Beef}
+{    canonicalName: Beef strips, parent: Beef, aliases: {Beef stir-fry strips}}
 ---
 {    canonicalName: Braising Beef, parent: Beef}
 ---
