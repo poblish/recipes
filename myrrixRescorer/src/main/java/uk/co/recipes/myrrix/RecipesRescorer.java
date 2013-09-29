@@ -35,6 +35,11 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 
 
 	@Override
+	public IDRescorer getRecommendToAnonymousRescorer( long[] userIDs, final MyrrixRecommender recommender, final String... inArgs) {
+		return getRecommendRescorer( userIDs, recommender, inArgs);
+	}
+
+	@Override
 	public IDRescorer getRecommendRescorer( long[] userIDs, final MyrrixRecommender recommender, final String... inArgs) {
 
 		LOG.info("RecipesRescorer: userIDs = " + Arrays.toString(userIDs));
