@@ -100,6 +100,7 @@ public class Recipe implements IRecipe {
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.api.IRecipe#ingredients()
 	 */
+	@JsonIgnore
 	@Override
 	public Collection<IIngredient> getIngredients() {
 		final Collection<IIngredient> is = Sets.newLinkedHashSet();
