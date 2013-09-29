@@ -1,4 +1,4 @@
-@(currentUser: uk.co.recipes.api.IUser)
+@(currentUser: uk.co.recipes.api.IUser, recipe: uk.co.recipes.api.IRecipe, recommendedRecipes: List[uk.co.recipes.api.IRecipe])
 
 @main("Create Recipe") {
 
@@ -13,6 +13,85 @@
 	<p>Hello</p>
 
 	<div><input type="hidden" style="width: 250px" id="addIngredient" /><button type="button" style="margin-left: 12px" class="btn btn-default" onclick="createAddIngredient($('#addIngredient'))"><span class="glyphicon glyphicon-plus"></span> Add Ingredient</button></div>
+
+	<hr />
+
+
+	<div class="row" style="padding-top: 20px">
+	  <div class="col-md-3">
+
+		<div class="panel-group" id="accordion">
+		  <div class="panel panel-default">
+		    <div class="panel-heading">
+		      <h4 class="panel-title">
+		        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+		          Ingredients:
+		        </a>
+		      </h4>
+		    </div>
+		    <div id="collapse1" class="panel-collapse collapse in">
+		      <div class="panel-body">
+				<ul class="list-group">
+				@for(ingr <- recipe.getSortedIngredients()) {
+				<li class="list-group-item"><a href="http://localhost:9000/items/@ingr.getItem().getCanonicalName()">@ingr.getItem().getCanonicalName()</a>&nbsp;@if(ingr.isOptional()) { <span>(optional)</span>&nbsp;}@for(tagName <- ingr.getItem().getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}&nbsp;<a href="/recipes/@recipe.getTitle()/@ingr.getItem().getCanonicalName()/remove">[x]</a></li>
+				}
+				</ul>
+
+				<div><input type="hidden" style="width: 250px" id="addIngredient" /><button type="button" style="margin-left: 12px" class="btn btn-default" onclick="addIngredient('@recipe.getTitle()',$('#addIngredient'))"><span class="glyphicon glyphicon-plus"></span> Add Ingredient</button></div>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="panel panel-default">
+		    <div class="panel-heading">
+		      <h4 class="panel-title">
+		        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+		          Details:
+		        </a>
+		      </h4>
+		    </div>
+		    <div id="collapse3" class="panel-collapse collapse">
+		      <div class="panel-body">
+				Created by <a href="http://localhost:9000/users/@recipe.getCreator().getUserName()">@recipe.getCreator().getDisplayName()</a> on @org.joda.time.format.DateTimeFormat.forPattern("dd MMMM yyyy 'at' HH:mm").withLocale( Locale.UK ).print( recipe.getCreationTime() )
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+	  </div>
+	  <div class="col-md-9">
+		@if( recommendedRecipes.size() == 0) {
+			<p>Sorry, no Similar recipes could be found</p>
+		} else {
+			<div class="container">
+			<h3>Similar Recipes:</h3>
+			@for(( eachRecipe, index) <- recommendedRecipes.zipWithIndex) {
+			
+			@if((index % 3) == 0) {
+				@if( index >= 3) {
+				  </div>  <!-- <div class="row"> -->
+				}
+			 <div class="row">
+			}
+	
+			<div class="col-md-4">
+				@_displayRecipe( eachRecipe, index)
+			</div>  <!-- <div class="col-md-4"> -->
+			
+			<script>
+			$('#toggle_@index').click(function() {
+			  $('#ingredients_@index').slideToggle(function() {
+			    // Should toggle chevron
+			  });
+			});
+			</script>
+			
+			}
+			
+			</div>  <!-- <div class="row"> -->
+			</div>  <!-- <div class="container"> -->
+		}
+	  </div>  <!-- <div class="col-md-9"> -->
+	</div>  <!-- <div class="row"> -->
 
 	@_addIngredientPicker()
 }

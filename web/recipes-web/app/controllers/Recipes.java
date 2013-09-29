@@ -3,12 +3,17 @@ package controllers;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
 import play.mvc.Result;
 import uk.co.recipes.Ingredient;
 import uk.co.recipes.Quantity;
+import uk.co.recipes.Recipe;
+import uk.co.recipes.RecipeStage;
+import uk.co.recipes.User;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.ITag;
@@ -28,7 +33,10 @@ import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.tags.NationalCuisineTags;
 
 import com.codahale.metrics.MetricRegistry;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Multiset;
 
 /**
@@ -42,33 +50,50 @@ public class Recipes extends AbstractExplorableController {
 
     private IRecipePersistence recipes;
     private UserRatings ratings;
+	private ObjectMapper mapper;
 
     @Inject
     public Recipes( final MyrrixUpdater updater, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService, final EsItemFactory items,
-                    final EsRecipeFactory recipes, final EsUserFactory users, final UserRatings inRatings, final MyrrixRecommendationService inRecService, final MetricRegistry metrics) {
+                    final EsRecipeFactory recipes, final EsUserFactory users, final UserRatings inRatings, final MyrrixRecommendationService inRecService, final MetricRegistry metrics,
+                    final ObjectMapper inMapper) {
     	super( items, explorerFilters, inExplorerService, inRecService, metrics);
 
     	updater.startListening();
         this.recipes = checkNotNull(recipes);
         this.ratings = checkNotNull(inRatings);
+        this.mapper = checkNotNull(inMapper);
     }
 
     public Result create() throws IOException, InterruptedException {
 		final IUser user1 = getLocalUser();
-        return ok(views.html.create_recipe.render(user1));
+		final IRecipe recipe = getSessionCreatedRecipe();
+
+		final List<IRecipe> recRecipes = recsApi.recommendRecipesToAnonymous( 12, Iterables.toArray( recipe.getItems(), ICanonicalItem.class));
+
+        return ok(views.html.create_recipe.render(user1, recipe, recRecipes));
     }
 
     public Result createAddIngredient( final String ingredient) throws IOException, InterruptedException {
-    	// Do stuff...
+		final IRecipe recipe = getSessionCreatedRecipe();
+
+		final ICanonicalItem item = items.get(ingredient).get();
+		if (!recipe.containsItem(item)) {
+			recipe.addIngredients( new Ingredient( item, new Quantity( Units.GRAMMES, 10)) );
+			storeSessionCreatedRecipe(recipe);
+		}
+
     	return redirect("/recipes/create");
     }
 
     public Result createRemoveIngredient( final String ingredient) throws IOException, InterruptedException {
-    	// Do stuff...
+		final IRecipe recipe = getSessionCreatedRecipe();
+		recipe.removeItems( items.getByName(ingredient) );
+		storeSessionCreatedRecipe(recipe);
+
     	return redirect("/recipes/create");
     }
 
-    public Result fork( final String name) throws IOException, InterruptedException {
+	public Result fork( final String name) throws IOException, InterruptedException {
         final String[] newName = request().queryString().get("newName");
         final boolean gotNewName = ( newName != null && newName.length > 0 && !newName[0].isEmpty());
         if (!gotNewName) {
@@ -165,4 +190,29 @@ public class Recipes extends AbstractExplorableController {
     private interface RecipeAction {
 		Result doAction( IUser loggedInUser, IRecipe recipe) throws IOException, InterruptedException;
     }
+
+    private IRecipe getSessionCreatedRecipe() throws IOException {
+    	final String payload = session("recipe_json");
+		System.out.println("> Payload " + payload);
+
+    	final Recipe recipe;
+
+    	if ( payload == null) {
+    		recipe = new Recipe( new User("temp_" + System.currentTimeMillis(), "???"), "Untitled", Locale.UK /* FIXME */);
+    		recipe.addStage( new RecipeStage() );
+    		System.out.println("Created: " + recipe);
+    		storeSessionCreatedRecipe(recipe);
+    	}
+    	else {
+    		recipe = mapper.readValue( payload, Recipe.class);
+    		System.out.println("Parsed: " + recipe);
+    	}
+
+    	return recipe;
+    }
+
+	private void storeSessionCreatedRecipe( final IRecipe recipe) throws JsonProcessingException {
+		System.out.println("> Storing: " + recipe);
+		session().put( "recipe_json", mapper.writeValueAsString(recipe));
+	}
 }
