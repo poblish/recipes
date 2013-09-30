@@ -78,7 +78,7 @@
 ---
 {canonicalName: Herbes de Provence, tags: {HERB, FRENCH}}
 ---
-{canonicalName: Lemon grass, tags: {HERB, THAI, VIETNAMESE, LEMON}, aliases: {Lemongrass}}
+{canonicalName: Lemon grass, tags: {HERB, THAI, VIETNAMESE, LEMON}, aliases: {Lemongrass, stick lemongrass, stalks lemongrass, stem of lemongrass, lemongrass stalks, lemongrass stalk, stalk lemongrass}}
 ---
 {canonicalName: Marjoram, tags: HERB}
 ---
@@ -220,7 +220,7 @@
 ---
 
 
-{canonicalName: Chilli, tags: {CHILLI}}
+{canonicalName: Chilli, tags: {CHILLI}, aliases: {Chillies}}
 ---
 {    canonicalName: Chilli Flakes, parent: Chilli}
 ---
@@ -257,6 +257,8 @@
 {        canonicalName: Brown Rice Noodles, parent: Rice Noodles}
 ---
 {    canonicalName: Ramen Noodles, parent: Noodles, tags: {JAPANESE, WHEAT}}
+---
+{    canonicalName: Soba Noodles, parent: Noodles, tags: {JAPANESE, WHEAT}}
 ---
 {    canonicalName: Udon Noodles, parent: Noodles, tags: {JAPANESE, WHEAT}}
 ---
@@ -342,7 +344,7 @@
 ---
 {    canonicalName: Cos Lettuce, parent: Lettuce}
 ---
-{    canonicalName: Gem Lettuce, parent: Lettuce, aliases: {Little Gem Lettuce, Baby Gem Lettuces}}
+{    canonicalName: Gem Lettuce, parent: Lettuce, aliases: {Little Gem Lettuce, Little Gem Lettuces, Baby Gem Lettuces}}
 ---
 {    canonicalName: Iceberg Lettuce, parent: Lettuce}
 ---
@@ -632,13 +634,25 @@
 ---
 
 
+{canonicalName: Chapatis, tags: {BREAD, INDIAN}, aliases: Chapati}
+---
+{    canonicalName: Wholemeal Chapatis, parent: Chapatis}
+---
 {canonicalName: Ciabatta, tags: {BREAD, ITALIAN}}
 ---
 {canonicalName: Focaccia, tags: {BREAD, ITALIAN}}
 ---
+{canonicalName: Naan Bread, tags: {BREAD, INDIAN}, aliases: Naan}
+---
+{canonicalName: Pitta Bread, tags: {BREAD}, aliases: Pitta, aliases: Pitta Breads}
+---
+{    canonicalName: Wholemeal Pitta Bread, parent: Pitta Bread}
+---
 {canonicalName: Roti, tags: {BREAD, INDIAN, CARIBBEAN}}
 ---
 {canonicalName: Rye Bread, tags: {BREAD}}
+---
+{canonicalName: Sourdough Bread, tags: {BREAD}}
 ---
 {canonicalName: Tortilla, tags: {BREAD, MEXICAN}, aliases: Tortillas}
 ---
@@ -1002,7 +1016,11 @@
 ---
 {canonicalName: Salmon, tags: {FISH,SEAFOOD}}
 ---
+{    canonicalName: Hot-smoked Salmon, parent: Salmon}
+---
 {    canonicalName: Salmon Fillet, parent: Salmon, aliases: {Salmon Fillets}}
+---
+{    canonicalName: Side of Salmon, parent: Salmon}
 ---
 {canonicalName: Sea Bass, tags: {FISH,SEAFOOD}}
 ---
