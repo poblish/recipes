@@ -12,3 +12,8 @@ function createAddIngredient(inIngredientSelect) {
 	document.location.href = '/recipes/create/' + inIngredientSelect.select2('data').displayName + '/add';
 	return false;
 }
+
+function cancelCreate() {
+	document.location.href = '/recipes/create/cancel';
+	return false;
+}

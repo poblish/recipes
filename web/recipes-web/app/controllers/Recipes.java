@@ -91,6 +91,11 @@ public class Recipes extends AbstractExplorableController {
     	return redirect("/recipes/create");
     }
 
+    public Result cancelCreate() {
+		session().remove("recipe_json");
+    	return redirect("/");
+    }
+
 	public Result fork( final String name) throws IOException, InterruptedException {
         final String[] newName = request().queryString().get("newName");
         final boolean gotNewName = ( newName != null && newName.length > 0 && !newName[0].isEmpty());
