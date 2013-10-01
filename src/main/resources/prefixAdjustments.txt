@@ -59,6 +59,7 @@ roughly
 salted
 shelled
 skinless
+skinned
 sliced
 slices
 small
