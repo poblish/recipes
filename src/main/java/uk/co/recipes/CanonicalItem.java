@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.elasticsearch.common.Preconditions;
@@ -21,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IQuantity;
 import uk.co.recipes.api.ITag;
+import uk.co.recipes.tags.TagUtils;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -30,7 +32,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
@@ -144,7 +146,7 @@ public class CanonicalItem implements ICanonicalItem {
 	}
 
 	public boolean hasOverlappingTags() {
-	    final List<ITag> copy = Lists.newArrayList( tags.keySet() );
+	    final Set<ITag> copy = Maps.filterEntries( tags, TagUtils.findActivated()).keySet();
 	    copy.retainAll( ((CanonicalItem) parent).tags.keySet() );
 	    return !copy.isEmpty();
 	}

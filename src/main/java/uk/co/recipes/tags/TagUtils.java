@@ -58,7 +58,7 @@ public final class TagUtils {
 
 	private static final Predicate<Entry<ITag,Serializable>> ALL_ACTIVATED = new Predicate<Entry<ITag,Serializable>>() {
 		public boolean apply( final Entry<ITag,Serializable> inEntry) {
-			return ( inEntry.getValue() == Boolean.TRUE || Boolean.parseBoolean((String) inEntry.getValue() ));
+			return isActivated(inEntry);
 		}
 	};
 
@@ -66,9 +66,16 @@ public final class TagUtils {
 		final Collection<ITag> tagsColl = Arrays.asList(inTags);
 		return new Predicate<Entry<ITag,Serializable>>() {
 			public boolean apply( final Entry<ITag,Serializable> inEntry) {
-				return tagsColl.contains( inEntry.getKey() ) && ( inEntry.getValue() == Boolean.TRUE || Boolean.parseBoolean((String) inEntry.getValue() ));
+				return tagsColl.contains( inEntry.getKey() ) && isActivated(inEntry);
 			}
 		};
+	}
+
+	private static boolean isActivated( final Entry<ITag,Serializable> inEntry) {
+		if ( inEntry.getValue() instanceof Boolean) {
+			return ((Boolean) inEntry.getValue());
+		}
+		return Boolean.parseBoolean((String) inEntry.getValue() );
 	}
 
 	public static Predicate<Entry<ITag,Serializable>> findActivated() {
