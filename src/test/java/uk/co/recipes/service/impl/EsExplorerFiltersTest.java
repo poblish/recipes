@@ -6,6 +6,7 @@ package uk.co.recipes.service.impl;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
+import static uk.co.recipes.tags.FlavourTags.CITRUS;
 
 import java.io.IOException;
 
@@ -72,28 +73,28 @@ public class EsExplorerFiltersTest {
 
     @Test
     public void testIncludeMultipleTags() throws IOException {
-        final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT, CommonTags.CITRUS ).toFilter();
+        final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT, CITRUS ).toFilter();
         assertThat( filter.idsToInclude().length, greaterThan(12));
         assertThat( filter.idsToExclude().length, is(0));
     }
 
     @Test
     public void testIncludeMultipleTags2() throws IOException {
-        final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT, CommonTags.CITRUS, MeatAndFishTags.MEAT ).toFilter();
+        final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT, CITRUS, MeatAndFishTags.MEAT ).toFilter();
         assertThat( filter.idsToInclude().length, is(0));
         assertThat( filter.idsToExclude().length, is(0));
     }
 
     @Test
     public void testIncludeMultipleInclAndExclTags() throws IOException {
-        final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT, CommonTags.CITRUS ).excludeTags( MeatAndFishTags.MEAT, CommonTags.VEGETABLE ).toFilter();
+        final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT, CITRUS ).excludeTags( MeatAndFishTags.MEAT, CommonTags.VEGETABLE ).toFilter();
         assertThat( filter.idsToInclude().length, greaterThan(12));
         assertThat( filter.idsToExclude().length, greaterThan(84));
     }
 
     @Test
     public void testIncludeMultipleTagsReordered() throws IOException {
-        final IExplorerFilter filter = filters.build().includeTags( CommonTags.CITRUS, CommonTags.FRUIT ).toFilter();
+        final IExplorerFilter filter = filters.build().includeTags( CITRUS, CommonTags.FRUIT ).toFilter();
         assertThat( filter.idsToInclude().length, greaterThan(12));
         assertThat( filter.idsToExclude().length, is(0));
     }

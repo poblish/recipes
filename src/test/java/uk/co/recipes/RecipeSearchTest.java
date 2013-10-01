@@ -6,8 +6,8 @@ package uk.co.recipes;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
+import static uk.co.recipes.tags.FlavourTags.CITRUS;
 
-import com.google.common.collect.Ordering;
 import java.io.IOException;
 import java.util.List;
 
@@ -27,12 +27,12 @@ import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.EsSearchService;
-import uk.co.recipes.tags.CommonTags;
 import uk.co.recipes.tags.MeatAndFishTags;
 import uk.co.recipes.test.TestDataUtils;
 
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Ordering;
 
 import dagger.ObjectGraph;
 
@@ -83,7 +83,7 @@ public class RecipeSearchTest {
 
 	@Test
 	public void testUnusedTag() throws IOException {
-		assertThat( searchApi.findRecipesByTag( CommonTags.CITRUS ).size(), is(0));
+		assertThat( searchApi.findRecipesByTag(CITRUS).size(), is(0));
 	}
 
 	@Test
