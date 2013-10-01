@@ -446,6 +446,8 @@
 ---
 {    canonicalName: Tomato Purée, parent: Tomato, tags: {SAUCE}, aliases: {Tomato Puree}}
 ---
+{    canonicalName: Tomato Sauce, parent: Tomato, tags: {SAUCE}}
+---
 {canonicalName: Turnip, tags: VEGETABLE, aliases: {Turnips}}
 ---
 {    canonicalName: Baby Turnips, parent: Turnip}
@@ -904,6 +906,8 @@
 ---
 
 
+{canonicalName: Barbecue Sauce, tags: {SAUCE}}
+---
 {canonicalName: Beef Stock, tags: {MEAT, RED_MEAT, STOCK}, aliases: {Beef Stock Cube, Beef Stock Cubes}}
 ---
 {canonicalName: Chicken Stock, tags: {MEAT, POULTRY, STOCK}, aliases: {Chicken Stock Cube}}
@@ -914,7 +918,7 @@
 ---
 {    canonicalName: Hot Chilli Sauce, parent: Chilli Sauce}
 ---
-{    canonicalName: Sweet Chilli Sauce, parent: Chilli Sauce}
+{    canonicalName: Sweet Chilli Sauce, parent: Chilli Sauce, aliases: Thai Sweet Chilli Sauce}
 ---
 {canonicalName: Curry Paste, tags: {SAUCE}}
 ---
@@ -932,6 +936,8 @@
 ---
 {canonicalName: Fish Sauce, tags: {FISH, SAUCE, THAI, VIETNAMESE}}
 ---
+{canonicalName: Hoisin Sauce, tags: {SAUCE, CHINESE}}
+---
 {canonicalName: Lamb Stock, tags: {MEAT, STOCK}}
 ---
 {canonicalName: Mayonnaise, tags: {EGG, SAUCE}}
@@ -947,6 +953,8 @@
 {canonicalName: Pesto, tags: {SAUCE, ITALIAN}}
 ---
 {canonicalName: Soy Sauce, tags: {SAUCE, CHINESE}}
+---
+{canonicalName: Tabasco Sauce, tags: {SAUCE, USA}}
 ---
 {canonicalName: Worcestershire Sauce, tags: {ENGLISH, SAUCE}, contains: Anchovy}
 ---
@@ -1090,7 +1098,7 @@
 ---
 {    canonicalName: Duck Breast, parent: Duck, aliases: Duck Breasts}
 ---
-{    canonicalName: Duck Legs, parent: Duck}
+{    canonicalName: Duck Legs, parent: Duck, aliases: {Duck Leg}}
 ---
 {canonicalName: Lamb, tags: {MEAT, RED_MEAT}}
 ---

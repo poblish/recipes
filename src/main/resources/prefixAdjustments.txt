@@ -32,14 +32,19 @@ grated
 ground
 half-fat
 hot
+just-ripe
 large
 lean
 long
 low-fat
 low salt
+low-sodium
 medium
+melted
 mini
 organic
+overripe
+over-ripe
 peeled
 pitted
 plump
@@ -47,6 +52,7 @@ quality
 raw
 reduced-fat
 reduced-salt
+really ripe
 ripe
 roasted
 roughly
