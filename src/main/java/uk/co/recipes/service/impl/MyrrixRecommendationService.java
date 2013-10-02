@@ -238,7 +238,7 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
             return Collections.emptyList();
         }
         catch (TasteException e) {
-        	LOG.error("FIXME > Ignore error for now: ", e);
+        	LOG.error("FIXME > Ignore error for now: " + e);
             return Collections.emptyList();
             // FIXME throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
         }

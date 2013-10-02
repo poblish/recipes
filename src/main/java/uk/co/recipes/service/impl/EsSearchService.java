@@ -246,7 +246,7 @@ public class EsSearchService implements ISearchAPI {
 			cNames.add( each.getCanonicalName() );
 		}
 
-		final List<IRecipe> recipesToChooseFrom = findNRecipesByItemName( inCount * 4, Iterables.toArray( cNames, String.class));
+		final List<IRecipe> recipesToChooseFrom = findNRecipesByItemName( inCount * 3, Iterables.toArray( cNames, String.class));
 		Collections.shuffle(recipesToChooseFrom);
 		return recipesToChooseFrom.subList( 0, Math.min( inCount, recipesToChooseFrom.size()));
 	}
