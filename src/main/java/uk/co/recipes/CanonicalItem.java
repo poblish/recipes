@@ -7,12 +7,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static uk.co.recipes.tags.TagUtils.findActivated;
 import static uk.co.recipes.tags.TagUtils.tagNamesTitleCase;
 
+import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.TreeMap;
 
 import org.elasticsearch.common.Preconditions;
@@ -146,7 +146,8 @@ public class CanonicalItem implements ICanonicalItem {
 	}
 
 	public boolean hasOverlappingTags() {
-	    final Set<ITag> copy = Maps.filterEntries( tags, TagUtils.findActivated()).keySet();
+	    // *Must* take a copy of the collection - do *not* modify 'tags'
+	    final List<ITag> copy = Lists.newArrayList( Maps.filterEntries( tags, TagUtils.findActivated()).keySet() );
 	    copy.retainAll( ((CanonicalItem) parent).tags.keySet() );
 	    return !copy.isEmpty();
 	}
