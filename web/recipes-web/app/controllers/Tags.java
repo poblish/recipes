@@ -32,7 +32,7 @@ public class Tags extends Controller {
     }
 
     public Result display( final String name) throws IOException {
-        final ITag theTag = TagUtils.forName( name.toUpperCase() );
+        final ITag theTag = TagUtils.forName( name.replace( ' ', '_').toUpperCase() );
         final List<ICanonicalItem> results = search.findItemsByTag(theTag);
         return ok(views.html.tags.render( theTag, results));
     }
