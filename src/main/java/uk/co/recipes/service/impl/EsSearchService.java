@@ -237,8 +237,26 @@ public class EsSearchService implements ISearchAPI {
 		return findRecipesByItemName( Iterables.toArray( cNames, String.class));
 	}
 
+	// FIXME - a very crude implementation
+	@Override
+	public List<IRecipe> findRandomRecipesByItemName( int inCount, final ICanonicalItem... inItems) throws IOException {
+		Set<String> cNames = Sets.newHashSet();  // FIXME Factor this out somewhere
+
+		for ( ICanonicalItem each : inItems) {
+			cNames.add( each.getCanonicalName() );
+		}
+
+		final List<IRecipe> recipesToChooseFrom = findNRecipesByItemName( inCount * 4, Iterables.toArray( cNames, String.class));
+		Collections.shuffle(recipesToChooseFrom);
+		return recipesToChooseFrom.subList( 0, Math.min( inCount, recipesToChooseFrom.size()));
+	}
+
 	@Override
 	public List<IRecipe> findRecipesByItemName( String... inNames) throws IOException {
+		return findNRecipesByItemName( 9999, inNames);
+	}
+
+	private List<IRecipe> findNRecipesByItemName( final int inCount, String... inNames) throws IOException {
 		if (inNames.length == 0) {
 			return Collections.emptyList();
 		}
@@ -248,7 +266,7 @@ public class EsSearchService implements ISearchAPI {
 			booleanQ.must( matchPhraseQuery( "canonicalName", eachName) );
 		}
 
-        final SearchResponse resp = esClient.prepareSearch("recipe").setTypes("recipes").setQuery(booleanQ).setSize(9999)/* .addSort( "_score", DESC) */.execute().actionGet();
+        final SearchResponse resp = esClient.prepareSearch("recipe").setTypes("recipes").setQuery(booleanQ).setSize(inCount)/* .addSort( "_score", DESC) */.execute().actionGet();
         final SearchHit[] hits = resp.getHits().hits();
 
         if ( hits.length == 0) {
