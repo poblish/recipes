@@ -46,7 +46,7 @@ public class ItemsLoaderTest {
 	}
 
 	@Module( includes=DaggerModule.class, overrides=true, injects=ItemsLoaderTest.class)
-	private static class TestModule {
+	static class TestModule {
 		@Provides
 		@Singleton
 		EsItemFactory provideEsItemFactory() {
