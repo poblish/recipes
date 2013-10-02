@@ -55,11 +55,11 @@ public final class UnitParser {
 			return Units.LITRE;
 		}
 
-        if (s.equals("ML TUB") || s.equals("ML CARTON") || s.equals("ML POT") || s.equals("ML JAR")) {
+        if (s.equals("ML TUB") || s.equals("ML CARTON") || s.equals("ML POT") || s.equals("ML JAR") || s.equals("ML PACK")) {
             return Units.ML;
         }
 
-        if (s.equals("KG TUB")) {
+        if (s.startsWith("KG ")) {
             return Units.KG;
         }
 
@@ -90,6 +90,10 @@ public final class UnitParser {
 		if (s.startsWith("BIG PINCH")) {
 			return Units.BIG_PINCH;
 		}
+
+        if (s.startsWith("PINCH")) {
+            return Units.PINCH;
+        }
 
 		if (s.equals("SPLASH")) {
 			return Units.SPLASHES;
