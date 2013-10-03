@@ -7,6 +7,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static uk.co.recipes.tags.TagUtils.findActivated;
 import static uk.co.recipes.tags.TagUtils.tagNamesTitleCase;
 
+import java.util.Set;
 import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.util.Collection;
@@ -60,6 +61,7 @@ public class CanonicalItem implements ICanonicalItem {
 	private IQuantity baseAmount;
 
 	private Map<ITag,Serializable> tags = new TreeMap<>( Ordering.usingToString() );  // Try to keep the order regular. This will *not* sort enums by name, only by index
+    private Set<ITag> cancelTags = Sets.newHashSet();
 
 	/**
 	 * @param canonicalName
@@ -121,7 +123,21 @@ public class CanonicalItem implements ICanonicalItem {
 		tags.put( key, Boolean.TRUE);
 	}
 
-	@JsonIgnore  // This is a *processed* list that Jackson must not use, otherwise info (-ve Tags) is thrown away!
+    public void addCancelTag( final ITag key) {
+        cancelTags.add(key);
+    }
+
+    // *Has* to be exist, and be public, for Jackson
+    public Set<ITag> getCancelTags() {
+        return cancelTags;
+    }
+
+    // *Has* to be exist, and be public, for Jackson
+    public void setCancelTags( Set<ITag> inTags) {
+        cancelTags = inTags;
+    }
+
+    // Jackson *will* use this to persist 'tags'
 	@Override
 	public Map<ITag,Serializable> getTags() {
 		if ( parent == null) {
@@ -132,20 +148,14 @@ public class CanonicalItem implements ICanonicalItem {
 		allTags.putAll( parent.getTags() );
 
 		for ( Entry<ITag,Serializable> each : tags.entrySet()) {
-			if ( each.getValue() == Boolean.FALSE) {
-				allTags.remove( each.getKey() );  // Do not inherit!
-			}
-			else {
-				allTags.put( each.getKey(), each.getValue());
-			}
+			allTags.put( each.getKey(), each.getValue());
+		}
+
+		for ( ITag eachCancelTag : cancelTags) {
+            allTags.remove(eachCancelTag);  // Do not inherit!
 		}
 
 		return allTags;
-	}
-
-	@JsonProperty("tags")  // Get the *unprocessed* list for Jackson's use
-	private Map<ITag,Serializable> getJacksonTags() {
-		return tags;
 	}
 
 	public boolean hasOverlappingTags() {
@@ -165,7 +175,8 @@ public class CanonicalItem implements ICanonicalItem {
 		return this.aliases;
 	}
 
-	@JsonProperty("tags")  // Set the *unprocessed* list for Jackson's use
+    // Jackson *will* use this to persist 'tags'. *Can* be private
+	@SuppressWarnings("unused")
 	private void setTags( Map<ITag,Serializable> inTags) {
 		tags.clear();
 

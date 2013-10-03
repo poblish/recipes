@@ -123,7 +123,7 @@ public class ItemsLoader {
 
 	private void processTagValue( final ICanonicalItem ioItem, final String inTagName, final Serializable inValue) {
         if (inTagName.startsWith("-")) {
-        	ioItem.addTag( TagUtils.forName( inTagName.substring(1)), Boolean.FALSE);
+        	((CanonicalItem) ioItem).addCancelTag( TagUtils.forName( inTagName.substring(1)) );
         }
         else {
         	ioItem.addTag( TagUtils.forName(inTagName), inValue);
