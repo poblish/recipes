@@ -121,9 +121,7 @@ public class CanonicalItem implements ICanonicalItem {
 		tags.put( key, Boolean.TRUE);
 	}
 
-	/* (non-Javadoc)
-	 * @see uk.co.recipes.api.ITagging#tagValues()
-	 */
+	@JsonIgnore  // This is a *processed* list that Jackson must not use, otherwise info (-ve Tags) is thrown away!
 	@Override
 	public Map<ITag,Serializable> getTags() {
 		if ( parent == null) {
@@ -145,6 +143,11 @@ public class CanonicalItem implements ICanonicalItem {
 		return allTags;
 	}
 
+	@JsonProperty("tags")  // Get the *unprocessed* list for Jackson's use
+	private Map<ITag,Serializable> getJacksonTags() {
+		return tags;
+	}
+
 	public boolean hasOverlappingTags() {
 	    // *Must* take a copy of the collection - do *not* modify 'tags'
 	    final List<ITag> copy = Lists.newArrayList( Maps.filterEntries( tags, TagUtils.findActivated()).keySet() );
@@ -162,8 +165,7 @@ public class CanonicalItem implements ICanonicalItem {
 		return this.aliases;
 	}
 
-	// Strictly for Jackson only. *Can* be private
-	@SuppressWarnings("unused")
+	@JsonProperty("tags")  // Set the *unprocessed* list for Jackson's use
 	private void setTags( Map<ITag,Serializable> inTags) {
 		tags.clear();
 
