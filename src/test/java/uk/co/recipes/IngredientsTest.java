@@ -167,6 +167,7 @@ public class IngredientsTest {
 
 		final Map<ITag,Serializable> expectedBaconTags = Maps.newHashMap();
 		expectedBaconTags.put( MeatAndFishTags.MEAT, true);
+        expectedBaconTags.put( FlavourTags.BRINE_SALT, true);
 
 		assertThat( lamb.getTags(), is(expectedLambTags));
 		assertThat( lambNeck.getTags(), is(expectedLambTags));
