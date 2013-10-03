@@ -3,6 +3,7 @@
  */
 package uk.co.recipes.persistence;
 
+import com.google.common.base.Throwables;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -107,6 +108,22 @@ public class ItemsLoader {
 
                 for ( String eachAlias : yamlObjectToStrings( inMap.get("aliases") )) {
                     ((CanonicalItem) newItem).aliases.add(eachAlias);
+                }
+
+                for ( String eachConstitName : yamlObjectToStrings( inMap.get("contains") )) {
+                    try {
+                        final Optional<ICanonicalItem> constituent = itemFactory.get(eachConstitName);
+    
+                        if (!constituent.isPresent()) {
+                            LOG.warn("Missing constituent '" + eachConstitName + "' for " + newItem);
+                            continue;
+                        }
+    
+                        ((CanonicalItem) newItem).constituents.add( constituent.get() );
+                    }
+                    catch (IOException e) {
+                        Throwables.propagate(e);  // Yuk!
+                    }
                 }
 
                 final String baseAmt = (String) inMap.get("baseAmt");

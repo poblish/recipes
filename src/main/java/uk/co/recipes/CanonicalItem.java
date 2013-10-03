@@ -63,6 +63,8 @@ public class CanonicalItem implements ICanonicalItem {
 	private Map<ITag,Serializable> tags = new TreeMap<>( Ordering.usingToString() );  // Try to keep the order regular. This will *not* sort enums by name, only by index
     private Set<ITag> cancelTags = Sets.newHashSet();
 
+    public Collection<ICanonicalItem> constituents = Sets.newHashSet();
+
 	/**
 	 * @param canonicalName
 	 * @param parent
@@ -174,6 +176,10 @@ public class CanonicalItem implements ICanonicalItem {
 	public Collection<String> getAliases() {
 		return this.aliases;
 	}
+
+    public Collection<ICanonicalItem> getConstituents() {
+        return this.constituents;
+    }
 
     // Jackson *will* use this to persist 'tags'. *Can* be private
 	@SuppressWarnings("unused")
