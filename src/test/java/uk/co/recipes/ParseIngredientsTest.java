@@ -29,6 +29,7 @@ import uk.co.recipes.persistence.EsUtils;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
+import uk.co.recipes.tags.FlavourTags;
 import uk.co.recipes.tags.NationalCuisineTags;
 import uk.co.recipes.test.TestDataUtils;
 
@@ -210,6 +211,17 @@ public class ParseIngredientsTest {
 		assertThat( Categorisation.forIngredients(ingrBol1, tags).toString(), is("[ITALIAN]"));
 		assertThat( Categorisation.forIngredients(ingrBol2, tags).toString(), is("[]"));
 		assertThat( Categorisation.forIngredients(ingrChBeef, tags).toString(), is("[CHINESE x 6, INDIAN x 2, SPANISH, THAI]"));
+	}
+
+	@Test
+    public void testWeightedCategorisation() throws IOException {
+        final List<IIngredient> ingrChBeef = dataUtils.parseIngredientsFrom("chineseBeef.txt");
+
+        final ITag[] natTags = NationalCuisineTags.values();
+        assertThat( Categorisation.forIngredientsWeighted(ingrChBeef, natTags).toString(), is("[CHINESE x 11, INDIAN x 4, SPANISH, THAI x 2]"));
+
+        final ITag[] flavourTags = FlavourTags.values();
+        assertThat( Categorisation.forIngredientsWeighted(ingrChBeef, flavourTags).toString(), is("[ANISEED x 2, CITRUS x 2, GARLIC x 2, GREEN_GRASSY x 4, SULPHUROUS x 4]"));
 	}
 
     @Test

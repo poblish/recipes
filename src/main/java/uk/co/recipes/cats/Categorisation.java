@@ -6,6 +6,7 @@ package uk.co.recipes.cats;
 import static uk.co.recipes.tags.TagUtils.entryKeys;
 import static uk.co.recipes.tags.TagUtils.findActivated;
 
+import java.util.List;
 import java.util.Collection;
 
 import uk.co.recipes.api.IIngredient;
@@ -45,4 +46,20 @@ public final class Categorisation {
 
 		return tagsSet;
 	}
+
+    // As above, but optionals are only weighted 0.5
+    public static Multiset<ITag> forIngredientsWeighted( final Collection<IIngredient> inIngredients, final ITag... inTagsToCheck) {
+        final Multiset<ITag> tagsSet = TreeMultiset.create( TagUtils.comparator() );
+
+        for ( IIngredient each : inIngredients) {
+            final List<ITag> theTags = FluentIterable.from( each.getItem().getTags().entrySet() ).filter( findActivated(inTagsToCheck) ).transform( entryKeys() ).toList();
+            tagsSet.addAll(theTags);
+
+            if (!each.isOptional()) {  // Add twice for non-optional
+                tagsSet.addAll(theTags);
+            }
+        }
+
+        return tagsSet;
+    }
 }
