@@ -4,6 +4,8 @@ import static java.util.Locale.ENGLISH;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+import dagger.Module;
+import javax.inject.Inject;
 import uk.co.recipes.tags.FlavourTags;
 import java.io.IOException;
 import java.io.Serializable;
@@ -19,7 +21,6 @@ import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.api.Units;
-import uk.co.recipes.events.api.IEventListener;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.persistence.EsItemFactory;
@@ -27,12 +28,7 @@ import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsSequenceFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
-import uk.co.recipes.service.api.IExplorerAPI;
 import uk.co.recipes.service.api.IExplorerFilter;
-import uk.co.recipes.service.api.IItemPersistence;
-import uk.co.recipes.service.api.IRecommendationsAPI;
-import uk.co.recipes.service.api.ISearchAPI;
-import uk.co.recipes.service.api.IUserPersistence;
 import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.EsSearchService;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
@@ -55,35 +51,41 @@ import dagger.ObjectGraph;
  */
 public class IngredientsTest {
 
-	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
+    @Inject EsItemFactory itemFactory;
+    @Inject EsUserFactory userFactory;
+    @Inject EsRecipeFactory recipes;
+    @Inject EsSequenceFactory sequenceFactory;
+    @Inject ItemsLoader loader;
 
-	private IItemPersistence itemFactory = GRAPH.get( EsItemFactory.class );
-	private IUserPersistence userFactory = GRAPH.get( EsUserFactory.class );
-    private EsSequenceFactory sequenceFactory = GRAPH.get( EsSequenceFactory.class );
+    @Inject MyrrixUpdater updater;
 
-    private IEventListener updater = GRAPH.get( MyrrixUpdater.class );
+    @Inject EsSearchService searchService;
+    @Inject MyrrixExplorerService explorerApi;
+    @Inject EsExplorerFilters explorerFilters;
+    @Inject MyrrixRecommendationService recsApi;
 
-	private ISearchAPI searchService = GRAPH.get( EsSearchService.class );
-    private IExplorerAPI explorerApi = GRAPH.get( MyrrixExplorerService.class );
-    private EsExplorerFilters explorerFilters = GRAPH.get( EsExplorerFilters.class );
-    private IRecommendationsAPI recsApi = GRAPH.get( MyrrixRecommendationService.class );
-
-    private IEventService events = GRAPH.get( IEventService.class );
+    @Inject IEventService events;
 //    private IIngredientQuantityScoreBooster booster = GRAPH.get( DefaultIngredientQuantityScoreBooster.class );
+
+    private void injectDependencies() {
+        ObjectGraph.create( new TestModule() ).inject(this);
+    }
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
+	    injectDependencies();
+
 		updater.startListening();
 
 		itemFactory.deleteAll();
-		GRAPH.get( EsRecipeFactory.class ).deleteAll();
+		recipes.deleteAll();
 
         sequenceFactory.deleteAll();
 	}
 
 	@BeforeClass
 	public void loadIngredientsFromYaml() throws IOException {
-		GRAPH.get( ItemsLoader.class ).load();
+	    loader.load();
 	}
 
 	@Test
@@ -275,4 +277,7 @@ public class IngredientsTest {
     private ICanonicalItem loadItem( final String inName) throws IOException {
         return itemFactory.get(inName).get();
     }
+
+    @Module( includes=DaggerModule.class, overrides=true, injects=IngredientsTest.class)
+    static class TestModule {}
 }
