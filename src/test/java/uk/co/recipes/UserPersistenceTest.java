@@ -8,6 +8,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 
+import dagger.Module;
+import javax.inject.Inject;
 import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
@@ -25,9 +27,6 @@ import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.ratings.ItemRating;
 import uk.co.recipes.ratings.RecipeRating;
 import uk.co.recipes.ratings.UserRatings;
-import uk.co.recipes.service.api.IItemPersistence;
-import uk.co.recipes.service.api.IRecipePersistence;
-import uk.co.recipes.service.api.IUserPersistence;
 import uk.co.recipes.tags.CommonTags;
 import uk.co.recipes.tags.MeatAndFishTags;
 import uk.co.recipes.test.TestDataUtils;
@@ -47,27 +46,29 @@ public class UserPersistenceTest {
 
     private final static String TEST_RECIPE = "inputs3.txt";
 
-    private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
+    @Inject EsItemFactory itemFactory;
+    @Inject EsUserFactory userFactory;
+    @Inject EsRecipeFactory recipeFactory;
+    @Inject EsSequenceFactory sequenceFactory;
+    @Inject TestDataUtils dataUtils;
+    @Inject UserRatings userRatings;
+    @Inject ItemsLoader loader;
 
-    private IItemPersistence itemFactory = GRAPH.get( EsItemFactory.class );
-    private IRecipePersistence recipeFactory = GRAPH.get( EsRecipeFactory.class );
-    private IUserPersistence userFactory = GRAPH.get( EsUserFactory.class );
-    private EsSequenceFactory sequenceFactory = GRAPH.get( EsSequenceFactory.class );
-
-	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
-	private UserRatings userRatings = GRAPH.get( UserRatings.class );
-
+    private void injectDependencies() {
+        ObjectGraph.create( new TestModule() ).inject(this);
+    }
 
     @BeforeClass
     public void cleanIndices() throws ClientProtocolException, IOException {
+        injectDependencies();
+
         userFactory.deleteAll();
         sequenceFactory.deleteAll();
     }
 
     @BeforeClass
     public void loadIngredientsFromYaml() throws IOException, InterruptedException {
-        GRAPH.get( ItemsLoader.class ).load();
-
+        loader.load();
 		dataUtils.parseIngredientsFrom(TEST_RECIPE);
 
         while ( recipeFactory.countAll() < 1) {
@@ -141,4 +142,7 @@ public class UserPersistenceTest {
         assertThat( retrievedUser.getItemRatings().size(), is(2));
         assertThat( retrievedUser.getRecipeRatings().size(), is(1));
     }
+
+    @Module( includes=DaggerModule.class, overrides=true, injects=UserPersistenceTest.class)
+    static class TestModule {}
 }
