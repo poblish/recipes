@@ -4,6 +4,7 @@ import static java.util.Locale.ENGLISH;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+import uk.co.recipes.tags.FlavourTags;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
@@ -253,5 +254,24 @@ public class IngredientsTest {
         final ICanonicalItem item = itemFactory.get(inName).get();
         assertThat( inName, is( item.getCanonicalName() ));
         System.out.println( Strings.padEnd("Similar to " + inName + ":", 24, ' ') + explorerApi.similarIngredients( item, 10) );
+    }
+
+    @Test
+    public void testHierarchicalTagPersistence() throws IOException {
+        assertThat( loadItem("coriander").getTags().toString(), is("{GREEN_GRASSY=true, HERB=true}"));
+        assertThat( loadItem("coriander_powder").getTags().toString(), is("{INDIAN=true, SPICE=true}"));
+        assertThat( loadItem("coriander_seeds").getTags().toString(), is("{FLORAL_FRUITY=true, INDIAN=true, SPICE=true}"));
+        assertThat( loadItem("smoked_haddock").getTags().toString(), is("{BRINE_SALT=true, FISH=true, SEAFOOD=true}"));
+
+        assertThat( searchService.findItemsByTag( FlavourTags.GREEN_GRASSY ), hasItem( loadItem("coriander") ));
+        assertThat( searchService.findItemsByTag( FlavourTags.GREEN_GRASSY ), not( hasItem( loadItem("coriander_seeds") )));
+
+        assertThat( searchService.findItemsByTag( FlavourTags.BRINE_SALT ), hasItem( loadItem("smoked_haddock") ));
+        assertThat( searchService.findItemsByTag( MeatAndFishTags.FISH ), hasItem( loadItem("smoked_haddock") ));
+        assertThat( searchService.findItemsByTag( FlavourTags.MARINE ), not( hasItem( loadItem("smoked_haddock") )));
+    }
+
+    private ICanonicalItem loadItem( final String inName) throws IOException {
+        return itemFactory.get(inName).get();
     }
 }
