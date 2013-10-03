@@ -159,9 +159,11 @@ public class MyrrixUpdater implements IEventListener {
 
         try {
             for ( IIngredient eachIngr : inIngredients) {
-            	changesMade |= setItemTagsForItem( eachIngr.getItem(), inRecipeId, 1.0f * booster.getBoostForQuantity( inRecipeLocale, eachIngr.getItem(), eachIngr.getQuantity()));
+                final float basicScoreForIngr = getBasicScore(eachIngr);
 
-    			/* FIXME */ recommender.ingest( new StringReader( inRecipeId + "," + eachIngr.getItem().getId() + ",1.0") );
+            	changesMade |= setItemTagsForItem( eachIngr.getItem(), inRecipeId, basicScoreForIngr * booster.getBoostForQuantity( inRecipeLocale, eachIngr.getItem(), eachIngr.getQuantity()));
+
+    			/* FIXME */ recommender.ingest( new StringReader( inRecipeId + "," + eachIngr.getItem().getId() + "," + basicScoreForIngr) );
     			/* FIXME */ changesMade = true;
     		}
 	    }
@@ -185,7 +187,9 @@ public class MyrrixUpdater implements IEventListener {
             for ( IIngredient eachIngr : inIngredients) {
                 changesMade |= removeItemTagsForItem( eachIngr.getItem(), inRecipeId);
 
-    			/* FIXME */ recommender.ingest( new StringReader( inRecipeId + "," + eachIngr.getItem().getId() + ",-1.0") );
+                final float basicScoreForIngr = -getBasicScore(eachIngr);
+
+    			/* FIXME */ recommender.ingest( new StringReader( inRecipeId + "," + eachIngr.getItem().getId() + "," + basicScoreForIngr) );
     			/* FIXME */ changesMade = true;
             }
         }
@@ -336,5 +340,10 @@ public class MyrrixUpdater implements IEventListener {
 		catch (TasteException e) {
 			Throwables.propagate(e);
 		}
+    }
+
+    // For Recipe-based similarity (tags) and recommendations (prefs): de-value optional ingredients
+    private float getBasicScore( final IIngredient inIngr) {
+        return inIngr.isOptional() ? 0.4f : 1.0f;
     }
 }
