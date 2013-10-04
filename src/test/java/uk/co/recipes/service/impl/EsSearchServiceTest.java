@@ -148,7 +148,7 @@ public class EsSearchServiceTest {
 	@Test
 	public void partialTestForRecipe1() throws IOException {
 		final List<ISearchResult<?>> results1 = searchService.findPartial("curr", 5);
-		assertThat( results1.toString(), is("[RecipeSearchResult{recipeName=chCashBlackSpiceCurry.txt}, ItemSearchResult{itemName=Currant}, ItemSearchResult{itemName=Curry Leaves}, ItemSearchResult{itemName=Curry Powder}, ItemSearchResult{itemName=Curry Paste}]"));
+		assertThat( results1.toString(), is("[RecipeSearchResult{recipeName=chCashBlackSpiceCurry.txt}, ItemSearchResult{itemName=Blackcurrants}, ItemSearchResult{itemName=Currant}, ItemSearchResult{itemName=Curry Leaves}, ItemSearchResult{itemName=Curry Powder}]"));
 		assertThat( results1.size(), is(5));
 	}
 
