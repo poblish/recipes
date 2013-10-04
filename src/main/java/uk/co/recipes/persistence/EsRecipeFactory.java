@@ -44,6 +44,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 /**
@@ -176,7 +177,19 @@ public class EsRecipeFactory implements IRecipePersistence {
 	@Override
 	public void removeItems( final IRecipe inRecipe, final ICanonicalItem... inItems) throws IOException {
 
-		if (!inRecipe.removeItems(inItems) ) {
+    	final Collection<IIngredient> ingredientsToRemove = Lists.newArrayList();
+
+    	// We need to convert back Item to Ingredient, so look among all Ingredients to find matches
+        for ( IIngredient eachIngr : inRecipe.getIngredients()) {
+            for ( ICanonicalItem eachItem : inItems) {
+            	if (eachIngr.getItem().equals(eachItem)) {
+            		ingredientsToRemove.add(eachIngr);
+            		break;
+            	}
+            }
+        }
+
+        if (!inRecipe.removeItems(inItems) ) {
         	throw new RuntimeException("Item(s) could not be removed");
         }
 
@@ -184,7 +197,7 @@ public class EsRecipeFactory implements IRecipePersistence {
 
 			@Override
 			public void run() {
-				eventService.removeRecipeItems( inRecipe, inItems);
+				eventService.removeRecipeIngredients( inRecipe, Iterables.toArray( ingredientsToRemove, IIngredient.class));
 			}
 		});
 	}

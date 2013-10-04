@@ -31,6 +31,5 @@ public interface IEventService {
     void rateRecipe( final IUser inUser, final IRecipe inRecipe, float inRating);
     void addRecipeIngredients( final IRecipe inRecipe, final IIngredient... inIngredients);
     void removeRecipeIngredients( final IRecipe inRecipe, final IIngredient... inIngredients);
-    void removeRecipeItems( final IRecipe inRecipe, final ICanonicalItem... inItems);
     void deleteRecipe( final IRecipe inRecipe);
 }

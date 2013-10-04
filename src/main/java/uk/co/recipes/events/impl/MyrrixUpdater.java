@@ -157,7 +157,7 @@ public class MyrrixUpdater implements IEventListener {
         removeRecipeIngredients( evt.getRecipe().getId(), evt.getRecipe().getLocale(), Lists.newArrayList( evt.getIngredient() ));
     }
 
-    public void addRecipeIngredients( final long inRecipeId, final Locale inRecipeLocale, final Collection<IIngredient> inIngredients) {
+    private void addRecipeIngredients( final long inRecipeId, final Locale inRecipeLocale, final Collection<IIngredient> inIngredients) {
         boolean changesMade = false;
         final StringBuffer myrrixPrefsBuf = new StringBuffer();
 
@@ -192,7 +192,7 @@ public class MyrrixUpdater implements IEventListener {
         }
     }
 
-    public void removeRecipeIngredients( final long inRecipeId, final Locale inRecipeLocale, final Collection<IIngredient> inIngredients) {
+    private void removeRecipeIngredients( final long inRecipeId, final Locale inRecipeLocale, final Collection<IIngredient> inIngredients) {
         boolean changesMade = false;
         final StringBuffer myrrixPrefsBuf = new StringBuffer();
 
@@ -236,30 +236,6 @@ public class MyrrixUpdater implements IEventListener {
 
         for ( ICanonicalItem eachConstituent : inIngrItem.getConstituents()) {
             ioBuf.append( "\n" + inRecipeId + "," + eachConstituent.getId() + "," + (inBaseScore * INGREDIENT_CONSTITUENT_WEIGHT));
-        }
-    }
-
-    @Subscribe
-    public void onRemoveRecipeItems( final RecipeRemoveItemsEvent evt) {
-    	if (LOG.isTraceEnabled()) {
-    		LOG.trace("onRemoveRecipeItems: " + evt);
-    	}
-
-        boolean changesMade = false;
-
-        try {
-            changesMade = setItemTagsForItem( evt.getItem(), evt.getRecipe().getId(), /* FIXME: can this be right -> */ -DEFAULT_WEIGHT);
-        }
-        catch (TasteException e) {
-            Throwables.propagate(e);
-        }
-
-        if (changesMade) {
-            recommender.refresh();
-
-            if (LOG.isTraceEnabled()) {
-                LOG.trace("deleteRecipeIngredients: refresh done");
-            }
         }
     }
 
