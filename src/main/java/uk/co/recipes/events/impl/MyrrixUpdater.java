@@ -77,11 +77,10 @@ public class MyrrixUpdater implements IEventListener {
             LOG.trace("onAddItem: " + evt);
         }
 
-        final long itemId = evt.getItem().getId();
         boolean changesMade = false;
 
         try {
-            changesMade = setItemTagsForItem( evt.getItem(), itemId, 1.0f);
+            changesMade |= setItemTagsForItem( evt.getItem(), evt.getItem().getId(), DEFAULT_WEIGHT);
         }
         catch (TasteException e) {
             Throwables.propagate(e);
@@ -102,11 +101,10 @@ public class MyrrixUpdater implements IEventListener {
             LOG.trace("onDeleteItem: " + evt);
         }
 
-        final long itemId = evt.getItem().getId();
         boolean changesMade = false;
 
         try {
-            changesMade = removeItemTagsForItem( evt.getItem(), itemId);
+            changesMade |= removeItemTagsForItem( evt.getItem(), evt.getItem().getId());
         }
         catch (TasteException e) {
             Throwables.propagate(e);
@@ -268,7 +266,7 @@ public class MyrrixUpdater implements IEventListener {
     			        continue;
     			    }
 
-                    changesMade = doSetTag( eachTag.getKey(), setStr, inItemOrRecipeId, scoreToUse);
+                    changesMade |= doSetTag( eachTag.getKey(), setStr, inItemOrRecipeId, scoreToUse);
     			}
     		}
     		else {
@@ -279,7 +277,7 @@ public class MyrrixUpdater implements IEventListener {
                         continue;
                     }
 
-                    changesMade = doSetTag( eachTag.getKey(), setStr, inItemOrRecipeId, scoreToUse);
+                    changesMade |= doSetTag( eachTag.getKey(), setStr, inItemOrRecipeId, scoreToUse);
     		    }
     		    else {  // It's a String value, e.g. scoville - ignore the value and just use basicScore
                     final float scoreToUse = eachTag.getKey().getBoost() * inBasicScore;
@@ -287,7 +285,7 @@ public class MyrrixUpdater implements IEventListener {
                         continue;
                     }
 
-                    changesMade = doSetTag( eachTag.getKey(), setStr, inItemOrRecipeId, scoreToUse);
+                    changesMade |= doSetTag( eachTag.getKey(), setStr, inItemOrRecipeId, scoreToUse);
     		    }
     		}
     	}
@@ -330,7 +328,7 @@ public class MyrrixUpdater implements IEventListener {
     }
 
     private boolean removeItemTagsForItem( final ICanonicalItem inItem, final long inItemOrRecipeId) throws TasteException {
-        return setItemTagsForItem( inItem, inItemOrRecipeId, -1.0f);
+        return setItemTagsForItem( inItem, inItemOrRecipeId, -DEFAULT_WEIGHT);
     }
 
     @Subscribe
