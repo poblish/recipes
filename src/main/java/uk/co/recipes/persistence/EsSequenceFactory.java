@@ -3,13 +3,13 @@
  */
 package uk.co.recipes.persistence;
 
-import org.elasticsearch.indices.TypeMissingException;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
 
 import org.elasticsearch.client.Client;
+import org.elasticsearch.indices.TypeMissingException;
 
 import com.google.common.base.Throwables;
 

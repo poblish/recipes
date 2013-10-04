@@ -4,6 +4,7 @@
 package uk.co.recipes.api;
 
 import java.util.Collection;
+
 import com.google.common.base.Optional;
 
 /**
