@@ -81,6 +81,7 @@ public class MyrrixUpdater implements IEventListener {
 
         try {
             changesMade |= setItemTagsForItem( evt.getItem(), evt.getItem().getId(), DEFAULT_WEIGHT);
+            // NB. Do *not* deal with constituents here, as all items will be covered Item-level tagging, we don't want double-counting
         }
         catch (TasteException e) {
             Throwables.propagate(e);
@@ -105,6 +106,7 @@ public class MyrrixUpdater implements IEventListener {
 
         try {
             changesMade |= setItemTagsForItem( evt.getItem(), evt.getItem().getId(), -DEFAULT_WEIGHT);
+            // NB. Do *not* deal with constituents here, as all items will be covered Item-level tagging, we don't want double-counting
         }
         catch (TasteException e) {
             Throwables.propagate(e);
@@ -161,9 +163,14 @@ public class MyrrixUpdater implements IEventListener {
 
         try {
             for ( IIngredient eachIngr : inIngredients) {
-                final float basicScoreForIngr = getBasicScore(eachIngr);
+                final float basicScoreForIngr = getBasicScore(eachIngr) * booster.getBoostForQuantity( inRecipeLocale, eachIngr.getItem(), eachIngr.getQuantity());
 
-            	changesMade |= setItemTagsForItem( eachIngr.getItem(), inRecipeId, basicScoreForIngr * booster.getBoostForQuantity( inRecipeLocale, eachIngr.getItem(), eachIngr.getQuantity()));
+            	changesMade |= setItemTagsForItem( eachIngr.getItem(), inRecipeId, basicScoreForIngr);
+
+                // We've covered the ingredient itself, now give a little bit of credit to its constituent items
+                for ( ICanonicalItem eachConstituent : eachIngr.getItem().getConstituents()) {
+                    changesMade |= setItemTagsForItem( eachConstituent, inRecipeId, basicScoreForIngr * INGREDIENT_CONSTITUENT_WEIGHT);
+                }
 
             	///////////////////  Deal with preferences for Recipe > Item recommendations
 
@@ -191,9 +198,14 @@ public class MyrrixUpdater implements IEventListener {
 
         try {
             for ( IIngredient eachIngr : inIngredients) {
-                changesMade |= removeItemTagsForItem( eachIngr.getItem(), inRecipeId);
+                final float basicScoreForIngr = -getBasicScore(eachIngr) * booster.getBoostForQuantity( inRecipeLocale, eachIngr.getItem(), eachIngr.getQuantity());
 
-                final float basicScoreForIngr = -getBasicScore(eachIngr);
+                changesMade |= setItemTagsForItem( eachIngr.getItem(), inRecipeId, basicScoreForIngr);
+
+                // We've covered the ingredient itself, now remove a little bit of credit for its constituent items
+                for ( ICanonicalItem eachConstituent : eachIngr.getItem().getConstituents()) {
+                    changesMade |= setItemTagsForItem( eachConstituent, inRecipeId, basicScoreForIngr * INGREDIENT_CONSTITUENT_WEIGHT);
+                }
 
                 ///////////////////  Deal with preferences for Recipe > Item recommendations
 
