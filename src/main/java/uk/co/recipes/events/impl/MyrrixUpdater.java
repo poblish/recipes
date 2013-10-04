@@ -104,7 +104,7 @@ public class MyrrixUpdater implements IEventListener {
         boolean changesMade = false;
 
         try {
-            changesMade |= removeItemTagsForItem( evt.getItem(), evt.getItem().getId());
+            changesMade |= setItemTagsForItem( evt.getItem(), evt.getItem().getId(), -DEFAULT_WEIGHT);
         }
         catch (TasteException e) {
             Throwables.propagate(e);
@@ -236,7 +236,7 @@ public class MyrrixUpdater implements IEventListener {
         boolean changesMade = false;
 
         try {
-            changesMade = removeItemTagsForItem( evt.getItem(), evt.getRecipe().getId());
+            changesMade = setItemTagsForItem( evt.getItem(), evt.getRecipe().getId(), /* FIXME: can this be right -> */ -DEFAULT_WEIGHT);
         }
         catch (TasteException e) {
             Throwables.propagate(e);
@@ -325,10 +325,6 @@ public class MyrrixUpdater implements IEventListener {
 
     private boolean isPointlessScore( final float inScore) {
     	return inScore > -0.01f && inScore < 0.01f;
-    }
-
-    private boolean removeItemTagsForItem( final ICanonicalItem inItem, final long inItemOrRecipeId) throws TasteException {
-        return setItemTagsForItem( inItem, inItemOrRecipeId, -DEFAULT_WEIGHT);
     }
 
     @Subscribe
