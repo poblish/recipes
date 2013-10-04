@@ -3,6 +3,7 @@
  */
 package uk.co.recipes.persistence;
 
+import org.elasticsearch.indices.TypeMissingException;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
@@ -44,6 +45,11 @@ public class EsSequenceFactory {
 	}
 
 	public void deleteAll() throws IOException {
-		esClient.admin().indices().prepareDeleteMapping().setIndices(INDEX).setType(TYPE).execute().actionGet();
+		try {
+		    esClient.admin().indices().prepareDeleteMapping().setIndices(INDEX).setType(TYPE).execute().actionGet();
+		}
+        catch (TypeMissingException e) {
+            // Ignore
+        }
 	}
 }
