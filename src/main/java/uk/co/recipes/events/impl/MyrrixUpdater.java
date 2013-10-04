@@ -58,6 +58,9 @@ public class MyrrixUpdater implements IEventListener {
     @Inject
     IIngredientQuantityScoreBooster booster;
 
+    private final static float DEFAULT_WEIGHT = 1.0f;
+    private final static float OPTIONAL_INGREDIENT_WEIGHT = 0.4f;
+    private final static float INGREDIENT_CONSTITUENT_WEIGHT = 0.2f;
 
     public MyrrixUpdater() {
     	// For Dagger
@@ -156,6 +159,7 @@ public class MyrrixUpdater implements IEventListener {
 
     public void addRecipeIngredients( final long inRecipeId, final Locale inRecipeLocale, final Collection<IIngredient> inIngredients) {
         boolean changesMade = false;
+        final StringBuffer myrrixPrefsBuf = new StringBuffer();
 
         try {
             for ( IIngredient eachIngr : inIngredients) {
@@ -163,25 +167,29 @@ public class MyrrixUpdater implements IEventListener {
 
             	changesMade |= setItemTagsForItem( eachIngr.getItem(), inRecipeId, basicScoreForIngr * booster.getBoostForQuantity( inRecipeLocale, eachIngr.getItem(), eachIngr.getQuantity()));
 
-    			/* FIXME */ recommender.ingest( new StringReader( inRecipeId + "," + eachIngr.getItem().getId() + "," + basicScoreForIngr) );
-    			/* FIXME */ changesMade = true;
+            	///////////////////  Deal with preferences for Recipe > Item recommendations
+
+            	addPrefsForItem( myrrixPrefsBuf, inRecipeId, eachIngr.getItem(), basicScoreForIngr);
+            	changesMade = true;  // There will always be changes now - cheerfully overwrite flag
     		}
-	    }
-		catch (TasteException e) {
-			Throwables.propagate(e);
-		}
 
-        if (changesMade) {
-        	recommender.refresh();
-
-        	if (LOG.isTraceEnabled()) {
-        		LOG.trace("addRecipeIngredients: refresh done");
-        	}
+            if (changesMade) {
+                recommender.ingest( new StringReader( myrrixPrefsBuf.toString() ) );
+            	recommender.refresh();
+    
+            	if (LOG.isTraceEnabled()) {
+            		LOG.trace("addRecipeIngredients: refresh done");
+            	}
+            }
+        }
+        catch (TasteException e) {
+            Throwables.propagate(e);
         }
     }
 
     public void removeRecipeIngredients( final long inRecipeId, final Collection<IIngredient> inIngredients) {
         boolean changesMade = false;
+        final StringBuffer myrrixPrefsBuf = new StringBuffer();
 
         try {
             for ( IIngredient eachIngr : inIngredients) {
@@ -189,20 +197,35 @@ public class MyrrixUpdater implements IEventListener {
 
                 final float basicScoreForIngr = -getBasicScore(eachIngr);
 
-    			/* FIXME */ recommender.ingest( new StringReader( inRecipeId + "," + eachIngr.getItem().getId() + "," + basicScoreForIngr) );
-    			/* FIXME */ changesMade = true;
+                ///////////////////  Deal with preferences for Recipe > Item recommendations
+
+                addPrefsForItem( myrrixPrefsBuf, inRecipeId, eachIngr.getItem(), basicScoreForIngr);
+                changesMade = true;  // There will always be changes now - cheerfully overwrite flag
+            }
+
+            if (changesMade) {
+                recommender.ingest( new StringReader( myrrixPrefsBuf.toString() ) );
+                recommender.refresh();
+    
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace("deleteRecipeIngredients: refresh done");
+                }
             }
         }
         catch (TasteException e) {
             Throwables.propagate(e);
         }
+    }
 
-        if (changesMade) {
-            recommender.refresh();
+    private void addPrefsForItem( final StringBuffer ioBuf, final long inRecipeId, final ICanonicalItem inIngrItem, final float inBaseScore) {
+        if ( ioBuf.length() > 0) {
+            ioBuf.append("\n");
+        }
 
-            if (LOG.isTraceEnabled()) {
-                LOG.trace("deleteRecipeIngredients: refresh done");
-            }
+        ioBuf.append( inRecipeId + "," + inIngrItem.getId() + "," + inBaseScore);
+
+        for ( ICanonicalItem eachConstituent : inIngrItem.getConstituents()) {
+            ioBuf.append( "\n" + inRecipeId + "," + eachConstituent.getId() + "," + (inBaseScore * INGREDIENT_CONSTITUENT_WEIGHT));
         }
     }
 
@@ -344,6 +367,6 @@ public class MyrrixUpdater implements IEventListener {
 
     // For Recipe-based similarity (tags) and recommendations (prefs): de-value optional ingredients
     private float getBasicScore( final IIngredient inIngr) {
-        return inIngr.isOptional() ? 0.4f : 1.0f;
+        return inIngr.isOptional() ? OPTIONAL_INGREDIENT_WEIGHT : DEFAULT_WEIGHT;
     }
 }
