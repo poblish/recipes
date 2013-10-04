@@ -3,10 +3,10 @@
  */
 package uk.co.recipes.convert;
 
+import static java.util.Locale.UK;
+import static java.util.Locale.US;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-
-import static java.util.Locale.*;
 
 import javax.measure.unit.NonSI;
 import javax.measure.unit.SI;

@@ -7,13 +7,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static uk.co.recipes.tags.TagUtils.findActivated;
 import static uk.co.recipes.tags.TagUtils.tagNamesTitleCase;
 
-import java.util.Set;
-import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.elasticsearch.common.Preconditions;
@@ -33,6 +32,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;

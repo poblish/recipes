@@ -3,7 +3,6 @@
  */
 package uk.co.recipes;
 
-import org.apache.http.impl.client.HttpClientBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -17,6 +16,7 @@ import net.myrrix.client.ClientRecommender;
 import net.myrrix.client.MyrrixClientConfiguration;
 
 import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.elasticsearch.ElasticSearchIllegalArgumentException;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;

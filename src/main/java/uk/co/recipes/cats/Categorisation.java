@@ -6,8 +6,8 @@ package uk.co.recipes.cats;
 import static uk.co.recipes.tags.TagUtils.entryKeys;
 import static uk.co.recipes.tags.TagUtils.findActivated;
 
-import java.util.List;
 import java.util.Collection;
+import java.util.List;
 
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.ITag;

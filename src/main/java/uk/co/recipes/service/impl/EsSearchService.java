@@ -3,7 +3,8 @@
  */
 package uk.co.recipes.service.impl;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.matchPhraseQuery;
 import static uk.co.recipes.metrics.MetricNames.TIMER_ITEMS_SEARCHES;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_SEARCHES;
 

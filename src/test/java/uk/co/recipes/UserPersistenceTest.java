@@ -8,9 +8,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 
-import dagger.Module;
-import javax.inject.Inject;
 import java.io.IOException;
+
+import javax.inject.Inject;
 
 import org.apache.http.client.ClientProtocolException;
 import org.testng.annotations.BeforeClass;
@@ -33,6 +33,7 @@ import uk.co.recipes.test.TestDataUtils;
 
 import com.google.common.base.Optional;
 
+import dagger.Module;
 import dagger.ObjectGraph;
 
 

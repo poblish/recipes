@@ -4,13 +4,12 @@ import static java.util.Locale.ENGLISH;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-import dagger.Module;
-import javax.inject.Inject;
-import uk.co.recipes.tags.FlavourTags;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+
+import javax.inject.Inject;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.mahout.cf.taste.common.TasteException;
@@ -33,6 +32,7 @@ import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.EsSearchService;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
+import uk.co.recipes.tags.FlavourTags;
 import uk.co.recipes.tags.MeatAndFishTags;
 
 import com.google.common.base.Optional;
@@ -40,6 +40,7 @@ import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Maps;
 
+import dagger.Module;
 import dagger.ObjectGraph;
 
 /**

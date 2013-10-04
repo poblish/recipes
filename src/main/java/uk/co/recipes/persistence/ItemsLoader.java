@@ -3,7 +3,6 @@
  */
 package uk.co.recipes.persistence;
 
-import com.google.common.base.Throwables;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -28,6 +27,7 @@ import uk.co.recipes.tags.TagUtils;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
+import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 
