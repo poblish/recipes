@@ -23,6 +23,9 @@ public interface IEventService {
     void rateItem( final IUser inUser, final ICanonicalItem inItem, float inRating);
     void deleteItem( final ICanonicalItem inItem);
 
+    void faveItem( final IUser inUser, final ICanonicalItem inItem);
+    void unFaveItem( final IUser inUser, final ICanonicalItem inItem);
+
     void addRecipe( final IRecipe inRecipe);
     void rateRecipe( final IUser inUser, final IRecipe inRecipe);
     void rateRecipe( final IUser inUser, final IRecipe inRecipe, float inRating);

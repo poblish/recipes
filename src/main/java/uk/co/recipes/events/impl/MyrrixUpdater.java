@@ -361,6 +361,28 @@ public class MyrrixUpdater implements IEventListener {
         rateGenericItem( evt.getUser().getId(), evt.getRecipe().getId(), evt.getScore());
     }
 
+    @Subscribe
+    public void onFaveItem( final FaveItemEvent evt) {
+        checkArgument( evt.getItem().getId() >= 0 && evt.getItem().getId() < Recipe.BASE_ID, "Item has not been persisted, or Id is invalid");
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Fave: " + evt);
+        }
+
+        rateGenericItem( evt.getUser().getId(), evt.getItem().getId(), evt.getScore());
+    }
+
+    @Subscribe
+    public void onUnFaveItem( final UnFaveItemEvent evt) {
+        checkArgument( evt.getItem().getId() >= 0 && evt.getItem().getId() < Recipe.BASE_ID, "Item has not been persisted, or Id is invalid");
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("UnFave: " + evt);
+        }
+
+        rateGenericItem( evt.getUser().getId(), evt.getItem().getId(), evt.getScore());
+    }
+
     private void rateGenericItem( final long inUserId, final long inGenericItemId, final float inRating) {
 		try {
 			recommender.ingest( new StringReader( inUserId + "," + inGenericItemId + "," + inRating) );
