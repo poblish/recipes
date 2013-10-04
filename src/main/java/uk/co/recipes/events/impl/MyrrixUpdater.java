@@ -46,17 +46,11 @@ public class MyrrixUpdater implements IEventListener {
 
     private static final Logger LOG = LoggerFactory.getLogger( MyrrixUpdater.class );
 
-    @Inject
-    IEventService eventService;
+    @Inject EsItemFactory itemFactory;  // Purely for getting Item Ids
 
-    @Inject
-    EsItemFactory itemFactory;  // Purely for getting Item Ids
-
-    @Inject
-    ClientRecommender recommender;
-
-    @Inject
-    IIngredientQuantityScoreBooster booster;
+    @Inject IEventService eventService;
+    @Inject ClientRecommender recommender;
+    @Inject IIngredientQuantityScoreBooster booster;
 
     private final static float DEFAULT_WEIGHT = 1.0f;
     private final static float OPTIONAL_INGREDIENT_WEIGHT = 0.4f;
