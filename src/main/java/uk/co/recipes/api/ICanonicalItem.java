@@ -3,6 +3,7 @@
  */
 package uk.co.recipes.api;
 
+import java.util.Collection;
 import com.google.common.base.Optional;
 
 /**
@@ -24,4 +25,6 @@ public interface ICanonicalItem extends ITagging, java.io.Serializable {
 	boolean descendsFrom( final ICanonicalItem inOther);
 
 	void setParent( ICanonicalItem canonicalItem);
+
+	Collection<ICanonicalItem> getConstituents();
 }

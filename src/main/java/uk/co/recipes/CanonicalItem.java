@@ -177,6 +177,7 @@ public class CanonicalItem implements ICanonicalItem {
 		return this.aliases;
 	}
 
+	@Override
     public Collection<ICanonicalItem> getConstituents() {
         return this.constituents;
     }
