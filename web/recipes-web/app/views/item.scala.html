@@ -89,18 +89,6 @@
 	}
 	</div>  <!-- <div class="container"> -->
 
-
-<script>
-function addInclTag(inTag) {
-    $.post("/user/filter/inc/addTag=" + inTag, function(data) { location.reload(false); });
-}
-function addExclTag(inTag) {
-    $.post("/user/filter/exc/addTag=" + inTag, function(data) { location.reload(false); });
-}
-function clearFilters() {
-    $.post("/user/filter/clearAll", function(data) { location.reload(false); });
-}</script>
-
 	<script>
     $.get("/items/" + encodeURIComponent('@item.getCanonicalName()') + '/ext')
     .error( function(xhr) { /* Anything? */ } )

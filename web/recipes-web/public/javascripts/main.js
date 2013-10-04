@@ -17,3 +17,15 @@ function cancelCreate() {
 	document.location.href = '/recipes/create/cancel';
 	return false;
 }
+
+function addInclTag(inTag) {
+    $.post("/user/filter/inc/addTag=" + inTag, function(data) { location.reload(false); });
+}
+
+function addExclTag(inTag) {
+    $.post("/user/filter/exc/addTag=" + inTag, function(data) { location.reload(false); });
+}
+
+function clearFilters() {
+    $.post("/user/filter/clearAll", function(data) { location.reload(false); });
+}
