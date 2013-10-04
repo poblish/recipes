@@ -7,6 +7,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_PUTS;
 
+import dagger.Module;
+import javax.inject.Inject;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -24,7 +26,6 @@ import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IForkDetails;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
-import uk.co.recipes.events.api.IEventListener;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.persistence.EsItemFactory;
@@ -32,11 +33,6 @@ import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsSequenceFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
-import uk.co.recipes.service.api.IExplorerAPI;
-import uk.co.recipes.service.api.IItemPersistence;
-import uk.co.recipes.service.api.IRecipePersistence;
-import uk.co.recipes.service.api.IRecommendationsAPI;
-import uk.co.recipes.service.api.IUserPersistence;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.test.TestDataUtils;
@@ -56,29 +52,32 @@ import dagger.ObjectGraph;
  */
 public class RecipeExploreRecommendTest {
 
-	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
+    @Inject Client esClient;
+    @Inject MetricRegistry metrics;
+    @Inject IEventService events;
 
-	private Client esClient = GRAPH.get( Client.class );
-    private MetricRegistry metrics = GRAPH.get( MetricRegistry.class );
+    @Inject EsItemFactory itemFactory;
+    @Inject EsUserFactory userFactory;
+    @Inject EsRecipeFactory recipeFactory;
+    @Inject EsSequenceFactory sequenceFactory;
+    @Inject ItemsLoader loader;
 
-	private IItemPersistence itemFactory = GRAPH.get( EsItemFactory.class );
-	private IRecipePersistence recipeFactory = GRAPH.get( EsRecipeFactory.class );
-	private IUserPersistence userFactory = GRAPH.get( EsUserFactory.class );
-	private EsSequenceFactory sequenceFactory = GRAPH.get( EsSequenceFactory.class );
-	
+    @Inject TestDataUtils dataUtils;
 
-	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
+    @Inject MyrrixUpdater updater;
+    @Inject MyrrixExplorerService explorerApi;
+    @Inject MyrrixRecommendationService recsApi;
 
-	private IExplorerAPI explorerApi = GRAPH.get( MyrrixExplorerService.class );
-	private IRecommendationsAPI recsApi = GRAPH.get( MyrrixRecommendationService.class );
 
-    private IEventListener updater = GRAPH.get( MyrrixUpdater.class );
-	private IEventService events = GRAPH.get( IEventService.class );
-
+    private void injectDependencies() {
+        ObjectGraph.create( new TestModule() ).inject(this);
+    }
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
-		updater.startListening();
+        injectDependencies();
+
+        updater.startListening();
 
 	    userFactory.deleteAll();
 		itemFactory.deleteAll();
@@ -88,7 +87,7 @@ public class RecipeExploreRecommendTest {
 
 	@BeforeClass
 	public void loadIngredientsFromYaml() throws InterruptedException, IOException {
-		GRAPH.get( ItemsLoader.class ).load();
+	    loader.load();
 
 		int count = 0;
 
@@ -243,4 +242,7 @@ public class RecipeExploreRecommendTest {
 	public void shutDown() {
 		esClient.close();
 	}
+
+    @Module( includes=DaggerModule.class, overrides=true, injects=RecipeExploreRecommendTest.class)
+    static class TestModule {}
 }
