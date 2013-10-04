@@ -182,6 +182,11 @@ public class CanonicalItem implements ICanonicalItem {
         return this.constituents;
     }
 
+    // Strictly for Jackson only. Must be public
+    public void setConstituents( Collection<ICanonicalItem> coll) {
+    	this.constituents = coll;  // Yuk FIXME
+    }
+
     // Jackson *will* use this to persist 'tags'. *Can* be private
 	@SuppressWarnings("unused")
 	private void setTags( Map<ITag,Serializable> inTags) {
