@@ -4,14 +4,11 @@
 package uk.co.recipes.persistence;
 
 import static org.elasticsearch.index.query.QueryBuilders.fieldQuery;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isOneOf;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_NAME_GETS;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_PUTS;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -20,11 +17,7 @@ import java.util.concurrent.ExecutionException;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.util.EntityUtils;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.indices.IndexMissingException;
 import org.elasticsearch.indices.TypeMissingException;
@@ -203,21 +196,9 @@ public class EsRecipeFactory implements IRecipePersistence {
 	}
 
 	private void handledChangedItems( final IRecipe inRecipe, final Runnable inEventServiceCallback) throws IOException {
-		// FIXME FIXME Duplication vs. put()
-	    final HttpPost req = new HttpPost( itemIndexUrl + "/" + inRecipe.getId());
-
-		try {
-			req.setEntity( new StringEntity( mapper.writeValueAsString(inRecipe) ) );
-
-			final HttpResponse resp = httpClient.execute(req);
-			assertThat( resp.getStatusLine().getStatusCode(), isOneOf(201, 200));
-			EntityUtils.consume( resp.getEntity() );
-
-			inEventServiceCallback.run();
-		}
-		catch (UnsupportedEncodingException e) {
-			Throwables.propagate(e);
-		}
+		// I guess we should wait for this to return...
+		esClient.prepareIndex( "recipe", "recipes", String.valueOf( inRecipe.getId() )).setSource( mapper.writeValueAsString(inRecipe) ).execute().actionGet();
+		inEventServiceCallback.run();
 	}
 
 	public String toStringId( final IRecipe inRecipe) throws IOException {
