@@ -318,7 +318,7 @@
 ---
 {canonicalName: Celeriac, tags: VEGETABLE}
 ---
-{canonicalName: Celery, tags: {VEGETABLE, EARTHY}, aliases: {Celery Stick, Celery Sticks, Celery Stalks}}
+{canonicalName: Celery, tags: {VEGETABLE, EARTHY}, aliases: {Celery Stick, Celery Sticks, Celery Stalk, Celery Stalks}}
 ---
 {canonicalName: Chard, tags: VEGETABLE}
 ---
@@ -554,6 +554,8 @@
 ---
 {canonicalName: Lemon, tags: {FRUIT, CITRUS, LEMON}, aliases: {Lemons}}
 ---
+{    canonicalName: Lemon Curd, parent: Lemon, contains: {Eggs, Sugar}}
+---
 {    canonicalName: Lemon Juice, parent: Lemon}
 ---
 {    canonicalName: Lemon Wedge, parent: Lemon, aliases: {Lemon Wedges}}
@@ -663,6 +665,14 @@
 {canonicalName: Focaccia, tags: {BREAD, ITALIAN}}
 ---
 {canonicalName: Naan Bread, tags: {BREAD, INDIAN}, aliases: Naan}
+---
+{canonicalName: Pastry, tags: {BREAD, PASTRY}}
+---
+{    canonicalName: Filo Pastry, parent: Pastry}
+---
+{    canonicalName: Puff Pastry, parent: Pastry}
+---
+{    canonicalName: Shortcrust Pastry, parent: Pastry}
 ---
 {canonicalName: Pitta Bread, tags: {BREAD}, aliases: Pitta, aliases: Pitta Breads}
 ---
@@ -782,17 +792,27 @@
 ---
 
 
+{canonicalName: Blue Cheese, tags: {DAIRY, CHEESE, BLUE_CHEESE}}
+---
+{    canonicalName: Roquefort, parent: Blue Cheese, tags: {FRENCH}, aliases: {Roquefort Cheese}}
+---
+{    canonicalName: Stilton, parent: Blue Cheese, tags: {ENGLISH}, aliases: {Stilton Cheese}}
+---
 {canonicalName: Brie, tags: {DAIRY, CHEESE, FRENCH}}
+---
+{canonicalName: Caciocavallo, tags: {DAIRY, CHEESE, ITALIAN}, aliases: {Caciocavallo Cheese}}
 ---
 {canonicalName: Camembert, tags: {DAIRY, CHEESE, FRENCH}}
 ---
 {canonicalName: Cheddar, tags: {DAIRY, CHEESE, ENGLISH}, aliases: {Cheddar Cheese}}
 ---
-{    canonicalName: Mature Cheddar, parent: Cheddar}
+{    canonicalName: Mature Cheddar, parent: Cheddar, aliases: {Mature Cheddar Cheese}}
 ---
 {canonicalName: Cheshire Cheese, tags: {DAIRY, CHEESE, ENGLISH}}
 ---
 {canonicalName: Feta, tags: {DAIRY, CHEESE, GREEK}, aliases: {Feta Cheese}}
+---
+{canonicalName: Goat's Cheese, tags: {DAIRY, CHEESE}}
 ---
 {canonicalName: Gruyère, tags: {DAIRY, CHEESE, SWISS}}
 ---
@@ -811,8 +831,6 @@
 {canonicalName: Provolone, tags: {DAIRY, CHEESE, ITALIAN}}
 ---
 {canonicalName: Ricotta, tags: {DAIRY, CHEESE, ITALIAN}}
----
-{canonicalName: Roquefort, tags: {DAIRY, CHEESE, BLUE_CHEESE, FRENCH}, aliases: {Roquefort Cheese}}
 ---
 {canonicalName: Taleggio, tags: {DAIRY, CHEESE, ITALIAN}, aliases: {Taleggio Cheese}}
 ---

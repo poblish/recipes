@@ -8,14 +8,15 @@ coarsely
 cold
 cooked
 cooking
+crumbled
 crushed
 dark
 diced
 dressed
 dried
 dry
-extra-lean
 extra lean
+extra-lean
 fat-free
 finely chopped
 finely grated
@@ -27,6 +28,7 @@ frozen
 full-bodied
 full-fat
 gluten-free
+good quality
 good-quality
 grated
 ground
@@ -36,27 +38,28 @@ just-ripe
 large
 lean
 long
-low-fat
 low salt
+low-fat
 low-sodium
 medium
 melted
 mini
 organic
-overripe
 over-ripe
+overripe
 peeled
 pitted
 plump
 quality
 raw
+really ripe
 reduced-fat
 reduced-salt
-really ripe
 ripe
 roasted
 roughly
 salted
+semi-dried
 shelled
 skinless
 skinned

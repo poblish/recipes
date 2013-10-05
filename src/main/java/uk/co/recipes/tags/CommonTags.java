@@ -21,7 +21,7 @@ public enum CommonTags implements ITag {
 	// Herbs are obtained from the leaves of herbaceous (non-woody) plants.
 	HERB, // Thyme, Sage, Oregano, Parsley, Marjoram, Basil, Chives, Rosemary, Mint
 
-	SUGAR, SALT, FLOUR, BREAD, PASTA, SEED, NUT, PULSE, FRUIT, TROPICAL, CHEESE, BLUE_CHEESE, CHILLI, EGG,
+	SUGAR, SALT, FLOUR, BREAD, PASTRY, PASTA, SEED, NUT, PULSE, FRUIT, TROPICAL, CHEESE, BLUE_CHEESE, CHILLI, EGG,
 
 	WINE, ALCOHOL, SPIRIT, VINEGAR, SAUCE, CONDIMENT, SYRUP, RICE, NOODLES, WHEAT, GRAIN, PORRIDGE,
 
