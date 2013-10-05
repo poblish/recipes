@@ -99,7 +99,16 @@ public class ParseIngredientsTest {
 
         assertThat( parser.parseQuantity("about 397g").get(), is( new Quantity( Units.GRAMMES, 397) ));
         assertThat( parser.parseQuantity("About 7 tsp").get(), is( new Quantity( Units.TSP, 7) ));
-}
+
+        assertThat( parser.parseQuantity("1 x 400g tub").get(), is( new Quantity( Units.GRAMMES, 400) ));
+        assertThat( parser.parseQuantity("½ x 300g jar").get(), is( new Quantity( Units.GRAMMES, 150) ));
+	}
+
+	@Test()
+	public void testBadQuantities() {
+        assertThat( parser.parseQuantity("x 900g tub").isPresent(), is(false));
+        assertThat( parser.parseQuantity("900 tub").isPresent(), is(false));
+	}
 
     @Test
     public void testItemNameParsing() {
