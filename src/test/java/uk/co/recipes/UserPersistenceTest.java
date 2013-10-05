@@ -16,23 +16,18 @@ import org.apache.http.client.ClientProtocolException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IUser;
-import uk.co.recipes.api.ratings.IItemRating;
-import uk.co.recipes.api.ratings.IRecipeRating;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsSequenceFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.ratings.ItemRating;
-import uk.co.recipes.ratings.RecipeRating;
 import uk.co.recipes.ratings.UserRatings;
 import uk.co.recipes.tags.CommonTags;
 import uk.co.recipes.tags.MeatAndFishTags;
 import uk.co.recipes.test.TestDataUtils;
-
-import com.google.common.base.Optional;
-
 import dagger.Module;
 import dagger.ObjectGraph;
 
@@ -117,6 +112,32 @@ public class UserPersistenceTest {
     }
 
     @Test
+    public void testPersistenceWithFaves() throws IOException {
+        final String testUName = "aregan_" + System.nanoTime();
+        final String testDName = "Andrew Regan #" + System.nanoTime();
+
+        final ICanonicalItem ginger = itemFactory.get("ginger").get();
+
+        final IUser u1 = new User( testUName, testDName);
+        userFactory.put( u1, userFactory.toStringId(u1));
+        u1.addFave(ginger);
+    	userFactory.update(u1);
+        assertThat( u1.getFaveRecipes().size(), is(0));
+        assertThat( u1.getFaveItems().size(), is(1));
+        assertThat( u1.getFaveItems(), hasItem(ginger));
+
+        u1.removeFave(ginger);
+    	userFactory.update(u1);
+        assertThat( u1.getFaveItems().size(), is(0));
+
+        u1.addFave( recipeFactory.get(TEST_RECIPE).get() );
+    	userFactory.update(u1);
+        assertThat( u1.getFaveItems().size(), is(0));
+        assertThat( u1.getFaveRecipes().size(), is(1));
+        assertThat( u1.getFaveRecipes(), hasItem( recipeFactory.get(TEST_RECIPE).get() ));
+    }
+
+    @Test
     public void testPersistenceWithRatings() throws IOException {
         final String testUName = "aregan_" + System.nanoTime();
         final String testDName = "Andrew Regan #" + System.nanoTime();
@@ -124,24 +145,6 @@ public class UserPersistenceTest {
         final IUser u1 = new User( testUName, testDName);
         userFactory.put( u1, userFactory.toStringId(u1));
         userRatings.addRating( u1, new ItemRating( itemFactory.get("ginger").get(), 5) );
-        Optional<IItemRating> oldGingerRating = userRatings.addRating( u1, new ItemRating( itemFactory.get("ginger").get(), 8) );  // Actually, no, change that to 8...
-        assertThat( u1.getItemRatings().size(), is(1));
-        assertThat( u1.getItemRatings().iterator().next().getScore(), is(8));
-        assertThat( oldGingerRating.get().getScore(), is(5));
-
-        userRatings.addRating( u1, new RecipeRating( recipeFactory.get(TEST_RECIPE).get(), 1) );
-        Optional<IRecipeRating> oldTestRecipeRating =  userRatings.addRating( u1, new RecipeRating( recipeFactory.get(TEST_RECIPE).get(), 6) );  // Actually, no, change that to 6...
-        assertThat( u1.getRecipeRatings().size(), is(1));
-        assertThat( u1.getRecipeRatings().iterator().next().getScore(), is(6));
-        assertThat( oldTestRecipeRating.get().getScore(), is(1));
-
-        final IUser retrievedUser = userFactory.getByName(testUName);
-        assertThat( newHashSet( u1.getItemRatings() ), is( newHashSet( retrievedUser.getItemRatings() ) ));
-        assertThat( newHashSet( u1.getRecipeRatings() ), is( newHashSet( retrievedUser.getRecipeRatings() ) ));
-
-        userRatings.addRating( retrievedUser, new ItemRating( itemFactory.get("turmeric").get(), 7) );
-        assertThat( retrievedUser.getItemRatings().size(), is(2));
-        assertThat( retrievedUser.getRecipeRatings().size(), is(1));
     }
 
     @Module( includes=DaggerModule.class, overrides=true, injects=UserPersistenceTest.class)

@@ -48,5 +48,13 @@ public interface IUser extends java.io.Serializable {
 	Optional<IRecipeRating> addRating( IRecipeRating inRating);
     Collection<IRecipeRating> getRecipeRatings();
 
+    void addFave( final ICanonicalItem item);
+    void removeFave( final ICanonicalItem item);
+    Collection<ICanonicalItem> getFaveItems();
+
+    void addFave( final IRecipe recipe);
+    void removeFave( final IRecipe recipe);
+    Collection<IRecipe> getFaveRecipes();
+
 //    void removeRating( IRating inRating);
 }

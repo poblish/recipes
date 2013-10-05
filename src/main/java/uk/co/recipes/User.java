@@ -11,6 +11,8 @@ import java.util.Set;
 import org.elasticsearch.common.Preconditions;
 import org.joda.time.DateTime;
 
+import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.api.IUserAuth;
 import uk.co.recipes.api.IUserPreferences;
@@ -50,6 +52,8 @@ public class User implements IUser {
 
     private final Collection<IItemRating> itemRatings = Sets.newHashSet();  // FIXME Be careful loading this, could be big
     private final Collection<IRecipeRating> recipeRatings = Sets.newHashSet();  // FIXME Be careful loading this, could be big
+    private final Collection<ICanonicalItem> itemFaves = Sets.newHashSet();  // FIXME Be careful loading this, could be big
+    private final Collection<IRecipe> recipeFaves = Sets.newHashSet();  // FIXME Be careful loading this, could be big
 	private final Set<IUserAuth> auths = Sets.newHashSet();
 	private final IUserPreferences prefs = new UserPreferences();
 
@@ -234,8 +238,38 @@ public class User implements IUser {
 	}
 
 	@Override
+	public void addFave( ICanonicalItem item) {
+		itemFaves.add( checkNotNull(item) );
+	}
+
+	@Override
+	public void removeFave( ICanonicalItem item) {
+		itemFaves.remove( checkNotNull(item) );
+	}
+
+	@Override
+	public void addFave( IRecipe recipe) {
+		recipeFaves.add( checkNotNull(recipe) );
+	}
+
+	@Override
+	public void removeFave( IRecipe recipe) {
+		recipeFaves.remove( checkNotNull(recipe) );
+	}
+
+	@Override
+	public Collection<ICanonicalItem> getFaveItems() {
+		return itemFaves;
+	}
+
+	@Override
+	public Collection<IRecipe> getFaveRecipes() {
+		return recipeFaves;
+	}
+
+	@Override
 	public int hashCode() {
-		return Objects.hashCode( id, username, displayName);
+		return Objects.hashCode( id, username, displayName, itemFaves, recipeFaves);
 	}
 
 	@Override
@@ -250,7 +284,8 @@ public class User implements IUser {
 			return false;
 		}
 		final User other = (User) obj;
-		return ( id == other.id) && Objects.equal( username, other.username) && Objects.equal( displayName, other.displayName);
+		return ( id == other.id) && Objects.equal( username, other.username) && Objects.equal( displayName, other.displayName) &&
+									Objects.equal( itemFaves, other.itemFaves) && Objects.equal( recipeFaves, other.recipeFaves);
 	}
 
 	public String toString() {
@@ -258,6 +293,8 @@ public class User implements IUser {
                         .add( "id", ( id == UNSET_ID) ? "NEW" : Long.valueOf(id))
                         .add( "username", getUserName())
                         .add( "displayName", getDisplayName())
+                        .add( "itemFaves", itemFaves.isEmpty() ? null : itemFaves)
+                        .add( "recipeFaves", recipeFaves.isEmpty() ? null : recipeFaves)
                         .add( "auths", auths.isEmpty() ? null : auths)
 						.toString();
 	}
