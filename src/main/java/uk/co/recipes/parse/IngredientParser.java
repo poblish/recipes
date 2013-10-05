@@ -47,7 +47,7 @@ public class IngredientParser {
 
     private static final String DEC_FRAC_NUMBER_BIT = "[0-9\\.]*(?: ?[0-9]/[0-9])?";
     private static final String DEC_FRAC_NUMBER_PATTERN = "(" + DEC_FRAC_NUMBER_BIT + ")";
-    private static final String DEC_FRAC_NUMBER_RANGE_PATTERN = "(" + DEC_FRAC_NUMBER_BIT + "(?: ?- ?" + DEC_FRAC_NUMBER_BIT + ")?)";
+    private static final String DEC_FRAC_NUMBER_RANGE_PATTERN = "(?:About )?(" + DEC_FRAC_NUMBER_BIT + "(?: ?- ?" + DEC_FRAC_NUMBER_BIT + ")?)";
 	private static final String	NOTES = "([,;\\(].*)?";
     private static final String ITEM_NAME = "([\\p{L}- '&]*)";
     private static final String SUFFIX = ITEM_NAME + NOTES;
