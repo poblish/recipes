@@ -11,6 +11,7 @@ import play.mvc.Result;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
+import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.external.WikipediaGetter;
 import uk.co.recipes.external.WikipediaResults;
@@ -46,8 +47,8 @@ public class Items extends AbstractExplorableController {
     @Inject
     public Items( final MyrrixUpdater updater, final EsItemFactory items, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService,
     			  final MyrrixRecommendationService inRecService, final EsUserFactory users, final UserRatings inRatings, final MetricRegistry metrics,
-    			  final ObjectMapper inMapper, final EsSearchService inSearch) {
-        super( items, explorerFilters, inExplorerService, inRecService, metrics);
+    			  final ObjectMapper inMapper, final EsSearchService inSearch, final IEventService eventService) {
+        super( items, explorerFilters, inExplorerService, inRecService, metrics, eventService);
 
     	updater.startListening();
         this.ratings = checkNotNull(inRatings);
@@ -64,6 +65,10 @@ public class Items extends AbstractExplorableController {
         }
 
         final ICanonicalItem item = optItem.get();
+		if ( user1 != null) {
+			events.visit( user1, item);
+		}
+
         final List<ICanonicalItem> similarities = explorer.similarIngredients( item, getExplorerFilter(explorerFilters), 20);
         final List<IRecipe> recRecipes = ( user1 != null) ? recsApi.recommendRecipes( user1, NUM_RECOMMENDATIONS_TO_SHOW, item) : recsApi.recommendRecipesToAnonymous( NUM_RECOMMENDATIONS_TO_SHOW, item);
 

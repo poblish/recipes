@@ -19,6 +19,7 @@ import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.api.Units;
 import uk.co.recipes.cats.Categorisation;
+import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
@@ -53,8 +54,8 @@ public class Recipes extends AbstractExplorableController {
     @Inject
     public Recipes( final MyrrixUpdater updater, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService, final EsItemFactory items,
                     final EsRecipeFactory recipes, final EsUserFactory users, final UserRatings inRatings, final MyrrixRecommendationService inRecService, final MetricRegistry metrics,
-                    final ObjectMapper inMapper) {
-    	super( items, explorerFilters, inExplorerService, inRecService, metrics);
+                    final ObjectMapper inMapper, final IEventService eventService) {
+    	super( items, explorerFilters, inExplorerService, inRecService, metrics, eventService);
 
     	updater.startListening();
         this.recipes = checkNotNull(recipes);
@@ -120,7 +121,13 @@ public class Recipes extends AbstractExplorableController {
             return notFound("'" + name + "' not found!");
         }
 
-        final IRecipe recipe = optRecipe.get();
+		final IUser user1 = getLocalUser();
+		final IRecipe recipe = optRecipe.get();
+
+		if ( user1 != null) {
+			events.visit( user1, recipe);
+		}
+
         final Multiset<ITag> categorisation = Categorisation.forIngredients( recipe.getIngredients(), NationalCuisineTags.values());
 
         return ok(views.html.recipe.render( recipe, categorisation, explorer.similarRecipes( recipe, getExplorerFilter(explorerFilters), 12), recsApi.recommendIngredients( recipe, 12) ));

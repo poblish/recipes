@@ -32,4 +32,7 @@ public interface IEventService {
     void addRecipeIngredients( final IRecipe inRecipe, final IIngredient... inIngredients);
     void removeRecipeIngredients( final IRecipe inRecipe, final IIngredient... inIngredients);
     void deleteRecipe( final IRecipe inRecipe);
+
+    void visit( final IUser inUser, final ICanonicalItem inItem);
+    void visit( final IUser inUser, final IRecipe inRecipe);
 }

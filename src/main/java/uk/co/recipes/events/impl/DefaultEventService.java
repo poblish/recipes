@@ -100,4 +100,14 @@ public class DefaultEventService implements IEventService {
 	    	eventBus.post( new RecipeRemoveIngredientsEvent( inRecipe, item) );
 	    }
 	}
+
+	@Override
+	public void visit( IUser inUser, ICanonicalItem inItem) {
+		eventBus.post( new ItemVisitedEvent( inUser, inItem) );
+	}
+
+	@Override
+	public void visit( IUser inUser, IRecipe inRecipe) {
+		eventBus.post( new RecipeVisitedEvent( inUser, inRecipe) );
+	}
 }

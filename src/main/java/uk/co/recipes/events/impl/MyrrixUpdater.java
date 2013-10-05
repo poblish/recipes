@@ -308,6 +308,24 @@ public class MyrrixUpdater implements IEventListener {
     }
 
     @Subscribe
+    public void onVisitItem( final ItemVisitedEvent evt) {
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Visited: " + evt);
+		}
+
+        rateGenericItem( evt.getUser().getId(), evt.getItem().getId(), evt.getScore());
+    }
+
+    @Subscribe
+    public void onVisitRecipe( final RecipeVisitedEvent evt) {
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Visited: " + evt);
+		}
+
+        rateGenericItem( evt.getUser().getId(), evt.getRecipe().getId(), evt.getScore());
+    }
+
+    @Subscribe
     public void onRateItem( final RateItemEvent evt) {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Rate: " + evt);

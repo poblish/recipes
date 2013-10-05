@@ -9,6 +9,7 @@ import play.mvc.Controller;
 import service.PlayAuthUserServicePlugin;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.IUser;
+import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.service.api.IExplorerAPI;
 import uk.co.recipes.service.api.IExplorerFilter;
@@ -34,13 +35,16 @@ public abstract class AbstractExplorableController extends Controller {
     protected EsExplorerFilters explorerFilters;
     protected MetricRegistry metrics;
     protected IRecommendationsAPI recsApi;
+    protected IEventService events;
 
-    public AbstractExplorableController( final EsItemFactory items, final EsExplorerFilters explorerFilters, final MyrrixExplorerService explorer, final MyrrixRecommendationService inRecService, final MetricRegistry metrics) {
+    public AbstractExplorableController( final EsItemFactory items, final EsExplorerFilters explorerFilters, final MyrrixExplorerService explorer,
+    									 final MyrrixRecommendationService inRecService, final MetricRegistry metrics, final IEventService eventService) {
         this.items = checkNotNull(items);
         this.explorer = checkNotNull(explorer);
         this.explorerFilters = checkNotNull(explorerFilters);
         this.metrics = checkNotNull(metrics);
         this.recsApi = checkNotNull(inRecService);
+        this.events = checkNotNull(eventService);
     }
 
     protected IUser getLocalUser() {
