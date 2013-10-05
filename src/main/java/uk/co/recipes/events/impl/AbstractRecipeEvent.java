@@ -3,10 +3,12 @@
  */
 package uk.co.recipes.events.impl;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.Serializable;
 
+import uk.co.recipes.Recipe;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
 
@@ -29,6 +31,8 @@ public abstract class AbstractRecipeEvent implements Serializable {
         this.user = user;
         this.recipe = checkNotNull( inRecipe, "Recipe cannot be null");
         this.score = inScore;
+
+        checkArgument( inRecipe.getId() >= Recipe.BASE_ID, "Recipe has not been persisted");
     }
 
 	public IUser getUser() {

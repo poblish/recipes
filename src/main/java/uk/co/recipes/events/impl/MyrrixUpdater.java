@@ -3,7 +3,6 @@
  */
 package uk.co.recipes.events.impl;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.Serializable;
@@ -22,7 +21,6 @@ import org.elasticsearch.common.base.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.co.recipes.Recipe;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.ITag;
@@ -311,8 +309,6 @@ public class MyrrixUpdater implements IEventListener {
 
     @Subscribe
     public void onRateItem( final RateItemEvent evt) {
-    	checkArgument( evt.getItem().getId() >= 0 && evt.getItem().getId() < Recipe.BASE_ID, "Item has not been persisted, or Id is invalid");
-
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Rate: " + evt);
 		}
@@ -322,8 +318,6 @@ public class MyrrixUpdater implements IEventListener {
 
     @Subscribe
     public void onRateRecipe( final RateRecipeEvent evt) {
-    	checkArgument( evt.getRecipe().getId() >= Recipe.BASE_ID, "Recipe has not been persisted");
-
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Rate: " + evt);
 		}
@@ -333,8 +327,6 @@ public class MyrrixUpdater implements IEventListener {
 
     @Subscribe
     public void onFaveItem( final FaveItemEvent evt) {
-        checkArgument( evt.getItem().getId() >= 0 && evt.getItem().getId() < Recipe.BASE_ID, "Item has not been persisted, or Id is invalid");
-
         if (LOG.isDebugEnabled()) {
             LOG.debug("Fave: " + evt);
         }
@@ -344,8 +336,6 @@ public class MyrrixUpdater implements IEventListener {
 
     @Subscribe
     public void onUnFaveItem( final UnFaveItemEvent evt) {
-        checkArgument( evt.getItem().getId() >= 0 && evt.getItem().getId() < Recipe.BASE_ID, "Item has not been persisted, or Id is invalid");
-
         if (LOG.isDebugEnabled()) {
             LOG.debug("UnFave: " + evt);
         }
