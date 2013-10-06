@@ -54,7 +54,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Lists;
 import com.google.common.io.Files;
+import com.google.common.io.LineProcessor;
 
 import dagger.Module;
 import dagger.Provides;
@@ -191,7 +193,22 @@ public class DaggerModule {
     List<String> providePrefixAdjustments() {
         try {
             final String homeDir = System.getProperty("user.home");
-            return Files.readLines( new File( homeDir + "/Development/java/recipe_explorer/src/main/resources/prefixAdjustments.txt"), Charset.forName("utf-8"));
+            return Files.readLines( new File( homeDir + "/Development/java/recipe_explorer/src/main/resources/prefixAdjustments.txt"), Charset.forName("utf-8"), new LineProcessor<List<String>>() {
+            	final List<String> result = Lists.newArrayList();
+
+            	@Override
+            	public boolean processLine(String line) {
+            		if (!line.startsWith("// ")) {  // Ignore comments
+            			result.add(line);
+            		}
+            		return true;
+            	}
+
+            	@Override
+            	public List<String> getResult() {
+            		return result;
+            	}
+            });
         } catch (IOException e) {
             throw Throwables.propagate(e);
         }

@@ -14,6 +14,8 @@ diced
 dressed
 dried
 dry
+// 'each' below is very lame, but it works around a weakness in our parsing and 'rescues' many genuine matches
+each
 extra lean
 extra-lean
 fat-free
@@ -43,6 +45,7 @@ low-sodium
 medium
 melted
 mini
+ordinary
 organic
 over-ripe
 overripe
