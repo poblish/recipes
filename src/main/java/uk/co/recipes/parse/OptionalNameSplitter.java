@@ -6,6 +6,8 @@ package uk.co.recipes.parse;
 import java.util.Collection;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
@@ -22,6 +24,7 @@ public class OptionalNameSplitter {
 	private final static Splitter WORD_SPLITTER = Splitter.on(' ').trimResults();
 	private final static Joiner WORD_JOINER = Joiner.on(' ');
 
+	@Inject NameAdjuster nameAdjuster;
 
 	public SplitResults split( final String s1, final String s2) {
 
@@ -82,8 +85,8 @@ public class OptionalNameSplitter {
 			}
 		}
 
-		poss1.add(s1);
-		poss2.add(s2);
+		poss1.add( nameAdjuster.adjust(s1).getName() );  // FIXME Just ignore the notes?
+		poss2.add( nameAdjuster.adjust(s2).getName() );  // FIXME Just ignore the notes?
 
 		return new SplitResults( Iterables.toArray( poss1, String.class), Iterables.toArray( poss2, String.class));
 	}

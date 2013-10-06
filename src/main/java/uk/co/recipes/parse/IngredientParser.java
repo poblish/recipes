@@ -45,6 +45,8 @@ public class IngredientParser {
 	@Inject
 	MetricRegistry metrics;
 
+	@Inject OptionalNameSplitter optSplitter;
+
     private static final String DEC_FRAC_NUMBER_BIT = "(?:[0-9\\.]+ x )?[0-9\\.]*(?: ?[0-9]/[0-9])?";
     private static final String DEC_FRAC_NUMBER_PATTERN = "(" + DEC_FRAC_NUMBER_BIT + ")";
     private static final String DEC_FRAC_NUMBER_RANGE_PATTERN = "(?:About )?(" + DEC_FRAC_NUMBER_BIT + "(?: ?- ?" + DEC_FRAC_NUMBER_BIT + ")?)";
@@ -103,7 +105,7 @@ public class IngredientParser {
             	final Quantity q = new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse(numericQuantityStr));
 
             	// Get all the possible combinations of names
-            	final SplitResults splitResults = new OptionalNameSplitter().split( name1, name2);
+            	final SplitResults splitResults = optSplitter.split( name1, name2);
 
             	try {
             		handleOptionalIngredient( splitResults.getFirstResults(), q, m.group(4), adjusted.getNotes(), inHandler, inDeferHandler);
