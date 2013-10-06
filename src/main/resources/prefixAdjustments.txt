@@ -10,7 +10,6 @@ cooked
 cooking
 crumbled
 crushed
-dark
 diced
 dressed
 dried
@@ -76,6 +75,7 @@ tinned
 toasted
 top-quality
 unsweetened
+very finely chopped
 very large
 very ripe
 very soft
