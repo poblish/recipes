@@ -374,6 +374,8 @@
 ---
 {    canonicalName: Black Olives, parent: Olives}
 ---
+{    canonicalName: Kalamata Olives, parent: Olives, tags: GREEK, aliases: {Black Kalamata olives, Baby Kalamata olives}}
+---
 {    canonicalName: Green Olives, parent: Olives}
 ---
 {canonicalName: Onion, tags: {VEGETABLE, SULPHUROUS}, aliases: {Onions}}
@@ -658,6 +660,8 @@
 ---
 
 
+{canonicalName: Burger buns, tags: {BREAD}, aliases: {Burger bun, burger baps}}
+---
 {canonicalName: Chapatis, tags: {BREAD, INDIAN}, aliases: Chapati}
 ---
 {    canonicalName: Wholemeal Chapatis, parent: Chapatis}
@@ -830,6 +834,8 @@
 ---
 {canonicalName: Paneer, tags: {DAIRY, CHEESE, INDIAN}, aliases: {Paneer Cheese}}
 ---
+{canonicalName: Pecorino, tags: {DAIRY, CHEESE, ITALIAN}}
+---
 {canonicalName: Provolone, tags: {DAIRY, CHEESE, ITALIAN}}
 ---
 {canonicalName: Ricotta, tags: {DAIRY, CHEESE, ITALIAN}}
@@ -1000,9 +1006,11 @@
 ---
 
 
-{canonicalName: Fusilli, tags: {PASTA, ITALIAN}}
----
 {canonicalName: Farfalle, tags: {PASTA, ITALIAN}}
+---
+{canonicalName: Fettuccine, tags: {PASTA, ITALIAN}}
+---
+{canonicalName: Fusilli, tags: {PASTA, ITALIAN}}
 ---
 {canonicalName: Gnocchi, tags: {PASTA, ITALIAN}}
 ---
