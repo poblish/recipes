@@ -102,6 +102,10 @@ public class ParseIngredientsTest {
 
         assertThat( parser.parseQuantity("1 x 400g tub").get(), is( new Quantity( Units.GRAMMES, 400) ));
         assertThat( parser.parseQuantity("½ x 300g jar").get(), is( new Quantity( Units.GRAMMES, 150) ));
+        assertThat( parser.parseQuantity("½ x 400g tin").get(), is( new Quantity( Units.GRAMMES, 200) ));
+        assertThat( parser.parseQuantity("½ x 400g tins").get(), is( new Quantity( Units.GRAMMES, 200) ));
+        assertThat( parser.parseQuantity("½ x 500g can").get(), is( new Quantity( Units.GRAMMES, 250) ));
+        assertThat( parser.parseQuantity("½ x 500g cans").get(), is( new Quantity( Units.GRAMMES, 250) ));
 
         assertThat( parser.parseQuantity("3 level tsp").get(), is( new Quantity( Units.TSP, 3) ));
         assertThat( parser.parseQuantity("level tsp").get(), is( new Quantity( Units.TSP, 1) ));
