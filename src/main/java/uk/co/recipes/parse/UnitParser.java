@@ -31,11 +31,11 @@ public final class UnitParser {
             return Units.GRAMMES;
         }
 
-		if (s.startsWith("TABLESPOON")) {
+		if (s.startsWith("TABLESPOON") || s.startsWith("LEVEL TBSP")) {
 			return Units.TBSP;
 		}
 
-        if (s.startsWith("TSP") || s.startsWith("TEASPOON")) {
+        if (s.startsWith("TSP") || s.startsWith("TEASPOON") || s.startsWith("LEVEL TSP")) {
             return Units.TSP;
         }
 
