@@ -284,6 +284,8 @@
 
 {canonicalName: Artichoke, tags: {VEGETABLE, SULPHUROUS}, aliases: {Globe Artichoke}}
 ---
+{    canonicalName: Artichoke Hearts, parent: Artichoke}
+---
 {canonicalName: Asparagus, tags: {VEGETABLE, SULPHUROUS}, aliases: {Asparagus Spears}}
 ---
 {canonicalName: Aubergine, tags: {VEGETABLE, EARTHY}, aliases: {Aubergines}}
@@ -588,6 +590,8 @@
 ---
 {    canonicalName: Orange Zest, parent: Orange}
 ---
+{    canonicalName: Seville Orange, parent: Orange, aliases: Seville Oranges}
+---
 {canonicalName: Peach, tags: {FRUIT, CREAMY_FRUITY}, aliases: {Peaches}}
 ---
 {canonicalName: Pear, tags: {FRUIT, FRESH_FRUITY}, aliases: {Pears}}
@@ -596,7 +600,7 @@
 ---
 {canonicalName: Plum, tags: {FRUIT}, aliases: {Plums}}
 ---
-{    canonicalName: Prune, parent: Plum, aliases: {Prunes}}
+{    canonicalName: Prune, parent: Plum, aliases: {Prunes, Dried Plum}}
 ---
 {canonicalName: Raspberries, tags: {FRUIT, FLORAL_FRUITY}, aliases: Raspberry}
 ---
@@ -660,6 +664,12 @@
 ---
 
 
+{canonicalName: Breadcrumbs, tags: {BREAD}}
+---
+{    canonicalName: White Breadcrumbs, tags: {BREAD}}
+---
+{    canonicalName: Wholemeal Breadcrumbs, tags: {BREAD}}
+---
 {canonicalName: Burger buns, tags: {BREAD}, aliases: {Burger bun, burger baps}}
 ---
 {canonicalName: Chapatis, tags: {BREAD, INDIAN}, aliases: Chapati}
@@ -755,6 +765,8 @@
 {    canonicalName: Granulated Sugar, parent: Sugar}
 ---
 {    canonicalName: Icing Sugar, parent: Sugar, aliases: {White Icing Sugar}}
+---
+{    canonicalName: Jam Sugar, parent: Sugar}
 ---
 {    canonicalName: Nibbed Sugar, parent: Sugar}
 ---

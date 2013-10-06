@@ -27,6 +27,7 @@ fresh
 freshly grated
 frozen
 full-bodied
+full fat
 full-fat
 gluten-free
 good quality
@@ -45,6 +46,10 @@ low-sodium
 medium
 melted
 mini
+// 'of' below is very lame, but it works around a weakness in our parsing and 'rescues' many genuine matches
+of
+// 'or' below is very lame, but it works around a weakness in our parsing and 'rescues' many genuine matches
+or
 ordinary
 organic
 over-ripe
