@@ -192,25 +192,39 @@ public class DaggerModule {
     @Named("prefixAdjustments")
     List<String> providePrefixAdjustments() {
         try {
-            final String homeDir = System.getProperty("user.home");
-            return Files.readLines( new File( homeDir + "/Development/java/recipe_explorer/src/main/resources/prefixAdjustments.txt"), Charset.forName("utf-8"), new LineProcessor<List<String>>() {
-            	final List<String> result = Lists.newArrayList();
-
-            	@Override
-            	public boolean processLine(String line) {
-            		if (!line.startsWith("// ")) {  // Ignore comments
-            			result.add(line);
-            		}
-            		return true;
-            	}
-
-            	@Override
-            	public List<String> getResult() {
-            		return result;
-            	}
-            });
+            return commentedFileToStrings( System.getProperty("user.home") + "/Development/java/recipe_explorer/src/main/resources/prefixAdjustments.txt");
         } catch (IOException e) {
             throw Throwables.propagate(e);
         }
+    }
+
+    @Provides
+    @Singleton
+    @Named("suffixAdjustments")
+    List<String> provideSuffixAdjustments() {
+        try {
+            return commentedFileToStrings( System.getProperty("user.home") + "/Development/java/recipe_explorer/src/main/resources/suffixAdjustments.txt");
+        } catch (IOException e) {
+            throw Throwables.propagate(e);
+        }
+    }
+
+    private List<String> commentedFileToStrings( final String inPath) throws IOException {
+        return Files.readLines( new File(inPath), Charset.forName("utf-8"), new LineProcessor<List<String>>() {
+        	final List<String> result = Lists.newArrayList();
+
+        	@Override
+        	public boolean processLine(String line) {
+        		if (!line.startsWith("// ")) {  // Ignore comments
+        			result.add(line);
+        		}
+        		return true;
+        	}
+
+        	@Override
+        	public List<String> getResult() {
+        		return result;
+        	}
+        });
     }
 }

@@ -54,4 +54,18 @@ public class NameAdjusterTest {
         assertThat( na.getName(), is("100g coriander seeds"));
         assertThat( na.getNotes(), empty());
     }
+
+    @Test
+    public void testAdjustSuffix1() {
+        final AdjustedName na = ADJUSTER.adjust("olive oil for drizzling");
+        assertThat( na.getName(), is("olive oil"));
+        assertThat( na.getNotes(), hasItems("for drizzling"));
+    }
+
+    @Test
+    public void testAdjustPrefixAndSuffixes() {
+        final AdjustedName na = ADJUSTER.adjust("low-sodium walnut pieces for drizzling");
+        assertThat( na.getName(), is("walnut"));
+        assertThat( na.getNotes(), hasItems("for drizzling", "pieces"));
+    }
 }

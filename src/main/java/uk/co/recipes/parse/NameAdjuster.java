@@ -21,15 +21,18 @@ import com.google.common.collect.Lists;
 @Singleton
 public class NameAdjuster {
 
-    @Inject
     @Named("prefixAdjustments")
-    List<String> badPrefixes;
+    @Inject List<String> badPrefixes;
+
+    @Named("suffixAdjustments")
+    @Inject List<String> badSuffixes;
 
 	// FIXME Can probably replace with one big regex
 	public AdjustedName adjust( final String inName) {
 	    Collection<String> notesToAdd = Lists.newArrayList();
 		String theNameToUse = inName.toLowerCase();
 		int incr = 0;
+		int endIdx = inName.length();
 
 		while (true) {
 			boolean anyDoneThisRound = false;
@@ -42,11 +45,20 @@ public class NameAdjuster {
 				}
 			}
 
+			for ( String eachSuffix : badSuffixes) {
+				if (theNameToUse.endsWith(" " + eachSuffix)) {
+					endIdx -= eachSuffix.length() + 1;
+					theNameToUse = theNameToUse.substring( 0, theNameToUse.length() - eachSuffix.length() - 1);
+					notesToAdd.add(eachSuffix);
+					anyDoneThisRound = true;
+				}
+			}
+
 			if (!anyDoneThisRound) {
 				break;
 			}
 		}
 
-		return new AdjustedName( inName.substring(incr), notesToAdd);
+		return new AdjustedName( inName.substring( incr, endIdx), notesToAdd);
 	}
 }
