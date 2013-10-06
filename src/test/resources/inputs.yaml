@@ -382,17 +382,19 @@
 ---
 {    canonicalName: Pearl Onions, parent: Onion}
 ---
+{    canonicalName: Pickling Onions, parent: Onion}
+---
 {    canonicalName: Red Onion, parent: Onion, aliases: {Red Onions}}
 ---
-{    canonicalName: Spanish Onion, parent: Onion}
----
-{    canonicalName: Spring Onion, parent: Onion}
----
-{    canonicalName: Yellow Onion, parent: Onion}
+{    canonicalName: Salad Onions, parent: Onion, aliases: {Salad Onion}}
 ---
 {    canonicalName: Shallot, parent: Onion, aliases: {Shallots}}
 ---
+{    canonicalName: Spanish Onion, parent: Onion}
+---
 {    canonicalName: Spring Onions, parent: Onion, aliases: {Spring Onion}}
+---
+{    canonicalName: Yellow Onion, parent: Onion}
 ---
 {canonicalName: Pak Choi, tags: {VEGETABLE, CHINESE}}
 ---
