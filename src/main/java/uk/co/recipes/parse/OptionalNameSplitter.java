@@ -50,6 +50,12 @@ public class OptionalNameSplitter {
 		while (words1[ words1.length - k].equalsIgnoreCase( words2[ words2.length - k] )) {
 			maxNumWordsToSkip--;
 			k++;
+
+			// Don't quite understand this hack, but it works - see the 'tomatoes -or - lovely cherry tomatoes' test
+			if ( words1.length < k) {
+				maxNumWordsToSkip--;
+				break;
+			}
 		}
 
 		for ( int numWordsToSkip = 1; numWordsToSkip < maxNumWordsToSkip; numWordsToSkip++)

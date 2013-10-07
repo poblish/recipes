@@ -43,6 +43,7 @@ public class OptionalNameSplittingTest {
 		assertThat( strFor("dried", "fresh kaffir lime leaves"), is("SplitResults{first=[dried kaffir lime leaves, dried lime leaves, dried leaves, dried], second=[kaffir lime leaves]}"));  // 'fresh kaffir lime leaves' adjusted => 'kaffir lime leaves'
 		assertThat( strFor("espresso", "strong instant coffee"), is("SplitResults{first=[espresso instant coffee, espresso coffee, espresso], second=[strong instant coffee]}"));
 		assertThat( strFor("spring onions", "finely chopped onions"), is("SplitResults{first=[spring onions chopped onions, spring onions], second=[spring finely chopped onions, onions]}"));  // 'finely chopped onions' adjusted => 'onions'
+		assertThat( strFor("tomatoes", "lovely cherry tomatoes"), is("SplitResults{first=[tomatoes], second=[lovely cherry tomatoes]}"));
 	}
 
 	private String strFor( final String s1, final String s2) {
