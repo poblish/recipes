@@ -38,7 +38,11 @@
 ---
 {    canonicalName: Yellow Food Colouring, parent: Food Colouring}
 ---
-{canonicalName: Marzipan, parent: Almond, tags: {BAKING, -WOODLAND}}
+{canonicalName: Marzipan, parent: Almond, tags: {BAKING, -WOODLAND}, aliases: {Natural Marzipan}}
+---
+{    canonicalName: Golden Marzipan, parent: Marzipan}
+---
+{    canonicalName: White Marzipan, parent: Marzipan}
 ---
 {canonicalName: Mixed Peel, tags: {BAKING}}
 ---
@@ -65,6 +69,10 @@
 {    canonicalName: Fresh Basil, parent: Basil, aliases: {Basil Leaves}}
 ---
 {canonicalName: Bay Leaf, tags: HERB, aliases: {Bay Leaves}}
+---
+{canonicalName: Chives, tags: HERB, aliases: Chive}
+---
+{    canonicalName: Snipped Chives, parent: Chives}
 ---
 {canonicalName: Coriander, tags: {HERB, GREEN_GRASSY}, aliases: {Cilantro, Coriander Leaves}}
 ---
@@ -498,6 +506,10 @@
 ---
 {canonicalName: Pea, tags: {PULSE, VEGETABLE, GREEN_GRASSY}, aliases: {Peas}}
 ---
+{    canonicalName: Garden Peas, parent: Pea}
+---
+{    canonicalName: Snap Peas, parent: Pea, aliases: {sugar snap peas}}
+---
 
 
 {canonicalName: Apple, tags: {FRUIT, FRESH_FRUITY}, aliases: {Apples}}
@@ -542,7 +554,13 @@
 ---
 {canonicalName: Cranberries, tags: {FRUIT}, aliases: {Cranberry}}
 ---
+{    canonicalName: Cranberry Juice, parent: Cranberries}
+---
 {    canonicalName: Cranberry Sauce, parent: Cranberries, tags: {CONDIMENT}}
+---
+{canonicalName: Dates, tags: {FRUIT, TUNISIAN, MOROCCAN}, aliases: {Date}}
+---
+{    canonicalName: Medjool dates, parent: Dates}
 ---
 {canonicalName: Figs, tags: {FRUIT, FLORAL_FRUITY}, aliases: {Fig}}
 ---
@@ -1010,6 +1028,8 @@
 ---
 {canonicalName: Soy Sauce, tags: {SAUCE, CHINESE}}
 ---
+{    canonicalName: Dark Soy Sauce, parent: Soy Sauce}
+---
 {canonicalName: Tabasco Sauce, tags: {SAUCE, USA}}
 ---
 {canonicalName: Worcestershire Sauce, tags: {ENGLISH, SAUCE}, contains: Anchovy}
@@ -1018,6 +1038,8 @@
 ---
 
 
+{canonicalName: Bucatini, tags: {PASTA, ITALIAN}}
+---
 {canonicalName: Farfalle, tags: {PASTA, ITALIAN}}
 ---
 {canonicalName: Fettuccine, tags: {PASTA, ITALIAN}}
@@ -1028,9 +1050,13 @@
 ---
 {canonicalName: Linguine, tags: {PASTA, ITALIAN}}
 ---
+{canonicalName: Macaroni, tags: {PASTA, ITALIAN}}
+---
 {canonicalName: Orzo, tags: {PASTA, ITALIAN}, aliases: {Orzo Pasta}}
 ---
 {canonicalName: Pappardelle, tags: {PASTA, ITALIAN}, aliases: {Pappardelle Pasta}}
+---
+{canonicalName: Pasta Shapes, tags: {PASTA, ITALIAN}}
 ---
 {canonicalName: Pasta Shells, tags: {PASTA, ITALIAN}}
 ---
@@ -1216,6 +1242,8 @@
 ---
 {            canonicalName: Parma Ham, parent: Prosciutto}
 ---
+{        canonicalName: Serrano Ham, parent: Ham, tags: {SPANISH, BRINE_SALT}, aliases: {Jamón serrano}}
+---
 {    canonicalName: Pork Belly, parent: Pork}
 ---
 {    canonicalName: Pork Loin, parent: Pork, aliases: {British Pork Loin}}
@@ -1238,6 +1266,10 @@
 ---
 {    canonicalName: Wild Rabbit, parent: Rabbit}
 ---
+{canonicalName: Sausagemeat, tags: {SAUSAGE}}
+---
+{canonicalName: Salami, tags: {MEAT}}
+---
 {canonicalName: Turkey, tags: {MEAT, POULTRY, WHITE_MEAT}}
 ---
 {    canonicalName: Turkey Mince, parent: Turkey}
@@ -1249,6 +1281,8 @@
 
 
 {canonicalName: Amaretto, tags: {SPIRIT, ALCOHOL, ITALIAN, ALMOND}}
+---
+{    canonicalName: Disaronno, parent: Amaretto}
 ---
 {canonicalName: Brandy, tags: {SPIRIT, ALCOHOL, FRENCH}}
 ---
@@ -1263,8 +1297,6 @@
 {canonicalName: Cointreau, tags: {SPIRIT, ALCOHOL, FRENCH, ORANGE}}
 ---
 {canonicalName: Curaçao, tags: {SPIRIT, ALCOHOL, DUTCH, ORANGE}}
----
-{canonicalName: Dry Sherry, tags: {SPIRIT, ALCOHOL, SPANISH}}
 ---
 {canonicalName: Limoncello, tags: {SPIRIT, ALCOHOL, ITALIAN, LEMON}}
 ---
@@ -1281,6 +1313,10 @@
 {canonicalName: Rice Wine, tags: {WINE, ALCOHOL, ASIAN}}
 ---
 {canonicalName: Rum, tags: {SPIRIT, ALCOHOL, CARIBBEAN}}
+---
+{canonicalName: Sherry, tags: {SPIRIT, ALCOHOL, SPANISH}}
+---
+{    canonicalName: Dry Sherry, parent: Sherry}
 ---
 {canonicalName: Tia Maria, tags: {SPIRIT, ALCOHOL, COFFEE}}
 ---

@@ -1,4 +1,5 @@
 beaten
+blanched
 boneless
 can
 chilled
@@ -44,6 +45,7 @@ low salt
 low-fat
 low-sodium
 medium
+medium-sized
 melted
 mini
 // 'of' below is very lame, but it works around a weakness in our parsing and 'rescues' many genuine matches
@@ -52,6 +54,8 @@ of
 or
 ordinary
 organic
+// 'other' below is very lame, but it works around a weakness in our parsing and 'rescues' many genuine matches
+other
 over-ripe
 overripe
 peeled
@@ -77,6 +81,7 @@ small
 smoked
 softened
 steamed
+stoned
 sustainable
 thick
 tin
@@ -90,5 +95,6 @@ very ripe
 very soft
 very strong
 vine-ripened
+warm
 warmed
 whole
