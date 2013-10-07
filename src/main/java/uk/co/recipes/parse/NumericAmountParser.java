@@ -20,8 +20,13 @@ public class NumericAmountParser {
         double multiplier = 1.0;
 
         if ( multiplierPos > 0) {
-        	multiplier = Double.valueOf( adjustedStr.substring( 0, multiplierPos).trim() );
-        	adjustedStr = adjustedStr.substring( multiplierPos + 1).trim();
+        	if (adjustedStr.contains("-")) {
+        		// Ugh, just ignore '2-3 x 400g tins' for now FIXME
+        	}
+        	else {
+        		multiplier = Double.valueOf( adjustedStr.substring( 0, multiplierPos).trim() );
+        		adjustedStr = adjustedStr.substring( multiplierPos + 1).trim();
+        	}
         }
 
         if (adjustedStr.contains("-")) {  // OK, we've got a numeric range. For now (FIXME!) just use the average
