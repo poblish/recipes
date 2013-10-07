@@ -96,6 +96,7 @@ public class ParseIngredientsTest {
         assertThat( parser.parseQuantity("198g pot").get(), is( new Quantity( Units.GRAMMES, 198) ));
         assertThat( parser.parseQuantity("398g jar").get(), is( new Quantity( Units.GRAMMES, 398) ));
         assertThat( parser.parseQuantity("20g sachet").get(), is( new Quantity( Units.GRAMMES, 20) ));
+        assertThat( parser.parseQuantity("601g bag").get(), is( new Quantity( Units.GRAMMES, 601) ));
 
         assertThat( parser.parseQuantity("about 397g").get(), is( new Quantity( Units.GRAMMES, 397) ));
         assertThat( parser.parseQuantity("About 7 tsp").get(), is( new Quantity( Units.TSP, 7) ));
