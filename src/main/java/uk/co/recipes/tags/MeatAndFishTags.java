@@ -6,7 +6,7 @@ package uk.co.recipes.tags;
 import uk.co.recipes.api.ITag;
 
 /**
- * Non-vegetarian items. The main point is to allow vegetarian/non-vegetarian splits using big boosts
+ * Non-vegetarian items.
  *
  * @author andrewregan
  *
@@ -19,6 +19,6 @@ public enum MeatAndFishTags implements ITag {
 
     @Override
     public float getBoost() {
-        return 100.0f;
+        return 50.0f;
     }
 }

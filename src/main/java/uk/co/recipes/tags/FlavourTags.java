@@ -22,6 +22,6 @@ public enum FlavourTags implements ITag {
 
     @Override
     public float getBoost() {
-        return 1.0f;
+        return 10.0f;
     }
 }
