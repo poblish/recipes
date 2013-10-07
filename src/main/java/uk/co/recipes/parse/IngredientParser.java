@@ -54,13 +54,13 @@ public class IngredientParser {
     private static final String ITEM_NAME = "([\\p{L}- '&]*)";
     private static final String SUFFIX = ITEM_NAME + NOTES;
 
-    private static final String NUMBER_AND_UNITS = DEC_FRAC_NUMBER_RANGE_PATTERN + "( ?(?:kg|ml|g) ?(?:bag|cans?|carton|jar|pack|pot|punnet|sachet|tins?|tub)?|gms| ?pounds?| ?lbs?\\.?| ?oz\\.?|cm|-in|-inch|mm|ml| ?l| litres?| ?quarts?| cups?| ?pots?| jars?| packets?| ?(?:big |large |small )?bunch(?:es)?| ?(?:big )?pinch(?:es)?| sticks?| heaped tbsps?| heaped tsps?| ?level tsps?| ?level tbsps?| rounded tbsps?| rounded tsps?| tablespoons?| tbsp[s\\.]?| tsp[s\\.]?| teaspoons?| ?handfuls?| cloves?)?";
+    private static final String NUMBER_AND_UNITS = DEC_FRAC_NUMBER_RANGE_PATTERN + "( ?(?:kg|ml|g) ?(?:bag|cans?|carton|jar|pack|pot|punnet|sachet|tins?|tub)?|gms| ?pounds?| ?lbs?\\.?| ?oz\\.?|cm|-in|-inch|mm|ml| ?l| litres?| ?quarts?| bottles?| cups?| ?pots?| jars?| packets?| ?(?:big |large |small )?bunch(?:es)?| ?(?:big )?pinch(?:es)?| sticks?| heaped tbsps?| heaped tsps?| ?level tsps?| ?level tbsps?| rounded tbsps?| rounded tsps?| tablespoons?| tbsp[s\\.]?| tsp[s\\.]?| teaspoons?| ?handfuls?| cloves?)?";
 
     private static final Pattern    NUMBER_AND_UNITS_PATTERN = Pattern.compile( NUMBER_AND_UNITS, Pattern.CASE_INSENSITIVE);
     private static final Pattern    ITEM_NAME_PATTERN = Pattern.compile( ITEM_NAME, Pattern.CASE_INSENSITIVE);
 
 	private static final Pattern	A = Pattern.compile( NUMBER_AND_UNITS + " " + SUFFIX, Pattern.CASE_INSENSITIVE);
-	private static final Pattern	B = Pattern.compile("((?:a )?(few |generous |good |large |small |thumb-sized? )?(splash|bunch|dash|drizzle|drops?|few|glass|handful|little|piece|knob|pinch|splash|squeeze)(?: of)?) " + SUFFIX, Pattern.CASE_INSENSITIVE);
+	private static final Pattern	B = Pattern.compile("((?:a )?(few |generous |good |large |small |thumb-sized? )?(splash|bottle|bunch|dash|drizzle|drops?|few|glass|handful|little|piece|knob|pinch|quantity|splash|squeeze)(?: of)?) " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	C = Pattern.compile("((?:finely )?(?:grated )?(?:juice|juice and zest|zest|zest and juice))(?: of)? " + DEC_FRAC_NUMBER_PATTERN + " " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	D = Pattern.compile("(icing sugar|nutmeg|parmesan|salt|salt and pepper.*|beaten egg|.*cream)" + NOTES, Pattern.CASE_INSENSITIVE);
     private static final Pattern    E = Pattern.compile("((?:dressed|steamed|cooked|sliced|sweet|roughly chopped) [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);

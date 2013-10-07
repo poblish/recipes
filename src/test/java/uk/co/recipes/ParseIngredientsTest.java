@@ -82,6 +82,7 @@ public class ParseIngredientsTest {
         assertThat( parser.parseQuantity("3 pinches").get(), is( new Quantity( Units.PINCH, 3) ));
         assertThat( parser.parseQuantity("big pinch").get(), is( new Quantity( Units.BIG_PINCH, 1) ));
 
+        assertThat( parser.parseQuantity("1 bottle").get(), is( new Quantity( Units.BOTTLE, 1) ));
         assertThat( parser.parseQuantity("bunch").get(), is( new Quantity( Units.BUNCHES, 1) ));
         assertThat( parser.parseQuantity("big bunch").get(), is( new Quantity( Units.BIG_BUNCHES, 1) ));
         assertThat( parser.parseQuantity("½ large bunch").get(), is( new Quantity( Units.BIG_BUNCHES, 0) ));
