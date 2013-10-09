@@ -9,6 +9,8 @@ import javax.inject.Singleton;
 import javax.measure.quantity.Volume;
 
 import org.jscience.physics.amount.Amount;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IQuantity;
@@ -28,6 +30,8 @@ public class DefaultIngredientQuantityScoreBooster implements IIngredientQuantit
     private static final float NO_BOOST = 1.0f;
 //    private static final float FILTER_OUT = 0;
 
+	private static final Logger LOG = LoggerFactory.getLogger( DefaultIngredientQuantityScoreBooster.class );
+
     @Override
     public float getBoostForQuantity( final Locale inRecipeLocale, final ICanonicalItem inItem, final IQuantity inQuantity) {
 
@@ -45,6 +49,9 @@ public class DefaultIngredientQuantityScoreBooster implements IIngredientQuantit
                     // System.out.println( "Boost = " + ratio.getEstimatedValue() + " for " + inItem);
                     return (float) ratio.getEstimatedValue();
         		}
+    		}
+    		else {
+    			LOG.warn("No conversion found for " + inQuantity + " of " + inItem);
     		}
     	}
 
