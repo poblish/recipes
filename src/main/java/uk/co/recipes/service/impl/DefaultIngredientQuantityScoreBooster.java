@@ -36,10 +36,10 @@ public class DefaultIngredientQuantityScoreBooster implements IIngredientQuantit
             // FIXME Should do this, once parsing is much improved... return FILTER_OUT;  // Zero quantity passed-in, no point continuing with that. Quantities shouldn't be zero.
         }
 
-    	if ( inItem.getBaseAmount() != null /* FIXME null check */) {
+    	if (inItem.getBaseAmount().isPresent()) {
 			final Optional<Amount<Volume>> actualAmount = new Conversions().toJsrAmount( inRecipeLocale, inQuantity);
     		if (actualAmount.isPresent()) {
-    			final Optional<Amount<Volume>> baseAmount = new Conversions().toJsrAmount( inRecipeLocale, inItem.getBaseAmount());
+    			final Optional<Amount<Volume>> baseAmount = new Conversions().toJsrAmount( inRecipeLocale, inItem.getBaseAmount().get());
         		if (baseAmount.isPresent()) {
         			final Amount<?> ratio = actualAmount.get().divide( baseAmount.get() );
                     // System.out.println( "Boost = " + ratio.getEstimatedValue() + " for " + inItem);

@@ -19,7 +19,7 @@ public interface ICanonicalItem extends ITagging, java.io.Serializable {
 	void setId( long id);
 
 	String getCanonicalName();
-	IQuantity getBaseAmount();
+	Optional<IQuantity> getBaseAmount();
 
 	Optional<ICanonicalItem> parent();
 

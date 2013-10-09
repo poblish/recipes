@@ -253,8 +253,25 @@ public class CanonicalItem implements ICanonicalItem {
 		baseAmount = checkNotNull(inQuantity);
 	}
 
-	public IQuantity getBaseAmount() {
+	// The point is that we do *not* need to persist baseAmt for children, as we calc that on the fly (see below)
+	@JsonProperty("baseAmount")
+	public IQuantity getBaseAmountForJackson() {
 		return baseAmount;
+	}
+
+	@JsonIgnore
+	public Optional<IQuantity> getBaseAmount() {
+		CanonicalItem curr = this;
+		do {
+			if ( curr.baseAmount != null) {
+				return Optional.of( curr.baseAmount );
+			}
+
+			curr = curr.getParent();
+		}
+		while ( curr != null);
+
+		return Optional.absent();
 	}
 
 	/* (non-Javadoc)
