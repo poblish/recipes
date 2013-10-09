@@ -81,8 +81,10 @@ public class CanonicalItem implements ICanonicalItem {
 	 */
 	@JsonCreator
 	public CanonicalItem(@JsonProperty("canonicalName") String canonicalName,
+						 @JsonProperty("baseAmount") IQuantity baseAmount,
 						 @JsonDeserialize(as=CanonicalItem.class) @JsonProperty("parent") ICanonicalItem parent) {
 		this.canonicalName = canonicalName;
+		this.baseAmount = baseAmount;
 
 		if ( parent != null && /* Jackson!!! */ parent.getCanonicalName() != null) {
 			this.parent = parent;
