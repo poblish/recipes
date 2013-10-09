@@ -1038,37 +1038,39 @@
 ---
 
 
-{canonicalName: Bucatini, tags: {PASTA, ITALIAN}}
+{canonicalName: Pasta, tags: {PASTA, ITALIAN}}
 ---
-{canonicalName: Farfalle, tags: {PASTA, ITALIAN}}
+{    canonicalName: Bucatini, parent: Pasta}
 ---
-{canonicalName: Fettuccine, tags: {PASTA, ITALIAN}}
+{    canonicalName: Conchiglie, parent: Pasta, aliases: {Pasta Shells}}
 ---
-{canonicalName: Fusilli, tags: {PASTA, ITALIAN}}
+{    canonicalName: Farfalle, parent: Pasta}
 ---
-{canonicalName: Gnocchi, tags: {PASTA, ITALIAN}}
+{    canonicalName: Fettuccine, parent: Pasta}
 ---
-{canonicalName: Linguine, tags: {PASTA, ITALIAN}}
+{    canonicalName: Fusilli, parent: Pasta}
 ---
-{canonicalName: Macaroni, tags: {PASTA, ITALIAN}}
+{    canonicalName: Gnocchi, parent: Pasta}
 ---
-{canonicalName: Orzo, tags: {PASTA, ITALIAN}, aliases: {Orzo Pasta}}
+{    canonicalName: Linguine, parent: Pasta}
 ---
-{canonicalName: Pappardelle, tags: {PASTA, ITALIAN}, aliases: {Pappardelle Pasta}}
+{    canonicalName: Macaroni, parent: Pasta}
 ---
-{canonicalName: Pasta Shapes, tags: {PASTA, ITALIAN}}
+{    canonicalName: Orzo, parent: Pasta, aliases: {Orzo Pasta}}
 ---
-{canonicalName: Pasta Shells, tags: {PASTA, ITALIAN}}
+{    canonicalName: Pappardelle, parent: Pasta, aliases: {Pappardelle Pasta}}
 ---
-{canonicalName: Penne, tags: {PASTA, ITALIAN}, aliases: {Penne Pasta}}
+{    canonicalName: Pasta Shapes, parent: Pasta}
 ---
-{canonicalName: Rigatoni, tags: {PASTA, ITALIAN}}
+{    canonicalName: Penne, parent: Pasta, aliases: {Penne Pasta}}
 ---
-{canonicalName: Spaghetti, tags: {PASTA, ITALIAN}}
+{    canonicalName: Rigatoni, parent: Pasta}
 ---
-{canonicalName: Tagliatelle, tags: {PASTA, ITALIAN}}
+{    canonicalName: Spaghetti, parent: Pasta}
 ---
-{canonicalName: Trofie, tags: {PASTA, ITALIAN}, aliases: {Trofie Pasta}}
+{    canonicalName: Tagliatelle, parent: Pasta}
+---
+{    canonicalName: Trofie, parent: Pasta, aliases: {Trofie Pasta}}
 ---
 
 
