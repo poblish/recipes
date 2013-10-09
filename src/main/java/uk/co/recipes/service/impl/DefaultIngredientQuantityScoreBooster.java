@@ -49,6 +49,9 @@ public class DefaultIngredientQuantityScoreBooster implements IIngredientQuantit
                     // System.out.println( "Boost = " + ratio.getEstimatedValue() + " for " + inItem);
                     return (float) ratio.getEstimatedValue();
         		}
+        		else {
+        			LOG.warn("No conversion found for " + inQuantity + " of " + inItem);
+        		}
     		}
     		else {
     			LOG.warn("No conversion found for " + inQuantity + " of " + inItem);

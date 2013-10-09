@@ -90,6 +90,12 @@ public class IngredientsTest {
 	}
 
 	@Test
+	public void inheritedBaseAmountsTest() throws IOException {
+		final Optional<ICanonicalItem> item = itemFactory.get("Rye Flour");
+		assertThat( item.get().getBaseAmount(), notNullValue());
+	}
+
+	@Test
 	public void accentsTest() throws IOException {
 		assertThat( itemFactory.get("Lovely Glacé Cherries").isPresent(), is(false));
 

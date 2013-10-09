@@ -17,6 +17,7 @@ dried
 dry
 // 'each' below is very lame, but it works around a weakness in our parsing and 'rescues' many genuine matches
 each
+extra
 extra lean
 extra-lean
 fat-free
@@ -60,7 +61,6 @@ over-ripe
 overripe
 peeled
 pitted
-plain
 plump
 podded
 quality
