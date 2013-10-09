@@ -36,17 +36,20 @@ public class Conversions {
 
     private final static Locale DEFAULT_LOCALE = new Locale( "xx", "xx");
     private final static String DEFAULT_ITEM = "_";
+   
+    private final static double ROUNDED_FACTOR = 1.3;	// Guessing, after http://www.hintsandthings.co.uk/kitchen/measures.htm
+    private final static double HEAPED_FACTOR = 1.8;	// " " "
 
     private final static Table<ItemUnit,Locale,Unit<?>>  VOLUME_UNITS_TABLE = HashBasedTable.create();
 
     static {
     	final Unit<Volume> tsp_UK = NonSI.LITRE.divide(1000).times(5.91939047);
     	final Unit<Volume> tsp_US = NonSI.LITRE.divide(1000).times(4.92892159);
-    	final Unit<Volume> tbsp_UK = tsp_UK.times(3);
-    	final Unit<Volume> tbsp_US = tsp_US.times(3);
 
         VOLUME_UNITS_TABLE.put( forUnit(Units.TSP), DEFAULT_LOCALE, tsp_UK);
-        VOLUME_UNITS_TABLE.put( forUnit(Units.TBSP), DEFAULT_LOCALE, tbsp_UK);
+        VOLUME_UNITS_TABLE.put( forUnit(Units.ROUNDED_TBSP), DEFAULT_LOCALE, tsp_UK.times(ROUNDED_FACTOR));
+        VOLUME_UNITS_TABLE.put( forUnit(Units.HEAPED_TBSP), DEFAULT_LOCALE, tsp_UK.times(HEAPED_FACTOR));
+        VOLUME_UNITS_TABLE.put( forUnit(Units.TBSP), DEFAULT_LOCALE, tsp_UK.times(3));
 
         VOLUME_UNITS_TABLE.put( forUnit(Units.GRAMMES), DEFAULT_LOCALE, SI.GRAM);
 
@@ -60,7 +63,9 @@ public class Conversions {
 //        VOLUME_UNITS_TABLE.put( forUnit(Units.QUART), /* Override */ Locale.US, tsp_US);
 
         VOLUME_UNITS_TABLE.put( forUnit(Units.TSP), /* Override */ Locale.US, tsp_US);
-        VOLUME_UNITS_TABLE.put( forUnit(Units.TBSP), /* Override */ Locale.US, tbsp_US);
+        VOLUME_UNITS_TABLE.put( forUnit(Units.ROUNDED_TBSP), /* Override */ Locale.US, tsp_US.times(ROUNDED_FACTOR));
+        VOLUME_UNITS_TABLE.put( forUnit(Units.HEAPED_TBSP), /* Override */ Locale.US, tsp_US.times(HEAPED_FACTOR));
+        VOLUME_UNITS_TABLE.put( forUnit(Units.TBSP), /* Override */ Locale.US, tsp_US.times(3));
     }
 
 	public <T extends Quantity> Optional<Amount<T>> toJsrAmount( final Locale inLocale, final IQuantity inQuantity) {
