@@ -3,6 +3,7 @@ package controllers;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -67,7 +68,10 @@ public class Recipes extends AbstractExplorableController {
 		final IUser user1 = getLocalUser();
 		final IRecipe recipe = getSessionCreatedRecipe();
 
-        return ok(views.html.create_recipe.render(user1, recipe, recsApi.recommendRecipesToAnonymous( recipe, 12)));
+		final List<IRecipe> matchingRecipes = recsApi.recommendRecipesToAnonymous( recipe, 12);
+		Collections.shuffle(matchingRecipes);
+
+        return ok(views.html.create_recipe.render(user1, recipe, matchingRecipes));
     }
 
     public Result createAddIngredient( final String ingredient) throws IOException, InterruptedException {
