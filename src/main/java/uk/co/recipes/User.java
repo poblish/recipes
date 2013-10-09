@@ -279,7 +279,7 @@ public class User implements IUser {
 
 	}
 
-	@JsonProperty("excludedItems")
+	@JsonProperty("excludedRecipes")
 	public Collection<Long> getExcludedRecipeIdsForJackon() {
 		return FluentIterable.from(excludedRecipes).transform( new Function<IRecipe,Long>() {
 
