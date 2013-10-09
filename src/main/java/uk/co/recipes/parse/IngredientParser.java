@@ -66,6 +66,7 @@ public class IngredientParser {
     private static final Pattern    E = Pattern.compile("((?:dressed|steamed|cooked|sliced|sweet|roughly chopped) [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);
     private static final Pattern    F = Pattern.compile(SUFFIX, Pattern.CASE_INSENSITIVE);
 
+    private static final Pattern    GRAMMES_OZ_STRIPPER = Pattern.compile("g/ ?[0-9\\.]+ ?oz", Pattern.CASE_INSENSITIVE);
 
 	public boolean parse( final String inRawStr, final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) {
 	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPE_PARSE).time();
@@ -80,7 +81,8 @@ public class IngredientParser {
 
 	private boolean timedParse( final String inRawStr, final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) {
 
-	    final String adjustedStr = new FractionReplacer().replaceFractions(inRawStr);
+	    String adjustedStr = new FractionReplacer().replaceFractions(inRawStr);
+	    adjustedStr = GRAMMES_OZ_STRIPPER.matcher(adjustedStr).replaceAll("g");  // Strip stupid '200g/7oz' => '200g'
 
 		Matcher m = A.matcher(adjustedStr);
 		if (m.matches()) {
