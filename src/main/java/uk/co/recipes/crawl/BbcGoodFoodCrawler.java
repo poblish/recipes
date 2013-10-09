@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.testng.annotations.Test;
 
 import com.google.common.base.Throwables;
 import com.google.common.io.Files;
@@ -31,9 +30,22 @@ import edu.uci.ics.crawler4j.url.WebURL;
  * @author andrewregan
  *
  */
-public class RecipeCrawlTest {
+public class BbcGoodFoodCrawler {
 
-	@Test(enabled=false)
+	public static void main( String[] args) throws Exception {
+		try {
+			long st = System.currentTimeMillis();
+			new BbcGoodFoodCrawler().crawlBbcGoodFood();
+			System.out.println("Finished loading in " + (( System.currentTimeMillis() - st) / 1000d) + " msecs");
+			System.exit(0);
+		}
+		catch (IOException e) {
+			Throwables.propagate(e);
+		} catch (InterruptedException e) {
+			Throwables.propagate(e);
+		}
+	}
+
 	public void crawlBbcGoodFood() throws Exception {
         String crawlStorageFolder = "/Users/andrewregan/Development/java/recipe_explorer";
         int numberOfCrawlers = 5;
