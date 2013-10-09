@@ -70,11 +70,7 @@ public class Recipes extends AbstractExplorableController {
     public Result create() throws IOException, InterruptedException {
 		final IUser user1 = getLocalUser();
 		final IRecipe recipe = getSessionCreatedRecipe(true);
-
-		final List<IRecipe> matchingRecipes = recsApi.recommendRecipesToAnonymous( recipe, 12);
-		Collections.shuffle(matchingRecipes);
-
-        return ok(views.html.create_recipe.render(user1, recipe, matchingRecipes));
+        return ok(views.html.create_recipe.render(user1, recipe, recsApi.recommendRandomRecipesToAnonymous( recipe, 12)));
     }
 
     public Result createAddIngredient( final String ingredient) throws IOException, InterruptedException {

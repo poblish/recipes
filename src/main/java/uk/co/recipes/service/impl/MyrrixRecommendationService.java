@@ -175,6 +175,13 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 	}
 
 	@Override
+	public List<IRecipe> recommendRandomRecipesToAnonymous( final IRecipe inRecipe, int inNumRecs) {
+		final List<IRecipe> recipesToChooseFrom = recommendRecipesToAnonymous( inRecipe, inNumRecs * 3);
+		Collections.shuffle(recipesToChooseFrom);
+		return recipesToChooseFrom.subList( 0, Math.min( inNumRecs, recipesToChooseFrom.size()));
+	}
+
+	@Override
 	public List<IRecipe> recommendRecipesToAnonymous( final IRecipe inRecipe, int inNumRecs) {
 		final Collection<ICanonicalItem> items = inRecipe.getItems();
 		if ( items.isEmpty()) {

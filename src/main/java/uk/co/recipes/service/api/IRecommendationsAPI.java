@@ -25,5 +25,6 @@ public interface IRecommendationsAPI extends ITasteRecommendationsAPI {
 	List<IRecipe> recommendRecipes( final IUser inUser, final int inNumRecs, final ICanonicalItem... inIncludes);
 
 	List<IRecipe> recommendRecipesToAnonymous( final IRecipe inRecipe, final int inNumRecs);
+	List<IRecipe> recommendRandomRecipesToAnonymous( final IRecipe inRecipe, final int inNumRecs);
 	List<IRecipe> recommendRecipesToAnonymous( final int inNumRecs, final ICanonicalItem... inIncludes);
 }
