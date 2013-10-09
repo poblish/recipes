@@ -3,4 +3,5 @@ diced
 for drizzling
 halves
 pieces
+sliced
 to serve

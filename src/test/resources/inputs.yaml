@@ -302,11 +302,17 @@
 ---
 {canonicalName: Broccoli, tags: {VEGETABLE, SULPHUROUS}}
 ---
+{    canonicalName: Tenderstem Broccoli, parent: Broccoli}
+---
 {canonicalName: Butternut Squash, tags: {VEGETABLE, WOODLAND}}
 ---
 {canonicalName: Cabbage, tags: {VEGETABLE, SULPHUROUS}, aliases: {Green Cabbage, Cabbage Leaves}}
 ---
+{    canonicalName: Red Cabbage, parent: Cabbage}
+---
 {    canonicalName: Savoy Cabbage, parent: Cabbage}
+---
+{    canonicalName: White Cabbage, parent: Cabbage}
 ---
 {canonicalName: Peppers, tags: {VEGETABLE, GREEN_GRASSY}, aliases: {Capsicum}}
 ---
@@ -696,6 +702,8 @@
 ---
 {canonicalName: Ciabatta, tags: {BREAD, ITALIAN}}
 ---
+{    canonicalName: Ciabatta Rolls, parent: Ciabatta}
+---
 {canonicalName: Focaccia, tags: {BREAD, ITALIAN}}
 ---
 {canonicalName: Naan Bread, tags: {BREAD, INDIAN}, aliases: Naan}
@@ -1025,6 +1033,10 @@
 {canonicalName: Oyster Sauce, tags: {SAUCE, CHINESE, FISH}}
 ---
 {canonicalName: Pesto, tags: {SAUCE, ITALIAN}}
+---
+{    canonicalName: Basil Pesto, parent: Pesto, contains: Basil}
+---
+{    canonicalName: Green Pesto, parent: Pesto, contains: Basil}
 ---
 {canonicalName: Soy Sauce, tags: {SAUCE, CHINESE}}
 ---

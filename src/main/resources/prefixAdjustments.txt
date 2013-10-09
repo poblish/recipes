@@ -60,10 +60,12 @@ over-ripe
 overripe
 peeled
 pitted
+plain
 plump
 podded
 quality
 raw
+ready-cooked
 really ripe
 reduced-fat
 reduced-salt
@@ -84,6 +86,7 @@ steamed
 stoned
 sustainable
 thick
+thinly sliced
 tin
 tinned
 toasted
