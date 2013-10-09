@@ -214,11 +214,11 @@
 
 {canonicalName: Mustard Seeds, tags: {SEED, MUSTARDY}, aliases: {Mustard Seed}}
 ---
-{    canonicalName: Black Mustard Seeds, parent: Mustard Seeds}
+{    canonicalName: Black Mustard Seeds, parent: Mustard Seeds, aliases: Black Mustard Seed}
 ---
-{    canonicalName: Brown Mustard Seeds, parent: Mustard Seeds}
+{    canonicalName: Brown Mustard Seeds, parent: Mustard Seeds, aliases: Brown Mustard Seed}
 ---
-{    canonicalName: Yellow Mustard Seeds, parent: Mustard Seeds, aliases: {White Mustard Seeds}}
+{    canonicalName: Yellow Mustard Seeds, parent: Mustard Seeds, aliases: {Yellow Mustard Seed, White Mustard Seeds}}
 ---
 {canonicalName: Pine Nuts, tags: {SEED}}
 ---
@@ -284,7 +284,7 @@
 ---
 {    canonicalName: Brown rice, parent: Rice}
 ---
-{    canonicalName: Camargue red rice, parent: Rice, tags: {FRENCH}}
+{    canonicalName: Camargue red rice, parent: Rice, tags: {FRENCH}, aliases: Red Camargue Rice}
 ---
 {    canonicalName: Carnaroli Rice, parent: Rice, tags: {ITALIAN}}
 ---
@@ -632,6 +632,10 @@
 ---
 {    canonicalName: Prune, parent: Plum, aliases: {Prunes, Dried Plum}}
 ---
+{canonicalName: Pomegranate, tags: {FRUIT}}
+---
+{    canonicalName: Pomegranate Seeds, parent: Pomegranate}
+---
 {canonicalName: Raspberries, tags: {FRUIT, FLORAL_FRUITY}, aliases: Raspberry}
 ---
 {    canonicalName: Raspberry Jam, parent: Raspberries, tags: {CONDIMENT}, aliases: Raspberry Conserve}
@@ -899,6 +903,8 @@
 {canonicalName: Pecorino, tags: {DAIRY, CHEESE, ITALIAN}}
 ---
 {canonicalName: Provolone, tags: {DAIRY, CHEESE, ITALIAN}}
+---
+{canonicalName: Red Leicester, tags: {DAIRY, CHEESE, ENGLISH}, aliases: {Red Leicester Cheese}}
 ---
 {canonicalName: Ricotta, tags: {DAIRY, CHEESE, ITALIAN}}
 ---
@@ -1247,6 +1253,8 @@
 {    canonicalName: Lamb Mince, parent: Lamb, aliases: {Minced Lamb}}
 ---
 {    canonicalName: Lamb Neck Fillets, parent: Lamb, aliases: {Lamb Neck Fillet}}
+---
+{    canonicalName: Lamb Shank, parent: Lamb, aliases: {Lamb Shanks}}
 ---
 {    canonicalName: Lamb Shoulder, parent: Lamb, aliases: {Shoulder of Lamb}}
 ---
