@@ -82,6 +82,10 @@ slices
 small
 smoked
 softened
+sprig
+sprig of
+sprigs
+sprigs of
 steamed
 stoned
 sustainable

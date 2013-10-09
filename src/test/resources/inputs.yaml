@@ -92,7 +92,7 @@
 ---
 {canonicalName: Mixed Herbs, tags: HERB}
 ---
-{canonicalName: Oregano, tags: {HERB, ITALIAN}, aliases: {Oregano Sprigs, Oregano Leaves}}
+{canonicalName: Oregano, tags: {HERB, ITALIAN}, aliases: {Oregano Leaves}}
 ---
 {canonicalName: Parsley, tags: {HERB, GREEN_GRASSY}}
 ---
@@ -100,7 +100,7 @@
 ---
 {    canonicalName: Flat-leaf Parsley, parent: Parsley, aliases: {Flatleaf Parsley}}
 ---
-{canonicalName: Rosemary, tags: {HERB, BRAMBLE_HEDGE}, aliases: {Rosemary Sprigs}}
+{canonicalName: Rosemary, tags: {HERB, BRAMBLE_HEDGE}}
 ---
 {canonicalName: Sage, tags: {HERB, BRAMBLE_HEDGE}}
 ---
@@ -112,7 +112,7 @@
 ---
 {canonicalName: Thyme, tags: {HERB, BRAMBLE_HEDGE}}
 ---
-{    canonicalName: Fresh Thyme, parent: Thyme, aliases: {Thyme Leaves, Thyme Sprig, Thyme Sprigs}}
+{    canonicalName: Fresh Thyme, parent: Thyme, aliases: {Thyme Leaf, Thyme Leaves}}
 ---
 
 

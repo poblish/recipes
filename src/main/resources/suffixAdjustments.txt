@@ -4,4 +4,6 @@ for drizzling
 halves
 pieces
 sliced
+sprig
+sprigs
 to serve
