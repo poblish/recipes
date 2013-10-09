@@ -13,7 +13,7 @@ import uk.co.recipes.api.ITag;
  */
 public enum MeatAndFishTags implements ITag {
 
-	MEAT, RED_MEAT, WHITE_MEAT, OFFAL, POULTRY, GAME, FISH, SEAFOOD, STOCK, SAUSAGE,
+	MEAT, RED_MEAT, WHITE_MEAT, OFFAL, POULTRY, GAME, FISH, SEAFOOD, SAUSAGE,
 
 	;
 

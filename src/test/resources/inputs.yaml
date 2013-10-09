@@ -990,10 +990,6 @@
 
 {canonicalName: Barbecue Sauce, tags: {SAUCE}}
 ---
-{canonicalName: Beef Stock, tags: {MEAT, RED_MEAT, STOCK}, aliases: {Beef Stock Cube, Beef Stock Cubes}}
----
-{canonicalName: Chicken Stock, tags: {MEAT, POULTRY, STOCK}, aliases: {Chicken Stock Cube}}
----
 {canonicalName: Chilli Sauce, tags: {SAUCE, CHILLI}}
 ---
 {    canonicalName: Harissa, tags: {TUNISIAN}, parent: Chilli Sauce, aliases: Harissa Paste}
@@ -1020,8 +1016,6 @@
 ---
 {canonicalName: Hoisin Sauce, tags: {SAUCE, CHINESE}}
 ---
-{canonicalName: Lamb Stock, tags: {MEAT, STOCK}}
----
 {canonicalName: Mayonnaise, tags: {EGG, SAUCE}}
 ---
 {canonicalName: Mustard, tags: {SAUCE, MUSTARDY}}
@@ -1042,11 +1036,23 @@
 ---
 {    canonicalName: Dark Soy Sauce, parent: Soy Sauce}
 ---
+{canonicalName: Stock, tags: {SAUCE, STOCK}, aliases: {Stock Cube, Stock from a cube}}
+---
+{    canonicalName: Beef Stock, parent: Stock, tags: {MEAT, RED_MEAT}, aliases: {Beef Stock Cube, Beef Stock Cubes}}
+---
+{    canonicalName: Chicken Stock, parent: Stock, tags: {MEAT, POULTRY}, aliases: {Chicken Stock Cube}}
+---
+{    canonicalName: Fish Stock, parent: Stock, tags: {FISH}}
+---
+{    canonicalName: Lamb Stock, parent: Stock, tags: {MEAT}}
+---
+{    canonicalName: Pork Stock, parent: Stock, tags: {MEAT}, aliases: {Pork Stock Cubes}}
+---
+{    canonicalName: Vegetable Stock, parent: Stock, tags: {VEGETABLE}, aliases: {Vegetable Stock Cube}}
+---
 {canonicalName: Tabasco Sauce, tags: {SAUCE, USA}}
 ---
 {canonicalName: Worcestershire Sauce, tags: {ENGLISH, SAUCE}, contains: Anchovy}
----
-{canonicalName: Vegetable Stock, tags: {VEGETABLE, SAUCE}}
 ---
 
 
