@@ -48,6 +48,8 @@ public class Conversions {
         VOLUME_UNITS_TABLE.put( forUnit(Units.TSP), DEFAULT_LOCALE, tsp_UK);
         VOLUME_UNITS_TABLE.put( forUnit(Units.TBSP), DEFAULT_LOCALE, tbsp_UK);
 
+        VOLUME_UNITS_TABLE.put( forUnit(Units.GRAMMES), DEFAULT_LOCALE, SI.GRAM);
+
         VOLUME_UNITS_TABLE.put( new ItemUnit( Units.CUP, "Plain Flour"), /* Override */ Locale.US, SI.KILOGRAM.times(0.125));
         VOLUME_UNITS_TABLE.put( new ItemUnit( Units.CUP, "Bread Flour"), /* Override */ Locale.US, SI.KILOGRAM.times(0.127));
         VOLUME_UNITS_TABLE.put( new ItemUnit( Units.CUP, "Rye Flour"), /* Override */ Locale.US, SI.KILOGRAM.times(0.102));

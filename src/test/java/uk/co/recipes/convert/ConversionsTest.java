@@ -36,6 +36,12 @@ public class ConversionsTest {
     private final static IQuantity ONE_QUART = new Quantity( Units.QUART, 1);
     private final static IQuantity ONE_OZ = new Quantity( Units.OUNCES, 1);
     private final static IQuantity ONE_TSP = new Quantity( Units.TSP, 1);
+    private final static IQuantity NINETEEN_GRAMMES = new Quantity( Units.GRAMMES, 19);
+
+    @Test
+    public void testGrammesUK() {
+    	assertThat( toGrammes( CVS.toJsrAmount( UK, NINETEEN_GRAMMES)), is(19.0));
+    }
 
     @Test
     public void testTspUK() {
