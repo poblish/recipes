@@ -7,13 +7,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_PUTS;
 
-import dagger.Module;
-import javax.inject.Inject;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.mahout.cf.taste.common.TasteException;
@@ -42,6 +42,7 @@ import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 
+import dagger.Module;
 import dagger.ObjectGraph;
 
 /**

@@ -3,8 +3,6 @@ package controllers;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
