@@ -60,6 +60,8 @@ other
 over-ripe
 overripe
 peeled
+// 'piece' is not enough info. Allow 'x-sized piece', however.
+piece
 pitted
 plump
 podded

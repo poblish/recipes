@@ -3,6 +3,7 @@ diced
 for drizzling
 // To be honest we should probably exclude 'for dusting' items altogether...
 for dusting
+fresh
 halves
 pieces
 sliced

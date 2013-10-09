@@ -80,6 +80,8 @@
 ---
 {canonicalName: Dill, tags: {HERB, GREEN_GRASSY}}
 ---
+{    canonicalName: Fresh Dill, parent: Dill, aliases: {Dill Leaves}}
+---
 {canonicalName: Fenugreek, tags: {HERB, INDIAN}}
 ---
 {canonicalName: Fresh Mint, tags: {HERB, BRAMBLE_HEDGE}, aliases: {Mint Leaves}}
@@ -113,6 +115,8 @@
 {canonicalName: Thyme, tags: {HERB, BRAMBLE_HEDGE}}
 ---
 {    canonicalName: Fresh Thyme, parent: Thyme, aliases: {Thyme Leaf, Thyme Leaves}}
+---
+{    canonicalName: Lemon Thyme, parent: Thyme}
 ---
 
 
@@ -196,7 +200,7 @@
 ---
 {canonicalName: Pepper, tags: SPICE}
 ---
-{    canonicalName: Black Pepper, parent: Pepper, aliases: {Pepper Powder, Black Pepper, Black Peppercorns, Ground Black Pepper}}
+{    canonicalName: Black Pepper, parent: Pepper, aliases: {Pepper Powder, Black Pepper, Black Peppercorn, Black Peppercorns, Ground Black Pepper}}
 ---
 {    canonicalName: White Peppercorns, parent: Pepper}
 ---
@@ -381,6 +385,8 @@
 {    canonicalName: Button Mushrooms, parent: Mushrooms}
 ---
 {    canonicalName: Chestnut Mushrooms, parent: Mushrooms}
+---
+{    canonicalName: Porcini Mushrooms, parent: Mushrooms}
 ---
 {    canonicalName: Shiitake Mushrooms, parent: Mushrooms, tags: JAPANESE}
 ---
@@ -652,17 +658,35 @@
 ---
 
 
-{canonicalName: Flour, tags: {BAKING, FLOUR}}
+{canonicalName: Flour, tags: {FLOUR}, baseAmt: 50g}
+---
+{    canonicalName: Chickpea Flour, parent: Flour, aliases: Gram Flour}
 ---
 {    canonicalName: Cornflour, parent: Flour}
 ---
 {    canonicalName: Maize Flour, parent: Flour, aliases: Cornmeal}
 ---
-{    canonicalName: Plain Flour, parent: Flour}
+{    canonicalName: Quinoa Flour, parent: Flour}
+---
+{    canonicalName: Rice Flour, parent: Flour}
+---
+{    canonicalName: Rye Flour, parent: Flour}
 ---
 {    canonicalName: Self-raising Flour, parent: Flour}
 ---
-{    canonicalName: Semolina, parent: Flour}
+{    canonicalName: Semolina, parent: Flour, aliases: Semolina Flour}
+---
+{    canonicalName: Soya Flour, parent: Flour}
+---
+{    canonicalName: White Flour, parent: Flour}
+---
+{        canonicalName: Plain Flour, parent: White Flour, aliases: Plain White Flour}
+---
+{        canonicalName: Strong White Flour, parent: White Flour, aliases: Strong Plain Flour}
+---
+{    canonicalName: Wholemeal Flour, parent: Flour, aliases: {Plain Wholemeal Flour, Wholewheat flour}}
+---
+{        canonicalName: Strong Wholemeal Flour, parent: Wholemeal Flour}
 ---
 
 
