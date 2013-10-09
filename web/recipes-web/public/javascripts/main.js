@@ -18,6 +18,12 @@ function cancelCreate() {
 	return false;
 }
 
+
+function clearAllIngredients() {
+	document.location.href = '/recipes/create/clear';
+	return false;
+}
+
 function addInclTag(inTag) {
     $.post("/user/filter/inc/addTag=" + inTag, function(data) { location.reload(false); });
 }

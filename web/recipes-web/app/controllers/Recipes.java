@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -15,6 +16,7 @@ import uk.co.recipes.Recipe;
 import uk.co.recipes.RecipeStage;
 import uk.co.recipes.User;
 import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.IUser;
@@ -37,6 +39,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Multiset;
 
 /**
@@ -66,7 +69,7 @@ public class Recipes extends AbstractExplorableController {
 
     public Result create() throws IOException, InterruptedException {
 		final IUser user1 = getLocalUser();
-		final IRecipe recipe = getSessionCreatedRecipe();
+		final IRecipe recipe = getSessionCreatedRecipe(true);
 
 		final List<IRecipe> matchingRecipes = recsApi.recommendRecipesToAnonymous( recipe, 12);
 		Collections.shuffle(matchingRecipes);
@@ -75,7 +78,7 @@ public class Recipes extends AbstractExplorableController {
     }
 
     public Result createAddIngredient( final String ingredient) throws IOException, InterruptedException {
-		final IRecipe recipe = getSessionCreatedRecipe();
+		final IRecipe recipe = getSessionCreatedRecipe(true);
 
 		final ICanonicalItem item = items.get(ingredient).get();
 		if (!recipe.containsItem(item)) {
@@ -87,11 +90,22 @@ public class Recipes extends AbstractExplorableController {
     }
 
     public Result createRemoveIngredient( final String ingredient) throws IOException, InterruptedException {
-		final IRecipe recipe = getSessionCreatedRecipe();
+		final IRecipe recipe = getSessionCreatedRecipe(true);
         final ICanonicalItem theItemToRemove = checkNotNull( items.get(ingredient).get(), "Could not load Item");
 
 		recipe.removeItems(theItemToRemove);
 		storeSessionCreatedRecipe(recipe);
+
+    	return redirect("/recipes/create");
+    }
+
+    public Result clearCreate() throws IOException {
+		final IRecipe recipe = getSessionCreatedRecipe(false);
+
+		if ( recipe != null) {
+			recipe.removeIngredients( Iterables.toArray( recipe.getIngredients(), IIngredient.class) );  // Yuk!
+			storeSessionCreatedRecipe(recipe);
+		}
 
     	return redirect("/recipes/create");
     }
@@ -205,13 +219,17 @@ public class Recipes extends AbstractExplorableController {
 		Result doAction( IUser loggedInUser, IRecipe recipe) throws IOException, InterruptedException;
     }
 
-    private IRecipe getSessionCreatedRecipe() throws IOException {
+    private IRecipe getSessionCreatedRecipe( boolean inCreateIfNeeded) throws IOException {
     	final String payload = session("recipe_json");
 		// System.out.println("> Payload " + payload);
 
     	final Recipe recipe;
 
     	if ( payload == null) {
+    		if (!inCreateIfNeeded) {
+    			return null;
+    		}
+
     		recipe = new Recipe( new User("temp_" + System.currentTimeMillis(), "???"), "Untitled", Locale.UK /* FIXME */);
     		recipe.addStage( new RecipeStage() );
     		// System.out.println("Created: " + recipe);

@@ -12,6 +12,7 @@ GET     /items/:name/ext              @controllers.Items.loadExternals(name: Str
 GET     /recipes/create               @controllers.Recipes.create()
 GET     /recipes/create/:ing/add      @controllers.Recipes.createAddIngredient(ing: String)
 GET     /recipes/create/:ing/remove   @controllers.Recipes.createRemoveIngredient(ing: String)
+GET     /recipes/create/clear         @controllers.Recipes.clearCreate()
 GET     /recipes/create/cancel        @controllers.Recipes.cancelCreate()
 
 GET     /recipes/:name/fork           @controllers.Recipes.fork(name: String)
