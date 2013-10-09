@@ -56,5 +56,6 @@ public interface IUser extends java.io.Serializable {
     void removeFave( final IRecipe recipe);
     Collection<IRecipe> getFaveRecipes();
 
-//    void removeRating( IRating inRating);
+    Collection<ICanonicalItem> getExcludedItemParents();
+    Collection<IRecipe> getExcludedRecipes();
 }

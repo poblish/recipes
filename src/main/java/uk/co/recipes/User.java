@@ -20,9 +20,12 @@ import uk.co.recipes.api.ratings.IItemRating;
 import uk.co.recipes.api.ratings.IRecipeRating;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Sets;
 
 /**
@@ -54,6 +57,8 @@ public class User implements IUser {
     private final Collection<IRecipeRating> recipeRatings = Sets.newHashSet();  // FIXME Be careful loading this, could be big
     private final Collection<ICanonicalItem> itemFaves = Sets.newHashSet();  // FIXME Be careful loading this, could be big
     private final Collection<IRecipe> recipeFaves = Sets.newHashSet();  // FIXME Be careful loading this, could be big
+    private final Collection<ICanonicalItem> excludedItems = Sets.newHashSet();  // OK, will not persist whole thing
+    private final Collection<IRecipe> excludedRecipes = Sets.newHashSet();  // OK, will not persist whole thing
 	private final Set<IUserAuth> auths = Sets.newHashSet();
 	private final IUserPreferences prefs = new UserPreferences();
 
@@ -262,6 +267,41 @@ public class User implements IUser {
 		return itemFaves;
 	}
 
+	@JsonProperty("excludedItems")
+	public Collection<Long> getExcludedItemParentIdsForJackon() {
+		return FluentIterable.from(excludedItems).transform( new Function<ICanonicalItem,Long>() {
+
+			@Override
+			public Long apply( ICanonicalItem input) {
+				return input.getId();
+			}
+		} ).toList();
+
+	}
+
+	@JsonProperty("excludedItems")
+	public Collection<Long> getExcludedRecipeIdsForJackon() {
+		return FluentIterable.from(excludedRecipes).transform( new Function<IRecipe,Long>() {
+
+			@Override
+			public Long apply( IRecipe input) {
+				return input.getId();
+			}
+		} ).toList();
+	}
+
+	@JsonIgnore
+	@Override
+	public Collection<ICanonicalItem> getExcludedItemParents() {
+		return this.excludedItems;
+	}
+
+	@JsonIgnore
+	@Override
+	public Collection<IRecipe> getExcludedRecipes() {
+		return this.excludedRecipes;
+	}
+
 	@Override
 	public Collection<IRecipe> getFaveRecipes() {
 		return recipeFaves;
@@ -285,7 +325,8 @@ public class User implements IUser {
 		}
 		final User other = (User) obj;
 		return ( id == other.id) && Objects.equal( username, other.username) && Objects.equal( displayName, other.displayName) &&
-									Objects.equal( itemFaves, other.itemFaves) && Objects.equal( recipeFaves, other.recipeFaves);
+									Objects.equal( itemFaves, other.itemFaves) && Objects.equal( recipeFaves, other.recipeFaves) &&
+									Objects.equal( excludedItems, other.excludedItems) && Objects.equal( excludedRecipes, other.excludedRecipes);
 	}
 
 	public String toString() {
@@ -295,6 +336,8 @@ public class User implements IUser {
                         .add( "displayName", getDisplayName())
                         .add( "itemFaves", itemFaves.isEmpty() ? null : itemFaves)
                         .add( "recipeFaves", recipeFaves.isEmpty() ? null : recipeFaves)
+                        .add( "excludedItems", excludedItems.isEmpty() ? null : excludedItems)
+                        .add( "excludedRecipes", excludedRecipes.isEmpty() ? null : excludedRecipes)
                         .add( "auths", auths.isEmpty() ? null : auths)
 						.toString();
 	}
