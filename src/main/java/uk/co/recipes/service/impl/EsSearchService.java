@@ -264,7 +264,11 @@ public class EsSearchService implements ISearchAPI {
 
 		final BoolQueryBuilder booleanQ = boolQuery();
 		for ( String eachName : inNames) {
-			booleanQ.must( matchPhraseQuery( "canonicalName", eachName) );
+			// So, when including a parent like 'Pasta', we should pick up all children too.
+			final BoolQueryBuilder boolParentQ = boolQuery();
+			boolParentQ.should( matchPhraseQuery( "canonicalName", eachName) );
+			boolParentQ.should( matchPhraseQuery( "stages.ingredients.item.parent.canonicalName", eachName) );
+			booleanQ.must(boolParentQ);
 		}
 
         final SearchResponse resp = esClient.prepareSearch("recipe").setTypes("recipes").setQuery(booleanQ).setSize(inCount)/* .addSort( "_score", DESC) */.execute().actionGet();
