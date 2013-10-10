@@ -40,4 +40,7 @@ public interface ISearchAPI {
 
     List<ISearchResult<?>> findPartial( final String inStr) throws IOException;
     List<ISearchResult<?>> findPartial( final String inStr, final int inSize) throws IOException;
+
+    List<ISearchResult<?>> findPartialWithTags( final String inStr) throws IOException;
+    List<ISearchResult<?>> findPartialWithTags( final String inStr, final int inSize) throws IOException;
 }

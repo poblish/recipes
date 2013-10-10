@@ -298,6 +298,11 @@ public class EsSearchService implements ISearchAPI {
     }
 
     @Override
+    public List<ISearchResult<?>> findPartialWithTags( final String inStr) throws IOException {
+    	return findPartialWithTags( inStr, 10);
+    }
+
+    @Override
     public List<ISearchResult<?>> findPartial( final String inStr, final int inSize) throws IOException {
         final SearchResponse resp = esClient.prepareSearch("recipe").setTypes("items","recipes").setQuery( matchPhraseQuery( "autoCompleteTerms", inStr) ).setSize(inSize)/* .addSort( "_score", DESC) */.execute().actionGet();
         final SearchHit[] hits = resp.getHits().hits();
@@ -316,6 +321,20 @@ public class EsSearchService implements ISearchAPI {
                 results.add( new RecipeSearchResult( mapper.readValue( eachHit.getSourceAsString(), Recipe.class) ));
             }
         }
+        return results;
+    }
+
+    @Override
+    public List<ISearchResult<?>> findPartialWithTags( final String inStr, final int inSize) throws IOException {
+    	final List<ISearchResult<?>> results = Lists.newArrayList();
+
+    	// Pretty lame - these will only be *exact* matches, so it/they must go first
+    	for ( ITag each : findTagsByName(inStr)) {
+    		results.add( new TagSearchResult(each) );
+    	}
+
+    	results.addAll( findPartial( inStr, inSize) );
+
         return results;
     }
 
@@ -380,6 +399,38 @@ public class EsSearchService implements ISearchAPI {
 
 		public String toString() {
 			return Objects.toStringHelper(this).add( "recipeName", getEntity().getTitle()).toString();
+		}
+    }
+
+    private static class TagSearchResult implements ISearchResult<ITag> {
+
+		private ITag tag;
+
+		public TagSearchResult( final ITag tag) {
+			this.tag = tag;
+		}
+
+		public long getId() {
+			return tag.hashCode();
+		}
+
+		@Override
+		public String getDisplayName() {
+			return "'" + TagUtils.formatTagName(tag) + "' tag";
+		}
+
+		public String getType() {
+			return "tag";
+		}
+
+		@JsonIgnore
+		@Override
+		public ITag getEntity() {
+			return tag;
+		}
+
+		public String toString() {
+			return Objects.toStringHelper(this).add( "tag", getDisplayName()).toString();
 		}
     }
 }
