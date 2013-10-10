@@ -97,7 +97,7 @@ public class EsSearchServiceTest {
 	public void partialTestForItem1() throws IOException {
 		final int numToFind = 8;
 		final List<ISearchResult<?>> results1 = searchService.findPartial("ging", numToFind);
-		assertThat( results1.toString(), is("[ItemSearchResult{itemName=Ginger}, ItemSearchResult{itemName=Crystallised Ginger}, ItemSearchResult{itemName=Ginger Paste}, ItemSearchResult{itemName=Root Ginger}, ItemSearchResult{itemName=Stem Ginger}, ItemSearchResult{itemName=piece of fresh ginger}, ItemSearchResult{itemName=Aubergine}, ItemSearchResult{itemName=Linguine}]"));
+		assertThat( results1.toString(), is("[ItemSearchResult{itemName=Ginger}, ItemSearchResult{itemName=Crystallised Ginger}, ItemSearchResult{itemName=Ginger Paste}, ItemSearchResult{itemName=Root Ginger}, ItemSearchResult{itemName=Stem Ginger}, ItemSearchResult{itemName=Aubergine}, ItemSearchResult{itemName=Linguine}, ItemSearchResult{itemName=Extra Virgin Olive Oil}]"));
 		assertThat( results1.size(), is(numToFind));
 	}
 
@@ -105,7 +105,7 @@ public class EsSearchServiceTest {
 	public void partialTestForItemWithSize2() throws IOException {
 		final int numToFind = 5;
 		final List<ISearchResult<?>> results1 = searchService.findPartial("cori", numToFind);
-		assertThat( results1.toString(), is("[ItemSearchResult{itemName=Coriander}, ItemSearchResult{itemName=Coriander Powder}, ItemSearchResult{itemName=Coriander Seeds}, ItemSearchResult{itemName=Chorizo}, ItemSearchResult{itemName=Cornflour}]"));
+		assertThat( results1.toString(), is("[ItemSearchResult{itemName=Pecorino}, ItemSearchResult{itemName=Coriander}, ItemSearchResult{itemName=Coriander Powder}, ItemSearchResult{itemName=Coriander Seeds}, ItemSearchResult{itemName=Chorizo}]"));
 		assertThat( results1.size(), is(numToFind));
 	}
 
