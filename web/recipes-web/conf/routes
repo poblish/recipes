@@ -22,6 +22,7 @@ GET     /recipes/:name                @controllers.Recipes.display(name: String)
 GET     /recipes/:name/rate/:score    @controllers.Recipes.rate(name: String, score: Int)
 
 GET     /search/partial               @controllers.Search.findPartial()
+GET     /search/partialTags           @controllers.Search.findPartialWithTags()
 GET     /search                       @controllers.Search.doSearch()
 GET     /tags/:name                   @controllers.Tags.display(name: String)
 GET     /users/:id                    @controllers.Users.display(id: String)
