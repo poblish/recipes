@@ -40,6 +40,22 @@
 			<artifactId>hamcrest-all</artifactId>
 			<version>${hamcrest.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.squareup.dagger</groupId>
+			<artifactId>dagger</artifactId>
+			<version>${dagger.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.dagger</groupId>
+			<artifactId>dagger-compiler</artifactId>
+			<version>${dagger.version}</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>uk.co.recipes</groupId>
+			<artifactId>recipes-domain</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<defaultGoal>clean install</defaultGoal>
@@ -56,6 +72,7 @@
 		</plugins>
 	</build>
 	<properties>
+		<dagger.version>1.1.0</dagger.version>
 		<hamcrest.version>1.3</hamcrest.version>
 	</properties>
 </project>

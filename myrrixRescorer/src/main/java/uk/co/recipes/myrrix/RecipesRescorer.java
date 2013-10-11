@@ -3,6 +3,9 @@
  */
 package uk.co.recipes.myrrix;
 
+import uk.co.recipes.service.impl.EsSearchService;
+import javax.inject.Inject;
+import dagger.ObjectGraph;
 import java.util.Arrays;
 
 import net.myrrix.common.MyrrixRecommender;
@@ -26,6 +29,8 @@ import com.google.common.primitives.Longs;
  */
 public class RecipesRescorer extends AbstractRescorerProvider {
 
+    @Inject EsSearchService searchApi;
+
 	private static final Logger LOG = LoggerFactory.getLogger( RecipesRescorer.class );
 
 	private final static long RECIPE_BASE_ID = 0x4000000000000000L;
@@ -33,6 +38,13 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 	private static final Splitter ID_SPLITTER = Splitter.on(',');
 	private static final long[] EMPTY_ARRAY = new long[0];
 
+
+	public RecipesRescorer() {
+	    System.out.println("Injecting dependencies...");
+	    long st = System.currentTimeMillis();
+        ObjectGraph.create( new RescorerModule() ).inject(this);
+        System.out.println("Injecting dependencies DONE in " + ( System.currentTimeMillis() - st) + " msecs");
+	}
 
 	@Override
 	public IDRescorer getRecommendToAnonymousRescorer( long[] userIDs, final MyrrixRecommender recommender, final String... inArgs) {
