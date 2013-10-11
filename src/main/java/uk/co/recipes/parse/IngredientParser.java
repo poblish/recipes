@@ -92,37 +92,22 @@ public class IngredientParser {
 			}
 
             final AdjustedName adjusted = nameAdjuster.adjust( m.group(3).trim() );
+        	final Quantity q = new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse(numericQuantityStr));
+			final String note = m.group(4);
 
             // Yuk, refactor!
 
             if ( adjusted.getName().contains(" or ")) {
-            	int idx = adjusted.getName().indexOf(" or ");
-
-            	// FIXME: should use Ngrams to prevent " lamb or beef stock" problem!
-            	final String name1 = adjusted.getName().substring( 0, idx);
-            	final String name2 = adjusted.getName().substring( idx + 4 );
-
-            	// System.out.println( name1 + " / " + name2);
-            	
-            	final Quantity q = new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse(numericQuantityStr));
-
-            	// Get all the possible combinations of names
-            	final SplitResults splitResults = optSplitter.split( name1, name2);
-
-            	try {
-            		handleOptionalIngredient( splitResults.getFirstResults(), q, m.group(4), adjusted.getNotes(), inHandler, inDeferHandler);
-            		handleOptionalIngredient( splitResults.getSecondResults(), q, m.group(4), adjusted.getNotes(), inHandler, inDeferHandler);
-				}
-            	catch (IOException e) {
-					Throwables.propagate(e);  // Ugh FIXME
-				}
+            	handleOredIngredients( adjusted, q, note, inHandler, inDeferHandler);
+            }
+            else if ( adjusted.getName().contains(" and ")) {
+            	handleAndedIngredients( adjusted, q, note, inHandler, inDeferHandler);
             }
             else {
-				final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), new Quantity( UnitParser.parse( m.group(2) ), NumericAmountParser.parse(numericQuantityStr)));
+				final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), q);
 	
-				final String note = m.group(4);
 				if ( note != null) {
-					ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
+					ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);  // FIXME Factor this logic out!
 				}
 	
 				ingr.addNotes( ENGLISH, adjusted.getNotes());
@@ -146,77 +131,131 @@ public class IngredientParser {
 				}
 
                 final AdjustedName adjusted = nameAdjuster.adjust( m.group(4).trim() );
-				final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), q);
-
 				final String note = m.group(5);
-				if ( note != null) {
-					ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
-				}
 
-				ingr.addNotes( ENGLISH, adjusted.getNotes());
+				if ( adjusted.getName().contains(" or ")) {
+	            	handleOredIngredients( adjusted, q, note, inHandler, inDeferHandler);
+	            }
+	            else if ( adjusted.getName().contains(" and ")) {
+                	handleAndedIngredients( adjusted, q, note, inHandler, inDeferHandler);
+                }
+                else {
+	                final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), q);
 
-				inHandler.foundIngredient(ingr);
+	                if ( note != null) {
+						ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
+					}
+	
+					ingr.addNotes( ENGLISH, adjusted.getNotes());
+	
+					inHandler.foundIngredient(ingr);
+                }
+
 				return true;
 			}
 			else {
 				m = C.matcher(adjustedStr);
 				if (m.matches()) {
                     final AdjustedName adjusted = nameAdjuster.adjust( m.group(3).trim() );
-					final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), new Quantity( Units.INSTANCES, NumericAmountParser.parse( m.group(2) )));
-					ingr.addNote( ENGLISH, m.group(1).trim());
-					ingr.addNotes( ENGLISH, adjusted.getNotes());
+                    final IQuantity q = new Quantity( Units.INSTANCES, NumericAmountParser.parse( m.group(2) ));
+					final String note = m.group(1).trim();
 
-					inHandler.foundIngredient(ingr);
+                    if ( adjusted.getName().contains(" or ")) {
+                    	handleOredIngredients( adjusted, q, note, inHandler, inDeferHandler);
+                    }
+                    else if ( adjusted.getName().contains(" and ")) {
+                    	handleAndedIngredients( adjusted, q, note, inHandler, inDeferHandler);
+                    }
+                    else {
+	                    final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), q);
+						ingr.addNote( ENGLISH, note);
+						ingr.addNotes( ENGLISH, adjusted.getNotes());
+	
+						inHandler.foundIngredient(ingr);
+                    }
+
 					return true;
 				}
 				else {
 					m = D.matcher(adjustedStr);
 					if (m.matches()) {
                         final AdjustedName adjusted = nameAdjuster.adjust( m.group(1).trim() );
-						final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), new Quantity( Units.INSTANCES, 1));
-
+                        final IQuantity q = new Quantity( Units.INSTANCES, 1);
 						final String note = m.group(2);
-						if ( note != null) {
-							ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
-						}
 
-						ingr.addNotes( ENGLISH, adjusted.getNotes());
+						if ( adjusted.getName().contains(" or ")) {
+			            	handleOredIngredients( adjusted, q, note, inHandler, inDeferHandler);
+			            }
+			            else if ( adjusted.getName().contains(" and ")) {
+                        	handleAndedIngredients( adjusted, q, note, inHandler, inDeferHandler);
+                        }
+                        else {
+	                        final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), q);
+	
+							if ( note != null) {
+								ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
+							}
+	
+							ingr.addNotes( ENGLISH, adjusted.getNotes());
+	
+							inHandler.foundIngredient(ingr);
+                        }
 
-						inHandler.foundIngredient(ingr);
 						return true;
 					}
 					else {
 						m = E.matcher(adjustedStr);
 						if (m.matches()) {
                             final AdjustedName adjusted = nameAdjuster.adjust( m.group(1).trim() );
-							final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), new Quantity( Units.INSTANCES, NonNumericQuantities.ANY_AMOUNT));
-
+                            final IQuantity q = new Quantity( Units.INSTANCES, NonNumericQuantities.ANY_AMOUNT);
 							final String note = m.group(2);
-							if ( note != null) {
-								ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
-							}
 
-							ingr.addNotes( ENGLISH, adjusted.getNotes());
+							if ( adjusted.getName().contains(" or ")) {
+				            	handleOredIngredients( adjusted, q, note, inHandler, inDeferHandler);
+				            }
+				            else if ( adjusted.getName().contains(" and ")) {
+                            	handleAndedIngredients( adjusted, q, note, inHandler, inDeferHandler);
+                            }
+                            else {
+	                            final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), q);
+	
+								if ( note != null) {
+									ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
+								}
+	
+								ingr.addNotes( ENGLISH, adjusted.getNotes());
+	
+								inHandler.foundIngredient(ingr);
+                            }
 
-							inHandler.foundIngredient(ingr);
 							return true;
 						}
 	                    else {
 	                        m = F.matcher(adjustedStr);
 	                        if (m.matches()) {
 	                            final AdjustedName adjusted = nameAdjuster.adjust( m.group(1).trim() );
-	                            final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), new Quantity( Units.INSTANCES, NonNumericQuantities.ANY_AMOUNT));
-
+	                            final IQuantity q = new Quantity( Units.INSTANCES, NonNumericQuantities.ANY_AMOUNT);
 	                            final String note = m.group(2);
-	                            if ( note != null) {
-	                                ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
+
+	                            if ( adjusted.getName().contains(" or ")) {
+	                            	handleOredIngredients( adjusted, q, note, inHandler, inDeferHandler);
+	                            }
+	                            else if ( adjusted.getName().contains(" and ")) {
+	                            	handleAndedIngredients( adjusted, q, note, inHandler, inDeferHandler);
+	                            }
+	                            else {
+		                            final Ingredient ingr = new Ingredient( findItem( adjusted.getName() ), q);
+	
+		                            if ( note != null) {
+		                                ingr.addNote( ENGLISH, note.startsWith(",") ? note.substring(1).trim() : note);
+		                            }
+	
+		                            ingr.addNotes( ENGLISH, adjusted.getNotes());
+	
+		                			inHandler.foundIngredient(ingr);
 	                            }
 
-	                            ingr.addNotes( ENGLISH, adjusted.getNotes());
-//	                            System.out.println("... " + ingr);
-
-	                			inHandler.foundIngredient(ingr);
-	                			return true;
+	                            return true;
 	                        }
 	                    }
 					}
@@ -227,7 +266,49 @@ public class IngredientParser {
 		return false;
 	}
 
-	private void handleOptionalIngredient( final String[] namePossibilities, final IQuantity inQuantity,
+	// FIXME Refactor!
+	private void handleAndedIngredients( final AdjustedName inName, final IQuantity inQuantity, final String inNoteStr, final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) {
+    	int idx = inName.getName().indexOf(" and ");
+
+    	// FIXME: should use Ngrams to prevent " lamb or beef stock" problem!
+    	final String name1 = inName.getName().substring( 0, idx);
+    	final String name2 = inName.getName().substring( idx + 5);
+    	
+    	// Get all the possible combinations of names
+    	final SplitResults splitResults = optSplitter.split( name1, name2);
+    	// System.out.println("---> AND-splitting: " + splitResults);
+
+    	try {
+    		handleSplitIngredient( splitResults.getFirstResults(), false, inQuantity, inNoteStr, inName.getNotes(), inHandler, inDeferHandler);
+    		handleSplitIngredient( splitResults.getSecondResults(), false, inQuantity, inNoteStr, inName.getNotes(), inHandler, inDeferHandler);
+		}
+    	catch (IOException e) {
+			Throwables.propagate(e);  // Ugh FIXME
+		}
+	}
+
+	// FIXME Refactor!
+	private void handleOredIngredients( final AdjustedName inName, final IQuantity inQuantity, final String inNoteStr, final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) {
+    	int idx = inName.getName().indexOf(" or ");
+
+    	// FIXME: should use Ngrams to prevent " lamb or beef stock" problem!
+    	final String name1 = inName.getName().substring( 0, idx);
+    	final String name2 = inName.getName().substring( idx + 4);
+    	
+    	// Get all the possible combinations of names
+    	final SplitResults splitResults = optSplitter.split( name1, name2);
+    	// System.out.println("---> OR-splitting: " + splitResults);
+
+    	try {
+    		handleSplitIngredient( splitResults.getFirstResults(), true, inQuantity, inNoteStr, inName.getNotes(), inHandler, inDeferHandler);
+    		handleSplitIngredient( splitResults.getSecondResults(), true, inQuantity, inNoteStr, inName.getNotes(), inHandler, inDeferHandler);
+		}
+    	catch (IOException e) {
+			Throwables.propagate(e);  // Ugh FIXME
+		}
+	}
+
+	private void handleSplitIngredient( final String[] namePossibilities, boolean isOptional, final IQuantity inQuantity,
 										   final String inNote, final Collection<String> inExtraNotes,
 										   final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) throws IOException {
 
@@ -236,7 +317,7 @@ public class IngredientParser {
     	final Optional<ICanonicalItem> item1 = itemFactory.get( namePossibilities[0] );
     	
     	if (item1.isPresent()) {
-			final Ingredient ingr1 = new Ingredient( item1.get(), inQuantity, Boolean.TRUE);
+			final Ingredient ingr1 = new Ingredient( item1.get(), inQuantity, isOptional);
 
 			if ( inNote != null) {
 				ingr1.addNote( ENGLISH, /* FIXME: comma rubbish */ inNote.startsWith(",") ? inNote.substring(1).trim() : inNote);
