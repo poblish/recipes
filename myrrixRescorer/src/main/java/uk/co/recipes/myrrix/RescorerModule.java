@@ -3,29 +3,35 @@
  */
 package uk.co.recipes.myrrix;
 
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Slf4jReporter;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Throwables;
-import com.google.common.io.Files;
-import dagger.Module;
-import dagger.Provides;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
+
 import javax.inject.Named;
 import javax.inject.Singleton;
+
 import net.myrrix.client.ClientRecommender;
+
 import org.elasticsearch.ElasticSearchIllegalArgumentException;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.indices.IndexMissingException;
 import org.slf4j.LoggerFactory;
+
 import uk.co.recipes.persistence.EsUtils;
 import uk.co.recipes.persistence.JacksonFactory;
 import uk.co.recipes.service.impl.EsSearchService;
+
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Slf4jReporter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Throwables;
+import com.google.common.io.Files;
+
+import dagger.Module;
+import dagger.Provides;
 
 /**
  * TODO

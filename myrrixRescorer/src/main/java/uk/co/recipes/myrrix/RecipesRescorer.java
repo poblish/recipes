@@ -3,10 +3,9 @@
  */
 package uk.co.recipes.myrrix;
 
-import uk.co.recipes.service.impl.EsSearchService;
-import javax.inject.Inject;
-import dagger.ObjectGraph;
 import java.util.Arrays;
+
+import javax.inject.Inject;
 
 import net.myrrix.common.MyrrixRecommender;
 import net.myrrix.online.AbstractRescorerProvider;
@@ -17,9 +16,13 @@ import org.apache.mahout.common.LongPair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.recipes.service.impl.EsSearchService;
+
 import com.google.common.base.Splitter;
 import com.google.common.collect.FluentIterable;
 import com.google.common.primitives.Longs;
+
+import dagger.ObjectGraph;
 
 /**
  * TODO

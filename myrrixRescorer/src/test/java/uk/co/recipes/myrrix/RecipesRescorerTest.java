@@ -3,14 +3,15 @@
  */
 package uk.co.recipes.myrrix;
 
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.mock;
+import net.myrrix.common.MyrrixRecommender;
+
+import org.apache.mahout.cf.taste.recommender.IDRescorer;
 import org.apache.mahout.cf.taste.recommender.Rescorer;
 import org.apache.mahout.common.LongPair;
-import net.myrrix.common.MyrrixRecommender;
-import org.apache.mahout.cf.taste.recommender.IDRescorer;
 import org.testng.annotations.Test;
-import static org.mockito.Mockito.mock;
 
 /**
  * TODO
