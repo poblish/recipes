@@ -38,6 +38,12 @@
 ---
 {    canonicalName: Yellow Food Colouring, parent: Food Colouring}
 ---
+{canonicalName: Gelatine, tags: {BAKING}}
+---
+{    canonicalName: Gelatine Sheets, parent: Gelatine, aliases: {Gelatine Leaves, sheets of gelatine, strips gelatine, leaves gelatine, sheets leaf gelatine, sheets of leaf gelatine}}
+---
+{    canonicalName: Powdered Gelatine, parent: Gelatine}
+---
 {canonicalName: Marzipan, parent: Almond, tags: {BAKING, -WOODLAND}, aliases: {Natural Marzipan}}
 ---
 {    canonicalName: Golden Marzipan, parent: Marzipan}
@@ -340,7 +346,7 @@
 ---
 {canonicalName: Celery, tags: {VEGETABLE, EARTHY}, aliases: {Celery Stick, Celery Sticks, Celery Stalk, Celery Stalks}}
 ---
-{canonicalName: Chard, tags: VEGETABLE}
+{canonicalName: Chard, tags: VEGETABLE, tags: ITALIAN, aliases: {Swiss Chard}}
 ---
 {canonicalName: Courgette, tags: VEGETABLE, aliases: {Courgettes}}
 ---
@@ -361,6 +367,8 @@
 {canonicalName: Horseradish, tags: {VEGETABLE, MUSTARDY}}
 ---
 {canonicalName: Kale, tags: VEGETABLE}
+---
+{   canonicalName: Cavolo Nero, parent: Kale, tags: ITALIAN, aliases: {Lacinato kale}}
 ---
 {canonicalName: Leek, tags: VEGETABLE, aliases: {Leeks}}
 ---

@@ -1,8 +1,13 @@
+and
 chopped
 diced
+for brushing
 for drizzling
 // To be honest we should probably exclude 'for dusting' items altogether...
 for dusting
+for frying
+for sifting
+for sprinkling
 fresh
 halves
 pieces
@@ -10,3 +15,4 @@ sliced
 sprig
 sprigs
 to serve
+to sprinkle
