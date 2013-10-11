@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -31,6 +32,7 @@ import uk.co.recipes.Recipe;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.ITag;
+import uk.co.recipes.service.api.ESearchArea;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.api.ISearchResult;
 import uk.co.recipes.tags.TagUtils;
@@ -41,7 +43,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Function;
 import com.google.common.base.Objects;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -293,25 +297,42 @@ public class EsSearchService implements ISearchAPI {
 	}
 
     @Override
-    public List<ISearchResult<?>> findPartial( final String inStr) throws IOException {
-    	return findPartial( inStr, 10);
+    public List<ISearchResult<?>> findPartial( final String inStr, final ESearchArea... areas) throws IOException {
+    	return findPartial( inStr, 10, areas);
     }
 
     @Override
-    public List<ISearchResult<?>> findPartialWithTags( final String inStr) throws IOException {
-    	return findPartialWithTags( inStr, 10);
-    }
+    public List<ISearchResult<?>> findPartial( final String inStr, final int inSize, final ESearchArea... areas) throws IOException {
+    	final List<ISearchResult<?>> results = Lists.newArrayList();
+    	final Collection<ESearchArea> areasColl = Lists.newArrayList(areas);  // Yuk, only so we can do the remove trick below
 
-    @Override
-    public List<ISearchResult<?>> findPartial( final String inStr, final int inSize) throws IOException {
-        final SearchResponse resp = esClient.prepareSearch("recipe").setTypes("items","recipes").setQuery( matchPhraseQuery( "autoCompleteTerms", inStr) ).setSize(inSize)/* .addSort( "_score", DESC) */.execute().actionGet();
+    	if (areasColl.contains( ESearchArea.TAGS )) {
+        	// Pretty lame - these will only be *exact* matches, so it/they must go first
+        	for ( ITag each : findTagsByName(inStr)) {
+        		results.add( new TagSearchResult(each) );
+        	}
+    	}
+
+    	// Yuk
+    	areasColl.remove( ESearchArea.TAGS );
+    	if (areasColl.isEmpty()) {
+    		return results;
+    	}
+
+    	// Yuk
+    	final String[] typesArr = FluentIterable.from(areasColl).transform( new Function<ESearchArea,String>() {
+    		public String apply( ESearchArea inArea) {
+    			if ( inArea == ESearchArea.ITEMS) {
+    				return "items";
+    			}
+    			else /* if ( inArea == ESearchArea.RECIPES) */ {
+    				return "recipes";
+    			}
+    		}
+    	} ).toArray( String.class );
+
+        final SearchResponse resp = esClient.prepareSearch("recipe").setTypes(typesArr).setQuery( matchPhraseQuery( "autoCompleteTerms", inStr) ).setSize(inSize)/* .addSort( "_score", DESC) */.execute().actionGet();
         final SearchHit[] hits = resp.getHits().hits();
-
-        if ( hits.length == 0) {
-            return Collections.emptyList();
-        }
-
-        final List<ISearchResult<?>> results = Lists.newArrayList();
 
         for ( final SearchHit eachHit : hits) {
             if ( eachHit.getType().equals("items")) {
@@ -321,19 +342,6 @@ public class EsSearchService implements ISearchAPI {
                 results.add( new RecipeSearchResult( mapper.readValue( eachHit.getSourceAsString(), Recipe.class) ));
             }
         }
-        return results;
-    }
-
-    @Override
-    public List<ISearchResult<?>> findPartialWithTags( final String inStr, final int inSize) throws IOException {
-    	final List<ISearchResult<?>> results = Lists.newArrayList();
-
-    	// Pretty lame - these will only be *exact* matches, so it/they must go first
-    	for ( ITag each : findTagsByName(inStr)) {
-    		results.add( new TagSearchResult(each) );
-    	}
-
-    	results.addAll( findPartial( inStr, inSize) );
 
         return results;
     }

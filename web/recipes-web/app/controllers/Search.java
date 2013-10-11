@@ -1,6 +1,8 @@
 package controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static uk.co.recipes.service.api.ESearchArea.ITEMS;
+import static uk.co.recipes.service.api.ESearchArea.TAGS;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -58,7 +60,7 @@ public class Search extends Controller {
         final String[] count = request().queryString().get("count");
         // System.out.println("x = " + Arrays.toString(searchString) + " / " + Arrays.toString(count) + " / " + Arrays.toString(callback));
 
-        final List<ISearchResult<?>> results = search.findPartial( searchString[0], Integer.parseInt( count[0] ));  // FIXME Use 20 if not set, or set > 20
+        final List<ISearchResult<?>> results = search.findPartial( searchString[0], Integer.parseInt( count[0] ), ITEMS);  // FIXME Use 20 if not set, or set > 20
 
     	return returnSearchResults( results, request().queryString().get("callback"));
     }
@@ -68,7 +70,7 @@ public class Search extends Controller {
         final String[] count = request().queryString().get("count");
         // System.out.println("x = " + Arrays.toString(searchString) + " / " + Arrays.toString(count) + " / " + Arrays.toString(callback));
 
-        final List<ISearchResult<?>> results = search.findPartialWithTags( searchString[0], Integer.parseInt( count[0] ));  // FIXME Use 20 if not set, or set > 20
+        final List<ISearchResult<?>> results = search.findPartial( searchString[0], Integer.parseInt( count[0] ), ITEMS, TAGS);  // FIXME Use 20 if not set, or set > 20
 
     	return returnSearchResults( results, request().queryString().get("callback"));
     }

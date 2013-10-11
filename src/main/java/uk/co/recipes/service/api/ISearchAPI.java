@@ -38,9 +38,6 @@ public interface ISearchAPI {
     List<IRecipe> findRandomRecipesByItemName( final int inCount, final ICanonicalItem... inName) throws IOException;
     int countRecipesByItemName( final String... inName) throws IOException;
 
-    List<ISearchResult<?>> findPartial( final String inStr) throws IOException;
-    List<ISearchResult<?>> findPartial( final String inStr, final int inSize) throws IOException;
-
-    List<ISearchResult<?>> findPartialWithTags( final String inStr) throws IOException;
-    List<ISearchResult<?>> findPartialWithTags( final String inStr, final int inSize) throws IOException;
+    List<ISearchResult<?>> findPartial( final String inStr, final ESearchArea... areas) throws IOException;
+    List<ISearchResult<?>> findPartial( final String inStr, final int inSize, final ESearchArea... areas) throws IOException;
 }
