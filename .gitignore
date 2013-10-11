@@ -7,3 +7,5 @@ runMyrrix.sh
 .settings/
 frontier/
 bbcgoodfood/
+
+myrrixRescorer/dependency-reduced-pom.xml
