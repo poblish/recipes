@@ -196,6 +196,8 @@
 ---
 {canonicalName: Mace, tags: SPICE}
 ---
+{canonicalName: Mixed Seeds, tags: {SPICE}}
+---
 {canonicalName: Mixed Spice, tags: {SPICE, BAKING}}
 ---
 {canonicalName: Nutmeg, tags: {SPICE, SPICY}}
@@ -344,7 +346,7 @@
 ---
 {canonicalName: Celeriac, tags: VEGETABLE}
 ---
-{canonicalName: Celery, tags: {VEGETABLE, EARTHY}, aliases: {Celery Stick, Celery Sticks, Celery Stalk, Celery Stalks}}
+{canonicalName: Celery, tags: {VEGETABLE, EARTHY}, aliases: {Celery Stick, Celery Sticks, Celery Stalk, Celery Stalks, Sticks Celery}}
 ---
 {canonicalName: Chard, tags: VEGETABLE, tags: ITALIAN, aliases: {Swiss Chard}}
 ---
@@ -442,6 +444,8 @@
 ---
 {    canonicalName: Floury Potatoes, parent: Potato, aliases: {Floury Potato}}
 ---
+{    canonicalName: Jersey Royal Potatoes, parent: Potato, aliases: {Jersey Royal Potato}}
+---
 {    canonicalName: New Potato, parent: Potato, aliases: {New Potatoes}}
 ---
 {    canonicalName: Baby New Potato, parent: New Potato, aliases: {Baby New Potatoes}}
@@ -536,7 +540,7 @@
 ---
 {    canonicalName: Apple Juice, parent: Apple}
 ---
-{    canonicalName: Bramley apples, tags: BAKING, parent: Apple}
+{    canonicalName: Bramley apples, tags: BAKING, parent: Apple, aliases: Bramley apple}
 ---
 {    canonicalName: Eating apples, parent: Apple, aliases: {Eating apple}}
 ---
@@ -558,9 +562,13 @@
 ---
 {canonicalName: Cherries, tags: {FRUIT, FRESH_FRUITY}, aliases: {Cherry}}
 ---
+{    canonicalName: Black Cherries, parent: Cherries}
+---
 {    canonicalName: Cherry Jam, parent: Cherries, tags: {CONDIMENT}}
 ---
 {    canonicalName: Glacé Cherries, tags: BAKING, parent: Cherries}
+---
+{    canonicalName: Morello Cherries, parent: Cherries}
 ---
 {    canonicalName: Sour Cherries, parent: Cherries}
 ---
@@ -619,6 +627,8 @@
 {canonicalName: Melon, tags: {FRUIT, CREAMY_FRUITY}, aliases: {Melons}}
 ---
 {    canonicalName: Watermelon, parent: Melon, tags: {-CREAMY_FRUITY, FRESH_FRUITY}, aliases: {Watermelons}}
+---
+{canonicalName: Mixed Berries, tags: {FRUIT}}
 ---
 {canonicalName: Nectarine, tags: {FRUIT}, aliases: {Nectarines}}
 ---
@@ -890,6 +900,8 @@
 ---
 {canonicalName: Cheshire Cheese, tags: {DAIRY, CHEESE, ENGLISH}}
 ---
+{canonicalName: Cream Cheese, tags: {DAIRY, CHEESE}}
+---
 {canonicalName: Feta, tags: {DAIRY, CHEESE, GREEK}, aliases: {Feta Cheese}}
 ---
 {canonicalName: Goat's Cheese, tags: {DAIRY, CHEESE}}
@@ -916,6 +928,8 @@
 ---
 {canonicalName: Ricotta, tags: {DAIRY, CHEESE, ITALIAN}}
 ---
+{canonicalName: Soft Cheese, tags: {DAIRY, CHEESE}}
+---
 {canonicalName: Taleggio, tags: {DAIRY, CHEESE, ITALIAN}, aliases: {Taleggio Cheese}}
 ---
 
@@ -941,6 +955,10 @@
 {    canonicalName: Soured Cream, parent: Cream}
 ---
 {    canonicalName: Whipping Cream, parent: Cream}
+---
+{canonicalName: Ice Cream, tags: DAIRY, contains: Cream}
+---
+{    canonicalName: Vanilla Ice Cream, parent: Ice Cream, contains: Vanilla}
 ---
 {canonicalName: Milk, tags: DAIRY}
 ---
@@ -975,6 +993,8 @@
 {        canonicalName: Coconut Oil, parent: Vegetable Oil}
 ---
 {        canonicalName: Groundnut Oil, parent: Vegetable Oil, tags: {NUT}}
+---
+{        canonicalName: Hazelnut Oil, parent: Vegetable Oil, tags: {NUT}}
 ---
 {        canonicalName: Olive Oil, parent: Vegetable Oil}
 ---
@@ -1340,7 +1360,7 @@
 ---
 
 
-{canonicalName: Amaretto, tags: {SPIRIT, ALCOHOL, ITALIAN, ALMOND}}
+{canonicalName: Amaretto, tags: {SPIRIT, ALCOHOL, ITALIAN, ALMOND}, aliases: Amaretto liqueur}
 ---
 {    canonicalName: Disaronno, parent: Amaretto}
 ---
@@ -1357,6 +1377,8 @@
 {canonicalName: Cointreau, tags: {SPIRIT, ALCOHOL, FRENCH, ORANGE}}
 ---
 {canonicalName: Curaçao, tags: {SPIRIT, ALCOHOL, DUTCH, ORANGE}}
+---
+{canonicalName: Kirsch, tags: {SPIRIT, ALCOHOL, GERMAN}}
 ---
 {canonicalName: Limoncello, tags: {SPIRIT, ALCOHOL, ITALIAN, LEMON}}
 ---
