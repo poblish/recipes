@@ -11,6 +11,7 @@ import static uk.co.recipes.metrics.MetricNames.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -35,6 +36,7 @@ import uk.co.recipes.service.api.IItemPersistence;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
@@ -160,6 +162,22 @@ public class EsItemFactory implements IItemPersistence {
 
 	public ICanonicalItem getOrCreate( final String inCanonicalName, final Supplier<ICanonicalItem> inCreator, final boolean inMatchAliases) {
 		try {
+			final ICanonicalItem itemOrNull = getOrCreateImpl( inCanonicalName, inMatchAliases, /* Deliberate: */ inMatchAliases);
+			if ( itemOrNull != null) {
+				return itemOrNull;
+			}
+
+//			System.out.println("Creating '" + inCanonicalName + "' ...");
+
+			return put( inCreator.get(), toId(inCanonicalName));
+		}
+		catch (IOException e) {
+			throw Throwables.propagate(e);
+		}
+	}
+
+	public ICanonicalItem getOrCreateImpl( final String inCanonicalName, final boolean inMatchAliases, final boolean inFindSubItems) {
+		try {
 			final Optional<ICanonicalItem> got = get(inCanonicalName);
 	
 			if (got.isPresent()) {
@@ -195,9 +213,30 @@ public class EsItemFactory implements IItemPersistence {
 				catch (IOException e) { /* e.printStackTrace(); */ }
 			}
 
-//			System.out.println("Creating '" + inCanonicalName + "' ...");
+			// A bit of a hack to deal with things like "British red-skinned eating apples". Use 'inMatchAliases' as proxy for 'discovered' item.
+			if (inFindSubItems) {
+				if (inCanonicalName.contains(" ")) {
+					final String[] words = inCanonicalName.split(" ");
+					for ( int numWordsToRemove = 1; numWordsToRemove < words.length; numWordsToRemove++) {
 
-			return put( inCreator.get(), toId(inCanonicalName));
+						final String candidate1 = Joiner.on(' ').join( Arrays.copyOfRange( words, numWordsToRemove, words.length) );
+						final ICanonicalItem item1 = getOrCreateImpl(candidate1, /* Want aliases: */ true, false);
+						if (item1 != null) {
+							LOG.info("Convert '" + inCanonicalName + "' => " + item1);
+							return item1;
+						}
+
+						final String candidate2 = Joiner.on(' ').join( Arrays.copyOfRange( words, 0, words.length - numWordsToRemove) );
+						final ICanonicalItem item2 = getOrCreateImpl(candidate2, /* Want aliases: */ true, false);
+						if (item2 != null) {
+							LOG.info("Convert '" + inCanonicalName + "' => " + item2);
+							return item2;
+						}
+					}
+				}
+			}
+
+			return null;
 		}
 		catch (IOException e) {
 			throw Throwables.propagate(e);
