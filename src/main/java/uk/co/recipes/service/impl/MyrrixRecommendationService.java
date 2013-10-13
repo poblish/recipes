@@ -33,9 +33,8 @@ import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
-import com.google.common.collect.Iterables;
-import com.google.common.primitives.Longs;
 
 /**
  * TODO
@@ -47,12 +46,12 @@ import com.google.common.primitives.Longs;
 public class MyrrixRecommendationService implements IRecommendationsAPI {
 
 	@Inject MyrrixTasteRecommendationService tasteRecommendations;
-	@Inject EsSearchService searchAPI;
 	@Inject ClientRecommender recommender;
 	@Inject EsItemFactory itemsFactory;
 	@Inject EsRecipeFactory recipesFactory;
 	@Inject MyrrixUpdater myrrixUpdater;
 	@Inject MetricRegistry metrics;
+	@Inject ObjectMapper mapper;
 
 	private static final long[] ANON_EMPTYITEMS = new long[]{0L};
 	private static final float[] ANON_EMPTYVALUES = new float[]{0};
@@ -137,23 +136,8 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_FILTERED_RECOMMENDATIONS).time();
 
 		try {
-			final List<IRecipe> recipesToInclude = searchAPI.findRecipesByItemName(inIncludes);
-			if ( recipesToInclude.isEmpty()) {
-				return Collections.emptyList();  // If _no_ Recipes contain the specified Items, we cannot recommend anything. How the caller deals with that is his business.
-			}
 
-			// FIXME - Try to share with Ids-building code in EsExplorerFilters
-            final long[] ids = new long[ recipesToInclude.size() ];
-            int i = 0;
-
-            for ( IRecipe each : recipesToInclude) {
-                ids[i++] = each.getId();
-            }
-
-			final String includeIdsStr = Longs.join( ",", ids);
-			final String excludeIdsStr = "";
-
-			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.recommend( inUser.getId(), inNumRecs, false, new String[]{"RECIPE", includeIdsStr, excludeIdsStr}) ) );
+			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.recommend( inUser.getId(), inNumRecs, false, new String[]{"RECIPE", "", getItemsListJson( Arrays.asList(inIncludes) )}) ) );
 		}
         catch (NoSuchUserException e) {
             return Collections.emptyList();
@@ -171,7 +155,7 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 
 	@Override
 	public List<IRecipe> recommendRecipesToAnonymous( int inNumRecs, ICanonicalItem... inIncludes) {
-		return recommendRecipesToAnonymous( ANON_EMPTYITEMS, ANON_EMPTYVALUES, inNumRecs, "");
+		return recommendRecipesToAnonymous( ANON_EMPTYITEMS, ANON_EMPTYVALUES, inNumRecs, null);
 	}
 
 	@Override
@@ -182,63 +166,37 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 	}
 
 	@Override
-	public List<IRecipe> recommendRecipesToAnonymous( final IRecipe inRecipe, int inNumRecs) {
-		final Collection<ICanonicalItem> items = inRecipe.getItems();
-		if ( items.isEmpty()) {
+	public List<IRecipe> recommendRecipesToAnonymous( final IRecipe inUsersCreatedRecipe, int inNumRecs) {
+		final Collection<ICanonicalItem> usersItems = inUsersCreatedRecipe.getItems();
+		if ( usersItems.isEmpty()) {
 			return Collections.emptyList();  // If _no_ Items in Recipe, we cannot recommend anything. How the caller deals with that is his business.
 		}
 
-		final ICanonicalItem[] itemsArray = Iterables.toArray( items, ICanonicalItem.class);
+        //////////////////////////////////////////////////////////////  Build up the fake Item preferences
 
-        //////////////////////////////////////////////////////////////  Strip out Recipes that don't contain _all_ these Items
+		// FIXME - Try to share with Ids-building code in EsExplorerFilters
+        final long[] ids = new long[ usersItems.size() ];
+        int j = 0;
 
-		try {
-			final List<IRecipe> recipesToInclude = searchAPI.findRecipesByItemName(itemsArray);
-			if ( recipesToInclude.isEmpty()) {
-				return Collections.emptyList();  // If _no_ Recipes contain the specified Items, we cannot recommend anything. How the caller deals with that is his business.
-			}
-
-			// FIXME - Try to share with Ids-building code in EsExplorerFilters
-            final long[] recipeIds = new long[ recipesToInclude.size() ];
-            int i = 0;
-
-            for ( IRecipe each : recipesToInclude) {
-            	recipeIds[i++] = each.getId();
-            }
-
-			final String includeIdsStr = Longs.join( ",", recipeIds);
-
-//			System.out.println("filter Recipe ids: " + includeIdsStr);
-
-	        //////////////////////////////////////////////////////////////  Build up the fake Item preferences
-
-			// FIXME - Try to share with Ids-building code in EsExplorerFilters
-	        final long[] ids = new long[ items.size() ];
-            int j = 0;
-
-	        for ( ICanonicalItem each : items) {
-	            ids[j++] = each.getId();
-	        }
-
-//			System.out.println("fake pref Item ids: " + Arrays.toString(ids));
-
-	        final float[] vals = new float[ items.size() ];
-	        Arrays.fill( vals, 1.0f);
-
-	        //////////////////////////////////////////////////////////////
-	
-			return recommendRecipesToAnonymous( ids, vals, inNumRecs, includeIdsStr);
+        for ( ICanonicalItem each : usersItems) {
+            ids[j++] = each.getId();
         }
-		catch (IOException e) {
-			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
-		}
+
+//		System.out.println("fake pref Item ids: " + Arrays.toString(ids));
+
+        final float[] vals = new float[ usersItems.size() ];
+        Arrays.fill( vals, 1.0f);
+
+        //////////////////////////////////////////////////////////////
+
+		return recommendRecipesToAnonymous( ids, vals, inNumRecs, usersItems);
 	}
 
-	private List<IRecipe> recommendRecipesToAnonymous( final long[] preferredItemIds,  final float[] itemScores, int inNumRecs, final String inIncludesStr) {
+	private List<IRecipe> recommendRecipesToAnonymous( final long[] preferredItemIds,  final float[] itemScores, int inNumRecs, final Collection<ICanonicalItem> inItems) {
 	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_FILTERED_RECOMMENDATIONS).time();  // Same again - that OK?
 
 		try {
-			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.recommendToAnonymous( preferredItemIds, itemScores, inNumRecs, new String[]{"RECIPE", inIncludesStr, ""}, null) ) );
+			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.recommendToAnonymous( preferredItemIds, itemScores, inNumRecs, new String[]{"RECIPE", "", getItemsListJson(inItems)}, null) ) );
 		}
         catch (NoSuchUserException e) {
 			// Basically, this means we've passed in one single Item pref, and that Item has had _zero_ previous prefs. In which case, we're quite entitled to return nothing. How the caller deals with that is his business.
@@ -255,6 +213,14 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
         finally {
             timerCtxt.stop();
         }
+	}
+
+	private String getItemsListJson( final Collection<ICanonicalItem> inItems) throws IOException {
+		if ( inItems == null || inItems.isEmpty()) {
+			return "";
+		}
+
+		return mapper.writeValueAsString(inItems);
 	}
 
 	@Override

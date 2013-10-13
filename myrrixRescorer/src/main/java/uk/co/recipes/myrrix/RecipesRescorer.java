@@ -5,6 +5,7 @@ package uk.co.recipes.myrrix;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -17,16 +18,20 @@ import org.apache.mahout.common.LongPair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.service.api.IExplorerFilter;
 import uk.co.recipes.service.api.IExplorerFilterDef;
 import uk.co.recipes.service.impl.DefaultExplorerFilterDef;
 import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.EsSearchService;
 
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Splitter;
 import com.google.common.base.Throwables;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Iterables;
 import com.google.common.primitives.Longs;
 
 import dagger.ObjectGraph;
@@ -43,6 +48,8 @@ public class RecipesRescorer extends AbstractRescorerProvider {
     @Inject EsExplorerFilters filtersApi;
     @Inject ObjectMapper mapper;
 
+	private final JavaType itemArrayType;
+
 	private static final Logger LOG = LoggerFactory.getLogger( RecipesRescorer.class );
 
 	private final static long RECIPE_BASE_ID = 0x4000000000000000L;
@@ -56,6 +63,8 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 	    long st = System.currentTimeMillis();
         ObjectGraph.create( new RescorerModule() ).inject(this);
         System.out.println("Injecting dependencies DONE in " + ( System.currentTimeMillis() - st) + " msecs");
+
+        itemArrayType = mapper.getTypeFactory().constructCollectionType( List.class, ICanonicalItem.class);
 	}
 
 	@Override
@@ -88,7 +97,7 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 				}
 
 				if ( arrays.includeIds.length > 0 && !isLongInArray( arrays.includeIds, inId)) {
-					LOG.info("RecipesRescorer: Filter out " + inId);
+					LOG.trace("RecipesRescorer: Filter out " + inId);
 					return true;
 				}
 
@@ -211,8 +220,6 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 
 		try {
 			final IExplorerFilterDef filterDef = ( inArgs != null && inArgs.length > 1 && inArgs[1] != null && inArgs[1].startsWith("{")) ? mapper.readValue( inArgs[1], DefaultExplorerFilterDef.class) : null;
-			LOG.info("Using FilterDef: " + filterDef);
-
 			if ( filterDef != null) {
 				final IExplorerFilter filter = filtersApi.from(filterDef);
 				LOG.info("Got Filter: " + filterDef);
@@ -221,9 +228,31 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 				result.excludeIds = filter.idsToExclude();
 			}
 			else {
-				LOG.info("No FilterDef, using Args: " + Arrays.toString(inArgs));
-				result.includeIds = ( inArgs != null && inArgs.length > 1) ? parseLongArrayString(inArgs[1]) : EMPTY_ARRAY;
-				result.excludeIds = ( inArgs != null && inArgs.length > 2) ? parseLongArrayString(inArgs[2]) : EMPTY_ARRAY;
+				@SuppressWarnings("unchecked")
+				final List<ICanonicalItem> itemsList = (List<ICanonicalItem>) (( inArgs != null && inArgs.length > 2 && inArgs[2] != null && inArgs[2].startsWith("[")) ? mapper.readValue( inArgs[2], itemArrayType) : null);
+				if ( itemsList != null) {
+					LOG.info("Find Recipes, with Filter itemsList: " + itemsList);
+
+					final List<IRecipe> recipesToInclude = searchApi.findRecipesByItemName( Iterables.toArray( itemsList, ICanonicalItem.class));
+					if ( recipesToInclude.isEmpty()) {
+						result.includeIds = new long[]{-1L};
+						return result;  // Nothing to do, bail out with a zero result
+					}
+
+					int i = 0;
+					result.includeIds = new long[ recipesToInclude.size() ];
+
+		            for ( IRecipe each : recipesToInclude) {
+		            	result.includeIds[i++] = each.getId();
+		            }
+		
+		            // No excludeIds
+				}
+				else {
+					LOG.info("No FilterDef or Items list, using Args: " + Arrays.toString(inArgs));
+					result.includeIds = ( inArgs != null && inArgs.length > 1) ? parseLongArrayString(inArgs[1]) : EMPTY_ARRAY;
+					result.excludeIds = ( inArgs != null && inArgs.length > 2) ? parseLongArrayString(inArgs[2]) : EMPTY_ARRAY;
+				}
 			}
 
 			return result;
