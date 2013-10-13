@@ -3,6 +3,7 @@
  */
 package uk.co.recipes.service.impl;
 
+import java.util.Collections;
 import java.util.Set;
 
 import uk.co.recipes.api.ITag;
@@ -29,12 +30,18 @@ public class DefaultExplorerFilterDef implements IExplorerFilterDef {
 
 	@Override
 	public Set<ITag> getIncludeTags() {
-		return includeTags;
+		if ( includeTags != null) {
+			return includeTags;
+		}
+		return Collections.emptySet();
 	}
 
 	@Override
 	public Set<ITag> getExcludeTags() {
-		return excludeTags;
+		if ( excludeTags != null) {
+			return excludeTags;
+		}
+		return Collections.emptySet();
 	}
 
 	@Override
@@ -57,4 +64,8 @@ public class DefaultExplorerFilterDef implements IExplorerFilterDef {
 		return Objects.equal( includeTags, other.includeTags) && Objects.equal( excludeTags, other.excludeTags);
 	}
 
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this).omitNullValues().add( "includeTags", includeTags).add( "excludeTags", excludeTags).toString();
+	}
 }

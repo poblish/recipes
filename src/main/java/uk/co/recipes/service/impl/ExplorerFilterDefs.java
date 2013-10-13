@@ -5,6 +5,7 @@ package uk.co.recipes.service.impl;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
 import uk.co.recipes.api.ITag;
@@ -19,6 +20,8 @@ import com.google.common.collect.Sets;
  *
  */
 public class ExplorerFilterDefs {
+
+	private static final IExplorerFilterDef NULL_FILTER = new NullFilterDef();
 
     public Builder build() {
     	return new Builder();
@@ -73,4 +76,22 @@ public class ExplorerFilterDefs {
     		return new DefaultExplorerFilterDef( includeTags, excludeTags);
     	}
     }
+
+    public static IExplorerFilterDef nullFilter() {
+    	return NULL_FILTER;
+    }
+
+	private static class NullFilterDef implements IExplorerFilterDef {
+
+		@Override
+		public Set<ITag> getIncludeTags() {
+			return Collections.emptySet();
+		}
+
+		@Override
+		public Set<ITag> getExcludeTags() {
+			return Collections.emptySet();
+		}
+
+	}
 }

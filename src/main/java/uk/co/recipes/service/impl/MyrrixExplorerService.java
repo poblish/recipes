@@ -25,12 +25,12 @@ import uk.co.recipes.myrrix.MyrrixUtils;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.service.api.IExplorerAPI;
-import uk.co.recipes.service.api.IExplorerFilter;
+import uk.co.recipes.service.api.IExplorerFilterDef;
 import uk.co.recipes.service.taste.impl.MyrrixTasteSimilarityService;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
-import com.google.common.primitives.Longs;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * TODO
@@ -41,20 +41,12 @@ import com.google.common.primitives.Longs;
 @Singleton
 public class MyrrixExplorerService implements IExplorerAPI {
 
-	@Inject
-	MyrrixTasteSimilarityService tasteSimilarity;
-
-	@Inject
-	ClientRecommender recommender;
-
-	@Inject
-	EsItemFactory itemsFactory;
-
-	@Inject
-	EsRecipeFactory recipesFactory;
-
-	@Inject
-	MetricRegistry metrics;
+	@Inject MyrrixTasteSimilarityService tasteSimilarity;
+	@Inject ClientRecommender recommender;
+	@Inject EsItemFactory itemsFactory;
+	@Inject EsRecipeFactory recipesFactory;
+	@Inject MetricRegistry metrics;
+	@Inject ObjectMapper mapper;
 
 
 	/* (non-Javadoc)
@@ -62,18 +54,15 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	 */
 	@Override
 	public List<ICanonicalItem> similarIngredients( final ICanonicalItem item, int inNumRecs) {
-		return similarIngredients( item, EsExplorerFilters.nullFilter(), inNumRecs);
+		return similarIngredients( item, ExplorerFilterDefs.nullFilter(), inNumRecs);
 	}
 
 	@Override
-	public List<ICanonicalItem> similarIngredients( final ICanonicalItem item, final IExplorerFilter inFilter, final int inNumRecs) {
+	public List<ICanonicalItem> similarIngredients( final ICanonicalItem item, final IExplorerFilterDef inFilterDef, final int inNumRecs) {
 	    final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_MOSTSIMILAR).time();
 
 		try {
-			final String includeIdsStr = inFilter.idsToInclude().length > 0 ? Longs.join( ",", inFilter.idsToInclude()) : ""; // FIXME - this is going to get big!
-			final String excludeIdsStr = inFilter.idsToExclude().length > 0 ? Longs.join( ",", inFilter.idsToExclude()) : ""; // FIXME - this is going to get big!
-
-			return itemsFactory.getAll( MyrrixUtils.getItems( recommender.mostSimilarItems( new long[]{ item.getId() }, inNumRecs, new String[]{"ITEM", includeIdsStr, excludeIdsStr}, /* "contextUserID" */ 0L) ) );
+			return itemsFactory.getAll( MyrrixUtils.getItems( recommender.mostSimilarItems( new long[]{ item.getId() }, inNumRecs, new String[]{"ITEM", mapper.writeValueAsString(inFilterDef)}, /* "contextUserID" */ 0L) ) );
 		}
 		catch (NoSuchItemException e) {
 			return Collections.emptyList();
@@ -94,18 +83,15 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	 */
 	@Override
 	public List<IRecipe> similarRecipes( final IRecipe inTarget, int inNumRecs) {
-		return similarRecipes( inTarget, EsExplorerFilters.nullFilter(), inNumRecs);
+		return similarRecipes( inTarget, ExplorerFilterDefs.nullFilter(), inNumRecs);
 	}
 
 	@Override
-	public List<IRecipe> similarRecipes( final IRecipe recipe, final IExplorerFilter inFilter, final int inNumRecs) {
+	public List<IRecipe> similarRecipes( final IRecipe recipe, final IExplorerFilterDef inFilterDef, final int inNumRecs) {
 	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_MOSTSIMILAR).time();
 
 		try {
-			final String includeIdsStr = inFilter.idsToInclude().length > 0 ? Longs.join( ",", inFilter.idsToInclude()) : ""; // FIXME - this is going to get big!
-			final String excludeIdsStr = inFilter.idsToExclude().length > 0 ? Longs.join( ",", inFilter.idsToExclude()) : ""; // FIXME - this is going to get big!
-
-			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.mostSimilarItems( new long[]{ recipe.getId() }, inNumRecs, new String[]{"RECIPE", includeIdsStr, excludeIdsStr}, /* "contextUserID" */ 0L) ) );
+			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.mostSimilarItems( new long[]{ recipe.getId() }, inNumRecs, new String[]{"RECIPE", mapper.writeValueAsString(inFilterDef)}, /* "contextUserID" */ 0L) ) );
 		}
 		catch (NoSuchItemException e) {
 			return Collections.emptyList();
