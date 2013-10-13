@@ -12,10 +12,11 @@ import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.service.api.IExplorerAPI;
-import uk.co.recipes.service.api.IExplorerFilter;
+import uk.co.recipes.service.api.IExplorerFilterDef;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.impl.EsExplorerFilters;
+import uk.co.recipes.service.impl.ExplorerFilterDefs;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
 
@@ -69,17 +70,17 @@ public abstract class AbstractExplorableController extends Controller {
         return currUser.getPrefs().getExplorerExcludeTags();
     }
 
-    public IExplorerFilter getExplorerFilter( final EsExplorerFilters inFilters) {
+    public IExplorerFilterDef getExplorerFilter( final EsExplorerFilters inFilters) {
         final IUser currUser = getLocalUser();
         if ( currUser == null) {
-            return EsExplorerFilters.nullFilter();
+            return ExplorerFilterDefs.nullFilter();
         }
 
         try {
-            return inFilters.build().includeTags( getExplorerIncludeTags() ).excludeTags( getExplorerExcludeTags() ).toFilter();
+            return new ExplorerFilterDefs().build().includeTags( getExplorerIncludeTags() ).excludeTags( getExplorerExcludeTags() ).toFilterDef();
         }
         catch (Exception e) {
-            return EsExplorerFilters.nullFilter();
+            return ExplorerFilterDefs.nullFilter();
         }
     }
 }
