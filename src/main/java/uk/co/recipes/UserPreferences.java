@@ -41,11 +41,13 @@ public class UserPreferences implements IUserPreferences {
 
 	@Override
 	public boolean explorerIncludeAdd( ITag inTag) {
+		explorerExcludeRemove(inTag);
 		return includeTags.add(inTag);
 	}
 
 	@Override
 	public boolean explorerExcludeAdd( ITag inTag) {
+		explorerIncludeRemove(inTag);
 		return excludeTags.add(inTag);
 	}
 
