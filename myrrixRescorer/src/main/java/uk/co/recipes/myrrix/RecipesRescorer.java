@@ -81,7 +81,7 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 		final boolean isRecipe = desiredType.equals("RECIPE");
 		final boolean isItem = desiredType.equals("ITEM");
 
-		final TwoLongArrays arrays = getIncludeExcludeArraysFromInputs(inArgs);
+		final FilterParameters filterParams = getIncludeExcludeArraysFromInputs(inArgs);
 
 		return new IDRescorer() {
 
@@ -96,7 +96,7 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 					return true;
 				}
 
-				if ( arrays.includeIds.length > 0 && !isLongInArray( arrays.includeIds, inId)) {
+				if ( filterParams.includeIds.length > 0 && !isLongInArray( filterParams.includeIds, inId)) {
 					LOG.trace("RecipesRescorer: Filter out " + inId);
 					return true;
 				}
@@ -120,15 +120,29 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 		final boolean isRecipe = desiredType.equals("RECIPE");
 		final boolean isItem = desiredType.equals("ITEM");
 
-		final TwoLongArrays arrays = getIncludeExcludeArraysFromInputs(inArgs);
+		final FilterParameters filterParams = getIncludeExcludeArraysFromInputs(inArgs);
 
 		return new Rescorer<LongPair>() {
 
 			@Override
 			public boolean isFiltered( final LongPair inPair) {
 
-				if (!includesOK( arrays.includeIds, inPair.getFirst(), inPair.getSecond() ) ||
-					!excludesOK( arrays.excludeIds, inPair.getFirst(), inPair.getSecond() )) {
+				if (filterParams.mayFilterOutSelf) {
+					// Exclude if either A or B aren't in Includes
+					if (!includesOK( filterParams.includeIds, inPair.getFirst(), inPair.getSecond() )) {
+						LOG.trace("RecipesRescorer: Filter out " + inPair);
+						return true;
+					}
+				}
+				else {
+					// Exclude only if incoming A (not 'current' B) isn't in Includes
+					if (!includesOK( filterParams.includeIds, inPair.getFirst())) {
+						LOG.trace("RecipesRescorer: Filter out " + inPair);
+						return true;
+					}
+				}
+
+				if (!excludesOK( filterParams.excludeIds, inPair.getFirst(), inPair.getSecond() )) {
 					LOG.trace("RecipesRescorer: Filter out " + inPair);
 					return true;
 				}
@@ -215,8 +229,8 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 		return longs;
 	}
 
-	private TwoLongArrays getIncludeExcludeArraysFromInputs( final String... inArgs) {
-		final TwoLongArrays result = new TwoLongArrays();
+	private FilterParameters getIncludeExcludeArraysFromInputs( final String... inArgs) {
+		final FilterParameters result = new FilterParameters();
 
 		try {
 			final IExplorerFilterDef filterDef = ( inArgs != null && inArgs.length > 1 && inArgs[1] != null && inArgs[1].startsWith("{")) ? mapper.readValue( inArgs[1], DefaultExplorerFilterDef.class) : null;
@@ -226,6 +240,7 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 	
 				result.includeIds = filter.idsToInclude();
 				result.excludeIds = filter.idsToExclude();
+				result.mayFilterOutSelf = false;
 			}
 			else {
 				@SuppressWarnings("unchecked")
@@ -262,8 +277,9 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 		}
 	}
 
-	private static class TwoLongArrays {
+	private static class FilterParameters {
 		long[] includeIds = EMPTY_ARRAY;
 		long[] excludeIds = EMPTY_ARRAY;
+		boolean mayFilterOutSelf = true; // Why would this *ever* be true?
 	}
 }
