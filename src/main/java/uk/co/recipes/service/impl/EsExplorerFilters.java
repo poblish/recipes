@@ -210,7 +210,7 @@ public class EsExplorerFilters {
  
         timerCtxt.close();
 
-        LOG.info("Ids = " + Arrays.toString(ids));
+        LOG.info("ExplorerFilter Impl > matching Ids for Filter: " + Arrays.toString(ids));
 
         return ids;
     }
