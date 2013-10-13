@@ -120,7 +120,7 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 
 				if (!includesOK( arrays.includeIds, inPair.getFirst(), inPair.getSecond() ) ||
 					!excludesOK( arrays.excludeIds, inPair.getFirst(), inPair.getSecond() )) {
-					LOG.info("RecipesRescorer: Filter out " + inPair);
+					LOG.trace("RecipesRescorer: Filter out " + inPair);
 					return true;
 				}
 
