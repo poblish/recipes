@@ -40,6 +40,7 @@ public class EsExplorerFiltersTest {
 //	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
 
 	private EsExplorerFilters filters = GRAPH.get( EsExplorerFilters.class );
+	private ExplorerFilterDefs filterDefs = new ExplorerFilterDefs();
 //	private IExplorerAPI explorer = GRAPH.get( MyrrixExplorerService.class );
 
 
@@ -66,49 +67,63 @@ public class EsExplorerFiltersTest {
 
     @Test
     public void testIncludeTags() throws IOException {
-        final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT ).toFilter();
+        final IExplorerFilter filter = filters.from( filterDefs.build().includeTags( CommonTags.FRUIT ).toFilterDef() );
         assertThat( filter.idsToInclude().length, greaterThan(27));
         assertThat( filter.idsToExclude().length, is(0));
     }
 
     @Test
     public void testIncludeMultipleTags() throws IOException {
-        final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT, CITRUS ).toFilter();
+        final IExplorerFilter filter = filters.from( filterDefs.build().includeTags( CommonTags.FRUIT, CITRUS ).toFilterDef() );
         assertThat( filter.idsToInclude().length, greaterThan(12));
         assertThat( filter.idsToExclude().length, is(0));
     }
 
     @Test
-    public void testIncludeMultipleTags2() throws IOException {
-        final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT, CITRUS, MeatAndFishTags.MEAT ).toFilter();
+    public void testIncludeMultipleTags2_Order1() throws IOException {
+        final IExplorerFilter filter = filters.from( filterDefs.build().includeTags( CommonTags.FRUIT, CITRUS, MeatAndFishTags.MEAT ).toFilterDef() );
+        assertThat( filter.idsToInclude().length, is(0));
+        assertThat( filter.idsToExclude().length, is(0));
+    }
+
+    @Test
+    public void testIncludeMultipleTags2_Order2() throws IOException {
+        final IExplorerFilter filter = filters.from( filterDefs.build().includeTags( CITRUS, CommonTags.FRUIT, MeatAndFishTags.MEAT ).toFilterDef() );
+        assertThat( filter.idsToInclude().length, is(0));
+        assertThat( filter.idsToExclude().length, is(0));
+    }
+
+    @Test
+    public void testIncludeMultipleTags2_Order3() throws IOException {
+        final IExplorerFilter filter = filters.from( filterDefs.build().includeTags( MeatAndFishTags.MEAT, CommonTags.FRUIT, CITRUS ).toFilterDef() );
         assertThat( filter.idsToInclude().length, is(0));
         assertThat( filter.idsToExclude().length, is(0));
     }
 
     @Test
     public void testIncludeMultipleInclAndExclTags() throws IOException {
-        final IExplorerFilter filter = filters.build().includeTags( CommonTags.FRUIT, CITRUS ).excludeTags( MeatAndFishTags.MEAT, CommonTags.VEGETABLE ).toFilter();
+        final IExplorerFilter filter = filters.from( filterDefs.build().includeTags( CommonTags.FRUIT, CITRUS ).excludeTags( MeatAndFishTags.MEAT, CommonTags.VEGETABLE ).toFilterDef() );
         assertThat( filter.idsToInclude().length, greaterThan(12));
         assertThat( filter.idsToExclude().length, greaterThan(84));
     }
 
     @Test
     public void testIncludeMultipleTagsReordered() throws IOException {
-        final IExplorerFilter filter = filters.build().includeTags( CITRUS, CommonTags.FRUIT ).toFilter();
+        final IExplorerFilter filter = filters.from( filterDefs.build().includeTags( CITRUS, CommonTags.FRUIT ).toFilterDef() );
         assertThat( filter.idsToInclude().length, greaterThan(12));
         assertThat( filter.idsToExclude().length, is(0));
     }
 
     @Test
     public void testExcludeTags() throws IOException {
-        final IExplorerFilter filter = filters.build().excludeTags( CommonTags.FRUIT ).toFilter();
+        final IExplorerFilter filter = filters.from( filterDefs.build().excludeTags( CommonTags.FRUIT ).toFilterDef() );
         assertThat( filter.idsToInclude().length, is(0));
         assertThat( filter.idsToExclude().length, greaterThan(27));
     }
 
     @Test
     public void testExcludeMultipleTags() throws IOException {
-        final IExplorerFilter filter = filters.build().excludeTags( CommonTags.FRUIT, MeatAndFishTags.MEAT ).toFilter();
+        final IExplorerFilter filter = filters.from( filterDefs.build().excludeTags( CommonTags.FRUIT, MeatAndFishTags.MEAT ).toFilterDef() );
         assertThat( filter.idsToInclude().length, is(0));
         assertThat( filter.idsToExclude().length, greaterThan(60));
     }

@@ -20,6 +20,7 @@ import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.service.api.IExplorerFilter;
+import uk.co.recipes.service.api.IExplorerFilterDef;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
@@ -49,6 +50,61 @@ public class EsExplorerFilters {
 
     public Builder build() {
     	return new Builder();
+    }
+
+    public IExplorerFilter from( final IExplorerFilterDef inDef) throws IOException {
+    	long[] includeIds = EMPTY_ARRAY;
+    	long[] excludeIds = EMPTY_ARRAY;
+
+		boolean firstInclude = true;
+
+    	for ( ITag eachTag : inDef.getIncludeTags()) {
+    		final List<ICanonicalItem> items = search.findItemsByTag(eachTag);
+    		final List<IRecipe> recipes = search.findRecipesByTag(eachTag);
+    		final long[] newIds = getIdsForResults( items, recipes);
+
+    		if (firstInclude) {
+    		    includeIds = newIds;
+    		    firstInclude = false;
+    		}
+    		else if ( includeIds.length == 0) {
+    			// Already AND-ed down to nothing, so bail out
+    			break;
+    		}
+     		else {
+        		// INTERSECTION: Include things in all of the categories
+        		final Set<Long> union = Sets.newHashSet( Longs.asList(includeIds) );
+        		union.retainAll( Longs.asList(newIds) );
+    
+        		includeIds = new long[ union.size() ];
+                int i = 0;
+    
+                for ( Long each : union) {
+                    includeIds[i++] = each;
+                }
+    		}
+    	}
+ 
+    	for ( ITag eachTag : inDef.getExcludeTags()) {
+			final List<ICanonicalItem> items = search.findItemsByTag(eachTag);
+			final List<IRecipe> recipes = search.findRecipesByTag(eachTag);
+	        excludeIds = Longs.concat( excludeIds, getIdsForResults( items, recipes));  // UNION: Exclude anything in any of the categories
+    	}
+
+    	final long[] fIs = includeIds;
+    	final long[] fEs = excludeIds;
+
+		return new IExplorerFilter() {
+
+			@Override
+			public long[] idsToInclude() {
+				return fIs;
+			}
+
+			@Override
+			public long[] idsToExclude() {
+				return fEs;
+			}};
     }
 
     public class Builder {
@@ -121,29 +177,6 @@ public class EsExplorerFilters {
             return this;
     	}
 
-        private long[] getIdsForResults( final List<ICanonicalItem> inItems, final List<IRecipe> inRecipes) {
-            final Timer.Context timerCtxt = metrics.timer(TIMER_EXPLORER_FILTER_IDS_GET).time();
-
-            final long[] ids = new long[ inItems.size() + inRecipes.size()];
-            int i = 0;
-
-            for (ICanonicalItem each : inItems) {
-                ids[i++] = each.getId();
-            }
-
-            for (IRecipe each : inRecipes) {
-                ids[i++] = each.getId();
-            }
-            
-            // Arrays.sort(ids);  // Do *not* bother with this. See http://bit.ly/187WEvC - we don't search enough times to make binary search worthwhile
-     
-            timerCtxt.close();
-
-            LOG.info("Ids = " + Arrays.toString(ids));
-
-            return ids;
-        }
-
     	public IExplorerFilter toFilter() {
     		return new IExplorerFilter() {
 
@@ -157,6 +190,29 @@ public class EsExplorerFilters {
 					return excludeIds;
 				}};
     	}
+    }
+
+    private long[] getIdsForResults( final List<ICanonicalItem> inItems, final List<IRecipe> inRecipes) {
+        final Timer.Context timerCtxt = metrics.timer(TIMER_EXPLORER_FILTER_IDS_GET).time();
+
+        final long[] ids = new long[ inItems.size() + inRecipes.size()];
+        int i = 0;
+
+        for (ICanonicalItem each : inItems) {
+            ids[i++] = each.getId();
+        }
+
+        for (IRecipe each : inRecipes) {
+            ids[i++] = each.getId();
+        }
+        
+        // Arrays.sort(ids);  // Do *not* bother with this. See http://bit.ly/187WEvC - we don't search enough times to make binary search worthwhile
+ 
+        timerCtxt.close();
+
+        LOG.info("Ids = " + Arrays.toString(ids));
+
+        return ids;
     }
 
     public static IExplorerFilter nullFilter() {
