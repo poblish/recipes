@@ -3,6 +3,7 @@
  */
 package uk.co.recipes.myrrix;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 import javax.inject.Inject;
@@ -16,9 +17,15 @@ import org.apache.mahout.common.LongPair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.recipes.service.api.IExplorerFilter;
+import uk.co.recipes.service.api.IExplorerFilterDef;
+import uk.co.recipes.service.impl.DefaultExplorerFilterDef;
+import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.EsSearchService;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Splitter;
+import com.google.common.base.Throwables;
 import com.google.common.collect.FluentIterable;
 import com.google.common.primitives.Longs;
 
@@ -33,6 +40,8 @@ import dagger.ObjectGraph;
 public class RecipesRescorer extends AbstractRescorerProvider {
 
     @Inject EsSearchService searchApi;
+    @Inject EsExplorerFilters filtersApi;
+    @Inject ObjectMapper mapper;
 
 	private static final Logger LOG = LoggerFactory.getLogger( RecipesRescorer.class );
 
@@ -63,7 +72,7 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 		final boolean isRecipe = desiredType.equals("RECIPE");
 		final boolean isItem = desiredType.equals("ITEM");
 
-		final long[] includeIds = ( inArgs != null && inArgs.length > 1) ? parseLongArrayString((String) inArgs[1]) : EMPTY_ARRAY;
+		final TwoLongArrays arrays = getIncludeExcludeArraysFromInputs(inArgs);
 
 		return new IDRescorer() {
 
@@ -78,7 +87,7 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 					return true;
 				}
 
-				if ( includeIds.length > 0 && !isLongInArray( includeIds, inId)) {
+				if ( arrays.includeIds.length > 0 && !isLongInArray( arrays.includeIds, inId)) {
 					LOG.info("RecipesRescorer: Filter out " + inId);
 					return true;
 				}
@@ -102,16 +111,15 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 		final boolean isRecipe = desiredType.equals("RECIPE");
 		final boolean isItem = desiredType.equals("ITEM");
 
-		final long[] includeIdsSorted = ( inArgs != null && inArgs.length > 1) ? parseLongArrayString((String) inArgs[1]) : EMPTY_ARRAY;
-		final long[] excludeIdsSorted = ( inArgs != null && inArgs.length > 2) ? parseLongArrayString((String) inArgs[2]) : EMPTY_ARRAY;
+		final TwoLongArrays arrays = getIncludeExcludeArraysFromInputs(inArgs);
 
 		return new Rescorer<LongPair>() {
 
 			@Override
 			public boolean isFiltered( final LongPair inPair) {
 
-				if (!includesOK( includeIdsSorted, inPair.getFirst(), inPair.getSecond() ) ||
-					!excludesOK( excludeIdsSorted, inPair.getFirst(), inPair.getSecond() )) {
+				if (!includesOK( arrays.includeIds, inPair.getFirst(), inPair.getSecond() ) ||
+					!excludesOK( arrays.excludeIds, inPair.getFirst(), inPair.getSecond() )) {
 					LOG.info("RecipesRescorer: Filter out " + inPair);
 					return true;
 				}
@@ -196,5 +204,37 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 		}
 
 		return longs;
+	}
+
+	private TwoLongArrays getIncludeExcludeArraysFromInputs( final String... inArgs) {
+		final TwoLongArrays result = new TwoLongArrays();
+
+		try {
+			final IExplorerFilterDef filterDef = ( inArgs != null && inArgs.length > 1 && inArgs[1] != null && inArgs[1].startsWith("{")) ? mapper.readValue( inArgs[1], DefaultExplorerFilterDef.class) : null;
+			LOG.info("Using FilterDef: " + filterDef);
+
+			if ( filterDef != null) {
+				final IExplorerFilter filter = filtersApi.from(filterDef);
+				LOG.info("Got Filter: " + filterDef);
+	
+				result.includeIds = filter.idsToInclude();
+				result.excludeIds = filter.idsToExclude();
+			}
+			else {
+				LOG.info("No FilterDef, using Args: " + Arrays.toString(inArgs));
+				result.includeIds = ( inArgs != null && inArgs.length > 1) ? parseLongArrayString(inArgs[1]) : EMPTY_ARRAY;
+				result.excludeIds = ( inArgs != null && inArgs.length > 2) ? parseLongArrayString(inArgs[2]) : EMPTY_ARRAY;
+			}
+
+			return result;
+		}
+		catch (IOException e) {
+			throw Throwables.propagate(e);
+		}
+	}
+
+	private static class TwoLongArrays {
+		long[] includeIds = EMPTY_ARRAY;
+		long[] excludeIds = EMPTY_ARRAY;
 	}
 }
