@@ -6,14 +6,12 @@ package uk.co.recipes.service.impl;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
-
+import static uk.co.recipes.service.api.ESearchArea.*;
 import java.io.IOException;
 import java.util.List;
-
 import org.apache.http.client.ClientProtocolException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
 import uk.co.recipes.DaggerModule;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
@@ -25,9 +23,7 @@ import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.api.ISearchResult;
 import uk.co.recipes.test.TestDataUtils;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import dagger.ObjectGraph;
 
 /**
@@ -96,15 +92,15 @@ public class EsSearchServiceTest {
 	@Test
 	public void partialTestForItem1() throws IOException {
 		final int numToFind = 8;
-		final List<ISearchResult<?>> results1 = searchService.findPartial("ging", numToFind);
-		assertThat( results1.toString(), is("[ItemSearchResult{itemName=Ginger}, ItemSearchResult{itemName=Crystallised Ginger}, ItemSearchResult{itemName=Ginger Paste}, ItemSearchResult{itemName=Root Ginger}, ItemSearchResult{itemName=Stem Ginger}, ItemSearchResult{itemName=Aubergine}, ItemSearchResult{itemName=Linguine}, ItemSearchResult{itemName=Extra Virgin Olive Oil}]"));
+		final List<ISearchResult<?>> results1 = searchService.findPartial("ging", numToFind, ITEMS);
+		assertThat( results1.toString(), is("[ItemSearchResult{itemName=Ginger}, ItemSearchResult{itemName=Crystallised Ginger}, ItemSearchResult{itemName=Ginger Paste}, ItemSearchResult{itemName=Root Ginger}, ItemSearchResult{itemName=Stem Ginger}, ItemSearchResult{itemName=Aubergine}, ItemSearchResult{itemName=Linguine}, ItemSearchResult{itemName=Spring Onions}]"));
 		assertThat( results1.size(), is(numToFind));
 	}
 
 	@Test
 	public void partialTestForItemWithSize2() throws IOException {
 		final int numToFind = 5;
-		final List<ISearchResult<?>> results1 = searchService.findPartial("cori", numToFind);
+		final List<ISearchResult<?>> results1 = searchService.findPartial("cori", numToFind, ITEMS);
 		assertThat( results1.toString(), is("[ItemSearchResult{itemName=Pecorino}, ItemSearchResult{itemName=Coriander}, ItemSearchResult{itemName=Coriander Powder}, ItemSearchResult{itemName=Coriander Seeds}, ItemSearchResult{itemName=Chorizo}]"));
 		assertThat( results1.size(), is(numToFind));
 	}
@@ -112,7 +108,7 @@ public class EsSearchServiceTest {
 	@Test
 	public void partialTestForAlias() throws IOException {
 		final int numToFind = 1;
-		final List<ISearchResult<?>> results1 = searchService.findPartial("cilant", numToFind);
+		final List<ISearchResult<?>> results1 = searchService.findPartial("cilant", numToFind, ITEMS);
 		assertThat( results1.toString(), is("[ItemSearchResult{itemName=Coriander}]"));
 		assertThat( results1.size(), is(numToFind));
 	}
@@ -120,7 +116,7 @@ public class EsSearchServiceTest {
 	@Test
 	public void partialTestForAlias2() throws IOException {
 		final int numToFind = 1;
-		final List<ISearchResult<?>> results1 = searchService.findPartial("antro", numToFind);
+		final List<ISearchResult<?>> results1 = searchService.findPartial("antro", numToFind, ITEMS);
 		assertThat( results1.toString(), is("[ItemSearchResult{itemName=Coriander}]"));
 		assertThat( results1.size(), is(numToFind));
 	}
@@ -128,33 +124,33 @@ public class EsSearchServiceTest {
 	@Test
 	public void partialTestForAlias3() throws IOException {
 		final int numToFind = 1;
-		final List<ISearchResult<?>> results1 = searchService.findPartial("Pobla", numToFind);
+		final List<ISearchResult<?>> results1 = searchService.findPartial("Pobla", numToFind, ITEMS);
 		assertThat( results1.toString(), is("[ItemSearchResult{itemName=Ancho Chile}]"));
 		assertThat( results1.size(), is(numToFind));
 	}
 
 	@Test
 	public void partialTestForAlias4() throws IOException {
-		final List<ISearchResult<?>> results1 = searchService.findPartial("Bulb", 5);
+		final List<ISearchResult<?>> results1 = searchService.findPartial("Bulb", 5, ITEMS);
 		assertThat( results1.toString(), is("[ItemSearchResult{itemName=Garlic Bulb}, ItemSearchResult{itemName=Fennel Bulb}, ItemSearchResult{itemName=Bulgur Wheat}]"));
 	}
 
 	@Test
 	public void partialTestForMissingItem() throws IOException {
-		final List<ISearchResult<?>> results1 = searchService.findPartial("qux");
+		final List<ISearchResult<?>> results1 = searchService.findPartial("qux", ITEMS);
 		assertThat( results1.size(), is(0));
 	}
 
 	@Test
 	public void partialTestForRecipe1() throws IOException {
-		final List<ISearchResult<?>> results1 = searchService.findPartial("curr", 5);
+		final List<ISearchResult<?>> results1 = searchService.findPartial("curr", 5, ITEMS, RECIPES);
 		assertThat( results1.toString(), is("[RecipeSearchResult{recipeName=chCashBlackSpiceCurry.txt}, ItemSearchResult{itemName=Blackcurrants}, ItemSearchResult{itemName=Currant}, ItemSearchResult{itemName=Curry Leaves}, ItemSearchResult{itemName=Curry Powder}]"));
 		assertThat( results1.size(), is(5));
 	}
 
 	@Test
 	public void testSerializeResults() throws IOException {
-		final List<ISearchResult<?>> results1 = searchService.findPartial("curr", 4);
+		final List<ISearchResult<?>> results1 = searchService.findPartial("curr", 4, ITEMS, RECIPES);
 		final String stringOutput = mapper.writeValueAsString(results1);
 		assertThat( stringOutput, containsString("\"id\":"));  // at least one Id
 		assertThat( stringOutput, containsString("\"displayName\":\"Curry Leaves\""));
