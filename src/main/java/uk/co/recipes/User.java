@@ -253,6 +253,11 @@ public class User implements IUser {
 	}
 
 	@Override
+	public boolean isFave( ICanonicalItem item) {
+		return itemFaves.contains( checkNotNull(item) );
+	}
+
+	@Override
 	public void addFave( IRecipe recipe) {
 		recipeFaves.add( checkNotNull(recipe) );
 	}
@@ -260,6 +265,11 @@ public class User implements IUser {
 	@Override
 	public void removeFave( IRecipe recipe) {
 		recipeFaves.remove( checkNotNull(recipe) );
+	}
+
+	@Override
+	public boolean isFave( IRecipe recipe) {
+		return recipeFaves.contains( checkNotNull(recipe) );
 	}
 
 	@Override

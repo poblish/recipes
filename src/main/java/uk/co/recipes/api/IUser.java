@@ -49,10 +49,12 @@ public interface IUser extends java.io.Serializable {
     Collection<IRecipeRating> getRecipeRatings();
 
     void addFave( final ICanonicalItem item);
+    boolean isFave( final ICanonicalItem item);
     void removeFave( final ICanonicalItem item);
     Collection<ICanonicalItem> getFaveItems();
 
     void addFave( final IRecipe recipe);
+    boolean isFave( final IRecipe recipe);
     void removeFave( final IRecipe recipe);
     Collection<IRecipe> getFaveRecipes();
 
