@@ -64,7 +64,11 @@ public class ItemsLoader {
 			    continue;
             }
 
-			processItem( map, parentCI);
+			if (!processItem( map, parentCI)) {
+			    // Most probably because of missing constituent
+                entriesToDefer.add(map);
+                continue;
+			}
 		}
 
 		// Note that we don't support *recursive* deferring, e.g. if hierarchy is specified backwards
@@ -81,8 +85,25 @@ public class ItemsLoader {
 		}
 	}
 
-	private void processItem( final Map<String,Object> inMap, final Optional<ICanonicalItem> inParent) {
+	private boolean processItem( final Map<String,Object> inMap, final Optional<ICanonicalItem> inParent) {
         final String name = (String) inMap.get("canonicalName");
+
+        final List<ICanonicalItem> validConstitutents = Lists.newArrayList();
+
+        for ( String eachConstitName : yamlObjectToStrings( inMap.get("contains") )) {
+            try {
+                final Optional<ICanonicalItem> constituent = itemFactory.get(eachConstitName);
+                if (!constituent.isPresent()) {
+                    // Missing constituent 'eachConstitName' - defer and try again on the second pass
+                    return false;
+                }
+
+                validConstitutents.add( constituent.get() );
+            }
+            catch (IOException e) {
+                Throwables.propagate(e);  // Yuk!
+            }
+        }
 
         itemFactory.getOrCreate( name, new Supplier<ICanonicalItem>() {
 
@@ -110,20 +131,11 @@ public class ItemsLoader {
                     ((CanonicalItem) newItem).aliases.add(eachAlias);
                 }
 
-                for ( String eachConstitName : yamlObjectToStrings( inMap.get("contains") )) {
-                    try {
-                        final Optional<ICanonicalItem> constituent = itemFactory.get(eachConstitName);
-    
-                        if (!constituent.isPresent()) {
-                            LOG.warn("Missing constituent '" + eachConstitName + "' for " + newItem);
-                            continue;
-                        }
-    
-                        ((CanonicalItem) newItem).constituents.add( constituent.get() );
+                if (!validConstitutents.isEmpty()) {
+                    if (LOG.isTraceEnabled()) {
+                        LOG.trace("Adding " + validConstitutents + " to " + newItem);
                     }
-                    catch (IOException e) {
-                        Throwables.propagate(e);  // Yuk!
-                    }
+                    ((CanonicalItem) newItem).constituents.addAll(validConstitutents);
                 }
 
                 final String baseAmt = (String) inMap.get("baseAmt");
@@ -136,6 +148,8 @@ public class ItemsLoader {
 
                 return newItem;
             }});
+
+        return true;  // OK
 	}
 
 	private void processTagValue( final ICanonicalItem ioItem, final String inTagName, final Serializable inValue) {
