@@ -77,6 +77,16 @@ public class DefaultEventService implements IEventService {
         eventBus.post( new UnFaveItemEvent( inUser, inItem) );
     }
 
+    @Override
+    public void faveRecipe( IUser inUser, IRecipe inRecipe) {
+        eventBus.post( new FaveRecipeEvent( inUser, inRecipe) );
+    }
+
+    @Override
+    public void unFaveRecipe( IUser inUser, IRecipe inRecipe) {
+        eventBus.post( new UnFaveRecipeEvent( inUser, inRecipe) );
+    }
+
 	@Override
 	public void rateRecipe( final IUser inUser, final IRecipe inRecipe) {
 	    rateRecipe( inUser, inRecipe, 1.0f);

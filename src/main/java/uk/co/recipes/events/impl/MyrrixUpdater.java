@@ -361,6 +361,24 @@ public class MyrrixUpdater implements IEventListener {
         rateGenericItem( evt.getUser().getId(), evt.getItem().getId(), evt.getScore());
     }
 
+    @Subscribe
+    public void onFaveRecipe( final FaveRecipeEvent evt) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Fave: " + evt);
+        }
+
+        rateGenericItem( evt.getUser().getId(), evt.getRecipe().getId(), evt.getScore());
+    }
+
+    @Subscribe
+    public void onUnFaveRecipe( final UnFaveRecipeEvent evt) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("UnFave: " + evt);
+        }
+
+        rateGenericItem( evt.getUser().getId(), evt.getRecipe().getId(), evt.getScore());
+    }
+
     private void rateGenericItem( final long inUserId, final long inGenericItemId, final float inRating) {
 		try {
 			recommender.ingest( new StringReader( inUserId + "," + inGenericItemId + "," + inRating) );

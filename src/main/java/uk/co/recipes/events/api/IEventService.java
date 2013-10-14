@@ -33,6 +33,9 @@ public interface IEventService {
     void removeRecipeIngredients( final IRecipe inRecipe, final IIngredient... inIngredients);
     void deleteRecipe( final IRecipe inRecipe);
 
+    void faveRecipe( final IUser inUser, final IRecipe inItem);
+    void unFaveRecipe( final IUser inUser, final IRecipe inItem);
+
     void visit( final IUser inUser, final ICanonicalItem inItem);
     void visit( final IUser inUser, final IRecipe inRecipe);
 }
