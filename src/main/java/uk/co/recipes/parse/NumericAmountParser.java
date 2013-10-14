@@ -3,7 +3,6 @@
  */
 package uk.co.recipes.parse;
 
-import org.apache.commons.math3.fraction.Fraction;
 
 /**
  * TODO
@@ -14,14 +13,18 @@ import org.apache.commons.math3.fraction.Fraction;
 public class NumericAmountParser {
 
 	// FIXME Should use http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math3/fraction/Fraction.html
-	public static int parse( final String inStrx) {
-		String adjustedStr = inStrx;
-        int multiplierPos = inStrx.indexOf('x');
+	public static double parse( final String inStr) {
+		String adjustedStr = inStr;
+        int multiplierPos = inStr.indexOf('x');
         double multiplier = 1.0;
 
         if ( multiplierPos > 0) {
         	if (adjustedStr.contains("-")) {
-        		// Ugh, just ignore '2-3 x 400g tins' for now FIXME
+                final int dashPos = adjustedStr.indexOf("-");
+                final String left = adjustedStr.substring( 0, dashPos).trim();
+                final String right = adjustedStr.substring( dashPos + 1, multiplierPos).trim();
+                multiplier = ( Double.valueOf(left) + Double.valueOf(right)) / 2;
+        		return multiplier * Integer.valueOf( adjustedStr.substring( multiplierPos + 1).trim() );
         	}
         	else {
         		multiplier = Double.valueOf( adjustedStr.substring( 0, multiplierPos).trim() );
@@ -33,21 +36,16 @@ public class NumericAmountParser {
             final int dashPos = adjustedStr.indexOf("-");
             final String left = adjustedStr.substring( 0, dashPos).trim();
             final String right = adjustedStr.substring( dashPos + 1).trim();
-            return (int) Math.round(( Double.valueOf(left) + Double.valueOf(right)) / 2);
+            return ( Double.valueOf(left) + Double.valueOf(right)) / 2;
         }
         else if (adjustedStr.contains(".")) {
-			Fraction f = new Fraction( Double.parseDouble(adjustedStr) );
-			return f.intValue();  // FIXME FIXME
+			return Double.parseDouble(adjustedStr);
 		}
 		else if (adjustedStr.contains("/")) {
 			int spos = adjustedStr.indexOf(' ');
-			int dpos = adjustedStr.indexOf('/');
-			String s2 = adjustedStr.substring( spos + 1, spos+2);
-			String s3 = adjustedStr.substring( spos + 3);
-			Fraction f = new Fraction( Integer.parseInt( adjustedStr.substring( spos + 1, spos+2) ), Integer.parseInt( adjustedStr.substring( spos + 3 )));
-			return f.intValue();  // FIXME FIXME
+			return Double.valueOf( adjustedStr.substring( spos + 1, spos+2) ) / Double.valueOf( adjustedStr.substring( spos + 3) );
 		}
 
-		return (int) (multiplier * Integer.valueOf(adjustedStr));
+		return multiplier * Integer.valueOf(adjustedStr);
 	}
 }

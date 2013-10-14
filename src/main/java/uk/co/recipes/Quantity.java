@@ -20,7 +20,7 @@ import com.google.common.base.Objects;
 public class Quantity implements IQuantity {
 
 	private IUnit units;
-	private int number;
+	private double number;
 	private NonNumericQuantities nnQuantity;
 
 	// Purely for Jackson deserialization
@@ -32,6 +32,15 @@ public class Quantity implements IQuantity {
 	 * @param number
 	 */
 	public Quantity(IUnit units, int number) {
+		this.units = checkNotNull(units, "Units cannot be null");
+		this.number = number;
+	}
+
+	/**
+	 * @param units
+	 * @param number
+	 */
+	public Quantity(IUnit units, double number) {
 		this.units = checkNotNull(units, "Units cannot be null");
 		this.number = number;
 	}
@@ -57,7 +66,7 @@ public class Quantity implements IQuantity {
 	 * @see uk.co.recipes.api.IQuantity#number()
 	 */
 	@Override
-	public int getNumber() {
+	public double getNumber() {
 		return number;
 	}
 
