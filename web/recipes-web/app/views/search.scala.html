@@ -16,7 +16,7 @@
         <div class="tab-pane active" id="recipes">
 			<ol>
 			@for( eachRecipe <- foundRecipes) {
-			  <li><a href="/recipes/@eachRecipe.getTitle()">@eachRecipe.getTitle()</a>&nbsp;&nbsp;@_forkRecipeDisplay( eachRecipe, "btn-xs") @_faveRecipeDisplay( eachRecipe, "btn-xs")</li>
+			  <li><a href="/recipes/@eachRecipe.getTitle()">@eachRecipe.getTitle()</a>&nbsp;&nbsp;@_forkRecipeDisplay( eachRecipe, "btn-xs") @_faveRecipeDisplay( eachRecipe, null, "btn-xs")</li>
 			}
 			</ol>
         </div>

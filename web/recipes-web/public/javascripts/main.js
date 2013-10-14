@@ -35,3 +35,13 @@ function addExclTag(inTag) {
 function clearFilters() {
     $.post("/user/filter/clearAll", function(data) { location.reload(false); });
 }
+
+function faveRecipe(inRecipeTitle) {
+	document.location.href = '/recipes/' + inRecipeTitle + '/fave';
+	return false;
+}
+
+function faveItem(inItem) {
+	document.location.href = '/items/' + inItem + '/fave';
+	return false;
+}

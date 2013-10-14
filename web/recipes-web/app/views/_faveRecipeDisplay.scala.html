@@ -1,2 +1,10 @@
-@(recipe: uk.co.recipes.api.IRecipe, extraStyles: String)
-<button type="button" class="btn btn-default @extraStyles" onclick="" title="Mark this recipe as a favourite"><span class="glyphicon glyphicon-heart-empty"></span></button>
+@(recipe: uk.co.recipes.api.IRecipe, currUser: uk.co.recipes.api.IUser, extraStyles: String)
+@if( currUser == null) {
+<button type="button" disabled="disabled" class="btn btn-default @extraStyles" onclick="" title="Mark this recipe as a favourite"><span class="glyphicon glyphicon-heart-empty"></span></button>
+} else {
+  @if(currUser.isFave(recipe)) {
+<button type="button" class="btn btn-default @extraStyles" onclick="faveRecipe('@recipe.getTitle()')" title="Remove this recipe as a favourite"><span class="glyphicon glyphicon-heart"></span></button>
+  } else {
+<button type="button" class="btn btn-default @extraStyles" onclick="faveRecipe('@recipe.getTitle()')" title="Add this recipe as a favourite"><span class="glyphicon glyphicon-heart-empty"></span></button>
+  }
+}

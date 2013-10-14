@@ -15,6 +15,7 @@ import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.external.WikipediaGetter;
 import uk.co.recipes.external.WikipediaResults;
+import uk.co.recipes.faves.UserFaves;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.ratings.ItemRating;
@@ -39,6 +40,7 @@ import com.google.common.base.Optional;
 public class Items extends AbstractExplorableController {
 
     private UserRatings ratings;
+    private UserFaves faves;
 	private ObjectMapper mapper;
 	private ISearchAPI searchApi;
 
@@ -47,13 +49,14 @@ public class Items extends AbstractExplorableController {
     @Inject
     public Items( final MyrrixUpdater updater, final EsItemFactory items, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService,
     			  final MyrrixRecommendationService inRecService, final EsUserFactory users, final UserRatings inRatings, final MetricRegistry metrics,
-    			  final ObjectMapper inMapper, final EsSearchService inSearch, final IEventService eventService) {
+    			  final ObjectMapper inMapper, final EsSearchService inSearch, final IEventService eventService, final UserFaves userFaves) {
         super( items, explorerFilters, inExplorerService, inRecService, metrics, eventService);
 
     	updater.startListening();
         this.ratings = checkNotNull(inRatings);
         this.mapper = checkNotNull(inMapper);
         this.searchApi = checkNotNull(inSearch);
+        this.faves = checkNotNull(userFaves);
     }
 
     public Result display( final String name) throws IOException {
@@ -88,6 +91,19 @@ public class Items extends AbstractExplorableController {
         }
 
 		ratings.addRating( user1, new ItemRating( item, inScore) );
+  
+        return redirect("/items/" + item.getCanonicalName());  // FIXME - horrible way to reload!
+    }
+
+    public Result fave( final String name) throws IOException {
+        final ICanonicalItem item = items.get(name).get();
+
+        final IUser user1 = getLocalUser();
+        if ( user1 == null) {
+            return unauthorized("Not logged-in");
+        }
+
+		faves.faveItem( user1, item);
   
         return redirect("/items/" + item.getCanonicalName());  // FIXME - horrible way to reload!
     }

@@ -22,6 +22,7 @@ import uk.co.recipes.api.Units;
 import uk.co.recipes.cats.Categorisation;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.events.impl.MyrrixUpdater;
+import uk.co.recipes.faves.UserFaves;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsUserFactory;
@@ -51,18 +52,20 @@ public class Recipes extends AbstractExplorableController {
 
     private IRecipePersistence recipes;
     private UserRatings ratings;
+    private UserFaves faves;
 	private ObjectMapper mapper;
 
     @Inject
     public Recipes( final MyrrixUpdater updater, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService, final EsItemFactory items,
                     final EsRecipeFactory recipes, final EsUserFactory users, final UserRatings inRatings, final MyrrixRecommendationService inRecService, final MetricRegistry metrics,
-                    final ObjectMapper inMapper, final IEventService eventService) {
+                    final ObjectMapper inMapper, final IEventService eventService, final UserFaves userFaves) {
     	super( items, explorerFilters, inExplorerService, inRecService, metrics, eventService);
 
     	updater.startListening();
         this.recipes = checkNotNull(recipes);
         this.ratings = checkNotNull(inRatings);
         this.mapper = checkNotNull(inMapper);
+        this.faves = checkNotNull(userFaves);
     }
 
     public Result create() throws IOException, InterruptedException {
@@ -142,7 +145,7 @@ public class Recipes extends AbstractExplorableController {
 
         final Multiset<ITag> categorisation = Categorisation.forIngredients( recipe.getIngredients(), NationalCuisineTags.values());
 
-        return ok(views.html.recipe.render( recipe, categorisation, explorer.similarRecipes( recipe, getExplorerFilter(explorerFilters), 12), recsApi.recommendIngredients( recipe, 9) ));
+        return ok(views.html.recipe.render( recipe, user1, categorisation, explorer.similarRecipes( recipe, getExplorerFilter(explorerFilters), 12), recsApi.recommendIngredients( recipe, 9) ));
     }
 
     public Result rate( final String name, final int inScore) throws IOException, InterruptedException {
@@ -184,6 +187,20 @@ public class Recipes extends AbstractExplorableController {
 		        final ICanonicalItem theItemToAdd = checkNotNull( items.get(ingredient).get(), "Could not load Item");
 
 		        recipes.addIngredients( recipe, new Ingredient( theItemToAdd, /* FIXME: hardcoded: */ new Quantity( Units.GRAMMES, 100)));
+		        recipes.waitUntilRefreshed();
+
+		        return reloadRecipe(recipe);
+			}
+		} );
+     }
+
+    public Result fave( final String name) throws IOException, InterruptedException {
+    	return handleLoggedInRecipeBasedAction( name, new RecipeAction() {
+
+			@Override
+			public Result doAction( final IUser loggedInUser, final IRecipe recipe) throws IOException, InterruptedException {
+				faves.faveRecipe( loggedInUser, recipe);
+
 		        recipes.waitUntilRefreshed();
 
 		        return reloadRecipe(recipe);

@@ -1,4 +1,4 @@
-@(recipe: uk.co.recipes.api.IRecipe, categorisation: com.google.common.collect.Multiset[uk.co.recipes.api.ITag], similarities: List[uk.co.recipes.api.IRecipe], recommendedItems: List[uk.co.recipes.api.ICanonicalItem])
+@(recipe: uk.co.recipes.api.IRecipe, currUser: uk.co.recipes.api.IUser, categorisation: com.google.common.collect.Multiset[uk.co.recipes.api.ITag], similarities: List[uk.co.recipes.api.IRecipe], recommendedItems: List[uk.co.recipes.api.ICanonicalItem])
 
 @main("Recipe: " + recipe.getTitle() ) {
 
@@ -24,7 +24,7 @@
 		  </ul>
 		</div>
 	    <div class="wrapper">
-	        <h1><!-- <span>@recipe.getId()</span>&nbsp; -->@recipe.getTitle()&nbsp;<!-- <span class="label label-warning">@recipe.getLocale()</span> -->@_forkRecipeDisplay( recipe, "btn-lg") @_faveRecipeDisplay( recipe, "btn-lg")</h1>
+	        <h1><!-- <span>@recipe.getId()</span>&nbsp; -->@recipe.getTitle()&nbsp;<!-- <span class="label label-warning">@recipe.getLocale()</span> -->@_forkRecipeDisplay( recipe, "btn-lg") @_faveRecipeDisplay( recipe, currUser, "btn-lg")</h1>
 	    </div>
 	</section>
 	
