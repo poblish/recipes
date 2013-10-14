@@ -23,11 +23,8 @@ import com.google.common.base.Optional;
  */
 public class UserRatings {
 
-    @Inject
-    EsUserFactory userFactory;
-
-    @Inject
-    IEventService eventService;
+    @Inject EsUserFactory userFactory;
+    @Inject IEventService eventService;
 
     private final static float INDIFFERENT_RATING = 5.0f;
 
