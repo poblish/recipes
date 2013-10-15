@@ -12,13 +12,16 @@ import javax.inject.Inject;
 
 import play.mvc.Controller;
 import play.mvc.Result;
+import service.PlayAuthUserServicePlugin;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.ITag;
+import uk.co.recipes.api.IUser;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.api.ISearchResult;
 import uk.co.recipes.service.impl.EsSearchService;
 
+import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -32,15 +35,17 @@ public class Search extends Controller {
 
 	private ObjectMapper mapper;
 	private ISearchAPI search;
+	private MetricRegistry metrics;
 
     private static final List<IRecipe> EMPTY_RECIPES = Collections.emptyList();
     private static final List<ITag> EMPTY_TAGS = Collections.emptyList();
     private static final List<ICanonicalItem> EMPTY_ITEMS = Collections.emptyList();
 
     @Inject
-    public Search( final EsSearchService inSearch, final ObjectMapper inMapper) {
+    public Search( final EsSearchService inSearch, final ObjectMapper inMapper, final MetricRegistry metrics) {
         this.mapper = checkNotNull(inMapper);
         this.search = checkNotNull(inSearch);
+        this.metrics = checkNotNull(metrics);
     }
 
     public Result doSearch() throws IOException {
@@ -85,5 +90,9 @@ public class Search extends Controller {
     	}
 
     	return ok( mapper.writeValueAsString(inResults) ).as("application/json");
+    }
+
+    private IUser getLocalUser() {
+        return /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( metrics, session());
     }
 }
