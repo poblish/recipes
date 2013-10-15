@@ -5,21 +5,16 @@ package uk.co.recipes.convert;
 
 
 import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.util.Locale;
-
 import javax.measure.quantity.Quantity;
 import javax.measure.quantity.Volume;
 import javax.measure.unit.NonSI;
 import javax.measure.unit.SI;
 import javax.measure.unit.Unit;
-
 import org.jscience.physics.amount.Amount;
-
 import uk.co.recipes.api.IQuantity;
 import uk.co.recipes.api.IUnit;
 import uk.co.recipes.api.Units;
-
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.collect.HashBasedTable;
@@ -46,33 +41,33 @@ public class Conversions {
     	final Unit<Volume> tsp_UK = NonSI.LITRE.divide(1000).times(5.91939047);
     	final Unit<Volume> tsp_US = NonSI.LITRE.divide(1000).times(4.92892159);
 
-        VOLUME_UNITS_TABLE.put( forUnit(Units.TSP), DEFAULT_LOCALE, tsp_UK);
-        VOLUME_UNITS_TABLE.put( forUnit(Units.ROUNDED_TBSP), DEFAULT_LOCALE, tsp_UK.times(ROUNDED_FACTOR));
-        VOLUME_UNITS_TABLE.put( forUnit(Units.HEAPED_TBSP), DEFAULT_LOCALE, tsp_UK.times(HEAPED_FACTOR));
-        VOLUME_UNITS_TABLE.put( forUnit(Units.TBSP), DEFAULT_LOCALE, tsp_UK.times(3));
+    	defaults( Units.TSP, tsp_UK);
+    	defaults( Units.ROUNDED_TBSP, tsp_UK.times(ROUNDED_FACTOR));
+    	defaults( Units.HEAPED_TBSP, tsp_UK.times(HEAPED_FACTOR));
+    	defaults( Units.TBSP, tsp_UK.times(3));
 
-        VOLUME_UNITS_TABLE.put( forUnit(Units.GRAMMES), DEFAULT_LOCALE, SI.GRAM);
+    	defaults( Units.GRAMMES, SI.GRAM);
 
-        VOLUME_UNITS_TABLE.put( new ItemUnit( Units.CUP, "Plain Flour"), /* Override */ Locale.US, SI.KILOGRAM.times(0.125));
-        VOLUME_UNITS_TABLE.put( new ItemUnit( Units.CUP, "Bread Flour"), /* Override */ Locale.US, SI.KILOGRAM.times(0.127));
-        VOLUME_UNITS_TABLE.put( new ItemUnit( Units.CUP, "Rye Flour"), /* Override */ Locale.US, SI.KILOGRAM.times(0.102));
-        VOLUME_UNITS_TABLE.put( new ItemUnit( Units.CUP, "Self-raising Flour"), /* Override */ Locale.US, SI.KILOGRAM.times(0.125));
-        VOLUME_UNITS_TABLE.put( new ItemUnit( Units.CUP, "Wholewheat Flour"), /* Override */ Locale.US, SI.KILOGRAM.times(0.120));
-        VOLUME_UNITS_TABLE.put( new ItemUnit( Units.CUP, "Rolled Oats"), /* Override */ Locale.US, SI.KILOGRAM.times(0.085));
+        override( Locale.US, new ItemUnit( Units.CUP, "Plain Flour"), SI.KILOGRAM.times(0.125));
+        override( Locale.US, new ItemUnit( Units.CUP, "Bread Flour"), SI.KILOGRAM.times(0.127));
+        override( Locale.US, new ItemUnit( Units.CUP, "Rye Flour"), SI.KILOGRAM.times(0.102));
+        override( Locale.US, new ItemUnit( Units.CUP, "Self-raising Flour"), SI.KILOGRAM.times(0.125));
+        override( Locale.US, new ItemUnit( Units.CUP, "Wholewheat Flour"), SI.KILOGRAM.times(0.120));
+        override( Locale.US, new ItemUnit( Units.CUP, "Rolled Oats"), SI.KILOGRAM.times(0.085));
 
-//        VOLUME_UNITS_TABLE.put( forUnit(Units.QUART), /* Override */ Locale.US, tsp_US);
+        override( Locale.US, Units.TSP, tsp_US);
+        override( Locale.US, Units.ROUNDED_TBSP, tsp_US.times(ROUNDED_FACTOR));
+        override( Locale.US, Units.HEAPED_TBSP, tsp_US.times(HEAPED_FACTOR));
+        override( Locale.US, Units.TBSP, tsp_US.times(3));
 
-        VOLUME_UNITS_TABLE.put( forUnit(Units.TSP), /* Override */ Locale.US, tsp_US);
-        VOLUME_UNITS_TABLE.put( forUnit(Units.ROUNDED_TBSP), /* Override */ Locale.US, tsp_US.times(ROUNDED_FACTOR));
-        VOLUME_UNITS_TABLE.put( forUnit(Units.HEAPED_TBSP), /* Override */ Locale.US, tsp_US.times(HEAPED_FACTOR));
-        VOLUME_UNITS_TABLE.put( forUnit(Units.TBSP), /* Override */ Locale.US, tsp_US.times(3));
+//      override( Locale.US, Units.QUART, tsp_US);
     }
 
 	public <T extends Quantity> Optional<Amount<T>> toJsrAmount( final Locale inLocale, final IQuantity inQuantity) {
 		return toJsrAmount( inLocale, forUnit( inQuantity.getUnits() ), inQuantity);
 	}
 
-	public <T extends Quantity> Optional<Amount<T>> toJsrAmount( final Locale inLocale, final String inItemName, IQuantity inQuantity) {
+    public <T extends Quantity> Optional<Amount<T>> toJsrAmount( final Locale inLocale, final String inItemName, IQuantity inQuantity) {
 		return toJsrAmount( inLocale, new ItemUnit( inQuantity.getUnits(), inItemName), inQuantity);
 	}
 
@@ -116,6 +111,23 @@ public class Conversions {
 	private static ItemUnit forUnit( final IUnit unit) {
 		return new ItemUnit( unit, DEFAULT_ITEM);
 	}
+
+    @SuppressWarnings("unused")
+    private static void defaults( ItemUnit itemUnit, Unit<?> inUnit) {
+        VOLUME_UNITS_TABLE.put( itemUnit, DEFAULT_LOCALE, inUnit);
+    }
+
+    private static void defaults( IUnit unit, Unit<?> inUnit) {
+        VOLUME_UNITS_TABLE.put( forUnit(unit), DEFAULT_LOCALE, inUnit);
+    }
+
+    private static void override( Locale inLocale, ItemUnit itemUnit, Unit<?> inUnit) {
+        VOLUME_UNITS_TABLE.put( itemUnit, inLocale, inUnit);
+    }
+
+    private static void override( Locale inLocale, IUnit unit, Unit<?> inUnit) {
+        VOLUME_UNITS_TABLE.put( forUnit(unit), inLocale, inUnit);
+    }
 
 	/**
 	 * 
