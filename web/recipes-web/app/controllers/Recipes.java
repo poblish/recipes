@@ -194,6 +194,7 @@ public class Recipes extends AbstractExplorableController {
 		} );
      }
 
+    // Bear in mind: can be unfave-ing too!
     public Result fave( final String name) throws IOException, InterruptedException {
     	return handleLoggedInRecipeBasedAction( name, new RecipeAction() {
 
