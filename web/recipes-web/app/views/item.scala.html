@@ -1,4 +1,4 @@
-@(item: uk.co.recipes.api.ICanonicalItem, similarities: List[uk.co.recipes.api.ICanonicalItem], recommendedRecipes: List[uk.co.recipes.api.IRecipe], hasGoodRecommendations: Boolean)
+@(item: uk.co.recipes.api.ICanonicalItem, currUser: uk.co.recipes.api.IUser, similarities: List[uk.co.recipes.api.ICanonicalItem], recommendedRecipes: List[uk.co.recipes.api.IRecipe], hasGoodRecommendations: Boolean)
 
 @main("Item: " + item.getCanonicalName() ) {
 
@@ -51,7 +51,7 @@
 		}
 
 		<div class="col-md-4">
-			@_displayRecipe( eachRecipe, index)
+			@_displayRecipe( eachRecipe, index, currUser)
 		</div>  <!-- <div class="col-md-4"> -->
 		
 		<script>

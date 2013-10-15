@@ -76,10 +76,10 @@ public class Items extends AbstractExplorableController {
         final List<IRecipe> recRecipes = ( user1 != null) ? recsApi.recommendRecipes( user1, NUM_RECOMMENDATIONS_TO_SHOW, item) : recsApi.recommendRecipesToAnonymous( NUM_RECOMMENDATIONS_TO_SHOW, item);
 
         if (!recRecipes.isEmpty()) {
-            return ok(views.html.item.render( item, similarities, recRecipes, /* Got recommendations OK */ true));
+            return ok(views.html.item.render( item, user1, similarities, recRecipes, /* Got recommendations OK */ true));
         }
 
-        return ok(views.html.item.render( item, similarities, searchApi.findRandomRecipesByItemName( NUM_RECOMMENDATIONS_TO_SHOW, item), /* Didn't get recommendations */ false));
+        return ok(views.html.item.render( item, user1, similarities, searchApi.findRandomRecipesByItemName( NUM_RECOMMENDATIONS_TO_SHOW, item), /* Didn't get recommendations */ false));
     }
 
     public Result rate( final String name, final int inScore) throws IOException {

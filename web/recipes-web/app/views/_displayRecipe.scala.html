@@ -1,6 +1,6 @@
-@(recipe: uk.co.recipes.api.IRecipe, index: Int)
+@(recipe: uk.co.recipes.api.IRecipe, index: Int, currUser: uk.co.recipes.api.IUser)
 <div class="panel panel-default">
- 	<div class="panel-heading"><a href="/recipes/@recipe.getTitle()">@recipe.getTitle()</a>@_forkRecipeDisplay( recipe, "btn-xs pull-right") @_faveRecipeDisplay( recipe, null, "btn-xs pull-right")&nbsp;<a id="toggle_@index" class="btn btn-default btn-xs" href="#"><i class="glyphicon glyphicon-chevron-down"></i></a></div>
+ 	<div class="panel-heading"><a href="/recipes/@recipe.getTitle()">@recipe.getTitle()</a>@_forkRecipeDisplay( recipe, "btn-xs pull-right") @_faveRecipeDisplay( recipe, currUser, "btn-xs pull-right")&nbsp;<a id="toggle_@index" class="btn btn-default btn-xs" href="#"><i class="glyphicon glyphicon-chevron-down"></i></a></div>
  	<div class="panel-body" style="display: none" id="ingredients_@index"><ol>
 @for(ingr <- recipe.getSortedIngredients()) {
 <li><a href="http://localhost:9000/items/@ingr.getItem().getCanonicalName()">@ingr.getItem().getCanonicalName()</a>&nbsp;@if(ingr.isOptional()) { <span>(optional)</span>&nbsp;}@for(tagName <- ingr.getItem().getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}</li>

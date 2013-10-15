@@ -49,15 +49,16 @@ public class Search extends Controller {
     }
 
     public Result doSearch() throws IOException {
+		final IUser currUser = getLocalUser();
         final String[] theInputs = request().queryString().get("input");
         final boolean gotInput = ( theInputs != null && theInputs.length > 0 && !theInputs[0].isEmpty());
 
         if (!gotInput) {
-            return ok(views.html.search.render( "-", EMPTY_RECIPES, EMPTY_TAGS, EMPTY_ITEMS));
+            return ok(views.html.search.render( "-", currUser, EMPTY_RECIPES, EMPTY_TAGS, EMPTY_ITEMS));
         }
 
         final String termToUse = theInputs[0].trim();
-        return ok(views.html.search.render( "'" + termToUse + "'", search.findRecipesByName(termToUse), search.findTagsByName(termToUse), search.findItemsByName(termToUse) ));
+        return ok(views.html.search.render( "'" + termToUse + "'", currUser, search.findRecipesByName(termToUse), search.findTagsByName(termToUse), search.findItemsByName(termToUse) ));
     }
 
     public Result findPartial() throws IOException {

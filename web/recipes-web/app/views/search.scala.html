@@ -1,4 +1,4 @@
-@(searchQuery: String, foundRecipes: List[uk.co.recipes.api.IRecipe], foundTags: List[uk.co.recipes.api.ITag], foundItems: List[uk.co.recipes.api.ICanonicalItem])
+@(searchQuery: String, currUser: uk.co.recipes.api.IUser, foundRecipes: List[uk.co.recipes.api.IRecipe], foundTags: List[uk.co.recipes.api.ITag], foundItems: List[uk.co.recipes.api.ICanonicalItem])
 
 @main("Search Results: " + searchQuery) {
 	<section id="top">
@@ -16,7 +16,7 @@
         <div class="tab-pane active" id="recipes">
 			<ol>
 			@for( eachRecipe <- foundRecipes) {
-			  <li><a href="/recipes/@eachRecipe.getTitle()">@eachRecipe.getTitle()</a>&nbsp;&nbsp;@_forkRecipeDisplay( eachRecipe, "btn-xs") @_faveRecipeDisplay( eachRecipe, null, "btn-xs")</li>
+			  <li><a href="/recipes/@eachRecipe.getTitle()">@eachRecipe.getTitle()</a>&nbsp;&nbsp;@_forkRecipeDisplay( eachRecipe, "btn-xs") @_faveRecipeDisplay( eachRecipe, currUser, "btn-xs")</li>
 			}
 			</ol>
         </div>
