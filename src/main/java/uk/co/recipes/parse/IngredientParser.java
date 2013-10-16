@@ -67,6 +67,8 @@ public class IngredientParser {
     private static final Pattern    F = Pattern.compile(SUFFIX, Pattern.CASE_INSENSITIVE);
 
     private static final Pattern    GRAMMES_OZ_STRIPPER = Pattern.compile("g/ ?[0-9\\.]+ ?oz", Pattern.CASE_INSENSITIVE);
+    private static final Pattern    BONELESS_COMMA_STRIPPER = Pattern.compile("boneless,", Pattern.CASE_INSENSITIVE);
+    private static final Pattern    SKINLESS_COMMA_STRIPPER = Pattern.compile("skinless,", Pattern.CASE_INSENSITIVE);
 
 	public boolean parse( final String inRawStr, final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) {
 	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPE_PARSE).time();
@@ -83,6 +85,8 @@ public class IngredientParser {
 
 	    String adjustedStr = new FractionReplacer().replaceFractions(inRawStr);
 	    adjustedStr = GRAMMES_OZ_STRIPPER.matcher(adjustedStr).replaceAll("g");  // Strip stupid '200g/7oz' => '200g'
+	    adjustedStr = BONELESS_COMMA_STRIPPER.matcher(adjustedStr).replaceAll("boneless ");  // Pre-strip 'boneless, [skinless]' to work around our lame name parsing
+	    adjustedStr = SKINLESS_COMMA_STRIPPER.matcher(adjustedStr).replaceAll("boneless ");  // Pre-strip 'skinless, [boneless]' to work around our lame name parsing
 
 		Matcher m = A.matcher(adjustedStr);
 		if (m.matches()) {
@@ -353,7 +357,9 @@ public class IngredientParser {
 
     // For parsing an ingredient name only
     public boolean parseItemName( final String inRawStr) {
-        return ITEM_NAME_PATTERN.matcher(inRawStr).matches();
+	    String adjustedStr = BONELESS_COMMA_STRIPPER.matcher(inRawStr).replaceAll("boneless ");  // Pre-strip 'boneless, [skinless]' to work around our lame name parsing
+	    adjustedStr = SKINLESS_COMMA_STRIPPER.matcher(adjustedStr).replaceAll("skinless ");  // Pre-strip 'skinless, [boneless]' to work around our lame name parsing
+        return ITEM_NAME_PATTERN.matcher(adjustedStr).matches();
     }
     
 	public ICanonicalItem findItem( final String inName) {
