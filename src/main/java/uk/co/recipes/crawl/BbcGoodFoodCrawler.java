@@ -52,7 +52,7 @@ public class BbcGoodFoodCrawler {
 
         CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(crawlStorageFolder);
-        config.setMaxPagesToFetch(2000);
+        config.setMaxPagesToFetch(5000);
 
         /*
          * Instantiate the controller for this crawl.
