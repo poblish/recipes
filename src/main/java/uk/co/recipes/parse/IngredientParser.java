@@ -66,9 +66,12 @@ public class IngredientParser {
     private static final Pattern    E = Pattern.compile("((?:dressed|steamed|cooked|sliced|sweet|roughly chopped) [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);
     private static final Pattern    F = Pattern.compile(SUFFIX, Pattern.CASE_INSENSITIVE);
 
+    // Not very nice hacks...
     private static final Pattern    GRAMMES_OZ_STRIPPER = Pattern.compile("g/ ?[0-9\\.]+ ?oz", Pattern.CASE_INSENSITIVE);
     private static final Pattern    BONELESS_COMMA_STRIPPER = Pattern.compile("boneless,", Pattern.CASE_INSENSITIVE);
     private static final Pattern    SKINLESS_COMMA_STRIPPER = Pattern.compile("skinless,", Pattern.CASE_INSENSITIVE);
+    private static final Pattern    ONE_CUP_STRIPPER = Pattern.compile("1 Cup/300ml", Pattern.CASE_INSENSITIVE);
+    private static final Pattern    FOUR_CUPS_STRIPPER = Pattern.compile("4 Cups/1200ml", Pattern.CASE_INSENSITIVE);
 
 	public boolean parse( final String inRawStr, final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) {
 	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPE_PARSE).time();
@@ -87,6 +90,8 @@ public class IngredientParser {
 	    adjustedStr = GRAMMES_OZ_STRIPPER.matcher(adjustedStr).replaceAll("g");  // Strip stupid '200g/7oz' => '200g'
 	    adjustedStr = BONELESS_COMMA_STRIPPER.matcher(adjustedStr).replaceAll("boneless ");  // Pre-strip 'boneless, [skinless]' to work around our lame name parsing
 	    adjustedStr = SKINLESS_COMMA_STRIPPER.matcher(adjustedStr).replaceAll("boneless ");  // Pre-strip 'skinless, [boneless]' to work around our lame name parsing
+	    adjustedStr = ONE_CUP_STRIPPER.matcher(adjustedStr).replaceAll("300ml");  // Yuk, via CurryFrenzy
+	    adjustedStr = FOUR_CUPS_STRIPPER.matcher(adjustedStr).replaceAll("1200ml");  // Yuk, via CurryFrenzy
 
 		Matcher m = A.matcher(adjustedStr);
 		if (m.matches()) {
