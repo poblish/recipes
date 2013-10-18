@@ -186,13 +186,13 @@
 ---
 {canonicalName: Fenugreek Seeds, parent: Fenugreek, tags: {-HERB, SPICE}, aliases: {Fenugreek Seed, Methi}}
 ---
-{canonicalName: Garam Masala, tags: {SPICE, INDIAN}, aliases: {Garam Masala Powder}}
+{canonicalName: Garam Masala, tags: {SPICE, INDIAN}, aliases: {Garam Masala Powder, Garam Masalla, Garam Masalla powder}}
 ---
 {canonicalName: Ginger, tags: {SPICE, CITRUS, INDIAN, CHINESE}}
 ---
 {    canonicalName: Crystallised Ginger, parent: Ginger}
 ---
-{    canonicalName: Ginger Paste, parent: Ginger}
+{    canonicalName: Ginger Puree, parent: Ginger, aliases: Ginger Paste}
 ---
 {    canonicalName: Root Ginger, parent: Ginger}
 ---
@@ -205,6 +205,8 @@
 {canonicalName: Mixed Seeds, tags: {SPICE}}
 ---
 {canonicalName: Mixed Spice, tags: {SPICE, BAKING}}
+---
+{canonicalName: Nigella Seeds, tags: {SPICE, ASIAN}, aliases: {Kalonji, Kalonji Seeds, Black Cumin}}
 ---
 {canonicalName: Nutmeg, tags: {SPICE, SPICY}}
 ---
@@ -254,11 +256,13 @@
 ---
 {    canonicalName: Ancho Chile, parent: Chilli, tags: {MEXICAN, {SCOVILLE: 1000–1500, HEAT_5: 1}}, aliases: {Ancho Chilli, Ancho Chillies, Poblano}}
 ---
-{    canonicalName: Cayenne Pepper, parent: Chilli, tags: {{SCOVILLE: 30000–50000, HEAT_5: 3}}}
+{    canonicalName: Cayenne Pepper, parent: Chilli, tags: {{SCOVILLE: 30000–50000, HEAT_5: 3}}, aliases: {Cayenne Chilli, Cayenne chillies}}
 ---
 {    canonicalName: Chile de árbol, parent: Chilli, tags: {MEXICAN, GREEN_GRASSY, {SCOVILLE: 15000-30000, HEAT_5: 3}}, aliases: {Arbol Chili, Chile de arbol}}
 ---
 {    canonicalName: Bird's eye chili, parent: Chilli, tags: {THAI, VIETNAMESE, GREEN_GRASSY, {SCOVILLE: 50000–100000, HEAT_5: 4}}, aliases: {Bird's eye chilli, Thai chili, Birds eye chillies}}
+---
+{        canonicalName: Red Bird's eye chili, parent: Bird's eye chili, aliases: {Red Birds eye Chillies}}
 ---
 {    canonicalName: Chipotle, parent: Chilli, tags: {MEXICAN, {SCOVILLE: 3000-10000, HEAT_5: 3}}, aliases: {Chipotle chili, Chilpotle}}
 ---
@@ -268,7 +272,11 @@
 ---
 {    canonicalName: Green Thai chilli, parent: Chilli, tags: {THAI, GREEN_GRASSY}}
 ---
+{    canonicalName: Habanero, parent: Chilli, tags: {MEXICAN, GREEN_GRASSY, {SCOVILLE: 100000–350000, HEAT_5: 5}}, aliases: {Habanero Chili}}
+---
 {    canonicalName: Jalapeño, parent: Chilli, tags: {MEXICAN, GREEN_GRASSY, {SCOVILLE: 2500–10000, HEAT_5: 2}}, aliases: {Jalapeno}}
+---
+{    canonicalName: Naga Chili, parent: Chilli, tags: {INDIAN, GREEN_GRASSY, {SCOVILLE: 330000–1032310, HEAT_5: 5}}, aliases: {Naga Chillies, Bhut Jolokia, Ghost Pepper}}
 ---
 {    canonicalName: Red Chillies, parent: Chilli, tags: {INDIAN, THAI, CHINESE, GREEN_GRASSY}, aliases: {Red Chilli}}
 ---
@@ -368,7 +376,7 @@
 ---
 {    canonicalName: Garlic Bulb, parent: Garlic Cloves}
 ---
-{    canonicalName: Garlic Paste, parent: Garlic Cloves}
+{    canonicalName: Garlic Puree, parent: Garlic Cloves, aliases: Garlic Paste}
 ---
 {canonicalName: Green Beans, tags: VEGETABLE}
 ---
@@ -426,6 +434,8 @@
 ---
 {    canonicalName: Pickling Onions, parent: Onion}
 ---
+{    canonicalName: Pureed Onion, parent: Onion}
+---
 {    canonicalName: Red Onion, parent: Onion, aliases: {Red Onions}}
 ---
 {    canonicalName: Salad Onions, parent: Onion, aliases: {Salad Onion}}
@@ -437,6 +447,8 @@
 {    canonicalName: Spring Onions, parent: Onion, aliases: {Spring Onion}}
 ---
 {    canonicalName: Yellow Onion, parent: Onion}
+---
+{    canonicalName: White Onions, parent: Onion, aliases: {White Onion}}
 ---
 {canonicalName: Pak Choi, tags: {VEGETABLE, CHINESE}}
 ---
@@ -694,6 +706,8 @@
 
 {canonicalName: Flour, tags: {FLOUR}, baseAmt: 50g}
 ---
+{    canonicalName: Chapati Flour, parent: Flour, tags: INDIAN}
+---
 {    canonicalName: Chickpea Flour, parent: Flour, aliases: Gram Flour}
 ---
 {    canonicalName: Cornflour, parent: Flour}
@@ -826,7 +840,7 @@
 ---
 {canonicalName: Pecan Nuts, tags: NUT, aliases: {Pecan, Pecans}}
 ---
-{canonicalName: Pistachios, tags: NUT, aliases: {Pistachio}}
+{canonicalName: Pistachios, tags: NUT, aliases: {Pistachio, pistachio nuts}}
 ---
 {canonicalName: Walnuts, tags: {NUT, WOODLAND}, aliases: {Walnut}}
 ---
@@ -1126,7 +1140,7 @@
 ---
 {canonicalName: Tabasco Sauce, tags: {SAUCE, USA}}
 ---
-{canonicalName: Worcestershire Sauce, tags: {ENGLISH, SAUCE}, contains: Anchovy}
+{canonicalName: Worcestershire Sauce, tags: {ENGLISH, SAUCE}, contains: Anchovy, aliases: {Worcester sauce}}
 ---
 
 
@@ -1202,7 +1216,7 @@
 ---
 {    canonicalName: Tuna, parent: Oily Fish}
 ---
-{        canonicalName: Tuna Steaks, parent: Tuna}
+{        canonicalName: Tuna Steaks, parent: Tuna, aliases: {Tuna Steak}}
 ---
 {canonicalName: White Fish, tags: {FISH, SEAFOOD, MARINE}}
 ---
@@ -1243,6 +1257,8 @@
 {canonicalName: Beef, tags: {MEAT, RED_MEAT}}
 ---
 {    canonicalName: Beef cheek, parent: Beef}
+---
+{    canonicalName: Beef steak, parent: Beef, aliases: {Steak}}
 ---
 {    canonicalName: Beef strips, parent: Beef, aliases: {Beef stir-fry strips}}
 ---
