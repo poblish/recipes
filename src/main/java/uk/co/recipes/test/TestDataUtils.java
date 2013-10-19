@@ -7,9 +7,11 @@ import static java.util.Locale.ENGLISH;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -19,6 +21,7 @@ import uk.co.recipes.RecipeStage;
 import uk.co.recipes.User;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
+import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.parse.DeferralStatus;
 import uk.co.recipes.parse.IDeferredIngredientHandler;
@@ -27,10 +30,12 @@ import uk.co.recipes.parse.IngredientParser;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsUserFactory;
+import uk.co.recipes.tags.TagUtils;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 
 /**
@@ -79,6 +84,8 @@ public class TestDataUtils {
 
 		final List<DeferralStatus> deferredItems = Lists.newArrayList();
 
+		Map<ITag,Serializable> recipeTags = null;
+
 		for ( String eachLine : Files.readLines( new File( inDir, inFilename), Charset.forName("utf-8"))) {
 
 			if (eachLine.isEmpty()) {
@@ -87,12 +94,32 @@ public class TestDataUtils {
 
 			lineNum++;
 
+			// Parse comments
 			if (eachLine.startsWith("// ")) {
 				if ( lineNum == 1) {
 					recipeTitle = eachLine.substring(3).trim();
 				}
 				continue;
 			}
+
+			// Parse Recipe tags
+			if (eachLine.startsWith("@")) {
+				if ( recipeTags == null) {
+					recipeTags = Maps.newHashMap();
+				}
+
+				int eqPos = eachLine.indexOf('=');
+				String tagName = eachLine.substring( 1, eqPos);
+
+				if (tagName.startsWith("recipe")) {  // Yuk, insert underscore between words
+					tagName = "recipe_" + tagName.substring(6);
+				}
+
+				recipeTags.put( TagUtils.forName( tagName.toUpperCase() ), eachLine.substring( eqPos + 1));
+				continue;
+			}
+
+			///////////////////////////////////////////////////////////////////////////////////////////
 
 			boolean matched = parser.parse( eachLine, new IParsedIngredientHandler() {
 
@@ -152,6 +179,10 @@ public class TestDataUtils {
 
 		if ( recipeTitle != null) {
 			r.setTitle(recipeTitle);
+		}
+
+		if ( recipeTags != null) {
+			r.addTags(recipeTags);
 		}
 
 		recipeFactory.put( r, recipeFactory.toStringId(r));
