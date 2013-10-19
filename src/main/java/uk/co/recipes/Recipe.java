@@ -193,6 +193,13 @@ public class Recipe implements IRecipe {
 	}
 
 	@Override
+	public void addTags( final Map<ITag,Serializable> tags) {
+		for ( Entry<ITag,Serializable> each : tags.entrySet()) {
+			addTag( each.getKey(), each.getValue());
+		}
+	}
+
+	@Override
 	public void addTag( final ITag key) {
 		tagsMap.put( key, Boolean.TRUE);
 	}

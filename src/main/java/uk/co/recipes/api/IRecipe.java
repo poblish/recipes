@@ -3,9 +3,11 @@
  */
 package uk.co.recipes.api;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 
@@ -15,7 +17,7 @@ import org.joda.time.DateTime;
  * @author andrewregan
  * 
  */
-public interface IRecipe extends ITagging, Cloneable, java.io.Serializable {
+public interface IRecipe extends ITagging, Cloneable, Serializable {
 
 	long getId();
 	void setId( long id);
@@ -44,4 +46,6 @@ public interface IRecipe extends ITagging, Cloneable, java.io.Serializable {
 	boolean removeItems( final ICanonicalItem... inItems);
 	boolean addIngredients( final IIngredient... inIngredients);
 	boolean removeIngredients( final IIngredient... inIngredients);
+
+	void addTags( final Map<ITag,Serializable> tags);
 }
