@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package uk.co.recipes.persistence;
 
@@ -72,14 +72,14 @@ public class EsItemFactory implements IItemPersistence {
 	@Inject
 	EsSequenceFactory sequences;
 
-    @Inject
-    MetricRegistry metrics;
+	@Inject
+	MetricRegistry metrics;
 
-    @Inject
-    IEventService eventService;
+	@Inject
+	IEventService eventService;
 
-    @Inject
-    Cache<String,ICanonicalItem> itemsCache;
+	@Inject
+	Cache<String,ICanonicalItem> itemsCache;
 
 
 	public ICanonicalItem put( final ICanonicalItem inItem, String inId) throws IOException {
@@ -90,13 +90,13 @@ public class EsItemFactory implements IItemPersistence {
 
 			/* IndexResponse esResp = */ esClient.prepareIndex( "recipe", "items", inId)/*.setCreate(true) */.setSource( mapper.writeValueAsString(inItem) ).execute().actionGet();
 
-		    itemsCache.put( inId, inItem);
+			itemsCache.put( inId, inItem);
 
 			eventService.addItem(inItem);
 		}
-        finally {
-            timerCtxt.stop();
-        }
+		finally {
+			timerCtxt.stop();
+		}
 
 		return inItem;
 	}
@@ -179,7 +179,7 @@ public class EsItemFactory implements IItemPersistence {
 	public ICanonicalItem getOrCreateImpl( final String inCanonicalName, final boolean inMatchAliases, final boolean inFindSubItems) {
 		try {
 			final Optional<ICanonicalItem> got = get(inCanonicalName);
-	
+
 			if (got.isPresent()) {
 				return got.get();
 			}
