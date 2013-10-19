@@ -115,6 +115,18 @@ public class BbcGoodFoodCrawler {
             	sb.append("// ").append(title).append("\n");
             	sb.append("// ").append(url).append("\n");
 
+            	for ( Element each : doc.select("div#recipe-main-details meta")) {
+            		final String prop = each.attr("itemprop");
+            		final String val = each.attr("content");
+
+            		if ( prop.equals("cookTime") || prop.equals("prepTime") || prop.equals("totalTime") || prop.equals("recipeCuisine") || prop.equals("recipeCategory")) {
+                    	sb.append("@").append(prop).append("=").append(val).append("\n");
+            		}
+            		else if (val.equals("Vegan") || val.equals("Vegetarian")) {
+                    	sb.append("@").append(val).append("=true").append("\n");
+            		}
+            	}
+
             	for ( Element each : doc.select("section#recipe-ingredients div li")) {
                 	sb.append( each.text() ).append("\n");
             	}
