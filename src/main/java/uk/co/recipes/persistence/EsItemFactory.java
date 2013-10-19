@@ -222,14 +222,14 @@ public class EsItemFactory implements IItemPersistence {
 						final String candidate1 = Joiner.on(' ').join( Arrays.copyOfRange( words, numWordsToRemove, words.length) );
 						final ICanonicalItem item1 = getOrCreateImpl(candidate1, /* Want aliases: */ true, false);
 						if (item1 != null) {
-							LOG.info("Convert '" + inCanonicalName + "' => " + item1);
+							LOG.trace("Convert '" + inCanonicalName + "' => " + item1);
 							return item1;
 						}
 
 						final String candidate2 = Joiner.on(' ').join( Arrays.copyOfRange( words, 0, words.length - numWordsToRemove) );
 						final ICanonicalItem item2 = getOrCreateImpl(candidate2, /* Want aliases: */ true, false);
 						if (item2 != null) {
-							LOG.info("Convert '" + inCanonicalName + "' => " + item2);
+							LOG.trace("Convert '" + inCanonicalName + "' => " + item2);
 							return item2;
 						}
 					}
