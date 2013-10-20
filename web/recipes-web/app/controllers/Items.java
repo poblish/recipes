@@ -25,6 +25,7 @@ import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.EsSearchService;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
+import uk.co.recipes.ui.CuisineColours;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,8 +50,9 @@ public class Items extends AbstractExplorableController {
     @Inject
     public Items( final MyrrixUpdater updater, final EsItemFactory items, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService,
     			  final MyrrixRecommendationService inRecService, final EsUserFactory users, final UserRatings inRatings, final MetricRegistry metrics,
-    			  final ObjectMapper inMapper, final EsSearchService inSearch, final IEventService eventService, final UserFaves userFaves) {
-        super( items, explorerFilters, inExplorerService, inRecService, metrics, eventService);
+    			  final ObjectMapper inMapper, final EsSearchService inSearch, final IEventService eventService, final UserFaves userFaves,
+    			  final CuisineColours colours) {
+        super( items, explorerFilters, inExplorerService, inRecService, metrics, eventService, colours);
 
     	updater.startListening();
         this.ratings = checkNotNull(inRatings);
@@ -76,10 +78,10 @@ public class Items extends AbstractExplorableController {
         final List<IRecipe> recRecipes = ( user1 != null) ? recsApi.recommendRecipes( user1, NUM_RECOMMENDATIONS_TO_SHOW, item) : recsApi.recommendRecipesToAnonymous( NUM_RECOMMENDATIONS_TO_SHOW, item);
 
         if (!recRecipes.isEmpty()) {
-            return ok(views.html.item.render( item, user1, similarities, recRecipes, /* Got recommendations OK */ true));
+            return ok(views.html.item.render( item, user1, similarities, recRecipes, /* Got recommendations OK */ true, colours));
         }
 
-        return ok(views.html.item.render( item, user1, similarities, searchApi.findRandomRecipesByItemName( NUM_RECOMMENDATIONS_TO_SHOW, item), /* Didn't get recommendations */ false));
+        return ok(views.html.item.render( item, user1, similarities, searchApi.findRandomRecipesByItemName( NUM_RECOMMENDATIONS_TO_SHOW, item), /* Didn't get recommendations */ false, colours));
     }
 
     public Result rate( final String name, final int inScore) throws IOException {

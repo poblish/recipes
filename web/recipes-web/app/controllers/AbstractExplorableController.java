@@ -19,6 +19,7 @@ import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.ExplorerFilterDefs;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
+import uk.co.recipes.ui.CuisineColours;
 
 import com.codahale.metrics.MetricRegistry;
 
@@ -37,15 +38,18 @@ public abstract class AbstractExplorableController extends Controller {
     protected MetricRegistry metrics;
     protected IRecommendationsAPI recsApi;
     protected IEventService events;
+    protected CuisineColours colours;
 
     public AbstractExplorableController( final EsItemFactory items, final EsExplorerFilters explorerFilters, final MyrrixExplorerService explorer,
-    									 final MyrrixRecommendationService inRecService, final MetricRegistry metrics, final IEventService eventService) {
+    									 final MyrrixRecommendationService inRecService, final MetricRegistry metrics, final IEventService eventService,
+    									 final CuisineColours colours) {
         this.items = checkNotNull(items);
         this.explorer = checkNotNull(explorer);
         this.explorerFilters = checkNotNull(explorerFilters);
         this.metrics = checkNotNull(metrics);
         this.recsApi = checkNotNull(inRecService);
         this.events = checkNotNull(eventService);
+        this.colours = checkNotNull(colours);
     }
 
     protected IUser getLocalUser() {

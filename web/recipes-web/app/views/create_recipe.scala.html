@@ -1,4 +1,4 @@
-@(currentUser: uk.co.recipes.api.IUser, recipe: uk.co.recipes.api.IRecipe, recommendedRecipes: List[uk.co.recipes.api.IRecipe])
+@(currentUser: uk.co.recipes.api.IUser, recipe: uk.co.recipes.api.IRecipe, recommendedRecipes: List[uk.co.recipes.api.IRecipe], cuisineColours: uk.co.recipes.ui.CuisineColours)
 
 @main("Create Recipe") {
 
@@ -75,7 +75,7 @@
 			}
 	
 			<div class="col-md-4">
-				@_displayRecipe( eachRecipe, index, currentUser)
+				@_displayRecipe( eachRecipe, index, currentUser, cuisineColours)
 			</div>  <!-- <div class="col-md-4"> -->
 			
 			<script>

@@ -57,26 +57,24 @@ public class Recipes extends AbstractExplorableController {
     private UserRatings ratings;
     private UserFaves faves;
 	private ObjectMapper mapper;
-	private CuisineColours colours;
 
     @Inject
     public Recipes( final MyrrixUpdater updater, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService, final EsItemFactory items,
                     final EsRecipeFactory recipes, final EsUserFactory users, final UserRatings inRatings, final MyrrixRecommendationService inRecService, final MetricRegistry metrics,
                     final ObjectMapper inMapper, final IEventService eventService, final UserFaves userFaves, final CuisineColours colours) {
-    	super( items, explorerFilters, inExplorerService, inRecService, metrics, eventService);
+    	super( items, explorerFilters, inExplorerService, inRecService, metrics, eventService, colours);
 
     	updater.startListening();
         this.recipes = checkNotNull(recipes);
         this.ratings = checkNotNull(inRatings);
         this.mapper = checkNotNull(inMapper);
         this.faves = checkNotNull(userFaves);
-        this.colours = checkNotNull(colours);
     }
 
     public Result create() throws IOException, InterruptedException {
 		final IUser user1 = getLocalUser();
 		final IRecipe recipe = getSessionCreatedRecipe(true);
-        return ok(views.html.create_recipe.render(user1, recipe, recsApi.recommendRandomRecipesToAnonymous( recipe, 12)));
+        return ok(views.html.create_recipe.render(user1, recipe, recsApi.recommendRandomRecipesToAnonymous( recipe, 12), colours));
     }
 
     public Result createAddIngredient( final String ingredient) throws IOException, InterruptedException {
@@ -153,7 +151,7 @@ public class Recipes extends AbstractExplorableController {
 
         final Multiset<ITag> categorisation = Categorisation.forIngredients( recipe.getIngredients(), NationalCuisineTags.values());
 
-        return ok(views.html.recipe.render( recipe, user1, categorisation, explorer.similarRecipes( recipe, getExplorerFilter(explorerFilters), 12), recsApi.recommendIngredients( recipe, 9), cuisineName, cuisineColour ));
+        return ok(views.html.recipe.render( recipe, user1, categorisation, explorer.similarRecipes( recipe, getExplorerFilter(explorerFilters), 12), recsApi.recommendIngredients( recipe, 9), colours, cuisineName, cuisineColour ));
     }
 
     public Result rate( final String name, final int inScore) throws IOException, InterruptedException {

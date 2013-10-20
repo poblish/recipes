@@ -1,4 +1,4 @@
-@(user: uk.co.recipes.api.IUser, recommendedRecipes: List[uk.co.recipes.api.IRecipe], recommendedItems: List[uk.co.recipes.api.ICanonicalItem])
+@(user: uk.co.recipes.api.IUser, recommendedRecipes: List[uk.co.recipes.api.IRecipe], recommendedItems: List[uk.co.recipes.api.ICanonicalItem], cuisineColours: uk.co.recipes.ui.CuisineColours)
 
 @import com.feth.play.module.pa.views.html._
 
@@ -36,7 +36,7 @@
 			}
 			
 		<div class="col-md-4">
-			@_displayRecipe( eachRecipe, index, user)
+			@_displayRecipe( eachRecipe, index, user, cuisineColours)
 		</div>  <!-- <div class="col-md-4"> -->
 		
 		<script>

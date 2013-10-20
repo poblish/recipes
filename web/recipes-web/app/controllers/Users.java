@@ -16,6 +16,7 @@ import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.api.IUserPersistence;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
+import uk.co.recipes.ui.CuisineColours;
 
 /**
  * 
@@ -28,17 +29,19 @@ public class Users extends Controller {
 
     private IUserPersistence users;
     private IRecommendationsAPI recsApi;
+    private CuisineColours colours;
 
     @Inject
-    public Users( final EsUserFactory inUsers, final MyrrixRecommendationService inRecService) {
+    public Users( final EsUserFactory inUsers, final MyrrixRecommendationService inRecService, final CuisineColours colours) {
         this.users = checkNotNull(inUsers);
         this.recsApi = checkNotNull(inRecService);
+        this.colours = checkNotNull(colours);
     }
 
     public Result display( final String id) throws IOException {
         final IUser user = users.get(id).get();
         final List<IRecipe> recommendedRecipes = recsApi.recommendRecipes( user, 10);
         final List<ICanonicalItem> recommendedItems = recsApi.recommendIngredients( user, 10);
-        return ok(views.html.user.render( user, recommendedRecipes, recommendedItems));
+        return ok(views.html.user.render( user, recommendedRecipes, recommendedItems, colours));
     }
 }
