@@ -10,7 +10,6 @@ import static uk.co.recipes.metrics.MetricNames.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -19,6 +18,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.http.client.HttpClient;
+import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.indices.IndexMissingException;
@@ -110,13 +110,14 @@ public class EsItemFactory implements IItemPersistence {
         }
 
 		try {
-		    final ICanonicalItem item = mapper.readValue( esUtils.parseSource( itemIndexUrl + "/" + URLEncoder.encode( inId, "utf-8")), CanonicalItem.class);
-		    if ( item == null) {
-		    	return null;  // Nothing to do - cannot cache value of null anyway. Can this actually happen?!?
-		    }
+			final GetResponse resp = esClient.prepareGet( "recipe", "items", inId).get();
+			if (!resp.isExists()) {
+				return null;  // Nothing to do - cannot cache value of null anyway. Can this actually happen?!?
+			}
 
-		    itemsCache.put( inId, item);  // Cache MISS
-		    return item;
+			final ICanonicalItem item = mapper.readValue( resp.getSourceAsString(), CanonicalItem.class);
+			itemsCache.put( inId, item);  // Cache MISS
+			return item;
 		}
         finally {
             timerCtxt.stop();
