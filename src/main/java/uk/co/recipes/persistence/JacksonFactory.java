@@ -71,7 +71,15 @@ public final class JacksonFactory {
             @Override
             public Serializable deserialize( JsonParser jp, DeserializationContext ctxt) {
                 JsonToken t = jp.getCurrentToken();
-                return t.asString();
+                if ( t.asString() != null) {  // This'll work for JsonToken.VALUE_TRUE and VALUE_FALSE
+                	return t.asString();
+                }
+
+				try {
+					return jp.getText();  // This'll work for JsonToken.VALUE_STRING
+				} catch (IOException e) {
+					throw Throwables.propagate(e);
+				}
             }} );
 
         testModule.addDeserializer( IUnit.class, new JsonDeserializer<IUnit>() {
