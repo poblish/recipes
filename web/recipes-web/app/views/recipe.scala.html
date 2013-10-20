@@ -1,4 +1,5 @@
-@(recipe: uk.co.recipes.api.IRecipe, currUser: uk.co.recipes.api.IUser, categorisation: com.google.common.collect.Multiset[uk.co.recipes.api.ITag], similarities: List[uk.co.recipes.api.IRecipe], recommendedItems: List[uk.co.recipes.api.ICanonicalItem])
+@(recipe: uk.co.recipes.api.IRecipe, currUser: uk.co.recipes.api.IUser, categorisation: com.google.common.collect.Multiset[uk.co.recipes.api.ITag], similarities: List[uk.co.recipes.api.IRecipe],
+  recommendedItems: List[uk.co.recipes.api.ICanonicalItem], cuisineName: String, cuisineColour: String)
 
 @main("Recipe: " + recipe.getTitle() ) {
 
@@ -31,6 +32,8 @@
 	@if( recipe.getForkDetails() != null) {
 	<p>@recipe.getForkDetails()</p>
 	}
+
+	<div style="background-color: @cuisineColour; border-radius: 2px" title="@cuisineName Cuisine">&nbsp;</div>
 
 	<div class="row" style="padding-top: 20px">
 	  <div class="col-md-3">

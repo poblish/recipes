@@ -33,10 +33,13 @@ import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.tags.NationalCuisineTags;
+import uk.co.recipes.tags.RecipeTags;
+import uk.co.recipes.ui.CuisineColours;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Multiset;
@@ -54,11 +57,12 @@ public class Recipes extends AbstractExplorableController {
     private UserRatings ratings;
     private UserFaves faves;
 	private ObjectMapper mapper;
+	private CuisineColours colours;
 
     @Inject
     public Recipes( final MyrrixUpdater updater, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService, final EsItemFactory items,
                     final EsRecipeFactory recipes, final EsUserFactory users, final UserRatings inRatings, final MyrrixRecommendationService inRecService, final MetricRegistry metrics,
-                    final ObjectMapper inMapper, final IEventService eventService, final UserFaves userFaves) {
+                    final ObjectMapper inMapper, final IEventService eventService, final UserFaves userFaves, final CuisineColours colours) {
     	super( items, explorerFilters, inExplorerService, inRecService, metrics, eventService);
 
     	updater.startListening();
@@ -66,6 +70,7 @@ public class Recipes extends AbstractExplorableController {
         this.ratings = checkNotNull(inRatings);
         this.mapper = checkNotNull(inMapper);
         this.faves = checkNotNull(userFaves);
+        this.colours = checkNotNull(colours);
     }
 
     public Result create() throws IOException, InterruptedException {
@@ -143,9 +148,12 @@ public class Recipes extends AbstractExplorableController {
 			events.visit( user1, recipe);
 		}
 
+		final String cuisineName = Objects.firstNonNull((String) recipe.getTags().get( RecipeTags.RECIPE_CUISINE ), "");
+		final String cuisineColour = cuisineName.isEmpty() ? "" : colours.colourForName(cuisineName);
+
         final Multiset<ITag> categorisation = Categorisation.forIngredients( recipe.getIngredients(), NationalCuisineTags.values());
 
-        return ok(views.html.recipe.render( recipe, user1, categorisation, explorer.similarRecipes( recipe, getExplorerFilter(explorerFilters), 12), recsApi.recommendIngredients( recipe, 9) ));
+        return ok(views.html.recipe.render( recipe, user1, categorisation, explorer.similarRecipes( recipe, getExplorerFilter(explorerFilters), 12), recsApi.recommendIngredients( recipe, 9), cuisineName, cuisineColour ));
     }
 
     public Result rate( final String name, final int inScore) throws IOException, InterruptedException {

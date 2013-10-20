@@ -6,7 +6,9 @@ package uk.co.recipes;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Named;
@@ -47,6 +49,7 @@ import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
 import uk.co.recipes.service.taste.impl.MyrrixTasteSimilarityService;
 import uk.co.recipes.test.TestDataUtils;
+import uk.co.recipes.ui.CuisineColours;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
@@ -70,7 +73,7 @@ import dagger.Provides;
 @Module(injects={EsItemFactory.class, EsRecipeFactory.class, ItemsLoader.class, IngredientParser.class, TestDataUtils.class, ObjectMapper.class, ClientRecommender.class,
 				 MyrrixTasteRecommendationService.class, MyrrixRecommendationService.class, MyrrixTasteSimilarityService.class, MyrrixExplorerService.class,
 				 Client.class, EsSearchService.class, EsUserFactory.class, EsSequenceFactory.class, MyrrixUpdater.class, IEventService.class, UserRatings.class,
-				 MetricRegistry.class, EsExplorerFilters.class, NameAdjuster.class})
+				 MetricRegistry.class, EsExplorerFilters.class, NameAdjuster.class, CuisineColours.class})
 public class DaggerModule {
 
 	@Provides
@@ -227,4 +230,15 @@ public class DaggerModule {
         	}
         });
     }
+
+	@Provides
+	@Singleton
+    @Named("cuisineColours")
+	Map<String,String> provideCuisineColours( ObjectMapper mapper) {
+		try {
+			return mapper.readValue( new File( System.getProperty("user.home") + "/Development/java/recipe_explorer/src/test/resources/cuisineColours.json"), mapper.getTypeFactory().constructMapType( HashMap.class, String.class, String.class));
+		} catch (IOException e) {
+			throw Throwables.propagate(e);
+		}
+	}
 }
