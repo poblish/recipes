@@ -11,6 +11,11 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import uk.co.recipes.api.IRecipe;
+import uk.co.recipes.tags.RecipeTags;
+
+import com.google.common.base.Objects;
+
 /**
  * TODO
  *
@@ -25,6 +30,11 @@ public class CuisineColours {
 
     public String colourForName( final String inName) {
     	return cuisineColours.get( checkNotNull(inName) );
+    }
+
+    public String colourForRecipe( final IRecipe inRecipe) {
+    	final String cuisineName = Objects.firstNonNull((String) inRecipe.getTags().get( RecipeTags.RECIPE_CUISINE ), "");
+    	return cuisineName.isEmpty() ? "" : cuisineColours.get(cuisineName);
     }
 
     public Map<String,String> getMap() {
