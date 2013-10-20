@@ -195,11 +195,7 @@ public class CanonicalItem implements ICanonicalItem {
 		tags.clear();
 
 		for ( Entry<ITag,Serializable> each : inTags.entrySet()) {
-			if (each.getValue() == null) {
-				LOG.warn("Jackson deserialized null!");
-				tags.put( each.getKey(), Boolean.TRUE);
-			}
-			else if (each.getValue().equals("true")) /* Ugh!!! */ {
+			if (each.getValue().equals("true")) /* Ugh!!! */ {
 				tags.put( each.getKey(), Boolean.TRUE);
 			}
 			else {
