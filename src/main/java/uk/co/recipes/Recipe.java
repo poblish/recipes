@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.elasticsearch.common.Preconditions;
 import org.joda.time.DateTime;
@@ -31,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Objects;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
 /**
@@ -56,7 +57,7 @@ public class Recipe implements IRecipe {
 	private IForkDetails forkDetails;
 
 	private final List<IRecipeStage> stages = Lists.newArrayList();
-	private final Map<ITag,Serializable> tagsMap = Maps.newHashMap();
+	private Map<ITag,Serializable> tags = new TreeMap<>( Ordering.usingToString() );  // Try to keep the order regular. This will *not* sort enums by name, only by index
 
 	// Purely for Jackson deserialization
 	public Recipe() {
@@ -189,7 +190,7 @@ public class Recipe implements IRecipe {
 
 	@Override
 	public void addTag( final ITag key, final Serializable value) {
-		tagsMap.put( key, checkNotNull( value, "Value cannot be null"));
+		tags.put( key, checkNotNull( value, "Value cannot be null"));
 	}
 
 	@Override
@@ -201,21 +202,38 @@ public class Recipe implements IRecipe {
 
 	@Override
 	public void addTag( final ITag key) {
-		tagsMap.put( key, Boolean.TRUE);
+		tags.put( key, Boolean.TRUE);
 	}
 
-	/* (non-Javadoc)
-	 * @see uk.co.recipes.api.ITagging#tagValues()
-	 */
 	@Override
 	public Map<ITag,Serializable> getTags() {
-		return tagsMap;
+		return tags;
 	}
 
 	@JsonIgnore  // Prevent Jackson insanity
 	@Override
 	public List<String> getTagNamesForDisplay() {
 		return FluentIterable.from( getTags().entrySet() ).filter( findActivated() ).transform( tagNamesTitleCase() ).toList();
+	}
+
+	// FIXME Copy/paste from CanonicalItem
+    // Jackson *will* use this to persist 'tags'. *Can* be private
+	@SuppressWarnings("unused")
+	private void setTags( Map<ITag,Serializable> inTags) {
+		tags.clear();
+
+		for ( Entry<ITag,Serializable> each : inTags.entrySet()) {
+			if (each.getValue() == null) {
+				// LOG.warn("Jackson deserialized null!");
+				tags.put( each.getKey(), Boolean.TRUE);
+			}
+			else if (each.getValue().equals("true")) /* Ugh!!! */ {
+				tags.put( each.getKey(), Boolean.TRUE);
+			}
+			else {
+				tags.put( each.getKey(), each.getValue());
+			}
+		}
 	}
 
 	/* (non-Javadoc)
@@ -299,7 +317,7 @@ public class Recipe implements IRecipe {
         for (IRecipeStage eachStage : stages) {
             theClone.addStage(eachStage);
         }
-        for (Entry<ITag, Serializable> eachTag : tagsMap.entrySet()) {
+        for (Entry<ITag, Serializable> eachTag : tags.entrySet()) {
             theClone.addTag(eachTag.getKey(), eachTag.getValue());
         }
 
@@ -313,7 +331,7 @@ public class Recipe implements IRecipe {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCode( title, locale, stages, tagsMap, creator, /* creationTime, */ forkDetails);
+		return Objects.hashCode( title, locale, stages, tags, creator, /* creationTime, */ forkDetails);
 	}
 
 	/* (non-Javadoc)
@@ -333,7 +351,7 @@ public class Recipe implements IRecipe {
 
 		final Recipe other = (Recipe) obj;
 		return Objects.equal( title, other.title) && Objects.equal( locale, other.locale) &&
-			   Objects.equal( stages, other.stages) && Objects.equal( tagsMap, other.tagsMap) &&
+			   Objects.equal( stages, other.stages) && Objects.equal( tags, other.tags) &&
 			   Objects.equal( creator, other.creator) && /* Objects.equal( creationTime, other.creationTime) && */
 			   Objects.equal( forkDetails, other.forkDetails);
 	}
@@ -345,7 +363,7 @@ public class Recipe implements IRecipe {
 						.add( "creator", creator)
 						.add( "fork", forkDetails)
 						.add( "stages", stages)
-						.add( "tags", tagsMap)
+						.add( "tags", getTags())
 						.add( "locale", locale)
 						.toString();
 	}

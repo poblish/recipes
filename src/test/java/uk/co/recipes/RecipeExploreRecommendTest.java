@@ -35,6 +35,7 @@ import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
+import uk.co.recipes.tags.RecipeTags;
 import uk.co.recipes.test.TestDataUtils;
 
 import com.codahale.metrics.MetricRegistry;
@@ -238,6 +239,24 @@ public class RecipeExploreRecommendTest {
     private ICanonicalItem item( final String inName) throws IOException {
     	return itemFactory.get(inName).get();
     }
+
+	@Test
+	public void testTagPersistence() throws IOException {
+		final User user = new User( "aregan", "Andrew R");
+        final IRecipe recipe1 = new Recipe(user, "Lovely Food", Locale.UK);
+        assertThat( recipe1.getTags().isEmpty(), is(true));
+
+        recipe1.addTag( RecipeTags.RECIPE_CUISINE, "Hungarian");
+        recipe1.addTag( RecipeTags.SERVES_COUNT, 2);
+        recipe1.addTag( RecipeTags.RECIPE_CATEGORY, "Main Course");
+        recipe1.addTag( RecipeTags.VEGAN );
+
+        recipeFactory.put( recipe1, null);
+        recipeFactory.waitUntilRefreshed();
+
+        final IRecipe loaded = recipeFactory.get("Lovely Food").get();
+        assertThat( loaded.getTags().toString(), is("{RECIPE_CATEGORY=Main Course, RECIPE_CUISINE=Hungarian, SERVES_COUNT=2, VEGAN=true}"));
+	}
 
 	@AfterClass
 	public void shutDown() {
