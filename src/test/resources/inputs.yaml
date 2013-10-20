@@ -622,6 +622,8 @@
 ---
 {canonicalName: Grapefruit, tags: {FRUIT, CITRUS}}
 ---
+{canonicalName: Greengage, tags: {FRUIT}}
+---
 {canonicalName: Juniper, tags: {FRUIT, BRAMBLE_HEDGE}}
 ---
 {canonicalName: Lemon, tags: {FRUIT, CITRUS, LEMON}, aliases: {Lemons}}
@@ -855,6 +857,8 @@
 
 
 {canonicalName: Sugar, tags: {BAKING, SUGAR}}
+---
+{    canonicalName: Caramel, parent: Sugar}
 ---
 {    canonicalName: Caster Sugar, parent: Sugar}
 ---
@@ -1415,6 +1419,8 @@
 {canonicalName: Crème de Cassis, tags: {SPIRIT, ALCOHOL, FRENCH}, aliases: {Cassis, Cassis liquer}, contains: Blackcurrants}
 ---
 {canonicalName: Curaçao, tags: {SPIRIT, ALCOHOL, DUTCH, ORANGE}}
+---
+{canonicalName: Kahlúa, tags: {SPIRIT, ALCOHOL, COFFEE}, contains: {Coffee, Rum}}
 ---
 {canonicalName: Kirsch, tags: {SPIRIT, ALCOHOL, GERMAN}}
 ---

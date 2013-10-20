@@ -46,6 +46,7 @@ hot
 just-ripe
 large
 lean
+leftover
 long
 low salt
 low-fat
