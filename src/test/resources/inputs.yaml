@@ -140,6 +140,8 @@
 ---
 {canonicalName: Asafoetida, tags: {SPICE, INDIAN}}
 ---
+{canonicalName: Cajun Seasoning, tags: {SPICE, USA}, aliases: {Cumin, Coriander Powder, Paprika, Salt}}
+---
 {canonicalName: Caraway Seeds, tags: {SPICE, ANISEED}, aliases: {Caraway Seed}}
 ---
 {canonicalName: Cardamom, tags: {SPICE, INDIAN}, aliases: {Cardamom Pods}}
@@ -176,7 +178,7 @@
 ---
 {    canonicalName: Cumin Seeds, parent: Cumin, aliases: {Cumin Seed, Jeera}, baseAmt: 1 tsp}
 ---
-{canonicalName: Curry Powder, tags: {SPICE, INDIAN}}
+{canonicalName: Curry Powder, tags: {SPICE, INDIAN}, contains: {Turmeric, Chilli powder, Coriander Powder, Cumin}}
 ---
 {    canonicalName: Madras Curry Powder, parent: Curry Powder}
 ---
@@ -198,7 +200,7 @@
 ---
 {    canonicalName: Stem Ginger, parent: Ginger}
 ---
-{canonicalName: Jerk Spice, tags: {SPICE, CARIBBEAN}, aliases: Jerk, contains: {Allspice, Scotch Bonnet}}
+{canonicalName: Jerk Seasoning, tags: {SPICE, CARIBBEAN}, aliases: {Jerk, Jerk Spice, Jamaican jerk paste}, contains: {Allspice, Scotch Bonnet}}
 ---
 {canonicalName: Mace, tags: SPICE}
 ---
@@ -1101,6 +1103,8 @@
 {    canonicalName: Thai Red Curry Paste, tags: THAI, parent: Curry Paste, aliases: {Red Thai Curry Paste, Red Curry Paste}}
 ---
 {canonicalName: Fish Sauce, tags: {FISH, SAUCE, THAI, VIETNAMESE}}
+---
+{canonicalName: Guacamole, tags: {SAUCE, MEXICAN}, contains: {Avocado, Jalapeño, Lime}}
 ---
 {canonicalName: Hoisin Sauce, tags: {SAUCE, CHINESE}}
 ---
