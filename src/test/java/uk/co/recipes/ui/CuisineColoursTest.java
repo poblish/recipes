@@ -1,24 +1,21 @@
 /**
  * 
  */
-package uk.co.recipes;
+package uk.co.recipes.ui;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.inject.Inject;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import uk.co.recipes.DaggerModule;
+import uk.co.recipes.ui.CuisineColours;
 import dagger.Module;
 import dagger.ObjectGraph;
 
@@ -28,9 +25,9 @@ import dagger.ObjectGraph;
  * @author andrewregan
  *
  */
-public class CusineColoursTest {
+public class CuisineColoursTest {
 
-    @Inject ObjectMapper mapper;
+    @Inject CuisineColours colours;
 
 	@BeforeClass
     public void injectDependencies() {
@@ -39,12 +36,11 @@ public class CusineColoursTest {
 
 	@Test
 	void testParse() throws IOException {
-		final Map<String,String> colsMap = mapper.readValue( new File("src/test/resources/cuisineColours.json"), mapper.getTypeFactory().constructMapType( HashMap.class, String.class, String.class));
-		assertThat( colsMap.size(), greaterThan(42));
-		assertThat( colsMap.containsKey("British"), is(true));
+		assertThat( colours.getMap().size(), greaterThan(42));
+		assertThat( colours.getMap().containsKey("British"), is(true));
 		// System.out.println(colsMap);
 	}
 
-    @Module( includes=DaggerModule.class, overrides=true, injects=CusineColoursTest.class)
+    @Module( includes=DaggerModule.class, overrides=true, injects=CuisineColoursTest.class)
     static class TestModule {}
 }
