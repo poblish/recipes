@@ -16,10 +16,8 @@ import uk.co.recipes.User;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IRecipe;
-import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.api.Units;
-import uk.co.recipes.cats.Categorisation;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.faves.UserFaves;
@@ -33,7 +31,6 @@ import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
-import uk.co.recipes.tags.NationalCuisineTags;
 import uk.co.recipes.tags.RecipeTags;
 import uk.co.recipes.ui.CuisineColours;
 
@@ -43,7 +40,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Multiset;
 
 /**
  * 
@@ -150,11 +146,9 @@ public class Recipes extends AbstractExplorableController {
 		final String cuisineName = Objects.firstNonNull((String) recipe.getTags().get( RecipeTags.RECIPE_CUISINE ), "");
 		final String cuisineColour = cuisineName.isEmpty() ? "" : colours.colourForName(cuisineName);
 
-        final Multiset<ITag> categorisation = Categorisation.forIngredients( recipe.getIngredients(), NationalCuisineTags.values());
-
         final IExplorerFilterDef filter = getExplorerFilter(explorerFilters);
 
-        return ok(views.html.recipe.render( recipe, user1, categorisation, explorer.similarRecipes( recipe, filter, 12), recsApi.recommendIngredients( recipe, 9), filter, colours, cuisineName, cuisineColour));
+        return ok(views.html.recipe.render( recipe, user1, explorer.similarRecipes( recipe, filter, 12), recsApi.recommendIngredients( recipe, 9), filter, colours, cuisineName, cuisineColour));
     }
 
     public Result rate( final String name, final int inScore) throws IOException, InterruptedException {

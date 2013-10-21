@@ -1,5 +1,6 @@
-@(recipe: uk.co.recipes.api.IRecipe, currUser: uk.co.recipes.api.IUser, categorisation: com.google.common.collect.Multiset[uk.co.recipes.api.ITag], similarities: List[uk.co.recipes.api.IRecipe],
-  recommendedItems: List[uk.co.recipes.api.ICanonicalItem], explorerFilters: uk.co.recipes.service.api.IExplorerFilterDef, cuisineColours: uk.co.recipes.ui.CuisineColours, cuisineName: String, cuisineColour: String)
+@(recipe: uk.co.recipes.api.IRecipe, currUser: uk.co.recipes.api.IUser, similarities: List[uk.co.recipes.api.IRecipe],
+  recommendedItems: List[uk.co.recipes.api.ICanonicalItem], explorerFilters: uk.co.recipes.service.api.IExplorerFilterDef,
+  cuisineColours: uk.co.recipes.ui.CuisineColours, cuisineName: String, cuisineColour: String)
 
 @main("Recipe: " + recipe.getTitle() ) {
 
@@ -56,20 +57,6 @@
 				</ul>
 
 				<div><input type="hidden" style="width: 250px" id="addIngredient" /><button type="button" style="margin-left: 12px" class="btn btn-default" onclick="addIngredient('@recipe.getTitle()',$('#addIngredient'))"><span class="glyphicon glyphicon-plus"></span> Add</button></div>
-		      </div>
-		    </div>
-		  </div>
-		  <div class="panel panel-default">
-		    <div class="panel-heading">
-		      <h4 class="panel-title">
-		        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse2">
-		          Categories:
-		        </a>
-		      </h4>
-		    </div>
-		    <div id="collapse2" class="panel-collapse collapse">
-		      <div class="panel-body">
-				@categorisation
 		      </div>
 		    </div>
 		  </div>
