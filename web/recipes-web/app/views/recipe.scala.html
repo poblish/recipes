@@ -1,5 +1,5 @@
 @(recipe: uk.co.recipes.api.IRecipe, currUser: uk.co.recipes.api.IUser, categorisation: com.google.common.collect.Multiset[uk.co.recipes.api.ITag], similarities: List[uk.co.recipes.api.IRecipe],
-  recommendedItems: List[uk.co.recipes.api.ICanonicalItem], cuisineColours: uk.co.recipes.ui.CuisineColours, cuisineName: String, cuisineColour: String)
+  recommendedItems: List[uk.co.recipes.api.ICanonicalItem], explorerFilters: uk.co.recipes.service.api.IExplorerFilterDef, cuisineColours: uk.co.recipes.ui.CuisineColours, cuisineName: String, cuisineColour: String)
 
 @main("Recipe: " + recipe.getTitle() ) {
 

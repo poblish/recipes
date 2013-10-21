@@ -28,6 +28,7 @@ import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.ratings.RecipeRating;
 import uk.co.recipes.ratings.UserRatings;
+import uk.co.recipes.service.api.IExplorerFilterDef;
 import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
@@ -151,7 +152,9 @@ public class Recipes extends AbstractExplorableController {
 
         final Multiset<ITag> categorisation = Categorisation.forIngredients( recipe.getIngredients(), NationalCuisineTags.values());
 
-        return ok(views.html.recipe.render( recipe, user1, categorisation, explorer.similarRecipes( recipe, getExplorerFilter(explorerFilters), 12), recsApi.recommendIngredients( recipe, 9), colours, cuisineName, cuisineColour ));
+        final IExplorerFilterDef filter = getExplorerFilter(explorerFilters);
+
+        return ok(views.html.recipe.render( recipe, user1, categorisation, explorer.similarRecipes( recipe, filter, 12), recsApi.recommendIngredients( recipe, 9), filter, colours, cuisineName, cuisineColour));
     }
 
     public Result rate( final String name, final int inScore) throws IOException, InterruptedException {
