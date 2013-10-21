@@ -77,16 +77,29 @@ public class UserPersistenceTest {
         final String testUName = "aregan_" + System.nanoTime();
         final String testDName = "Andrew Regan #" + System.nanoTime();
 
+        final ICanonicalItem item1 = itemFactory.get("Coriander").get();
+        final ICanonicalItem item2 = itemFactory.get("Ginger").get();
+
         final IUser u1 = new User( testUName, testDName);
         u1.getPrefs().explorerIncludeAdd( CommonTags.VEGETABLE );
+        u1.getPrefs().explorerExcludeAdd(item1);
+        u1.getPrefs().explorerExcludeAdd(item1);  // Try DUPE
         u1.getPrefs().explorerExcludeAdd( MeatAndFishTags.MEAT );
+        u1.getPrefs().explorerExcludeAdd( MeatAndFishTags.FISH );
+        u1.getPrefs().explorerIncludeAdd( MeatAndFishTags.FISH );  // Reverse the above!
+        u1.getPrefs().explorerIncludeAdd( MeatAndFishTags.SAUSAGE );
+        u1.getPrefs().explorerExcludeAdd( MeatAndFishTags.SAUSAGE );  // Reverse the above!
+        u1.getPrefs().explorerIncludeAdd(item2);
+        u1.getPrefs().explorerIncludeAdd(item2);  // Try DUPE
         userFactory.put( u1, userFactory.toStringId(u1));
 
         userFactory.waitUntilRefreshed();
 
         final IUser retrievedUser = userFactory.getByName(testUName);
-        assertThat( retrievedUser.getPrefs().getExplorerIncludeTags(), hasItem( CommonTags.VEGETABLE ));
-        assertThat( retrievedUser.getPrefs().getExplorerExcludeTags(), hasItem( MeatAndFishTags.MEAT ));
+//        assertThat( retrievedUser.getPrefs().getExplorerIncludes(), hasItem( CommonTags.VEGETABLE ));
+//        assertThat( retrievedUser.getPrefs().getExplorerExcludes(), hasItem( MeatAndFishTags.MEAT ));
+        assertThat( retrievedUser.getPrefs().getExplorerIncludes().toString(), is("[TagFilterItem{tag=VEGETABLE}, TagFilterItem{tag=FISH}, ItemFilterItem{name=Ginger}]"));
+        assertThat( retrievedUser.getPrefs().getExplorerExcludes().toString(), is("[ItemFilterItem{name=Coriander}, TagFilterItem{tag=MEAT}, TagFilterItem{tag=SAUSAGE}]"));
     }
 
     @Test

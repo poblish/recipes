@@ -115,39 +115,59 @@ public class Application extends Controller {
 		} ).toSortedSet( Ordering.usingToString() );
 	}
 
-	public Result explorerIncludeAddTag( final String inTag) {
+	public Result explorerIncludeAdd( final String inName) {
         return handleUserPreference( new UserTask() {
 
 			@Override
 			public boolean makeChanges( IUser inUser) {
-				return inUser.getPrefs().explorerIncludeAdd( TagUtils.forName(inTag) );
+				try {
+					return inUser.getPrefs().explorerIncludeAdd( TagUtils.forName(inName) );
+				}
+				catch (RuntimeException e) {
+					return inUser.getPrefs().explorerIncludeAdd( getItem(inName) );
+				}
 			}} );
     }
 
-	public Result explorerIncludeRemoveTag( final String inTag) {
+	public Result explorerIncludeRemove( final String inName) {
         return handleUserPreference( new UserTask() {
 
 			@Override
 			public boolean makeChanges( IUser inUser) {
-				return inUser.getPrefs().explorerIncludeRemove( TagUtils.forName(inTag) );
+				try {
+					return inUser.getPrefs().explorerIncludeRemove( TagUtils.forName(inName) );
+				}
+				catch (RuntimeException e) {
+					return inUser.getPrefs().explorerIncludeRemove( getItem(inName) );
+				}
 			}} );
     }
 
-	public Result explorerExcludeAddTag( final String inTag) {
+	public Result explorerExcludeAdd( final String inName) {
         return handleUserPreference( new UserTask() {
 
 			@Override
 			public boolean makeChanges( IUser inUser) {
-				return inUser.getPrefs().explorerExcludeAdd( TagUtils.forName(inTag) );
+				try {
+					return inUser.getPrefs().explorerExcludeAdd( TagUtils.forName(inName) );
+				}
+				catch (RuntimeException e) {
+					return inUser.getPrefs().explorerExcludeAdd( getItem(inName) );
+				}
 			}} );
     }
 
-	public Result explorerExcludeRemoveTag( final String inTag) {
+	public Result explorerExcludeRemove( final String inName) {
         return handleUserPreference( new UserTask() {
 
 			@Override
 			public boolean makeChanges( IUser inUser) {
-				return inUser.getPrefs().explorerExcludeRemove( TagUtils.forName(inTag) );
+				try {
+					return inUser.getPrefs().explorerExcludeRemove( TagUtils.forName(inName) );
+				}
+				catch (RuntimeException e) {
+					return inUser.getPrefs().explorerExcludeRemove( getItem(inName) );
+				}
 			}} );
     }
 
@@ -190,5 +210,15 @@ public class Application extends Controller {
 	private interface UserTask {
 		// Return false if no change
 		boolean makeChanges( final IUser inUser);
+	}
+
+	// Yuk
+	private ICanonicalItem getItem( final String inName) {
+		try {
+			return items.get(inName).get();
+		}
+		catch (IOException e) {
+			throw Throwables.propagate(e);
+		}
 	}
 }

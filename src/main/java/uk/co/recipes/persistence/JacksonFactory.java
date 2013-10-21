@@ -16,6 +16,7 @@ import uk.co.recipes.User;
 import uk.co.recipes.UserAuth;
 import uk.co.recipes.UserPreferences;
 import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.IExplorerFilterItem;
 import uk.co.recipes.api.IForkDetails;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IQuantity;
@@ -92,6 +93,8 @@ public final class JacksonFactory {
                     throw Throwables.propagate(e);
                 }
             }} );
+
+        testModule.addDeserializer( IExplorerFilterItem.class, UserPreferences.explorerFilterItemsDeser());
 
         testModule.addAbstractTypeMapping( IRecipe.class, Recipe.class);
         testModule.addAbstractTypeMapping( IRecipeStage.class, RecipeStage.class);

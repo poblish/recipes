@@ -7,7 +7,7 @@ import java.util.Collections;
 
 import play.mvc.Controller;
 import service.PlayAuthUserServicePlugin;
-import uk.co.recipes.api.ITag;
+import uk.co.recipes.api.IExplorerFilterItem;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.persistence.EsItemFactory;
@@ -56,22 +56,22 @@ public abstract class AbstractExplorableController extends Controller {
         return /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( metrics, session());
     }
 
-    protected Collection<ITag> getExplorerIncludeTags() {
+    protected Collection<IExplorerFilterItem<?>> getExplorerIncludeTags() {
         final IUser currUser = getLocalUser();
         if ( currUser == null) {
             return Collections.emptyList();
         }
 
-        return currUser.getPrefs().getExplorerIncludeTags();
+        return currUser.getPrefs().getExplorerIncludes();
     }
 
-    protected Collection<ITag> getExplorerExcludeTags() {
+    protected Collection<IExplorerFilterItem<?>> getExplorerExcludeTags() {
         final IUser currUser = getLocalUser();
         if ( currUser == null) {
             return Collections.emptyList();
         }
 
-        return currUser.getPrefs().getExplorerExcludeTags();
+        return currUser.getPrefs().getExplorerExcludes();
     }
 
     public IExplorerFilterDef getExplorerFilter( final EsExplorerFilters inFilters) {
