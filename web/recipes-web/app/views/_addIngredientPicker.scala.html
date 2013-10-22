@@ -1,10 +1,14 @@
-@(elemId: String)
+@(elemId: String, addTags: Boolean)
 <script>
 $("#@elemId").select2({
     placeholder: "Find Ingredient...",
     minimumInputLength: 2,
     ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
-        url: "http://localhost:9000/search/partial",
+        @if( addTags == true) {
+    	url: "http://localhost:9000/search/partialTags",
+        } else {
+        	url: "http://localhost:9000/search/partial",
+        }
         dataType: 'jsonp',
         data: function (term, page) {
             return {
