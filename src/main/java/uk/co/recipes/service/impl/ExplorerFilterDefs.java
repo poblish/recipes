@@ -4,14 +4,14 @@
 package uk.co.recipes.service.impl;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
+import uk.co.recipes.UserPreferences;
+import uk.co.recipes.api.IExplorerFilterItem;
 import uk.co.recipes.api.ITag;
+import uk.co.recipes.api.IUserPreferences;
 import uk.co.recipes.service.api.IExplorerFilterDef;
-
-import com.google.common.collect.Sets;
 
 /**
  * TODO
@@ -27,14 +27,16 @@ public class ExplorerFilterDefs {
     	return new Builder();
     }
 
+    public static IExplorerFilterDef forPrefs( final IUserPreferences inPrefs) {
+		return new DefaultExplorerFilterDef((Set<IExplorerFilterItem<?>>) inPrefs.getExplorerIncludes(), (Set<IExplorerFilterItem<?>>) inPrefs.getExplorerExcludes());
+    }
+
     public static class Builder {
 
-		private final Set<ITag> includeTags = Sets.newLinkedHashSet();
-		private final Set<ITag> excludeTags = Sets.newLinkedHashSet();
+    	private final UserPreferences tempPrefs = new UserPreferences();
 
     	public Builder includeTag( final ITag inTag) throws IOException {
-    		excludeTags.remove(inTag);
-    		includeTags.add(inTag);
+    		tempPrefs.explorerIncludeAdd(inTag);
             return this;
     	}
 
@@ -45,16 +47,15 @@ public class ExplorerFilterDefs {
             return this;
     	}
 
-    	public Builder includeTags( final Collection<ITag> inTags) throws IOException {
-    		for ( ITag each : inTags) {
-    			includeTag(each);
-    		}
-            return this;
-    	}
+//    	public Builder includeTags( final Collection<ITag> inTags) throws IOException {
+//    		for ( ITag each : inTags) {
+//    			includeTag(each);
+//    		}
+//            return this;
+//    	}
 
     	public Builder excludeTag( final ITag inTag) throws IOException {
-    		includeTags.remove(inTag);
-    		excludeTags.add(inTag);
+    		tempPrefs.explorerExcludeAdd(inTag);
             return this;
     	}
 
@@ -65,15 +66,15 @@ public class ExplorerFilterDefs {
             return this;
     	}
 
-    	public Builder excludeTags( final Collection<ITag> inTags) throws IOException {
-    		for ( ITag each : inTags) {
-    			excludeTag(each);
-    		}
-            return this;
-    	}
+//    	public Builder excludeTags( final Collection<ITag> inTags) throws IOException {
+//    		for ( ITag each : inTags) {
+//    			excludeTag(each);
+//    		}
+//            return this;
+//    	}
 
     	public IExplorerFilterDef toFilterDef() {
-    		return new DefaultExplorerFilterDef( includeTags, excludeTags);
+    		return new DefaultExplorerFilterDef((Set<IExplorerFilterItem<?>>) tempPrefs.getExplorerIncludes(), (Set<IExplorerFilterItem<?>>) tempPrefs.getExplorerExcludes());
     	}
     }
 
@@ -84,12 +85,12 @@ public class ExplorerFilterDefs {
 	private static class NullFilterDef implements IExplorerFilterDef {
 
 		@Override
-		public Set<ITag> getIncludeTags() {
+		public Set<IExplorerFilterItem<?>> getIncludes() {
 			return Collections.emptySet();
 		}
 
 		@Override
-		public Set<ITag> getExcludeTags() {
+		public Set<IExplorerFilterItem<?>> getExcludes() {
 			return Collections.emptySet();
 		}
 

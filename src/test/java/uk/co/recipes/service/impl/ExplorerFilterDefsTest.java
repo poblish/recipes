@@ -45,19 +45,19 @@ public class ExplorerFilterDefsTest {
 	@Test
 	public void testSer() throws IOException {
         final IExplorerFilterDef fDef1 = filterDefs.build().includeTags( CommonTags.FRUIT, CommonTags.VEGETABLE ).toFilterDef();
-        assertThat( mapper.writeValueAsString(fDef1), is("{\"includeTags\":[\"FRUIT\",\"VEGETABLE\"]}"));
+        assertThat( mapper.writeValueAsString(fDef1), is("{\"includes\":[{\"filter\":\"Tag|FRUIT\"},{\"filter\":\"Tag|VEGETABLE\"}]}"));
 
         final IExplorerFilterDef fDef2 = filterDefs.build().excludeTags( MeatAndFishTags.MEAT, CommonTags.VEGETABLE ).toFilterDef();
-        assertThat( mapper.writeValueAsString(fDef2), is("{\"excludeTags\":[\"MEAT\",\"VEGETABLE\"]}"));
+        assertThat( mapper.writeValueAsString(fDef2), is("{\"excludes\":[{\"filter\":\"Tag|MEAT\"},{\"filter\":\"Tag|VEGETABLE\"}]}"));
 
         final IExplorerFilterDef fDef3 = filterDefs.build().includeTags( CommonTags.FRUIT, CITRUS ).excludeTags( MeatAndFishTags.MEAT, CommonTags.VEGETABLE ).toFilterDef();
-        assertThat( mapper.writeValueAsString(fDef3), is("{\"includeTags\":[\"FRUIT\",\"CITRUS\"],\"excludeTags\":[\"MEAT\",\"VEGETABLE\"]}"));
+        assertThat( mapper.writeValueAsString(fDef3), is("{\"includes\":[{\"filter\":\"Tag|FRUIT\"},{\"filter\":\"Tag|CITRUS\"}],\"excludes\":[{\"filter\":\"Tag|MEAT\"},{\"filter\":\"Tag|VEGETABLE\"}]}"));
 	}
 
 	@Test
 	public void testDeser() throws IOException {
-        final IExplorerFilterDef fDef1 = filterDefs.build().includeTags( CommonTags.FRUIT, CITRUS ).excludeTags( MeatAndFishTags.MEAT, CommonTags.VEGETABLE ).toFilterDef();
-        assertThat( mapper.readValue( "{\"includeTags\":[\"FRUIT\",\"CITRUS\"],\"excludeTags\":[\"MEAT\",\"VEGETABLE\"]}", DefaultExplorerFilterDef.class), is(fDef1));
+        final IExplorerFilterDef fDef1 = filterDefs.build().includeTags( CITRUS, CommonTags.FRUIT ).excludeTags( MeatAndFishTags.SAUSAGE, CommonTags.VEGETABLE ).toFilterDef();
+        assertThat( mapper.readValue( "{\"includes\":[{\"filter\":\"Tag|CITRUS\"},{\"filter\":\"Tag|FRUIT\"}],\"excludes\":[{\"filter\":\"Tag|SAUSAGE\"},{\"filter\":\"Tag|VEGETABLE\"}]}", DefaultExplorerFilterDef.class), is(fDef1));
 	}
 
     @Module( includes=DaggerModule.class, overrides=true, injects=ExplorerFilterDefsTest.class)

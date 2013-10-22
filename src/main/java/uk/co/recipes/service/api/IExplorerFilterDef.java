@@ -5,7 +5,7 @@ package uk.co.recipes.service.api;
 
 import java.util.Set;
 
-import uk.co.recipes.api.ITag;
+import uk.co.recipes.api.IExplorerFilterItem;
 
 /**
  * TODO
@@ -15,6 +15,6 @@ import uk.co.recipes.api.ITag;
  */
 public interface IExplorerFilterDef {
 
-	Set<ITag> getIncludeTags();
-	Set<ITag> getExcludeTags();
+	Set<IExplorerFilterItem<?>> getIncludes();
+	Set<IExplorerFilterItem<?>> getExcludes();
 }

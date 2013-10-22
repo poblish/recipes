@@ -1,13 +1,8 @@
 package controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.util.Collection;
-import java.util.Collections;
-
 import play.mvc.Controller;
 import service.PlayAuthUserServicePlugin;
-import uk.co.recipes.api.IExplorerFilterItem;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.persistence.EsItemFactory;
@@ -56,24 +51,6 @@ public abstract class AbstractExplorableController extends Controller {
         return /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( metrics, session());
     }
 
-    protected Collection<IExplorerFilterItem<?>> getExplorerIncludeTags() {
-        final IUser currUser = getLocalUser();
-        if ( currUser == null) {
-            return Collections.emptyList();
-        }
-
-        return currUser.getPrefs().getExplorerIncludes();
-    }
-
-    protected Collection<IExplorerFilterItem<?>> getExplorerExcludeTags() {
-        final IUser currUser = getLocalUser();
-        if ( currUser == null) {
-            return Collections.emptyList();
-        }
-
-        return currUser.getPrefs().getExplorerExcludes();
-    }
-
     public IExplorerFilterDef getExplorerFilter( final EsExplorerFilters inFilters) {
         final IUser currUser = getLocalUser();
         if ( currUser == null) {
@@ -81,7 +58,7 @@ public abstract class AbstractExplorableController extends Controller {
         }
 
         try {
-            return new ExplorerFilterDefs().build().includeTags( getExplorerIncludeTags() ).excludeTags( getExplorerExcludeTags() ).toFilterDef();
+            return ExplorerFilterDefs.forPrefs( currUser.getPrefs() );
         }
         catch (Exception e) {
             return ExplorerFilterDefs.nullFilter();

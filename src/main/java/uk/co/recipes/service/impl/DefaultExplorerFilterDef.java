@@ -6,7 +6,7 @@ package uk.co.recipes.service.impl;
 import java.util.Collections;
 import java.util.Set;
 
-import uk.co.recipes.api.ITag;
+import uk.co.recipes.api.IExplorerFilterItem;
 import uk.co.recipes.service.api.IExplorerFilterDef;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,33 +20,33 @@ import com.google.common.base.Objects;
  */
 public class DefaultExplorerFilterDef implements IExplorerFilterDef {
 
-	private Set<ITag> includeTags;
-	private Set<ITag> excludeTags;
+	private Set<IExplorerFilterItem<?>> includes;
+	private Set<IExplorerFilterItem<?>> excludes;
 
-	public DefaultExplorerFilterDef( @JsonProperty("includeTags") final Set<ITag> includeTags, @JsonProperty("excludeTags") final Set<ITag> excludeTags) {
-		this.includeTags = includeTags;
-		this.excludeTags = excludeTags;
+	public DefaultExplorerFilterDef( @JsonProperty("includes") final Set<IExplorerFilterItem<?>> includes, @JsonProperty("excludes") final Set<IExplorerFilterItem<?>> excludes) {
+		this.includes = includes;
+		this.excludes = excludes;
 	}
 
 	@Override
-	public Set<ITag> getIncludeTags() {
-		if ( includeTags != null) {
-			return includeTags;
+	public Set<IExplorerFilterItem<?>> getIncludes() {
+		if ( includes != null) {
+			return includes;
 		}
 		return Collections.emptySet();
 	}
 
 	@Override
-	public Set<ITag> getExcludeTags() {
-		if ( excludeTags != null) {
-			return excludeTags;
+	public Set<IExplorerFilterItem<?>> getExcludes() {
+		if ( excludes != null) {
+			return excludes;
 		}
 		return Collections.emptySet();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode( includeTags, excludeTags);
+		return Objects.hashCode( includes, excludes);
 	}
 
 	@Override
@@ -61,11 +61,11 @@ public class DefaultExplorerFilterDef implements IExplorerFilterDef {
 			return false;
 		}
 		final DefaultExplorerFilterDef other = (DefaultExplorerFilterDef) obj;
-		return Objects.equal( includeTags, other.includeTags) && Objects.equal( excludeTags, other.excludeTags);
+		return Objects.equal( includes, other.includes) && Objects.equal( excludes, other.excludes);
 	}
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).omitNullValues().add( "includeTags", includeTags).add( "excludeTags", excludeTags).toString();
+		return Objects.toStringHelper(this).omitNullValues().add( "includes", includes).add( "excludes", excludes).toString();
 	}
 }
