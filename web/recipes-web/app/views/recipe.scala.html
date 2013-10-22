@@ -37,6 +37,35 @@
 	<div style="background-color: @cuisineColour; border-radius: 2px" title="@cuisineName Cuisine">&nbsp;</div>
 
 	<div class="row" style="padding-top: 20px">
+	  <div class="col-md-2">
+
+		<div class="panel-group" id="sidebar">
+		  <div class="panel panel-default">
+		    <div class="panel-heading">
+		      <h4 class="panel-title">Suggestions Include:</h4>
+		    </div>
+		    <div id="sidebar-1" class="panel-collapse collapse in">
+		      <div class="panel-body">
+		      @explorerFilters.getIncludes()
+				<div><input type="hidden" style="width: 170px" id="sidebar-incl-pickItemTag" /><button type="button" style="margin-left: 12px" class="btn btn-sm btn-default" onclick="addInclTag($('#sidebar-incl-pickItemTag').select2('data').displayName)"><span class="glyphicon glyphicon-plus"></span> Include</button></div>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="panel panel-default">
+		    <div class="panel-heading">
+		      <h4 class="panel-title">Suggestions Exclude:</h4>
+		    </div>
+		    <div id="sidebar-2">
+		      <div class="panel-body">
+		      @explorerFilters.getExcludes()
+				<div><input type="hidden" style="width: 170px" id="sidebar-excl-pickItemTag" /><button type="button" style="margin-left: 12px" class="btn btn-sm btn-default" onclick="addExclTag($('#sidebar-excl-pickItemTag').select2('data').displayName)"><span class="glyphicon glyphicon-plus"></span> Exclude</button></div>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+	  </div>
+
 	  <div class="col-md-3">
 
 		<div class="panel-group" id="accordion">
@@ -77,7 +106,7 @@
 		</div>
 
 	  </div>
-	  <div class="col-md-9">
+	  <div class="col-md-7">
 		@if( recommendedItems.size() == 0) {
 			<p>Sorry, no Ingredient suggestions</p>
 		} else {
@@ -134,4 +163,6 @@
 	</div>  <!-- <div class="row"> -->
 
 	@_addIngredientPicker("addIngredient", false)
+	@_addIngredientPicker("sidebar-incl-pickItemTag", true)
+	@_addIngredientPicker("sidebar-excl-pickItemTag", true)
 }
