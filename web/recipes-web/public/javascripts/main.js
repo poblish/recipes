@@ -24,20 +24,24 @@ function clearAllIngredients() {
 	return false;
 }
 
-function addInclTag(inTag) {
-    $.post("/user/filter/inc/add=" + inTag, function(data) { location.reload(false); });
+function addInclTag(inName) {
+	var adjustedName = inName.replace("' tag",'').replace("'", "");  // Yuk!
+    $.post("/user/filter/inc/add=" + adjustedName, function(data) { location.reload(false); });
 }
 
-function addExclTag(inTag) {
-    $.post("/user/filter/exc/add=" + inTag, function(data) { location.reload(false); });
+function addExclTag(inName) {
+	var adjustedName = inName.replace("' tag",'').replace("'", "");  // Yuk!
+    $.post("/user/filter/exc/add=" + adjustedName, function(data) { location.reload(false); });
 }
 
-function removeInclTag(inTag) {
-    $.post("/user/filter/inc/rem=" + inTag, function(data) { location.reload(false); });
+function removeInclTag(inName) {
+	var adjustedName = inName.replace("' tag",'').replace("'", "");  // Yuk!
+    $.post("/user/filter/inc/rem=" + adjustedName, function(data) { location.reload(false); });
 }
 
-function removeExclTag(inTag) {
-    $.post("/user/filter/exc/rem=" + inTag, function(data) { location.reload(false); });
+function removeExclTag(inName) {
+	var adjustedName = inName.replace("' tag",'').replace("'", "");  // Yuk!
+    $.post("/user/filter/exc/rem=" + adjustedName, function(data) { location.reload(false); });
 }
 
 function clearFilters() {

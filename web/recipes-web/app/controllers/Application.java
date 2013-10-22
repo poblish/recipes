@@ -121,7 +121,7 @@ public class Application extends Controller {
 			@Override
 			public boolean makeChanges( IUser inUser) {
 				try {
-					return inUser.getPrefs().explorerIncludeAdd( TagUtils.forName(inName) );
+					return inUser.getPrefs().explorerIncludeAdd( TagUtils.forName( /* FIXME, lame: */ inName.toUpperCase() ) );
 				}
 				catch (RuntimeException e) {
 					return inUser.getPrefs().explorerIncludeAdd( getItem(inName) );
@@ -135,7 +135,7 @@ public class Application extends Controller {
 			@Override
 			public boolean makeChanges( IUser inUser) {
 				try {
-					return inUser.getPrefs().explorerIncludeRemove( TagUtils.forName(inName) );
+					return inUser.getPrefs().explorerIncludeRemove( TagUtils.forName( /* FIXME, lame: */ inName.toUpperCase() ) );
 				}
 				catch (RuntimeException e) {
 					return inUser.getPrefs().explorerIncludeRemove( getItem(inName) );
@@ -149,7 +149,7 @@ public class Application extends Controller {
 			@Override
 			public boolean makeChanges( IUser inUser) {
 				try {
-					return inUser.getPrefs().explorerExcludeAdd( TagUtils.forName(inName) );
+					return inUser.getPrefs().explorerExcludeAdd( TagUtils.forName( /* FIXME, lame: */ inName.toUpperCase() ) );
 				}
 				catch (RuntimeException e) {
 					return inUser.getPrefs().explorerExcludeAdd( getItem(inName) );
@@ -163,7 +163,7 @@ public class Application extends Controller {
 			@Override
 			public boolean makeChanges( IUser inUser) {
 				try {
-					return inUser.getPrefs().explorerExcludeRemove( TagUtils.forName(inName) );
+					return inUser.getPrefs().explorerExcludeRemove( TagUtils.forName( /* FIXME, lame: */ inName.toUpperCase() ) );
 				}
 				catch (RuntimeException e) {
 					return inUser.getPrefs().explorerExcludeRemove( getItem(inName) );
