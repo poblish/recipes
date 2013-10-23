@@ -100,7 +100,13 @@ public class EsExplorerFilters {
 			@Override
 			public long[] idsToExclude() {
 				return fEs;
-			}};
+			}
+
+			@Override
+			public String toString() {
+				return Objects.toStringHelper(this).add( "includeIds", fIs.length).add( "excludeIds", fEs.length).toString();
+			}
+		};
     }
 
     private long[] getRecipeIdsForFilterItem( final IExplorerFilterItem<?> inFilterItem) throws IOException {
@@ -198,7 +204,13 @@ public class EsExplorerFilters {
 				@Override
 				public long[] idsToExclude() {
 					return excludeIds;
-				}};
+				}
+
+				@Override
+				public String toString() {
+					return Objects.toStringHelper(this).add( "includeIds", includeIds.length).add( "excludeIds", excludeIds.length).toString();
+				}
+			};
     	}
     }
 
@@ -239,6 +251,11 @@ public class EsExplorerFilters {
 		@Override
 		public long[] idsToExclude() {
 			return EMPTY_ARRAY;
+		}
+
+		@Override
+		public String toString() {
+			return Objects.toStringHelper(this).toString();
 		}
 	}
 }
