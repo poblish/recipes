@@ -75,39 +75,39 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 	@Override
 	public IDRescorer getRecommendRescorer( long[] userIDs, final MyrrixRecommender recommender, final String... inArgs) {
 
-		LOG.info("RecipesRescorer: userIDs = " + Arrays.toString(userIDs));
+		LOG.info("RECOMMEND > RecipesRescorer: userIDs = " + Arrays.toString(userIDs));
 
 		final String desiredType = ( inArgs != null && inArgs.length >= 1) ? (String) inArgs[0] : "";
 		final boolean isRecipe = desiredType.equals("RECIPE");
 		final boolean isItem = desiredType.equals("ITEM");
 
-		final FilterParameters filterParams = getIncludeExcludeArraysFromInputs(inArgs);
+		final FilterParameters filterParams = getIncludeExcludeArraysFromInputs("RECOMMEND", inArgs);
 
 		return new IDRescorer() {
 
 			@Override
 			public boolean isFiltered( final long inId) {
 				if ( isRecipe && inId < RECIPE_BASE_ID) {
-					LOG.trace("RecipesRescorer: Stripping out invalid {RECIPE}... " + inId);
+					LOG.trace("RECOMMEND: Stripping out invalid {RECIPE}... " + inId);
 					return true;
 				}
 				else if ( isItem && inId >= RECIPE_BASE_ID) {
-					LOG.trace("RecipesRescorer: Stripping out invalid {ITEM}... " + inId);
+					LOG.trace("RECOMMEND: Stripping out invalid {ITEM}... " + inId);
 					return true;
 				}
 
 				if ( filterParams.includeIds.length > 0 && !isLongInArray( filterParams.includeIds, inId)) {
-					LOG.trace("RecipesRescorer: Filter out " + inId);
+					LOG.trace("RECOMMEND: Filter out " + inId);
 					return true;
 				}
 
-				LOG.info("RecipesRescorer: PASS recommend Id " + inId);
+				LOG.info("RECOMMEND: PASS recommend Id " + inId);
 				return false;
 			}
 
 			@Override
 			public double rescore( long id, double originalScore) {
-				LOG.info("RecipesRescorer: recommending " + id + " => " + originalScore);
+				LOG.info("RECOMMEND: recommending " + id + " => " + originalScore);
 				return originalScore;
 			}
 		};
@@ -116,11 +116,13 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 	@Override
 	public Rescorer<LongPair> getMostSimilarItemsRescorer( final MyrrixRecommender inRecommender, final String... inArgs) {
 
+		LOG.info("SIMILARITY > Starting");
+
 		final String desiredType = ( inArgs != null && inArgs.length >= 1) ? (String) inArgs[0] : "";
 		final boolean isRecipe = desiredType.equals("RECIPE");
 		final boolean isItem = desiredType.equals("ITEM");
 
-		final FilterParameters filterParams = getIncludeExcludeArraysFromInputs(inArgs);
+		final FilterParameters filterParams = getIncludeExcludeArraysFromInputs("SIMILARITY", inArgs);
 
 		return new Rescorer<LongPair>() {
 
@@ -130,47 +132,47 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 				if (filterParams.mayFilterOutSelf) {
 					// Exclude if either A or B aren't in Includes
 					if (!includesOK( filterParams.includeIds, inPair.getFirst(), inPair.getSecond() )) {
-						LOG.trace("RecipesRescorer: Filter out " + inPair);
+						LOG.trace("SIMILARITY: Filter out " + inPair);
 						return true;
 					}
 				}
 				else {
 					// Exclude only if incoming A (not 'current' B) isn't in Includes
 					if (!includesOK( filterParams.includeIds, inPair.getFirst())) {
-						LOG.trace("RecipesRescorer: Filter out " + inPair);
+						LOG.trace("SIMILARITY: Filter out " + inPair);
 						return true;
 					}
 				}
 
 				if (!excludesOK( filterParams.excludeIds, inPair.getFirst(), inPair.getSecond() )) {
-					LOG.trace("RecipesRescorer: Filter out " + inPair);
+					LOG.trace("SIMILARITY: Filter out " + inPair);
 					return true;
 				}
 
 				if (isRecipe) {
 					if ( inPair.getFirst() < RECIPE_BASE_ID || inPair.getSecond() < RECIPE_BASE_ID) {
-						LOG.trace("RecipesRescorer: Stripping out invalid {RECIPE,RECIPE}... " + inPair);
+						LOG.trace("SIMILARITY: Stripping out invalid {RECIPE,RECIPE}... " + inPair);
 						return true;
 					}
 				}
 				else if (isItem) {
 					if ( inPair.getFirst() >= RECIPE_BASE_ID || inPair.getSecond() >= RECIPE_BASE_ID) {
-						LOG.trace("RecipesRescorer: Stripping out invalid {ITEM,ITEM}... " + inPair);
+						LOG.trace("SIMILARITY: Stripping out invalid {ITEM,ITEM}... " + inPair);
 						return true;
 					}
 				}
 				else if (( inPair.getFirst() >= RECIPE_BASE_ID && inPair.getSecond() < RECIPE_BASE_ID) || ( inPair.getFirst() < RECIPE_BASE_ID && inPair.getSecond() >= RECIPE_BASE_ID)) {
-					LOG.trace("RecipesRescorer: Stripping out invalid {ITEM,RECIPE}... " + inPair);
+					LOG.trace("SIMILARITY: Stripping out invalid {ITEM,RECIPE}... " + inPair);
 					return true;
 				}
 
-				LOG.info("RecipesRescorer: PASS similarity pair " + inPair);
+				LOG.info("SIMILARITY: PASS similarity pair " + inPair);
 				return false;
 			}
 
 			@Override
 			public double rescore( final LongPair inPair, double originalScore) {
-				LOG.info("RecipesRescorer: similarity " + inPair + " => " + originalScore);
+				LOG.info("SIMILARITY: similarity " + inPair + " => " + originalScore);
 				return originalScore;
 			}
 		};
@@ -181,7 +183,7 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 			for ( long eachLong : inIdsToCheck) {
 				if (!isLongInArray( inIncludes, eachLong)) {
 					if (LOG.isTraceEnabled()) {
-						LOG.trace("RecipesRescorer: value (" + eachLong + ") not in include list: " + Arrays.toString(inIncludes));
+						LOG.trace("SIMILARITY: value (" + eachLong + ") not in include list: " + Arrays.toString(inIncludes));
 					}
 					return false;
 				}
@@ -196,7 +198,7 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 			for ( long eachLong : inIdsToCheck) {
 				if (isLongInArray( inExcludes, eachLong)) {
 					if (LOG.isTraceEnabled()) {
-						LOG.trace("RecipesRescorer: value (" + eachLong + ") not in exclude list: " + Arrays.toString(inExcludes));
+						LOG.trace("SIMILARITY: value (" + eachLong + ") not in exclude list: " + Arrays.toString(inExcludes));
 					}
 					return false;
 				}
@@ -229,14 +231,14 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 		return longs;
 	}
 
-	private FilterParameters getIncludeExcludeArraysFromInputs( final String... inArgs) {
+	private FilterParameters getIncludeExcludeArraysFromInputs( final String inLogLabel, final String... inArgs) {
 		final FilterParameters result = new FilterParameters();
 
 		try {
 			final IExplorerFilterDef filterDef = ( inArgs != null && inArgs.length > 1 && inArgs[1] != null && inArgs[1].startsWith("{")) ? mapper.readValue( inArgs[1], DefaultExplorerFilterDef.class) : null;
 			if ( filterDef != null) {
+				LOG.info( inLogLabel + ": Got Filter: " + filterDef);
 				final IExplorerFilter filter = filtersApi.from(filterDef);
-				LOG.info("Got Filter: " + filterDef);
 	
 				result.includeIds = filter.idsToInclude();
 				result.excludeIds = filter.idsToExclude();
@@ -246,7 +248,7 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 				@SuppressWarnings("unchecked")
 				final List<ICanonicalItem> itemsList = (List<ICanonicalItem>) (( inArgs != null && inArgs.length > 2 && inArgs[2] != null && inArgs[2].startsWith("[")) ? mapper.readValue( inArgs[2], itemArrayType) : null);
 				if ( itemsList != null) {
-					LOG.info("Find Recipes, with Filter itemsList: " + itemsList);
+					LOG.info( inLogLabel + ": Find Recipes, with Filter itemsList: " + itemsList);
 
 					final List<IRecipe> recipesToInclude = searchApi.findRecipesByItemName( Iterables.toArray( itemsList, ICanonicalItem.class));
 					if ( recipesToInclude.isEmpty()) {
@@ -264,7 +266,7 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 		            // No excludeIds
 				}
 				else {
-					LOG.info("No FilterDef or Items list, using Args: " + Arrays.toString(inArgs));
+					LOG.info( inLogLabel + ": No FilterDef or Items list, using Args: " + Arrays.toString(inArgs));
 					result.includeIds = ( inArgs != null && inArgs.length > 1) ? parseLongArrayString(inArgs[1]) : EMPTY_ARRAY;
 					result.excludeIds = ( inArgs != null && inArgs.length > 2) ? parseLongArrayString(inArgs[2]) : EMPTY_ARRAY;
 				}
