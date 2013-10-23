@@ -58,7 +58,7 @@ public class EsExplorerFilters {
 		boolean firstInclude = true;
 
     	for ( IExplorerFilterItem<?> eachFilterItem : inDef.getIncludes()) {
-    		final long[] newIds = getRecipeIdsForFilterItem(eachFilterItem);
+    		final long[] newIds = getRecipeIdsForFilterItem( eachFilterItem, true);
 
     		if (firstInclude) {
     		    includeIds = newIds;
@@ -83,7 +83,7 @@ public class EsExplorerFilters {
     	}
  
     	for ( IExplorerFilterItem<?> eachFilterItem : inDef.getExcludes()) {
-    		final long[] newIds = getRecipeIdsForFilterItem(eachFilterItem);
+    		final long[] newIds = getRecipeIdsForFilterItem( eachFilterItem, false);
 	        excludeIds = Longs.concat( excludeIds, newIds);  // UNION: Exclude anything in any of the categories
     	}
 
@@ -109,18 +109,18 @@ public class EsExplorerFilters {
 		};
     }
 
-    private long[] getRecipeIdsForFilterItem( final IExplorerFilterItem<?> inFilterItem) throws IOException {
+    private long[] getRecipeIdsForFilterItem( final IExplorerFilterItem<?> inFilterItem, boolean inInclude) throws IOException {
     	if ( inFilterItem.getEntity() instanceof ITag) {
     		final ITag theTag = (ITag) inFilterItem.getEntity();
     		final List<ICanonicalItem> items = search.findItemsByTag(theTag);
     		final List<IRecipe> recipes = search.findRecipesByTag(theTag);
-    		return getIdsForResults( items, recipes);
+    		return getIdsForResults( items, recipes, inInclude);
     	}
 
 		final String theItemName = (String) inFilterItem.getEntity();
 		final List<ICanonicalItem> items = Collections.emptyList(); // FIXME FIXME ???  Lists.newArrayList( itemFactory.get(theItemName).get() );  // FIXME, risky. Also do we really need to load to get Id ?!?
 		final List<IRecipe> recipes = search.findRecipesByItemName(theItemName);
-		return getIdsForResults( items, recipes);
+		return getIdsForResults( items, recipes, inInclude);
     }
 
     public class Builder {
@@ -132,7 +132,7 @@ public class EsExplorerFilters {
 
     		final List<ICanonicalItem> items = search.findItemsByTag(inTag);
     		final List<IRecipe> recipes = search.findRecipesByTag(inTag);
-    		final long[] newIds = getIdsForResults( items, recipes);
+    		final long[] newIds = getIdsForResults( items, recipes, true);
 
     		if ( includeIds.length == 0) {
     		    includeIds = newIds;
@@ -173,7 +173,7 @@ public class EsExplorerFilters {
 
     		final List<ICanonicalItem> items = search.findItemsByTag(inTag);
     		final List<IRecipe> recipes = search.findRecipesByTag(inTag);
-            excludeIds = Longs.concat( excludeIds, getIdsForResults( items, recipes));  // UNION: Exclude anything in any of the categories
+            excludeIds = Longs.concat( excludeIds, getIdsForResults( items, recipes, false));  // UNION: Exclude anything in any of the categories
             return this;
     	}
 
@@ -214,7 +214,7 @@ public class EsExplorerFilters {
     	}
     }
 
-    private long[] getIdsForResults( final List<ICanonicalItem> inItems, final List<IRecipe> inRecipes) {
+    private long[] getIdsForResults( final List<ICanonicalItem> inItems, final List<IRecipe> inRecipes, final boolean inInclude) {
         final Timer.Context timerCtxt = metrics.timer(TIMER_EXPLORER_FILTER_IDS_GET).time();
 
         final long[] ids = new long[ inItems.size() + inRecipes.size()];
@@ -232,7 +232,7 @@ public class EsExplorerFilters {
  
         timerCtxt.close();
 
-        LOG.info("ExplorerFilter Impl > matching Ids for Filter: " + Arrays.toString(ids));
+        LOG.info("ExplorerFilter Impl > " + (inInclude ? "INCLUDE" : "EXCLUDE") + " Ids for Filter element. " + Arrays.toString(ids));
 
         return ids;
     }
