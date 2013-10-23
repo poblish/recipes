@@ -239,7 +239,8 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 			if ( filterDef != null) {
 				LOG.info( inLogLabel + ": Got Filter: " + filterDef);
 				final IExplorerFilter filter = filtersApi.from(filterDef);
-	
+				LOG.info( inLogLabel + ": Obtained Filter: " + filter);
+
 				result.includeIds = filter.idsToInclude();
 				result.excludeIds = filter.idsToExclude();
 				result.mayFilterOutSelf = false;
