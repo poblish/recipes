@@ -46,7 +46,12 @@
 		    </div>
 		    <div id="sidebar-1" class="panel-collapse collapse in">
 		      <div class="panel-body">
-		      @explorerFilters.getIncludes()
+		        <ul>
+		        @for(eachIncl <- explorerFilters.getIncludes()) {
+		        	<li>@eachIncl.getEntity()&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeInclTag('@eachIncl.getEntity()')"><span class="glyphicon glyphicon-remove"></span></button></li>
+		        }
+		        </ul>
+
 				<div><input type="hidden" style="width: 170px" id="sidebar-incl-pickItemTag" /><button type="button" style="margin-left: 12px" class="btn btn-sm btn-default" onclick="addInclTag($('#sidebar-incl-pickItemTag').select2('data').displayName)"><span class="glyphicon glyphicon-plus"></span> Include</button></div>
 		      </div>
 		    </div>
@@ -57,7 +62,12 @@
 		    </div>
 		    <div id="sidebar-2">
 		      <div class="panel-body">
-		      @explorerFilters.getExcludes()
+		        <ul>
+		        @for(eachIncl <- explorerFilters.getExcludes()) {
+		        	<li>@eachIncl.getEntity()&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeExclTag('@eachIncl.getEntity()')"><span class="glyphicon glyphicon-remove"></span></button></li>
+		        }
+		        </ul>
+
 				<div><input type="hidden" style="width: 170px" id="sidebar-excl-pickItemTag" /><button type="button" style="margin-left: 12px" class="btn btn-sm btn-default" onclick="addExclTag($('#sidebar-excl-pickItemTag').select2('data').displayName)"><span class="glyphicon glyphicon-plus"></span> Exclude</button></div>
 		      </div>
 		    </div>
