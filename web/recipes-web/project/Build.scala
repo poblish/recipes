@@ -16,7 +16,7 @@ object ApplicationBuild extends Build {
     "com.squareup.dagger" % "dagger-compiler" % "1.1.0",
     "com.codahale.metrics" % "metrics-core" % "3.0.1",
     "com.codahale.metrics" % "metrics-servlets" % "3.0.1",
-    "com.feth" %% "play-authenticate" % "0.3.4-SNAPSHOT" exclude("org.scala-stm", "scala-stm_2.10.0")
+    "com.feth" %% "play-authenticate" % "0.5.0-SNAPSHOT" exclude("org.scala-stm", "scala-stm_2.10.0")
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
