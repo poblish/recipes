@@ -101,13 +101,13 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 					return true;
 				}
 
-				LOG.info("RECOMMEND: PASS recommend Id " + inId);
+				// No point logging that we got here, as we already log the 'rescore' method
 				return false;
 			}
 
 			@Override
 			public double rescore( long id, double originalScore) {
-				LOG.info("RECOMMEND: recommending " + id + " => " + originalScore);
+				LOG.info("RECOMMEND: rescore " + id + " => " + originalScore);
 				return originalScore;
 			}
 		};
@@ -166,13 +166,13 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 					return true;
 				}
 
-				LOG.info("SIMILARITY: PASS similarity pair " + inPair);
+				// No point logging that we got here, as we already log the 'rescore' method
 				return false;
 			}
 
 			@Override
 			public double rescore( final LongPair inPair, double originalScore) {
-				LOG.info("SIMILARITY: similarity " + inPair + " => " + originalScore);
+				LOG.info("SIMILARITY: rescore " + inPair + " => " + originalScore);
 				return originalScore;
 			}
 		};
