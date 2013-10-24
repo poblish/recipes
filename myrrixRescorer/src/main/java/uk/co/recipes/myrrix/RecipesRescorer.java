@@ -143,6 +143,11 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 						LOG.trace("SIMILARITY: Filter out " + inPair);
 						return true;
 					}
+
+					if (!excludesOK( filterParams.excludeIds, inPair.getFirst(), inPair.getSecond() )) {
+						LOG.trace("SIMILARITY: Filter out " + inPair);
+						return true;
+					}
 				}
 				else {
 					// Exclude only if incoming A (not 'current' B) isn't in Includes/Excludes
@@ -150,11 +155,11 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 						LOG.trace("SIMILARITY: Filter out " + inPair);
 						return true;
 					}
-				}
 
-				if (!excludesOK( filterParams.excludeIds, inPair.getFirst(), inPair.getSecond() )) {
-					LOG.trace("SIMILARITY: Filter out " + inPair);
-					return true;
+					if (!excludesOK( filterParams.excludeIds, inPair.getFirst())) {
+						LOG.trace("SIMILARITY: Filter out " + inPair);
+						return true;
+					}
 				}
 
 				if (isRecipe) {
