@@ -82,22 +82,28 @@ public class EsExplorerFiltersTest {
     @Test
     public void testIncludeMultipleTags2_Order1() throws IOException {
         final IExplorerFilter filter = filters.from( filterDefs.build().includeTags( CommonTags.FRUIT, CITRUS, MeatAndFishTags.MEAT ).toFilterDef() );
-        assertThat( filter.idsToInclude().length, is(0));
-        assertThat( filter.idsToExclude().length, is(0));
+        assertThat( filter.idsToInclude().length, is(1));
+        assertThat( filter.idsToExclude().length, is(1));
+        assertThat( filter.idsToInclude()[0], is(-1L));    // i.e. unusable!
+        assertThat( filter.idsToExclude()[0], is(-1L));    // i.e. unusable!
     }
 
     @Test
     public void testIncludeMultipleTags2_Order2() throws IOException {
         final IExplorerFilter filter = filters.from( filterDefs.build().includeTags( CITRUS, CommonTags.FRUIT, MeatAndFishTags.MEAT ).toFilterDef() );
-        assertThat( filter.idsToInclude().length, is(0));
-        assertThat( filter.idsToExclude().length, is(0));
+        assertThat( filter.idsToInclude().length, is(1));
+        assertThat( filter.idsToExclude().length, is(1));
+        assertThat( filter.idsToInclude()[0], is(-1L));    // i.e. unusable!
+        assertThat( filter.idsToExclude()[0], is(-1L));    // i.e. unusable!
     }
 
     @Test
     public void testIncludeMultipleTags2_Order3() throws IOException {
         final IExplorerFilter filter = filters.from( filterDefs.build().includeTags( MeatAndFishTags.MEAT, CommonTags.FRUIT, CITRUS ).toFilterDef() );
-        assertThat( filter.idsToInclude().length, is(0));
-        assertThat( filter.idsToExclude().length, is(0));
+        assertThat( filter.idsToInclude().length, is(1));
+        assertThat( filter.idsToExclude().length, is(1));
+        assertThat( filter.idsToInclude()[0], is(-1L));    // i.e. unusable!
+        assertThat( filter.idsToExclude()[0], is(-1L));    // i.e. unusable!
     }
 
     @Test

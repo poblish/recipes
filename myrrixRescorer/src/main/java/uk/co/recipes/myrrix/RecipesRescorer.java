@@ -87,6 +87,10 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 
 			@Override
 			public boolean isFiltered( final long inId) {
+				if (filterParams.deadFilter) {
+					return true;
+				}
+
 				if ( isRecipe && inId < RECIPE_BASE_ID) {
 					LOG.trace("RECOMMEND: Stripping out invalid {RECIPE}... " + inId);
 					return true;
@@ -129,15 +133,19 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 			@Override
 			public boolean isFiltered( final LongPair inPair) {
 
+				if (filterParams.deadFilter) {
+					return true;
+				}
+
 				if (filterParams.mayFilterOutSelf) {
-					// Exclude if either A or B aren't in Includes
+					// Exclude if either A or B aren't in Includes/Excludes
 					if (!includesOK( filterParams.includeIds, inPair.getFirst(), inPair.getSecond() )) {
 						LOG.trace("SIMILARITY: Filter out " + inPair);
 						return true;
 					}
 				}
 				else {
-					// Exclude only if incoming A (not 'current' B) isn't in Includes
+					// Exclude only if incoming A (not 'current' B) isn't in Includes/Excludes
 					if (!includesOK( filterParams.includeIds, inPair.getFirst())) {
 						LOG.trace("SIMILARITY: Filter out " + inPair);
 						return true;
@@ -244,6 +252,7 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 				result.includeIds = filter.idsToInclude();
 				result.excludeIds = filter.idsToExclude();
 				result.mayFilterOutSelf = false;
+				result.deadFilter = ( result.includeIds.length == 1 && result.excludeIds.length == 1 && result.includeIds[0] == -1L && result.excludeIds[0] == -1L);
 			}
 			else {
 				@SuppressWarnings("unchecked")
@@ -284,5 +293,6 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 		long[] includeIds = EMPTY_ARRAY;
 		long[] excludeIds = EMPTY_ARRAY;
 		boolean mayFilterOutSelf = true; // Why would this *ever* be true?
+		boolean deadFilter = false; // Must not return anything
 	}
 }

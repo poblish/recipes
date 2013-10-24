@@ -26,6 +26,7 @@ import uk.co.recipes.service.api.IExplorerFilterDef;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
+import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Longs;
 
@@ -42,6 +43,7 @@ public class EsExplorerFilters {
 	private static final IExplorerFilter NULL_FILTER = new NullFilter();
 
 	private static final long[] EMPTY_ARRAY = new long[0];
+	private static final long[] UNUSABLE_ARRAY = new long[]{-1};  // ANDed to death, this should not be used.
 
 	@Inject EsSearchService search;
 	@Inject MetricRegistry metrics;
@@ -66,13 +68,18 @@ public class EsExplorerFilters {
     		}
     		else if ( includeIds.length == 0) {
     			// Already AND-ed down to nothing, so bail out
-    			break;
+    			return new DeadFilter();
     		}
      		else {
         		// INTERSECTION: Include things in all of the categories
         		final Set<Long> union = Sets.newHashSet( Longs.asList(includeIds) );
         		union.retainAll( Longs.asList(newIds) );
-    
+
+        		if (union.isEmpty()) {
+        			// Already AND-ed down to nothing, so bail out
+        			return new DeadFilter();
+        		}
+
         		includeIds = new long[ union.size() ];
                 int i = 0;
     
@@ -251,6 +258,25 @@ public class EsExplorerFilters {
 		@Override
 		public long[] idsToExclude() {
 			return EMPTY_ARRAY;
+		}
+
+		@Override
+		public String toString() {
+			return Objects.toStringHelper(this).toString();
+		}
+	}
+
+	// Cannot match anything
+	private static class DeadFilter implements IExplorerFilter {
+
+		@Override
+		public long[] idsToInclude() {
+			return UNUSABLE_ARRAY;
+		}
+
+		@Override
+		public long[] idsToExclude() {
+			return UNUSABLE_ARRAY;
 		}
 
 		@Override
