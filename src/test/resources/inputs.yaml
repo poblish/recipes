@@ -780,6 +780,8 @@
 ---
 {    canonicalName: Ciabatta Rolls, parent: Ciabatta}
 ---
+{canonicalName: Crusty Bread, tags: {BREAD}}
+---
 {canonicalName: Focaccia, tags: {BREAD, ITALIAN}}
 ---
 {canonicalName: Naan Bread, tags: {BREAD, INDIAN}, aliases: Naan}
@@ -1234,6 +1236,10 @@
 ---
 {            canonicalName: Icelandic Cod Fillet, parent: Cod Fillet}
 ---
+{    canonicalName: Coley, parent: White Fish}
+---
+{        canonicalName: Coley Fillet, parent: Coley, aliases: {Coley Fillets}}
+---
 {    canonicalName: Haddock, parent: White Fish}
 ---
 {        canonicalName: Haddock Fillet, parent: Haddock, aliases: {Haddock Fillets}}
@@ -1376,10 +1382,6 @@
 ---
 {    canonicalName: Pork Mince, parent: Pork, aliases: {Minced Pork}}
 ---
-{    canonicalName: Pork Sausages, parent: Pork, tags: {SAUSAGE}}
----
-{        canonicalName: Chorizo, parent: Pork Sausages, tags: {SPANISH, MEXICAN}}
----
 {    canonicalName: Pork Shoulder, parent: Pork}
 ---
 {        canonicalName: Pork Shoulder Steaks, parent: Pork Shoulder}
@@ -1390,7 +1392,13 @@
 ---
 {    canonicalName: Wild Rabbit, parent: Rabbit}
 ---
-{canonicalName: Sausagemeat, tags: {SAUSAGE}}
+{canonicalName: Sausages, tags: {SAUSAGE}, aliases: {Sausage}}
+---
+{    canonicalName: Pork Sausages, parent: Sausages, contains: {Pork}}
+---
+{        canonicalName: Chorizo, parent: Pork Sausages, tags: {SPANISH, MEXICAN}, contains: {Pork}}
+---
+{    canonicalName: Sausagemeat, parent: Sausages}
 ---
 {canonicalName: Salami, tags: {MEAT}}
 ---
