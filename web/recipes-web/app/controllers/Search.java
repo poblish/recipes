@@ -20,6 +20,7 @@ import uk.co.recipes.api.IUser;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.api.ISearchResult;
 import uk.co.recipes.service.impl.EsSearchService;
+import uk.co.recipes.ui.CuisineColours;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,16 +37,18 @@ public class Search extends Controller {
 	private ObjectMapper mapper;
 	private ISearchAPI search;
 	private MetricRegistry metrics;
+    private CuisineColours colours;
 
     private static final List<IRecipe> EMPTY_RECIPES = Collections.emptyList();
     private static final List<ITag> EMPTY_TAGS = Collections.emptyList();
     private static final List<ICanonicalItem> EMPTY_ITEMS = Collections.emptyList();
 
     @Inject
-    public Search( final EsSearchService inSearch, final ObjectMapper inMapper, final MetricRegistry metrics) {
+    public Search( final EsSearchService inSearch, final ObjectMapper inMapper, final MetricRegistry metrics, final CuisineColours colours) {
         this.mapper = checkNotNull(inMapper);
         this.search = checkNotNull(inSearch);
         this.metrics = checkNotNull(metrics);
+        this.colours = checkNotNull(colours);
     }
 
     public Result doSearch() throws IOException {
@@ -54,11 +57,11 @@ public class Search extends Controller {
         final boolean gotInput = ( theInputs != null && theInputs.length > 0 && !theInputs[0].isEmpty());
 
         if (!gotInput) {
-            return ok(views.html.search.render( "-", currUser, EMPTY_RECIPES, EMPTY_TAGS, EMPTY_ITEMS));
+            return ok(views.html.search.render( "-", currUser, colours, EMPTY_RECIPES, EMPTY_TAGS, EMPTY_ITEMS));
         }
 
         final String termToUse = theInputs[0].trim();
-        return ok(views.html.search.render( "'" + termToUse + "'", currUser, search.findRecipesByName(termToUse), search.findTagsByName(termToUse), search.findItemsByName(termToUse) ));
+        return ok(views.html.search.render( "'" + termToUse + "'", currUser, colours, search.findRecipesByName(termToUse), search.findTagsByName(termToUse), search.findItemsByName(termToUse) ));
     }
 
     public Result findPartial() throws IOException {
