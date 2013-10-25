@@ -7,6 +7,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 
+import uk.co.recipes.service.impl.ExplorerFilterDefs;
 import java.io.IOException;
 import java.util.List;
 
@@ -106,11 +107,11 @@ public class RecipeSearchTest {
 		final List<IRecipe> foundRecipes = searchApi.findRecipesByTag( MeatAndFishTags.MEAT );
 		assertThat( foundRecipes.size(), greaterThanOrEqualTo(4));  // Surely 5 ?!?
 
-		final IExplorerFilter filter = explorerFilters.build().includeTags( MeatAndFishTags.MEAT ).toFilter();
+		final IExplorerFilter filter = explorerFilters.from( new ExplorerFilterDefs().build().includeTags( MeatAndFishTags.MEAT ).toFilterDef() );
 		assertThat( filter.idsToInclude().length, is( foundRecipes.size() + numItems));
 		assertThat( filter.idsToExclude().length, is(0));
 
-		final IExplorerFilter filter2 = explorerFilters.build().excludeTags( MeatAndFishTags.MEAT ).toFilter();
+		final IExplorerFilter filter2 = explorerFilters.from( new ExplorerFilterDefs().build().excludeTags( MeatAndFishTags.MEAT ).toFilterDef() );
 		assertThat( filter2.idsToInclude().length, is(0));
 		assertThat( filter2.idsToExclude().length, is( foundRecipes.size() + numItems));
 	}

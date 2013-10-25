@@ -7,7 +7,6 @@ import static uk.co.recipes.metrics.MetricNames.TIMER_EXPLORER_FILTER_IDS_GET;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -48,10 +47,6 @@ public class EsExplorerFilters {
 	@Inject EsSearchService search;
 	@Inject MetricRegistry metrics;
 
-
-    public Builder build() {
-    	return new Builder();
-    }
 
     public IExplorerFilter from( final IExplorerFilterDef inDef) throws IOException {
     	long[] includeIds = EMPTY_ARRAY;
@@ -128,97 +123,6 @@ public class EsExplorerFilters {
 		final List<ICanonicalItem> items = Collections.emptyList(); // FIXME FIXME ???  Lists.newArrayList( itemFactory.get(theItemName).get() );  // FIXME, risky. Also do we really need to load to get Id ?!?
 		final List<IRecipe> recipes = search.findRecipesByItemName(theItemName);
 		return getIdsForResults( items, recipes, inInclude);
-    }
-
-    public class Builder {
-
-    	private long[] includeIds = EMPTY_ARRAY;
-    	private long[] excludeIds = EMPTY_ARRAY;
-
-    	public Builder includeTag( final ITag inTag) throws IOException {
-
-    		final List<ICanonicalItem> items = search.findItemsByTag(inTag);
-    		final List<IRecipe> recipes = search.findRecipesByTag(inTag);
-    		final long[] newIds = getIdsForResults( items, recipes, true);
-
-    		if ( includeIds.length == 0) {
-    		    includeIds = newIds;
-    		}
-    		else {
-        		// INTERSECTION: Include things in all of the categories
-        		final Set<Long> union = Sets.newHashSet( Longs.asList(includeIds) );
-        		union.retainAll( Longs.asList(newIds) );
-    
-        		includeIds = new long[ union.size() ];
-                int i = 0;
-    
-                for ( Long each : union) {
-                    includeIds[i++] = each;
-                }
-    		}
-
-            return this;
-    	}
-
-    	// FIXME - very inefficient
-    	public Builder includeTags( final ITag... inTags) throws IOException {
-    		for ( ITag each : inTags) {
-    			includeTag(each);
-    		}
-            return this;
-    	}
-
-    	// FIXME - very inefficient
-    	public Builder includeTags( final Collection<ITag> inTags) throws IOException {
-    		for ( ITag each : inTags) {
-    			includeTag(each);
-    		}
-            return this;
-    	}
-
-    	public Builder excludeTag( final ITag inTag) throws IOException {
-
-    		final List<ICanonicalItem> items = search.findItemsByTag(inTag);
-    		final List<IRecipe> recipes = search.findRecipesByTag(inTag);
-            excludeIds = Longs.concat( excludeIds, getIdsForResults( items, recipes, false));  // UNION: Exclude anything in any of the categories
-            return this;
-    	}
-
-    	// FIXME - very inefficient
-    	public Builder excludeTags( final ITag... inTags) throws IOException {
-    		for ( ITag each : inTags) {
-    			excludeTag(each);
-    		}
-            return this;
-    	}
-
-    	// FIXME - very inefficient
-    	public Builder excludeTags( final Collection<ITag> inTags) throws IOException {
-    		for ( ITag each : inTags) {
-    			excludeTag(each);
-    		}
-            return this;
-    	}
-
-    	public IExplorerFilter toFilter() {
-    		return new IExplorerFilter() {
-
-				@Override
-				public long[] idsToInclude() {
-					return includeIds;
-				}
-
-				@Override
-				public long[] idsToExclude() {
-					return excludeIds;
-				}
-
-				@Override
-				public String toString() {
-					return Objects.toStringHelper(this).add( "includeIds", includeIds.length).add( "excludeIds", excludeIds.length).toString();
-				}
-			};
-    	}
     }
 
     private long[] getIdsForResults( final List<ICanonicalItem> inItems, final List<IRecipe> inRecipes, final boolean inInclude) {

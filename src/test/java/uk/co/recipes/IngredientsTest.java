@@ -4,6 +4,7 @@ import static java.util.Locale.ENGLISH;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+import uk.co.recipes.service.impl.ExplorerFilterDefs;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
@@ -160,11 +161,11 @@ public class IngredientsTest {
 		assertThat( results, hasItem( itemFactory.getByName("lamb") ));
 		assertThat( results, hasItem( itemFactory.getByName("diced_chicken") ));
 
-		final IExplorerFilter filter = explorerFilters.build().includeTags( MeatAndFishTags.MEAT ).toFilter();
+		final IExplorerFilter filter = explorerFilters.from( new ExplorerFilterDefs().build().includeTags( MeatAndFishTags.MEAT ).toFilterDef() );
 		assertThat( filter.idsToInclude().length, is( results.size() ));
 		assertThat( filter.idsToExclude().length, is(0));
 
-		final IExplorerFilter filter2 = explorerFilters.build().excludeTags( MeatAndFishTags.MEAT ).toFilter();
+		final IExplorerFilter filter2 = explorerFilters.from( new ExplorerFilterDefs().build().excludeTags( MeatAndFishTags.MEAT ).toFilterDef() );
 		assertThat( filter2.idsToInclude().length, is(0));
 		assertThat( filter2.idsToExclude().length, is( results.size() ));
 
