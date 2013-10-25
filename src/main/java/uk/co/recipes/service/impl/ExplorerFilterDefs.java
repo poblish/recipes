@@ -35,10 +35,15 @@ public class ExplorerFilterDefs {
 
     	private final UserPreferences tempPrefs = new UserPreferences();
 
-    	public Builder includeTag( final ITag inTag) throws IOException {
-    		tempPrefs.explorerIncludeAdd(inTag);
+        public Builder includeTag( final ITag inTag) throws IOException {
+            tempPrefs.explorerIncludeAdd(inTag);
             return this;
-    	}
+        }
+
+        public Builder includeTag( final ITag inTag, final String inValue) throws IOException {
+            tempPrefs.explorerIncludeAdd(inTag, inValue);
+            return this;
+        }
 
     	public Builder includeTags( final ITag... inTags) throws IOException {
     		for ( ITag each : inTags) {
@@ -47,10 +52,15 @@ public class ExplorerFilterDefs {
             return this;
     	}
 
-    	public Builder excludeTag( final ITag inTag) throws IOException {
-    		tempPrefs.explorerExcludeAdd(inTag);
+        public Builder excludeTag( final ITag inTag) throws IOException {
+            tempPrefs.explorerExcludeAdd(inTag);
             return this;
-    	}
+        }
+
+        public Builder excludeTag( final ITag inTag, final String inValue) throws IOException {
+            tempPrefs.explorerExcludeAdd(inTag, inValue);
+            return this;
+        }
 
     	public Builder excludeTags( final ITag... inTags) throws IOException {
     		for ( ITag each : inTags) {

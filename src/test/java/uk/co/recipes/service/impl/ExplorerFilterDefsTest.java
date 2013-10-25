@@ -54,11 +54,23 @@ public class ExplorerFilterDefsTest {
         assertThat( mapper.writeValueAsString(fDef3), is("{\"includes\":[{\"filter\":\"Tag|FRUIT\"},{\"filter\":\"Tag|CITRUS\"}],\"excludes\":[{\"filter\":\"Tag|MEAT\"},{\"filter\":\"Tag|VEGETABLE\"}]}"));
 	}
 
+    @Test
+    public void testSerWithValues() throws IOException {
+        final IExplorerFilterDef fDef1 = filterDefs.build().includeTag( CommonTags.FRUIT, "yes").includeTag( CommonTags.VEGETABLE, "maybe").excludeTag( CITRUS, "no").toFilterDef();
+        assertThat( mapper.writeValueAsString(fDef1), is("{\"includes\":[{\"filter\":\"Tag|FRUIT|yes\"},{\"filter\":\"Tag|VEGETABLE|maybe\"}],\"excludes\":[{\"filter\":\"Tag|CITRUS|no\"}]}"));
+    }
+
 	@Test
 	public void testDeser() throws IOException {
         final IExplorerFilterDef fDef1 = filterDefs.build().includeTags( CITRUS, CommonTags.FRUIT ).excludeTags( MeatAndFishTags.SAUSAGE, CommonTags.VEGETABLE ).toFilterDef();
         assertThat( mapper.readValue( "{\"includes\":[{\"filter\":\"Tag|CITRUS\"},{\"filter\":\"Tag|FRUIT\"}],\"excludes\":[{\"filter\":\"Tag|SAUSAGE\"},{\"filter\":\"Tag|VEGETABLE\"}]}", DefaultExplorerFilterDef.class), is(fDef1));
 	}
+
+    @Test
+    public void testDeserWithValues() throws IOException {
+        final IExplorerFilterDef fDef1 = filterDefs.build().includeTag( CommonTags.FRUIT, "yes").includeTag( CommonTags.VEGETABLE, "maybe").excludeTag( CITRUS, "no").toFilterDef();
+        assertThat( mapper.readValue("{\"includes\":[{\"filter\":\"Tag|FRUIT|yes\"},{\"filter\":\"Tag|VEGETABLE|maybe\"}],\"excludes\":[{\"filter\":\"Tag|CITRUS|no\"}]}", DefaultExplorerFilterDef.class), is(fDef1));
+    }
 
     @Module( includes=DaggerModule.class, overrides=true, injects=ExplorerFilterDefsTest.class)
     static class TestModule {}
