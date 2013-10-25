@@ -47,13 +47,6 @@ public class ExplorerFilterDefs {
             return this;
     	}
 
-//    	public Builder includeTags( final Collection<ITag> inTags) throws IOException {
-//    		for ( ITag each : inTags) {
-//    			includeTag(each);
-//    		}
-//            return this;
-//    	}
-
     	public Builder excludeTag( final ITag inTag) throws IOException {
     		tempPrefs.explorerExcludeAdd(inTag);
             return this;
@@ -65,13 +58,6 @@ public class ExplorerFilterDefs {
     		}
             return this;
     	}
-
-//    	public Builder excludeTags( final Collection<ITag> inTags) throws IOException {
-//    		for ( ITag each : inTags) {
-//    			excludeTag(each);
-//    		}
-//            return this;
-//    	}
 
     	public IExplorerFilterDef toFilterDef() {
     		return new DefaultExplorerFilterDef((Set<IExplorerFilterItem<?>>) tempPrefs.getExplorerIncludes(), (Set<IExplorerFilterItem<?>>) tempPrefs.getExplorerExcludes());
