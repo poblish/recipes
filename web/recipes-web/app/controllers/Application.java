@@ -121,10 +121,24 @@ public class Application extends Controller {
 			@Override
 			public boolean makeChanges( IUser inUser) {
 				try {
-					return inUser.getPrefs().explorerIncludeAdd( TagUtils.forName( /* FIXME, lame: */ inName.toUpperCase() ) );
+					return inUser.getPrefs().explorerIncludeAdd( tagForFilterItemName(inName) );
 				}
 				catch (RuntimeException e) {
 					return inUser.getPrefs().explorerIncludeAdd( getItem(inName) );
+				}
+			}} );
+    }
+
+	public Result explorerIncludeAddWithValue( final String inName, final String inValue) {
+        return handleUserPreference( new UserTask() {
+
+			@Override
+			public boolean makeChanges( IUser inUser) {
+				try {
+					return inUser.getPrefs().explorerIncludeAdd( tagForFilterItemName(inName), inValue);
+				}
+				catch (RuntimeException e) {
+					throw new UnsupportedOperationException("Should this work?");
 				}
 			}} );
     }
@@ -135,7 +149,7 @@ public class Application extends Controller {
 			@Override
 			public boolean makeChanges( IUser inUser) {
 				try {
-					return inUser.getPrefs().explorerIncludeRemove( TagUtils.forName( /* FIXME, lame: */ inName.toUpperCase() ) );
+					return inUser.getPrefs().explorerIncludeRemove( tagForFilterItemName(inName) );
 				}
 				catch (RuntimeException e) {
 					return inUser.getPrefs().explorerIncludeRemove( getItem(inName) );
@@ -149,10 +163,24 @@ public class Application extends Controller {
 			@Override
 			public boolean makeChanges( IUser inUser) {
 				try {
-					return inUser.getPrefs().explorerExcludeAdd( TagUtils.forName( /* FIXME, lame: */ inName.toUpperCase() ) );
+					return inUser.getPrefs().explorerExcludeAdd( tagForFilterItemName(inName) );
 				}
 				catch (RuntimeException e) {
 					return inUser.getPrefs().explorerExcludeAdd( getItem(inName) );
+				}
+			}} );
+    }
+
+	public Result explorerExcludeAddWithValue( final String inName, final String inValue) {
+        return handleUserPreference( new UserTask() {
+
+			@Override
+			public boolean makeChanges( IUser inUser) {
+				try {
+					return inUser.getPrefs().explorerExcludeAdd( tagForFilterItemName(inName), inValue);
+				}
+				catch (RuntimeException e) {
+					throw new UnsupportedOperationException("Should this work?");
 				}
 			}} );
     }
@@ -163,13 +191,17 @@ public class Application extends Controller {
 			@Override
 			public boolean makeChanges( IUser inUser) {
 				try {
-					return inUser.getPrefs().explorerExcludeRemove( TagUtils.forName( /* FIXME, lame: */ inName.toUpperCase() ) );
+					return inUser.getPrefs().explorerExcludeRemove( tagForFilterItemName(inName) );
 				}
 				catch (RuntimeException e) {
 					return inUser.getPrefs().explorerExcludeRemove( getItem(inName) );
 				}
 			}} );
     }
+
+	private ITag tagForFilterItemName( final String inName) {
+		return TagUtils.forName( /* FIXME, lame: */ inName.toUpperCase() );
+	}
 
 	public Result explorerClearAll() {
         return handleUserPreference( new UserTask() {

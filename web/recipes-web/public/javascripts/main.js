@@ -24,14 +24,16 @@ function clearAllIngredients() {
 	return false;
 }
 
-function addInclTag(inName) {
+function addInclTag(inName, inValue) {
 	var adjustedName = inName.replace("' tag",'').replace("'", "");  // Yuk!
-    $.post("/user/filter/inc/add=" + adjustedName, function(data) { location.reload(false); });
+	var url = inValue != null ? ("/user/filter/inc/add=" + adjustedName + "/v=" + inValue) : ("/user/filter/inc/add=" + adjustedName);
+    $.post( url, function(data) { location.reload(false); });
 }
 
-function addExclTag(inName) {
+function addExclTag(inName, inValue) {
 	var adjustedName = inName.replace("' tag",'').replace("'", "");  // Yuk!
-    $.post("/user/filter/exc/add=" + adjustedName, function(data) { location.reload(false); });
+	var url = inValue != null ? ("/user/filter/exc/add=" + adjustedName + "/v=" + inValue) : ("/user/filter/exc/add=" + adjustedName);
+    $.post( url, function(data) { location.reload(false); });
 }
 
 function removeInclTag(inName) {
