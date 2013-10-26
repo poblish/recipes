@@ -58,22 +58,15 @@ import com.google.common.collect.Sets;
  */
 public class EsSearchService implements ISearchAPI {
 
-    @Inject
-    Client esClient;
+	@Inject Client esClient;
+	@Inject ObjectMapper mapper;
+	@Inject MetricRegistry metrics;
 
-	@Inject
-	ObjectMapper mapper;
-
-	@Inject
-	MetricRegistry metrics;
-
-	@Inject
 	@Named("elasticSearchItemsUrl")
-	String itemIndexUrl;
+	@Inject String itemIndexUrl;
 
-	@Inject
 	@Named("elasticSearchRecipesUrl")
-	String recipesIndexUrl;
+	@Inject String recipesIndexUrl;
 
 
 	/* (non-Javadoc)
