@@ -3,6 +3,7 @@
  */
 package uk.co.recipes.service.impl;
 
+import static uk.co.recipes.metrics.MetricNames.TIMER_BUILD_FILTER_GET_IDS;
 import static uk.co.recipes.metrics.MetricNames.TIMER_EXPLORER_FILTER_IDS_GET;
 
 import java.io.IOException;
@@ -49,8 +50,19 @@ public class EsExplorerFilters {
 	@Inject MetricRegistry metrics;
 
 
-    public IExplorerFilter from( final IExplorerFilterDef inDef) throws IOException {
-    	long[] includeIds = EMPTY_ARRAY;
+	public IExplorerFilter from( final IExplorerFilterDef inDef) throws IOException {
+		final Timer.Context timerCtxt = metrics.timer(TIMER_BUILD_FILTER_GET_IDS).time();
+
+		try {
+			return timedFrom(inDef);
+		}
+		finally {
+			timerCtxt.stop();
+		}
+	}
+
+    private IExplorerFilter timedFrom( final IExplorerFilterDef inDef) throws IOException {
+	    long[] includeIds = EMPTY_ARRAY;
     	long[] excludeIds = EMPTY_ARRAY;
 
 		boolean firstInclude = true;

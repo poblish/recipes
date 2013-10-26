@@ -28,6 +28,7 @@ public interface MetricNames {
 	String TIMER_RECIPE_ITEMS_RECOMMENDATIONS = "recommendations_recipe:items";
 
     String TIMER_EXPLORER_FILTER_IDS_GET = "recipe.explorer_filter.ids.get";
+    String TIMER_BUILD_FILTER_GET_IDS = "recipe.explorer_filter.ids.get";
 
     String TIMER_USER_LOCAL_GET = "recipe.getLocalUser";
 }
