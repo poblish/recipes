@@ -157,6 +157,20 @@ public class Application extends Controller {
 			}} );
     }
 
+	public Result explorerIncludeRemoveWithValue( final String inName, final String inValue) {
+        return handleUserPreference( new UserTask() {
+
+			@Override
+			public boolean makeChanges( IUser inUser) {
+				try {
+					return inUser.getPrefs().explorerIncludeRemove( tagForFilterItemName(inName), inValue);
+				}
+				catch (RuntimeException e) {
+					return inUser.getPrefs().explorerIncludeRemove( getItem(inName) );
+				}
+			}} );
+    }
+
 	public Result explorerExcludeAdd( final String inName) {
         return handleUserPreference( new UserTask() {
 
@@ -192,6 +206,20 @@ public class Application extends Controller {
 			public boolean makeChanges( IUser inUser) {
 				try {
 					return inUser.getPrefs().explorerExcludeRemove( tagForFilterItemName(inName) );
+				}
+				catch (RuntimeException e) {
+					return inUser.getPrefs().explorerExcludeRemove( getItem(inName) );
+				}
+			}} );
+    }
+
+	public Result explorerExcludeRemoveWithValue( final String inName, final String inValue) {
+        return handleUserPreference( new UserTask() {
+
+			@Override
+			public boolean makeChanges( IUser inUser) {
+				try {
+					return inUser.getPrefs().explorerExcludeRemove( tagForFilterItemName(inName), inValue);
 				}
 				catch (RuntimeException e) {
 					return inUser.getPrefs().explorerExcludeRemove( getItem(inName) );

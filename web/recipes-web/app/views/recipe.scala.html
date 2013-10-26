@@ -48,7 +48,11 @@
 		      <div class="panel-body">
 		        <ul>
 		        @for(eachIncl <- explorerFilters.getIncludes()) {
-		        	<li>@eachIncl.getEntity()&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeInclTag('@eachIncl.getEntity()')"><span class="glyphicon glyphicon-remove"></span></button></li>
+		        	@if(eachIncl.getValue().isPresent()) {
+		        	  <li>@eachIncl.getValue().get()&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeInclTag('@eachIncl.getEntity()','@eachIncl.getValue().get()')"><span class="glyphicon glyphicon-remove"></span></button></li>
+		        	} else {
+		        	  <li>@eachIncl.getEntity()&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeInclTag('@eachIncl.getEntity()')"><span class="glyphicon glyphicon-remove"></span></button></li>
+		        	}
 		        }
 		        </ul>
 
@@ -63,8 +67,12 @@
 		    <div id="sidebar-2">
 		      <div class="panel-body">
 		        <ul>
-		        @for(eachIncl <- explorerFilters.getExcludes()) {
-		        	<li>@eachIncl.getEntity()&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeExclTag('@eachIncl.getEntity()')"><span class="glyphicon glyphicon-remove"></span></button></li>
+		        @for(eachExcl <- explorerFilters.getExcludes()) {
+		        	@if(eachExcl.getValue().isPresent()) {
+		        	  <li>@eachExcl.getValue().get()&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeExclTag('@eachExcl.getEntity()','@eachExcl.getValue().get()')"><span class="glyphicon glyphicon-remove"></span></button></li>
+		        	} else {
+		        	  <li>@eachExcl.getEntity()&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeExclTag('@eachExcl.getEntity()')"><span class="glyphicon glyphicon-remove"></span></button></li>
+		        	}
 		        }
 		        </ul>
 

@@ -36,14 +36,16 @@ function addExclTag(inName, inValue) {
     $.post( url, function(data) { location.reload(false); });
 }
 
-function removeInclTag(inName) {
+function removeInclTag(inName, inValue) {
 	var adjustedName = inName.replace("' tag",'').replace("'", "");  // Yuk!
-    $.post("/user/filter/inc/rem=" + adjustedName, function(data) { location.reload(false); });
+	var url = inValue != null ? ("/user/filter/inc/rem=" + adjustedName + "/v=" + inValue) : ("/user/filter/inc/rem=" + adjustedName);
+    $.post( url, function(data) { location.reload(false); });
 }
 
-function removeExclTag(inName) {
+function removeExclTag(inName, inValue) {
 	var adjustedName = inName.replace("' tag",'').replace("'", "");  // Yuk!
-    $.post("/user/filter/exc/rem=" + adjustedName, function(data) { location.reload(false); });
+	var url = inValue != null ? ("/user/filter/exc/rem=" + adjustedName + "/v=" + inValue) : ("/user/filter/exc/rem=" + adjustedName);
+    $.post( url, function(data) { location.reload(false); });
 }
 
 function clearFilters() {
