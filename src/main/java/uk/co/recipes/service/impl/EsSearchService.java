@@ -160,9 +160,42 @@ public class EsSearchService implements ISearchAPI {
         return findItemsByName( tagString(inTag), true);
     }
 
+    // FIXME Shameless copy/paste job
     @Override
     public List<ICanonicalItem> findItemsByTag( final ITag inTag, final String inValue) throws IOException {
-        return findItemsByName( tagString(inTag), true);
+	    final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_SEARCHES).time();
+
+		try
+		{
+			final JsonNode jn = mapper.readTree( new URL( itemIndexUrl + "/_search?q=" + URLEncoder.encode( inTag.toString() + ":" + inValue, "utf-8") + "&default_operator=AND" + "&size=9999") ).path("hits").path("hits");
+	
+ 			final List<ICanonicalItem> results = Lists.newArrayList();
+
+			for ( final JsonNode each : jn) {
+				results.add( mapper.readValue( each.path("_source").traverse(), CanonicalItem.class) );  // FIXME Remove _source stuff where possible
+			}
+
+			// Yuk FIXME by letting ES do this right!
+			if (true) {
+				Collections.sort( results, new Comparator<ICanonicalItem>() {
+	
+					@Override
+					public int compare( ICanonicalItem o1, ICanonicalItem o2) {
+						return o1.getCanonicalName().compareToIgnoreCase( o2.getCanonicalName() );
+					}} );
+			}
+
+			return results;
+		}
+		catch (MalformedURLException e) {
+			throw Throwables.propagate(e);
+		}
+		catch (JsonProcessingException e) {
+			throw Throwables.propagate(e);
+		}
+        finally {
+            timerCtxt.stop();
+        }
     }
 
     @Override
@@ -170,9 +203,32 @@ public class EsSearchService implements ISearchAPI {
         return findRecipesByName( tagString(inTag) );
     }
 
+    // FIXME Shameless copy/paste job
     @Override
     public List<IRecipe> findRecipesByTag( final ITag inTag, final String inValue) throws IOException {
-        return findRecipesByName( tagString(inTag) );
+	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_SEARCHES).time();
+
+		try
+		{
+            final JsonNode jn = mapper.readTree( new URL( recipesIndexUrl + "/_search?q=" + URLEncoder.encode( inTag.toString() + ":" + inValue, "utf-8") + "&default_operator=AND" + "&size=9999") ).path("hits").path("hits");
+	
+			final List<IRecipe> results = Lists.newArrayList();
+	
+			for ( final JsonNode each : jn) {
+				results.add( mapper.readValue( each.path("_source").traverse(), Recipe.class) );  // FIXME Remove _source stuff where possible
+			}
+	
+			return results;
+		}
+		catch (MalformedURLException e) {
+			throw Throwables.propagate(e);
+		}
+		catch (JsonProcessingException e) {
+			throw Throwables.propagate(e);
+		}
+        finally {
+            timerCtxt.stop();
+        }
     }
 
     /* (non-Javadoc)
