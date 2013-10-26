@@ -7,7 +7,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 
-import uk.co.recipes.service.impl.ExplorerFilterDefs;
 import java.io.IOException;
 import java.util.List;
 
@@ -27,6 +26,7 @@ import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.EsSearchService;
+import uk.co.recipes.service.impl.ExplorerFilterDefs;
 import uk.co.recipes.tags.MeatAndFishTags;
 import uk.co.recipes.tags.NationalCuisineTags;
 import uk.co.recipes.test.TestDataUtils;

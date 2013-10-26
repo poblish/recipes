@@ -6,12 +6,16 @@ package uk.co.recipes.service.impl;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
-import static uk.co.recipes.service.api.ESearchArea.*;
+import static uk.co.recipes.service.api.ESearchArea.ITEMS;
+import static uk.co.recipes.service.api.ESearchArea.RECIPES;
+
 import java.io.IOException;
 import java.util.List;
+
 import org.apache.http.client.ClientProtocolException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
 import uk.co.recipes.DaggerModule;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
@@ -23,7 +27,9 @@ import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.api.ISearchResult;
 import uk.co.recipes.test.TestDataUtils;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import dagger.ObjectGraph;
 
 /**

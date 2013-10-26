@@ -6,17 +6,18 @@ package uk.co.recipes.convert;
 import static java.util.Locale.UK;
 import static java.util.Locale.US;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.lessThan;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.*;
+
 import javax.measure.unit.NonSI;
 import javax.measure.unit.SI;
+
 import org.jscience.physics.amount.Amount;
 import org.testng.annotations.Test;
+
 import uk.co.recipes.Quantity;
 import uk.co.recipes.api.IQuantity;
 import uk.co.recipes.api.Units;
+
 import com.google.common.base.Optional;
 
 

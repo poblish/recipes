@@ -15,7 +15,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import uk.co.recipes.DaggerModule;
-import uk.co.recipes.ui.CuisineColours;
 import dagger.Module;
 import dagger.ObjectGraph;
 

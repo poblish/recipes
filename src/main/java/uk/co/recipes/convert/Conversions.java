@@ -5,16 +5,21 @@ package uk.co.recipes.convert;
 
 
 import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.Locale;
+
 import javax.measure.quantity.Quantity;
 import javax.measure.quantity.Volume;
 import javax.measure.unit.NonSI;
 import javax.measure.unit.SI;
 import javax.measure.unit.Unit;
+
 import org.jscience.physics.amount.Amount;
+
 import uk.co.recipes.api.IQuantity;
 import uk.co.recipes.api.IUnit;
 import uk.co.recipes.api.Units;
+
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.collect.HashBasedTable;

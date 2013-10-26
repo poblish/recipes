@@ -3,22 +3,24 @@
  */
 package uk.co.recipes;
 
-import com.google.common.base.Optional;
-import com.google.common.base.Strings;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Set;
+
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IExplorerFilterItem;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.IUserPreferences;
 import uk.co.recipes.tags.TagUtils;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.google.common.base.Objects;
+import com.google.common.base.Optional;
+import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 
 /**

@@ -4,7 +4,6 @@ import static java.util.Locale.ENGLISH;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-import uk.co.recipes.service.impl.ExplorerFilterDefs;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
@@ -31,6 +30,7 @@ import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.service.api.IExplorerFilter;
 import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.EsSearchService;
+import uk.co.recipes.service.impl.ExplorerFilterDefs;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.tags.FlavourTags;
