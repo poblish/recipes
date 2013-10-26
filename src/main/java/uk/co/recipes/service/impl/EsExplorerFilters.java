@@ -26,6 +26,7 @@ import uk.co.recipes.service.api.IExplorerFilterDef;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.google.common.base.Objects;
+import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Longs;
 
@@ -114,6 +115,14 @@ public class EsExplorerFilters {
     private long[] getRecipeIdsForFilterItem( final IExplorerFilterItem<?> inFilterItem, boolean inInclude) throws IOException {
     	if ( inFilterItem.getEntity() instanceof ITag) {
     		final ITag theTag = (ITag) inFilterItem.getEntity();
+    		final Optional<String> theTagValue = inFilterItem.getValue();
+
+    		if (theTagValue.isPresent()) {  // Yuk, sort out API properly
+        		final List<ICanonicalItem> items = search.findItemsByTag( theTag, theTagValue.get());
+        		final List<IRecipe> recipes = search.findRecipesByTag( theTag, theTagValue.get());
+        		return getIdsForResults( items, recipes, inInclude);
+    		}
+
     		final List<ICanonicalItem> items = search.findItemsByTag(theTag);
     		final List<IRecipe> recipes = search.findRecipesByTag(theTag);
     		return getIdsForResults( items, recipes, inInclude);

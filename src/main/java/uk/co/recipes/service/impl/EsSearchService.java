@@ -161,7 +161,17 @@ public class EsSearchService implements ISearchAPI {
     }
 
     @Override
+    public List<ICanonicalItem> findItemsByTag( final ITag inTag, final String inValue) throws IOException {
+        return findItemsByName( tagString(inTag), true);
+    }
+
+    @Override
     public List<IRecipe> findRecipesByTag( final ITag inTag) throws IOException {
+        return findRecipesByName( tagString(inTag) );
+    }
+
+    @Override
+    public List<IRecipe> findRecipesByTag( final ITag inTag, final String inValue) throws IOException {
         return findRecipesByName( tagString(inTag) );
     }
 

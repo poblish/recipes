@@ -3,6 +3,7 @@
  */
 package uk.co.recipes;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import java.io.IOException;
 import java.util.Collection;
@@ -145,6 +146,12 @@ public class UserPreferences implements IUserPreferences {
 			return tag;
 		}
 
+		@JsonIgnore
+		@Override
+		public Optional<String> getValue() {
+			return Optional.fromNullable(value);
+		}
+
 		@Override
 		public int hashCode() {
 			return Objects.hashCode( tag, value);
@@ -187,6 +194,12 @@ public class UserPreferences implements IUserPreferences {
 		@Override
 		public String getEntity() {
 			return canonicalName;
+		}
+
+		@JsonIgnore
+		@Override
+		public Optional<String> getValue() {
+			return Optional.absent();
 		}
 
 		@Override
