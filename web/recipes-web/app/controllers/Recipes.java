@@ -55,6 +55,8 @@ public class Recipes extends AbstractExplorableController {
     private UserFaves faves;
 	private ObjectMapper mapper;
 
+	public static final String[] RECIPE_CATS = {"Afternoon tea", "Breakfast", "Brunch", "Buffet", "Canapes", "Condiment", "Dessert", "Dinner", "Drink", "Fish Course", "Lunch", "Main course", "Pasta course", "Side dish", "Snack", "Soup course", "Starter", "Supper", "Treat", "Vegetable course"};
+
     @Inject
     public Recipes( final MyrrixUpdater updater, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService, final EsItemFactory items,
                     final EsRecipeFactory recipes, final EsUserFactory users, final UserRatings inRatings, final MyrrixRecommendationService inRecService, final MetricRegistry metrics,
