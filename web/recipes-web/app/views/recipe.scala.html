@@ -36,6 +36,14 @@
 
 	<div style="background-color: @cuisineColour; border-radius: 2px" title="@cuisineName Cuisine">&nbsp;</div>
 
+	<p>
+	@for((eachTag, tagValue) <- recipe.getTags()) {
+		@if(eachTag != uk.co.recipes.tags.RecipeTags.RECIPE_CUISINE) {
+		<span><strong>@eachTag:</strong> @tagValue</span>&nbsp;
+		}
+	}
+	</p>
+
 	<div class="row" style="padding-top: 20px">
 	  <div class="col-md-2">
 
