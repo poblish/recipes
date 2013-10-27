@@ -2,6 +2,7 @@ package controllers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import play.mvc.Result;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
+import uk.co.recipes.myrrix.MyrrixPrefsIngester;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.api.IUserPersistence;
@@ -30,12 +32,14 @@ public class Users extends Controller {
     private IUserPersistence users;
     private IRecommendationsAPI recsApi;
     private CuisineColours colours;
+    private MyrrixPrefsIngester prefsIngester;
 
     @Inject
-    public Users( final EsUserFactory inUsers, final MyrrixRecommendationService inRecService, final CuisineColours colours) {
+    public Users( final EsUserFactory inUsers, final MyrrixRecommendationService inRecService, final CuisineColours colours, final MyrrixPrefsIngester inIngester) {
         this.users = checkNotNull(inUsers);
         this.recsApi = checkNotNull(inRecService);
         this.colours = checkNotNull(colours);
+        this.prefsIngester = checkNotNull(inIngester);
     }
 
     public Result display( final String id) throws IOException {
@@ -43,5 +47,11 @@ public class Users extends Controller {
         final List<IRecipe> recommendedRecipes = recsApi.recommendRecipes( user, 10);
         final List<ICanonicalItem> recommendedItems = recsApi.recommendIngredients( user, 10);
         return ok(views.html.user.render( user, recommendedRecipes, recommendedItems, colours));
+    }
+
+    public Result ingestPrefs() throws IOException {
+    	final String data = prefsIngester.parseRecommendations( new File( /* FIXME Hardcoded: */ "/Users/andrewregan/Development/java/recipe_explorer/src/test/resources/recommendations1.yaml") );
+    	prefsIngester.ingestRecommendations(data);
+    	return ok("true");
     }
 }
