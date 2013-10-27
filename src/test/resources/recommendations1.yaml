@@ -2,9 +2,9 @@
 
 2:  # Prefers Indian food
 -
-  i: Coriander
+  i: Coriander Powder
 -
-  i: Coriander Seed
+  i: Coriander Seeds
   score: 3
 -
   i: Garam Masala
@@ -24,7 +24,7 @@
   i: Ancho Chile
   score: 8
 -
-  i: Red Chilli
+  i: Red Chillies
   score: 5
 -
   i: Red Wine
