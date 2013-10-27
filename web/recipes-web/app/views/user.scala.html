@@ -11,7 +11,7 @@
 
 	<p>Item Ratings: <span class="badge label-default">@user.getItemRatings().size()</span>&nbsp;: @user.getItemRatings()</p>
 	<p>Recipe Ratings: <span class="badge label-default">@user.getRecipeRatings().size()</span>&nbsp;: @user.getRecipeRatings()</p>
-	<button type="button" style="margin-left: 12px" class="btn btn-sm btn-default" onclick="$.post('/users/ingest', function(data) { location.reload(false); });"><span class="glyphicon glyphicon-plus"></span> Load Recommendations...</button>
+	<button type="button" class="btn btn-sm btn-default" onclick="$.post('/users/ingest', function(data) { location.reload(false); });"><span class="glyphicon glyphicon-plus"></span> Load Recommendations...</button>
 	<hr />
 
 	<div class="row">

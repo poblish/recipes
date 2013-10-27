@@ -61,6 +61,8 @@ public class MyrrixPrefsIngester {
 			}
 		}
 
+		System.out.println("Parsed: " + sb.toString().replace( '\r', ' ') + "  (" + sb.length() + " chars)");
+
 		return sb.toString();
 	}
 
