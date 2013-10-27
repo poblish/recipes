@@ -27,25 +27,29 @@ function clearAllIngredients() {
 function addInclTag(inName, inValue) {
 	var adjustedName = inName.replace("' tag",'').replace("'", "");  // Yuk!
 	var url = inValue != null ? ("/user/filter/inc/add=" + adjustedName + "/v=" + inValue) : ("/user/filter/inc/add=" + adjustedName);
-    $.post( url, function(data) { location.reload(false); });
+	doPost(url);
 }
 
 function addExclTag(inName, inValue) {
 	var adjustedName = inName.replace("' tag",'').replace("'", "");  // Yuk!
 	var url = inValue != null ? ("/user/filter/exc/add=" + adjustedName + "/v=" + inValue) : ("/user/filter/exc/add=" + adjustedName);
-    $.post( url, function(data) { location.reload(false); });
+	doPost(url);
 }
 
 function removeInclTag(inName, inValue) {
 	var adjustedName = inName.replace("' tag",'').replace("'", "");  // Yuk!
 	var url = inValue != null ? ("/user/filter/inc/rem=" + adjustedName + "/v=" + inValue) : ("/user/filter/inc/rem=" + adjustedName);
-    $.post( url, function(data) { location.reload(false); });
+	doPost(url);
 }
 
 function removeExclTag(inName, inValue) {
 	var adjustedName = inName.replace("' tag",'').replace("'", "");  // Yuk!
 	var url = inValue != null ? ("/user/filter/exc/rem=" + adjustedName + "/v=" + inValue) : ("/user/filter/exc/rem=" + adjustedName);
-    $.post( url, function(data) { location.reload(false); });
+	doPost(url);
+}
+
+function doPost(url) {
+    $.post( url, function(data) { location.reload(false); }).error( function() { alert('An error occurred - please contact us.') });
 }
 
 function clearFilters() {
