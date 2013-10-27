@@ -1,0 +1,33 @@
+# Test at http://yaml-online-parser.appspot.com/
+
+2:  # Prefers Indian food
+-
+  i: Coriander
+-
+  i: Coriander Seed
+  score: 3
+-
+  i: Garam Masala
+  score: 10
+-
+  i: Ginger
+  score: 10
+-
+  i: Green Cardamom
+  score: 8
+-
+  i: Lamb
+  score: 5
+
+3:  # Prefers Mexican food
+-
+  i: Ancho Chile
+  score: 8
+-
+  i: Red Chilli
+  score: 5
+-
+  i: Red Wine
+-
+  i: Beef
+  score: 3
