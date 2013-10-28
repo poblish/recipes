@@ -228,7 +228,7 @@
 ---
 {canonicalName: Star Anise, tags: {SPICE, CHINESE, GREEN_GRASSY}}
 ---
-{canonicalName: Turmeric, tags: {SPICE, INDIAN}, aliases: {Turmeric Powder, Haldi}}
+{canonicalName: Turmeric, tags: {SPICE, INDIAN}, aliases: {Turmeric Powder, Tumeric, Haldi}}
 ---
 
 
@@ -276,7 +276,7 @@
 ---
 {    canonicalName: Habanero, parent: Chilli, tags: {MEXICAN, GREEN_GRASSY, {SCOVILLE: 100000–350000, HEAT_5: 5}}, aliases: {Habanero Chili}}
 ---
-{    canonicalName: Jalapeño, parent: Chilli, tags: {MEXICAN, GREEN_GRASSY, {SCOVILLE: 2500–10000, HEAT_5: 2}}, aliases: {Jalapeno}}
+{    canonicalName: Jalapeño, parent: Chilli, tags: {MEXICAN, GREEN_GRASSY, {SCOVILLE: 2500–10000, HEAT_5: 2}}, aliases: {Jalapeno, jalapeños}}
 ---
 {    canonicalName: Naga Chili, parent: Chilli, tags: {INDIAN, GREEN_GRASSY, {SCOVILLE: 330000–1032310, HEAT_5: 5}}, aliases: {Naga Chillies, Bhut Jolokia, Ghost Pepper}}
 ---
@@ -304,7 +304,7 @@
 ---
 {    canonicalName: Arborio Rice, parent: Rice, tags: {ITALIAN}}
 ---
-{    canonicalName: Basmati Rice, parent: Rice, tags: {INDIAN}}
+{    canonicalName: Basmati Rice, parent: Rice, tags: {INDIAN}, aliases: Basmati}
 ---
 {        canonicalName: Brown Basmati Rice, parent: Basmati Rice}
 ---
@@ -366,7 +366,15 @@
 ---
 {canonicalName: Celery, tags: {VEGETABLE, EARTHY}, aliases: {Celery Stick, Celery Sticks, Celery Stalk, Celery Stalks, Sticks Celery}}
 ---
+{    canonicalName: Celery Heart, parent: Celery, aliases: Celery Hearts}
+---
 {canonicalName: Chard, tags: VEGETABLE, tags: ITALIAN, aliases: {Swiss Chard}}
+---
+{canonicalName: Chicory, tags: VEGETABLE}
+---
+{    canonicalName: Chicory Heads, parent: Chicory, aliases: {heads chicory, heads of chicory}}
+---
+{    canonicalName: Chicory Leaves, parent: Chicory}
 ---
 {canonicalName: Courgette, tags: VEGETABLE, aliases: {Courgettes}}
 ---
@@ -383,6 +391,8 @@
 {canonicalName: Green Beans, tags: VEGETABLE}
 ---
 {    canonicalName: Fine Green Beans, parent: Green Beans}
+---
+{canonicalName: Heart of Palm, tags: {VEGETABLE}, aliases: {Palm Heart, Palm Hearts}}
 ---
 {canonicalName: Horseradish, tags: {VEGETABLE, MUSTARDY}}
 ---
@@ -532,11 +542,11 @@
 ---
 {canonicalName: Butter Beans, tags: PULSE, aliases: {Lima Bean}}
 ---
-{canonicalName: Cannellini Beans, tags: {PULSE, ITALIAN}}
+{canonicalName: Cannellini Beans, tags: {PULSE, ITALIAN}, aliases: Cannellini}
 ---
 {canonicalName: Chickpeas, tags: PULSE, aliases: {Chickpea, Garbanzo Bean}}
 ---
-{canonicalName: Haricot Beans, tags: PULSE, aliases: {Navy Bean}}
+{canonicalName: Haricot Beans, tags: PULSE, aliases: {Navy Bean}, aliases: Haricot}
 ---
 {canonicalName: Kidney Beans, tags: PULSE}
 ---
@@ -664,7 +674,7 @@
 ---
 {    canonicalName: Seville Orange, parent: Orange, aliases: Seville Oranges}
 ---
-{canonicalName: Papaya, tags: {FRUIT}, aliases: {Papaw, Pawpaw}}
+{canonicalName: Papaya, tags: {FRUIT}, aliases: {Papaw, Pawpaw, Papayas}}
 ---
 {canonicalName: Peach, tags: {FRUIT, CREAMY_FRUITY}, aliases: {Peaches}}
 ---
@@ -676,7 +686,7 @@
 ---
 {    canonicalName: Prune, parent: Plum, aliases: {Prunes, Dried Plum}}
 ---
-{canonicalName: Pomegranate, tags: {FRUIT}}
+{canonicalName: Pomegranate, tags: {FRUIT}, aliases: {Pomegranates}}
 ---
 {    canonicalName: Pomegranate Seeds, parent: Pomegranate}
 ---
@@ -735,6 +745,8 @@
 {        canonicalName: Plain Flour, parent: White Flour, aliases: Plain White Flour}
 ---
 {        canonicalName: Strong White Flour, parent: White Flour, aliases: Strong Plain Flour}
+---
+{    canonicalName: Wholegrain Flour, parent: Flour, aliases: {Wholegrain}}
 ---
 {    canonicalName: Wholemeal Flour, parent: Flour, aliases: {Plain Wholemeal Flour, Wholewheat flour}}
 ---
@@ -798,7 +810,7 @@
 ---
 {    canonicalName: Wholemeal Pitta Bread, parent: Pitta Bread}
 ---
-{canonicalName: Roti, tags: {BREAD, INDIAN, CARIBBEAN}}
+{canonicalName: Roti, tags: {BREAD, INDIAN, CARIBBEAN}, aliases: Rotis}
 ---
 {canonicalName: Rye Bread, tags: {BREAD}}
 ---
@@ -809,6 +821,8 @@
 {    canonicalName: Corn Tortilla, parent: Tortilla, aliases: Corn Tortillas}
 ---
 {    canonicalName: Flour Tortilla, parent: Tortilla, aliases: Flour Tortillas}
+---
+{canonicalName: Wholegrain Bread, tags: {BREAD}, contains: Wholegrain Flour}
 ---
 
 
@@ -872,9 +886,13 @@
 ---
 {    canonicalName: Icing Sugar, parent: Sugar, aliases: {White Icing Sugar}}
 ---
+{    canonicalName: Jaggery, parent: Sugar, tags: {INDIAN}}
+---
 {    canonicalName: Jam Sugar, parent: Sugar}
 ---
 {    canonicalName: Nibbed Sugar, parent: Sugar}
+---
+{    canonicalName: Palm Sugar, parent: Sugar}
 ---
 {    canonicalName: Brown Sugar, parent: Sugar}
 ---
@@ -939,6 +957,8 @@
 {canonicalName: Feta, tags: {DAIRY, CHEESE, GREEK}, aliases: {Feta Cheese}}
 ---
 {canonicalName: Goat's Cheese, tags: {DAIRY, CHEESE}}
+---
+{canonicalName: Grana Padano, tags: {DAIRY, CHEESE, ITALIAN}}
 ---
 {canonicalName: Gruyère, tags: {DAIRY, CHEESE, SWISS}}
 ---
@@ -1246,6 +1266,14 @@
 ---
 {        canonicalName: Smoked Haddock, parent: Haddock, tags: {-MARINE, BRINE_SALT}}
 ---
+{    canonicalName: Hake, parent: White Fish}
+---
+{        canonicalName: Hake Fillet, parent: Hake, aliases: {Hake Fillets}}
+---
+{    canonicalName: Halibut, parent: White Fish}
+---
+{        canonicalName: Halibut Fillet, parent: Halibut, aliases: {Halibut Fillets}}
+---
 {    canonicalName: Plaice, parent: White Fish}
 ---
 {        canonicalName: Plaice Fillet, parent: Plaice, aliases: {Plaice Fillets}}
@@ -1254,7 +1282,7 @@
 ---
 {        canonicalName: Pollock Fillet, parent: Pollock, aliases: {Pollock Fillets, Pollack Fillets}}
 ---
-{    canonicalName: Sea Bass, parent: White Fish}
+{    canonicalName: Sea Bass, parent: White Fish, aliases: Seabass}
 ---
 {    canonicalName: Sea Bream, parent: White Fish}
 ---
@@ -1432,6 +1460,10 @@
 ---
 {canonicalName: Curaçao, tags: {SPIRIT, ALCOHOL, DUTCH, ORANGE}}
 ---
+{canonicalName: Ginger Wine, tags: {WINE, ALCOHOL}, contains: {Ginger, Raisin}}
+---
+{    canonicalName: Stone's Ginger Wine, parent: Ginger Wine}
+---
 {canonicalName: Kahlúa, tags: {SPIRIT, ALCOHOL, COFFEE}, contains: {Coffee, Rum}}
 ---
 {canonicalName: Kirsch, tags: {SPIRIT, ALCOHOL, GERMAN}}
@@ -1461,5 +1493,7 @@
 {canonicalName: Tia Maria, tags: {SPIRIT, ALCOHOL, COFFEE}}
 ---
 {canonicalName: Triple Sec, tags: {SPIRIT, ALCOHOL, FRENCH, ORANGE}}
+---
+{canonicalName: Vodka, tags: {SPIRIT, ALCOHOL}}
 ---
 {canonicalName: White Wine, tags: {WINE, ALCOHOL}}

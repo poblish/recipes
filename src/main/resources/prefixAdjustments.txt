@@ -84,6 +84,7 @@ roughly
 salted
 semi-dried
 shelled
+sized
 skinless
 skinned
 sliced
