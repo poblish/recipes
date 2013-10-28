@@ -4,6 +4,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -14,6 +16,7 @@ import uk.co.recipes.Recipe;
 import uk.co.recipes.RecipeStage;
 import uk.co.recipes.User;
 import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.IExplorerFilterItem;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
@@ -40,6 +43,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
 
 /**
  * 
@@ -150,8 +154,27 @@ public class Recipes extends AbstractExplorableController {
 
         final IExplorerFilterDef filter = getExplorerFilter(explorerFilters);
 
-        return ok(views.html.recipe.render( recipe, user1, explorer.similarRecipes( recipe, filter, 12), recsApi.recommendIngredients( recipe, 9), filter, colours, cuisineName, cuisineColour));
+        return ok(views.html.recipe.render( recipe, user1, explorer.similarRecipes( recipe, filter, 12), recsApi.recommendIngredients( recipe, 9), filter, colours, cuisineName, cuisineColour, recipeCategoriesSelections(filter)));
     }
+
+	private Map<String,Boolean> recipeCategoriesSelections( final IExplorerFilterDef inFilterDef) {
+        final Set<IExplorerFilterItem<?>> items = inFilterDef.getIncludes();
+
+        final Map<String,Boolean> results = Maps.newLinkedHashMap();
+
+        for ( String eachCat : RECIPE_CATS) {
+			results.put( eachCat, Boolean.FALSE);
+
+			for ( IExplorerFilterItem<?> eachItem : items) {
+        		if (eachItem.getValue().isPresent() && eachItem.getValue().get().equals(eachCat)) {
+        			results.put( eachCat, Boolean.TRUE);  // Is selected
+        			break;
+        		}
+        	}
+        }
+
+        return results;
+	}
 
     public Result rate( final String name, final int inScore) throws IOException, InterruptedException {
     	return handleLoggedInRecipeBasedAction( name, new RecipeAction() {

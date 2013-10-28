@@ -1,6 +1,7 @@
 @(recipe: uk.co.recipes.api.IRecipe, currUser: uk.co.recipes.api.IUser, similarities: List[uk.co.recipes.api.IRecipe],
   recommendedItems: List[uk.co.recipes.api.ICanonicalItem], explorerFilters: uk.co.recipes.service.api.IExplorerFilterDef,
-  cuisineColours: uk.co.recipes.ui.CuisineColours, cuisineName: String, cuisineColour: String)
+  cuisineColours: uk.co.recipes.ui.CuisineColours, cuisineName: String, cuisineColour: String,
+  recipeCategoriesActivationMap: Map[String,Boolean])
 
 @main("Recipe: " + recipe.getTitle() ) {
 
@@ -57,7 +58,7 @@
 		        <ul>
 		        @for(eachIncl <- explorerFilters.getIncludes()) {
 		        	@if(eachIncl.getValue().isPresent()) {
-		        	  <li>@eachIncl.getValue().get()&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeInclTag('@eachIncl.getEntity()','@eachIncl.getValue().get()')"><span class="glyphicon glyphicon-remove"></span></button></li>
+		        	  <!--  FIXME Bodge to hide Cats we're displaying further down!!! <li>@eachIncl.getValue().get()&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeInclTag('@eachIncl.getEntity()','@eachIncl.getValue().get()')"><span class="glyphicon glyphicon-remove"></span></button></li> -->
 		        	} else {
 		        	  <li>@eachIncl.getEntity()&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeInclTag('@eachIncl.getEntity()')"><span class="glyphicon glyphicon-remove"></span></button></li>
 		        	}
@@ -105,9 +106,15 @@
 		    </div>
 		    <div id="sidebar-2">
 		      <div class="panel-body">
-				@for(eachRecipeCat <- Recipes.RECIPE_CATS) {
-				  <button type="button" style="margin-left: 12px" class="btn btn-sm btn-default" onclick="addInclTag('RECIPE_CATEGORY','@eachRecipeCat')"><span class="glyphicon glyphicon-plus"></span> @eachRecipeCat</button>
-				}
+		      <ul class="list-group">
+					@for((eachRecipeCat, isSelected) <- recipeCategoriesActivationMap) {
+						@if(isSelected) {
+						  <li class="list-group-item"><strong>@eachRecipeCat</strong>&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Category" onclick="removeInclTag('RECIPE_CATEGORY','@eachRecipeCat')"><span class="glyphicon glyphicon-remove"></span></button></li>
+						} else {
+						  <li class="list-group-item"><a href="" onclick="addInclTag('RECIPE_CATEGORY','@eachRecipeCat'); return false" title="Add Category">@eachRecipeCat</a></li>
+						}
+					}
+			  </ul>
 		      </div>
 		    </div>
 		  </div>
