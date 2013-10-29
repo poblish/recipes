@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.elasticsearch.common.Preconditions;
@@ -27,8 +28,10 @@ import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IRecipeStage;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.IUser;
+import uk.co.recipes.tags.RecipeTags;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
@@ -230,6 +233,28 @@ public class Recipe implements IRecipe {
 				tags.put( each.getKey(), each.getValue());
 			}
 		}
+	}
+
+	@JsonProperty("catsFacet")
+	public Set<String> getCategoriesForFacet() {
+		return getTagValuesForFacet( RecipeTags.RECIPE_CATEGORY );
+	}
+
+	@JsonProperty("cuisineFacet")
+	public Set<String> getCuisineForFacet() {
+		return getTagValuesForFacet( RecipeTags.RECIPE_CUISINE );
+	}
+
+	private Set<String> getTagValuesForFacet( final ITag inTag) {
+		final Set<String> tagValues = Sets.newHashSet();
+
+		for ( Entry<ITag,Serializable> eachEntry : getTags().entrySet()) {
+			if ( eachEntry.getKey() == inTag) {
+				tagValues.add( eachEntry.getValue().toString().replace(' ', '_').toLowerCase() );  // Thwart tokenizing!
+			}
+		}
+
+		return tagValues;
 	}
 
 	/* (non-Javadoc)
