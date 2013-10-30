@@ -60,6 +60,7 @@ public class Recipes extends AbstractExplorableController {
 	private ObjectMapper mapper;
 
 	public static final String[] RECIPE_CATS = {"Afternoon tea", "Breakfast", "Brunch", "Buffet", "Canapes", "Condiment", "Dessert", "Dinner", "Drink", "Fish Course", "Lunch", "Main course", "Pasta course", "Side dish", "Snack", "Soup course", "Starter", "Supper", "Treat", "Vegetable course"};
+	public static final String[] DIET_TYPES = {"Vegan", "Vegetarian"};
 
     @Inject
     public Recipes( final MyrrixUpdater updater, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService, final EsItemFactory items,
@@ -154,7 +155,7 @@ public class Recipes extends AbstractExplorableController {
 
         final IExplorerFilterDef filter = getExplorerFilter(explorerFilters);
 
-        return ok(views.html.recipe.render( recipe, user1, explorer.similarRecipes( recipe, filter, 12), recsApi.recommendIngredients( recipe, 9), filter, colours, cuisineName, cuisineColour, recipeCategoriesSelections(filter)));
+        return ok(views.html.recipe.render( recipe, user1, explorer.similarRecipes( recipe, filter, 12), recsApi.recommendIngredients( recipe, 9), filter, colours, cuisineName, cuisineColour, recipeCategoriesSelections(filter), recipeDietTypesSelections(filter)));
     }
 
 	private Map<String,Boolean> recipeCategoriesSelections( final IExplorerFilterDef inFilterDef) {
@@ -167,6 +168,26 @@ public class Recipes extends AbstractExplorableController {
 
 			for ( IExplorerFilterItem<?> eachItem : items) {
         		if (eachItem.getValue().isPresent() && eachItem.getValue().get().equals(eachCat)) {
+        			results.put( eachCat, Boolean.TRUE);  // Is selected
+        			break;
+        		}
+        	}
+        }
+
+        return results;
+	}
+
+	// FIXME - filthy code
+	private Map<String,Boolean> recipeDietTypesSelections( final IExplorerFilterDef inFilterDef) {
+        final Set<IExplorerFilterItem<?>> items = inFilterDef.getIncludes();
+
+        final Map<String,Boolean> results = Maps.newLinkedHashMap();
+
+        for ( String eachCat : DIET_TYPES) {
+			results.put( eachCat, Boolean.FALSE);
+
+			for ( IExplorerFilterItem<?> eachItem : items) {
+        		if (eachItem.getEntity().toString().equalsIgnoreCase(eachCat)) {
         			results.put( eachCat, Boolean.TRUE);  // Is selected
         			break;
         		}
