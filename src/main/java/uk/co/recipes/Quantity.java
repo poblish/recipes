@@ -102,13 +102,24 @@ public class Quantity implements IQuantity {
 				return "Some";
 			}
 
-			return String.valueOf(number);
+			return tweakDouble(number);
 		}
 
 		if ( nnQuantity != null) {
 			return nnQuantity + " " + units;
 		}
 
-		return number + " " + units;
+		return tweakDouble(number) + " " + units;
+	}
+
+	private String tweakDouble( final double inVal) {
+		// Hack to avoid logging 1.0 all the time, instead of 1
+		final String numStr = String.valueOf(inVal);
+
+		if (numStr.endsWith(".0")) {
+			return numStr.substring( 0, numStr.length() - 2);
+		}
+
+		return numStr;
 	}
 }
