@@ -46,24 +46,15 @@ import com.google.common.collect.Lists;
  */
 public class EsUserFactory implements IUserPersistence {
 
-	@Inject
-	Client esClient;
-
-	@Inject
-	HttpClient httpClient;
+	@Inject Client esClient;
+	@Inject HttpClient httpClient;
+	@Inject ObjectMapper mapper;
+	@Inject EsUtils esUtils;
+	@Inject EsSequenceFactory sequences;
 
 	@Inject
 	@Named("elasticSearchUsersUrl")
 	String usersIndexUrl;
-
-	@Inject
-	ObjectMapper mapper;
-
-	@Inject
-	EsUtils esUtils;
-
-	@Inject
-	EsSequenceFactory sequences;
 
 
 	public IUser put( final IUser inUser, String inId) throws IOException {
