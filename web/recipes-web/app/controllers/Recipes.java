@@ -114,6 +114,17 @@ public class Recipes extends AbstractExplorableController {
     	return redirect("/recipes/create");
     }
 
+    public Result finishCreate( final String inNewTitle) throws IOException, InterruptedException {
+		final IRecipe recipe = getSessionCreatedRecipe(false);
+		recipe.setTitle(inNewTitle);
+
+		recipes.put( recipe, null);
+		recipes.waitUntilRefreshed();
+		clearCreate();
+
+    	return reloadRecipe(recipe);
+    }
+
     public Result cancelCreate() {
 		session().remove("recipe_json");
     	return redirect("/");

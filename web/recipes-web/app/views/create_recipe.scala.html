@@ -42,20 +42,6 @@
 		      </div>
 		    </div>
 		  </div>
-		  <div class="panel panel-default">
-		    <div class="panel-heading">
-		      <h4 class="panel-title">
-		        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse3">
-		          Details:
-		        </a>
-		      </h4>
-		    </div>
-		    <div id="collapse3" class="panel-collapse collapse">
-		      <div class="panel-body">
-				Created by <a href="http://localhost:9000/users/@recipe.getCreator().getUserName()">@recipe.getCreator().getDisplayName()</a> on @org.joda.time.format.DateTimeFormat.forPattern("dd MMMM yyyy 'at' HH:mm").withLocale( Locale.UK ).print( recipe.getCreationTime() )
-		      </div>
-		    </div>
-		  </div>
 		</div>
 
 	  </div>
@@ -93,6 +79,9 @@
 		}
 	  </div>  <!-- <div class="col-md-9"> -->
 	</div>  <!-- <div class="row"> -->
+
+<br/>
+	<button type="button" class="btn btn-primary btn-lg" onclick="createNewRecipe()"><span class="glyphicon glyphicon-ok"></span> Create Recipe</button>
 
 	@_addIngredientPicker("addIngredient", false)
 }
