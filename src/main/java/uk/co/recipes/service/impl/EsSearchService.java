@@ -354,14 +354,15 @@ public class EsSearchService implements ISearchAPI {
 		return findNRecipesByItemName( 9999, inNames);
 	}
 
-	private List<IRecipe> findNRecipesByItemName( final int inCount, String... inNames) throws IOException {
-		if (inNames.length == 0) {
-			return Collections.emptyList();
-		}
     @Override
     public long[] findRecipeIdsByItemName( String... inNames) throws IOException {
         return findNRecipeIdsByItemName( 9999, inNames);
     }
+
+	private List<IRecipe> findNRecipesByItemName( final int inCount, String... inNames) throws IOException {
+		if (inNames.length == 0) {
+			return Collections.emptyList();
+		}
 
 		final BoolQueryBuilder booleanQ = boolQuery();
 		for ( String eachName : inNames) {
