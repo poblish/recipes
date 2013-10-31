@@ -104,8 +104,11 @@ public class RecipeSearchTest {
 	public void testSearchByTagAndFilters() throws IOException {
 		final int numItems = searchApi.findItemsByTag( MeatAndFishTags.MEAT ).size();
 
-		final List<IRecipe> foundRecipes = searchApi.findRecipesByTag( MeatAndFishTags.MEAT );
-		assertThat( foundRecipes.size(), greaterThanOrEqualTo(4));  // Surely 5 ?!?
+        final List<IRecipe> foundRecipes = searchApi.findRecipesByTag( MeatAndFishTags.MEAT );
+        assertThat( foundRecipes.size(), greaterThanOrEqualTo(4));  // Surely 5 ?!?
+
+        final long[] foundRecipeIds = searchApi.findRecipeIdsByTag( MeatAndFishTags.MEAT );
+        assertThat( foundRecipeIds.length, greaterThanOrEqualTo(4));  // Surely 5 ?!?
 
 		final IExplorerFilter filter = explorerFilters.from( new ExplorerFilterDefs().build().includeTags( MeatAndFishTags.MEAT ).toFilterDef() );
 		assertThat( filter.idsToInclude().length, is( foundRecipes.size() + numItems));

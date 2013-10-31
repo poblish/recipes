@@ -35,6 +35,9 @@ public interface ISearchAPI {
     List<IRecipe> findRecipesByTag( final ITag inTag, final String value) throws IOException;
     int countRecipesByTag( final ITag inTag) throws IOException;
 
+    long[] findRecipeIdsByTag( final ITag inTag) throws IOException;
+    long[] findRecipeIdsByTag( final ITag inTag, final String value) throws IOException;
+
     List<IRecipe> findRecipesByItemName( final String... inName) throws IOException;
     List<IRecipe> findRecipesByItemName( final ICanonicalItem... inName) throws IOException;
     List<IRecipe> findRandomRecipesByItemName( final int inCount, final ICanonicalItem... inName) throws IOException;
