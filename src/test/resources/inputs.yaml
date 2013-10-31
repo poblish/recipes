@@ -676,6 +676,8 @@
 ---
 {canonicalName: Papaya, tags: {FRUIT}, aliases: {Papaw, Pawpaw, Papayas}}
 ---
+{canonicalName: Passion Fruit, tags: {FRUIT, TROPICAL}, aliases: {Passion Fruits}}
+---
 {canonicalName: Peach, tags: {FRUIT, CREAMY_FRUITY}, aliases: {Peaches}}
 ---
 {canonicalName: Pear, tags: {FRUIT, FRESH_FRUITY}, aliases: {Pears}}
@@ -1228,6 +1230,10 @@
 ---
 {        canonicalName: Anchovy Fillet, parent: Anchovy, aliases: {Anchovy Fillets}}
 ---
+{    canonicalName: Kipper, parent: Oily Fish, tags: {-MARINE, BRINE_SALT}}
+---
+{        canonicalName: Kipper Fillet, parent: Kipper, aliases: {Kipper Fillets}}
+---
 {    canonicalName: Mackerel, parent: Oily Fish}
 ---
 {        canonicalName: Mackerel Fillet, parent: Mackerel, aliases: {Mackerel Fillets}}
@@ -1243,6 +1249,8 @@
 {    canonicalName: Trout, parent: Oily Fish}
 ---
 {        canonicalName: Trout Fillet, parent: Trout, aliases: {Trout Fillets}}
+---
+{    canonicalName: Sardines, parent: Oily Fish, aliases: {Sardine}}
 ---
 {    canonicalName: Tuna, parent: Oily Fish}
 ---
@@ -1286,7 +1294,9 @@
 ---
 {    canonicalName: Sea Bream, parent: White Fish}
 ---
-{        canonicalName: Sea Bream Fillets, parent: Sea Bass}
+{        canonicalName: Sea Bream Fillets, parent: Sea Bream}
+---
+{        canonicalName: Bream, parent: Sea Bream, aliases: {Common Bream}}
 ---
 {    canonicalName: Tilapia, parent: White Fish, tags: {INDIAN}}
 ---
@@ -1299,6 +1309,8 @@
 {canonicalName: Beef, tags: {MEAT, RED_MEAT}}
 ---
 {    canonicalName: Beef cheek, parent: Beef}
+---
+{    canonicalName: Beef Flank Steak, parent: Beef, aliases: {Flank Steaks, Bavette steaks}}
 ---
 {    canonicalName: Beef steak, parent: Beef, aliases: {Steak}}
 ---
@@ -1375,6 +1387,10 @@
 {    canonicalName: Goat Shoulder, parent: Goat}
 ---
 {canonicalName: Mutton, tags: {MEAT, RED_MEAT}}
+---
+{canonicalName: Pigeon, tags: {MEAT, POULTRY, RED_MEAT}}
+---
+{    canonicalName: Pigeon Breast, parent: Duck, aliases: Pigeon Breasts}
 ---
 {canonicalName: Pork, tags: MEAT}
 ---
