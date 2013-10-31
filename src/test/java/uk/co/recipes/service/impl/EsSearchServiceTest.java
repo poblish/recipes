@@ -4,8 +4,7 @@
 package uk.co.recipes.service.impl;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static uk.co.recipes.service.api.ESearchArea.ITEMS;
 import static uk.co.recipes.service.api.ESearchArea.RECIPES;
 
@@ -67,11 +66,13 @@ public class EsSearchServiceTest {
 		Thread.sleep(900);
 	}
 
+	// Will find > 1, because it'll find Turmeric as a *constituent* of Curry Powder, etc.
 	@Test
 	public void findItemByName1Word() throws IOException {
 		final List<ICanonicalItem> results1 = searchService.findItemsByName("turmeric");
-		assertThat( results1.size(), is(1));
-		assertThat( searchService.countItemsByName("turmeric"), is(1));
+		assertThat( results1.size(), greaterThan(1));
+		assertThat( searchService.countItemsByName("turmeric"), greaterThan(1));
+		assertThat( results1.iterator().next().getCanonicalName(), is("Turmeric"));
 	}
 
 	@Test
@@ -99,15 +100,15 @@ public class EsSearchServiceTest {
 	public void partialTestForItem1() throws IOException {
 		final int numToFind = 8;
 		final List<ISearchResult<?>> results1 = searchService.findPartial("ging", numToFind, ITEMS);
-		assertThat( results1.toString(), is("[ItemSearchResult{itemName=Ginger}, ItemSearchResult{itemName=Crystallised Ginger}, ItemSearchResult{itemName=Ginger Paste}, ItemSearchResult{itemName=Root Ginger}, ItemSearchResult{itemName=Stem Ginger}, ItemSearchResult{itemName=Aubergine}, ItemSearchResult{itemName=Linguine}, ItemSearchResult{itemName=Spring Onions}]"));
+		assertThat( results1.toString(), is("[ItemSearchResult{itemName=Ginger}, ItemSearchResult{itemName=Ginger Puree}, ItemSearchResult{itemName=Crystallised Ginger}, ItemSearchResult{itemName=Root Ginger}, ItemSearchResult{itemName=Stem Ginger}, ItemSearchResult{itemName=Ginger Wine}, ItemSearchResult{itemName=Stone's Ginger Wine}, ItemSearchResult{itemName=Aubergine}]"));
 		assertThat( results1.size(), is(numToFind));
 	}
 
 	@Test
 	public void partialTestForItemWithSize2() throws IOException {
-		final int numToFind = 5;
+		final int numToFind = 6;
 		final List<ISearchResult<?>> results1 = searchService.findPartial("cori", numToFind, ITEMS);
-		assertThat( results1.toString(), is("[ItemSearchResult{itemName=Pecorino}, ItemSearchResult{itemName=Coriander}, ItemSearchResult{itemName=Coriander Powder}, ItemSearchResult{itemName=Coriander Seeds}, ItemSearchResult{itemName=Chorizo}]"));
+		assertThat( results1.toString(), is("[ItemSearchResult{itemName=Pecorino}, ItemSearchResult{itemName=Coriander}, ItemSearchResult{itemName=Coriander Powder}, ItemSearchResult{itemName=Coriander Seeds}, ItemSearchResult{itemName=Cajun Seasoning}, ItemSearchResult{itemName=Chorizo}]"));
 		assertThat( results1.size(), is(numToFind));
 	}
 
@@ -150,7 +151,7 @@ public class EsSearchServiceTest {
 	@Test
 	public void partialTestForRecipe1() throws IOException {
 		final List<ISearchResult<?>> results1 = searchService.findPartial("curr", 5, ITEMS, RECIPES);
-		assertThat( results1.toString(), is("[RecipeSearchResult{recipeName=chCashBlackSpiceCurry.txt}, ItemSearchResult{itemName=Blackcurrants}, ItemSearchResult{itemName=Currant}, ItemSearchResult{itemName=Curry Leaves}, ItemSearchResult{itemName=Curry Powder}]"));
+		assertThat( results1.toString(), is("[RecipeSearchResult{recipeName=chCashBlackSpiceCurry.txt}, ItemSearchResult{itemName=Blackcurrants}, ItemSearchResult{itemName=Redcurrants}, ItemSearchResult{itemName=Currant}, ItemSearchResult{itemName=Curry Leaves}]"));
 		assertThat( results1.size(), is(5));
 	}
 
@@ -159,7 +160,7 @@ public class EsSearchServiceTest {
 		final List<ISearchResult<?>> results1 = searchService.findPartial("curr", 4, ITEMS, RECIPES);
 		final String stringOutput = mapper.writeValueAsString(results1);
 		assertThat( stringOutput, containsString("\"id\":"));  // at least one Id
-		assertThat( stringOutput, containsString("\"displayName\":\"Curry Leaves\""));
+		assertThat( stringOutput, containsString("\"displayName\":\"Redcurrants\""));
 		assertThat( stringOutput, containsString("\"displayName\":\"chCashBlackSpiceCurry.txt\""));
 		assertThat( stringOutput, containsString("\"type\":\"item\""));
 		assertThat( stringOutput, containsString("\"type\":\"recipe\""));
