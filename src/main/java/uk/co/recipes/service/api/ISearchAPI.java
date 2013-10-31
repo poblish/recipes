@@ -38,6 +38,8 @@ public interface ISearchAPI {
     long[] findRecipeIdsByTag( final ITag inTag) throws IOException;
     long[] findRecipeIdsByTag( final ITag inTag, final String value) throws IOException;
 
+    long[] findRecipeIdsByItemName( final String... inName) throws IOException;
+    long[] findRecipeIdsByItemName( final ICanonicalItem... inName) throws IOException;
     List<IRecipe> findRecipesByItemName( final String... inName) throws IOException;
     List<IRecipe> findRecipesByItemName( final ICanonicalItem... inName) throws IOException;
     List<IRecipe> findRandomRecipesByItemName( final int inCount, final ICanonicalItem... inName) throws IOException;

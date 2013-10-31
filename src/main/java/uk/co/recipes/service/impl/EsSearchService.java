@@ -324,6 +324,17 @@ public class EsSearchService implements ISearchAPI {
 		return findRecipesByItemName( Iterables.toArray( cNames, String.class));
 	}
 
+    @Override
+    public long[] findRecipeIdsByItemName( final ICanonicalItem... inItems) throws IOException {
+        Set<String> cNames = Sets.newHashSet();  // FIXME Factor this out somewhere
+
+        for ( ICanonicalItem each : inItems) {
+            cNames.add( each.getCanonicalName() );
+        }
+
+        return findRecipeIdsByItemName( Iterables.toArray( cNames, String.class));
+    }
+
 	// FIXME - a very crude implementation
 	@Override
 	public List<IRecipe> findRandomRecipesByItemName( int inCount, final ICanonicalItem... inItems) throws IOException {
@@ -347,6 +358,10 @@ public class EsSearchService implements ISearchAPI {
 		if (inNames.length == 0) {
 			return Collections.emptyList();
 		}
+    @Override
+    public long[] findRecipeIdsByItemName( String... inNames) throws IOException {
+        return findNRecipeIdsByItemName( 9999, inNames);
+    }
 
 		final BoolQueryBuilder booleanQ = boolQuery();
 		for ( String eachName : inNames) {
@@ -372,6 +387,35 @@ public class EsSearchService implements ISearchAPI {
 
 		return results;
 	}
+    private long[] findNRecipeIdsByItemName( final int inCount, String... inNames) throws IOException {
+        if (inNames.length == 0) {
+            return new long[0];
+        }
+
+        final BoolQueryBuilder booleanQ = boolQuery();
+        for ( String eachName : inNames) {
+            // So, when including a parent like 'Pasta', we should pick up all children too.
+            final BoolQueryBuilder boolParentQ = boolQuery();
+            boolParentQ.should( matchPhraseQuery( "canonicalName", eachName) );
+            boolParentQ.should( matchPhraseQuery( "stages.ingredients.item.parent.canonicalName", eachName) );
+            booleanQ.must(boolParentQ);
+        }
+
+        final SearchHit[] hits = esClient.prepareSearch("recipe").setTypes("recipes").setQuery(booleanQ).setNoFields().setSize(inCount)/* .addSort( "_score", DESC) */.execute().actionGet().getHits().hits();
+
+        if ( hits.length == 0) {
+            return new long[0];
+        }
+
+        final long[] ids = new long[ hits.length ];
+        int i = 0;
+
+        for ( SearchHit each : hits) {
+            ids[i++] = Long.parseLong( each.getId() );
+        }
+
+        return ids;
+    }
 
 	@Override
 	public int countRecipesByItemName( String... inNames) throws IOException {
