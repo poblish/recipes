@@ -114,7 +114,7 @@
 		    </div>
 		    <div id="sidebar-1" class="panel-collapse collapse in">
 		      <div class="panel-body">
-		        <ul>
+		        <ul class="list-unstyled">
 		        @for(eachIncl <- explorerFilters.getIncludes()) {
 		        	@if(eachIncl.getValue().isPresent()) {
 		        	  <!--  FIXME Bodge to hide Cats we're displaying further down!!! <li>@eachIncl.getValue().get()&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeInclTag('@eachIncl.getEntity()','@eachIncl.getValue().get()')"><span class="glyphicon glyphicon-remove"></span></button></li> -->
@@ -122,7 +122,7 @@
 		        		@if(eachIncl.getEntity().toString().equals("VEGAN") || eachIncl.getEntity().toString().equals("VEGETARIAN")) {
 		        			<!-- Ignore - FIXME -->
 		        		} else {
-		        	  	<li>@eachIncl.getEntity()&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeInclTag('@eachIncl.getEntity()')"><span class="glyphicon glyphicon-remove"></span></button></li>
+		        	  	<li style="padding: 3px 5px 3px 10px"><strong>&raquo; @eachIncl.getEntity()</strong>&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeInclTag('@eachIncl.getEntity()')"><span class="glyphicon glyphicon-remove"></span></button></li>
 		        	  }
 		        	}
 		        }
@@ -139,12 +139,12 @@
 		    <div id="sidebar-2">
 		      <div class="panel-body">
 		        @if( explorerFilters.getExcludes().size() != 0) {
-		        <ul>
+		        <ul class="list-unstyled">
 		        @for(eachExcl <- explorerFilters.getExcludes()) {
 		        	@if(eachExcl.getValue().isPresent()) {
-		        	  <li>@eachExcl.getValue().get()&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeExclTag('@eachExcl.getEntity()','@eachExcl.getValue().get()')"><span class="glyphicon glyphicon-remove"></span></button></li>
+		        	  <li style="padding: 3px 5px 3px 10px"><strong>&raquo; @eachExcl.getValue().get()</strong>&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeExclTag('@eachExcl.getEntity()','@eachExcl.getValue().get()')"><span class="glyphicon glyphicon-remove"></span></button></li>
 		        	} else {
-		        	  <li>@eachExcl.getEntity()&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeExclTag('@eachExcl.getEntity()')"><span class="glyphicon glyphicon-remove"></span></button></li>
+		        	  <li style="padding: 3px 5px 3px 10px"><strong>&raquo; @eachExcl.getEntity()</strong>&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeExclTag('@eachExcl.getEntity()')"><span class="glyphicon glyphicon-remove"></span></button></li>
 		        	}
 		        }
 		        </ul>
@@ -163,9 +163,9 @@
 		      <ul class="list-unstyled" style="margin-bottom: 0">
 					@for((eachDietType, isSelected) <- dietTypesActivationMap) {
 						@if(isSelected) {
-						  <li style="padding: 3px 5px 3px 10px"><strong>@eachDietType</strong>&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Category" onclick="removeInclTag('@eachDietType.toUpperCase()')"><span class="glyphicon glyphicon-remove"></span></button></li>
+						  <li style="padding: 3px 5px 3px 10px"><strong>&raquo; @eachDietType</strong>&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Category" onclick="removeInclTag('@eachDietType.toUpperCase()')"><span class="glyphicon glyphicon-remove"></span></button></li>
 						} else {
-						  <li style="padding: 3px 5px 3px 10px"><a href="" onclick="addInclTag('@eachDietType.toUpperCase()'); return false" title="Add Category">@eachDietType</a></li>
+						  <li style="padding: 3px 5px 3px 10px"><a onclick="addInclTag('@eachDietType.toUpperCase()'); return false" title="Add Category">@eachDietType</a></li>
 						}
 					}
 			  </ul>
@@ -181,7 +181,7 @@
 		      <ul class="list-unstyled" style="margin-bottom: 0">
 					@for((eachRecipeCat, isSelected) <- recipeCategoriesActivationMap) {
 						@if(isSelected) {
-						  <li style="padding: 3px 5px 3px 10px"><strong>@eachRecipeCat</strong>&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Category" onclick="removeInclTag('RECIPE_CATEGORY','@eachRecipeCat')"><span class="glyphicon glyphicon-remove"></span></button></li>
+						  <li style="padding: 3px 5px 3px 10px"><strong>&raquo; @eachRecipeCat</strong>&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Category" onclick="removeInclTag('RECIPE_CATEGORY','@eachRecipeCat')"><span class="glyphicon glyphicon-remove"></span></button></li>
 						} else {
 						  <li style="padding: 3px 5px 3px 10px"><a href="" onclick="addInclTag('RECIPE_CATEGORY','@eachRecipeCat'); return false" title="Add Category">@eachRecipeCat</a></li>
 						}
