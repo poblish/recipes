@@ -131,13 +131,13 @@ public class EsExplorerFilters {
 
     		if (theTagValue.isPresent()) {  // Yuk, sort out API properly
         		final List<ICanonicalItem> items = search.findItemsByTag( theTag, theTagValue.get());
-        		final List<IRecipe> recipes = search.findRecipesByTag( theTag, theTagValue.get());
-        		return getIdsForResults( items, recipes, inInclude);
+        		final long[] recipeIds = search.findRecipeIdsByTag( theTag, theTagValue.get());
+        		return getIdsForResults( items, recipeIds, inInclude);
     		}
 
     		final List<ICanonicalItem> items = search.findItemsByTag(theTag);
-    		final List<IRecipe> recipes = search.findRecipesByTag(theTag);
-    		return getIdsForResults( items, recipes, inInclude);
+    		final long[] recipeIds = search.findRecipeIdsByTag(theTag);
+    		return getIdsForResults( items, recipeIds, inInclude);
     	}
 
 		final String theItemName = (String) inFilterItem.getEntity();
@@ -146,6 +146,7 @@ public class EsExplorerFilters {
 		return getIdsForResults( items, recipes, inInclude);
     }
 
+    @Deprecated  // Use the long[] version!!!
     private long[] getIdsForResults( final List<ICanonicalItem> inItems, final List<IRecipe> inRecipes, final boolean inInclude) {
         final Timer.Context timerCtxt = metrics.timer(TIMER_EXPLORER_FILTER_IDS_GET).time();
 
@@ -161,6 +162,25 @@ public class EsExplorerFilters {
         }
         
         // Arrays.sort(ids);  // Do *not* bother with this. See http://bit.ly/187WEvC - we don't search enough times to make binary search worthwhile
+ 
+        timerCtxt.close();
+
+        LOG.info("ExplorerFilter Impl > " + (inInclude ? "INCLUDE" : "EXCLUDE") + " Ids for Filter element. " + Arrays.toString(ids));
+
+        return ids;
+    }
+
+    private long[] getIdsForResults( final List<ICanonicalItem> inItems, final long[] inRecipeIds, final boolean inInclude) {
+        final Timer.Context timerCtxt = metrics.timer(TIMER_EXPLORER_FILTER_IDS_GET).time();
+
+        final long[] ids = new long[ inItems.size() + inRecipeIds.length];
+        int i = 0;
+
+        for (ICanonicalItem each : inItems) {
+            ids[i++] = each.getId();
+        }
+
+        System.arraycopy( inRecipeIds, 0, ids, i, inRecipeIds.length);
  
         timerCtxt.close();
 
