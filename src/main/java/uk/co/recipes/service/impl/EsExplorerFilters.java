@@ -5,25 +5,19 @@ package uk.co.recipes.service.impl;
 
 import static uk.co.recipes.metrics.MetricNames.TIMER_BUILD_FILTER_GET_IDS;
 import static uk.co.recipes.metrics.MetricNames.TIMER_EXPLORER_FILTER_IDS_GET;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
 import javax.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IExplorerFilterItem;
-import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.service.api.IExplorerFilter;
 import uk.co.recipes.service.api.IExplorerFilterDef;
-
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.google.common.base.Objects;
@@ -142,32 +136,8 @@ public class EsExplorerFilters {
 
 		final String theItemName = (String) inFilterItem.getEntity();
 		final List<ICanonicalItem> items = Collections.emptyList(); // FIXME FIXME ???  Lists.newArrayList( itemFactory.get(theItemName).get() );  // FIXME, risky. Also do we really need to load to get Id ?!?
-		final List<IRecipe> recipes = search.findRecipesByItemName(theItemName);
-		return getIdsForResults( items, recipes, inInclude);
-    }
-
-    @Deprecated  // Use the long[] version!!!
-    private long[] getIdsForResults( final List<ICanonicalItem> inItems, final List<IRecipe> inRecipes, final boolean inInclude) {
-        final Timer.Context timerCtxt = metrics.timer(TIMER_EXPLORER_FILTER_IDS_GET).time();
-
-        final long[] ids = new long[ inItems.size() + inRecipes.size()];
-        int i = 0;
-
-        for (ICanonicalItem each : inItems) {
-            ids[i++] = each.getId();
-        }
-
-        for (IRecipe each : inRecipes) {
-            ids[i++] = each.getId();
-        }
-        
-        // Arrays.sort(ids);  // Do *not* bother with this. See http://bit.ly/187WEvC - we don't search enough times to make binary search worthwhile
- 
-        timerCtxt.close();
-
-        LOG.info("ExplorerFilter Impl > " + (inInclude ? "INCLUDE" : "EXCLUDE") + " Ids for Filter element. " + Arrays.toString(ids));
-
-        return ids;
+		final long[] recipeIds = search.findRecipeIdsByItemName(theItemName);
+		return getIdsForResults( items, recipeIds, inInclude);
     }
 
     private long[] getIdsForResults( final List<ICanonicalItem> inItems, final long[] inRecipeIds, final boolean inInclude) {
