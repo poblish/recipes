@@ -5,19 +5,24 @@ package uk.co.recipes.service.impl;
 
 import static uk.co.recipes.metrics.MetricNames.TIMER_BUILD_FILTER_GET_IDS;
 import static uk.co.recipes.metrics.MetricNames.TIMER_EXPLORER_FILTER_IDS_GET;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+
 import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IExplorerFilterItem;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.service.api.IExplorerFilter;
 import uk.co.recipes.service.api.IExplorerFilterDef;
+
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.google.common.base.Objects;
