@@ -5,12 +5,9 @@ package uk.co.recipes.persistence;
 
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.fieldQuery;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -18,11 +15,7 @@ import java.util.concurrent.ExecutionException;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.util.EntityUtils;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.indices.TypeMissingException;
 import org.elasticsearch.search.SearchHit;
@@ -58,38 +51,13 @@ public class EsUserFactory implements IUserPersistence {
 
 
 	public IUser put( final IUser inUser, String inId) throws IOException {
-		final HttpPost req = new HttpPost( usersIndexUrl + "/" + inId);
-
-		try {
-			inUser.setId( sequences.getSeqnoForType("users_seqno") );
-
-			req.setEntity( new StringEntity( mapper.writeValueAsString(inUser) ) );
-
-			final HttpResponse resp = httpClient.execute(req);
-			assertThat( resp.getStatusLine().getStatusCode(), is(201));
-			EntityUtils.consume( resp.getEntity() );
-		}
-		catch (UnsupportedEncodingException e) {
-			Throwables.propagate(e);
-		}
-
+		inUser.setId( sequences.getSeqnoForType("users_seqno") );
+		esClient.prepareIndex( "recipe", "users", inId).setSource( mapper.writeValueAsString(inUser) ).execute().actionGet();
 		return inUser;
 	}
 
-	// FIXME - must reconcile with put!!!
 	public void update( final IUser inUser) throws IOException {
-		final HttpPost req = new HttpPost( usersIndexUrl + "/" + toStringId(inUser));
-
-		try {
-			req.setEntity( new StringEntity( mapper.writeValueAsString(inUser) ) );
-
-			final HttpResponse resp = httpClient.execute(req);
-			assertThat( resp.getStatusLine().getStatusCode(), is(200));
-			EntityUtils.consume( resp.getEntity() );
-		}
-		catch (UnsupportedEncodingException e) {
-			Throwables.propagate(e);
-		}
+		esClient.prepareIndex( "recipe", "users", toStringId(inUser) ).setSource( mapper.writeValueAsString(inUser) ).execute().actionGet();
 	}
 
 	public IUser getByName( String inId) throws IOException {
