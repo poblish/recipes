@@ -4,9 +4,9 @@
 package uk.co.recipes.service.impl;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
-import static uk.co.recipes.metrics.MetricNames.TIMER_ITEMS_SEARCHES;
-import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_SEARCHES;
-import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_IDS_SEARCHES;
+import static org.elasticsearch.index.query.QueryStringQueryBuilder.Operator.AND;
+import static uk.co.recipes.metrics.MetricNames.*;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -16,13 +16,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.base.Throwables;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.search.SearchHit;
+
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.ICanonicalItem;
@@ -32,6 +35,7 @@ import uk.co.recipes.service.api.ESearchArea;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.api.ISearchResult;
 import uk.co.recipes.tags.TagUtils;
+
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -238,7 +242,7 @@ public class EsSearchService implements ISearchAPI {
 
         try
         {
-            final SearchHit[] hits = esClient.prepareSearch("recipe").setTypes("recipes").setNoFields().setQuery( termQuery( inTag.toString(), inValue) ).setSize(9999).execute().actionGet().getHits().hits();
+            final SearchHit[] hits = esClient.prepareSearch("recipe").setTypes("recipes").setNoFields().setQuery( queryString(inValue).defaultField( inTag.toString() ).defaultOperator(AND) ).setSize(9999).execute().actionGet().getHits().hits();
 
             final long[] ids = new long[ hits.length ];
             int i = 0;
