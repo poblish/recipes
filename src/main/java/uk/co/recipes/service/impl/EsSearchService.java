@@ -322,6 +322,13 @@ public class EsSearchService implements ISearchAPI {
 	}
 
 	@Override
+	public List<IRecipe> findRandomRecipesByTag( int inCount, final ITag inTag) throws IOException {
+		final List<IRecipe> recipesToChooseFrom = findNRecipesByName( inCount * 3, tagString(inTag) );
+		Collections.shuffle(recipesToChooseFrom);
+		return recipesToChooseFrom.subList( 0, Math.min( inCount, recipesToChooseFrom.size()));
+	}
+
+	@Override
 	public List<IRecipe> findRecipesByItemName( final ICanonicalItem... inItems) throws IOException {
 		Set<String> cNames = Sets.newHashSet();  // FIXME Factor this out somewhere
 
@@ -396,6 +403,7 @@ public class EsSearchService implements ISearchAPI {
 
 		return results;
 	}
+
     private long[] findNRecipeIdsByItemName( final int inCount, String... inNames) throws IOException {
         if (inNames.length == 0) {
             return new long[0];
