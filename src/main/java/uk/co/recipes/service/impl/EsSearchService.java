@@ -127,13 +127,17 @@ public class EsSearchService implements ISearchAPI {
 	 */
 	@Override
 	public List<IRecipe> findRecipesByName( String inName) throws IOException {
+	    return findNRecipesByName( 9999, inName);
+	}
+
+	private List<IRecipe> findNRecipesByName( final int inSize, final String inName) throws IOException {
 	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_SEARCHES).time();
 
 		try
 		{
             // esClient.prepareSearch("recipe").setTypes("items").setQuery("ginger").setSize(50).execute().get().getHits().toXContent( JsonXContent.contentBuilder(), ToXContent.EMPTY_PARAMS);
 
-            final JsonNode jn = mapper.readTree( new URL( recipesIndexUrl + "/_search?q=" + URLEncoder.encode( inName, "utf-8") + "&size=9999") ).path("hits").path("hits");
+            final JsonNode jn = mapper.readTree( new URL( recipesIndexUrl + "/_search?q=" + URLEncoder.encode( inName, "utf-8") + "&size=" + inSize) ).path("hits").path("hits");
 	
 			final List<IRecipe> results = Lists.newArrayList();
 	
