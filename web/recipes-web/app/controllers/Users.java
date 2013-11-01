@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import jgravatar.Gravatar;
+
 import play.mvc.Controller;
 import play.mvc.Result;
 import uk.co.recipes.api.ICanonicalItem;
@@ -44,9 +46,12 @@ public class Users extends Controller {
 
     public Result display( final String id) throws IOException {
         final IUser user = users.get(id).get();
+        final Gravatar gravatar = new Gravatar();
+        gravatar.setSize(256);
+
         final List<IRecipe> recommendedRecipes = recsApi.recommendRecipes( user, 12);
         final List<ICanonicalItem> recommendedItems = recsApi.recommendIngredients( user, 12);
-        return ok(views.html.user.render( user, recommendedRecipes, recommendedItems, colours));
+        return ok(views.html.user.render( user, recommendedRecipes, recommendedItems, colours, gravatar.getUrl( user.getEmail() )));
     }
 
     public Result ingestPrefs() throws IOException {
