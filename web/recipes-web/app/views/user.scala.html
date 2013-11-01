@@ -14,13 +14,16 @@
 	<button type="button" class="btn btn-sm btn-default" onclick="$.post('/users/ingest', function(data) { location.reload(false); });"><span class="glyphicon glyphicon-plus"></span> Load Recommendations...</button>
 	<hr />
 
-<img src="@gravatarUrl" alt="" class="pull-left" />
+	<div><img src="@gravatarUrl" alt="" class="pull-left" /></div>
 
 	<div class="container">
 	  <div class="col-md-12">
 		<div class="container">
 		<h3>Recommended Recipes:</h3>
 			
+	@if( recommendedItems.size() == 0) {
+		<p>Sorry, no recommended recipes could be found. Try relaxing any filters.</p>
+	} else {
 			@for(( eachRecipe, index) <- recommendedRecipes.zipWithIndex) {
 			
 			@if((index % 3) == 0) {
@@ -41,10 +44,11 @@
 		  });
 		});
 		</script>
+	}
+				</div>  <!-- <div class="row"> -->
 	
 			}
 			
-			</div>  <!-- <div class="row"> -->
 	  </div>  <!-- <div class="container"> -->
 
 	<div class="container">
