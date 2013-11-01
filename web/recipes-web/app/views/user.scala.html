@@ -14,16 +14,8 @@
 	<button type="button" class="btn btn-sm btn-default" onclick="$.post('/users/ingest', function(data) { location.reload(false); });"><span class="glyphicon glyphicon-plus"></span> Load Recommendations...</button>
 	<hr />
 
-	<div class="row">
-	  <div class="col-md-3">
-			<h3>Recommended Items</h3>
-			<ul class="list-group">
-			@for( eachItem <- recommendedItems) {
-			  <li class="list-group-item"><a href="http://localhost:9000/items/@eachItem.getCanonicalName()">@eachItem.getCanonicalName()</a>&nbsp;@for(tagName <- eachItem.getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}</li>  <!-- Parent stuff -->
-			}
-			</ul>
-	  </div>
-	  <div class="col-md-9">
+	<div class="container">
+	  <div class="col-md-12">
 		<div class="container">
 		<h3>Recommended Recipes:</h3>
 			
@@ -50,8 +42,30 @@
 	
 			}
 			
-			</div>  <!-- <div class="container"> -->
-	  </div>
-	</div>
-	</div>
+			</div>  <!-- <div class="row"> -->
+	  </div>  <!-- <div class="container"> -->
+
+	<div class="container">
+	<h3>Recommended Ingredients:</h3>
+	@if( recommendedItems.size() == 0) {
+		<p>Sorry, no recommended ingredients could be found. Try relaxing any filters.</p>
+	} else {
+		@for(( eachItem, index) <- recommendedItems.zipWithIndex) {
+	
+		@if((index % 3) == 0) {
+			@if( index >= 3) {
+			  </div>  <!-- <div class="row"> -->
+			}
+		 <div class="row">
+		}
+	
+		<div class="col-md-4">@_itemWell(eachItem)</div>
+		}
+	
+		</div>  <!-- <div class="row"> -->
+	}
+	</div>  <!-- <div class="container"> -->
+
+	</div>  <!-- <div class="col-md-12"> -->
+	</div>  <!-- <div class="container"> -->
 }

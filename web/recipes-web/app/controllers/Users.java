@@ -44,8 +44,8 @@ public class Users extends Controller {
 
     public Result display( final String id) throws IOException {
         final IUser user = users.get(id).get();
-        final List<IRecipe> recommendedRecipes = recsApi.recommendRecipes( user, 10);
-        final List<ICanonicalItem> recommendedItems = recsApi.recommendIngredients( user, 10);
+        final List<IRecipe> recommendedRecipes = recsApi.recommendRecipes( user, 12);
+        final List<ICanonicalItem> recommendedItems = recsApi.recommendIngredients( user, 12);
         return ok(views.html.user.render( user, recommendedRecipes, recommendedItems, colours));
     }
 
