@@ -3,6 +3,7 @@ package controllers;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -93,8 +94,8 @@ public class Items extends AbstractExplorableController {
         }
 
 		ratings.addRating( user1, new ItemRating( item, inScore) );
-  
-        return redirect("/items/" + item.getCanonicalName());  // FIXME - horrible way to reload!
+
+        return redirect("/items/" + URLEncoder.encode( item.getCanonicalName(), "utf-8"));  // FIXME - horrible way to reload!
     }
 
     public Result fave( final String name) throws IOException {
@@ -107,7 +108,7 @@ public class Items extends AbstractExplorableController {
 
 		faves.faveItem( user1, item);
   
-        return redirect("/items/" + item.getCanonicalName());  // FIXME - horrible way to reload!
+        return redirect("/items/" + URLEncoder.encode( item.getCanonicalName(), "utf-8"));  // FIXME - horrible way to reload!
     }
 
     public Result loadExternals( final String name) throws IOException {
