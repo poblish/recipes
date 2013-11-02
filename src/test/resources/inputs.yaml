@@ -624,6 +624,8 @@
 ---
 {canonicalName: Figs, tags: {FRUIT, FLORAL_FRUITY}, aliases: {Fig}}
 ---
+{canonicalName: Gooseberries, tags: {FRUIT}, aliases: Gooseberry}
+---
 {canonicalName: Grape, tags: {FRUIT, FRESH_FRUITY}}
 ---
 {    canonicalName: Currant, parent: Grape, aliases: {Zante currant, Currants}}
