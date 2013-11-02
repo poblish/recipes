@@ -8,6 +8,8 @@
 	</section>
 	
 	<p><em>If low, run RecipeExploreRecommendTest to install all Recipes and set up similarities</em></p>
+	<p><button type="button" class="btn btn-default" onclick="$.post('/app/load/loadBBCGF', function(data) { location.reload(false); });">Load BBC Good Food</button>
+	<button type="button" class="btn btn-default" onclick="$.post('/app/load/loadCurry', function(data) { location.reload(false); });">Load CurryFrenzy</button></p>
 	
 	<p>ES Items: <span class="badge label-default">@itemsCount</span></p>
 	<p>ES Recipes: <span class="badge">@recipesCount</span></p>

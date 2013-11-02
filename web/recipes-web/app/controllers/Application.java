@@ -21,6 +21,8 @@ import service.PlayAuthUserServicePlugin;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.IUser;
+import uk.co.recipes.loader.BbcGoodFoodLoader;
+import uk.co.recipes.loader.CurryFrenzyLoader;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsUserFactory;
@@ -239,6 +241,16 @@ public class Application extends Controller {
 				return inUser.getPrefs().explorerClearAll();
 			}} );
     }
+
+	public Result loadBbcGoodFood() throws IOException, InterruptedException {
+		new BbcGoodFoodLoader().start();
+		return ok("Started");
+	}
+
+	public Result loadCurryFrenzy() throws IOException, InterruptedException {
+		new CurryFrenzyLoader().start();
+		return ok("Started");
+	}
 
 	public Result handleUserPreference( final UserTask inTask) {
         final IUser currUser = /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( metrics, session());
