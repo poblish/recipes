@@ -65,7 +65,7 @@ public class Items extends AbstractExplorableController {
     public Result display( final String name) throws IOException {
 		final IUser user1 = getLocalUser();
 
-        final Optional<ICanonicalItem> optItem = items.get(name);
+        final Optional<ICanonicalItem> optItem = items.get( name.replace('+', ' ') );
         if (!optItem.isPresent()) {
             return notFound("'" + name + "' not found!");
         }
