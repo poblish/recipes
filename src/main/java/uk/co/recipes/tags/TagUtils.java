@@ -75,7 +75,13 @@ public final class TagUtils {
 		if ( inEntry.getValue() instanceof Boolean) {
 			return ((Boolean) inEntry.getValue());
 		}
-		return Boolean.parseBoolean((String) inEntry.getValue() );
+
+		final String strVal = (String) inEntry.getValue();
+		if ( strVal == null || strVal.isEmpty() || strVal.equalsIgnoreCase("false")) {
+			return false;
+		}
+
+		return true;  // 'true' or any non-Boolean representation is *fine* !
 	}
 
 	public static Predicate<Entry<ITag,Serializable>> findActivated() {
