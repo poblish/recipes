@@ -49,6 +49,7 @@ public class BbcGoodFoodLoader {
     @Inject TestDataUtils dataUtils;
     @Inject MyrrixUpdater updater;
     @Inject MetricRegistry metrics;
+    final String path = System.getProperty("user.home") + "/Development/java/recipe_explorer/src/test/resources/";  // FIXME!
 
 	public static void main( String[] args) {
 		try {
@@ -92,7 +93,7 @@ public class BbcGoodFoodLoader {
 		int count = 0;
 //		int errors = 0;
 
-		for ( File each : new File("src/test/resources/ingredients/bbcgoodfood/").listFiles( new FilenameFilter() {
+		for ( File each : new File( path + "ingredients/bbcgoodfood/").listFiles( new FilenameFilter() {
 
 			@Override
 			public boolean accept( File dir, String name) {
@@ -101,7 +102,7 @@ public class BbcGoodFoodLoader {
 		} )) {
 			try
 			{
-				dataUtils.parseIngredientsFrom( "src/test/resources/ingredients/bbcgoodfood/", each.getName() );
+				dataUtils.parseIngredientsFrom( path + "ingredients/bbcgoodfood/", each.getName() );
 				count++;
 			}
 			catch (RuntimeException e) {

@@ -39,10 +39,9 @@ import com.google.common.io.Files;
  */
 public class ItemsLoader {
 
-	@Inject
-	EsItemFactory itemFactory;
-
+	@Inject EsItemFactory itemFactory;
 	@Inject IngredientParser parser;
+	final String path = System.getProperty("user.home") + "/Development/java/recipe_explorer/src/test/resources/";  // FIXME!
 
 	private static final Logger LOG = LoggerFactory.getLogger( ItemsLoader.class );
 	private static final Optional<ICanonicalItem> MISSING = Optional.absent();
@@ -50,7 +49,7 @@ public class ItemsLoader {
 	public void load() throws IOException {
 	    final List<Map<String,Object>> entriesToDefer = Lists.newArrayList();
 
-		for ( Object each : new Yaml().loadAll( Files.toString( new File("src/test/resources/inputs.yaml"), Charset.forName("utf-8")))) {
+		for ( Object each : new Yaml().loadAll( Files.toString( new File( path + "inputs.yaml"), Charset.forName("utf-8")))) {
 
 			@SuppressWarnings("unchecked")
 			final Map<String,Object> map = (Map<String,Object>) each;
