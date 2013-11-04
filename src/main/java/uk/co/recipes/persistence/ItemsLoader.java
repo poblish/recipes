@@ -3,6 +3,8 @@
  */
 package uk.co.recipes.persistence;
 
+import static uk.co.recipes.metrics.MetricNames.TIMER_LOAD_ITEM_PROCESSITEM;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -25,6 +27,8 @@ import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.parse.IngredientParser;
 import uk.co.recipes.tags.TagUtils;
 
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
@@ -39,6 +43,7 @@ import com.google.common.io.Files;
  */
 public class ItemsLoader {
 
+	@Inject MetricRegistry metrics;
 	@Inject EsItemFactory itemFactory;
 	@Inject IngredientParser parser;
 	final String path = System.getProperty("user.home") + "/Development/java/recipe_explorer/src/test/resources/";  // FIXME!
@@ -85,6 +90,16 @@ public class ItemsLoader {
 	}
 
 	private boolean processItem( final Map<String,Object> inMap, final Optional<ICanonicalItem> inParent) {
+	    final Timer.Context timerCtxt = metrics.timer(TIMER_LOAD_ITEM_PROCESSITEM).time();
+	    try {
+	    	return timedProcessItem( inMap, inParent);
+	    }
+	    finally {
+            timerCtxt.stop();
+	    }
+	}
+
+	private boolean timedProcessItem( final Map<String,Object> inMap, final Optional<ICanonicalItem> inParent) {
         final String name = (String) inMap.get("canonicalName");
 
         final List<ICanonicalItem> validConstitutents = Lists.newArrayList();

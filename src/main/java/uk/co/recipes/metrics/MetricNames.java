@@ -32,4 +32,7 @@ public interface MetricNames {
     String TIMER_BUILD_FILTER_GET_IDS = "recipe.build_explorer_filter.ids.get";
 
     String TIMER_USER_LOCAL_GET = "recipe.getLocalUser";
+
+    String TIMER_LOAD_ITEM_PROCESSITEM = "recipes.laod.item.processItem";
+
 }
