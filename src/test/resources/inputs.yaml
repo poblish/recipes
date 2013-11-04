@@ -578,6 +578,10 @@
 ---
 {    canonicalName: Snap Peas, parent: Pea, aliases: {sugar snap peas}}
 ---
+{canonicalName: Soybean, tags: {PULSE}, aliases: {Soya bean, Soya}}
+---
+{    canonicalName: Soy Milk, aliases: {soya milk, soybean milk}}
+---
 
 
 {canonicalName: Apple, tags: {FRUIT, FRESH_FRUITY}, aliases: {Apples}}
@@ -760,7 +764,7 @@
 ---
 {    canonicalName: Semolina, parent: Flour, aliases: Semolina Flour}
 ---
-{    canonicalName: Soya Flour, parent: Flour}
+{    canonicalName: Soya Flour, parent: Flour, contains: Soybean}
 ---
 {    canonicalName: White Flour, parent: Flour}
 ---
@@ -873,6 +877,10 @@
 {    canonicalName: Rice Porridge, parent: Porridge}
 ---
 {        canonicalName: Congee, parent: Rice Porridge, tags: ASIAN}
+---
+
+
+{canonicalName: Tofu, tags: {CHINESE, JAPANESE}, contains: {Soy Milk, Soybean, Soya bean curd, bean curd}}
 ---
 
 
