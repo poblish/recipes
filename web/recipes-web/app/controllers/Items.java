@@ -75,7 +75,7 @@ public class Items extends AbstractExplorableController {
 			events.visit( user1, item);
 		}
 
-        final List<ICanonicalItem> similarities = explorer.similarIngredients( item, getExplorerFilter(explorerFilters), 20);
+        final List<ICanonicalItem> similarities = explorer.similarIngredients( item, getExplorerFilter(explorerFilters), 12);
         final List<IRecipe> recRecipes = ( user1 != null) ? recsApi.recommendRecipes( user1, NUM_RECOMMENDATIONS_TO_SHOW, item) : recsApi.recommendRecipesToAnonymous( NUM_RECOMMENDATIONS_TO_SHOW, item);
 
         if (!recRecipes.isEmpty()) {

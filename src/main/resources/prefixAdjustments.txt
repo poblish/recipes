@@ -43,6 +43,7 @@ grated
 ground
 half-fat
 hot
+juicy
 just-ripe
 large
 lean
@@ -64,17 +65,23 @@ ordinary
 organic
 // 'other' below is very lame, but it works around a weakness in our parsing and 'rescues' many genuine matches
 other
+oven-ready
 over-ripe
 overripe
 peeled
 // 'piece' is not enough info. Allow 'x-sized piece', however.
 piece
+pieces of
 pitted
 plump
 podded
 quality
 raw
+ready grated
 ready-cooked
+ready-made
+ready-rolled
+ready-to-eat
 really ripe
 reduced-fat
 reduced-salt
@@ -115,3 +122,4 @@ vine-ripened
 warm
 warmed
 whole
+x
