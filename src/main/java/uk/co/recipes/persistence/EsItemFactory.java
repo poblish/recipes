@@ -53,33 +53,19 @@ public class EsItemFactory implements IItemPersistence {
 
 	private final static Logger LOG = LoggerFactory.getLogger( EsItemFactory.class );
 
-	@Inject
-	Client esClient;
+	@Inject Client esClient;
+	@Inject HttpClient httpClient;
 
-	@Inject
-	HttpClient httpClient;
-
-	@Inject
-	@Named("elasticSearchItemsUrl")
+	@Inject @Named("elasticSearchItemsUrl")
 	String itemIndexUrl;
 
-	@Inject
-	ObjectMapper mapper;
+	@Inject ObjectMapper mapper;
+	@Inject EsUtils esUtils;
+	@Inject EsSequenceFactory sequences;
+	@Inject MetricRegistry metrics;
+	@Inject IEventService eventService;
 
-	@Inject
-	EsUtils esUtils;
-
-	@Inject
-	EsSequenceFactory sequences;
-
-	@Inject
-	MetricRegistry metrics;
-
-	@Inject
-	IEventService eventService;
-
-	@Inject
-	Cache<String,ICanonicalItem> itemsCache;
+	@Inject Cache<String,ICanonicalItem> itemsCache;
 
 
 	public ICanonicalItem put( final ICanonicalItem inItem, String inId) throws IOException {
