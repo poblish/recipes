@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.io.StringReader;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.inject.Inject;
@@ -28,6 +29,7 @@ import uk.co.recipes.events.api.IEventListener;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
+import uk.co.recipes.tags.RecipeTags;
 
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
@@ -52,6 +54,7 @@ public class MyrrixUpdater implements IEventListener {
 
     private final static float DEFAULT_WEIGHT = 1.0f;
     private final static float OPTIONAL_INGREDIENT_WEIGHT = 0.4f;
+    private final static float MATCHING_RECIPE_CATEGORY_WEIGHT = 0.6f;
     private final static float INGREDIENT_CONSTITUENT_WEIGHT = 0.1f;  // Pretty low, but bear in mind that if a constit is tagged with 'MEAT', that could still pull in +10
 
     public MyrrixUpdater() {
@@ -119,7 +122,7 @@ public class MyrrixUpdater implements IEventListener {
     		LOG.trace("onAddRecipe: " + evt);
     	}
 
-        addRecipeIngredients( evt.getRecipe().getId(), evt.getRecipe().getLocale(), evt.getRecipe().getIngredients());
+        addRecipeIngredients( evt.getRecipe().getId(), evt.getRecipe().getLocale(), evt.getRecipe().getTags(), evt.getRecipe().getIngredients());
     }
 
     @Subscribe
@@ -128,7 +131,7 @@ public class MyrrixUpdater implements IEventListener {
             LOG.trace("onDeleteRecipe: " + evt);
         }
 
-        removeRecipeIngredients( evt.getRecipe().getId(), evt.getRecipe().getLocale(), evt.getRecipe().getIngredients());
+        removeRecipeIngredients( evt.getRecipe().getId(), evt.getRecipe().getLocale(), evt.getRecipe().getTags(), evt.getRecipe().getIngredients());
     }
 
     @Subscribe
@@ -137,7 +140,7 @@ public class MyrrixUpdater implements IEventListener {
     		LOG.trace("onAddRecipeIngredients: " + evt);
     	}
 
-        addRecipeIngredients( evt.getRecipe().getId(), evt.getRecipe().getLocale(), Lists.newArrayList( evt.getIngredient() ));
+        addRecipeIngredients( evt.getRecipe().getId(), evt.getRecipe().getLocale(), evt.getRecipe().getTags(), Lists.newArrayList( evt.getIngredient() ));
     }
 
     @Subscribe
@@ -146,10 +149,10 @@ public class MyrrixUpdater implements IEventListener {
     		LOG.trace("onDeleteRecipeIngredients: " + evt);
     	}
 
-        removeRecipeIngredients( evt.getRecipe().getId(), evt.getRecipe().getLocale(), Lists.newArrayList( evt.getIngredient() ));
+        removeRecipeIngredients( evt.getRecipe().getId(), evt.getRecipe().getLocale(), evt.getRecipe().getTags(), Lists.newArrayList( evt.getIngredient() ));
     }
 
-    private void addRecipeIngredients( final long inRecipeId, final Locale inRecipeLocale, final Collection<IIngredient> inIngredients) {
+    private void addRecipeIngredients( final long inRecipeId, final Locale inRecipeLocale, final Map<ITag,Serializable> inRecipeTags, final Collection<IIngredient> inIngredients) {
         boolean changesMade = false;
         final StringBuffer myrrixPrefsBuf = new StringBuffer();
 
@@ -170,6 +173,13 @@ public class MyrrixUpdater implements IEventListener {
             	changesMade = true;  // There will always be changes now - cheerfully overwrite flag
     		}
 
+            // Recipe Tags begin...
+            final Serializable catVal = inRecipeTags.get( RecipeTags.RECIPE_CATEGORY );
+            if ( catVal != null) {
+                changesMade |= doSetTag( "RECIPE_CATEGORY_" + catVal.toString(), "SET", inRecipeId, /* No boost, I think */ MATCHING_RECIPE_CATEGORY_WEIGHT);
+            }
+            // Recipe Tags END
+
             if (changesMade) {
                 recommender.ingest( new StringReader( myrrixPrefsBuf.toString() ) );
             	recommender.refresh();
@@ -184,7 +194,7 @@ public class MyrrixUpdater implements IEventListener {
         }
     }
 
-    private void removeRecipeIngredients( final long inRecipeId, final Locale inRecipeLocale, final Collection<IIngredient> inIngredients) {
+    private void removeRecipeIngredients( final long inRecipeId, final Locale inRecipeLocale, final Map<ITag,Serializable> inRecipeTags, final Collection<IIngredient> inIngredients) {
         boolean changesMade = false;
         final StringBuffer myrrixPrefsBuf = new StringBuffer();
 
@@ -204,6 +214,13 @@ public class MyrrixUpdater implements IEventListener {
                 addPrefsForItem( myrrixPrefsBuf, inRecipeId, eachIngr.getItem(), basicScoreForIngr);
                 changesMade = true;  // There will always be changes now - cheerfully overwrite flag
             }
+
+            // Recipe Tags begin...
+            final Serializable catVal = inRecipeTags.get( RecipeTags.RECIPE_CATEGORY );
+            if ( catVal != null) {
+                changesMade |= doSetTag( "RECIPE_CATEGORY_" + catVal.toString(), "SET", inRecipeId, /* No boost, I think */ -MATCHING_RECIPE_CATEGORY_WEIGHT);
+            }
+            // Recipe Tags END
 
             if (changesMade) {
                 recommender.ingest( new StringReader( myrrixPrefsBuf.toString() ) );
@@ -274,10 +291,14 @@ public class MyrrixUpdater implements IEventListener {
     }
 
     private boolean doSetTag( final ITag inTag, final String inSetStr, final long inItemOrRecipeId, final float inScoreToUse) throws TasteException {
+        return doSetTag( inTag.toString(), inSetStr, inItemOrRecipeId, inScoreToUse);
+    }
+
+    private boolean doSetTag( final String inString, final String inSetStr, final long inItemOrRecipeId, final float inScoreToUse) throws TasteException {
         if (LOG.isDebugEnabled()) {
-            LOG.debug( inSetStr + " Tag '" + inTag + "' val=" + inScoreToUse + " for " + inItemOrRecipeId);
+            LOG.debug( inSetStr + " Tag '" + inString + "' val=" + inScoreToUse + " for " + inItemOrRecipeId);
         }
-        recommender.setItemTag( inTag.toString(), inItemOrRecipeId, inScoreToUse);
+        recommender.setItemTag( inString, inItemOrRecipeId, inScoreToUse);
         return true;
     }
 
