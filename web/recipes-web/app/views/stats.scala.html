@@ -7,7 +7,8 @@
 	    </div>
 	</section>
 	
-	<p><button type="button" class="btn btn-default" onclick="$.post('/app/load/loadBBCGF', function(data) { location.reload(false); });">Load BBC Good Food</button>
+	<p><button type="button" class="btn btn-default" onclick="$.post('/app/clearAll', function(data) { location.reload(false); });"><span class="glyphicon glyphicon-remove"></span> Clear All</button>
+	<button type="button" class="btn btn-default" onclick="$.post('/app/load/loadBBCGF', function(data) { location.reload(false); });">Load BBC Good Food</button>
 	<button type="button" class="btn btn-default" onclick="$.post('/app/load/loadCurry', function(data) { location.reload(false); });">Load CurryFrenzy</button></p>
 	
 	<p>ES Items: <span class="badge label-default">@itemsCount</span></p>

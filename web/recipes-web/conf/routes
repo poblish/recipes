@@ -39,6 +39,7 @@ POST    /user/filter/exc/add=:item    @controllers.Application.explorerExcludeAd
 POST    /user/filter/exc/rem=:i/v=:v  @controllers.Application.explorerExcludeRemoveWithValue(i: String, v: String)
 POST    /user/filter/exc/rem=:item    @controllers.Application.explorerExcludeRemove(item: String)
 POST    /user/filter/clearAll         @controllers.Application.explorerClearAll()
+POST    /app/clearAll                 @controllers.Application.clearDataAndCache()
 POST    /app/load/loadBBCGF           @controllers.Application.loadBbcGoodFood()
 POST    /app/load/loadCurry           @controllers.Application.loadCurryFrenzy()
 

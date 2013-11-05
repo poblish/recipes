@@ -27,6 +27,7 @@ import uk.co.recipes.loader.BbcGoodFoodLoader;
 import uk.co.recipes.loader.CurryFrenzyLoader;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
+import uk.co.recipes.persistence.EsSequenceFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
@@ -55,6 +56,7 @@ public class Application extends Controller {
     private IItemPersistence items;
     private IUserPersistence users;
     private IRecipePersistence recipes;
+    private EsSequenceFactory sequences;  // For deleteAll() only
     private MetricRegistry metrics;
     private ClientRecommender recommender;
     private Cache<String,ICanonicalItem> itemsCache;
@@ -65,13 +67,14 @@ public class Application extends Controller {
 
     @Inject
     public Application( final EsItemFactory items, final EsRecipeFactory recipes, final EsUserFactory users, final ClientRecommender recommender, final MetricRegistry metrics, final Cache<String,ICanonicalItem> inItemsCache,
-    				    final BbcGoodFoodLoader bbcGfLoader, final CurryFrenzyLoader cfLoader) {
+    				    final EsSequenceFactory seqs, final BbcGoodFoodLoader bbcGfLoader, final CurryFrenzyLoader cfLoader) {
         this.items = checkNotNull(items);
         this.recipes = checkNotNull(recipes);
         this.users = checkNotNull(users);
         this.metrics = checkNotNull(metrics);
         this.recommender = checkNotNull(recommender);
         this.itemsCache = checkNotNull(inItemsCache);
+        this.sequences = checkNotNull(seqs);
         this.bbcGfLoader = checkNotNull(bbcGfLoader);
         this.cfLoader = checkNotNull(cfLoader);
     }
@@ -250,6 +253,15 @@ public class Application extends Controller {
 				return inUser.getPrefs().explorerClearAll();
 			}} );
     }
+
+	public Result clearDataAndCache() throws IOException {
+	    itemsCache.invalidateAll();
+	    users.deleteAll();
+		items.deleteAll();
+		recipes.deleteAll();
+		sequences.deleteAll();
+		return ok("Cleared");
+	}
 
 	public Result loadBbcGoodFood() throws IOException, InterruptedException {
 		loadPool.submit( new Runnable() {
