@@ -588,11 +588,13 @@
 ---
 {    canonicalName: Apple Juice, parent: Apple}
 ---
+{    canonicalName: Braeburn apples, parent: Apple}
+---
 {    canonicalName: Bramley apples, tags: BAKING, parent: Apple, aliases: Bramley apple}
 ---
 {    canonicalName: Eating apples, parent: Apple, aliases: {Eating apple}}
 ---
-{    canonicalName: Braeburn apples, parent: Apple}
+{    canonicalName: Granny Smith, parent: Apple, aliases: {Granny Smiths}}
 ---
 {canonicalName: Apricot, tags: {FRUIT, CREAMY_FRUITY}, aliases: {Apricots}}
 ---
@@ -705,6 +707,8 @@
 {canonicalName: Pineapple, tags: {FRUIT, TROPICAL, FRESH_FRUITY}, aliases: {Pineapples}}
 ---
 {canonicalName: Plum, tags: {FRUIT}, aliases: {Plums}}
+---
+{    canonicalName: Damson, parent: Plum, aliases: {Damsons}}
 ---
 {    canonicalName: Prune, parent: Plum, aliases: {Prunes, Dried Plum}}
 ---
@@ -823,6 +827,8 @@
 {canonicalName: Crusty Bread, tags: {BREAD}}
 ---
 {canonicalName: Focaccia, tags: {BREAD, ITALIAN}}
+---
+{canonicalName: Flatbread, tags: {BREAD}, aliases: Flatbreads}
 ---
 {canonicalName: Naan Bread, tags: {BREAD, INDIAN}, aliases: Naan}
 ---
@@ -978,25 +984,27 @@
 ---
 
 
-{canonicalName: Blue Cheese, tags: {DAIRY, CHEESE, BLUE_CHEESE}}
+{canonicalName: Cheese, tags: {DAIRY, CHEESE}}
 ---
-{    canonicalName: Gorgonzola, parent: Blue Cheese, tags: {ITALIAN}}
+{    canonicalName: Blue Cheese, parent: Cheese, tags: {BLUE_CHEESE}}
 ---
-{        canonicalName: Dolcelatte, parent: Gorgonzola}
+{        canonicalName: Gorgonzola, parent: Blue Cheese, tags: {ITALIAN}}
 ---
-{    canonicalName: Roquefort, parent: Blue Cheese, tags: {FRENCH}, aliases: {Roquefort Cheese}}
+{            canonicalName: Dolcelatte, parent: Gorgonzola}
 ---
-{    canonicalName: Stilton, parent: Blue Cheese, tags: {ENGLISH}, aliases: {Stilton Cheese}}
+{        canonicalName: Roquefort, parent: Blue Cheese, tags: {FRENCH}, aliases: {Roquefort Cheese}}
+---
+{        canonicalName: Stilton, parent: Blue Cheese, tags: {ENGLISH}, aliases: {Stilton Cheese}}
+---
+{    canonicalName: Cheddar, parent: Cheese, tags: {ENGLISH}, aliases: {Cheddar Cheese}}
+---
+{        canonicalName: Mature Cheddar, parent: Cheddar, aliases: {Mature Cheddar Cheese}}
 ---
 {canonicalName: Brie, tags: {DAIRY, CHEESE, FRENCH}}
 ---
 {canonicalName: Caciocavallo, tags: {DAIRY, CHEESE, ITALIAN}, aliases: {Caciocavallo Cheese}}
 ---
 {canonicalName: Camembert, tags: {DAIRY, CHEESE, FRENCH}}
----
-{canonicalName: Cheddar, tags: {DAIRY, CHEESE, ENGLISH}, aliases: {Cheddar Cheese}}
----
-{    canonicalName: Mature Cheddar, parent: Cheddar, aliases: {Mature Cheddar Cheese}}
 ---
 {canonicalName: Cheshire Cheese, tags: {DAIRY, CHEESE, ENGLISH}}
 ---
@@ -1005,6 +1013,8 @@
 {canonicalName: Emmental, tags: {DAIRY, CHEESE, SWISS}}
 ---
 {canonicalName: Feta, tags: {DAIRY, CHEESE, GREEK}, aliases: {Feta Cheese}}
+---
+{canonicalName: Fontina, tags: {DAIRY, CHEESE, ITALIAN}}
 ---
 {canonicalName: Goat's Cheese, tags: {DAIRY, CHEESE}}
 ---
@@ -1242,6 +1252,8 @@
 ---
 {    canonicalName: Gnocchi, parent: Pasta}
 ---
+{    canonicalName: Lasagne, parent: Pasta}
+---
 {    canonicalName: Linguine, parent: Pasta}
 ---
 {    canonicalName: Macaroni, parent: Pasta}
@@ -1266,6 +1278,12 @@
 ---
 
 
+{canonicalName: Crabmeat, tags: SEAFOOD, aliases: Crab}
+---
+{    canonicalName: Brown Crabmeat, parent: Crabmeat}
+---
+{    canonicalName: White Crabmeat, parent: Crabmeat}
+---
 {canonicalName: Mussels, tags: SEAFOOD}
 ---
 {canonicalName: Oysters, tags: {SEAFOOD, MARINE}, aliases: Oyster}
