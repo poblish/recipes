@@ -54,7 +54,10 @@ public class BbcGoodFoodLoader {
 	public static void main( String[] args) {
 		try {
 			long st = System.currentTimeMillis();
-			new BbcGoodFoodLoader().start();
+
+			final BbcGoodFoodLoader loader = new BbcGoodFoodLoader();
+	        ObjectGraph.create( new TestModule() ).inject(loader);
+	        loader.start();
 
 			int i = 0;
 			while ( i++ < 7) {
@@ -73,8 +76,6 @@ public class BbcGoodFoodLoader {
 	}
 
 	public void start() throws IOException, InterruptedException {
-        ObjectGraph.create( new TestModule() ).inject(this);
-
         updater.startListening();
 
 	    userFactory.deleteAll();
@@ -120,9 +121,10 @@ public class BbcGoodFoodLoader {
 	}
 
 	public void shutDown() {
-		esClient.close();
+//		esClient.close();
 	}
 
+	// Used by main method, not by BbcGoodFoodLoader itself!
     @Module( includes=DaggerModule.class, overrides=true, injects=BbcGoodFoodLoader.class)
     static class TestModule {}
 }

@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.EnumSet;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -56,15 +58,22 @@ public class Application extends Controller {
     private MetricRegistry metrics;
     private ClientRecommender recommender;
     private Cache<String,ICanonicalItem> itemsCache;
+    private BbcGoodFoodLoader bbcGfLoader;
+    private CurryFrenzyLoader cfLoader;
+
+    private final ExecutorService loadPool = Executors.newFixedThreadPool(3);
 
     @Inject
-    public Application( final EsItemFactory items, final EsRecipeFactory recipes, final EsUserFactory users, final ClientRecommender recommender, final MetricRegistry metrics, final Cache<String,ICanonicalItem> inItemsCache) {
+    public Application( final EsItemFactory items, final EsRecipeFactory recipes, final EsUserFactory users, final ClientRecommender recommender, final MetricRegistry metrics, final Cache<String,ICanonicalItem> inItemsCache,
+    				    final BbcGoodFoodLoader bbcGfLoader, final CurryFrenzyLoader cfLoader) {
         this.items = checkNotNull(items);
         this.recipes = checkNotNull(recipes);
         this.users = checkNotNull(users);
         this.metrics = checkNotNull(metrics);
         this.recommender = checkNotNull(recommender);
         this.itemsCache = checkNotNull(inItemsCache);
+        this.bbcGfLoader = checkNotNull(bbcGfLoader);
+        this.cfLoader = checkNotNull(cfLoader);
     }
 
     public String getMetricsString() {
@@ -243,12 +252,42 @@ public class Application extends Controller {
     }
 
 	public Result loadBbcGoodFood() throws IOException, InterruptedException {
-		new BbcGoodFoodLoader().start();
+		loadPool.submit( new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					System.out.println("Start BBC Good Food load...");
+					bbcGfLoader.start();
+					System.out.println("DONE BBC Good Food load...");
+				} catch (IOException e) {
+					Throwables.propagate(e);
+				} catch (InterruptedException e) {
+					Throwables.propagate(e);
+				}
+			}
+		} );
+
 		return ok("Started");
 	}
 
 	public Result loadCurryFrenzy() throws IOException, InterruptedException {
-		new CurryFrenzyLoader().start();
+		loadPool.submit( new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					System.out.println("Start Curry Frenzy load...");
+					cfLoader.start();
+					System.out.println("DONE Curry Frenzy load...");
+				} catch (IOException e) {
+					Throwables.propagate(e);
+				} catch (InterruptedException e) {
+					Throwables.propagate(e);
+				}
+			}
+		} );
+
 		return ok("Started");
 	}
 

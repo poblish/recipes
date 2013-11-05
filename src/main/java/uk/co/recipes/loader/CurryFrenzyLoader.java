@@ -46,7 +46,10 @@ public class CurryFrenzyLoader {
 	public static void main( String[] args) {
 		try {
 			long st = System.currentTimeMillis();
-			new CurryFrenzyLoader().start();
+
+			final CurryFrenzyLoader loader = new CurryFrenzyLoader();
+	        ObjectGraph.create( new TestModule() ).inject(loader);
+	        loader.start();
 
 			int i = 0;
 			while ( i++ < 7) {
@@ -65,14 +68,7 @@ public class CurryFrenzyLoader {
 	}
 
 	public void start() throws IOException, InterruptedException {
-        ObjectGraph.create( new TestModule() ).inject(this);
-
         updater.startListening();
-
-//	    userFactory.deleteAll();
-//		itemFactory.deleteAll();
-//		recipeFactory.deleteAll();
-//	    sequenceFactory.deleteAll();
 
 	    loadIngredientsFromYaml();
 
@@ -113,9 +109,10 @@ public class CurryFrenzyLoader {
 	}
 
 	public void shutDown() {
-		esClient.close();
+//		esClient.close();
 	}
 
+	// Used by main method, not by CurryFrenzyLoader itself!
     @Module( includes=DaggerModule.class, overrides=true, injects=CurryFrenzyLoader.class)
     static class TestModule {}
 }
