@@ -270,7 +270,7 @@ public class Application extends Controller {
 			public void run() {
 				try {
 					System.out.println("Start BBC Good Food load...");
-					bbcGfLoader.start();
+					bbcGfLoader.start(false);
 					System.out.println("DONE BBC Good Food load...");
 				} catch (IOException e) {
 					Throwables.propagate(e);

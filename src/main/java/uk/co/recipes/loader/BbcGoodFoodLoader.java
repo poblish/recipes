@@ -57,7 +57,7 @@ public class BbcGoodFoodLoader {
 
 			final BbcGoodFoodLoader loader = new BbcGoodFoodLoader();
 	        ObjectGraph.create( new TestModule() ).inject(loader);
-	        loader.start();
+	        loader.start(true);
 
 			int i = 0;
 			while ( i++ < 7) {
@@ -75,13 +75,15 @@ public class BbcGoodFoodLoader {
 		}
 	}
 
-	public void start() throws IOException, InterruptedException {
+	public void start( boolean inClearData) throws IOException, InterruptedException {
         updater.startListening();
 
-	    userFactory.deleteAll();
-		itemFactory.deleteAll();
-		recipeFactory.deleteAll();
-	    sequenceFactory.deleteAll();
+        if (inClearData) {
+		    userFactory.deleteAll();
+			itemFactory.deleteAll();
+			recipeFactory.deleteAll();
+		    sequenceFactory.deleteAll();
+        }
 
 	    loadIngredientsFromYaml();
 
