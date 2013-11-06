@@ -324,7 +324,7 @@
 ---
 
 
-{canonicalName: Artichoke, tags: {VEGETABLE, SULPHUROUS}, aliases: {Globe Artichoke}}
+{canonicalName: Artichoke, tags: {VEGETABLE, SULPHUROUS}, aliases: {Globe Artichoke, Artichokes}}
 ---
 {    canonicalName: Artichoke Hearts, parent: Artichoke}
 ---
@@ -416,13 +416,15 @@
 ---
 {canonicalName: Lettuce, tags: VEGETABLE}
 ---
-{    canonicalName: Cos Lettuce, parent: Lettuce}
----
 {    canonicalName: Gem Lettuce, parent: Lettuce, aliases: {Little Gem Lettuce, Little Gem Lettuces, Baby Gem Lettuces}}
 ---
 {    canonicalName: Iceberg Lettuce, parent: Lettuce}
 ---
 {    canonicalName: Lamb's Lettuce, parent: Lettuce}
+---
+{    canonicalName: Romaine Lettuce, parent: Lettuce, aliases: {Cos Lettuce, romaine lettuce leaves, leaves romaine}}
+---
+{        canonicalName: Romaine Lettuce Hearts, parent: Romaine Lettuce}
 ---
 {canonicalName: Mangetout, tags: VEGETABLE, aliases: Mange Tout}
 ---
@@ -563,6 +565,8 @@
 {canonicalName: Kidney Beans, tags: PULSE}
 ---
 {canonicalName: Lentils, tags: PULSE, aliases: {Lentil}}
+---
+{    canonicalName: Black Lentils, parent: Lentils, tags: INDIAN, aliases: Black Gram}
 ---
 {    canonicalName: Green Lentils, parent: Lentils}
 ---
@@ -750,6 +754,8 @@
 
 {canonicalName: Flour, tags: {FLOUR}, baseAmt: 50g}
 ---
+{    canonicalName: Black Gram Flour, parent: Flour, tags: INDIAN, contains: Black Lentils}
+---
 {    canonicalName: Chapati Flour, parent: Flour, tags: INDIAN}
 ---
 {    canonicalName: Chickpea Flour, parent: Flour, aliases: Gram Flour}
@@ -830,7 +836,13 @@
 ---
 {canonicalName: Flatbread, tags: {BREAD}, aliases: Flatbreads}
 ---
+{canonicalName: Muffin, tags: {BREAD, ENGLISH, USA}, aliases: Muffins}
+---
+{    canonicalName: English Muffin, parent: Muffin, tags: {ENGLISH, -USA}, aliases: English Muffins}
+---
 {canonicalName: Naan Bread, tags: {BREAD, INDIAN}, aliases: Naan}
+---
+{canonicalName: Papadum, tags: {BREAD, INDIAN}, aliases: {poppadom, poppadum, poppadoms, poppadums}, contains: Black Gram Flour}
 ---
 {canonicalName: Pastry, tags: {BREAD, PASTRY}}
 ---
@@ -1270,6 +1282,8 @@
 ---
 {    canonicalName: Spaghetti, parent: Pasta}
 ---
+{    canonicalName: Spirali, parent: Pasta}
+---
 {    canonicalName: Tagliatelle, parent: Pasta}
 ---
 {    canonicalName: Tortellini, parent: Pasta}
@@ -1363,6 +1377,8 @@
 {        canonicalName: Pollock Fillet, parent: Pollock, aliases: {Pollock Fillets, Pollack Fillets}}
 ---
 {    canonicalName: Sea Bass, parent: White Fish, aliases: Seabass}
+---
+{        canonicalName: Sea Bass Fillets, parent: Sea Bass}
 ---
 {    canonicalName: Sea Bream, parent: White Fish}
 ---
@@ -1568,6 +1584,8 @@
 ---
 {canonicalName: Curaçao, tags: {SPIRIT, ALCOHOL, DUTCH, ORANGE}}
 ---
+{canonicalName: Gin, tags: {SPIRIT, ALCOHOL}}
+---
 {canonicalName: Ginger Wine, tags: {WINE, ALCOHOL}, contains: {Ginger, Raisin}}
 ---
 {    canonicalName: Stone's Ginger Wine, parent: Ginger Wine}
@@ -1592,6 +1610,8 @@
 ---
 {canonicalName: Rice Wine, tags: {WINE, ALCOHOL, ASIAN}}
 ---
+{    canonicalName: Sake, parent: Rice Wine, tags: JAPANESE, aliases: Saké}
+---
 {    canonicalName: Mirin, parent: Rice Wine, tags: JAPANESE}
 ---
 {canonicalName: Rum, tags: {SPIRIT, ALCOHOL, CARIBBEAN}}
@@ -1609,3 +1629,5 @@
 {canonicalName: White Wine, tags: {WINE, ALCOHOL}}
 ---
 {    canonicalName: Champagne, parent: White Wine}
+---
+{    canonicalName: Vermouth, tags: ITALIAN, parent: White Wine}
