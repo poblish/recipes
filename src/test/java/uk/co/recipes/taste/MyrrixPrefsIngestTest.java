@@ -51,7 +51,7 @@ public class MyrrixPrefsIngestTest {
         @Provides
         @Singleton
         EsItemFactory provideItemFactory() {
-        	return MockFactories.mockItemFactory();
+        	return MockFactories.inMemoryItemFactory();
         }
     }
 }

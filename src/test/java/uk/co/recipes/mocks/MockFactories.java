@@ -8,7 +8,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.util.Map;
 
+import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -17,7 +19,9 @@ import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.persistence.EsItemFactory;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
+import com.google.common.collect.Maps;
 
 /**
  * TODO
@@ -27,7 +31,10 @@ import com.google.common.base.Throwables;
  */
 public class MockFactories {
 
-    public static EsItemFactory mockItemFactory() {
+    private final static Map<String,ICanonicalItem> ITEMS = Maps.newHashMap();
+
+    @SuppressWarnings("unchecked")
+	public static EsItemFactory inMemoryItemFactory() {
     	try {
             final EsItemFactory iff = mock( EsItemFactory.class );
 
@@ -36,16 +43,45 @@ public class MockFactories {
 				@Override
 				public Optional<ICanonicalItem> answer( InvocationOnMock invocation) {
 					final String name = (String) invocation.getArguments()[0];
+					return Optional.of( cachedGet(name) );
+				}
+			} );
 
-					final ICanonicalItem item = new CanonicalItem(name);
-					item.setId( Math.abs( name.hashCode() ));  // Yuk!
-					return Optional.of(item);
-				}} );
+            when( iff.getOrCreate( anyString(), Mockito.any( Supplier.class ) )).thenAnswer( new Answer<ICanonicalItem>() {
+
+				@Override
+				public ICanonicalItem answer( InvocationOnMock invocation) {
+					final String name = (String) invocation.getArguments()[0];
+					final Supplier<ICanonicalItem> getter = (Supplier<ICanonicalItem>) invocation.getArguments()[1];
+
+					final ICanonicalItem itemOrNull = ITEMS.get(name);
+					if ( itemOrNull != null) {
+						return itemOrNull;
+					}
+
+//					System.out.println("Creating '" + inCanonicalName + "' ...");
+
+					return getter.get();
+//					return put( getter.get(), toId(name));
+				}
+			} );
 
             return iff;
     	}
     	catch (IOException e) {
     		throw Throwables.propagate(e);
     	}
+    }
+
+    private static ICanonicalItem cachedGet( final String name) {
+		final ICanonicalItem cached = ITEMS.get(name);
+		if ( cached != null) {
+			return cached;
+		}
+
+		final ICanonicalItem item = new CanonicalItem(name);
+		item.setId( Math.abs( name.hashCode() ));  // Yuk!
+		ITEMS.put( name, item);
+		return item;
     }
 }
