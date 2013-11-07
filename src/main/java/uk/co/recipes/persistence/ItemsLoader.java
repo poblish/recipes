@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -33,6 +34,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 
 /**
@@ -54,6 +56,8 @@ public class ItemsLoader {
 	public void load() throws IOException {
 	    final List<Map<String,Object>> entriesToDefer = Lists.newArrayList();
 
+	    final Set<String> topLevelNamesCache = Sets.newHashSet();
+
 		for ( Object each : new Yaml().loadAll( Files.toString( new File( path + "inputs.yaml"), Charset.forName("utf-8")))) {
 
 			@SuppressWarnings("unchecked")
@@ -68,7 +72,7 @@ public class ItemsLoader {
 			    continue;
             }
 
-			if (!processItem( map, parentCI)) {
+			if (!processItem( map, parentCI, topLevelNamesCache)) {
 			    // Most probably because of missing constituent
                 entriesToDefer.add(map);
                 continue;
@@ -85,22 +89,30 @@ public class ItemsLoader {
                 throw new RuntimeException("Missing parent item '" + parentName + "' for '" + eachDeferred.get("canonicalName") + "'");
             }
 
-            processItem( eachDeferred, parentCI);
+            processItem( eachDeferred, parentCI, topLevelNamesCache);
 		}
 	}
 
-	private boolean processItem( final Map<String,Object> inMap, final Optional<ICanonicalItem> inParent) {
+	private boolean processItem( final Map<String,Object> inMap, final Optional<ICanonicalItem> inParent, final Set<String> inTopLevelNamesCache) {
 	    final Timer.Context timerCtxt = metrics.timer(TIMER_LOAD_ITEM_PROCESSITEM).time();
 	    try {
-	    	return timedProcessItem( inMap, inParent);
+	    	return timedProcessItem( inMap, inParent, inTopLevelNamesCache);
 	    }
 	    finally {
             timerCtxt.stop();
 	    }
 	}
 
-	private boolean timedProcessItem( final Map<String,Object> inMap, final Optional<ICanonicalItem> inParent) {
+	private boolean timedProcessItem( final Map<String,Object> inMap, final Optional<ICanonicalItem> inParent, final Set<String> inTopLevelNamesCache) {
         final String name = (String) inMap.get("canonicalName");
+
+        if (inTopLevelNamesCache.contains(name)) {
+        	throw new RuntimeException("Duplicate Name: " + name);
+        }
+
+        inTopLevelNamesCache.add(name);
+
+        //////////////////////////////////////////////////////////////////////////////
 
         final List<ICanonicalItem> validConstitutents = Lists.newArrayList();
 

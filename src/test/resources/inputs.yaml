@@ -804,8 +804,6 @@
 ---
 {    canonicalName: Porridge Oats, parent: Oats, aliases: {rolled porridge oats}}
 ---
-{canonicalName: Oats, tags: GRAIN}
----
 {canonicalName: Rye, tags: GRAIN}
 ---
 {canonicalName: Quinoa, tags: GRAIN}
