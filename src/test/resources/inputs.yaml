@@ -138,7 +138,7 @@
 ---
 
 
-{canonicalName: Allspice, tags: SPICE, aliases: {Allspice Berries}}
+{canonicalName: Allspice, tags: {SPICE, WARM}, aliases: {Allspice Berries}}
 ---
 {canonicalName: Asafoetida, tags: {SPICE, INDIAN}}
 ---
@@ -154,11 +154,11 @@
 ---
 {    canonicalName: Green Cardamom, tags: CITRUS, parent: Cardamom, aliases: {Green Cardamom Pods}}
 ---
-{canonicalName: Cayenne Pepper, tags: {SPICE}}
+{canonicalName: Cayenne Pepper, tags: {SPICE, WARM, SMOKY_SALTY}, aliases: Ground Cayenne Pepper}
 ---
 {canonicalName: Celery Salt, tags: {SPICE}}
 ---
-{canonicalName: Chilli Powder, tags: {SPICE, INDIAN}}
+{canonicalName: Chilli Powder, tags: {SPICE, WARM, INDIAN}}
 ---
 {    canonicalName: Mild Chilli Powder, parent: Chilli Powder}
 ---
@@ -176,7 +176,7 @@
 ---
 {canonicalName: Coriander Seeds, parent: Coriander, tags: {-HERB, SPICE, INDIAN}, aliases: {Coriander Seed, Dhania}}
 ---
-{canonicalName: Cumin, tags: {SPICE, EARTHY, INDIAN}, aliases: {Ground Cumin, Cumin Powder}}
+{canonicalName: Cumin, tags: {SPICE, EARTHY, WARM, INDIAN}, aliases: {Ground Cumin, Cumin Powder}}
 ---
 {    canonicalName: Cumin Seeds, parent: Cumin, aliases: {Cumin Seed, Jeera}, baseAmt: 1 tsp}
 ---
@@ -188,11 +188,11 @@
 ---
 {canonicalName: Fennel Seeds, tags: {SPICE, SEED, FLORAL, ANISEED}, aliases: {Fennel Seed}}
 ---
-{canonicalName: Fenugreek Seeds, parent: Fenugreek, tags: {-HERB, SPICE}, aliases: {Fenugreek Seed, Methi}}
+{canonicalName: Fenugreek Seeds, parent: Fenugreek, tags: {-HERB, SPICE, SWEET_NUTTY}, aliases: {Fenugreek Seed, Methi}}
 ---
 {canonicalName: Garam Masala, tags: {SPICE, INDIAN}, aliases: {Garam Masala Powder, Garam Masalla, Garam Masalla powder}}
 ---
-{canonicalName: Ginger, tags: {SPICE, CITRUS, SPICY, INDIAN, CHINESE}}
+{canonicalName: Ginger, tags: {SPICE, CITRUS, SPICY, WARM, PEPPERY, INDIAN, CHINESE}}
 ---
 {    canonicalName: Crystallised Ginger, parent: Ginger}
 ---
@@ -204,7 +204,7 @@
 ---
 {canonicalName: Jerk Seasoning, tags: {SPICE, CARIBBEAN}, aliases: {Jerk, Jerk Spice, Jamaican jerk paste}, contains: {Allspice, Scotch Bonnet}}
 ---
-{canonicalName: Mace, tags: SPICE}
+{canonicalName: Mace, tags: {SPICE, EARTHY}}
 ---
 {canonicalName: Mixed Seeds, tags: {SPICE}}
 ---
@@ -214,15 +214,15 @@
 ---
 {canonicalName: Nutmeg, tags: {SPICE, SPICY}}
 ---
-{canonicalName: Paprika, tags: {SPICE, HUNGARIAN, SPANISH}}
+{canonicalName: Paprika, tags: {SPICE, HUNGARIAN, SPANISH, SWEET_NUTTY, WARM, SMOKY_SALTY}}
 ---
 {    canonicalName: Sweet Paprika, parent: Paprika}
 ---
-{canonicalName: Pepper, tags: {SPICE, SPICY}}
+{canonicalName: Pepper, tags: {SPICE, SPICY, PEPPERY}}
 ---
 {    canonicalName: Black Pepper, parent: Pepper, aliases: {Pepper Powder, Black Pepper, Black Peppercorn, Black Peppercorns, Ground Black Pepper}}
 ---
-{    canonicalName: White Pepper, parent: Pepper, aliases: White Peppercorns}
+{    canonicalName: White Pepper, parent: Pepper, tags: EARTHY, aliases: White Peppercorns}
 ---
 {canonicalName: Ras el hanout, tags: {MOROCCAN}, aliases: {Rass el hanout, Ras-el-hanout}, contains: {Ginger, Cardamom Powder, Mace, Cinnamon, Allspice}}
 ---
@@ -230,11 +230,11 @@
 ---
 {canonicalName: Star Anise, tags: {SPICE, CHINESE, FLORAL, SPICY}}
 ---
-{canonicalName: Turmeric, tags: {SPICE, INDIAN}, aliases: {Turmeric Powder, Tumeric, Haldi}}
+{canonicalName: Turmeric, tags: {SPICE, INDIAN, EARTHY}, aliases: {Turmeric Powder, Tumeric, Haldi}}
 ---
 
 
-{canonicalName: Mustard Seeds, tags: {SEED}, aliases: {Mustard Seed}}
+{canonicalName: Mustard Seeds, tags: {SEED, HOT}, aliases: {Mustard Seed}}
 ---
 {    canonicalName: Black Mustard Seeds, parent: Mustard Seeds, aliases: Black Mustard Seed}
 ---
@@ -256,13 +256,11 @@
 ---
 
 
-{canonicalName: Chilli, tags: {CHILLI}, aliases: {Chillies}}
+{canonicalName: Chilli, tags: {CHILLI, HOT}, aliases: {Chillies}}
 ---
 {    canonicalName: Chilli Flakes, parent: Chilli}
 ---
 {    canonicalName: Ancho Chile, parent: Chilli, tags: {MEXICAN, {SCOVILLE: 1000–1500, HEAT_5: 1}}, aliases: {Ancho Chilli, Ancho Chillies, Poblano}}
----
-{    canonicalName: Cayenne Pepper, parent: Chilli, tags: {{SCOVILLE: 30000–50000, HEAT_5: 3}}, aliases: {Cayenne Chilli, Cayenne chillies}}
 ---
 {    canonicalName: Chile de árbol, parent: Chilli, tags: {MEXICAN, {SCOVILLE: 15000-30000, HEAT_5: 3}}, aliases: {Arbol Chili, Chile de arbol}}
 ---
@@ -273,6 +271,8 @@
 {    canonicalName: Chipotle, parent: Chilli, tags: {MEXICAN, {SCOVILLE: 3000-10000, HEAT_5: 3}}, aliases: {Chipotle chili, Chilpotle}}
 ---
 {        canonicalName: Chipotle Paste, parent: Chipotle, tags: {SAUCE}}
+---
+{    canonicalName: Fresh Cayenne Pepper, parent: Chilli, tags: {{SCOVILLE: 30000–50000, HEAT_5: 3}}, aliases: {Cayenne Chilli, Cayenne chillies}}
 ---
 {    canonicalName: Green Chillies, parent: Chilli, tags: {INDIAN, THAI, CHINESE}, aliases: {Green Chilli}}
 ---
@@ -332,7 +332,7 @@
 ---
 {canonicalName: Aubergine, tags: {VEGETABLE, EARTHY}, aliases: {Aubergines}}
 ---
-{canonicalName: Beetroot, tags: {VEGETABLE, EARTHY}, aliases: {Beetroots}}
+{canonicalName: Beetroot, tags: {VEGETABLE}, aliases: {Beetroots}}
 ---
 {canonicalName: Broccoli, tags: {VEGETABLE}}
 ---
@@ -372,7 +372,7 @@
 ---
 {canonicalName: Celeriac, tags: VEGETABLE}
 ---
-{canonicalName: Celery, tags: {VEGETABLE, EARTHY}, aliases: {Celery Stick, Celery Sticks, Celery Stalk, Celery Stalks, Sticks Celery}}
+{canonicalName: Celery, tags: {VEGETABLE, UMAMI}, aliases: {Celery Stick, Celery Sticks, Celery Stalk, Celery Stalks, Sticks Celery}}
 ---
 {    canonicalName: Celery Heart, parent: Celery, aliases: Celery Hearts}
 ---
@@ -430,7 +430,7 @@
 ---
 {canonicalName: Mixed Leaves, tags: VEGETABLE}
 ---
-{canonicalName: Mushrooms, tags: {VEGETABLE, EARTHY}, aliases: Mushroom}
+{canonicalName: Mushrooms, tags: {VEGETABLE, EARTHY, UMAMI}, aliases: Mushroom}
 ---
 {    canonicalName: Button Mushrooms, parent: Mushrooms}
 ---
@@ -502,7 +502,7 @@
 ---
 {canonicalName: Rocket, tags: {VEGETABLE, SALAD_LEAF, ITALIAN}, aliases: {Rocket Leaves}}
 ---
-{canonicalName: Spinach, tags: {VEGETABLE, SALAD_LEAF}, aliases: {Spinach Leaves}}
+{canonicalName: Spinach, tags: {VEGETABLE, SALAD_LEAF, UMAMI}, aliases: {Spinach Leaves}}
 ---
 {    canonicalName: Baby Spinach, parent: Spinach, aliases: {Baby Spinach Leaves}}
 ---
@@ -604,13 +604,13 @@
 ---
 {    canonicalName: Apricot Conserve, parent: Apricot, tags: {CONDIMENT}, aliases: {Apricot Jam}}
 ---
-{canonicalName: Avocado, tags: {FRUIT, MEXICAN}, aliases: {Avocados}}
+{canonicalName: Avocado, tags: {FRUIT, MEXICAN, CREAMY}, aliases: {Avocados}}
 ---
 {canonicalName: Banana, tags: {FRUIT, CREAMY}, aliases: {Bananas}}
 ---
-{canonicalName: Blackberries, tags: {FRUIT}, aliases: {Blackberry}}
+{canonicalName: Blackberries, tags: {FRUIT, SUGAR_SWEET}, aliases: {Blackberry}}
 ---
-{canonicalName: Blackcurrants, tags: {FRUIT}, aliases: {Blackcurrant}}
+{canonicalName: Blackcurrants, tags: {FRUIT, TART}, aliases: {Blackcurrant}}
 ---
 {canonicalName: Blueberries, tags: {FRUIT, FLORAL}, aliases: Blueberry}
 ---
@@ -648,9 +648,9 @@
 ---
 {canonicalName: Figs, tags: {FRUIT}, aliases: {Fig}}
 ---
-{canonicalName: Gooseberries, tags: {FRUIT}, aliases: Gooseberry}
+{canonicalName: Gooseberries, tags: {FRUIT, TART}, aliases: Gooseberry}
 ---
-{canonicalName: Grape, tags: {FRUIT}}
+{canonicalName: Grape, tags: {FRUIT, TART}}
 ---
 {    canonicalName: Currant, parent: Grape, aliases: {Zante currant, Currants}}
 ---
@@ -658,13 +658,13 @@
 ---
 {    canonicalName: Sultana, parent: Grape, aliases: {Sultanas}}
 ---
-{canonicalName: Grapefruit, tags: {FRUIT, CITRUS}}
+{canonicalName: Grapefruit, tags: {FRUIT, CITRUS, TART}}
 ---
 {canonicalName: Greengage, tags: {FRUIT}}
 ---
 {canonicalName: Juniper, tags: {FRUIT}}
 ---
-{canonicalName: Lemon, tags: {FRUIT, CITRUS, LEMON}, aliases: {Lemons}}
+{canonicalName: Lemon, tags: {FRUIT, CITRUS, LEMON, TART}, aliases: {Lemons}}
 ---
 {    canonicalName: Lemon Curd, parent: Lemon, contains: {Eggs, Sugar}}
 ---
@@ -680,7 +680,7 @@
 ---
 {    canonicalName: Lime Wedge, parent: Lime, aliases: {Lime Wedges}}
 ---
-{canonicalName: Mango, tags: {FRUIT, TROPICAL, CREAMY}, aliases: {Mangoes}}
+{canonicalName: Mango, tags: {FRUIT, TROPICAL, SUGAR_SWEET, CREAMY}, aliases: {Mangoes}}
 ---
 {    canonicalName: Mango Chutney, parent: Mango, tags: {INDIAN, SAUCE}}
 ---
@@ -702,7 +702,7 @@
 ---
 {canonicalName: Papaya, tags: {FRUIT}, aliases: {Papaw, Pawpaw, Papayas}}
 ---
-{canonicalName: Passion Fruit, tags: {FRUIT, TROPICAL}, aliases: {Passion Fruits}}
+{canonicalName: Passion Fruit, tags: {FRUIT, TROPICAL, TART}, aliases: {Passion Fruits}}
 ---
 {canonicalName: Peach, tags: {FRUIT, CREAMY}, aliases: {Peaches}}
 ---
@@ -724,7 +724,7 @@
 ---
 {canonicalName: Quince, tags: {FRUIT}, aliases: Quinces}
 ---
-{canonicalName: Raspberries, tags: {FRUIT}, aliases: Raspberry}
+{canonicalName: Raspberries, tags: {FRUIT, TART}, aliases: Raspberry}
 ---
 {    canonicalName: Raspberry Jam, parent: Raspberries, tags: {CONDIMENT}, aliases: Raspberry Conserve}
 ---
@@ -738,7 +738,7 @@
 ---
 {canonicalName: Satsuma, tags: {FRUIT, CITRUS}}
 ---
-{canonicalName: Strawberries, tags: {FRUIT}, aliases: Strawberry}
+{canonicalName: Strawberries, tags: {FRUIT, SUGAR_SWEET}, aliases: Strawberry}
 ---
 {    canonicalName: Strawberry Jam, parent: Strawberries, tags: {CONDIMENT}, aliases: Strawberry Conserve}
 ---
@@ -902,29 +902,29 @@
 ---
 
 
-{canonicalName: Almond, tags: {NUT, ALMOND}, aliases: Almonds}
+{canonicalName: Almond, tags: {NUT, ALMOND, SWEET_NUTTY}, aliases: Almonds}
 ---
 {    canonicalName: Flaked Almonds, parent: Almond, tags: {BAKING}, aliases: {Flaked Almond}}
 ---
-{canonicalName: Cashew Nuts, tags: NUT, aliases: {Cashew, Cashews, Cashew Nut}}
+{canonicalName: Cashew Nuts, tags: {NUT, SWEET_NUTTY}, aliases: {Cashew, Cashews, Cashew Nut}}
 ---
-{canonicalName: Chestnuts, tags: {NUT}, aliases: {Chestnut}}
+{canonicalName: Chestnuts, tags: {NUT, SWEET_NUTTY}, aliases: {Chestnut}}
 ---
 {canonicalName: Hazelnuts, tags: {NUT}, aliases: Hazelnut}
 ---
 {canonicalName: Mixed Nuts, tags: NUT}
 ---
-{canonicalName: Peanuts, tags: {NUT}}
+{canonicalName: Peanuts, tags: {NUT, SWEET_NUTTY}}
 ---
 {    canonicalName: Peanut Butter, parent: Peanuts, tags: {CONDIMENT}}
 ---
 {        canonicalName: Smooth Peanut Butter, parent: Peanut Butter}
 ---
-{canonicalName: Pecan Nuts, tags: NUT, aliases: {Pecan, Pecans}}
+{canonicalName: Pecan Nuts, tags: {NUT, SWEET_NUTTY}, aliases: {Pecan, Pecans}}
 ---
-{canonicalName: Pistachios, tags: NUT, aliases: {Pistachio, pistachio nuts}}
+{canonicalName: Pistachios, tags: {NUT, SWEET_NUTTY}, aliases: {Pistachio, pistachio nuts}}
 ---
-{canonicalName: Walnuts, tags: {NUT}, aliases: {Walnut}}
+{canonicalName: Walnuts, tags: {NUT, SWEET_NUTTY, TANNIC}, aliases: {Walnut}}
 ---
 
 
@@ -1068,7 +1068,7 @@
 ---
 
 
-{canonicalName: Cream, tags: DAIRY}
+{canonicalName: Cream, tags: {DAIRY, CREAMY}}
 ---
 {    canonicalName: Clotted Cream, parent: Cream}
 ---
@@ -1098,7 +1098,7 @@
 ---
 {    canonicalName: Semi-skimmed Milk, parent: Milk}
 ---
-{canonicalName: Yogurt, tags: DAIRY}
+{canonicalName: Yogurt, tags: {DAIRY, CREAMY}}
 ---
 {    canonicalName: Greek Yogurt, parent: Yogurt, tags: GREEK, aliases: {Greek-style yogurt}}
 ---
@@ -1208,7 +1208,7 @@
 ---
 {canonicalName: Miso, tags: {JAPANESE, SAUCE}, aliases: Miso Paste}
 ---
-{canonicalName: Mustard, tags: {SAUCE}}
+{canonicalName: Mustard, tags: {SAUCE, HOT}}
 ---
 {    canonicalName: Dijon Mustard, parent: Mustard}
 ---
@@ -1222,7 +1222,7 @@
 ---
 {    canonicalName: Green Pesto, parent: Pesto, contains: Basil}
 ---
-{canonicalName: Soy Sauce, tags: {SAUCE, CHINESE}}
+{canonicalName: Soy Sauce, tags: {SAUCE, CHINESE, UMAMI}}
 ---
 {    canonicalName: Dark Soy Sauce, parent: Soy Sauce}
 ---
@@ -1234,7 +1234,7 @@
 ---
 {    canonicalName: Chicken Stock, parent: Stock, tags: {MEAT, POULTRY}, aliases: {Chicken Stock Cube}}
 ---
-{    canonicalName: Fish Stock, parent: Stock, tags: {FISH}}
+{    canonicalName: Fish Stock, parent: Stock, tags: {FISH, UMAMI}}
 ---
 {    canonicalName: Lamb Stock, parent: Stock, tags: {MEAT}}
 ---
@@ -1484,7 +1484,7 @@
 ---
 {canonicalName: Pork, tags: MEAT}
 ---
-{    canonicalName: Bacon, parent: Pork, tags: SMOKY_SALTY, aliases: {Bacon Rashers}}
+{    canonicalName: Bacon, parent: Pork, tags: {SMOKY_SALTY, UMAMI}, aliases: {Bacon Rashers}}
 ---
 {        canonicalName: Back Bacon, parent: Bacon, aliases: {back bacon rashers}}
 ---
@@ -1502,7 +1502,7 @@
 ---
 {    canonicalName: Gammon, parent: Pork}
 ---
-{    canonicalName: Ham, parent: Pork}
+{    canonicalName: Ham, parent: Pork, tags: {UMAMI}}
 ---
 {        canonicalName: Prosciutto, parent: Ham, tags: {ITALIAN, SMOKY_SALTY}}
 ---
