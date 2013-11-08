@@ -111,8 +111,6 @@ public class ItemsLoader {
         	throw new RuntimeException("Duplicate Name: " + name);
         }
 
-        inTopLevelNamesCache.add(name);
-
         //////////////////////////////////////////////////////////////////////////////
 
         final List<ICanonicalItem> validConstitutents = Lists.newArrayList();
@@ -131,6 +129,10 @@ public class ItemsLoader {
                 Throwables.propagate(e);  // Yuk!
             }
         }
+
+        inTopLevelNamesCache.add(name);
+
+        //////////////////////////////////////////////////////////////////////////////
 
         itemFactory.getOrCreate( name, new Supplier<ICanonicalItem>() {
 
