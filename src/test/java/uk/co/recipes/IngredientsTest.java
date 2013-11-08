@@ -175,9 +175,10 @@ public class IngredientsTest {
 		expectedLambTags.put( MeatAndFishTags.MEAT, true);
 		expectedLambTags.put( MeatAndFishTags.RED_MEAT, true);
 
-		final Map<ITag,Serializable> expectedBaconTags = Maps.newHashMap();
+		final Map<ITag,Serializable> expectedBaconTags = Maps.newLinkedHashMap();
 		expectedBaconTags.put( MeatAndFishTags.MEAT, true);
-        expectedBaconTags.put( FlavourTags.BRINE_SALT, true);
+        expectedBaconTags.put( FlavourTags.SMOKY_SALTY, true);
+        expectedBaconTags.put( FlavourTags.UMAMI, true);
 
 		assertThat( lamb.getTags(), is(expectedLambTags));
 		assertThat( lambNeck.getTags(), is(expectedLambTags));
@@ -269,17 +270,17 @@ public class IngredientsTest {
 
     @Test
     public void testHierarchicalTagPersistence() throws IOException {
-        assertThat( loadItem("coriander").getTags().toString(), is("{GREEN_GRASSY=true, HERB=true}"));
-        assertThat( loadItem("coriander_powder").getTags().toString(), is("{INDIAN=true, SPICE=true}"));
-        assertThat( loadItem("coriander_seeds").getTags().toString(), is("{FLORAL_FRUITY=true, INDIAN=true, SPICE=true}"));
-        assertThat( loadItem("smoked_haddock").getTags().toString(), is("{BRINE_SALT=true, FISH=true, SEAFOOD=true}"));
+        assertThat( loadItem("coriander").getTags().toString(), is("{GRASSY=true, HERB=true}"));
+        assertThat( loadItem("coriander_powder").getTags().toString(), is("{GRASSY=true, INDIAN=true, SPICE=true}"));
+        assertThat( loadItem("coriander_seeds").getTags().toString(), is("{INDIAN=true, SPICE=true}"));
+        assertThat( loadItem("smoked_haddock").getTags().toString(), is("{FISH=true, SEAFOOD=true, SMOKY_SALTY=true}"));
 
-        assertThat( searchService.findItemsByTag( FlavourTags.GREEN_GRASSY ), hasItem( loadItem("coriander") ));
-        assertThat( searchService.findItemsByTag( FlavourTags.GREEN_GRASSY ), not( hasItem( loadItem("coriander_seeds") )));
+        assertThat( searchService.findItemsByTag( FlavourTags.GRASSY ), hasItem( loadItem("coriander") ));
+        assertThat( searchService.findItemsByTag( FlavourTags.GRASSY ), not( hasItem( loadItem("coriander_seeds") )));
 
-        assertThat( searchService.findItemsByTag( FlavourTags.BRINE_SALT ), hasItem( loadItem("smoked_haddock") ));
+        assertThat( searchService.findItemsByTag( FlavourTags.SMOKY_SALTY ), hasItem( loadItem("smoked_haddock") ));
         assertThat( searchService.findItemsByTag( MeatAndFishTags.FISH ), hasItem( loadItem("smoked_haddock") ));
-        assertThat( searchService.findItemsByTag( FlavourTags.MARINE ), not( hasItem( loadItem("smoked_haddock") )));
+//        assertThat( searchService.findItemsByTag( FlavourTags.SMOKY_SALTY ), not( hasItem( loadItem("smoked_haddock") )));
     }
 
     private ICanonicalItem loadItem( final String inName) throws IOException {

@@ -84,7 +84,7 @@
 ---
 {    canonicalName: Snipped Chives, parent: Chives}
 ---
-{canonicalName: Coriander, tags: {HERB}, aliases: {Cilantro, Coriander Leaves, Corriander}}
+{canonicalName: Coriander, tags: {HERB, GRASSY}, aliases: {Cilantro, Coriander Leaves, Corriander}}
 ---
 {canonicalName: Curry Leaves, tags: {HERB, INDIAN}, aliases: {Curry Leaf}}
 ---
@@ -174,7 +174,7 @@
 ---
 {canonicalName: Coriander Powder, parent: Coriander, tags: {-HERB, SPICE, INDIAN}, aliases: {Ground Coriander}}
 ---
-{canonicalName: Coriander Seeds, parent: Coriander, tags: {-HERB, SPICE, INDIAN}, aliases: {Coriander Seed, Dhania}}
+{canonicalName: Coriander Seeds, parent: Coriander, tags: {-HERB, -GRASSY, SPICE, INDIAN}, aliases: {Coriander Seed, Dhania}}
 ---
 {canonicalName: Cumin, tags: {SPICE, EARTHY, WARM, INDIAN}, aliases: {Ground Cumin, Cumin Powder}}
 ---
