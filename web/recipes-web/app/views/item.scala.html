@@ -27,6 +27,14 @@
 	    <div class="wrapper">
 	        <h1>@item.getCanonicalName() <span style="padding-left: 30px">@for(tagName <- item.getTagNamesForDisplay()){ <span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}</span></h1>
 	    </div>
+	    @if( item.getConstituents.size() != 0) {
+	    <div style="line-height: 24px; padding: 12px 0 3px 20px">Contains:
+	      @for((eachConstituent, index) <- item.getConstituents().zipWithIndex) {
+	        @if(index > 0) { &nbsp;&mdash; }
+	        <span><a href="/items/@eachConstituent.getCanonicalName()">@eachConstituent.getCanonicalName()</a>&nbsp;@for(tagName <- eachConstituent.getTagNamesForDisplay()){&nbsp;<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}</span>
+	      }
+	    </div>
+	    }
 	</section>
 
 	  <div id="item-ext-img-ctr" class="pull-right" style="margin-top: 10px; display: none">
