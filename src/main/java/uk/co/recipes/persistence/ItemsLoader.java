@@ -25,6 +25,7 @@ import org.yaml.snakeyaml.Yaml;
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Quantity;
 import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.ITag;
 import uk.co.recipes.parse.IngredientParser;
 import uk.co.recipes.tags.TagUtils;
 
@@ -180,7 +181,13 @@ public class ItemsLoader {
 
 	private void processTagValue( final ICanonicalItem ioItem, final String inTagName, final Serializable inValue) {
         if (inTagName.startsWith("-")) {
-        	((CanonicalItem) ioItem).addCancelTag( TagUtils.forName( inTagName.substring(1)) );
+        	final ITag cancelTag = TagUtils.forName( inTagName.substring(1));
+
+        	if (!ioItem.getTags().keySet().contains(ioItem)) {
+        		LOG.warn("Possibly unnecessary Cancel tag '" + cancelTag + "' added to " + ioItem);
+        	}
+
+        	((CanonicalItem) ioItem).addCancelTag(cancelTag);
         }
         else {
         	ioItem.addTag( TagUtils.forName(inTagName), inValue);
