@@ -144,7 +144,7 @@
 ---
 {canonicalName: Cajun Seasoning, tags: {SPICE, USA}, aliases: {Cumin, Coriander Powder, Paprika, Salt}}
 ---
-{canonicalName: Caraway Seeds, tags: {SPICE, ANISEED}, aliases: {Caraway Seed}}
+{canonicalName: Caraway Seeds, tags: {SPICE, ANISEED}, aliases: {Caraway Seed}, baseAmt: 5g}
 ---
 {canonicalName: Cardamom, tags: {SPICE, INDIAN, SPICY}, aliases: {Cardamom Pods}}
 ---
@@ -246,7 +246,7 @@
 ---
 {canonicalName: Pine Nuts, tags: {SEED}}
 ---
-{canonicalName: Poppy Seeds, tags: {BAKING, SEED}, aliases: {Poppy Seed}}
+{canonicalName: Poppy Seeds, tags: {BAKING, SEED}, aliases: {Poppy Seed}, baseAmt: 10g}
 ---
 {canonicalName: Pumpkin Seeds, tags: {SEED}}
 ---
@@ -254,7 +254,7 @@
 ---
 {canonicalName: Sizzling Seeds, tags: {SEED, INDIAN}}
 ---
-{canonicalName: Sunflower Seeds, tags: {SEED}}
+{canonicalName: Sunflower Seeds, tags: {SEED}, baseAmt: 10g}
 ---
 
 
@@ -638,7 +638,7 @@
 ---
 {    canonicalName: Desiccated Coconut, parent: Coconut, tags: BAKING}
 ---
-{canonicalName: Cranberries, tags: {FRUIT}, aliases: {Cranberry}}
+{canonicalName: Cranberries, tags: {FRUIT, TART}, aliases: {Cranberry}}
 ---
 {    canonicalName: Cranberry Juice, parent: Cranberries}
 ---
@@ -654,11 +654,11 @@
 ---
 {canonicalName: Grape, tags: {FRUIT, TART}}
 ---
-{    canonicalName: Currant, parent: Grape, aliases: {Zante currant, Currants}}
+{    canonicalName: Currant, parent: Grape, tags: {-TART}, aliases: {Zante currant, Currants}}
 ---
-{    canonicalName: Raisin, parent: Grape, aliases: {Raisins}}
+{    canonicalName: Raisin, parent: Grape, tags: {-TART}, aliases: {Raisins}}
 ---
-{    canonicalName: Sultana, parent: Grape, aliases: {Sultanas}}
+{    canonicalName: Sultana, parent: Grape, tags: {-TART}, aliases: {Sultanas}}
 ---
 {canonicalName: Grapefruit, tags: {FRUIT, CITRUS, TART}}
 ---
@@ -724,7 +724,7 @@
 ---
 {canonicalName: Pomello, tags: {FRUIT, CITRUS}}
 ---
-{canonicalName: Quince, tags: {FRUIT}, aliases: Quinces}
+{canonicalName: Quince, tags: {FRUIT, TART}, aliases: Quinces}
 ---
 {canonicalName: Raspberries, tags: {FRUIT, TART}, aliases: Raspberry}
 ---
@@ -744,7 +744,7 @@
 ---
 {    canonicalName: Strawberry Jam, parent: Strawberries, tags: {CONDIMENT}, aliases: Strawberry Conserve}
 ---
-{canonicalName: Tamarind, tags: {FRUIT}}
+{canonicalName: Tamarind, tags: {FRUIT, TART}}
 ---
 {    canonicalName: Tamarind Paste, parent: Tamarind, tags: {SAUCE}}
 ---
@@ -1081,6 +1081,8 @@
 {    canonicalName: Soured Cream, parent: Cream}
 ---
 {    canonicalName: Whipping Cream, parent: Cream}
+---
+{canonicalName: Custard, tags: {DAIRY, CREAMY}, contains: {Milk, Egg Yolks}}
 ---
 {canonicalName: Ice Cream, tags: DAIRY, contains: Cream}
 ---
