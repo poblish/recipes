@@ -180,7 +180,7 @@
 ---
 {    canonicalName: Cumin Seeds, parent: Cumin, aliases: {Cumin Seed, Jeera}, baseAmt: 1 tsp}
 ---
-{canonicalName: Curry Powder, tags: {SPICE, INDIAN}, contains: {Turmeric, Chilli powder, Coriander Powder, Cumin}}
+{canonicalName: Curry Powder, tags: {SPICE, INDIAN, SOUTH_ASIAN}, contains: {Turmeric, Chilli powder, Coriander Powder, Cumin}}
 ---
 {    canonicalName: Madras Curry Powder, parent: Curry Powder}
 ---
@@ -201,6 +201,8 @@
 {    canonicalName: Root Ginger, parent: Ginger}
 ---
 {    canonicalName: Stem Ginger, parent: Ginger}
+---
+{canonicalName: Idli Podi, tags: {SPICE, SOUTH_ASIAN}, contains: {Chickpeas, Black Lentils, Red Chillies, Sesame Seeds, Asafoetida}}
 ---
 {canonicalName: Jerk Seasoning, tags: {SPICE, CARIBBEAN}, aliases: {Jerk, Jerk Spice, Jamaican jerk paste}, contains: {Allspice, Scotch Bonnet}}
 ---
@@ -224,7 +226,7 @@
 ---
 {    canonicalName: White Pepper, parent: Pepper, tags: EARTHY, aliases: White Peppercorns}
 ---
-{canonicalName: Ras el hanout, tags: {MOROCCAN}, aliases: {Rass el hanout, Ras-el-hanout}, contains: {Ginger, Cardamom Powder, Mace, Cinnamon, Allspice}}
+{canonicalName: Ras el hanout, tags: {SPICE, NORTH_AFRICAN}, aliases: {Rass el hanout, Ras-el-hanout}, contains: {Ginger, Cardamom Powder, Mace, Cinnamon, Allspice}}
 ---
 {canonicalName: Saffron, tags: {SPICE}}
 ---
@@ -558,7 +560,7 @@
 ---
 {canonicalName: Cannellini Beans, tags: {PULSE, ITALIAN}, aliases: Cannellini}
 ---
-{canonicalName: Chickpeas, tags: PULSE, aliases: {Chickpea, Garbanzo Bean}}
+{canonicalName: Chickpeas, tags: PULSE, aliases: {Chickpea, Garbanzo Bean, Channa dal}}
 ---
 {canonicalName: Haricot Beans, tags: PULSE, aliases: {Navy Bean}, aliases: Haricot}
 ---
@@ -566,7 +568,7 @@
 ---
 {canonicalName: Lentils, tags: PULSE, aliases: {Lentil}}
 ---
-{    canonicalName: Black Lentils, parent: Lentils, tags: INDIAN, aliases: Black Gram}
+{    canonicalName: Black Lentils, parent: Lentils, tags: INDIAN, aliases: {Black Gram, urad dal}}
 ---
 {    canonicalName: Green Lentils, parent: Lentils}
 ---
@@ -1240,7 +1242,7 @@
 ---
 {    canonicalName: Vegetable Stock, parent: Stock, tags: {VEGETABLE}, aliases: {Vegetable Stock Cube}}
 ---
-{canonicalName: Tahini, tags: {SAUCE}, contains: Sesame Seeds, aliases: Tahini Paste}
+{canonicalName: Tahini, tags: {SAUCE, MIDDLE_EASTERN, NORTH_AFRICAN, GREEK, TURKISH}, contains: Sesame Seeds, aliases: Tahini Paste}
 ---
 {canonicalName: Tabasco Sauce, tags: {SAUCE, USA}}
 ---
