@@ -169,6 +169,20 @@ public class CanonicalItem implements ICanonicalItem {
 	    return !copy.isEmpty();
 	}
 
+	public boolean hasUnecessaryCancelTags() {
+	    final Set<ITag> cancelTagsCopy = Sets.newHashSet(cancelTags);
+
+		if ( parent == null) {
+			cancelTagsCopy.removeAll( tags.keySet() );
+		}
+		else {
+			cancelTagsCopy.removeAll( parent.getTags().keySet() );  // No, must be recursive!!!
+			cancelTagsCopy.removeAll( tags.keySet() );
+		}
+
+	    return !cancelTagsCopy.isEmpty();
+	}
+
 	@JsonIgnore  // Prevent Jackson insanity
 	@Override
 	public List<String> getTagNamesForDisplay() {

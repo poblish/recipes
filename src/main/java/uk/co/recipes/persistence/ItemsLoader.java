@@ -25,7 +25,6 @@ import org.yaml.snakeyaml.Yaml;
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Quantity;
 import uk.co.recipes.api.ICanonicalItem;
-import uk.co.recipes.api.ITag;
 import uk.co.recipes.parse.IngredientParser;
 import uk.co.recipes.tags.TagUtils;
 
@@ -156,6 +155,12 @@ public class ItemsLoader {
                     LOG.warn( "Overlapping Tags for: " + newItem);
                 }
 
+                if (((CanonicalItem) newItem).hasUnecessaryCancelTags()) {
+                    LOG.warn( "Unnecessary Cancel tags (" + ((CanonicalItem) newItem).getCancelTags() + ") among: " + newItem);
+                }
+
+                ///////////////////////////////////////////////////////////////////////
+
                 for ( String eachAlias : yamlObjectToStrings( inMap.get("aliases") )) {
                     ((CanonicalItem) newItem).aliases.add(eachAlias);
                 }
@@ -183,13 +188,7 @@ public class ItemsLoader {
 
 	private void processTagValue( final ICanonicalItem ioItem, final String inTagName, final Serializable inValue) {
         if (inTagName.startsWith("-")) {
-        	final ITag cancelTag = TagUtils.forName( inTagName.substring(1));
-
-        	if (!ioItem.getTags().keySet().contains(ioItem)) {
-        		LOG.warn("Possibly unnecessary Cancel tag '" + cancelTag + "' added to " + ioItem);
-        	}
-
-        	((CanonicalItem) ioItem).addCancelTag(cancelTag);
+        	((CanonicalItem) ioItem).addCancelTag( TagUtils.forName( inTagName.substring(1)) );
         }
         else {
         	ioItem.addTag( TagUtils.forName(inTagName), inValue);

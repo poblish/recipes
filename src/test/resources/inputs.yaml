@@ -838,7 +838,7 @@
 ---
 {canonicalName: Muffin, tags: {BREAD, ENGLISH, USA}, aliases: Muffins}
 ---
-{    canonicalName: English Muffin, parent: Muffin, tags: {ENGLISH, -USA}, aliases: English Muffins}
+{    canonicalName: English Muffin, parent: Muffin, tags: {-USA}, aliases: English Muffins}
 ---
 {canonicalName: Naan Bread, tags: {BREAD, INDIAN}, aliases: Naan}
 ---
