@@ -438,7 +438,11 @@
 ---
 {    canonicalName: Chestnut Mushrooms, parent: Mushrooms}
 ---
+{    canonicalName: Field Mushrooms, parent: Mushrooms}
+---
 {    canonicalName: Porcini Mushrooms, parent: Mushrooms}
+---
+{    canonicalName: Portobello Mushrooms, parent: Mushrooms}
 ---
 {    canonicalName: Shiitake Mushrooms, parent: Mushrooms, tags: JAPANESE}
 ---
@@ -578,7 +582,7 @@
 ---
 {        canonicalName: Split Red Lentils, parent: Red Lentils}
 ---
-{canonicalName: Pea, tags: {PULSE, VEGETABLE}, aliases: {Peas}}
+{canonicalName: Pea, tags: {PULSE, VEGETABLE, UMAMI}, aliases: {Peas, petits pois}}
 ---
 {    canonicalName: Garden Peas, parent: Pea}
 ---
@@ -652,7 +656,7 @@
 ---
 {canonicalName: Gooseberries, tags: {FRUIT, TART}, aliases: Gooseberry}
 ---
-{canonicalName: Grape, tags: {FRUIT, TART}}
+{canonicalName: Grape, tags: {FRUIT, TART}, aliases: Grapes}
 ---
 {    canonicalName: Currant, parent: Grape, tags: {-TART}, aliases: {Zante currant, Currants}}
 ---
@@ -914,7 +918,7 @@
 ---
 {canonicalName: Mixed Nuts, tags: NUT}
 ---
-{canonicalName: Peanuts, tags: {NUT, SWEET_NUTTY}}
+{canonicalName: Peanuts, tags: {NUT, SWEET_NUTTY}, aliases: Peanut}
 ---
 {    canonicalName: Peanut Butter, parent: Peanuts, tags: {CONDIMENT}}
 ---
@@ -1028,6 +1032,8 @@
 ---
 {canonicalName: Fontina, tags: {DAIRY, CHEESE, ITALIAN}}
 ---
+{canonicalName: Fromage frais, tags: {DAIRY, CHEESE, FRENCH}, aliases: Fromage blanc}
+---
 {canonicalName: Goat's Cheese, tags: {DAIRY, CHEESE}}
 ---
 {canonicalName: Grana Padano, tags: {DAIRY, CHEESE, ITALIAN}}
@@ -1042,7 +1048,7 @@
 ---
 {canonicalName: Mozzarella, tags: {DAIRY, CHEESE, ITALIAN}}
 ---
-{canonicalName: Parmesan, tags: {DAIRY, CHEESE, ITALIAN}}
+{canonicalName: Parmesan, tags: {DAIRY, CHEESE, ITALIAN, UMAMI}}
 ---
 {canonicalName: Paneer, tags: {DAIRY, CHEESE, INDIAN}, aliases: {Paneer Cheese}}
 ---
@@ -1100,13 +1106,13 @@
 ---
 {    canonicalName: Semi-skimmed Milk, parent: Milk}
 ---
-{canonicalName: Yogurt, tags: {DAIRY, CREAMY}}
+{canonicalName: Yogurt, tags: {DAIRY, CREAMY}, aliases: Yoghurt}
 ---
 {    canonicalName: Greek Yogurt, parent: Yogurt, tags: GREEK, aliases: {Greek-style yogurt}}
 ---
 {    canonicalName: Low Fat Yogurt, parent: Yogurt}
 ---
-{    canonicalName: Natural Yogurt, parent: Yogurt}
+{    canonicalName: Natural Yogurt, parent: Yogurt, aliases: Natural Yoghurt}
 ---
 {    canonicalName: Soya Yogurt, parent: Yogurt}
 ---
@@ -1200,6 +1206,8 @@
 ---
 {    canonicalName: Thai Red Curry Paste, tags: THAI, parent: Curry Paste, aliases: {Red Thai Curry Paste, Red Curry Paste}}
 ---
+{    canonicalName: Tikka Masala Paste, tags: INDIAN, parent: Curry Paste, aliases: {Tikka paste}}
+---
 {canonicalName: Fish Sauce, tags: {FISH, SAUCE, THAI, VIETNAMESE}}
 ---
 {canonicalName: Guacamole, tags: {SAUCE, MEXICAN}, contains: {Avocado, Jalapeño, Lime}}
@@ -1208,7 +1216,7 @@
 ---
 {canonicalName: Mayonnaise, tags: {EGG, SAUCE}}
 ---
-{canonicalName: Miso, tags: {JAPANESE, SAUCE}, aliases: Miso Paste}
+{canonicalName: Miso, tags: {JAPANESE, SAUCE, UMAMI}, aliases: Miso Paste}
 ---
 {canonicalName: Mustard, tags: {SAUCE, HOT}}
 ---
@@ -1294,6 +1302,8 @@
 ---
 
 
+{canonicalName: Clams, tags: {SEAFOOD, UMAMI}, aliases: Clam}
+---
 {canonicalName: Crabmeat, tags: SEAFOOD, aliases: Crab}
 ---
 {    canonicalName: Brown Crabmeat, parent: Crabmeat}
@@ -1302,7 +1312,7 @@
 ---
 {canonicalName: Mussels, tags: SEAFOOD}
 ---
-{canonicalName: Oysters, tags: {SEAFOOD}, aliases: Oyster}
+{canonicalName: Oysters, tags: {SEAFOOD, UMAMI}, aliases: Oyster}
 ---
 {canonicalName: Prawns, tags: SEAFOOD}
 ---
@@ -1310,11 +1320,17 @@
 ---
 {    canonicalName: Tiger Prawns, parent: Prawns}
 ---
+{canonicalName: Scallops, tags: {SEAFOOD, UMAMI}, aliases: Scallop}
+---
+{canonicalName: Shrimps, tags: {SEAFOOD}, aliases: Shrimp}
+---
+{    canonicalName: Potted Shrimp, parent: Shrimps, aliases: Potted Shrimps}
+---
 
 
 {canonicalName: Oily Fish, tags: {FISH, SEAFOOD}}
 ---
-{    canonicalName: Anchovy, parent: Oily Fish, tags: {}, aliases: {Anchovies}}
+{    canonicalName: Anchovy, parent: Oily Fish, tags: {SMOKY_SALTY, UMAMI}, aliases: {Anchovies}}
 ---
 {        canonicalName: Anchovy Fillet, parent: Anchovy, aliases: {Anchovy Fillets}}
 ---
@@ -1328,6 +1344,8 @@
 ---
 {    canonicalName: Salmon, parent: Oily Fish}
 ---
+{        canonicalName: Gravlax, parent: Salmon, aliases: {Gravadlax, gravad lax}}
+---
 {        canonicalName: Hot-smoked Salmon, parent: Salmon}
 ---
 {        canonicalName: Salmon Fillet, parent: Salmon, aliases: {Salmon Fillets}}
@@ -1340,7 +1358,7 @@
 ---
 {    canonicalName: Sardines, parent: Oily Fish, aliases: {Sardine}}
 ---
-{    canonicalName: Tuna, parent: Oily Fish}
+{    canonicalName: Tuna, tags: UMAMI, parent: Oily Fish}
 ---
 {        canonicalName: Tuna Steaks, parent: Tuna, aliases: {Tuna Steak}}
 ---
@@ -1525,6 +1543,10 @@
 {        canonicalName: Pork Shoulder Steaks, parent: Pork Shoulder}
 ---
 {    canonicalName: Pork Tenderloin, parent: Pork, aliases: {Pork Tenderloins}}
+---
+{canonicalName: Pheasant, tags: {MEAT, POULTRY, WHITE_MEAT}, aliases: Pheasants}
+---
+{canonicalName: Quail, tags: {MEAT, POULTRY, WHITE_MEAT}, aliases: Quails}
 ---
 {canonicalName: Rabbit, tags: {MEAT, WHITE_MEAT}, aliases: Rabbits}
 ---

@@ -4,6 +4,7 @@ blanched
 boiled
 boiling
 boneless
+bundle
 can
 cheap
 chilled
@@ -43,6 +44,7 @@ grated
 grilled
 ground
 half-fat
+homemade
 hot
 juicy
 just-ripe
@@ -92,6 +94,8 @@ roughly
 salted
 semi-dried
 shelled
+shop-bought
+shredded
 sized
 skinless
 skinned
@@ -106,6 +110,7 @@ sprigs
 sprigs of
 steamed
 stoned
+sugar-free
 sustainable
 thick
 thinly sliced
