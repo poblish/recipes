@@ -1,6 +1,8 @@
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
+import play.api.mvc.EssentialFilter;
+import play.filters.gzip.GzipFilter;
 import play.mvc.Call;
 import uk.co.recipes.DaggerModule;
 
@@ -91,7 +93,13 @@ public class Global extends GlobalSettings {
 		return graph.get(inClass);
 	}
 
-	@Module( includes=DaggerModule.class, injects={controllers.Application.class, controllers.Recipes.class, controllers.Search.class, controllers.Tags.class, controllers.Users.class, controllers.Items.class})
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends EssentialFilter> Class<T>[] filters() {
+		return new Class[]{ GzipFilter.class };
+	}
+
+    @Module( includes=DaggerModule.class, injects={controllers.Application.class, controllers.Recipes.class, controllers.Search.class, controllers.Tags.class, controllers.Users.class, controllers.Items.class})
 	static class RecipesWebAppModule {
 		
 	}

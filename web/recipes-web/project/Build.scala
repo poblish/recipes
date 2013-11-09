@@ -11,7 +11,8 @@ object ApplicationBuild extends Build {
 
   val appDependencies = Seq(
     // Add your project dependencies here,
-    javaCore,
+    javaCore, filters,
+
     "uk.co.recipes" % "recipes-domain" % "0.0.1-SNAPSHOT" exclude("org.scala-stm", "scala-stm_2.10.0"),
     "com.squareup.dagger" % "dagger-compiler" % "1.1.0",
     "com.codahale.metrics" % "metrics-core" % "3.0.1",
