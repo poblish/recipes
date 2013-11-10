@@ -37,14 +37,9 @@ import com.google.common.base.Throwables;
  */
 public class IngredientParser {
 
-	@Inject
-	EsItemFactory itemFactory;
-
+	@Inject EsItemFactory itemFactory;
 	@Inject NameAdjuster nameAdjuster;
-
-	@Inject
-	MetricRegistry metrics;
-
+	@Inject MetricRegistry metrics;
 	@Inject OptionalNameSplitter optSplitter;
 
     private static final String DEC_FRAC_NUMBER_BIT = "(?:[0-9\\.]+ x )?[0-9\\.]*(?: ?[0-9]/[0-9])?";
