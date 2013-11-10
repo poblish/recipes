@@ -96,7 +96,7 @@ public class Quantity implements IQuantity {
 		return number == other.number && Objects.equal( nnQuantity, other.nnQuantity) && Objects.equal( units, other.units);
 	}
 
-	public String toString() {
+	public String buildString( final boolean inDisplayVersion) {
 		if ( units == Units.INSTANCES) {
 			if ( nnQuantity == NonNumericQuantities.ANY_AMOUNT) {
 				return "Some";
@@ -106,10 +106,11 @@ public class Quantity implements IQuantity {
 		}
 
 		if ( nnQuantity != null) {
-			return nnQuantity + " " + units;
+			return nnQuantity + ( inDisplayVersion ? units.getDisplayString(false) : " " + units.toString());
 		}
 
-		return tweakDouble(number) + " " + units;
+		final String numValue = tweakDouble(number);
+		return numValue + ( inDisplayVersion ? units.getDisplayString( !numValue.equals("1") ) : " " + units.toString());
 	}
 
 	private String tweakDouble( final double inVal) {
@@ -121,5 +122,9 @@ public class Quantity implements IQuantity {
 		}
 
 		return numStr;
+	}
+
+	public String toString() {
+		return buildString(false);
 	}
 }
