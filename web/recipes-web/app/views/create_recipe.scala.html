@@ -81,7 +81,11 @@
 	</div>  <!-- <div class="row"> -->
 
 <br/>
+	@if( currentUser != null) {
 	<button type="button" class="btn btn-primary btn-lg" onclick="createNewRecipe()"><span class="glyphicon glyphicon-ok"></span> Create Recipe</button>
+	} else {
+	<button type="button" class="btn btn-warning btn-lg" disabled="disabled"><span class="glyphicon glyphicon-ban-circle"></span> Please log in to Create Recipe</button>
+	}
 
 	@_addIngredientPicker("addIngredient", false)
 }
