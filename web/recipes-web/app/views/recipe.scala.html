@@ -203,7 +203,7 @@
 		@if( similarities.size() == 0) {
 			<p>Sorry, no Similar recipes could be found</p>
 		} else {
-			<div class="container tab-pane active" id="similarRecipes">
+			<div class="tab-pane active" id="similarRecipes">
 			@for(( eachRecipe, index) <- similarities.zipWithIndex) {
 			
 			@if((index % 2) == 0) {
