@@ -131,8 +131,17 @@ public class ParseIngredientsTest {
         assertThat( parser.parseItemName("Green & Black's white chocolate"), is(true));
         assertThat( parser.parseItemName("Green & Black's white chocolate"), is(true));
         assertThat( parser.parseItemName("boneless, skinless chicken breasts"), is(true));
+        assertThat( parser.parseItemName("skinless, boneless chicken breasts"), is(true));
+        assertThat( parser.parseItemName("Large free-range eggs"), is(true));
+        assertThat( parser.parseItemName("Large, free-range eggs"), is(true));
+        assertThat( parser.parseItemName("Small, free-range eggs"), is(true));
+        assertThat( parser.parseItemName("Unknownprefix, free-range eggs"), is(false));
         assertThat( parser.parseItemName("1855 Cabernet Wine"), is(false));  // *Should* work, but we're not ready to deal with numbers mixed up with names (yet)
         assertThat( parser.parseItemName("70% plain chocolate"), is(false));  // *Should* work, but we're not ready to deal with numbers mixed up with names (yet)
+
+//        assertThat( parser.parseItemName("1 Cup/300ml Stock"), is(true));  // Won't work, as these have Q + name!
+//        assertThat( parser.parseItemName("2 Cups/600ml Stock"), is(true));
+//        assertThat( parser.parseItemName("4 Cups/1200ml Stock"), is(true));
     }
 
     @Test
