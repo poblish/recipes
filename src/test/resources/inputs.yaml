@@ -558,6 +558,8 @@
 ---
 {canonicalName: Beansprouts, tags: {PULSE, ASIAN}, aliases: Beansprout}
 ---
+{canonicalName: Black Beans, tags: {PULSE, CHINESE}, aliases: {Black Bean, Douchi}, contains: Soybean}
+---
 {canonicalName: Borlotti Beans, tags: {PULSE, ITALIAN}}
 ---
 {canonicalName: Broad Beans, tags: PULSE, aliases: {Fava Bean, Faba Bean}}
@@ -589,6 +591,10 @@
 {    canonicalName: Garden Peas, parent: Pea}
 ---
 {    canonicalName: Snap Peas, parent: Pea, aliases: {sugar snap peas}}
+---
+{canonicalName: Pinto beans, tags: {PULSE, USA, MEXICAN}}
+---
+{canonicalName: Refried beans, tags: {PULSE, USA, MEXICAN}, contains: Pinto beans}
 ---
 {canonicalName: Soybean, tags: {PULSE}, aliases: {Soya bean, Soya}}
 ---
@@ -1185,6 +1191,8 @@
 
 
 {canonicalName: Barbecue Sauce, tags: {SAUCE}}
+---
+{canonicalName: Black Bean Sauce, tags: {SAUCE, CHINESE}, aliases: {Black Beans Sauce, black bean stir-fry sauce}, contains: Black Beans}
 ---
 {canonicalName: Chilli Sauce, tags: {SAUCE, CHILLI}}
 ---

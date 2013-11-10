@@ -22,6 +22,9 @@ import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.Units;
 import uk.co.recipes.cats.Categorisation;
+import uk.co.recipes.parse.DeferralStatus;
+import uk.co.recipes.parse.IDeferredIngredientHandler;
+import uk.co.recipes.parse.IParsedIngredientHandler;
 import uk.co.recipes.parse.IngredientParser;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
@@ -65,6 +68,23 @@ public class ParseIngredientsTest {
 	public void loadIngredientsFromYaml() throws InterruptedException, IOException {
 		GRAPH.get( ItemsLoader.class ).load();
 		Thread.sleep(1000);
+	}
+
+	@Test
+	public void testCompleteParse() {
+		parser.parse( "415g can refried beans (we used Discovery)", new IParsedIngredientHandler() {
+
+			@Override
+			public void foundIngredient( IIngredient ingr) {
+				assertThat( ingr.toString(), is("Ingredient{q=415 GRAMMES, item=CanonicalItem{name=Refried beans, tags={MEXICAN=true, PULSE=true, USA=true}}, notes={en=[(we used Discovery)]}}"));
+			}
+		}, new IDeferredIngredientHandler() {
+
+			@Override
+			public void deferIngredient( DeferralStatus status) {
+				// NOOP
+			}
+		});
 	}
 
 	@Test
