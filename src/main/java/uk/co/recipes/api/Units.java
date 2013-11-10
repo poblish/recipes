@@ -22,7 +22,11 @@ public enum Units implements IUnit {
 
 	DASH, FEW, LITTLE, SPLASHES(" splash", " splashes"), DRIZZLE, SQUEEZE,
 
-	BUNCHES, BIG_BUNCHES, SMALL_BUNCHES, DROP, HANDFUL, PINCH, BIG_PINCH, KNOB, CLOVE, STICK, PIECE, GLASS, BOTTLE, CUP, POT, JAR, PACKET, QUART, LITRE
+	BUNCHES(" bunch"),
+	BIG_BUNCHES,
+	SMALL_BUNCHES(" small bunch"),
+
+	DROP, HANDFUL, PINCH, BIG_PINCH, KNOB, CLOVE, STICK, PIECE, GLASS, BOTTLE, CUP, POT, JAR, PACKET, QUART, LITRE
 
 	;
 
@@ -30,7 +34,7 @@ public enum Units implements IUnit {
 	private final String displayPlural;
 
 	Units() {
-		this.displaySingular = this.displayPlural = " " + this.name().toLowerCase();
+		this.displaySingular = this.displayPlural = " " + this.name().toLowerCase().replace('_', ' ');
 	}
 
 	Units( final String displaySingular) {
