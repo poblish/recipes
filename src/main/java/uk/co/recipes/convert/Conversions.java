@@ -43,8 +43,9 @@ public class Conversions {
     private final static Table<ItemUnit,Locale,Unit<?>>  VOLUME_UNITS_TABLE = HashBasedTable.create();
 
     static {
-    	final Unit<Volume> tsp_UK = NonSI.LITRE.divide(1000).times(5.91939047);
-    	final Unit<Volume> tsp_US = NonSI.LITRE.divide(1000).times(4.92892159);
+    	final Unit<Volume> millilitre = NonSI.LITRE.divide(1000);
+    	final Unit<Volume> tsp_UK = millilitre.times(5.91939047);
+    	final Unit<Volume> tsp_US = millilitre.times(4.92892159);
 
     	defaults( Units.TSP, tsp_UK);
     	defaults( Units.ROUNDED_TBSP, tsp_UK.times(ROUNDED_FACTOR));
@@ -52,6 +53,7 @@ public class Conversions {
     	defaults( Units.TBSP, tsp_UK.times(3));
 
     	defaults( Units.GRAMMES, SI.GRAM);
+    	defaults( Units.ML, millilitre);
 
         override( Locale.US, new ItemUnit( Units.CUP, "Plain Flour"), SI.KILOGRAM.times(0.125));
         override( Locale.US, new ItemUnit( Units.CUP, "Bread Flour"), SI.KILOGRAM.times(0.127));
