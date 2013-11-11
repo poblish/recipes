@@ -644,7 +644,7 @@
 ---
 {canonicalName: Coconut, tags: {FRUIT, NUT, TROPICAL, ASIAN, CREAMY}, aliases: {Coconut grated}}
 ---
-{    canonicalName: Coconut Milk, parent: Coconut}
+{    canonicalName: Coconut Milk, parent: Coconut, baseAmt: 100ml}
 ---
 {    canonicalName: Coconut Cream, parent: Coconut}
 ---
@@ -774,9 +774,9 @@
 ---
 {    canonicalName: Chickpea Flour, parent: Flour, aliases: Gram Flour}
 ---
-{    canonicalName: Cornflour, parent: Flour}
+{    canonicalName: Cornflour, parent: Flour, aliases: {Cornstarch, Corn starch, maize starch}, contains: Maize}
 ---
-{    canonicalName: Maize Flour, parent: Flour, aliases: Cornmeal}
+{    canonicalName: Maize Flour, parent: Flour, aliases: Cornmeal, contains: Maize}
 ---
 {    canonicalName: Quinoa Flour, parent: Flour}
 ---
@@ -807,6 +807,10 @@
 {canonicalName: Bulgur Wheat, tags: GRAIN, aliases: {Bulghar Wheat, Bulghur Wheat, Bulgar Wheat}}
 ---
 {canonicalName: Couscous, tags: GRAIN}
+---
+{canonicalName: Maize, tags: GRAIN, aliases: Corn}
+---
+{    canonicalName: Popcorn, parent: Maize}
 ---
 {canonicalName: Oats, tags: GRAIN}
 ---
@@ -898,19 +902,19 @@
 
 {canonicalName: Porridge, tags: {PORRIDGE}}
 ---
-{    canonicalName: Maize Porridge, parent: Porridge}
+{    canonicalName: Maize Porridge, parent: Porridge, contains: Maize}
 ---
 {        canonicalName: Grits, parent: Maize Porridge, tags: USA}
 ---
 {        canonicalName: Polenta, parent: Maize Porridge, tags: ITALIAN}
 ---
-{    canonicalName: Rice Porridge, parent: Porridge}
+{    canonicalName: Rice Porridge, parent: Porridge, contains: Rice}
 ---
 {        canonicalName: Congee, parent: Rice Porridge, tags: ASIAN}
 ---
 
 
-{canonicalName: Tofu, tags: {CHINESE, JAPANESE}, contains: {Soy Milk, Soybean, Soya bean curd, bean curd}}
+{canonicalName: Tofu, tags: {CHINESE, JAPANESE}, contains: {Soy Milk, Soybean}, aliases: {Soya bean curd, bean curd}}
 ---
 
 
