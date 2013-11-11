@@ -63,7 +63,7 @@ public class IngredientParser {
 
     // Not very nice hacks...
     private static final Pattern    GRAMMES_OZ_STRIPPER = Pattern.compile("g/ ?[0-9\\.]+ ?oz", Pattern.CASE_INSENSITIVE);
-    private static final Pattern    MULTIWORD_COMMA_STRIPPER = Pattern.compile("(large|small|firm|boneless|skinless|ripe|salted|unsalted),", Pattern.CASE_INSENSITIVE);
+    private static final Pattern    MULTIWORD_COMMA_STRIPPER = Pattern.compile("(large|small|firm|frozen|thick|dried|boneless|skinless|raw|ripe|salted|unsalted),", Pattern.CASE_INSENSITIVE);
     private static final Pattern    CUPS_STRIPPER = Pattern.compile("[0-9] Cups?/([0-9]+ml)", Pattern.CASE_INSENSITIVE);
 
 	public boolean parse( final String inRawStr, final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) {
