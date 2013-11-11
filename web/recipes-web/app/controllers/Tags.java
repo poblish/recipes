@@ -7,8 +7,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import com.codahale.metrics.MetricRegistry;
-
 import play.mvc.Controller;
 import play.mvc.Result;
 import service.PlayAuthUserServicePlugin;
@@ -19,6 +17,8 @@ import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.impl.EsSearchService;
 import uk.co.recipes.tags.TagUtils;
 import uk.co.recipes.ui.CuisineColours;
+
+import com.codahale.metrics.MetricRegistry;
 
 /**
  * 

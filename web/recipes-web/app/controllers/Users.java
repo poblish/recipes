@@ -9,7 +9,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import jgravatar.Gravatar;
-
 import play.mvc.Controller;
 import play.mvc.Result;
 import uk.co.recipes.api.ICanonicalItem;
