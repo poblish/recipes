@@ -96,6 +96,16 @@ public class IngredientsTest {
 		assertThat( item.get().getBaseAmount(), notNullValue());
 	}
 
+    @Test
+    public void inheritedConstituentsTest() throws IOException {
+        final ICanonicalItem const1 = itemFactory.get("Maize").get();
+
+        // FIXME: Should test _merging_ from parent too
+        assertThat( itemFactory.get("Maize Porridge").get().getConstituents(), hasItem(const1));  // Yes, we know this one will
+        assertThat( itemFactory.get("Polenta").get().getConstituents(), hasItem(const1));         // But is it inherited?
+        assertThat( itemFactory.get("Orange").get().getConstituents(), not( hasItem(const1) ));   // Sanity check
+    }
+
 	@Test
 	public void accentsTest() throws IOException {
 		assertThat( itemFactory.get("Lovely Glacé Cherries").isPresent(), is(false));

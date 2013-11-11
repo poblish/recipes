@@ -193,9 +193,22 @@ public class CanonicalItem implements ICanonicalItem {
 		return this.aliases;
 	}
 
+    // The point is that we do *not* need to persist baseAmt for children, as we calc that on the fly (see below)
+    @JsonProperty("constituents")
+    public Collection<ICanonicalItem> getConstituentsForJackson() {
+        return this.constituents;
+    }
+
+    @JsonIgnore
 	@Override
     public Collection<ICanonicalItem> getConstituents() {
-        return this.constituents;
+        if ( parent == null) {
+            return this.constituents;
+        }
+
+        final Collection<ICanonicalItem> all = Sets.newHashSet( parent.getConstituents() );
+        all.addAll( this.constituents );
+        return all;
     }
 
     // Strictly for Jackson only. Must be public
