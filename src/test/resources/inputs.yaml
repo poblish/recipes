@@ -238,7 +238,7 @@
 ---
 
 
-{canonicalName: Mustard Seeds, tags: {SEED, HOT}, aliases: {Mustard Seed}}
+{canonicalName: Mustard Seeds, tags: {SEED, HOT, MUSTARDY}, aliases: {Mustard Seed}}
 ---
 {    canonicalName: Black Mustard Seeds, parent: Mustard Seeds, aliases: Black Mustard Seed}
 ---
@@ -346,7 +346,7 @@
 ---
 {canonicalName: Butternut Squash, tags: {VEGETABLE}}
 ---
-{canonicalName: Cabbage, tags: {VEGETABLE}, aliases: {Green Cabbage, Green Cabbages, Cabbage Leaves}}
+{canonicalName: Cabbage, tags: {VEGETABLE, MUSTARDY}, aliases: {Green Cabbage, Green Cabbages, Cabbage Leaves}}
 ---
 {    canonicalName: Kohlrabi, parent: Cabbage, tags: GERMAN, aliases: Kohlrübe}
 ---
@@ -372,7 +372,7 @@
 ---
 {    canonicalName: Baby Carrots, parent: Carrot}
 ---
-{canonicalName: Cauliflower, tags: {VEGETABLE}}
+{canonicalName: Cauliflower, tags: {VEGETABLE, MUSTARDY}}
 ---
 {canonicalName: Celeriac, tags: VEGETABLE}
 ---
@@ -408,7 +408,7 @@
 ---
 {canonicalName: Heart of Palm, tags: {VEGETABLE}, aliases: {Palm Heart, Palm Hearts}}
 ---
-{canonicalName: Horseradish, tags: {VEGETABLE}}
+{canonicalName: Horseradish, tags: {VEGETABLE, MUSTARDY}}
 ---
 {canonicalName: Kale, tags: VEGETABLE}
 ---
@@ -506,7 +506,7 @@
 ---
 {    canonicalName: Waxy Potatoes, parent: Potato}
 ---
-{canonicalName: Radish, tags: {VEGETABLE}, aliases: Radishes}
+{canonicalName: Radish, tags: {VEGETABLE, MUSTARDY}, aliases: Radishes}
 ---
 {canonicalName: Rocket, tags: {VEGETABLE, SALAD_LEAF, ITALIAN}, aliases: {Rocket Leaves}}
 ---
@@ -546,9 +546,11 @@
 ---
 {canonicalName: Truffle, tags: {VEGETABLE}}
 ---
-{canonicalName: Turnip, tags: VEGETABLE, aliases: {Turnips}}
+{canonicalName: Turnip, tags: {VEGETABLE, MUSTARDY}, aliases: {Turnips}}
 ---
 {    canonicalName: Baby Turnips, parent: Turnip}
+---
+{canonicalName: Wasabi, tags: {VEGETABLE, MUSTARDY, JAPANESE}, aliases: {Japanese horseradish}}
 ---
 {canonicalName: Watercress, tags: {VEGETABLE}}
 ---
@@ -1234,7 +1236,7 @@
 ---
 {canonicalName: Miso, tags: {JAPANESE, SAUCE, UMAMI}, aliases: Miso Paste}
 ---
-{canonicalName: Mustard, tags: {SAUCE, HOT}}
+{canonicalName: Mustard, tags: {SAUCE, HOT, MUSTARDY}}
 ---
 {    canonicalName: Dijon Mustard, parent: Mustard}
 ---
