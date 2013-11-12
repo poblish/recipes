@@ -220,7 +220,11 @@
 ---
 {canonicalName: Paprika, tags: {SPICE, HUNGARIAN, SPANISH, SWEET_NUTTY, WARM, SMOKY_SALTY}}
 ---
+{    canonicalName: Pimentón, parent: Paprika, tags: {-HUNGARIAN}, aliases: Pimenton}
+---
 {    canonicalName: Sweet Paprika, parent: Paprika}
+---
+{    canonicalName: Sweet Pimentón, parent: Paprika, tags: {-HUNGARIAN}, aliases: Sweet Pimenton}
 ---
 {canonicalName: Pepper, tags: {SPICE, SPICY, PEPPERY}}
 ---
@@ -517,6 +521,8 @@
 {canonicalName: Spring Greens, tags: VEGETABLE}
 ---
 {canonicalName: Swede, tags: {VEGETABLE}, aliases: {Swedes}}
+---
+{canonicalName: Sweetcorn, parent: Maize, tags: VEGETABLE}
 ---
 {canonicalName: Sweet Potato, tags: VEGETABLE, aliases: {Sweet Potatoes}}
 ---
@@ -954,7 +960,7 @@
 ---
 
 
-{canonicalName: Sugar, tags: {BAKING, SUGAR}}
+{canonicalName: Sugar, tags: {BAKING, SUGAR}, baseAmt: 40g}
 ---
 {    canonicalName: Caramel, parent: Sugar, tags: DARK_RICH}
 ---
@@ -1208,7 +1214,7 @@
 ---
 {    canonicalName: Sweet Chilli Sauce, parent: Chilli Sauce, aliases: Thai Sweet Chilli Sauce}
 ---
-{canonicalName: Curry Paste, tags: {SAUCE}}
+{canonicalName: Curry Paste, tags: {SAUCE}, baseAmt: 1 tsp}
 ---
 {    canonicalName: Balti Curry Paste, tags: INDIAN, parent: Curry Paste}
 ---
