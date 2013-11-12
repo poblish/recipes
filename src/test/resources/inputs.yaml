@@ -218,13 +218,13 @@
 ---
 {canonicalName: Nutmeg, tags: {SPICE, SPICY}}
 ---
-{canonicalName: Paprika, tags: {SPICE, HUNGARIAN, SPANISH, SWEET_NUTTY, WARM, SMOKY_SALTY}}
+{canonicalName: Paprika, tags: {SPICE, HUNGARIAN, SPANISH, WARM, SMOKY_SALTY}}
 ---
 {    canonicalName: Pimentón, parent: Paprika, tags: {-HUNGARIAN}, aliases: Pimenton}
 ---
-{    canonicalName: Sweet Paprika, parent: Paprika}
+{    canonicalName: Sweet Paprika, parent: Paprika, tags: SWEET_NUTTY}
 ---
-{    canonicalName: Sweet Pimentón, parent: Paprika, tags: {-HUNGARIAN}, aliases: Sweet Pimenton}
+{    canonicalName: Sweet Pimentón, parent: Paprika, tags: {SWEET_NUTTY, -HUNGARIAN}, aliases: Sweet Pimenton}
 ---
 {canonicalName: Pepper, tags: {SPICE, SPICY, PEPPERY}}
 ---
@@ -798,6 +798,8 @@
 ---
 {    canonicalName: Soya Flour, parent: Flour, contains: Soybean}
 ---
+{    canonicalName: Wheat Flour, parent: Flour, contains: Wheat}
+---
 {    canonicalName: White Flour, parent: Flour}
 ---
 {        canonicalName: Plain Flour, parent: White Flour, aliases: Plain White Flour}
@@ -833,6 +835,8 @@
 {canonicalName: Rye, tags: GRAIN}
 ---
 {canonicalName: Quinoa, tags: GRAIN}
+---
+{canonicalName: Wheat, tags: GRAIN}
 ---
 
 
@@ -900,7 +904,9 @@
 ---
 {    canonicalName: Amaretti biscuits, parent: Biscuit, tags: ITALIAN}
 ---
-{    canonicalName: Digestive biscuits, parent: Biscuit}
+{    canonicalName: Biscotti, parent: Biscuit, tags: ITALIAN, aliases: {Cantuccini, Biscotti biscuits}}
+---
+{    canonicalName: Digestive biscuits, parent: Biscuit, contains: {Wheat Flour, Sugar}}
 ---
 {    canonicalName: Gingernut biscuits, parent: Biscuit}
 ---
