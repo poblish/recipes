@@ -330,20 +330,28 @@ public class MyrrixUpdater implements IEventListener {
 
     @Subscribe
     public void onVisitItem( final ItemVisitedEvent evt) {
+    	/* Comment-out for now until we have a better solution. Maybe we should defer these (e.g. log in Session)
+    	 * to prevent ratings changing on refresh?
+
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Visited: " + evt);
 		}
 
         rateGenericItem( evt.getUser().getId(), evt.getItem().getId(), evt.getScore());
+       */
     }
 
     @Subscribe
     public void onVisitRecipe( final RecipeVisitedEvent evt) {
+    	/* Comment-out for now until we have a better solution. Maybe we should defer these (e.g. log in Session)
+    	 * to prevent ratings changing on refresh?
+
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Visited: " + evt);
 		}
 
         rateGenericItem( evt.getUser().getId(), evt.getRecipe().getId(), evt.getScore());
+       */
     }
 
     @Subscribe
