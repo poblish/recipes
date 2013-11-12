@@ -33,7 +33,7 @@ public class DefaultEventService implements IEventService {
 	private static final Logger LOG = LoggerFactory.getLogger( DefaultEventService.class );
 
     @Inject
-    EventBus eventBus = /* FIXME - inject properly */ new AsyncEventBus( /* This will do for now! */ Executors.newSingleThreadExecutor() );
+    EventBus eventBus = /* FIXME - inject properly */ new AsyncEventBus( Executors.newFixedThreadPool(5) );
 
     public void addListener( final IEventListener inL) {
     	if (LOG.isTraceEnabled()) {
