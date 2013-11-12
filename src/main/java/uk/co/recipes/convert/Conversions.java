@@ -48,11 +48,15 @@ public class Conversions {
     	final Unit<Volume> tsp_US = millilitre.times(4.92892159);
 
     	defaults( Units.TSP, tsp_UK);
-    	defaults( Units.ROUNDED_TBSP, tsp_UK.times(ROUNDED_FACTOR));
-    	defaults( Units.HEAPED_TBSP, tsp_UK.times(HEAPED_FACTOR));
+    	defaults( Units.ROUNDED_TSP, tsp_UK.times(ROUNDED_FACTOR));
+    	defaults( Units.HEAPED_TSP, tsp_UK.times(HEAPED_FACTOR));
     	defaults( Units.TBSP, tsp_UK.times(3));
+    	defaults( Units.ROUNDED_TBSP, tsp_UK.times(3).times(ROUNDED_FACTOR));
+    	defaults( Units.HEAPED_TBSP, tsp_UK.times(3).times(HEAPED_FACTOR));
 
     	defaults( Units.GRAMMES, SI.GRAM);
+    	defaults( Units.KG, SI.KILOGRAM);
+    	defaults( Units.LITRE, NonSI.LITRE);
     	defaults( Units.ML, millilitre);
 
         override( Locale.US, new ItemUnit( Units.CUP, "Plain Flour"), SI.KILOGRAM.times(0.125));
@@ -63,9 +67,11 @@ public class Conversions {
         override( Locale.US, new ItemUnit( Units.CUP, "Rolled Oats"), SI.KILOGRAM.times(0.085));
 
         override( Locale.US, Units.TSP, tsp_US);
-        override( Locale.US, Units.ROUNDED_TBSP, tsp_US.times(ROUNDED_FACTOR));
-        override( Locale.US, Units.HEAPED_TBSP, tsp_US.times(HEAPED_FACTOR));
+        override( Locale.US, Units.ROUNDED_TSP, tsp_US.times(ROUNDED_FACTOR));
+        override( Locale.US, Units.HEAPED_TSP, tsp_US.times(HEAPED_FACTOR));
         override( Locale.US, Units.TBSP, tsp_US.times(3));
+        override( Locale.US, Units.ROUNDED_TBSP, tsp_US.times(3).times(ROUNDED_FACTOR));
+        override( Locale.US, Units.HEAPED_TBSP, tsp_US.times(3).times(HEAPED_FACTOR));
 
 //      override( Locale.US, Units.QUART, tsp_US);
     }

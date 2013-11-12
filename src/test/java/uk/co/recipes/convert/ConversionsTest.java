@@ -36,8 +36,15 @@ public class ConversionsTest {
     private final static IQuantity ONE_QUART = new Quantity( Units.QUART, 1);
     private final static IQuantity ONE_OZ = new Quantity( Units.OUNCES, 1);
     private final static IQuantity ONE_TSP = new Quantity( Units.TSP, 1);
+    private final static IQuantity ONE_HEAPED_TSP = new Quantity( Units.HEAPED_TSP, 1);
+    private final static IQuantity ONE_ROUNDED_TSP = new Quantity( Units.ROUNDED_TSP, 1);
+    private final static IQuantity ONE_TBSP = new Quantity( Units.TBSP, 1);
+    private final static IQuantity ONE_HEAPED_TBSP = new Quantity( Units.HEAPED_TBSP, 1);
+    private final static IQuantity ONE_ROUNDED_TBSP = new Quantity( Units.ROUNDED_TBSP, 1);
     private final static IQuantity NINETEEN_GRAMMES = new Quantity( Units.GRAMMES, 19);
+    private final static IQuantity EIGHT_KG = new Quantity( Units.KG, 8);
     private final static IQuantity SIXTEEN_ML = new Quantity( Units.ML, 16);
+    private final static IQuantity FIVE_LITRES = new Quantity( Units.LITRE, 5);
 
     @Test
     public void testGrammesUK() {
@@ -45,8 +52,18 @@ public class ConversionsTest {
     }
 
     @Test
+    public void testKilogrammesUK() {
+    	assertThat( toGrammes( CVS.toJsrAmount( UK, EIGHT_KG)), nearTo(8000.0));
+    }
+
+    @Test
     public void testMlUK() {
     	assertThat( toMl( CVS.toJsrAmount( UK, SIXTEEN_ML)), is(16.0));
+    }
+
+    @Test
+    public void testLitresUK() {
+    	assertThat( toMl( CVS.toJsrAmount( UK, FIVE_LITRES)), nearTo(5000.0));
     }
 
     @Test
@@ -57,6 +74,15 @@ public class ConversionsTest {
     @Test
     public void testTspUKInMilliletres() {
         assertThat( toMl( CVS.toJsrAmount( UK, ONE_TSP) ), nearTo(5.91939047));
+        assertThat( toMl( CVS.toJsrAmount( UK, ONE_HEAPED_TSP) ), nearTo(10.654903));
+        assertThat( toMl( CVS.toJsrAmount( UK, ONE_ROUNDED_TSP) ), nearTo(7.6952076));
+    }
+
+    @Test
+    public void testTbspUKInMilliletres() {
+        assertThat( toMl( CVS.toJsrAmount( UK, ONE_TBSP) ), nearTo(17.758171));
+        assertThat( toMl( CVS.toJsrAmount( UK, ONE_HEAPED_TBSP) ), nearTo(31.964709));
+        assertThat( toMl( CVS.toJsrAmount( UK, ONE_ROUNDED_TBSP) ), nearTo(23.085623));
     }
 
     @Test
