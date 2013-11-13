@@ -75,14 +75,16 @@ public class Items extends AbstractExplorableController {
 			events.visit( user1, item);
 		}
 
+		final int recipesCount = searchApi.countRecipesByItemName( item.getCanonicalName() );  // FIXME Should cache this!
+
         final List<ICanonicalItem> similarities = explorer.similarIngredients( item, getExplorerFilter(explorerFilters), 12);
         final List<IRecipe> recRecipes = ( user1 != null) ? recsApi.recommendRecipes( user1, NUM_RECOMMENDATIONS_TO_SHOW, item) : recsApi.recommendRecipesToAnonymous( NUM_RECOMMENDATIONS_TO_SHOW, item);
 
         if (!recRecipes.isEmpty()) {
-            return ok(views.html.item.render( item, user1, similarities, recRecipes, /* Got recommendations OK */ true, colours));
+            return ok(views.html.item.render( item, user1, similarities, recRecipes, /* Got recommendations OK */ true, colours, -1));
         }
 
-        return ok(views.html.item.render( item, user1, similarities, searchApi.findRandomRecipesByItemName( NUM_RECOMMENDATIONS_TO_SHOW, item), /* Didn't get recommendations */ false, colours));
+        return ok(views.html.item.render( item, user1, similarities, searchApi.findRandomRecipesByItemName( NUM_RECOMMENDATIONS_TO_SHOW, item), /* Didn't get recommendations */ false, colours, recipesCount));
     }
 
     public Result rate( final String name, final int inScore) throws IOException {

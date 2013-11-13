@@ -24,6 +24,7 @@ public interface MetricNames {
     String TIMER_ITEMS_PUTS = "items.put";
 	String TIMER_ITEMS_SEARCHES = "items.searches";
 	String TIMER_ITEMS_MOSTSIMILAR = "items.mostsimilar";
+	String TIMER_ITEMS_COUNT_AMONG_RECIPES = "items.count_among_recipes";
 
 	String TIMER_USER_ITEMS_RECOMMENDATIONS = "recommendations_user:items";
 	String TIMER_RECIPE_ITEMS_RECOMMENDATIONS = "recommendations_recipe:items";

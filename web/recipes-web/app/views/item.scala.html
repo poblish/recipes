@@ -1,5 +1,5 @@
 @(item: uk.co.recipes.api.ICanonicalItem, currUser: uk.co.recipes.api.IUser, similarities: List[uk.co.recipes.api.ICanonicalItem], recommendedRecipes: List[uk.co.recipes.api.IRecipe],
-  hasGoodRecommendations: Boolean, cuisineColours: uk.co.recipes.ui.CuisineColours)
+  hasGoodRecommendations: Boolean, cuisineColours: uk.co.recipes.ui.CuisineColours, recipesCount: Integer)
 
 @main("Item: " + item.getCanonicalName() ) {
 
@@ -25,7 +25,7 @@
 		  </ul>
 		</div>
 	    <div class="wrapper">
-	        <h1>@item.getCanonicalName() <span style="padding-left: 30px">@for(tagName <- item.getTagNamesForDisplay()){ <span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}</span></h1>
+	        <h1>@item.getCanonicalName() <span style="padding-left: 30px">@for(tagName <- item.getTagNamesForDisplay()){ <span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span>}</span> @if(recipesCount >= 0) {<span class="label label-default" style="font-weight:normal; background-color:#666">@recipesCount recipes</span>}</h1>
 	    </div>
 	    @if( item.getConstituents.size() != 0) {
 	    <div style="line-height: 24px; padding: 12px 0 3px 20px">Contains:

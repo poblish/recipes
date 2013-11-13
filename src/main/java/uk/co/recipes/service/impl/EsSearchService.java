@@ -374,11 +374,7 @@ public class EsSearchService implements ISearchAPI {
         return findNRecipeIdsByItemName( 9999, inNames);
     }
 
-	private List<IRecipe> findNRecipesByItemName( final int inCount, String... inNames) throws IOException {
-		if (inNames.length == 0) {
-			return Collections.emptyList();
-		}
-
+    private BoolQueryBuilder getBooleanQueryForNames( final String... inNames) {
 		final BoolQueryBuilder booleanQ = boolQuery();
 		for ( String eachName : inNames) {
 			// So, when including a parent like 'Pasta', we should pick up all children too.
@@ -387,6 +383,15 @@ public class EsSearchService implements ISearchAPI {
 			boolParentQ.should( matchPhraseQuery( "stages.ingredients.item.parent.canonicalName", eachName) );
 			booleanQ.must(boolParentQ);
 		}
+		return booleanQ;
+    }
+
+	private List<IRecipe> findNRecipesByItemName( final int inCount, String... inNames) throws IOException {
+		if (inNames.length == 0) {
+			return Collections.emptyList();
+		}
+
+		final BoolQueryBuilder booleanQ = getBooleanQueryForNames(inNames);
 
         final SearchResponse resp = esClient.prepareSearch("recipe").setTypes("recipes").setQuery(booleanQ).setSize(inCount)/* .addSort( "_score", DESC) */.execute().actionGet();
         final SearchHit[] hits = resp.getHits().hits();
@@ -409,14 +414,7 @@ public class EsSearchService implements ISearchAPI {
             return new long[0];
         }
 
-        final BoolQueryBuilder booleanQ = boolQuery();
-        for ( String eachName : inNames) {
-            // So, when including a parent like 'Pasta', we should pick up all children too.
-            final BoolQueryBuilder boolParentQ = boolQuery();
-            boolParentQ.should( matchPhraseQuery( "canonicalName", eachName) );
-            boolParentQ.should( matchPhraseQuery( "stages.ingredients.item.parent.canonicalName", eachName) );
-            booleanQ.must(boolParentQ);
-        }
+		final BoolQueryBuilder booleanQ = getBooleanQueryForNames(inNames);
 
         final SearchHit[] hits = esClient.prepareSearch("recipe").setTypes("recipes").setQuery(booleanQ).setNoFields().setSize(inCount)/* .addSort( "_score", DESC) */.execute().actionGet().getHits().hits();
 
@@ -436,7 +434,21 @@ public class EsSearchService implements ISearchAPI {
 
 	@Override
 	public int countRecipesByItemName( String... inNames) throws IOException {
-		return findRecipesByItemName(inNames).size();  // FIXME, lame
+		if (inNames.length == 0) {
+			return 0;
+		}
+
+	    final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_COUNT_AMONG_RECIPES).time();
+
+		try
+		{
+			final BoolQueryBuilder booleanQ = getBooleanQueryForNames(inNames);
+	
+	        return /* FIXME Cast */ (int) esClient.prepareCount("recipe").setTypes("recipes").setQuery(booleanQ).execute().actionGet().getCount();
+		}
+		finally {
+			timerCtxt.stop();
+		}
 	}
 
     @Override
