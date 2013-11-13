@@ -1288,6 +1288,9 @@
 ---
 {canonicalName: Worcestershire Sauce, tags: {ENGLISH, SAUCE}, contains: Anchovy, aliases: {Worcester sauce}}
 ---
+# FIXME Move back above 'Worcestershire Sauce' after deferral bug fixed. 13 Nov 2013
+{canonicalName: Caesar dressing, tags: {SAUCE}, aliases: {Caesar salad dessing, Caesar salad dressing}, contains: {Olive Oil, Parmesan, Lemon Juice, Worcestershire Sauce, Eggs}}
+---
 
 
 {canonicalName: Pasta, tags: {PASTA, ITALIAN}}

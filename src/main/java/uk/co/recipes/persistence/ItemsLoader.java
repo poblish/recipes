@@ -89,7 +89,9 @@ public class ItemsLoader {
                 throw new RuntimeException("Missing parent item '" + parentName + "' for '" + eachDeferred.get("canonicalName") + "'");
             }
 
-            processItem( eachDeferred, parentCI, topLevelNamesCache);
+            if (!processItem( eachDeferred, parentCI, topLevelNamesCache)) {
+            	throw new RuntimeException("Deferral failed for " + eachDeferred);  // FIXME!
+            }
 		}
 	}
 
