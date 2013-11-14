@@ -31,6 +31,7 @@ import uk.co.recipes.Recipe;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.ITag;
+import uk.co.recipes.persistence.EsUtils;
 import uk.co.recipes.service.api.ESearchArea;
 import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.api.ISearchResult;
@@ -58,6 +59,7 @@ import com.google.common.collect.Sets;
 public class EsSearchService implements ISearchAPI {
 
 	@Inject Client esClient;
+	@Inject EsUtils esUtils;
 	@Inject ObjectMapper mapper;
 	@Inject MetricRegistry metrics;
 
@@ -136,19 +138,7 @@ public class EsSearchService implements ISearchAPI {
 		try
 		{
             final SearchResponse resp = esClient.prepareSearch("recipe").setTypes("recipes").setQuery( queryString(inName) ).setSize(inSize).execute().actionGet();
-            final SearchHit[] hits = resp.getHits().hits();
-
-            if ( hits.length == 0) {
-                return Collections.emptyList();
-            }
-
-            final List<IRecipe> results = Lists.newArrayList();
-
-            for ( final SearchHit eachHit : hits) {
-                results.add( mapper.readValue( eachHit.getSourceAsString(), Recipe.class) );
-            }
-	
-			return results;
+    		return esUtils.deserializeRecipeHits( resp.getHits().hits() );
 		}
 		catch (JsonProcessingException e) {
 			throw Throwables.propagate(e);
@@ -394,19 +384,8 @@ public class EsSearchService implements ISearchAPI {
 		final BoolQueryBuilder booleanQ = getBooleanQueryForNames(inNames);
 
         final SearchResponse resp = esClient.prepareSearch("recipe").setTypes("recipes").setQuery(booleanQ).setSize(inCount)/* .addSort( "_score", DESC) */.execute().actionGet();
-        final SearchHit[] hits = resp.getHits().hits();
 
-        if ( hits.length == 0) {
-            return Collections.emptyList();
-        }
-
-		final List<IRecipe> results = Lists.newArrayList();
-
-		for ( final SearchHit eachHit : hits) {
-            results.add( mapper.readValue( eachHit.getSourceAsString(), Recipe.class) );
-		}
-
-		return results;
+		return esUtils.deserializeRecipeHits( resp.getHits().hits() );
 	}
 
     private long[] findNRecipeIdsByItemName( final int inCount, String... inNames) throws IOException {

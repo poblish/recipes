@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -17,6 +19,10 @@ import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse.AnalyzeToken;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsRequestBuilder;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.search.SearchHit;
+
+import uk.co.recipes.Recipe;
+import uk.co.recipes.api.IRecipe;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -35,11 +41,8 @@ import com.google.common.io.Files;
  */
 public class EsUtils {
 
-	@Inject
-	ObjectMapper mapper;
-
-	@Inject
-	Client esClient;
+	@Inject Client esClient;
+	@Inject ObjectMapper mapper;
 
 	public JsonParser parseSource( final String inUrlString) throws IOException {
 		return mapper.readTree( new URL(inUrlString) ).path("_source").traverse();
@@ -98,6 +101,20 @@ public class EsUtils {
 		if ( waitsToGo <= 0) {
 			throw new RuntimeException("Timeout exceeded!");
 		}
+	}
+
+	public List<IRecipe> deserializeRecipeHits( final SearchHit[] inHits) throws IOException {
+		if ( inHits.length == 0) {
+			return Collections.emptyList();
+		}
+
+		final List<IRecipe> results = Lists.newArrayList();
+
+		for ( final SearchHit eachHit : inHits) {
+			results.add( mapper.readValue( eachHit.getSourceAsString(), Recipe.class) );
+		}
+
+		return results;
 	}
 
 	public static void addPartialMatchMappings( final Client inClient) throws ElasticSearchException, IOException {
