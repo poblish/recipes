@@ -13,6 +13,9 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Ingredient;
 import uk.co.recipes.Quantity;
@@ -45,6 +48,9 @@ public class IngredientParser {
     private static final String DEC_FRAC_NUMBER_BIT = "(?:[0-9\\.]+ x )?[0-9\\.]*(?: ?[0-9]/[0-9])?";
     private static final String DEC_FRAC_NUMBER_PATTERN = "(" + DEC_FRAC_NUMBER_BIT + ")";
     private static final String DEC_FRAC_NUMBER_RANGE_PATTERN = "(?:About )?(" + DEC_FRAC_NUMBER_BIT + "(?: ?- ?" + DEC_FRAC_NUMBER_BIT + ")?)";
+	@SuppressWarnings("unused")
+	private final static Logger LOG = LoggerFactory.getLogger( IngredientParser.class );
+
 	private static final String	NOTES = "([,;\\(].*)?";
     private static final String ITEM_NAME = "([\\p{L}- '&]*)";
     private static final String SUFFIX = ITEM_NAME + NOTES;
