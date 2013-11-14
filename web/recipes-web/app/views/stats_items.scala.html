@@ -1,0 +1,16 @@
+@(items: List[String])
+
+@main("Items Statistics") {
+	<section id="top">
+	    <div class="wrapper">
+	        <h1>Item Statistics</h1>
+	    </div>
+	</section>
+
+<h3>@items.size() Items</h3>
+	<ol>
+    @for(eachItem <- items) {
+      <li>@eachItem</li>
+    }
+    </ol>
+}

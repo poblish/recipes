@@ -4,6 +4,7 @@
 
 GET     /                             controllers.Application.index()
 GET     /stats.html                   @controllers.Application.stats()
+GET     /stats_items.html             @controllers.Application.itemStats()
 
 GET     /items/:name                  @controllers.Items.display(name: String)
 GET     /items/:name/rate/:score      @controllers.Items.rate(name: String, score: Int)

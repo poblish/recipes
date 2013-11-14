@@ -16,6 +16,9 @@ import javax.inject.Inject;
 import net.myrrix.client.ClientRecommender;
 
 import org.apache.mahout.cf.taste.common.TasteException;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
 
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -42,7 +45,9 @@ import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 import com.google.common.cache.Cache;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
+import com.google.common.collect.Sets;
 
 /**
  * 
@@ -62,12 +67,14 @@ public class Application extends Controller {
     private Cache<String,ICanonicalItem> itemsCache;
     private BbcGoodFoodLoader bbcGfLoader;
     private CurryFrenzyLoader cfLoader;
+    private Client esClient;
 
     private final ExecutorService loadPool = Executors.newFixedThreadPool(3);
 
     @Inject
     public Application( final EsItemFactory items, final EsRecipeFactory recipes, final EsUserFactory users, final ClientRecommender recommender, final MetricRegistry metrics, final Cache<String,ICanonicalItem> inItemsCache,
-    				    final EsSequenceFactory seqs, final BbcGoodFoodLoader bbcGfLoader, final CurryFrenzyLoader cfLoader) {
+    				    final EsSequenceFactory seqs, final BbcGoodFoodLoader bbcGfLoader, final CurryFrenzyLoader cfLoader,
+    				    final Client esClient) {
         this.items = checkNotNull(items);
         this.recipes = checkNotNull(recipes);
         this.users = checkNotNull(users);
@@ -77,6 +84,16 @@ public class Application extends Controller {
         this.sequences = checkNotNull(seqs);
         this.bbcGfLoader = checkNotNull(bbcGfLoader);
         this.cfLoader = checkNotNull(cfLoader);
+        this.esClient = checkNotNull(esClient);
+    }
+
+    public Result itemStats() {
+    	final Set<String> names = Sets.newTreeSet();
+    	for ( SearchHit each : esClient.prepareSearch("recipe").setTypes("items").setQuery( QueryBuilders.matchAllQuery() ).setSize(9999).execute().actionGet().getHits()) {
+    		names.add( each.getSource().get("canonicalName").toString() );
+    	}
+
+    	return ok(views.html.stats_items.render( Lists.newArrayList(names) ));
     }
 
     public String getMetricsString() {
