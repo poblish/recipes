@@ -17,7 +17,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import uk.co.recipes.api.ICanonicalItem;
-import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.ItemsLoader;
@@ -28,7 +27,6 @@ import uk.co.recipes.service.impl.EsExplorerFilters;
 import uk.co.recipes.service.impl.EsSearchService;
 import uk.co.recipes.service.impl.ExplorerFilterDefs;
 import uk.co.recipes.tags.MeatAndFishTags;
-import uk.co.recipes.tags.NationalCuisineTags;
 import uk.co.recipes.test.TestDataUtils;
 
 import com.google.common.base.Function;

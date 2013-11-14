@@ -66,9 +66,6 @@ public class EsSearchService implements ISearchAPI {
 	@Named("elasticSearchItemsUrl")
 	@Inject String itemIndexUrl;
 
-	@Named("elasticSearchRecipesUrl")
-	@Inject String recipesIndexUrl;
-
 
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.service.api.ISearchAPI#findItemsByName(java.lang.String)
@@ -228,16 +225,7 @@ public class EsSearchService implements ISearchAPI {
 	 */
 	@Override
 	public int countItemsByName( String inName) throws IOException {
-		try
-		{
-			return mapper.readTree( new URL( itemIndexUrl + "/_search?q=" + URLEncoder.encode( inName, "utf-8")) ).path("hits").path("hits").size();
-		}
-		catch (MalformedURLException e) {
-			throw Throwables.propagate(e);
-		}
-		catch (JsonProcessingException e) {
-			throw Throwables.propagate(e);
-		}
+		return (int) esClient.prepareCount("recipe").setTypes("items").setQuery( queryString(inName) ).execute().actionGet().getCount();
 	}
 
 	/* (non-Javadoc)
@@ -245,16 +233,7 @@ public class EsSearchService implements ISearchAPI {
 	 */
 	@Override
 	public int countRecipesByName( String inName) throws IOException {
-		try
-		{
-			return mapper.readTree( new URL( recipesIndexUrl + "/_search?q=" + URLEncoder.encode( inName, "utf-8")) ).path("hits").path("hits").size();
-		}
-		catch (MalformedURLException e) {
-			throw Throwables.propagate(e);
-		}
-		catch (JsonProcessingException e) {
-			throw Throwables.propagate(e);
-		}
+		return (int) esClient.prepareCount("recipe").setTypes("recipes").setQuery( queryString(inName) ).execute().actionGet().getCount();
 	}
 
     @Override
