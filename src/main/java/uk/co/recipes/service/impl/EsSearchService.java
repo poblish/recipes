@@ -133,18 +133,22 @@ public class EsSearchService implements ISearchAPI {
 	}
 
 	private List<IRecipe> findNRecipesByName( final int inSize, final String inName) throws IOException {
-	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_SEARCHES).time();
+	    final Timer.Context searchTimerCtxt = metrics.timer(TIMER_RECIPES_SEARCHES_SEARCH).time();
+	    final SearchResponse resp;
 
-		try
-		{
-            final SearchResponse resp = esClient.prepareSearch("recipe").setTypes("recipes").setQuery( queryString(inName) ).setSize(inSize).execute().actionGet();
-    		return esUtils.deserializeRecipeHits( resp.getHits().hits() );
-		}
-		catch (JsonProcessingException e) {
-			throw Throwables.propagate(e);
+		try {
+            resp = esClient.prepareSearch("recipe").setTypes("recipes").setQuery( queryString(inName) ).setSize(inSize).execute().actionGet();
 		}
         finally {
-            timerCtxt.stop();
+        	searchTimerCtxt.stop();
+        }
+
+	    final Timer.Context deserTimerCtxt = metrics.timer(TIMER_RECIPES_SEARCHES_DESER).time();
+		try {
+			return esUtils.deserializeRecipeHits( resp.getHits().hits() );
+		}
+        finally {
+        	deserTimerCtxt.stop();
         }
 	}
 

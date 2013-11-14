@@ -11,7 +11,8 @@ public interface MetricNames {
 
     String TIMER_RECIPES_NAME_GETS = "recipes.by_name.get";
     String TIMER_RECIPES_PUTS = "recipes.put";
-    String TIMER_RECIPES_SEARCHES = "recipes.searches";
+    String TIMER_RECIPES_SEARCHES_SEARCH = "recipes.searches.search";
+    String TIMER_RECIPES_SEARCHES_DESER = "recipes.searches.deser_etc";
     String TIMER_RECIPES_IDS_SEARCHES = "recipe_ids.searches";
 	String TIMER_RECIPES_RECOMMENDATIONS = "recipes.recommendations";
 	String TIMER_RECIPES_FILTERED_RECOMMENDATIONS = "recipes.recommendations.filtered";
