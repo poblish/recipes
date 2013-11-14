@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.*;
 import static uk.co.recipes.service.api.ESearchArea.ITEMS;
 import static uk.co.recipes.service.api.ESearchArea.RECIPES;
 
+import uk.co.recipes.tags.RecipeTags;
 import java.io.IOException;
 import java.util.List;
 
@@ -166,4 +167,18 @@ public class EsSearchServiceTest {
 		assertThat( stringOutput, containsString("\"type\":\"recipe\""));
 		assertThat( /* Produce JsonNode */ mapper.valueToTree(results1).toString(), is(stringOutput));
 	}
+
+    @Test
+    public void testTagSearch() throws IOException {
+        final List<IRecipe> results1 = searchService.findRecipesByTag( RecipeTags.VEGAN );
+        assertThat( results1.size(), is(0));
+        // FIXME - rubbish, need proper test data!
+    }
+
+    @Test
+    public void testTagSearchWithValue() throws IOException {
+        final List<IRecipe> results1 = searchService.findRecipesByTag( RecipeTags.COOKTIME, "25");
+        assertThat( results1.size(), is(0));
+        // FIXME - rubbish, need proper test data!
+    }
 }
