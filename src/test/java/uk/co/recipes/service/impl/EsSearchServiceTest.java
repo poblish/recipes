@@ -11,6 +11,8 @@ import static uk.co.recipes.service.api.ESearchArea.RECIPES;
 import java.io.IOException;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.http.client.ClientProtocolException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -21,14 +23,12 @@ import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.ItemsLoader;
-import uk.co.recipes.service.api.IItemPersistence;
-import uk.co.recipes.service.api.IRecipePersistence;
-import uk.co.recipes.service.api.ISearchAPI;
 import uk.co.recipes.service.api.ISearchResult;
 import uk.co.recipes.test.TestDataUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import dagger.Module;
 import dagger.ObjectGraph;
 
 /**
@@ -39,25 +39,24 @@ import dagger.ObjectGraph;
  */
 public class EsSearchServiceTest {
 
-	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
-
-	private ObjectMapper mapper = GRAPH.get( ObjectMapper.class );
-	private IItemPersistence items = GRAPH.get( EsItemFactory.class );
-	private IRecipePersistence recipes = GRAPH.get( EsRecipeFactory.class );
-	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
-
-	private ISearchAPI searchService = GRAPH.get( EsSearchService.class );
-
+	@Inject EsItemFactory items;
+	@Inject EsRecipeFactory recipes;
+	@Inject ItemsLoader loader;
+	@Inject ObjectMapper mapper;
+	@Inject TestDataUtils dataUtils;
+	@Inject EsSearchService searchService;
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
+        ObjectGraph.create( new TestModule() ).inject(this);
+
 		items.deleteAll();
 		recipes.deleteAll();
 	}
 
 	@BeforeClass
 	public void loadIngredientsFromYaml() throws IOException, InterruptedException {
-		GRAPH.get( ItemsLoader.class ).load();
+		loader.load();
 
 		dataUtils.parseIngredientsFrom("chCashBlackSpiceCurry.txt");
 		dataUtils.parseIngredientsFrom("bol1.txt");
@@ -166,4 +165,7 @@ public class EsSearchServiceTest {
 		assertThat( stringOutput, containsString("\"type\":\"recipe\""));
 		assertThat( /* Produce JsonNode */ mapper.valueToTree(results1).toString(), is(stringOutput));
 	}
+
+    @Module( includes=DaggerModule.class, overrides=true, injects=EsSearchServiceTest.class)
+    static class TestModule {}
 }

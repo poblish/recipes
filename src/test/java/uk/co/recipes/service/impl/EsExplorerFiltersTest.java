@@ -10,6 +10,8 @@ import static uk.co.recipes.tags.FlavourTags.CITRUS;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import org.apache.http.client.ClientProtocolException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -17,12 +19,12 @@ import org.testng.annotations.Test;
 import uk.co.recipes.DaggerModule;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
+import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.service.api.IExplorerFilter;
-import uk.co.recipes.service.api.IItemPersistence;
-import uk.co.recipes.service.api.IRecipePersistence;
 import uk.co.recipes.tags.CommonTags;
 import uk.co.recipes.tags.MeatAndFishTags;
+import dagger.Module;
 import dagger.ObjectGraph;
 
 /**
@@ -33,26 +35,24 @@ import dagger.ObjectGraph;
  */
 public class EsExplorerFiltersTest {
 
-	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
-
-	private IItemPersistence users = GRAPH.get( EsItemFactory.class );
-	private IRecipePersistence recipes = GRAPH.get( EsRecipeFactory.class );
-//	private TestDataUtils dataUtils = GRAPH.get( TestDataUtils.class );
-
-	private EsExplorerFilters filters = GRAPH.get( EsExplorerFilters.class );
+	@Inject EsItemFactory itemFactory;
+	@Inject EsUserFactory users;
+	@Inject EsRecipeFactory recipes;
+	@Inject ItemsLoader loader;
+	@Inject EsExplorerFilters filters;
 	private ExplorerFilterDefs filterDefs = new ExplorerFilterDefs();
-//	private IExplorerAPI explorer = GRAPH.get( MyrrixExplorerService.class );
-
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
-		users.deleteAll();
+        ObjectGraph.create( new TestModule() ).inject(this);
+
+        users.deleteAll();
 		recipes.deleteAll();
 	}
 
 	@BeforeClass
 	public void loadIngredientsAndOneRecipe() throws InterruptedException, IOException {
-		GRAPH.get( ItemsLoader.class ).load();
+		loader.load();
 //		dataUtils.parseIngredientsFrom("bulk.txt");
 
 		Thread.sleep(900);  // FIXME Ensure everything's in ES index
@@ -133,4 +133,7 @@ public class EsExplorerFiltersTest {
         assertThat( filter.idsToInclude().length, is(0));
         assertThat( filter.idsToExclude().length, greaterThan(60));
     }
+
+    @Module( includes=DaggerModule.class, overrides=true, injects=EsExplorerFiltersTest.class)
+    static class TestModule {}
 }
