@@ -180,7 +180,7 @@ public class EsItemFactory implements IItemPersistence {
 					if ( /* Yes, want only one great match */ hits.length == 1) {
 						final ICanonicalItem mappedAlias = mapper.readValue( hits[0].getSourceAsString(), CanonicalItem.class);
 						if ( mappedAlias != null) {
-//							System.out.println("Successfully mapped Alias '" + inCanonicalName + "' => " + mappedAlias);
+//							LOG.info("Successfully mapped Alias '" + inCanonicalName + "' => " + mappedAlias);
 							return mappedAlias;
 						}
 					}
