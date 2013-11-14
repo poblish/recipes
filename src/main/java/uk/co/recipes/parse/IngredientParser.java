@@ -45,42 +45,42 @@ public class IngredientParser {
 	@Inject MetricRegistry metrics;
 	@Inject OptionalNameSplitter optSplitter;
 
-    private static final String DEC_FRAC_NUMBER_BIT = "(?:[0-9\\.]+ x )?[0-9\\.]*(?: ?[0-9]/[0-9])?";
-    private static final String DEC_FRAC_NUMBER_PATTERN = "(" + DEC_FRAC_NUMBER_BIT + ")";
-    private static final String DEC_FRAC_NUMBER_RANGE_PATTERN = "(?:About )?(" + DEC_FRAC_NUMBER_BIT + "(?: ?- ?" + DEC_FRAC_NUMBER_BIT + ")?)";
 	@SuppressWarnings("unused")
 	private final static Logger LOG = LoggerFactory.getLogger( IngredientParser.class );
 
+	private static final String DEC_FRAC_NUMBER_BIT = "(?:[0-9\\.]+ x )?[0-9\\.]*(?: ?[0-9]/[0-9])?";
+	private static final String DEC_FRAC_NUMBER_PATTERN = "(" + DEC_FRAC_NUMBER_BIT + ")";
+	private static final String DEC_FRAC_NUMBER_RANGE_PATTERN = "(?:About )?(" + DEC_FRAC_NUMBER_BIT + "(?: ?- ?" + DEC_FRAC_NUMBER_BIT + ")?)";
 	private static final String	NOTES = "([,;\\(].*)?";
-    private static final String ITEM_NAME = "([\\p{L}- '&]*)";
-    private static final String SUFFIX = ITEM_NAME + NOTES;
+	private static final String ITEM_NAME = "([\\p{L}- '&]*)";
+	private static final String SUFFIX = ITEM_NAME + NOTES;
 
-    private static final String NUMBER_AND_UNITS = DEC_FRAC_NUMBER_RANGE_PATTERN + "( ?(?:kg|ml|g) ?(?:bags?|cans?|cartons?|jar|packs?|pots?|punnets?|sachets?|tins?|tubs?)?|gms| ?pounds?| ?lbs?\\.?| ?oz\\.?|cm|-in|-inch|mm|ml| ?l| litres?| ?quarts?| bottles?| cups?| ?pots?| jars?| packets?| ?(?:big |large |small )?bunch(?:es)?| ?(?:big )?pinch(?:es)?| sticks?| heaped tbsps?| heaped tsps?| ?level tsps?| ?level tbsps?| rounded tbsps?| rounded tsps?| tablespoons?| tbsp[s\\.]?| tsp[s\\.]?| teaspoons?| ?handfuls?| cloves?)?";
+	private static final String NUMBER_AND_UNITS = DEC_FRAC_NUMBER_RANGE_PATTERN + "( ?(?:kg|ml|g) ?(?:bags?|cans?|cartons?|jar|packs?|pots?|punnets?|sachets?|tins?|tubs?)?|gms| ?pounds?| ?lbs?\\.?| ?oz\\.?|cm|-in|-inch|mm|ml| ?l| litres?| ?quarts?| bottles?| cups?| ?pots?| jars?| packets?| ?(?:big |large |small )?bunch(?:es)?| ?(?:big )?pinch(?:es)?| sticks?| heaped tbsps?| heaped tsps?| ?level tsps?| ?level tbsps?| rounded tbsps?| rounded tsps?| tablespoons?| tbsp[s\\.]?| tsp[s\\.]?| teaspoons?| ?handfuls?| cloves?)?";
 
-    private static final Pattern    NUMBER_AND_UNITS_PATTERN = Pattern.compile( NUMBER_AND_UNITS, Pattern.CASE_INSENSITIVE);
-    private static final Pattern    ITEM_NAME_PATTERN = Pattern.compile( ITEM_NAME, Pattern.CASE_INSENSITIVE);
+	private static final Pattern    NUMBER_AND_UNITS_PATTERN = Pattern.compile( NUMBER_AND_UNITS, Pattern.CASE_INSENSITIVE);
+	private static final Pattern    ITEM_NAME_PATTERN = Pattern.compile( ITEM_NAME, Pattern.CASE_INSENSITIVE);
 
 	private static final Pattern	A = Pattern.compile( NUMBER_AND_UNITS + " " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	B = Pattern.compile("((?:a )?(few |generous |good |large |small |thumb-sized? )?(splash|bottle|bunch|dash|drizzle|drops?|few|glass|handful|little|piece|knob|pinch|quantity|splash|squeeze)(?: of)?) " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	C = Pattern.compile("((?:finely )?(?:grated )?(?:juice|juice and zest|zest|zest and juice))(?: of)? " + DEC_FRAC_NUMBER_PATTERN + " " + SUFFIX, Pattern.CASE_INSENSITIVE);
 	private static final Pattern	D = Pattern.compile("(icing sugar|nutmeg|parmesan|salt|salt and pepper.*|beaten egg|.*cream)" + NOTES, Pattern.CASE_INSENSITIVE);
-    private static final Pattern    E = Pattern.compile("((?:dressed|steamed|cooked|sliced|sweet|roughly chopped) [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);
-    private static final Pattern    F = Pattern.compile(SUFFIX, Pattern.CASE_INSENSITIVE);
+	private static final Pattern    E = Pattern.compile("((?:dressed|steamed|cooked|sliced|sweet|roughly chopped) [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);
+	private static final Pattern    F = Pattern.compile(SUFFIX, Pattern.CASE_INSENSITIVE);
 
-    // Not very nice hacks...
-    private static final Pattern    GRAMMES_OZ_STRIPPER = Pattern.compile("g/ ?[0-9\\.]+ ?oz", Pattern.CASE_INSENSITIVE);
-    private static final Pattern    MULTIWORD_COMMA_STRIPPER = Pattern.compile("(large|small|firm|frozen|thick|dried|boneless|skinless|raw|ripe|salted|unsalted),", Pattern.CASE_INSENSITIVE);
-    private static final Pattern    CUPS_STRIPPER = Pattern.compile("[0-9] Cups?/([0-9]+ml)", Pattern.CASE_INSENSITIVE);
+	// Not very nice hacks...
+	private static final Pattern    GRAMMES_OZ_STRIPPER = Pattern.compile("g/ ?[0-9\\.]+ ?oz", Pattern.CASE_INSENSITIVE);
+	private static final Pattern    MULTIWORD_COMMA_STRIPPER = Pattern.compile("(large|small|firm|frozen|thick|dried|boneless|skinless|raw|ripe|salted|unsalted),", Pattern.CASE_INSENSITIVE);
+	private static final Pattern    CUPS_STRIPPER = Pattern.compile("[0-9] Cups?/([0-9]+ml)", Pattern.CASE_INSENSITIVE);
 
 	public boolean parse( final String inRawStr, final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) {
-	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPE_PARSE).time();
+		final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPE_PARSE).time();
 
-        try {
-            return timedParse(inRawStr, inHandler, inDeferHandler);
-        }
-        finally {
-            timerCtxt.stop();
-        }
+		try {
+			return timedParse(inRawStr, inHandler, inDeferHandler);
+		}
+		finally {
+			timerCtxt.stop();
+		}
 	}
 
 	private boolean timedParse( final String inRawStr, final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) {
