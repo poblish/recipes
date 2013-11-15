@@ -126,10 +126,11 @@ public class EsSearchService implements ISearchAPI {
 	 */
 	@Override
 	public List<IRecipe> findRecipesByName( String inName) throws IOException {
-	    return findNRecipesByName( 9999, inName);
+	    return findRecipesByName( inName, 9999);
 	}
 
-	private List<IRecipe> findNRecipesByName( final int inSize, final String inName) throws IOException {
+	@Override
+	public List<IRecipe> findRecipesByName( final String inName, final int inSize) throws IOException {
 	    final Timer.Context searchTimerCtxt = metrics.timer(TIMER_RECIPES_SEARCHES_SEARCH).time();
 	    final SearchResponse resp;
 
@@ -268,7 +269,7 @@ public class EsSearchService implements ISearchAPI {
 
 	@Override
 	public List<IRecipe> findRandomRecipesByTag( int inCount, final ITag inTag) throws IOException {
-		final List<IRecipe> recipesToChooseFrom = findNRecipesByName( inCount * 3, tagString(inTag) );
+		final List<IRecipe> recipesToChooseFrom = findRecipesByName( tagString(inTag), inCount * 3);
 		Collections.shuffle(recipesToChooseFrom);
 		return recipesToChooseFrom.subList( 0, Math.min( inCount, recipesToChooseFrom.size()));
 	}

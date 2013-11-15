@@ -61,7 +61,7 @@ public class Search extends Controller {
         }
 
         final String termToUse = theInputs[0].trim();
-        return ok(views.html.search.render( "'" + termToUse + "'", currUser, colours, search.findRecipesByName(termToUse), search.findTagsByName(termToUse), search.findItemsByName(termToUse) ));
+        return ok(views.html.search.render( "'" + termToUse + "'", currUser, colours, search.findRecipesByName( termToUse, 200), search.findTagsByName(termToUse), search.findItemsByName(termToUse) ));
     }
 
     public Result findPartial() throws IOException {

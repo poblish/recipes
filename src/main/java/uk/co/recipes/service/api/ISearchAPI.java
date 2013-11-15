@@ -22,6 +22,7 @@ public interface ISearchAPI {
 	int countItemsByName( final String inName) throws IOException;
 
 	List<IRecipe> findRecipesByName( final String inName) throws IOException;
+	List<IRecipe> findRecipesByName( final String inName, int inSize) throws IOException;
 	int countRecipesByName( final String inName) throws IOException;
 
 	List<ITag> findTagsByName( final String inName) throws IOException;
