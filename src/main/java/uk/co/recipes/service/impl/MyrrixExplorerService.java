@@ -6,8 +6,10 @@ package uk.co.recipes.service.impl;
 import static uk.co.recipes.metrics.MetricNames.TIMER_ITEMS_MOSTSIMILAR;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_MOSTSIMILAR;
 
+import com.netflix.hystrix.HystrixCommandGroupKey;
+import com.netflix.hystrix.HystrixCommand;
+import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -15,8 +17,6 @@ import javax.inject.Singleton;
 
 import net.myrrix.client.ClientRecommender;
 
-import org.apache.mahout.cf.taste.common.NoSuchItemException;
-import org.apache.mahout.cf.taste.common.TasteException;
 import org.elasticsearch.common.base.Throwables;
 
 import uk.co.recipes.api.ICanonicalItem;
@@ -62,13 +62,8 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	    final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_MOSTSIMILAR).time();
 
 		try {
-			return itemsFactory.getAll( MyrrixUtils.getItems( recommender.mostSimilarItems( new long[]{ item.getId() }, inNumRecs, new String[]{"ITEM", mapper.writeValueAsString(inFilterDef)}, /* "contextUserID" */ 0L) ) );
-		}
-		catch (NoSuchItemException e) {
-			return Collections.emptyList();
-		}
-		catch (TasteException e) {
-			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+            final HystrixCommand<List<RecommendedItem>> cmd = new MyrrixSimilarItemsCommand( item.getId(), inNumRecs, new String[]{"ITEM", mapper.writeValueAsString(inFilterDef)} );
+			return itemsFactory.getAll( MyrrixUtils.getItems( cmd.execute() ) );
 		}
         catch (IOException e) {
             throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
@@ -91,13 +86,8 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_MOSTSIMILAR).time();
 
 		try {
-			return recipesFactory.getAll( MyrrixUtils.getItems( recommender.mostSimilarItems( new long[]{ recipe.getId() }, inNumRecs, new String[]{"RECIPE", mapper.writeValueAsString(inFilterDef)}, /* "contextUserID" */ 0L) ) );
-		}
-		catch (NoSuchItemException e) {
-			return Collections.emptyList();
-		}
-		catch (TasteException e) {
-			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+		    final HystrixCommand<List<RecommendedItem>> cmd = new MyrrixSimilarItemsCommand( recipe.getId(), inNumRecs, new String[]{"RECIPE", mapper.writeValueAsString(inFilterDef)} );
+			return recipesFactory.getAll( MyrrixUtils.getItems( cmd.execute() ) );
 		}
 		catch (IOException e) {
 			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
@@ -146,4 +136,23 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	public float similarityToItem( final long item1, final long item2) {
 		return tasteSimilarity.similarityToItem( item1, item2);
 	}
+
+    private class MyrrixSimilarItemsCommand extends HystrixCommand<List<RecommendedItem>> {
+
+        private long[] itemIds;
+        private int howMany;
+        private String[] rescorerParams;
+
+        public MyrrixSimilarItemsCommand( long inItemId, int howMany, String[] rescorerParams) {
+            super( HystrixCommandGroupKey.Factory.asKey("Explorer.Similarity") );
+            this.itemIds = new long[]{inItemId};
+            this.howMany = howMany;
+            this.rescorerParams = rescorerParams;
+        }
+
+        @Override
+        protected List<RecommendedItem> run() throws Exception {
+            return recommender.mostSimilarItems( this.itemIds, this.howMany, this.rescorerParams, /* "contextUserID" */ 0L) ;
+        }
+    }
 }
