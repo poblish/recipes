@@ -339,7 +339,7 @@ public class EsSearchService implements ISearchAPI {
 
 		final BoolQueryBuilder booleanQ = getBooleanQueryForNames(inNames);
 
-        final SearchResponse resp = esClient.prepareSearch("recipe").setTypes("recipes").setQuery(booleanQ).setSize(inCount)/* .addSort( "_score", DESC) */.execute().actionGet();
+        final SearchResponse resp = esClient.prepareSearch("recipe").setTypes("recipes").setQuery(booleanQ).setSize(inCount).execute().actionGet();
 
 		return esUtils.deserializeRecipeHits( resp.getHits().hits() );
 	}
@@ -351,7 +351,7 @@ public class EsSearchService implements ISearchAPI {
 
 		final BoolQueryBuilder booleanQ = getBooleanQueryForNames(inNames);
 
-        final SearchHit[] hits = esClient.prepareSearch("recipe").setTypes("recipes").setQuery(booleanQ).setNoFields().setSize(inCount)/* .addSort( "_score", DESC) */.execute().actionGet().getHits().hits();
+        final SearchHit[] hits = esClient.prepareSearch("recipe").setTypes("recipes").setQuery(booleanQ).setNoFields().setSize(inCount).execute().actionGet().getHits().hits();
 
         if ( hits.length == 0) {
             return new long[0];
@@ -421,7 +421,7 @@ public class EsSearchService implements ISearchAPI {
     		}
     	} ).toArray( String.class );
 
-        final SearchResponse resp = esClient.prepareSearch("recipe").setTypes(typesArr).setQuery( matchPhraseQuery( "autoCompleteTerms", inStr) ).setSize(inSize)/* .addSort( "_score", DESC) */.execute().actionGet();
+        final SearchResponse resp = esClient.prepareSearch("recipe").setTypes(typesArr).setQuery( matchPhraseQuery( "autoCompleteTerms", inStr) ).setSize(inSize).execute().actionGet();
         final SearchHit[] hits = resp.getHits().hits();
 
         for ( final SearchHit eachHit : hits) {
