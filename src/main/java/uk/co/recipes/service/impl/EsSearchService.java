@@ -134,7 +134,12 @@ public class EsSearchService implements ISearchAPI {
 	    final SearchResponse resp;
 
 		try {
-            resp = esClient.prepareSearch("recipe").setTypes("recipes").setQuery( queryString(inName) ).setSize(inSize).execute().actionGet();
+            resp = esClient.prepareSearch("recipe").setTypes("recipes").setSize(inSize)
+            				.setQuery( queryString(inName)
+            					.field("recipes.stages.ingredients.item.canonicalName")
+            					.field("recipes.stages.ingredients.item.constituents.canonicalName", 0.5f)
+            					.field("title", 1.1f) )
+            				.execute().actionGet();
 		}
         finally {
         	searchTimerCtxt.stop();
