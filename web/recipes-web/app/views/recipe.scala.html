@@ -195,8 +195,8 @@
 
 	  <div class="col-md-8">
 		<ul id="recipesTabs" class="nav nav-tabs">
-			<li class="active lead"><a href="#similarRecipes"><strong>Similar Recipes</strong></a></li>
-			<li class="lead"><a href="#recIngredients"><strong>Why not add?</strong></a></li>
+			<li class="active lead"><a href="#similarRecipes" onclick="setUiOpt('recipes.similarTabSel','recipes')"><strong>Similar Recipes</strong></a></li>
+			<li class="lead"><a href="#recIngredients" onclick="setUiOpt('recipes.similarTabSel','items')"><strong>Why not add?</strong></a></li>
 		</ul>
     	<div id="my-tab-content" class="tab-content" style="margin-top: 24px">
 
@@ -255,6 +255,18 @@
 	  </div>
 
 	</div>  <!-- <div class="row"> -->
+
+	<script src="@routes.Assets.at("javascripts/jquery.cookie.js")" type="text/javascript"></script>
+	<script>
+	  switch (uiOpts().recipes.similarTabSel) {
+	    case 'recipes':
+		  $('#recipesTabs li:eq(0) a').tab('show')
+		  break;
+	    case 'items':
+		  $('#recipesTabs li:eq(1) a').tab('show')
+		  break;
+	  }
+	</script>
 
 	<script src="@routes.Assets.at("javascripts/select2.min.js")" type="text/javascript"></script>
 	@_addIngredientPicker("addIngredient", false)

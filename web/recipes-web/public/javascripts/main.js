@@ -1,3 +1,17 @@
+function uiOpts() {
+	$.cookie.json = true;
+	if ($.cookie("ui.opts") == undefined) {
+		$.cookie("ui.opts", {'recipes': {'similarTabSel': 'recipes'}});
+	}
+	return $.cookie("ui.opts");
+}
+
+function setUiOpt( name, value) {
+	var hash = uiOpts();
+	eval('hash.' + name + '=\'' + value + '\'');
+	$.cookie('ui.opts', hash);
+}
+
 function getForkName(inRecipeTitle) {
 	bootbox.prompt('Please name your new recipe', function(res) { if ( res != null && res != '') { document.location.href = '/recipes/' + inRecipeTitle + '/fork?newName=' + res; } });
 	return false;
