@@ -218,7 +218,7 @@
 ---
 {canonicalName: Nutmeg, tags: {SPICE, SPICY}}
 ---
-{canonicalName: Paprika, tags: {SPICE, HUNGARIAN, SPANISH, WARM, SMOKY_SALTY}}
+{canonicalName: Paprika, tags: {SPICE, HUNGARIAN, SPANISH, WARM, SMOKY_SALTY}, aliases: Colorau}
 ---
 {    canonicalName: Pimentón, parent: Paprika, tags: {-HUNGARIAN}, aliases: Pimenton}
 ---
@@ -232,7 +232,7 @@
 ---
 {    canonicalName: White Pepper, parent: Pepper, tags: EARTHY, aliases: White Peppercorns}
 ---
-{canonicalName: Ras el hanout, tags: {SPICE, NORTH_AFRICAN}, aliases: {Rass el hanout, Ras-el-hanout}, contains: {Ginger, Cardamom Powder, Mace, Cinnamon, Allspice}}
+{canonicalName: Ras el hanout, tags: {SPICE, NORTH_AFRICAN}, aliases: {Rass el hanout, Ras-el-hanout}, contains: {Ginger, Cardamom Powder, Cloves, Cinnamon, Allspice}}
 ---
 {canonicalName: Saffron, tags: {SPICE}}
 ---
@@ -347,8 +347,6 @@
 {    canonicalName: Tenderstem Broccoli, parent: Broccoli}
 ---
 {canonicalName: Brussels Sprouts, tags: {VEGETABLE}}
----
-{canonicalName: Butternut Squash, tags: {VEGETABLE}}
 ---
 {canonicalName: Cabbage, tags: {VEGETABLE, MUSTARDY}, aliases: {Green Cabbage, Green Cabbages, Cabbage Leaves}}
 ---
@@ -490,8 +488,6 @@
 ---
 {canonicalName: Parsnip, tags: {VEGETABLE}, aliases: {Parsnips}}
 ---
-{canonicalName: Pumpkin, tags: VEGETABLE, aliases: {Pumpkins}}
----
 {canonicalName: Potato, tags: {VEGETABLE, EARTHY}, aliases: {Potatoes}}
 ---
 {    canonicalName: Baking Potatoes, parent: Potato, aliases: {Baking Potato}}
@@ -519,6 +515,12 @@
 {    canonicalName: Baby Spinach, parent: Spinach, aliases: {Baby Spinach Leaves}}
 ---
 {canonicalName: Spring Greens, tags: VEGETABLE}
+---
+{canonicalName: Squash, tags: {VEGETABLE}, aliases: Cucurbita}
+---
+{    canonicalName: Butternut Squash, parent: Squash}
+---
+{    canonicalName: Pumpkin, parent: Squash, aliases: {Pumpkins}}
 ---
 {canonicalName: Swede, tags: {VEGETABLE}, aliases: {Swedes}}
 ---
@@ -848,6 +850,8 @@
 ---
 {    canonicalName: Wholemeal Breadcrumbs, tags: {BREAD}}
 ---
+{canonicalName: Brown Bread, tags: {BREAD}}
+---
 {canonicalName: Burger buns, tags: {BREAD}, aliases: {Burger bun, burger baps}}
 ---
 {canonicalName: Chapatis, tags: {BREAD, INDIAN}, aliases: Chapati}
@@ -895,6 +899,8 @@
 {    canonicalName: Corn Tortilla, parent: Tortilla, aliases: Corn Tortillas}
 ---
 {    canonicalName: Flour Tortilla, parent: Tortilla, aliases: Flour Tortillas}
+---
+{canonicalName: White Bread, tags: {BREAD}}
 ---
 {canonicalName: Wholegrain Bread, tags: {BREAD}, contains: Wholegrain Flour}
 ---
@@ -1591,7 +1597,7 @@
 ---
 {    canonicalName: Pork Sausages, parent: Sausages, contains: {Pork}}
 ---
-{        canonicalName: Chorizo, parent: Pork Sausages, tags: {SPANISH, MEXICAN}, contains: {Pork}}
+{        canonicalName: Chorizo, parent: Pork Sausages, tags: {SPANISH, MEXICAN}, contains: {Pork, Paprika, Pimentón}}
 ---
 {    canonicalName: Sausagemeat, parent: Sausages}
 ---
