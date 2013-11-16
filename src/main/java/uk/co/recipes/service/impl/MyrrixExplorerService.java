@@ -6,9 +6,6 @@ package uk.co.recipes.service.impl;
 import static uk.co.recipes.metrics.MetricNames.TIMER_ITEMS_MOSTSIMILAR;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_MOSTSIMILAR;
 
-import com.netflix.hystrix.HystrixCommandGroupKey;
-import com.netflix.hystrix.HystrixCommand;
-import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import java.io.IOException;
 import java.util.List;
 
@@ -17,6 +14,7 @@ import javax.inject.Singleton;
 
 import net.myrrix.client.ClientRecommender;
 
+import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.elasticsearch.common.base.Throwables;
 
 import uk.co.recipes.api.ICanonicalItem;
@@ -31,6 +29,8 @@ import uk.co.recipes.service.taste.impl.MyrrixTasteSimilarityService;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.netflix.hystrix.HystrixCommand;
+import com.netflix.hystrix.HystrixCommandGroupKey;
 
 /**
  * TODO
