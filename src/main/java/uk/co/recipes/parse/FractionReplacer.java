@@ -12,7 +12,7 @@ package uk.co.recipes.parse;
 public class FractionReplacer {
 
     public String replaceFractions( final String inStr) {
-        return specialReplace( specialReplace( specialReplace( inStr.trim(), "¼", ".25"), "¾", ".75"), "½", ".5");
+        return specialReplace( specialReplace( specialReplace( specialReplace( inStr.trim(), "⁄", "/"), "¼", ".25"), "¾", ".75"), "½", ".5");
     }
 
     private static String specialReplace(String inString, String oldPattern, String newPattern) {

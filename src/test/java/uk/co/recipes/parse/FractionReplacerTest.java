@@ -29,6 +29,12 @@ public class FractionReplacerTest {
         assertThat( fr.replaceFractions(" ½ lbs "), is("0.5 lbs"));
     }
 
+    @Test
+    public void testFractionSlashRemoval() {
+        final FractionReplacer fr = new FractionReplacer();
+        assertThat( fr.replaceFractions("8⁄9"), is("8/9"));
+    }
+
     // Should be an error, but too complex to solve now
     @Test(enabled=false)
     public void testBadFractions() {
