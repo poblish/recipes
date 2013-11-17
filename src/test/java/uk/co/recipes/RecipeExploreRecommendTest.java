@@ -91,6 +91,8 @@ public class RecipeExploreRecommendTest {
 	public void loadIngredientsFromYaml() throws InterruptedException, IOException {
 	    loader.load();
 
+		final IUser adminUser = userFactory.adminUser();
+
 		int count = 0;
 
 		for ( File each : new File("src/test/resources/ingredients").listFiles( new FilenameFilter() {
@@ -100,7 +102,7 @@ public class RecipeExploreRecommendTest {
 				return name.endsWith(".txt");
 			}
 		} )) {
-			dataUtils.parseIngredientsFrom( each.getName() );
+			dataUtils.parseIngredientsFrom( adminUser, each.getName() );
 			count++;
 		}
 

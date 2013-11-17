@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import org.elasticsearch.client.Client;
 
 import uk.co.recipes.DaggerModule;
+import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
@@ -95,6 +96,8 @@ public class BbcGoodFoodLoader {
 	public void loadIngredientsFromYaml() throws InterruptedException, IOException {
 		loader.load();
 
+		final IUser adminUser = userFactory.adminUser();
+
 		int count = 0;
 //		int errors = 0;
 
@@ -110,7 +113,7 @@ public class BbcGoodFoodLoader {
 			} )) {
 				try
 				{
-					dataUtils.parseIngredientsFrom( path + "ingredients/bbcgoodfood/", each.getName() );
+					dataUtils.parseIngredientsFrom( adminUser, path + "ingredients/bbcgoodfood/", each.getName() );
 					count++;
 				}
 				catch (RuntimeException e) {

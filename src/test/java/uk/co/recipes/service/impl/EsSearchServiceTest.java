@@ -20,8 +20,10 @@ import org.testng.annotations.Test;
 import uk.co.recipes.DaggerModule;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
+import uk.co.recipes.api.IUser;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
+import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.service.api.ISearchResult;
 import uk.co.recipes.test.TestDataUtils;
@@ -41,6 +43,8 @@ public class EsSearchServiceTest {
 
 	@Inject EsItemFactory items;
 	@Inject EsRecipeFactory recipes;
+	@Inject EsUserFactory userFactory;
+
 	@Inject ItemsLoader loader;
 	@Inject ObjectMapper mapper;
 	@Inject TestDataUtils dataUtils;
@@ -58,9 +62,11 @@ public class EsSearchServiceTest {
 	public void loadIngredientsFromYaml() throws IOException, InterruptedException {
 		loader.load();
 
-		dataUtils.parseIngredientsFrom("chCashBlackSpiceCurry.txt");
-		dataUtils.parseIngredientsFrom("bol1.txt");
-		dataUtils.parseIngredientsFrom("bol2.txt");
+		final IUser adminUser = userFactory.adminUser();
+
+		dataUtils.parseIngredientsFrom( adminUser, "chCashBlackSpiceCurry.txt");
+		dataUtils.parseIngredientsFrom( adminUser, "bol1.txt");
+		dataUtils.parseIngredientsFrom( adminUser, "bol2.txt");
 
 		Thread.sleep(900);
 	}

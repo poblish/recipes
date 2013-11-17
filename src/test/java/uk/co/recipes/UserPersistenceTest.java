@@ -40,15 +40,15 @@ import dagger.ObjectGraph;
  */
 public class UserPersistenceTest {
 
-    private final static String TEST_RECIPE = "inputs3.txt";
+	private final static String TEST_RECIPE = "inputs3.txt";
 
-    @Inject EsItemFactory itemFactory;
-    @Inject EsUserFactory userFactory;
-    @Inject EsRecipeFactory recipeFactory;
-    @Inject EsSequenceFactory sequenceFactory;
-    @Inject TestDataUtils dataUtils;
-    @Inject UserRatings userRatings;
-    @Inject ItemsLoader loader;
+	@Inject EsItemFactory itemFactory;
+	@Inject EsUserFactory userFactory;
+	@Inject EsRecipeFactory recipeFactory;
+	@Inject EsSequenceFactory sequenceFactory;
+	@Inject TestDataUtils dataUtils;
+	@Inject UserRatings userRatings;
+	@Inject ItemsLoader loader;
 
     private void injectDependencies() {
         ObjectGraph.create( new TestModule() ).inject(this);
@@ -65,7 +65,10 @@ public class UserPersistenceTest {
     @BeforeClass
     public void loadIngredientsFromYaml() throws IOException, InterruptedException {
         loader.load();
-		dataUtils.parseIngredientsFrom(TEST_RECIPE);
+
+		final IUser adminUser = userFactory.adminUser();
+
+        dataUtils.parseIngredientsFrom( adminUser, TEST_RECIPE);
 
         while ( recipeFactory.countAll() < 1) {
         	Thread.sleep(200); // Wait for saves to appear...

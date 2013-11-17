@@ -16,8 +16,10 @@ import javax.inject.Inject;
 import org.elasticsearch.client.Client;
 
 import uk.co.recipes.DaggerModule;
+import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.persistence.EsRecipeFactory;
+import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.test.TestDataUtils;
 
@@ -35,6 +37,7 @@ import dagger.ObjectGraph;
  */
 public class CurryFrenzyLoader {
 
+    @Inject EsUserFactory userFactory;
     @Inject EsRecipeFactory recipeFactory;
     @Inject Client esClient;
     @Inject ItemsLoader loader;
@@ -68,15 +71,17 @@ public class CurryFrenzyLoader {
 	}
 
 	public void start() throws IOException, InterruptedException {
-        updater.startListening();
+		updater.startListening();
 
-	    loadIngredientsFromYaml();
+		loadIngredientsFromYaml();
 
-	    shutDown();
+		shutDown();
 	}
 
 	public void loadIngredientsFromYaml() throws InterruptedException, IOException {
 		loader.load();
+
+		final IUser adminUser = userFactory.adminUser();
 
 		int count = 0;
 		int errors = 0;
@@ -90,7 +95,7 @@ public class CurryFrenzyLoader {
 		} )) {
 			try
 			{
-				dataUtils.parseIngredientsFrom( path + "ingredients/curryfrenzy/", each.getName() );
+				dataUtils.parseIngredientsFrom( adminUser, path + "ingredients/curryfrenzy/", each.getName() );
 				count++;
 			}
 			catch (RuntimeException e) {

@@ -19,7 +19,6 @@ import javax.inject.Inject;
 import uk.co.recipes.Ingredient;
 import uk.co.recipes.Recipe;
 import uk.co.recipes.RecipeStage;
-import uk.co.recipes.User;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.ITag;
@@ -36,7 +35,6 @@ import uk.co.recipes.tags.TagUtils;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.google.common.base.Optional;
-import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
@@ -76,22 +74,22 @@ public class TestDataUtils {
 		return parser.parse(inStr, inHandler, inDeferHandler);
 	}
 
-	public List<IIngredient> parseIngredientsFrom( final String inFilename) throws IOException {
-		return parseIngredientsFrom("src/test/resources/ingredients/", inFilename);
+	public List<IIngredient> parseIngredientsFrom( final IUser adminUser, final String inFilename) throws IOException {
+		return parseIngredientsFrom( adminUser, "src/test/resources/ingredients/", inFilename);
 	}
 
-	public List<IIngredient> parseIngredientsFrom( final String inDir, final String inFilename) throws IOException {
+	public List<IIngredient> parseIngredientsFrom( final IUser adminUser, final String inDir, final String inFilename) throws IOException {
 		final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPE_PARSE).time();
 
 		try {
-			return timedParseIngredientsFrom( inDir, inFilename);
+			return timedParseIngredientsFrom( adminUser, inDir, inFilename);
 		}
 		finally {
 			timerCtxt.stop();
 		}
 	}
 
-	private List<IIngredient> timedParseIngredientsFrom( final String inDir, final String inFilename) throws IOException {
+	private List<IIngredient> timedParseIngredientsFrom( final IUser adminUser, final String inDir, final String inFilename) throws IOException {
 		final List<IIngredient> allIngredients = Lists.newArrayList();
 
 		String recipeTitle = null;
@@ -177,14 +175,6 @@ public class TestDataUtils {
 		}
 
 		////////////////////////////////////////////////////////////
-
-		final IUser adminUser = userFactory.getOrCreate( "Admin", new Supplier<IUser>() {
-
-			@Override
-			public IUser get() {
-				return new User( "admin", "Admin");
-			}
-		} );
 
 		final RecipeStage stage1 = new RecipeStage();
 		stage1.addIngredients(allIngredients);
