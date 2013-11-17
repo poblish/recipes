@@ -94,13 +94,26 @@ public class ParseIngredientsTest {
 			public void foundIngredient( IIngredient ingr) {
 				assertThat( ingr.toString(), is("Ingredient{q=415 GRAMMES, item=CanonicalItem{name=Refried beans, tags={MEXICAN=true, PULSE=true, USA=true}}, notes={en=[(we used Discovery)]}}"));
 			}
-		}, new IDeferredIngredientHandler() {
+		}, new DummyDeferralHandler());
+	}
+
+	@Test
+	public void testCompleteParseWithHalfAReplaced() {
+		parser.parse( "0.5 x 400g can mixed pulses", new IParsedIngredientHandler() {
 
 			@Override
-			public void deferIngredient( DeferralStatus status) {
-				// NOOP
+			public void foundIngredient( IIngredient ingr) {
+				assertThat( ingr.toString(), is("Ingredient{q=200 GRAMMES, item=CanonicalItem{name=mixed pulses}}"));
 			}
-		});
+		}, new DummyDeferralHandler());
+
+		parser.parse( "Half an 802g can mixed pulses", new IParsedIngredientHandler() {
+
+			@Override
+			public void foundIngredient( IIngredient ingr) {
+				assertThat( ingr.toString(), is("Ingredient{q=401 GRAMMES, item=CanonicalItem{name=mixed pulses}}"));
+			}
+		}, new DummyDeferralHandler());
 	}
 
 	@Test
@@ -320,6 +333,14 @@ public class ParseIngredientsTest {
 	@AfterClass
 	public void shutDown() {
 		esClient.close();
+	}
+
+	private static class DummyDeferralHandler implements IDeferredIngredientHandler {
+
+		@Override
+		public void deferIngredient( DeferralStatus status) {
+			// NOOP
+		}
 	}
 
 	// Used by main method, not by BbcGoodFoodLoader itself!

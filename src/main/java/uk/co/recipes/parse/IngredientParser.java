@@ -70,6 +70,7 @@ public class IngredientParser {
 	// Not very nice hacks...
 	private static final Pattern    GRAMMES_OZ_STRIPPER = Pattern.compile("g/ ?[0-9\\.]+ ?oz", Pattern.CASE_INSENSITIVE);
 	private static final Pattern    MULTIWORD_COMMA_STRIPPER = Pattern.compile("(large|small|firm|frozen|thick|dried|boneless|skinless|raw|ripe|salted|unsalted),", Pattern.CASE_INSENSITIVE);
+	private static final Pattern    HALF_A_STRIPPER = Pattern.compile("^Half(?: an*)? ", Pattern.CASE_INSENSITIVE);
 	private static final Pattern    CUPS_STRIPPER = Pattern.compile("[0-9] Cups?/([0-9]+ml)", Pattern.CASE_INSENSITIVE);
 
 	public boolean parse( final String inRawStr, final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) {
@@ -274,6 +275,7 @@ public class IngredientParser {
 	    adjustedStr = GRAMMES_OZ_STRIPPER.matcher(adjustedStr).replaceAll("g");  // Strip stupid '200g/7oz' => '200g'
 	    adjustedStr = MULTIWORD_COMMA_STRIPPER.matcher(adjustedStr).replaceAll("$1");  // Pre-strip 'boneless, [skinless]' to work around our lame name parsing
 	    adjustedStr = CUPS_STRIPPER.matcher(adjustedStr).replaceAll("$1");  // Yuk, via CurryFrenzy
+	    adjustedStr = HALF_A_STRIPPER.matcher(adjustedStr).replaceAll("0.5 x ");  // Yuk, 'Half a 400g can' -> '0.5 x 400g can' for easier parsing
 	    return adjustedStr;
 	}
 
