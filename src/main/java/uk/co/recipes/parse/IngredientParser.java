@@ -71,6 +71,7 @@ public class IngredientParser {
 	private static final Pattern    GRAMMES_OZ_STRIPPER = Pattern.compile("g/ ?[0-9\\.]+ ?oz", Pattern.CASE_INSENSITIVE);
 	private static final Pattern    MULTIWORD_COMMA_STRIPPER = Pattern.compile("(large|small|firm|frozen|thick|dried|boneless|skinless|raw|ripe|salted|unsalted),", Pattern.CASE_INSENSITIVE);
 	private static final Pattern    HALF_A_STRIPPER = Pattern.compile("^Half(?: an*)? ", Pattern.CASE_INSENSITIVE);
+	private static final Pattern    WEAK_PREFIXES_STRIPPER = Pattern.compile("^(About|Approx|At least|Leaves from|Plus|Roughly|Up to) ", Pattern.CASE_INSENSITIVE);
 	private static final Pattern    CUPS_STRIPPER = Pattern.compile("[0-9] Cups?/([0-9]+ml)", Pattern.CASE_INSENSITIVE);
 
 	public boolean parse( final String inRawStr, final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) {
@@ -272,6 +273,7 @@ public class IngredientParser {
 
 	private String adjustInput( final String inRawStr) {
 	    String adjustedStr = new FractionReplacer().replaceFractions(inRawStr);
+	    adjustedStr = WEAK_PREFIXES_STRIPPER.matcher(adjustedStr).replaceAll("");  // "Approx 100g" -> "100g" is fine
 	    adjustedStr = GRAMMES_OZ_STRIPPER.matcher(adjustedStr).replaceAll("g");  // Strip stupid '200g/7oz' => '200g'
 	    adjustedStr = MULTIWORD_COMMA_STRIPPER.matcher(adjustedStr).replaceAll("$1");  // Pre-strip 'boneless, [skinless]' to work around our lame name parsing
 	    adjustedStr = CUPS_STRIPPER.matcher(adjustedStr).replaceAll("$1");  // Yuk, via CurryFrenzy
