@@ -88,32 +88,24 @@ public class ParseIngredientsTest {
 
 	@Test
 	public void testCompleteParse() {
-		parser.parse( "415g can refried beans (we used Discovery)", new IParsedIngredientHandler() {
-
-			@Override
-			public void foundIngredient( IIngredient ingr) {
-				assertThat( ingr.toString(), is("Ingredient{q=415 GRAMMES, item=CanonicalItem{name=Refried beans, tags={MEXICAN=true, PULSE=true, USA=true}}, notes={en=[(we used Discovery)]}}"));
-			}
-		}, new DummyDeferralHandler());
+		testCompleteParse( "415g can refried beans (we used Discovery)", "Ingredient{q=415 GRAMMES, item=CanonicalItem{name=Refried beans, tags={MEXICAN=true, PULSE=true, USA=true}}, notes={en=[(we used Discovery)]}}");
 	}
 
 	@Test
 	public void testCompleteParseWithHalfAReplaced() {
-		parser.parse( "0.5 x 400g can mixed pulses", new IParsedIngredientHandler() {
+		testCompleteParse( "Half an 802g can mixed pulses", "Ingredient{q=401 GRAMMES, item=CanonicalItem{name=mixed pulses}}");
+		testCompleteParse( "½ x 100g bag watercress", "Ingredient{q=50 GRAMMES, item=CanonicalItem{name=Watercress, tags={VEGETABLE=true}}}");
+		testCompleteParse( "0.5 x 400g can mixed pulses", "Ingredient{q=200 GRAMMES, item=CanonicalItem{name=mixed pulses}}");
+	}
+
+	private void testCompleteParse( final String inInput, final String inExpectedToString) {
+		assertThat( inInput + " not parsed!", parser.parse( inInput, new IParsedIngredientHandler() {
 
 			@Override
 			public void foundIngredient( IIngredient ingr) {
-				assertThat( ingr.toString(), is("Ingredient{q=200 GRAMMES, item=CanonicalItem{name=mixed pulses}}"));
+				assertThat( ingr.toString(), is(inExpectedToString));
 			}
-		}, new DummyDeferralHandler());
-
-		parser.parse( "Half an 802g can mixed pulses", new IParsedIngredientHandler() {
-
-			@Override
-			public void foundIngredient( IIngredient ingr) {
-				assertThat( ingr.toString(), is("Ingredient{q=401 GRAMMES, item=CanonicalItem{name=mixed pulses}}"));
-			}
-		}, new DummyDeferralHandler());
+		}, new DummyDeferralHandler()), is(true));
 	}
 
 	@Test
