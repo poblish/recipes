@@ -177,4 +177,16 @@ public class EsUserFactory implements IUserPersistence {
 			throw Throwables.propagate(e);
 		}
 	}
+
+	// FIXME, perhaps
+	@Override
+	public IUser adminUser() {
+		return getOrCreate( "Admin", new Supplier<IUser>() {
+
+			@Override
+			public IUser get() {
+				return new User( "admin", "Admin");
+			}
+		} );
+	}
 }

@@ -15,5 +15,7 @@ import com.google.common.base.Optional;
  */
 public interface IUserPersistence extends IPersistenceAPI<IUser> {
 
+	IUser adminUser();
+
 	Optional<IUser> findWithAuth( final IUserAuth inAuth) throws IOException;
 }
