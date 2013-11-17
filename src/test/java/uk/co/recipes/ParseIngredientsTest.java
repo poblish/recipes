@@ -269,11 +269,11 @@ public class ParseIngredientsTest {
 		final List<IIngredient> ingrBol2 = dataUtils.parseIngredientsFrom( ADMIN_USER, "bol2.txt");
 		final List<IIngredient> ingrChBeef = dataUtils.parseIngredientsFrom( ADMIN_USER, "chineseBeef.txt");
 
-		assertThat( Categorisation.forIngredients(ingr1).toString(), is("[ALCOHOL, BRAMBLE_HEDGE, BRINE_SALT, CITRUS, DAIRY, EARTHY, EGG, ENGLISH, FAT x 2, FLOUR x 2, FRUIT, HERB x 4, LEMON, MEAT x 4, OIL, RED_MEAT x 2, SAUCE x 3, STOCK x 2, SULPHUROUS x 2, VEGETABLE x 3, WINE, WOODLAND]"));
-		assertThat( Categorisation.forIngredients(ingr2).toString(), is("[CHEESE x 2, CHILLI, CHINESE, CITRUS, DAIRY x 2, FAT, FRUIT, GREEN_GRASSY, INDIAN, ITALIAN x 3, LEMON, OIL, PASTA, SULPHUROUS, THAI, VEGETABLE x 3]"));
-		assertThat( Categorisation.forIngredients(ingr4).toString(), is("[ASIAN, CHILLI, CHINESE x 2, CITRUS, CREAMY_FRUITY, EARTHY, FAT, FLORAL_FRUITY, FRUIT, GARLIC, GREEN_GRASSY, INDIAN x 6, MEAT, NUT x 2, OIL, POULTRY, SALT, SPICE x 6, SPICY x 2, SULPHUROUS x 2, THAI, TROPICAL, VEGETABLE x 2, WHITE_MEAT]"));
-		assertThat( Categorisation.forIngredients(ingrBol2).toString(), is("[ALCOHOL, BRINE_SALT, DAIRY x 2, EARTHY, FAT, FRESH_FRUITY, MEAT x 3, OFFAL, POULTRY, RED_MEAT, SPICE, SPICY, SULPHUROUS, VEGETABLE x 4, WINE, WOODLAND]"));
-		assertThat( Categorisation.forIngredients(ingrChBeef).toString(), is("[ALCOHOL x 2, ANISEED, BAKING, CHILLI, CHINESE x 6, CITRUS, FAT, FLOUR, GARLIC, GREEN_GRASSY x 2, INDIAN x 3, MEAT x 2, OIL, RED_MEAT x 2, RICE, SAUCE x 2, SPANISH, SPICE x 3, SPIRIT, STOCK, SUGAR, SULPHUROUS x 2, THAI, VEGETABLE x 2, WINE]"));
+		assertThat( Categorisation.forIngredients(ingr1).toString(), is("[ALCOHOL, CITRUS, DAIRY, EARTHY, EGG, ENGLISH, FAT x 2, FLOUR x 2, FRUIT, GRASSY, HERB x 4, LEMON, MEAT x 4, OIL, RED_MEAT x 2, SAUCE x 3, SMOKY_SALTY, STOCK x 2, TART, UMAMI x 2, VEGETABLE x 3, WINE]"));
+		assertThat( Categorisation.forIngredients(ingr2).toString(), is("[CHEESE x 2, CHILLI, CHINESE, CITRUS, DAIRY x 2, FAT, FRUIT, HOT, INDIAN, ITALIAN x 3, LEMON, OIL, PASTA, TART, THAI, UMAMI, VEGETABLE x 3]"));
+		assertThat( Categorisation.forIngredients(ingr4).toString(), is("[ASIAN, CHILLI, CHINESE x 2, CITRUS, CREAMY, EARTHY, FAT, FRUIT, GARLIC, HOT, INDIAN x 6, MEAT, NUT x 2, OIL, PEPPERY x 2, POULTRY, SALT, SPICE x 6, SPICY x 4, SWEET_NUTTY, THAI, TROPICAL, VEGETABLE x 2, WARM x 2, WHITE_MEAT]"));
+		assertThat( Categorisation.forIngredients(ingrBol2).toString(), is("[ALCOHOL, DAIRY x 2, FAT, MEAT x 3, OFFAL, POULTRY, RED_MEAT, SMOKY_SALTY, SPICE, SPICY, UMAMI x 3, VEGETABLE x 4, WINE]"));
+		assertThat( Categorisation.forIngredients(ingrChBeef).toString(), is("[ALCOHOL x 2, ANISEED, BAKING, CHILLI, CHINESE x 6, CITRUS, FAT, FLORAL, FLOUR, GARLIC, HOT, INDIAN x 3, MEAT x 2, OIL, PEPPERY, RED_MEAT x 2, RICE, SAUCE x 2, SPANISH, SPICE x 3, SPICY x 2, SPIRIT, STOCK, SUGAR, THAI, UMAMI, VEGETABLE x 2, WARM, WINE]"));
 
 		final ITag[] tags = NationalCuisineTags.values();
 		assertThat( Categorisation.forIngredients(ingr1, tags).toString(), is("[ENGLISH]"));
@@ -294,7 +294,7 @@ public class ParseIngredientsTest {
         assertThat( Categorisation.forIngredientsWeighted(ingrChBeef, natTags).toString(), is("[CHINESE x 11, INDIAN x 5, SPANISH, THAI x 2]"));
 
         final ITag[] flavourTags = FlavourTags.values();
-        assertThat( Categorisation.forIngredientsWeighted(ingrChBeef, flavourTags).toString(), is("[ANISEED x 2, CITRUS x 2, GARLIC x 2, GREEN_GRASSY x 4, SULPHUROUS x 4]"));
+        assertThat( Categorisation.forIngredientsWeighted(ingrChBeef, flavourTags).toString(), is("[ANISEED x 2, CITRUS x 2, FLORAL x 2, GARLIC x 2, HOT x 2, PEPPERY x 2, SPICY x 4, UMAMI x 2, WARM x 2]"));
 	}
 
     @Test
