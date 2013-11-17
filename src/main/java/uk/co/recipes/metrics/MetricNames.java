@@ -19,6 +19,8 @@ public interface MetricNames {
 	String TIMER_RECIPES_MOSTSIMILAR = "recipes.mostsimilar";
 
     String TIMER_RECIPE_PARSE = "recipe.parse";
+    String TIMER_RECIPE_LINE_PARSE = "recipe.line.parse";
+    String TIMER_RECIPES_DIR_PROCESS = "recipes.dir.process";
 
     String TIMER_ITEMS_NAME_GETS = "items.by_name.get";
     String TIMER_ITEMS_ID_GETS = "items.by_id.get";
@@ -35,6 +37,6 @@ public interface MetricNames {
 
     String TIMER_USER_LOCAL_GET = "recipe.getLocalUser";
 
-    String TIMER_LOAD_ITEM_PROCESSITEM = "recipes.laod.item.processItem";
+    String TIMER_LOAD_ITEM_PROCESSITEM = "recipes.load.item.processItem";
 
 }

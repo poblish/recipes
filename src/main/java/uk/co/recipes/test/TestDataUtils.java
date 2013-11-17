@@ -4,6 +4,7 @@
 package uk.co.recipes.test;
 
 import static java.util.Locale.ENGLISH;
+import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPE_PARSE;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +33,8 @@ import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.tags.TagUtils;
 
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
@@ -47,6 +50,7 @@ import com.google.common.io.Files;
 public class TestDataUtils {
 
 	@Inject IngredientParser parser;
+	@Inject MetricRegistry metrics;
 	@Inject EsUserFactory userFactory;
 	@Inject EsItemFactory itemFactory;
 	@Inject EsRecipeFactory recipeFactory;
@@ -77,6 +81,17 @@ public class TestDataUtils {
 	}
 
 	public List<IIngredient> parseIngredientsFrom( final String inDir, final String inFilename) throws IOException {
+		final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPE_PARSE).time();
+
+		try {
+			return timedParseIngredientsFrom( inDir, inFilename);
+		}
+		finally {
+			timerCtxt.stop();
+		}
+	}
+
+	private List<IIngredient> timedParseIngredientsFrom( final String inDir, final String inFilename) throws IOException {
 		final List<IIngredient> allIngredients = Lists.newArrayList();
 
 		String recipeTitle = null;

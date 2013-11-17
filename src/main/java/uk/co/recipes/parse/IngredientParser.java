@@ -4,7 +4,7 @@
 package uk.co.recipes.parse;
 
 import static java.util.Locale.ENGLISH;
-import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPE_PARSE;
+import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPE_LINE_PARSE;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -73,7 +73,7 @@ public class IngredientParser {
 	private static final Pattern    CUPS_STRIPPER = Pattern.compile("[0-9] Cups?/([0-9]+ml)", Pattern.CASE_INSENSITIVE);
 
 	public boolean parse( final String inRawStr, final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) {
-		final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPE_PARSE).time();
+		final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPE_LINE_PARSE).time();
 
 		try {
 			return timedParse(inRawStr, inHandler, inDeferHandler);

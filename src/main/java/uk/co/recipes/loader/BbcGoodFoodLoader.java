@@ -5,6 +5,7 @@ package uk.co.recipes.loader;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_DIR_PROCESS;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_PUTS;
 
 import java.io.File;
@@ -25,6 +26,7 @@ import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.test.TestDataUtils;
 
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
 import com.google.common.base.Throwables;
 
 import dagger.Module;
@@ -96,23 +98,30 @@ public class BbcGoodFoodLoader {
 		int count = 0;
 //		int errors = 0;
 
-		for ( File each : new File( path + "ingredients/bbcgoodfood/").listFiles( new FilenameFilter() {
+		final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_DIR_PROCESS + ":bbcGoodFood").time();
 
-			@Override
-			public boolean accept( File dir, String name) {
-				return name.endsWith(".txt");
+		try {
+			for ( File each : new File( path + "ingredients/bbcgoodfood/").listFiles( new FilenameFilter() {
+
+				@Override
+				public boolean accept( File dir, String name) {
+					return name.endsWith(".txt");
+				}
+			} )) {
+				try
+				{
+					dataUtils.parseIngredientsFrom( path + "ingredients/bbcgoodfood/", each.getName() );
+					count++;
+				}
+				catch (RuntimeException e) {
+					System.err.println(e);
+					// FIXME: use LOG.error("", e);
+//					errors++;
+				}
 			}
-		} )) {
-			try
-			{
-				dataUtils.parseIngredientsFrom( path + "ingredients/bbcgoodfood/", each.getName() );
-				count++;
-			}
-			catch (RuntimeException e) {
-				System.err.println(e);
-				// FIXME: use LOG.error("", e);
-//				errors++;
-			}
+		}
+		finally {
+			timerCtxt.stop();
 		}
 
         while ( recipeFactory.countAll() < count) {
