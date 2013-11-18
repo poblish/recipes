@@ -5,10 +5,15 @@
   i: Coriander Powder
 -
   i: Coriander Seeds
+  fave:
   score: 3
+-
+  i: Broccoli
+  block:
 -
   i: Garam Masala
   score: 10
+  fave:
 -
   i: Ginger
   score: 10
