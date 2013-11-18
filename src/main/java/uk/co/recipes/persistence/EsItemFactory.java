@@ -272,6 +272,9 @@ public class EsItemFactory implements IItemPersistence {
 	public List<ICanonicalItem> getAll( final List<Long> inIds) throws IOException {
 	    final Timer.Context timerCtxt = metrics.timer("items.getAll").time();
 
+	    // FIXME OK, we can't use ES GET methods, because 'id' is the name, not this numeric Id
+	    // But the least we could do is use the ES MultiSearch API, not n individual searches!
+
 		try {
 	        final List<ICanonicalItem> results = Lists.newArrayList();
 	
