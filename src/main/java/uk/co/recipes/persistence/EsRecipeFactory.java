@@ -41,6 +41,7 @@ import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * TODO
@@ -53,30 +54,18 @@ public class EsRecipeFactory implements IRecipePersistence {
 	@SuppressWarnings("unused")
 	private final static Logger LOG = LoggerFactory.getLogger( EsRecipeFactory.class );
 
-	@Inject
-	Client esClient;
-
-	@Inject
-	HttpClient httpClient;
+	@Inject Client esClient;
+	@Inject HttpClient httpClient;
+	@Inject EsUtils esUtils;
+	@Inject EsSequenceFactory sequences;
+	@Inject ObjectMapper mapper;
 
 	@Inject
 	@Named("elasticSearchRecipesUrl")
 	String itemIndexUrl;
 
-	@Inject
-	ObjectMapper mapper;
-
-	@Inject
-	EsUtils esUtils;
-
-	@Inject
-	EsSequenceFactory sequences;
-
-	@Inject
-	MetricRegistry metrics;
-
-    @Inject
-    IEventService eventService;
+	@Inject MetricRegistry metrics;
+	@Inject IEventService eventService;
 
 
 	public Optional<IRecipe> get( final String inName) throws IOException {
@@ -127,7 +116,7 @@ public class EsRecipeFactory implements IRecipePersistence {
 		try {
 			inRecipe.setId(newId);
 
-            /* IndexResponse esResp = */ esClient.prepareIndex( "recipe", "recipes", String.valueOf(newId))/*.setCreate(true) */.setSource( mapper.writeValueAsString(inRecipe) ).execute().actionGet();
+			esClient.prepareIndex( "recipe", "recipes", String.valueOf(newId))/*.setCreate(true) */.setSource( mapper.writeValueAsString(inRecipe) ).execute().actionGet();
 
 			eventService.addRecipe(inRecipe);
 		}
