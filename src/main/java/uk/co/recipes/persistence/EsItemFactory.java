@@ -270,17 +270,24 @@ public class EsItemFactory implements IItemPersistence {
 	 * @return
 	 */
 	public List<ICanonicalItem> getAll( final List<Long> inIds) throws IOException {
-        final List<ICanonicalItem> results = Lists.newArrayList();
+	    final Timer.Context timerCtxt = metrics.timer("items.getAll").time();
 
-        for ( final Long eachId : inIds) {
-            Optional<ICanonicalItem> oI = getById(eachId);
-
-            if (oI.isPresent()) {  // Shouldn't happen in Production!!
-                results.add( oI.get() );
-            }
-        }
-
-        return results;
+		try {
+	        final List<ICanonicalItem> results = Lists.newArrayList();
+	
+	        for ( final Long eachId : inIds) {
+	            Optional<ICanonicalItem> oI = getById(eachId);
+	
+	            if (oI.isPresent()) {  // Shouldn't happen in Production!!
+	                results.add( oI.get() );
+	            }
+	        }
+	
+	        return results;
+		}
+		finally {
+			timerCtxt.close();
+		}
 	}
 
 	public Optional<ICanonicalItem> findBestMatchByName( final String[] inNames) throws IOException {
