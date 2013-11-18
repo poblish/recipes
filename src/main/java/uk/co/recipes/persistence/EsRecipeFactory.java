@@ -116,7 +116,7 @@ public class EsRecipeFactory implements IRecipePersistence {
 			return Optional.absent();
 		}
 
-		return esUtils.findOneByIdAndType( itemIndexUrl, inId, IRecipe.class, Recipe.class);
+		return Optional.fromNullable((IRecipe) mapper.readValue( esClient.prepareGet( "recipe", "recipes", String.valueOf(inId)).execute().actionGet().getSourceAsString(), Recipe.class));
 	}
 
 	public IRecipe put( final IRecipe inRecipe, String inId_Unused) throws IOException {
@@ -241,17 +241,19 @@ public class EsRecipeFactory implements IRecipePersistence {
 	 * @throws IOException 
 	 */
 	public List<IRecipe> getAll( final List<Long> inIds) throws IOException {
-		final List<IRecipe> results = Lists.newArrayList();
+		final Timer.Context timerCtxt = metrics.timer("recipes.getAll").time();
 
-		for ( final Long eachId : inIds) {
-			Optional<IRecipe> oR = getById(eachId);
-
-			if (oR.isPresent()) {  // Shouldn't happen in Production!!
-				results.add( oR.get() );
-			}
+		final Collection<String> stringIds = Sets.newHashSet();
+		for ( Long each : inIds) {
+			stringIds.add( String.valueOf(each) );
 		}
 
-		return results;
+		try {
+			return esUtils.deserializeRecipeHits( esClient.prepareMultiGet().add( "recipe", "recipes", stringIds).execute().actionGet() );
+		}
+		finally {
+			timerCtxt.close();
+		}
 	}
 
     @Override

@@ -18,6 +18,8 @@ import org.elasticsearch.ElasticSearchException;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse.AnalyzeToken;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsRequestBuilder;
+import org.elasticsearch.action.get.MultiGetItemResponse;
+import org.elasticsearch.action.get.MultiGetResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.Logger;
@@ -118,6 +120,24 @@ public class EsUtils {
 
 		for ( final SearchHit eachHit : inHits) {
 			results.add( mapper.readValue( eachHit.getSourceAsString(), Recipe.class) );
+		}
+
+		return results;
+	}
+
+	public List<IRecipe> deserializeRecipeHits( final MultiGetResponse inResponses) throws IOException {
+		if ( inResponses.getResponses().length == 0) {
+			return Collections.emptyList();
+		}
+
+		final List<IRecipe> results = Lists.newArrayList();
+
+		for ( final MultiGetItemResponse eachHit : inResponses.getResponses()) {
+			if (!eachHit.getResponse().isExists()) {
+				LOG.warn("deserializeRecipeHits() Could not load Recipe " + eachHit.getId() + ", skipping.");
+				continue;
+			}
+			results.add( mapper.readValue( eachHit.getResponse().getSourceAsString(), Recipe.class) );
 		}
 
 		return results;
