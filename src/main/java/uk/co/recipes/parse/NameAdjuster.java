@@ -40,7 +40,9 @@ public class NameAdjuster {
 				if (theNameToUse.startsWith(eachPrefix + " ")) {
 					incr += eachPrefix.length() + 1;
 					theNameToUse = theNameToUse.substring( eachPrefix.length() + 1);
-					notesToAdd.add(eachPrefix);
+					if (!eachPrefix.equals("x")) {  // Yuk, ugly bodge. There are plenty of these we want to just chuck away...
+						notesToAdd.add(eachPrefix);
+					}
 					anyDoneThisRound = true;
 				}
 			}
