@@ -22,6 +22,8 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.indices.IndexMissingException;
 import org.elasticsearch.indices.TypeMissingException;
 import org.elasticsearch.search.SearchHit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.co.recipes.ForkDetails;
 import uk.co.recipes.Recipe;
@@ -48,7 +50,8 @@ import com.google.common.collect.Lists;
  */
 public class EsRecipeFactory implements IRecipePersistence {
 
-//	private final static Logger LOG = LoggerFactory.getLogger( EsRecipeFactory.class );
+	@SuppressWarnings("unused")
+	private final static Logger LOG = LoggerFactory.getLogger( EsRecipeFactory.class );
 
 	@Inject
 	Client esClient;

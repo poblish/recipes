@@ -20,6 +20,8 @@ import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse.AnalyzeTok
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsRequestBuilder;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.search.SearchHit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.IRecipe;
@@ -43,6 +45,10 @@ public class EsUtils {
 
 	@Inject Client esClient;
 	@Inject ObjectMapper mapper;
+
+	@SuppressWarnings("unused")
+	private final static Logger LOG = LoggerFactory.getLogger( EsUtils.class );
+
 
 	public JsonParser parseSource( final String inUrlString) throws IOException {
 		return mapper.readTree( new URL(inUrlString) ).path("_source").traverse();
