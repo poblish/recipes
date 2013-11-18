@@ -93,8 +93,11 @@ public class ParseIngredientsTest {
 
 	@Test
 	public void testCompleteParseWithHalfAReplaced() {
-		testCompleteParse( "Half an 802g can mixed pulses", "Ingredient{q=401 GRAMMES, item=CanonicalItem{name=mixed pulses}}");
 		testCompleteParse( "½ x 100g bag watercress", "Ingredient{q=50 GRAMMES, item=CanonicalItem{name=Watercress, tags={VEGETABLE=true}}}");
+		testCompleteParse( "½ cucumber", "Ingredient{q=0.5, item=CanonicalItem{name=Cucumber, tags={VEGETABLE=true}}}");
+		testCompleteParse( "½ 20g pack tarragon", "Ingredient{q=10 GRAMMES, item=CanonicalItem{name=Tarragon, tags={GRASSY=true, HERB=true}}}");
+		testCompleteParse( "half 22g bunch coriander", "Ingredient{q=11 GRAMMES, item=CanonicalItem{name=Coriander, tags={GRASSY=true, HERB=true}}}");
+		testCompleteParse( "Half an 802g can mixed pulses", "Ingredient{q=401 GRAMMES, item=CanonicalItem{name=mixed pulses}}");
 		testCompleteParse( "0.5 x 400g can mixed pulses", "Ingredient{q=200 GRAMMES, item=CanonicalItem{name=mixed pulses}}");
 	}
 

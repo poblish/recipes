@@ -71,7 +71,7 @@ public class IngredientParser {
 	private static final Pattern    GRAMMES_LBS_OZ_STRIPPER = Pattern.compile("g/ ?[0-9\\. lb]+ ?oz", Pattern.CASE_INSENSITIVE);
 	private static final Pattern    ML_FL_OZ_STRIPPER = Pattern.compile("ml/ ?[0-9\\.]+ ?fl oz", Pattern.CASE_INSENSITIVE);
 	private static final Pattern    MULTIWORD_COMMA_STRIPPER = Pattern.compile("(large|small|firm|frozen|thick|dried|boneless|skinless|raw|ripe|salted|unsalted),", Pattern.CASE_INSENSITIVE);
-	private static final Pattern    HALF_A_STRIPPER = Pattern.compile("^(Half|0.5)(?: an?| [^x ])", Pattern.CASE_INSENSITIVE);  // Replace '0.5 A' and '0.5 an A', but don't replace '0.5 x A' - that causes problems
+	private static final Pattern    HALF_A_STRIPPER = Pattern.compile("^(Half|0.5)(?: an?)? ", Pattern.CASE_INSENSITIVE);  // Replace '0.5 A' and '0.5 an A', but don't replace '0.5 x A' - that causes problems. Horrible look-ahead...
 	private static final Pattern    WEAK_PREFIXES_STRIPPER = Pattern.compile("^(About|Approx|At least|Leaves from|Plus|Roughly|Up to) ", Pattern.CASE_INSENSITIVE);
 	private static final Pattern    CUPS_STRIPPER = Pattern.compile("[0-9] Cups?/([0-9]+ml)", Pattern.CASE_INSENSITIVE);
 
@@ -279,7 +279,11 @@ public class IngredientParser {
 	    adjustedStr = ML_FL_OZ_STRIPPER.matcher(adjustedStr).replaceAll("ml");  // Strip stupid '200ml/7fl oz' => '200ml'
 	    adjustedStr = MULTIWORD_COMMA_STRIPPER.matcher(adjustedStr).replaceAll("$1");  // Pre-strip 'boneless, [skinless]' to work around our lame name parsing
 	    adjustedStr = CUPS_STRIPPER.matcher(adjustedStr).replaceAll("$1");  // Yuk, via CurryFrenzy
-	    adjustedStr = HALF_A_STRIPPER.matcher(adjustedStr).replaceAll("0.5 x ");  // Yuk, 'Half a 400g can' -> '0.5 x 400g can' for easier parsing
+
+		if (!adjustedStr.contains(" x ")) {  // Ugly, prevents '0.5 x foo' => '0.5 x x foo'
+			adjustedStr = HALF_A_STRIPPER.matcher(adjustedStr).replaceAll("0.5 x ");  // Yuk, 'Half a 400g can' -> '0.5 x 400g can' for easier parsing
+		}
+
 	    return adjustedStr;
 	}
 
