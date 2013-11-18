@@ -25,7 +25,9 @@ import org.elasticsearch.search.SearchHit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.Recipe;
+import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -138,6 +140,24 @@ public class EsUtils {
 				continue;
 			}
 			results.add( mapper.readValue( eachHit.getResponse().getSourceAsString(), Recipe.class) );
+		}
+
+		return results;
+	}
+
+	public List<ICanonicalItem> deserializeItemHits( final MultiGetResponse inResponses) throws IOException {
+		if ( inResponses.getResponses().length == 0) {
+			return Collections.emptyList();
+		}
+
+		final List<ICanonicalItem> results = Lists.newArrayList();
+
+		for ( final MultiGetItemResponse eachHit : inResponses.getResponses()) {
+			if (!eachHit.getResponse().isExists()) {
+				LOG.warn("deserializeItemHits() Could not load Item " + eachHit.getId() + ", skipping.");
+				continue;
+			}
+			results.add( mapper.readValue( eachHit.getResponse().getSourceAsString(), CanonicalItem.class) );
 		}
 
 		return results;
