@@ -100,7 +100,7 @@ public class Items extends AbstractExplorableController {
         return redirect("/items/" + URLEncoder.encode( item.getCanonicalName(), "utf-8"));  // FIXME - horrible way to reload!
     }
 
-    public Result fave( final String name) throws IOException {
+    public Result fave( final String name) throws IOException, InterruptedException {
         final ICanonicalItem item = items.get(name).get();
 
         final IUser user1 = getLocalUser();
@@ -109,7 +109,9 @@ public class Items extends AbstractExplorableController {
         }
 
 		faves.faveItem( user1, item);
-  
+
+        items.waitUntilRefreshed();
+
         return redirect("/items/" + URLEncoder.encode( item.getCanonicalName(), "utf-8"));  // FIXME - horrible way to reload!
     }
 
