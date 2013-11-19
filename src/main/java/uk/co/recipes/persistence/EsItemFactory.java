@@ -11,7 +11,6 @@ import static uk.co.recipes.metrics.MetricNames.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -228,11 +227,6 @@ public class EsItemFactory implements IItemPersistence {
 		catch (IOException e) {
 			throw Throwables.propagate(e);
 		}
-	}
-
-	// FIXME - pretty lame!
-	public Collection<CanonicalItem> listAll() throws IOException {
-		return esUtils.listAll( itemIndexUrl, CanonicalItem.class);
 	}
 
     public long countAll() throws IOException {

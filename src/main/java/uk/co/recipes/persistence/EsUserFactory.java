@@ -8,7 +8,6 @@ import static org.elasticsearch.index.query.QueryBuilders.fieldQuery;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -100,11 +99,6 @@ public class EsUserFactory implements IUserPersistence {
 		catch (IOException e) {
 			throw Throwables.propagate(e);
 		}
-	}
-
-	// FIXME - pretty lame!
-	public Collection<User> listAll() throws IOException {
-		return esUtils.listAll( usersIndexUrl, User.class);
 	}
 
     @Override

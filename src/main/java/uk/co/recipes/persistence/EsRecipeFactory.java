@@ -197,11 +197,6 @@ public class EsRecipeFactory implements IRecipePersistence {
         return String.valueOf( inRecipe.getId() ); // inRecipe.getTitle().toLowerCase().replace( ' ', '_');
 	}
 
-    // FIXME - pretty lame!
-    public Collection<Recipe> listAll() throws IOException {
-        return esUtils.listAll( itemIndexUrl, Recipe.class);
-    }
-
     public long countAll() throws IOException {
         return esUtils.countAll("recipes");
     }
