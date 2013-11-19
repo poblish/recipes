@@ -103,6 +103,9 @@ public class UserPersistenceTest {
 //        assertThat( retrievedUser.getPrefs().getExplorerExcludes(), hasItem( MeatAndFishTags.MEAT ));
         assertThat( retrievedUser.getPrefs().getExplorerIncludes().toString(), is("[TagFilterItem{tag=VEGETABLE}, TagFilterItem{tag=FISH}, ItemFilterItem{name=Ginger}]"));
         assertThat( retrievedUser.getPrefs().getExplorerExcludes().toString(), is("[ItemFilterItem{name=Coriander}, TagFilterItem{tag=MEAT}, TagFilterItem{tag=SAUSAGE}]"));
+
+        // Why not test this method too?
+        assertThat( userFactory.getByName( u1.getUserName() ), is(u1));
     }
 
     @Test
