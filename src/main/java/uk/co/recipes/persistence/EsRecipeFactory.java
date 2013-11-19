@@ -15,7 +15,6 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.apache.http.client.HttpClient;
 import org.elasticsearch.client.Client;
@@ -59,11 +58,6 @@ public class EsRecipeFactory implements IRecipePersistence {
 	@Inject EsUtils esUtils;
 	@Inject EsSequenceFactory sequences;
 	@Inject ObjectMapper mapper;
-
-	@Inject
-	@Named("elasticSearchRecipesUrl")
-	String itemIndexUrl;
-
 	@Inject MetricRegistry metrics;
 	@Inject IEventService eventService;
 

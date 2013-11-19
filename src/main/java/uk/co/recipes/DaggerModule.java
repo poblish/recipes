@@ -131,12 +131,6 @@ public class DaggerModule {
 	}
 
 	@Provides
-	@Named("elasticSearchRecipesUrl")
-	String provideEsRecipesUrl() {
-		return "http://localhost:9200/recipe/recipes";
-	}
-
-	@Provides
 	@Named("elasticSearchUsersUrl")
 	String provideEsUsersUrl() {
 		return "http://localhost:9200/recipe/users";

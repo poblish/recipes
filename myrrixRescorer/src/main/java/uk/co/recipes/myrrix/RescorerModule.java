@@ -90,12 +90,6 @@ public class RescorerModule {
 		return "http://localhost:9200/recipe/items";
 	}
 
-	@Provides
-	@Named("elasticSearchRecipesUrl")
-	String provideEsRecipesUrl() {
-		return "http://localhost:9200/recipe/recipes";
-	}
-
     @Provides
     @Singleton
     MetricRegistry provideMetricRegistry() {
