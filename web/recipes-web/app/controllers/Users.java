@@ -54,8 +54,14 @@ public class Users extends Controller {
     }
 
     public Result ingestPrefs() throws IOException {
-    	final String data = prefsIngester.parseRecommendations( new File( /* FIXME Hardcoded: */ "/Users/andrewregan/Development/java/recipe_explorer/src/test/resources/recommendations1.yaml") );
+    	final File theFile = new File( /* FIXME Hardcoded: */ "/Users/andrewregan/Development/java/recipe_explorer/src/test/resources/recommendations1.yaml");
+
+    	final String data = prefsIngester.parseRecommendations(theFile);
     	prefsIngester.ingestRecommendations(data);
+
+    	prefsIngester.parseFaves(theFile);  // FIXME - do something!
+    	prefsIngester.parseBlocks(theFile);  // FIXME - do something!
+
     	return ok("true");
     }
 }
