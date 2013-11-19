@@ -9,6 +9,61 @@
 	    </div>
 	</section>
 
+	<div class="container">
+		<h3>Favourite Ingredients:</h3>
+		@if( user.getFaveItems().size() == 0) {
+			<p>None yet</p>
+		} else {
+			<div class="container tab-pane" id="recIngredients">
+			@for(( eachItem, index) <- user.getFaveItems().zipWithIndex) {
+	
+			@if((index % 3) == 0) {
+				@if( index >= 3) {
+				  </div>  <!-- <div class="row"> -->
+				}
+			 <div class="row">
+			}
+	
+			<div class="col-md-6">@_itemWell(eachItem)</div>
+			}
+	
+			</div>  <!-- <div class="row"> -->
+			</div>  <!-- <div class="container"> -->
+		}
+	</div>
+
+	<div class="container">
+	@if( user.getFaveRecipes().size() == 0) {
+		<p>Please log in / Sorry, no matching recipes could be found</p>
+	} else {
+		<h3>Favourite Recipes:</h3>
+		@for(( eachRecipe, index) <- user.getFaveRecipes().zipWithIndex) {
+		
+		@if((index % 3) == 0) {
+			@if( index >= 3) {
+			  </div>  <!-- <div class="row"> -->
+			}
+		 <div class="row">
+		}
+
+		<div class="col-md-4">
+			@_displayRecipe( eachRecipe, index, user, cuisineColours)
+		</div>  <!-- <div class="col-md-4"> -->
+		
+		<script>
+		$('#toggle_@index').click(function() {
+		  $('#ingredients_@index').slideToggle(function() {
+		    // Should toggle chevron
+		  });
+		});
+		</script>
+		
+		}
+		
+		</div>  <!-- <div class="row"> -->
+	}
+	</div>  <!-- <div class="container"> -->
+
 	<p>Item Ratings: <span class="badge label-default">@user.getItemRatings().size()</span>&nbsp;: @user.getItemRatings()</p>
 	<p>Recipe Ratings: <span class="badge label-default">@user.getRecipeRatings().size()</span>&nbsp;: @user.getRecipeRatings()</p>
 	<button type="button" class="btn btn-sm btn-default" onclick="$.post('/users/ingest', function(data) { location.reload(false); });"><span class="glyphicon glyphicon-plus"></span> Load Recommendations...</button>
