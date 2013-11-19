@@ -10,6 +10,7 @@ import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_PUTS;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -220,6 +221,10 @@ public class EsRecipeFactory implements IRecipePersistence {
 	 */
 	public List<IRecipe> getAll( final List<Long> inIds) throws IOException {
 		final Timer.Context timerCtxt = metrics.timer("recipes.getAll").time();
+
+		if (inIds.isEmpty()) {
+			return Collections.emptyList();  // Is it fair to include this in timing?
+		}
 
 		final Collection<String> stringIds = Sets.newHashSet();
 		for ( Long each : inIds) {
