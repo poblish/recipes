@@ -149,7 +149,7 @@ public class EsUserFactory implements IUserPersistence {
 
     @Override
     public long countAll() throws IOException {
-        return esUtils.countAll(usersIndexUrl);
+        return esUtils.countAll("users");
     }
 
 	public void waitUntilRefreshed() {

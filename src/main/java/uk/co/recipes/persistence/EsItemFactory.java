@@ -236,7 +236,7 @@ public class EsItemFactory implements IItemPersistence {
 	}
 
     public long countAll() throws IOException {
-        return esUtils.countAll(itemIndexUrl);
+        return esUtils.countAll("items");
     }
 
     @Override

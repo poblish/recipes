@@ -50,7 +50,6 @@ public class EsUtils {
 	@Inject Client esClient;
 	@Inject ObjectMapper mapper;
 
-	@SuppressWarnings("unused")
 	private final static Logger LOG = LoggerFactory.getLogger( EsUtils.class );
 
 
@@ -84,9 +83,8 @@ public class EsUtils {
 		return allItems;
 	}
 
-    public <T> long countAll( final String inBaseUrl) throws IOException {
-        return mapper.readTree( new URL( inBaseUrl + "/_count") ).get("count").asLong();
-    	// FIXME Throws weird errors: return esClient.prepareCount(inIndex).execute().actionGet().count();
+    public <T> long countAll( final String inType) throws IOException {
+        return esClient.prepareCount("recipe").setTypes(inType).execute().actionGet().getCount();
     }
 
 	public void waitUntilTypesRefreshed( final String... inTypes) {

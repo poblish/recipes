@@ -203,7 +203,7 @@ public class EsRecipeFactory implements IRecipePersistence {
     }
 
     public long countAll() throws IOException {
-        return esUtils.countAll(itemIndexUrl);
+        return esUtils.countAll("recipes");
     }
 
 	public void deleteAll() throws IOException {
