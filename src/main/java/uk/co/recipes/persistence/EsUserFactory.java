@@ -162,7 +162,7 @@ public class EsUserFactory implements IUserPersistence {
 				return Optional.absent();
 			}
 
-            return Optional.of((IUser) mapper.readValue( hits[0].getSourceAsString(), User.class) );
+            return Optional.of((IUser) mapper.readValue( hits[0].getSourceRef().toBytes(), User.class) );
 		}
         catch (InterruptedException e) {
         	throw Throwables.propagate(e);

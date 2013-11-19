@@ -426,10 +426,10 @@ public class EsSearchService implements ISearchAPI {
 
         for ( final SearchHit eachHit : hits) {
             if ( eachHit.getType().equals("items")) {
-                results.add( new ItemSearchResult( mapper.readValue( eachHit.getSourceAsString(), CanonicalItem.class) ));
+                results.add( new ItemSearchResult( mapper.readValue( eachHit.getSourceRef().toBytes(), CanonicalItem.class) ));
             }
             else {
-                results.add( new RecipeSearchResult( mapper.readValue( eachHit.getSourceAsString(), Recipe.class) ));
+                results.add( new RecipeSearchResult( mapper.readValue( eachHit.getSourceRef().toBytes(), Recipe.class) ));
             }
         }
 

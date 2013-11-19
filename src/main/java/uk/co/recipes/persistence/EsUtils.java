@@ -105,7 +105,7 @@ public class EsUtils {
 		final List<IRecipe> results = Lists.newArrayList();
 
 		for ( final SearchHit eachHit : inHits) {
-			results.add( mapper.readValue( eachHit.getSourceAsString(), Recipe.class) );
+			results.add( mapper.readValue( eachHit.getSourceRef().toBytes(), Recipe.class) );
 		}
 
 		return results;
@@ -123,7 +123,7 @@ public class EsUtils {
 				LOG.warn("deserializeRecipeHits() Could not load Recipe " + eachHit.getId() + ", skipping.");
 				continue;
 			}
-			results.add( mapper.readValue( eachHit.getResponse().getSourceAsString(), Recipe.class) );
+			results.add( mapper.readValue( eachHit.getResponse().getSourceAsBytes(), Recipe.class) );
 		}
 
 		return results;
@@ -141,7 +141,7 @@ public class EsUtils {
 				LOG.warn("deserializeItemHits() Could not load Item " + eachHit.getId() + ", skipping.");
 				continue;
 			}
-			results.add( mapper.readValue( eachHit.getResponse().getSourceAsString(), CanonicalItem.class) );
+			results.add( mapper.readValue( eachHit.getResponse().getSourceAsBytes(), CanonicalItem.class) );
 		}
 
 		return results;

@@ -80,7 +80,7 @@ public class EsRecipeFactory implements IRecipePersistence {
             if ( hits.length < 1) {
                 return null;
             }
-            return mapper.readValue( hits[0].getSourceAsString(), Recipe.class);
+            return mapper.readValue( hits[0].getSourceRef().toBytes(), Recipe.class);
         }
         catch (InterruptedException e) {
             Throwables.propagate(e);
@@ -100,7 +100,7 @@ public class EsRecipeFactory implements IRecipePersistence {
 			return Optional.absent();
 		}
 
-		return Optional.fromNullable((IRecipe) mapper.readValue( esClient.prepareGet( "recipe", "recipes", String.valueOf(inId)).execute().actionGet().getSourceAsString(), Recipe.class));
+		return Optional.fromNullable((IRecipe) mapper.readValue( esClient.prepareGet( "recipe", "recipes", String.valueOf(inId)).execute().actionGet().getSourceAsBytes(), Recipe.class));
 	}
 
 	public IRecipe put( final IRecipe inRecipe, String inId_Unused) throws IOException {

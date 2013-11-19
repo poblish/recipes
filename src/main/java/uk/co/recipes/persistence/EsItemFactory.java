@@ -100,7 +100,7 @@ public class EsItemFactory implements IItemPersistence {
 				return null;  // Nothing to do - cannot cache value of null anyway. Can this actually happen?!?
 			}
 
-			final ICanonicalItem item = mapper.readValue( resp.getSourceAsString(), CanonicalItem.class);
+			final ICanonicalItem item = mapper.readValue( resp.getSourceAsBytes(), CanonicalItem.class);
 			itemsCache.put( inId, item);  // Cache MISS
 			return item;
 		}
@@ -177,14 +177,14 @@ public class EsItemFactory implements IItemPersistence {
 					final SearchHit[] hits = resp.getHits().hits();
 
 					if ( /* Yes, want only one great match */ hits.length == 1) {
-						final ICanonicalItem mappedAlias = mapper.readValue( hits[0].getSourceAsString(), CanonicalItem.class);
+						final ICanonicalItem mappedAlias = mapper.readValue( hits[0].getSourceRef().toBytes(), CanonicalItem.class);
 						if ( mappedAlias != null) {
 //							LOG.info("Successfully mapped Alias '" + inCanonicalName + "' => " + mappedAlias);
 							return mappedAlias;
 						}
 					}
 					else if ( hits.length > 1) {
-                        final ICanonicalItem firstMatch = mapper.readValue( hits[0].getSourceAsString(), CanonicalItem.class);
+                        final ICanonicalItem firstMatch = mapper.readValue( hits[0].getSourceRef().toBytes(), CanonicalItem.class);
 
                         // Yuk - check for *exact* alias match
                         for ( String eachAlias : ((CanonicalItem) firstMatch).getAliases()) {
