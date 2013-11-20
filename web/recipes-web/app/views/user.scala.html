@@ -14,136 +14,170 @@
 	<button type="button" class="btn btn-sm btn-default" onclick="$.post('/users/ingest', function(data) { location.reload(false); });"><span class="glyphicon glyphicon-plus"></span> Load Recommendations...</button>
 
 	<div class="container">
-		<h3>Favourite Ingredients:</h3>
-		<div class="well" style="min-width: 350px">
-			@if( user.getFaveItems().size() == 0) {
-				<p style="margin-bottom: 0">None yet</p>
-			} else {
-				@for(( eachItem, index) <- user.getFaveItems().zipWithIndex) {
-				  <div style="cursor: pointer; display: inline-block; border: 1px solid #CCC; padding: 1px 6px 1px 7px; margin: 3px; border-radius: 4px; background-color: #FFF"><button type="button" class="close" aria-hidden="true">&times;</button> @eachItem.getCanonicalName &nbsp;</div>
-				}
-			}
-		</div>
-
-		<h3 style="padding-top:15px">Favourite Recipes:</h3>
-		@if( user.getFaveRecipes().size() == 0) {
-			<p>None yet</p>
-		} else {
-			@for(( eachRecipe, index) <- user.getFaveRecipes().zipWithIndex) {
-			
-			@if((index % 3) == 0) {
-				@if( index >= 3) {
-				  </div>  <!-- <div class="row"> -->
-				}
-			 <div class="row">
-			}
-	
-			<div class="col-md-4">
-				@_displayRecipe( eachRecipe, index, user, cuisineColours)
-			</div>  <!-- <div class="col-md-4"> -->
-			
-			<script>
-			$('#toggle_@index').click(function() {
-			  $('#ingredients_@index').slideToggle(function() {
-			    // Should toggle chevron
-			  });
-			});
-			</script>
-			
-			}
-			
-			</div>  <!-- <div class="row"> -->
-		}
-
-		<h3>Ingredient Ratings:</h3>
-		<div class="well" style="min-width: 350px">
-			@if( user.getItemRatings().size() == 0) {
-				<p style="margin-bottom: 0">None yet</p>
-			} else {
-				@for(( eachRating, index) <- user.getItemRatings().zipWithIndex) {
-				  <div style="cursor: pointer; display: inline-block; border: 1px solid #CCC; padding: 1px 6px 1px 7px; margin: 3px; border-radius: 4px; background-color: #FFF"><button type="button" class="close" aria-hidden="true">&times;</button> @eachRating.getItem().getCanonicalName - @eachRating.getScore()/10 &nbsp;</div>
-				}
-			}
-		</div>
-
-		<h3 style="padding-top:15px">Recipe Ratings:</h3>
-		@if( user.getRecipeRatings().size() == 0) {
-			<p>None yet</p>
-		} else {
-			@for(( eachRatedRecipe, index) <- user.getRecipeRatings().zipWithIndex) {
-			
-			@if((index % 3) == 0) {
-				@if( index >= 3) {
-				  </div>  <!-- <div class="row"> -->
-				}
-			 <div class="row">
-			}
-	
-			<div class="col-md-4">
-				@_displayRecipe( eachRatedRecipe.getRecipe(), index, user, cuisineColours)
-			</div>  <!-- <div class="col-md-4"> -->
-			
-			<script>
-			$('#toggle_@index').click(function() {
-			  $('#ingredients_@index').slideToggle(function() {
-			    // Should toggle chevron
-			  });
-			});
-			</script>
-			
-			}
-			
-			</div>  <!-- <div class="row"> -->
-		}
-
-		<h3>Recommended Recipes:</h3>
-			
-		@if( recommendedItems.size() == 0) {
-			<p>Sorry, no recommended recipes could be found. Try relaxing any filters.</p>
-		} else {
-			@for(( eachRecipe, index) <- recommendedRecipes.zipWithIndex) {
-			
-			@if((index % 3) == 0) {
-				@if( index >= 3) {
-				  </div>  <!-- <div class="row"> -->
-				}
-			 <div class="row">
-			}
-			
-		<div class="col-md-4">
-			@_displayRecipe( eachRecipe, index, user, cuisineColours)
-		</div>  <!-- <div class="col-md-4"> -->
+		<ul id="userData" class="nav nav-tabs">
+			<li class="active lead"><a href="#faves" onclick="setUiOpt('users.dataTabSel','faves')"><strong>Favourites</strong> (@( user.getFaveItems().size() + user.getFaveRecipes().size() ))</a></li>
+			<li class="lead"><a href="#ratings" onclick="setUiOpt('users.dataTabSel','ratings')"><strong>Ratings</strong> (@( user.getItemRatings().size() + user.getRecipeRatings().size() ))</a></li>
+			<li class="lead"><a href="#recs" onclick="setUiOpt('users.dataTabSel','recs')"><strong>Recommendations</strong></a></li>
+		</ul>
+	    <div id="my-tab-content" class="tab-content" style="margin: 30px 10px 0 26px">
+	        <div class="tab-pane active" id="faves">
+				<h3>Favourite Ingredients:</h3>
+				<div class="well" style="min-width: 350px">
+					@if( user.getFaveItems().size() == 0) {
+						<p style="margin-bottom: 0">None yet</p>
+					} else {
+						@for(( eachItem, index) <- user.getFaveItems().zipWithIndex) {
+						  <div style="cursor: pointer; display: inline-block; border: 1px solid #CCC; padding: 1px 6px 1px 7px; margin: 3px; border-radius: 4px; background-color: #FFF"><button type="button" class="close" aria-hidden="true">&times;</button> @eachItem.getCanonicalName &nbsp;</div>
+						}
+					}
+				</div>
 		
-		<script>
-		$('#toggle_@index').click(function() {
-		  $('#ingredients_@index').slideToggle(function() {
-		    // Should toggle chevron
-		  });
-		});
-		</script>
-		}
-		</div>  <!-- <div class="row"> -->
-	
-	}
+				<h3 style="padding-top:15px">Favourite Recipes:</h3>
+				@if( user.getFaveRecipes().size() == 0) {
+					<p>None yet</p>
+				} else {
+					@for(( eachRecipe, index) <- user.getFaveRecipes().zipWithIndex) {
+					
+					@if((index % 3) == 0) {
+						@if( index >= 3) {
+						  </div>  <!-- <div class="row"> -->
+						}
+					 <div class="row">
+					}
 			
-
-	<h3>Recommended Ingredients:</h3>
-	@if( recommendedItems.size() == 0) {
-		<p>Sorry, no recommended ingredients could be found. Try relaxing any filters.</p>
-	} else {
-		@for(( eachItem, index) <- recommendedItems.zipWithIndex) {
-	
-		@if((index % 3) == 0) {
-			@if( index >= 3) {
-			  </div>  <!-- <div class="row"> -->
+					<div class="col-md-4">
+						@_displayRecipe( eachRecipe, index, user, cuisineColours)
+					</div>  <!-- <div class="col-md-4"> -->
+					
+					<script>
+					$('#toggle_@index').click(function() {
+					  $('#ingredients_@index').slideToggle(function() {
+					    // Should toggle chevron
+					  });
+					});
+					</script>
+					
+					}
+					
+					</div>  <!-- <div class="row"> -->
+				}
+	        </div>
+	        <div class="tab-pane" id="ratings">
+				<h3>Ingredient Ratings:</h3>
+				<div class="well" style="min-width: 350px">
+					@if( user.getItemRatings().size() == 0) {
+						<p style="margin-bottom: 0">None yet</p>
+					} else {
+						@for(( eachRating, index) <- user.getItemRatings().zipWithIndex) {
+						  <div style="cursor: pointer; display: inline-block; border: 1px solid #CCC; padding: 1px 6px 1px 7px; margin: 3px; border-radius: 4px; background-color: #FFF"><button type="button" class="close" aria-hidden="true">&times;</button> @eachRating.getItem().getCanonicalName - @eachRating.getScore()/10 &nbsp;</div>
+						}
+					}
+				</div>
+		
+				<h3 style="padding-top:15px">Recipe Ratings:</h3>
+				@if( user.getRecipeRatings().size() == 0) {
+					<p>None yet</p>
+				} else {
+					@for(( eachRatedRecipe, index) <- user.getRecipeRatings().zipWithIndex) {
+					
+					@if((index % 3) == 0) {
+						@if( index >= 3) {
+						  </div>  <!-- <div class="row"> -->
+						}
+					 <div class="row">
+					}
+			
+					<div class="col-md-4">
+						@_displayRecipe( eachRatedRecipe.getRecipe(), index, user, cuisineColours)
+					</div>  <!-- <div class="col-md-4"> -->
+					
+					<script>
+					$('#toggle_@index').click(function() {
+					  $('#ingredients_@index').slideToggle(function() {
+					    // Should toggle chevron
+					  });
+					});
+					</script>
+					
+					}
+					
+					</div>  <!-- <div class="row"> -->
+				}
+	        </div>
+	        <div class="tab-pane" id="recs">
+				<h3>Recommended Recipes:</h3>
+					
+				@if( recommendedItems.size() == 0) {
+					<p>Sorry, no recommended recipes could be found. Try relaxing any filters.</p>
+				} else {
+					@for(( eachRecipe, index) <- recommendedRecipes.zipWithIndex) {
+					
+					@if((index % 3) == 0) {
+						@if( index >= 3) {
+						  </div>  <!-- <div class="row"> -->
+						}
+					 <div class="row">
+					}
+					
+				<div class="col-md-4">
+					@_displayRecipe( eachRecipe, index, user, cuisineColours)
+				</div>  <!-- <div class="col-md-4"> -->
+				
+				<script>
+				$('#toggle_@index').click(function() {
+				  $('#ingredients_@index').slideToggle(function() {
+				    // Should toggle chevron
+				  });
+				});
+				</script>
+				}
+				</div>  <!-- <div class="row"> -->
+			
 			}
-		 <div class="row">
-		}
-	
-		<div class="col-md-4">@_itemWell(eachItem)</div>
-		}
-	
-		</div>  <!-- <div class="row"> -->
-	}
+					
+			<h3>Recommended Ingredients:</h3>
+			@if( recommendedItems.size() == 0) {
+				<p>Sorry, no recommended ingredients could be found. Try relaxing any filters.</p>
+			} else {
+				@for(( eachItem, index) <- recommendedItems.zipWithIndex) {
+			
+				@if((index % 3) == 0) {
+					@if( index >= 3) {
+					  </div>  <!-- <div class="row"> -->
+					}
+				 <div class="row">
+				}
+			
+				<div class="col-md-4">@_itemWell(eachItem)</div>
+				}
+			
+				</div>  <!-- <div class="row"> -->
+			}
+	        </div>
+	    </div>
+
 	</div>  <!-- <div class="container"> -->
+
+
+<script src="@routes.Assets.at("javascripts/jquery.cookie.js")" type="text/javascript"></script>
+<script>
+  switch (uiOpts().users.dataTabSel) {
+    case 'faves':
+	  $('#userData li:eq(0) a').tab('show')
+	  break;
+    case 'ratings':
+  	  $('#userData li:eq(1) a').tab('show')
+  	  break;
+    case 'recs':
+  	  $('#userData li:eq(2) a').tab('show')
+  	  break;
+  }
+</script>
+
+<script type="text/javascript">
+	$('#userData a').click( function (e) {
+	  e.preventDefault()
+	  $(this).tab('show')
+	})
+</script>    
 }

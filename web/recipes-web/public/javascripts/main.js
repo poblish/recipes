@@ -1,7 +1,7 @@
 function uiOpts() {
 	$.cookie.json = true;
 	if ($.cookie("ui.opts") == undefined) {
-		$.cookie("ui.opts", {'recipes': {'similarTabSel': 'recipes'}});
+		$.cookie("ui.opts", {'recipes': {'similarTabSel': 'recipes'}, 'users': {'dataTabSel': 'recs'} });
 	}
 	return $.cookie("ui.opts");
 }
