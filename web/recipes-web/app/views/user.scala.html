@@ -8,15 +8,28 @@
 	        <h1>@user.getDisplayName()</h1>
 	    </div>
 	</section>
+	<hr />
+
+	<div><img src="@gravatarUrl" alt="" class="pull-left" /></div>
 
 	<div class="container">
 		<h3>Favourite Ingredients:</h3>
-		@if( user.getFaveItems().size() == 0) {
-			<p>None yet</p>
+		<div class="well" style="min-width: 350px">
+			@if( user.getFaveItems().size() == 0) {
+				<p>None yet</p>
+			} else {
+				@for(( eachItem, index) <- user.getFaveItems().zipWithIndex) {
+				  <div style="display: inline-block; border: 1px solid #CCC; padding: 1px 6px 1px 7px; margin: 3px; border-radius: 4px; background-color: #FFF"><button type="button" class="close" aria-hidden="true">&times;</button> @eachItem.getCanonicalName &nbsp;</div>
+				}
+			}
+		</div>
+
+		@if( user.getFaveRecipes().size() == 0) {
+			<p>Please log in / Sorry, no matching recipes could be found</p>
 		} else {
-			<div class="container tab-pane" id="recIngredients">
-			@for(( eachItem, index) <- user.getFaveItems().zipWithIndex) {
-	
+			<h3>Favourite Recipes:</h3>
+			@for(( eachRecipe, index) <- user.getFaveRecipes().zipWithIndex) {
+			
 			@if((index % 3) == 0) {
 				@if( index >= 3) {
 				  </div>  <!-- <div class="row"> -->
@@ -24,61 +37,35 @@
 			 <div class="row">
 			}
 	
-			<div class="col-md-6">@_itemWell(eachItem)</div>
+			<div class="col-md-4">
+				@_displayRecipe( eachRecipe, index, user, cuisineColours)
+			</div>  <!-- <div class="col-md-4"> -->
+			
+			<script>
+			$('#toggle_@index').click(function() {
+			  $('#ingredients_@index').slideToggle(function() {
+			    // Should toggle chevron
+			  });
+			});
+			</script>
+			
 			}
-	
+			
 			</div>  <!-- <div class="row"> -->
-			</div>  <!-- <div class="container"> -->
 		}
-	</div>
-
-	<div class="container">
-	@if( user.getFaveRecipes().size() == 0) {
-		<p>Please log in / Sorry, no matching recipes could be found</p>
-	} else {
-		<h3>Favourite Recipes:</h3>
-		@for(( eachRecipe, index) <- user.getFaveRecipes().zipWithIndex) {
-		
-		@if((index % 3) == 0) {
-			@if( index >= 3) {
-			  </div>  <!-- <div class="row"> -->
-			}
-		 <div class="row">
-		}
-
-		<div class="col-md-4">
-			@_displayRecipe( eachRecipe, index, user, cuisineColours)
-		</div>  <!-- <div class="col-md-4"> -->
-		
-		<script>
-		$('#toggle_@index').click(function() {
-		  $('#ingredients_@index').slideToggle(function() {
-		    // Should toggle chevron
-		  });
-		});
-		</script>
-		
-		}
-		
-		</div>  <!-- <div class="row"> -->
-	}
 	</div>  <!-- <div class="container"> -->
 
 	<p>Item Ratings: <span class="badge label-default">@user.getItemRatings().size()</span>&nbsp;: @user.getItemRatings()</p>
 	<p>Recipe Ratings: <span class="badge label-default">@user.getRecipeRatings().size()</span>&nbsp;: @user.getRecipeRatings()</p>
 	<button type="button" class="btn btn-sm btn-default" onclick="$.post('/users/ingest', function(data) { location.reload(false); });"><span class="glyphicon glyphicon-plus"></span> Load Recommendations...</button>
-	<hr />
-
-	<div><img src="@gravatarUrl" alt="" class="pull-left" /></div>
 
 	<div class="container">
 	  <div class="col-md-12">
-		<div class="container">
 		<h3>Recommended Recipes:</h3>
 			
-	@if( recommendedItems.size() == 0) {
-		<p>Sorry, no recommended recipes could be found. Try relaxing any filters.</p>
-	} else {
+		@if( recommendedItems.size() == 0) {
+			<p>Sorry, no recommended recipes could be found. Try relaxing any filters.</p>
+		} else {
 			@for(( eachRecipe, index) <- recommendedRecipes.zipWithIndex) {
 			
 			@if((index % 3) == 0) {
@@ -99,14 +86,12 @@
 		  });
 		});
 		</script>
-	}
-				</div>  <!-- <div class="row"> -->
+		}
+		</div>  <!-- <div class="row"> -->
 	
-			}
+	}
 			
-	  </div>  <!-- <div class="container"> -->
 
-	<div class="container">
 	<h3>Recommended Ingredients:</h3>
 	@if( recommendedItems.size() == 0) {
 		<p>Sorry, no recommended ingredients could be found. Try relaxing any filters.</p>
@@ -128,5 +113,4 @@
 	</div>  <!-- <div class="container"> -->
 
 	</div>  <!-- <div class="col-md-12"> -->
-	</div>  <!-- <div class="container"> -->
 }
