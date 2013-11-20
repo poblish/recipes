@@ -2,7 +2,7 @@
 
 @import com.feth.play.module.pa.views.html._
 
-@main("User page") {
+@main("User: " + user.getDisplayName()) {
 	<section id="top">
 	    <div class="wrapper">
 	        <h1>@user.getDisplayName()</h1>
@@ -17,7 +17,7 @@
 		<h3>Favourite Ingredients:</h3>
 		<div class="well" style="min-width: 350px">
 			@if( user.getFaveItems().size() == 0) {
-				<p>None yet</p>
+				<p style="margin-bottom: 0">None yet</p>
 			} else {
 				@for(( eachItem, index) <- user.getFaveItems().zipWithIndex) {
 				  <div style="cursor: pointer; display: inline-block; border: 1px solid #CCC; padding: 1px 6px 1px 7px; margin: 3px; border-radius: 4px; background-color: #FFF"><button type="button" class="close" aria-hidden="true">&times;</button> @eachItem.getCanonicalName &nbsp;</div>
@@ -25,10 +25,10 @@
 			}
 		</div>
 
+		<h3 style="padding-top:15px">Favourite Recipes:</h3>
 		@if( user.getFaveRecipes().size() == 0) {
-			<p>Please log in / Sorry, no matching recipes could be found</p>
+			<p>None yet</p>
 		} else {
-			<h3 style="padding-top:15px">Favourite Recipes:</h3>
 			@for(( eachRecipe, index) <- user.getFaveRecipes().zipWithIndex) {
 			
 			@if((index % 3) == 0) {
@@ -58,7 +58,7 @@
 		<h3>Ingredient Ratings:</h3>
 		<div class="well" style="min-width: 350px">
 			@if( user.getItemRatings().size() == 0) {
-				<p>None yet</p>
+				<p style="margin-bottom: 0">None yet</p>
 			} else {
 				@for(( eachRating, index) <- user.getItemRatings().zipWithIndex) {
 				  <div style="cursor: pointer; display: inline-block; border: 1px solid #CCC; padding: 1px 6px 1px 7px; margin: 3px; border-radius: 4px; background-color: #FFF"><button type="button" class="close" aria-hidden="true">&times;</button> @eachRating.getItem().getCanonicalName - @eachRating.getScore()/10 &nbsp;</div>
@@ -66,10 +66,10 @@
 			}
 		</div>
 
+		<h3 style="padding-top:15px">Recipe Ratings:</h3>
 		@if( user.getRecipeRatings().size() == 0) {
-			<p>No recipes ratings found</p>
+			<p>None yet</p>
 		} else {
-			<h3 style="padding-top:15px">Recipe Ratings:</h3>
 			@for(( eachRatedRecipe, index) <- user.getRecipeRatings().zipWithIndex) {
 			
 			@if((index % 3) == 0) {
