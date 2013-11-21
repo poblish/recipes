@@ -139,11 +139,7 @@ public class Recipes extends AbstractExplorableController {
 
         final IRecipe fork = recipes.fork( recipes.get(name).get(), newName[0]);
 
-        // Wait until it appears in Elasticsearch!
-        do {
-        	Thread.sleep(250);
-        }
-        while (!recipes.getById( fork.getId() ).isPresent());
+        recipes.waitUntilRefreshed();
 
         return reloadRecipe(fork);
     }
