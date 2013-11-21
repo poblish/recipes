@@ -3,22 +3,30 @@
  */
 package uk.co.recipes.myrrix;
 
-import com.google.common.base.Objects;
-import com.google.common.base.Throwables;
-import com.google.common.io.Files;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.Charset;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+
 import javax.inject.Inject;
+
 import net.myrrix.client.ClientRecommender;
+
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.yaml.snakeyaml.Yaml;
+
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.persistence.EsItemFactory;
+
+import com.google.common.base.Objects;
+import com.google.common.base.Throwables;
+import com.google.common.collect.Sets;
+import com.google.common.io.Files;
 
 /**
  * TODO
@@ -59,7 +67,9 @@ public class MyrrixPrefsIngester {
 		return sb.toString();
 	}
 
-    public String parseFaves( final File inFile) throws IOException {
+    public Collection<ICanonicalItem> parseFaves( final File inFile) throws IOException {
+    	final Set<ICanonicalItem> faves = Sets.newLinkedHashSet();
+
         visitRecommendationsFile( inFile, new UserPrefsVisitor() {
 
             @Override
@@ -70,12 +80,12 @@ public class MyrrixPrefsIngester {
 
                 if (eachUserPref.containsKey("fave")) {
                     final ICanonicalItem item = itemFactory.get((String) eachUserPref.get("i") ).get();
-                    System.out.println("Fave: " + item);
+                    faves.add(item);
                 }
             }}
         );
 
-        return "ok";
+        return faves;
     }
 
     public String parseBlocks( final File inFile) throws IOException {

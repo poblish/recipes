@@ -11,15 +11,19 @@ import javax.inject.Inject;
 import jgravatar.Gravatar;
 import play.mvc.Controller;
 import play.mvc.Result;
+import service.PlayAuthUserServicePlugin;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
+import uk.co.recipes.faves.UserFaves;
 import uk.co.recipes.myrrix.MyrrixPrefsIngester;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.api.IUserPersistence;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.ui.CuisineColours;
+
+import com.codahale.metrics.MetricRegistry;
 
 /**
  * 
@@ -31,13 +35,18 @@ import uk.co.recipes.ui.CuisineColours;
 public class Users extends Controller {
 
     private IUserPersistence users;
+    private MetricRegistry metrics;
+    private UserFaves faves;
     private IRecommendationsAPI recsApi;
     private CuisineColours colours;
     private MyrrixPrefsIngester prefsIngester;
 
     @Inject
-    public Users( final EsUserFactory inUsers, final MyrrixRecommendationService inRecService, final CuisineColours colours, final MyrrixPrefsIngester inIngester) {
+    public Users( final EsUserFactory inUsers, final MetricRegistry metrics, final UserFaves userFaves,
+    			  final MyrrixRecommendationService inRecService, final CuisineColours colours, final MyrrixPrefsIngester inIngester) {
         this.users = checkNotNull(inUsers);
+        this.metrics = checkNotNull(metrics);
+        this.faves = checkNotNull(userFaves);
         this.recsApi = checkNotNull(inRecService);
         this.colours = checkNotNull(colours);
         this.prefsIngester = checkNotNull(inIngester);
@@ -59,9 +68,23 @@ public class Users extends Controller {
     	final String data = prefsIngester.parseRecommendations(theFile);
     	prefsIngester.ingestRecommendations(data);
 
-    	prefsIngester.parseFaves(theFile);  // FIXME - do something!
+    	final IUser currUser = getLocalUser();
+        if ( currUser == null) {
+            return unauthorized("Not logged-in");  // Surely shouldn't happen...
+        }
+
+    	for ( ICanonicalItem eachItem : prefsIngester.parseFaves(theFile)) {
+    		faves.faveItem( currUser, eachItem);
+    	}
+
+//      items.waitUntilRefreshed();
+
     	prefsIngester.parseBlocks(theFile);  // FIXME - do something!
 
     	return ok("true");
+    }
+
+    private IUser getLocalUser() {
+        return /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( metrics, session());
     }
 }

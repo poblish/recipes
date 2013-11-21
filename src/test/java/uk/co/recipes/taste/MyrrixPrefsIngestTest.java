@@ -3,22 +3,28 @@
  */
 package uk.co.recipes.taste;
 
-import dagger.Module;
-import dagger.ObjectGraph;
-import dagger.Provides;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
 import org.apache.http.client.ClientProtocolException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
 import uk.co.recipes.DaggerModule;
+import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.mocks.MockFactories;
 import uk.co.recipes.myrrix.MyrrixPrefsIngester;
 import uk.co.recipes.persistence.EsItemFactory;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import dagger.Module;
+import dagger.ObjectGraph;
+import dagger.Provides;
 
 /**
  * TODO
@@ -43,8 +49,8 @@ public class MyrrixPrefsIngestTest {
 
     @Test
     public void testLoadFaves() throws IOException {
-        final String contents = ingester.parseFaves( new File("src/test/resources/recommendations1.yaml") );
-        assertThat( contents, is("ok"));
+        final Collection<ICanonicalItem> faves = ingester.parseFaves( new File("src/test/resources/recommendations1.yaml") );
+        assertThat( faves.toString(), is("[CanonicalItem{name=Coriander Seeds}, CanonicalItem{name=Garam Masala}]"));
     }
 
     @Test
