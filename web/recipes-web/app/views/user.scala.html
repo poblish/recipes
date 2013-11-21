@@ -10,8 +10,8 @@
 	</section>
 	<hr />
 
-	<div><img src="@gravatarUrl" alt="" class="pull-left" /></div>
 	<button type="button" class="btn btn-sm btn-default" onclick="$.post('/users/ingest', function(data) { location.reload(false); });"><span class="glyphicon glyphicon-plus"></span> Load Recommendations...</button>
+	<div style="position: absolute; margin-top: 12px"><img src="@gravatarUrl" alt="" class="pull-left" /></div>
 
 	<div class="container">
 		<ul id="userData" class="nav nav-tabs">
