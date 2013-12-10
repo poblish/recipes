@@ -7,12 +7,12 @@
 	    </div>
 	</section>
 
-	<ul id="searchResults" class="nav nav-tabs">
-		<li class="active"><a href="#recipes">Recipes (@foundRecipes.size())</a></li>
-		<li><a href="#items">Ingredients (@foundItems.size())</a></li>
-		<li><a href="#tags">Tags (@foundTags.size())</a></li>
+	<ul id="searchResults" class="nav nav-tabs" style="padding-top: 10px">
+		<li class="active lead"><a href="#recipes"><span class="glyphicon glyphicon-cutlery" style="margin-right: 6px"></span> <strong>Recipes</strong> (@foundRecipes.size())</a></li>
+		<li class="lead"><a href="#items"><span class="glyphicon glyphicon-barcode" style="margin-right: 6px"></span> <strong>Ingredients</strong> (@foundItems.size())</a></li>
+		<li class="lead"><a href="#tags"><span class="glyphicon glyphicon-tags" style="margin-right: 6px"></span> <strong>Tags</strong> (@foundTags.size())</a></li>
 	</ul>
-    <div id="my-tab-content" class="tab-content" style="margin-top: 16px">
+    <div id="my-tab-content" class="tab-content" style="margin-top: 20px">
         <div class="tab-pane active" id="recipes">
 			<ol>
 			@for( eachRecipe <- foundRecipes) {
