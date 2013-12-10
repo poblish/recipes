@@ -8,7 +8,11 @@
 	<div class="panel-group" id="sidebar">
 	  <div class="panel panel-default">
 	    <div class="panel-heading">
-	      <h4 class="panel-title">Must Include:</h4>
+	      <h4 class="panel-title">
+	        <a class="accordion-toggle" data-toggle="collapse" href="#sidebar-1">
+	          Must Include:
+	        </a>
+	      </h4>
 	    </div>
 	    <div id="sidebar-1" class="panel-collapse collapse in">
 	      <div class="panel-body">
@@ -32,9 +36,13 @@
 	  </div>
 	  <div class="panel panel-default">
 	    <div class="panel-heading">
-	      <h4 class="panel-title">Exclude all:</h4>
+	      <h4 class="panel-title">
+	        <a class="accordion-toggle" data-toggle="collapse" href="#sidebar-2">
+	          Exclude all:
+	        </a>
+	      </h4>
 	    </div>
-	    <div id="sidebar-2">
+	    <div id="sidebar-2" class="panel-collapse collapse in">
 	      <div class="panel-body">
 	        @if( explorerFilters.getExcludes().size() != 0) {
 	        <ul class="list-unstyled">
@@ -54,9 +62,13 @@
 	  </div>
 	  <div class="panel panel-default">
 	    <div class="panel-heading">
-	      <h4 class="panel-title">Diet type:</h4>
+	      <h4 class="panel-title">
+	        <a class="accordion-toggle" data-toggle="collapse" href="#sidebar-3">
+	          Diet type:
+	        </a>
+	      </h4>
 	    </div>
-	    <div id="sidebar-2">
+	    <div id="sidebar-3" class="panel-collapse collapse in">
 	      <div class="panel-body">
 	      <ul class="list-unstyled" style="margin-bottom: 0">
 				@for((eachDietType, isSelected) <- dietTypesActivationMap) {
@@ -72,9 +84,13 @@
 	  </div>
 	  <div class="panel panel-default">
 	    <div class="panel-heading">
-	      <h4 class="panel-title">Course:</h4>
+	      <h4 class="panel-title">
+	        <a class="accordion-toggle" data-toggle="collapse" href="#sidebar-4">
+	          Course:
+	        </a>
+	      </h4>
 	    </div>
-	    <div id="sidebar-2">
+	    <div id="sidebar-4" class="panel-collapse collapse in">
 	      <div class="panel-body">
 	      <ul class="list-unstyled" style="margin-bottom: 0">
 				@for((eachRecipeCat, isSelected) <- recipeCategoriesActivationMap) {
