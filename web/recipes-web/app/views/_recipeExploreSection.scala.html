@@ -1,0 +1,153 @@
+@(recipe: uk.co.recipes.api.IRecipe, similarities: List[uk.co.recipes.api.IRecipe], currUser: uk.co.recipes.api.IUser,
+	recommendedItems: List[uk.co.recipes.api.ICanonicalItem], explorerFilters: uk.co.recipes.service.api.IExplorerFilterDef,
+	dietTypesActivationMap: Map[String,Boolean], recipeCategoriesActivationMap: Map[String,Boolean],
+	cuisineColours: uk.co.recipes.ui.CuisineColours)
+
+  <div class="col-md-4">
+
+	<div class="panel-group" id="sidebar">
+	  <div class="panel panel-default">
+	    <div class="panel-heading">
+	      <h4 class="panel-title">Must Include:</h4>
+	    </div>
+	    <div id="sidebar-1" class="panel-collapse collapse in">
+	      <div class="panel-body">
+	        <ul class="list-unstyled">
+	        @for(eachIncl <- explorerFilters.getIncludes()) {
+	        	@if(eachIncl.getValue().isPresent()) {
+	        	  <!--  FIXME Bodge to hide Cats we're displaying further down!!! <li>@eachIncl.getValue().get()&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeInclTag('@eachIncl.getEntity()','@eachIncl.getValue().get()')"><span class="glyphicon glyphicon-remove"></span></button></li> -->
+	        	} else {
+	        		@if(eachIncl.getEntity().toString().equals("VEGAN") || eachIncl.getEntity().toString().equals("VEGETARIAN")) {
+	        			<!-- Ignore - FIXME -->
+	        		} else {
+	        	  	<li style="padding: 3px 5px 3px 10px"><strong>&raquo; @eachIncl.getEntity()</strong>&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeInclTag('@eachIncl.getEntity()')"><span class="glyphicon glyphicon-remove"></span></button></li>
+	        	  }
+	        	}
+	        }
+	        </ul>
+
+			<div><input type="hidden" style="width: 180px" id="sidebar-incl-pickItemTag" /><button type="button" style="margin-left: 12px" class="btn btn-sm btn-default" onclick="addInclTag($('#sidebar-incl-pickItemTag').select2('data').displayName)"><span class="glyphicon glyphicon-plus"></span> Include</button></div>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="panel panel-default">
+	    <div class="panel-heading">
+	      <h4 class="panel-title">Exclude all:</h4>
+	    </div>
+	    <div id="sidebar-2">
+	      <div class="panel-body">
+	        @if( explorerFilters.getExcludes().size() != 0) {
+	        <ul class="list-unstyled">
+	        @for(eachExcl <- explorerFilters.getExcludes()) {
+	        	@if(eachExcl.getValue().isPresent()) {
+	        	  <li style="padding: 3px 5px 3px 10px"><strong>&raquo; @eachExcl.getValue().get()</strong>&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeExclTag('@eachExcl.getEntity()','@eachExcl.getValue().get()')"><span class="glyphicon glyphicon-remove"></span></button></li>
+	        	} else {
+	        	  <li style="padding: 3px 5px 3px 10px"><strong>&raquo; @eachExcl.getEntity()</strong>&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeExclTag('@eachExcl.getEntity()')"><span class="glyphicon glyphicon-remove"></span></button></li>
+	        	}
+	        }
+	        </ul>
+	        }
+
+			<div><input type="hidden" style="width: 180px" id="sidebar-excl-pickItemTag" /><button type="button" style="margin-left: 12px" class="btn btn-sm btn-default" onclick="addExclTag($('#sidebar-excl-pickItemTag').select2('data').displayName)"><span class="glyphicon glyphicon-plus"></span> Exclude</button></div>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="panel panel-default">
+	    <div class="panel-heading">
+	      <h4 class="panel-title">Diet type:</h4>
+	    </div>
+	    <div id="sidebar-2">
+	      <div class="panel-body">
+	      <ul class="list-unstyled" style="margin-bottom: 0">
+				@for((eachDietType, isSelected) <- dietTypesActivationMap) {
+					@if(isSelected) {
+					  <li style="padding: 3px 5px 3px 10px"><strong>&raquo; @eachDietType</strong>&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Category" onclick="removeInclTag('@eachDietType.toUpperCase()')"><span class="glyphicon glyphicon-remove"></span></button></li>
+					} else {
+					  <li style="padding: 3px 5px 3px 10px"><a onclick="addInclTag('@eachDietType.toUpperCase()'); return false" title="Add Category">@eachDietType</a></li>
+					}
+				}
+		  </ul>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="panel panel-default">
+	    <div class="panel-heading">
+	      <h4 class="panel-title">Course:</h4>
+	    </div>
+	    <div id="sidebar-2">
+	      <div class="panel-body">
+	      <ul class="list-unstyled" style="margin-bottom: 0">
+				@for((eachRecipeCat, isSelected) <- recipeCategoriesActivationMap) {
+					@if(isSelected) {
+					  <li style="padding: 3px 5px 3px 10px"><strong>&raquo; @eachRecipeCat</strong>&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Category" onclick="removeInclTag('RECIPE_CATEGORY','@eachRecipeCat')"><span class="glyphicon glyphicon-remove"></span></button></li>
+					} else {
+					  <li style="padding: 3px 5px 3px 10px"><a href="" onclick="addInclTag('RECIPE_CATEGORY','@eachRecipeCat'); return false" title="Add Category">@eachRecipeCat</a></li>
+					}
+				}
+		  </ul>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</div>
+
+  <div class="col-md-8">
+	<ul id="recipesTabs" class="nav nav-tabs">
+		<li class="active lead"><a href="#similarRecipes" onclick="setUiOpt('recipes.similarTabSel','recipes')"><strong>Similar Recipes</strong></a></li>
+		<li class="lead"><a href="#recIngredients" onclick="setUiOpt('recipes.similarTabSel','items')"><strong>Why not add?</strong></a></li>
+	</ul>
+   	<div id="my-tab-content" class="tab-content" style="margin-top: 24px">
+
+	@if( similarities.size() == 0) {
+		<p>Sorry, no Similar recipes could be found</p>
+	} else {
+		<div class="tab-pane active" id="similarRecipes">
+		@for(( eachRecipe, index) <- similarities.zipWithIndex) {
+		
+		@if((index % 2) == 0) {
+			@if( index >= 2) {
+			  </div>  <!-- <div class="row"> -->
+			}
+		 <div class="row">
+		}
+
+		<div class="col-md-6">
+			@_displayRecipe( eachRecipe, index, currUser, cuisineColours)
+		</div>  <!-- <div class="col-md-4"> -->
+		
+		<script>
+		$('#toggle_@index').click(function() {
+		  $('#ingredients_@index').slideToggle(function() {
+		    // Should toggle chevron
+		  });
+		  return false;
+		});
+		</script>
+		
+		}
+		
+		</div>  <!-- <div class="row"> -->
+		</div>  <!-- <div class="container"> -->
+
+	@if( recommendedItems.size() == 0) {
+		<p>Sorry, no Ingredient suggestions</p>
+	} else {
+		<div class="tab-pane" id="recIngredients">
+		@for(( eachItem, index) <- recommendedItems.zipWithIndex) {
+
+		@if((index % 2) == 0) {
+			@if( index >= 2) {
+			  </div>  <!-- <div class="row"> -->
+			}
+		 <div class="row">
+		}
+
+		<div class="col-md-6">@_itemWell(eachItem)</div>
+		}
+
+		</div>  <!-- <div class="row"> -->
+		</div>  <!-- <div class="container"> -->
+	}
+	}
+	</div>
+  </div>

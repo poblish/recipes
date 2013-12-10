@@ -38,221 +38,19 @@
 	<div style="background-color: @cuisineColour; border-radius: 2px" title="@cuisineName Cuisine">&nbsp;</div>
 
 	<div class="container" style="padding-top: 20px">
-	  <div class="col-md-5">
-		<div class="panel-group" id="accordion">
-		  <div class="panel panel-default">
-		    <div class="panel-heading">
-		      <h4 class="panel-title">
-		        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse1">
-		          Ingredients:
-		        </a>
-		      </h4>
-		    </div>
-		    <div id="collapse1" class="panel-collapse collapse in">
-		      <div class="panel-body">
-				<ul class="list-group">
-				@for(ingr <- recipe.getSortedIngredients()) {
-				<li class="list-group-item"><small style="color:#AAA; padding-right:5px">@ingr.getQuantity().buildString(true)</small> <a href="http://localhost:9000/items/@ingr.getItem().getCanonicalName()">@ingr.getItem().getCanonicalName()</a> @if(ingr.isOptional()) {<span style="color:#AAA; margin-left:5px">(optional)</span> }&nbsp;@for(tagName <- ingr.getItem().getTagNamesForDisplay()){<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span> }<button type="button" class="btn btn-xs btn-default" style="margin-left: 5px" title="Remove Ingredient" onclick="document.location.href='/recipes/@recipe.getTitle()/@ingr.getItem().getCanonicalName()/remove'; return false"><span class="glyphicon glyphicon-remove"></span></button></li>
-				}
-				</ul>
 
-				<div><input type="hidden" style="width: 250px" id="addIngredient" /><button type="button" style="margin-left: 12px" class="btn btn-default" onclick="addIngredient('@recipe.getTitle()',$('#addIngredient'))"><span class="glyphicon glyphicon-plus"></span> Add</button></div>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-	  </div>
-	  <div class="col-md-7">
-		<div class="panel-group" id="methodAccordion">
-		  <div class="panel panel-default">
-		    <div class="panel-heading">
-		      <h4 class="panel-title">
-		        <a class="accordion-toggle" data-toggle="collapse" data-parent="#methodAccordion" href="#methodCollapse">
-		          Method:
-		        </a>
-		      </h4>
-		    </div>
-		    <div id="methodCollapse" class="panel-collapse collapse in">
-
-			<p style="padding: 12px 6px 0 12px">
-				@for((eachTag, tagValue) <- recipe.getTags()) {
-					@if(eachTag != uk.co.recipes.tags.RecipeTags.RECIPE_CUISINE) {
-					<span><strong>@eachTag:</strong> @tagValue</span>&nbsp;
-					}
-				}
-			</p>
-
-		    </div>
-		  </div>
-		  <div class="panel panel-default">
-		    <div class="panel-heading">
-		      <h4 class="panel-title">
-		        <a class="accordion-toggle" data-toggle="collapse" data-parent="#methodAccordion" href="#collapse3">
-		          Details:
-		        </a>
-		      </h4>
-		    </div>
-		    <div id="collapse3" class="panel-collapse collapse">
-		      <div class="panel-body">
-				Created by <a href="http://localhost:9000/users/@recipe.getCreator().getUserName()">@recipe.getCreator().getDisplayName()</a> on @org.joda.time.format.DateTimeFormat.forPattern("dd MMMM yyyy 'at' HH:mm").withLocale( Locale.UK ).print( recipe.getCreationTime() )
-		      </div>
-		    </div>
-		  </div>
-		</div>
-	  </div>  <!-- <div class="col-md-9"> -->
-	</div>  <!-- <div class="row"> -->
-
-	<hr />
-
-	<div class="container" style="padding-top: 20px">
-	  <div class="col-md-4">
-
-		<div class="panel-group" id="sidebar">
-		  <div class="panel panel-default">
-		    <div class="panel-heading">
-		      <h4 class="panel-title">Must Include:</h4>
-		    </div>
-		    <div id="sidebar-1" class="panel-collapse collapse in">
-		      <div class="panel-body">
-		        <ul class="list-unstyled">
-		        @for(eachIncl <- explorerFilters.getIncludes()) {
-		        	@if(eachIncl.getValue().isPresent()) {
-		        	  <!--  FIXME Bodge to hide Cats we're displaying further down!!! <li>@eachIncl.getValue().get()&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeInclTag('@eachIncl.getEntity()','@eachIncl.getValue().get()')"><span class="glyphicon glyphicon-remove"></span></button></li> -->
-		        	} else {
-		        		@if(eachIncl.getEntity().toString().equals("VEGAN") || eachIncl.getEntity().toString().equals("VEGETARIAN")) {
-		        			<!-- Ignore - FIXME -->
-		        		} else {
-		        	  	<li style="padding: 3px 5px 3px 10px"><strong>&raquo; @eachIncl.getEntity()</strong>&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeInclTag('@eachIncl.getEntity()')"><span class="glyphicon glyphicon-remove"></span></button></li>
-		        	  }
-		        	}
-		        }
-		        </ul>
-
-				<div><input type="hidden" style="width: 180px" id="sidebar-incl-pickItemTag" /><button type="button" style="margin-left: 12px" class="btn btn-sm btn-default" onclick="addInclTag($('#sidebar-incl-pickItemTag').select2('data').displayName)"><span class="glyphicon glyphicon-plus"></span> Include</button></div>
-		      </div>
-		    </div>
-		  </div>
-		  <div class="panel panel-default">
-		    <div class="panel-heading">
-		      <h4 class="panel-title">Exclude all:</h4>
-		    </div>
-		    <div id="sidebar-2">
-		      <div class="panel-body">
-		        @if( explorerFilters.getExcludes().size() != 0) {
-		        <ul class="list-unstyled">
-		        @for(eachExcl <- explorerFilters.getExcludes()) {
-		        	@if(eachExcl.getValue().isPresent()) {
-		        	  <li style="padding: 3px 5px 3px 10px"><strong>&raquo; @eachExcl.getValue().get()</strong>&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeExclTag('@eachExcl.getEntity()','@eachExcl.getValue().get()')"><span class="glyphicon glyphicon-remove"></span></button></li>
-		        	} else {
-		        	  <li style="padding: 3px 5px 3px 10px"><strong>&raquo; @eachExcl.getEntity()</strong>&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Filter" onclick="removeExclTag('@eachExcl.getEntity()')"><span class="glyphicon glyphicon-remove"></span></button></li>
-		        	}
-		        }
-		        </ul>
-		        }
-
-				<div><input type="hidden" style="width: 180px" id="sidebar-excl-pickItemTag" /><button type="button" style="margin-left: 12px" class="btn btn-sm btn-default" onclick="addExclTag($('#sidebar-excl-pickItemTag').select2('data').displayName)"><span class="glyphicon glyphicon-plus"></span> Exclude</button></div>
-		      </div>
-		    </div>
-		  </div>
-		  <div class="panel panel-default">
-		    <div class="panel-heading">
-		      <h4 class="panel-title">Diet type:</h4>
-		    </div>
-		    <div id="sidebar-2">
-		      <div class="panel-body">
-		      <ul class="list-unstyled" style="margin-bottom: 0">
-					@for((eachDietType, isSelected) <- dietTypesActivationMap) {
-						@if(isSelected) {
-						  <li style="padding: 3px 5px 3px 10px"><strong>&raquo; @eachDietType</strong>&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Category" onclick="removeInclTag('@eachDietType.toUpperCase()')"><span class="glyphicon glyphicon-remove"></span></button></li>
-						} else {
-						  <li style="padding: 3px 5px 3px 10px"><a onclick="addInclTag('@eachDietType.toUpperCase()'); return false" title="Add Category">@eachDietType</a></li>
-						}
-					}
-			  </ul>
-		      </div>
-		    </div>
-		  </div>
-		  <div class="panel panel-default">
-		    <div class="panel-heading">
-		      <h4 class="panel-title">Course:</h4>
-		    </div>
-		    <div id="sidebar-2">
-		      <div class="panel-body">
-		      <ul class="list-unstyled" style="margin-bottom: 0">
-					@for((eachRecipeCat, isSelected) <- recipeCategoriesActivationMap) {
-						@if(isSelected) {
-						  <li style="padding: 3px 5px 3px 10px"><strong>&raquo; @eachRecipeCat</strong>&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 10px" title="Remove Category" onclick="removeInclTag('RECIPE_CATEGORY','@eachRecipeCat')"><span class="glyphicon glyphicon-remove"></span></button></li>
-						} else {
-						  <li style="padding: 3px 5px 3px 10px"><a href="" onclick="addInclTag('RECIPE_CATEGORY','@eachRecipeCat'); return false" title="Add Category">@eachRecipeCat</a></li>
-						}
-					}
-			  </ul>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-	</div>
-
-	  <div class="col-md-8">
-		<ul id="recipesTabs" class="nav nav-tabs">
-			<li class="active lead"><a href="#similarRecipes" onclick="setUiOpt('recipes.similarTabSel','recipes')"><strong>Similar Recipes</strong></a></li>
-			<li class="lead"><a href="#recIngredients" onclick="setUiOpt('recipes.similarTabSel','items')"><strong>Why not add?</strong></a></li>
+		<ul id="sectionsTabs" class="nav nav-tabs">
+			<li class="active lead"><a href="#follow" onclick="setUiOpt('recipes.mainSection','follow')"><span class="glyphicon glyphicon-cutlery"></span> <strong>Follow Recipe</strong></a></li>
+			<li class="lead"><a href="#explore" onclick="setUiOpt('recipes.mainSection','explore')"><span class="glyphicon glyphicon-search"></span> <strong>Explore Variations</strong></a></li>
 		</ul>
-    	<div id="my-tab-content" class="tab-content" style="margin-top: 24px">
-
-		@if( similarities.size() == 0) {
-			<p>Sorry, no Similar recipes could be found</p>
-		} else {
-			<div class="tab-pane active" id="similarRecipes">
-			@for(( eachRecipe, index) <- similarities.zipWithIndex) {
-			
-			@if((index % 2) == 0) {
-				@if( index >= 2) {
-				  </div>  <!-- <div class="row"> -->
-				}
-			 <div class="row">
-			}
-	
-			<div class="col-md-6">
-				@_displayRecipe( eachRecipe, index, currUser, cuisineColours)
-			</div>  <!-- <div class="col-md-4"> -->
-			
-			<script>
-			$('#toggle_@index').click(function() {
-			  $('#ingredients_@index').slideToggle(function() {
-			    // Should toggle chevron
-			  });
-			  return false;
-			});
-			</script>
-			
-			}
-			
-			</div>  <!-- <div class="row"> -->
-			</div>  <!-- <div class="container"> -->
-
-		@if( recommendedItems.size() == 0) {
-			<p>Sorry, no Ingredient suggestions</p>
-		} else {
-			<div class="container tab-pane" id="recIngredients">
-			@for(( eachItem, index) <- recommendedItems.zipWithIndex) {
-	
-			@if((index % 2) == 0) {
-				@if( index >= 2) {
-				  </div>  <!-- <div class="row"> -->
-				}
-			 <div class="row">
-			}
-	
-			<div class="col-md-6">@_itemWell(eachItem)</div>
-			}
-
-			</div>  <!-- <div class="row"> -->
-			</div>  <!-- <div class="container"> -->
-		}
-		}
+	 	<div id="sections-tab-content" class="tab-content" style="margin-top: 24px">
+			<div class="tab-pane active" id="follow">
+	@_recipeFollowSection(recipe)
+			</div>
+			<div class="tab-pane" id="explore">
+	@_recipeExploreSection(recipe, similarities, currUser, recommendedItems, explorerFilters, dietTypesActivationMap, recipeCategoriesActivationMap, cuisineColours)
+			</div>
 		</div>
-	  </div>
 
 	</div>  <!-- <div class="row"> -->
 
@@ -266,6 +64,15 @@
 		  $('#recipesTabs li:eq(1) a').tab('show')
 		  break;
 	  }
+
+	  switch (uiOpts().recipes.mainSection) {
+	    case 'follow':
+		  $('#sectionsTabs li:eq(0) a').tab('show')
+		  break;
+	    case 'explore':
+		  $('#sectionsTabs li:eq(1) a').tab('show')
+		  break;
+	  }
 	</script>
 
 	<script src="@routes.Assets.at("javascripts/select2.min.js")" type="text/javascript"></script>
@@ -274,9 +81,13 @@
 	@_addIngredientPicker("sidebar-excl-pickItemTag", true)
 
 <script type="text/javascript">
+	$('#sectionsTabs a').click( function (e) {
+	  e.preventDefault()
+	  $(this).tab('show')
+	});
 	$('#recipesTabs a').click( function (e) {
 	  e.preventDefault()
 	  $(this).tab('show')
-	})
+	});
 </script>    
 }

@@ -1,0 +1,65 @@
+@(recipe: uk.co.recipes.api.IRecipe)
+
+  <div class="col-md-5">
+	<div class="panel-group" id="accordion">
+	  <div class="panel panel-default">
+	    <div class="panel-heading">
+	      <h4 class="panel-title">
+	        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+	          Ingredients:
+	        </a>
+	      </h4>
+	    </div>
+	    <div id="collapse1" class="panel-collapse collapse in">
+	      <div class="panel-body">
+			<ul class="list-group">
+			@for(ingr <- recipe.getSortedIngredients()) {
+			<li class="list-group-item"><small style="color:#AAA; padding-right:5px">@ingr.getQuantity().buildString(true)</small> <a href="http://localhost:9000/items/@ingr.getItem().getCanonicalName()">@ingr.getItem().getCanonicalName()</a> @if(ingr.isOptional()) {<span style="color:#AAA; margin-left:5px">(optional)</span> }&nbsp;@for(tagName <- ingr.getItem().getTagNamesForDisplay()){<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span> }<button type="button" class="btn btn-xs btn-default" style="margin-left: 5px" title="Remove Ingredient" onclick="document.location.href='/recipes/@recipe.getTitle()/@ingr.getItem().getCanonicalName()/remove'; return false"><span class="glyphicon glyphicon-remove"></span></button></li>
+			}
+			</ul>
+
+			<div><input type="hidden" style="width: 250px" id="addIngredient" /><button type="button" style="margin-left: 12px" class="btn btn-default" onclick="addIngredient('@recipe.getTitle()',$('#addIngredient'))"><span class="glyphicon glyphicon-plus"></span> Add</button></div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+  </div>
+  <div class="col-md-7">
+	<div class="panel-group" id="methodAccordion">
+	  <div class="panel panel-default">
+	    <div class="panel-heading">
+	      <h4 class="panel-title">
+	        <a class="accordion-toggle" data-toggle="collapse" data-parent="#methodAccordion" href="#methodCollapse">
+	          Method:
+	        </a>
+	      </h4>
+	    </div>
+	    <div id="methodCollapse" class="panel-collapse collapse in">
+
+		<p style="padding: 12px 6px 0 12px">
+			@for((eachTag, tagValue) <- recipe.getTags()) {
+				@if(eachTag != uk.co.recipes.tags.RecipeTags.RECIPE_CUISINE) {
+				<span><strong>@eachTag:</strong> @tagValue</span>&nbsp;
+				}
+			}
+		</p>
+
+	    </div>
+	  </div>
+	  <div class="panel panel-default">
+	    <div class="panel-heading">
+	      <h4 class="panel-title">
+	        <a class="accordion-toggle" data-toggle="collapse" data-parent="#methodAccordion" href="#collapse3">
+	          Details:
+	        </a>
+	      </h4>
+	    </div>
+	    <div id="collapse3" class="panel-collapse collapse">
+	      <div class="panel-body">
+			Created by <a href="http://localhost:9000/users/@recipe.getCreator().getUserName()">@recipe.getCreator().getDisplayName()</a> on @org.joda.time.format.DateTimeFormat.forPattern("dd MMMM yyyy 'at' HH:mm").withLocale( Locale.UK ).print( recipe.getCreationTime() )
+	      </div>
+	    </div>
+	  </div>
+	</div>
+  </div>  <!-- <div class="col-md-9"> -->
+<!-- FIXME: </div> -->
