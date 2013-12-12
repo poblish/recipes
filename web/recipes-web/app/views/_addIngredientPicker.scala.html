@@ -5,9 +5,9 @@ $("#@elemId").select2({
     minimumInputLength: 2,
     ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
         @if( addTags == true) {
-    	url: "http://localhost:9000/search/partialTags",
+    	url: "/search/partialTags",
         } else {
-        	url: "http://localhost:9000/search/partial",
+        	url: "/search/partial",
         }
         dataType: 'jsonp',
         data: function (term, page) {

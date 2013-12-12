@@ -14,7 +14,7 @@
 	      <div class="panel-body">
 			<ul class="list-group">
 			@for(( ingr, index) <- recipe.getSortedIngredients().zipWithIndex) {
-			  <li class="list-group-item"><small style="color:#AAA; padding-right:5px">@ingr.getQuantity().buildString(true)</small> <a href="http://localhost:9000/items/@ingr.getItem().getCanonicalName()">@ingr.getItem().getCanonicalName()</a> @if(ingr.isOptional()) {<span style="color:#AAA; margin-left:5px">(optional)</span> }&nbsp;<button type="button" id="ingredient_@index" data-title="@ingr.getItem().getCanonicalName() details" class="btn btn-xs btn-default ingredientTagButton" style="margin-left: 5px"><span class="glyphicon glyphicon-tags"></span></button>&nbsp;<button type="button" class="btn btn-xs btn-danger" style="margin-left: 5px" title="Remove Ingredient" onclick="document.location.href='/recipes/@recipe.getTitle()/@ingr.getItem().getCanonicalName()/remove'; return false"><span class="glyphicon glyphicon-remove"></span></button></li>
+			  <li class="list-group-item"><small style="color:#AAA; padding-right:5px">@ingr.getQuantity().buildString(true)</small> <a href="/items/@ingr.getItem().getCanonicalName()">@ingr.getItem().getCanonicalName()</a> @if(ingr.isOptional()) {<span style="color:#AAA; margin-left:5px">(optional)</span> }&nbsp;<button type="button" id="ingredient_@index" data-title="@ingr.getItem().getCanonicalName() details" class="btn btn-xs btn-default ingredientTagButton" style="margin-left: 5px"><span class="glyphicon glyphicon-tags"></span></button>&nbsp;<button type="button" class="btn btn-xs btn-danger" style="margin-left: 5px" title="Remove Ingredient" onclick="document.location.href='/recipes/@recipe.getTitle()/@ingr.getItem().getCanonicalName()/remove'; return false"><span class="glyphicon glyphicon-remove"></span></button></li>
 			}
 			</ul>
 
@@ -56,7 +56,7 @@
 	    </div>
 	    <div id="collapse3" class="panel-collapse collapse">
 	      <div class="panel-body">
-			Created by <a href="http://localhost:9000/users/@recipe.getCreator().getUserName()">@recipe.getCreator().getDisplayName()</a> on @org.joda.time.format.DateTimeFormat.forPattern("dd MMMM yyyy 'at' HH:mm").withLocale( Locale.UK ).print( recipe.getCreationTime() )
+			Created by <a href="/users/@recipe.getCreator().getUserName()">@recipe.getCreator().getDisplayName()</a> on @org.joda.time.format.DateTimeFormat.forPattern("dd MMMM yyyy 'at' HH:mm").withLocale( Locale.UK ).print( recipe.getCreationTime() )
 	      </div>
 	    </div>
 	  </div>
