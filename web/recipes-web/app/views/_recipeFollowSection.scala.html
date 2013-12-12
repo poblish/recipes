@@ -14,7 +14,7 @@
 	      <div class="panel-body">
 			<ul class="list-group">
 			@for(( ingr, index) <- recipe.getSortedIngredients().zipWithIndex) {
-			  <li class="list-group-item"><small style="color:#AAA; padding-right:5px">@ingr.getQuantity().buildString(true)</small> <a href="http://localhost:9000/items/@ingr.getItem().getCanonicalName()">@ingr.getItem().getCanonicalName()</a> @if(ingr.isOptional()) {<span style="color:#AAA; margin-left:5px">(optional)</span> }&nbsp;<button type="button" id="ingredient_@index" data-title="@ingr.getItem().getCanonicalName() details" class="btn btn-xs btn-default ingredientTagButton" style="margin-left: 5px"><span class="glyphicon glyphicon-tags"></span></button>&nbsp;<button type="button" class="btn btn-xs btn-default" style="margin-left: 5px" title="Remove Ingredient" onclick="document.location.href='/recipes/@recipe.getTitle()/@ingr.getItem().getCanonicalName()/remove'; return false"><span class="glyphicon glyphicon-remove"></span></button></li>
+			  <li class="list-group-item"><small style="color:#AAA; padding-right:5px">@ingr.getQuantity().buildString(true)</small> <a href="http://localhost:9000/items/@ingr.getItem().getCanonicalName()">@ingr.getItem().getCanonicalName()</a> @if(ingr.isOptional()) {<span style="color:#AAA; margin-left:5px">(optional)</span> }&nbsp;<button type="button" id="ingredient_@index" data-title="@ingr.getItem().getCanonicalName() details" class="btn btn-xs btn-default ingredientTagButton" style="margin-left: 5px"><span class="glyphicon glyphicon-tags"></span></button>&nbsp;<button type="button" class="btn btn-xs btn-danger" style="margin-left: 5px" title="Remove Ingredient" onclick="document.location.href='/recipes/@recipe.getTitle()/@ingr.getItem().getCanonicalName()/remove'; return false"><span class="glyphicon glyphicon-remove"></span></button></li>
 			}
 			</ul>
 
@@ -65,7 +65,7 @@
 <!-- FIXME: </div> -->
 
 @for(( ingr, index) <- recipe.getSortedIngredients().zipWithIndex) {
-  <div style="display:none" id="ingredient_tags_@index"><p>Tags:</p><p>@for(tagName <- ingr.getItem().getTagNamesForDisplay()){<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span> }</p></div>
+  <div style="display:none" id="ingredient_tags_@index"><p style="margin-bottom: 5px">Tags:</p><p>@for(tagName <- ingr.getItem().getTagNamesForDisplay()){<span class="label @uk.co.recipes.tags.TagUtils.getStyle(tagName)"><a href="/tags/@tagName">@tagName</a></span> }</p></div>
   <script>
   	$('#ingredient_@index').popover({html: true, trigger: 'click', content: function(){ return $('#ingredient_tags_@index').html(); } });
   	$('#ingredient_@index').on('click', function (e) {  // Close existing popovers when we are opened!
