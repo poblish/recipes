@@ -27,7 +27,7 @@
 		  </ul>
 		</div>
 	    <div class="wrapper">
-	        <h1><!-- <span>@recipe.getId()</span>&nbsp; -->@recipe.getTitle()&nbsp;<!-- <span class="label label-warning">@recipe.getLocale()</span> -->@_forkRecipeDisplay( recipe, "btn-lg") @_faveRecipeDisplay( recipe, currUser, "btn-lg")</h1>
+	        <h1><span title="@cuisineName Cuisine" style="background-color: @cuisineColours.colourForRecipe(recipe); padding: 0 22px 0 22px; margin-right: 8px; border-radius: 22px"></span> @recipe.getTitle()&nbsp;<!-- <span class="label label-warning">@recipe.getLocale()</span> -->@_forkRecipeDisplay( recipe, "btn-lg") @_faveRecipeDisplay( recipe, currUser, "btn-lg")</h1>
 	    </div>
 	</section>
 	
@@ -35,9 +35,9 @@
 	<p>@recipe.getForkDetails()</p>
 	}
 
-	<div style="background-color: @cuisineColour; border-radius: 2px" title="@cuisineName Cuisine">&nbsp;</div>
+	<hr />
 
-	<div class="container" style="padding-top: 20px">
+	<div class="container" style="padding-top: 7px">
 
 		<ul id="sectionsTabs" class="nav nav-tabs">
 			<li class="active lead"><a href="#follow" onclick="setUiOpt('recipes.mainSection','follow')"><span class="glyphicon glyphicon-cutlery"></span> <strong>Follow Recipe</strong></a></li>
