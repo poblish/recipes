@@ -18,7 +18,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.elasticsearch.common.Preconditions;
+import com.google.common.base.Preconditions;
 import org.joda.time.DateTime;
 
 import uk.co.recipes.api.ICanonicalItem;

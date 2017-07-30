@@ -15,7 +15,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.elasticsearch.common.Preconditions;
+import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,8 +67,6 @@ public class CanonicalItem implements ICanonicalItem {
 
 	/**
 	 * @param canonicalName
-	 * @param parent
-	 * @param varieties
 	 */
 	public CanonicalItem(String canonicalName) {
 		this.canonicalName = canonicalName;
@@ -76,8 +74,6 @@ public class CanonicalItem implements ICanonicalItem {
 
 	/**
 	 * @param canonicalName
-	 * @param parent
-	 * @param varieties
 	 */
 	@JsonCreator
 	public CanonicalItem(@JsonProperty("canonicalName") String canonicalName,
@@ -98,8 +94,6 @@ public class CanonicalItem implements ICanonicalItem {
 
 	/**
 	 * @param canonicalName
-	 * @param parent
-	 * @param varieties
 	 */
 	public CanonicalItem(String canonicalName, final Optional<ICanonicalItem> inParent) {
 		this.canonicalName = canonicalName;

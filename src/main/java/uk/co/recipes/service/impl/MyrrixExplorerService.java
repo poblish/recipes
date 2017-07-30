@@ -12,10 +12,10 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import com.google.common.base.Throwables;
 import net.myrrix.client.ClientRecommender;
 
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
-import org.elasticsearch.common.base.Throwables;
 
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;

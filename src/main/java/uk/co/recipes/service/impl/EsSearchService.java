@@ -20,9 +20,9 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.google.common.base.Throwables;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.common.base.Throwables;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 

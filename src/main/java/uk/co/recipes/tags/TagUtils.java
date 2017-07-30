@@ -15,8 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.elasticsearch.common.base.Splitter;
-
+import com.google.common.base.Splitter;
 import uk.co.recipes.api.ITag;
 
 import com.google.common.base.Function;

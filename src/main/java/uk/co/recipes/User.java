@@ -8,7 +8,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 import java.util.Set;
 
-import org.elasticsearch.common.Preconditions;
+import com.google.common.base.Preconditions;
 import org.joda.time.DateTime;
 
 import uk.co.recipes.api.ICanonicalItem;

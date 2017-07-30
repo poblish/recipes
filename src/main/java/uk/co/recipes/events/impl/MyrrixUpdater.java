@@ -15,10 +15,10 @@ import java.util.Map.Entry;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import com.google.common.base.Throwables;
 import net.myrrix.client.ClientRecommender;
 
 import org.apache.mahout.cf.taste.common.TasteException;
-import org.elasticsearch.common.base.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
