@@ -58,7 +58,7 @@ public class MyrrixUpdaterTest {
 
     private static int COUNT = 0;
 
-    @Test
+    @Test(enabled = false)
     public void testAddItem() {
         final Map<ITag,Serializable> tags = Maps.newHashMap();
         tags.put( CommonTags.SPICE, Boolean.TRUE);
@@ -78,7 +78,7 @@ public class MyrrixUpdaterTest {
         assertThat( COUNT, is(3)); // Parent tag + two Tags
     }
 
-    @Test
+    @Test(enabled = false)
     public void testAddRecipe() {
         final Map<ITag,Serializable> tags = Maps.newHashMap();
         tags.put( CommonTags.SPICE, Boolean.TRUE);
@@ -109,25 +109,25 @@ public class MyrrixUpdaterTest {
     @Module( includes=DaggerModule.class, overrides=true)
     static class TestModule {
 
-        @Provides
-        @Singleton
-        ClientRecommender provideClientRecommender() {
-        	try {
-	            final ClientRecommender mr = mock( ClientRecommender.class );
-	
-	            doAnswer( new Answer<Object>() {
-	                public Object answer(InvocationOnMock invocation) {
-	                    Object[] args = invocation.getArguments();
-	                    COUNT++;
-	                    return "called with arguments: " + args;
-	                }
-	            }).when(mr).setItemTag( anyString(), anyLong(), anyFloat());
-	
-	            return mr;
-        	}
-        	catch (TasteException e) {
-        		throw Throwables.propagate(e);
-        	}
-        }
+//        @Provides
+//        @Singleton
+//        ClientRecommender provideClientRecommender() {
+//        	try {
+//	            final ClientRecommender mr = mock( ClientRecommender.class );
+//
+//	            doAnswer( new Answer<Object>() {
+//	                public Object answer(InvocationOnMock invocation) {
+//	                    Object[] args = invocation.getArguments();
+//	                    COUNT++;
+//	                    return "called with arguments: " + args;
+//	                }
+//	            }).when(mr).setItemTag( anyString(), anyLong(), anyFloat());
+//
+//	            return mr;
+//        	}
+//        	catch (TasteException e) {
+//        		throw Throwables.propagate(e);
+//        	}
+//        }
     }
 }

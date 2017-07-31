@@ -21,7 +21,7 @@ import com.google.common.base.Optional;
  */
 public class WikipediaTest {
 
-	@Test
+	@Test(enabled = false)
 	public void testWikipediaTextParse() throws IOException {
 		final Optional<WikipediaResults> results = new WikipediaGetter().getResultsFor("Coriander seed");
 
