@@ -5,6 +5,7 @@ package uk.co.recipes.taste;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.mock;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +16,6 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import net.myrrix.client.ClientRecommender;
-import net.myrrix.client.MyrrixClientConfiguration;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -72,11 +72,7 @@ public class MyrrixPrefsIngestTest {
         @Provides
         @Singleton
         ClientRecommender provideClientRecommender() {
-            try {
-                return new ClientRecommender( new MyrrixClientConfiguration() );
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            return mock(ClientRecommender.class);  // Mockito 2.x
         }
     }
 
@@ -84,6 +80,5 @@ public class MyrrixPrefsIngestTest {
     @Component(modules={ TestModule.class })
     public interface TestComponent {
         void inject(final MyrrixPrefsIngestTest runner);
-
     }
 }
