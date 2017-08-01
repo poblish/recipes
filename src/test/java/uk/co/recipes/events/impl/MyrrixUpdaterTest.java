@@ -9,9 +9,11 @@ import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
 import net.myrrix.client.ClientRecommender;
-import net.myrrix.client.MyrrixClientConfiguration;
 import org.apache.mahout.cf.taste.common.TasteException;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import uk.co.recipes.*;
 import uk.co.recipes.api.ICanonicalItem;
@@ -29,13 +31,15 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
+import static uk.co.recipes.api.Units.GRAMMES;
 
 
 public class MyrrixUpdaterTest {
@@ -44,11 +48,16 @@ public class MyrrixUpdaterTest {
 
     private final static Optional<ICanonicalItem> ABSENT = Optional.absent();
 
-    private static int COUNT = 0;
+    private static int COUNT;
 
     @BeforeClass
     private void injectDependencies() {
         DaggerMyrrixUpdaterTest_TestComponent.builder().testModule( new TestModule() ).build().inject(this);
+    }
+
+    @BeforeMethod
+    private void resetCount() {
+        COUNT = 0;
     }
 
     @Test
@@ -68,11 +77,12 @@ public class MyrrixUpdaterTest {
 
         updater.onAddItem( new AddItemEvent(item) );
 
-        assertThat( COUNT, is(3)); // Parent tag + two Tags
+        // 1/8/2017: Was this ever working? assertThat( COUNT, is(3)); // Parent tag + two Tags
+        assertThat( COUNT, is(2)); // Just two Tags
     }
 
     @Test
-    public void testAddRecipe() {
+    public void testAddRecipe() throws IOException {
         final Map<ITag,Serializable> tags = Maps.newHashMap();
         tags.put( CommonTags.SPICE, Boolean.TRUE);
         tags.put( NationalCuisineTags.INDIAN, "3.0");  // Try boosting
@@ -81,6 +91,7 @@ public class MyrrixUpdaterTest {
         when( item.getCanonicalName() ).thenReturn("ginger");
         when( item.getTags() ).thenReturn(tags);
         when( item.parent() ).thenReturn(ABSENT);
+        when( item.getBaseAmount() ).thenReturn( Optional.of( new Quantity( GRAMMES, 100)));
 
         final User user = new User( "aregan", "Andrew R");
 
@@ -90,13 +101,16 @@ public class MyrrixUpdaterTest {
         final Recipe r1 = new Recipe(user, "1", Locale.UK);
         r1.addStage(rs1);
 
+        r1.setId(Recipe.BASE_ID);
+
         /////////////////////////////////////////////////
 
-        assertThat( COUNT, is(3));
+        assertThat( COUNT, is(0));
 
         updater.onAddRecipe( new AddRecipeEvent(r1) );
 
-        assertThat( COUNT, is(6)); // Parent tag + two Tags
+        // 1/8/2017: Was this ever working? assertThat( COUNT, is(3)); // Parent tag + two Tags
+        assertThat( COUNT, is(2)); // Just two Tags
     }
 
     // FIXME Suboptimal: https://google.github.io/dagger/testing.html
@@ -117,15 +131,27 @@ public class MyrrixUpdaterTest {
         @Provides
         @Singleton
         IIngredientQuantityScoreBooster provideIngredientQuantityScoreBooster() {
-            return mock(IIngredientQuantityScoreBooster.class);
+            return new DefaultIngredientQuantityScoreBooster();
         }
 
         @Provides
         @Singleton
         ClientRecommender provideClientRecommender() {
             try {
-                return new ClientRecommender( new MyrrixClientConfiguration() );
-            } catch (IOException e) {
+                final ClientRecommender mr = mock( ClientRecommender.class );
+
+                doAnswer( new Answer<Object>() {
+                    public Object answer(InvocationOnMock invocation) {
+                        Object[] args = invocation.getArguments();
+                        System.out.println(Arrays.toString(args));
+                        COUNT++;
+                        return "called with arguments: " + args;
+                    }
+                }).when(mr).setItemTag( anyString(), anyLong(), anyFloat());
+
+                return mr;
+            }
+            catch (TasteException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -135,47 +161,5 @@ public class MyrrixUpdaterTest {
     @Component(modules={ TestModule.class })
     public interface TestComponent {
         void inject(final MyrrixUpdaterTest runner);
-    }
-
-//        @Provides
-//        @Singleton
-//        ClientRecommender provideClientRecommender() {
-//        	try {
-//	            final ClientRecommender mr = mock( ClientRecommender.class );
-//
-//	            doAnswer( new Answer<Object>() {
-//	                public Object answer(InvocationOnMock invocation) {
-//	                    Object[] args = invocation.getArguments();
-//	                    COUNT++;
-//	                    return "called with arguments: " + args;
-//	                }
-//	            }).when(mr).setItemTag( anyString(), anyLong(), anyFloat());
-//
-//	            return mr;
-//        	}
-//        	catch (TasteException e) {
-//        		throw Throwables.propagate(e);
-//        	}
-//        }
-
-    private class RecommenderWrapper {
-        private final ClientRecommender finalRecommender;
-
-
-        public RecommenderWrapper() {
-            try {
-                finalRecommender = new ClientRecommender( new MyrrixClientConfiguration() );
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        public void setItemTag(String tag, long itemID, float value) {
-            try {
-                finalRecommender.setItemTag(tag, itemID, value);
-            } catch (TasteException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 }
