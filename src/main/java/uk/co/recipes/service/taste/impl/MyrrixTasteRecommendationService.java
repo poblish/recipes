@@ -1,6 +1,3 @@
-/**
- * 
- */
 package uk.co.recipes.service.taste.impl;
 
 import java.util.List;
@@ -16,17 +13,16 @@ import org.apache.mahout.cf.taste.common.TasteException;
 import uk.co.recipes.myrrix.MyrrixUtils;
 import uk.co.recipes.service.taste.api.ITasteRecommendationsAPI;
 
-/**
- * TODO
- *
- * @author andrewregan
- *
- */
 @Singleton
 public class MyrrixTasteRecommendationService implements ITasteRecommendationsAPI {
 
 	@Inject
 	ClientRecommender recommender;
+
+	@Inject
+	public MyrrixTasteRecommendationService() {
+		// For Dagger
+	}
 
 	@Override
 	public List<Long> recommendIngredients( long inUser, int inNumRecs) {

@@ -11,7 +11,9 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+import dagger.Component;
 import org.apache.http.client.ClientProtocolException;
 import org.elasticsearch.client.Client;
 import org.testng.annotations.AfterClass;
@@ -36,7 +38,6 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Ordering;
 
 import dagger.Module;
-import dagger.ObjectGraph;
 
 /**
  * TODO
@@ -58,7 +59,7 @@ public class RecipeSearchTest {
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
-        ObjectGraph.create( new TestModule() ).inject(this);
+		DaggerRecipeSearchTest_TestComponent.create().inject(this);
 
         itemFactory.deleteAll();
 		recipeFactory.deleteAll();
@@ -125,7 +126,9 @@ public class RecipeSearchTest {
 		esClient.close();
 	}
 
-	// Used by main method, not by CurryFrenzyLoader itself!
-    @Module( includes=DaggerModule.class, overrides=true, injects=RecipeSearchTest.class)
-    static class TestModule {}
+	@Singleton
+	@Component(modules={ DaggerModule.class })
+	public interface TestComponent {
+		void inject(final RecipeSearchTest runner);
+	}
 }

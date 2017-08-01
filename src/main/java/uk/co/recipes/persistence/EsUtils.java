@@ -51,6 +51,10 @@ public class EsUtils {
 
 	private final static Logger LOG = LoggerFactory.getLogger( EsUtils.class );
 
+	@Inject
+	public EsUtils() {
+		// For Dagger
+	}
 
 	public JsonParser parseSource( final String inUrlString) throws IOException {
 		return mapper.readTree( new URL(inUrlString) ).path("_source").traverse();

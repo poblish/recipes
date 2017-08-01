@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Set;
 
+import com.google.common.base.MoreObjects;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IExplorerFilterItem;
 import uk.co.recipes.api.ITag;
@@ -117,7 +118,7 @@ public class UserPreferences implements IUserPreferences {
 	}
 
 	public String toString() {
-		return Objects.toStringHelper(this)
+		return MoreObjects.toStringHelper(this)
 						.add("includes", getExplorerIncludes())
 						.add("excludes", getExplorerExcludes())
 						.toString();
@@ -175,7 +176,7 @@ public class UserPreferences implements IUserPreferences {
 		}
 
 		public String toString() {
-			return Objects.toStringHelper(this).omitNullValues().add( "tag", tag).add( "value", value).toString();
+			return MoreObjects.toStringHelper(this).omitNullValues().add( "tag", tag).add( "value", value).toString();
 		}
     }
 
@@ -224,7 +225,7 @@ public class UserPreferences implements IUserPreferences {
 		}
 
 		public String toString() {
-			return Objects.toStringHelper(this).add( "name", canonicalName).toString();
+			return MoreObjects.toStringHelper(this).add( "name", canonicalName).toString();
 		}
     }
 

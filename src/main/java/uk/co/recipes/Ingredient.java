@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import com.google.common.base.MoreObjects;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IQuantity;
@@ -144,7 +145,7 @@ public class Ingredient implements IIngredient {
 	}
 
 	public String toString() {
-		return Objects.toStringHelper(this).omitNullValues()
+		return MoreObjects.toStringHelper(this).omitNullValues()
 						.add( "q", quantity)
 						.add( "item", item)
 						.add( "notes", notes.isEmpty() ? null : notes)

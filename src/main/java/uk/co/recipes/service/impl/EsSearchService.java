@@ -20,6 +20,7 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Throwables;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
@@ -66,10 +67,14 @@ public class EsSearchService implements ISearchAPI {
 	@Named("elasticSearchItemsUrl")
 	@Inject String itemIndexUrl;
 
+	@Inject
+	public EsSearchService() {
+		// For Dagger
+	}
 
 	/* (non-Javadoc)
-	 * @see uk.co.recipes.service.api.ISearchAPI#findItemsByName(java.lang.String)
-	 */
+         * @see uk.co.recipes.service.api.ISearchAPI#findItemsByName(java.lang.String)
+         */
 	@Override
 	public List<ICanonicalItem> findItemsByName( String inName) throws IOException {
 	    return findItemsByName( inName, false);
@@ -188,10 +193,10 @@ public class EsSearchService implements ISearchAPI {
 			return results;
 		}
 		catch (MalformedURLException e) {
-			throw Throwables.propagate(e);
+			throw new RuntimeException(e);
 		}
 		catch (JsonProcessingException e) {
-			throw Throwables.propagate(e);
+			throw new RuntimeException(e);
 		}
         finally {
             timerCtxt.stop();
@@ -464,7 +469,7 @@ public class EsSearchService implements ISearchAPI {
 		}
 
 		public String toString() {
-			return Objects.toStringHelper(this).add( "itemName", getEntity().getCanonicalName()).toString();
+			return MoreObjects.toStringHelper(this).add( "itemName", getEntity().getCanonicalName()).toString();
 		}
     }
 
@@ -496,7 +501,7 @@ public class EsSearchService implements ISearchAPI {
 		}
 
 		public String toString() {
-			return Objects.toStringHelper(this).add( "recipeName", getEntity().getTitle()).toString();
+			return MoreObjects.toStringHelper(this).add( "recipeName", getEntity().getTitle()).toString();
 		}
     }
 
@@ -528,7 +533,7 @@ public class EsSearchService implements ISearchAPI {
 		}
 
 		public String toString() {
-			return Objects.toStringHelper(this).add( "tag", getDisplayName()).toString();
+			return MoreObjects.toStringHelper(this).add( "tag", getDisplayName()).toString();
 		}
     }
 }

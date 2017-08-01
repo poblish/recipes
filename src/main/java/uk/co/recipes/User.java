@@ -1,6 +1,3 @@
-/**
- * 
- */
 package uk.co.recipes;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -8,7 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 import java.util.Set;
 
-import com.google.common.base.Preconditions;
+import com.google.common.base.*;
 import org.joda.time.DateTime;
 
 import uk.co.recipes.api.ICanonicalItem;
@@ -22,9 +19,6 @@ import uk.co.recipes.api.ratings.IRecipeRating;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.Function;
-import com.google.common.base.Objects;
-import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Sets;
 
@@ -340,7 +334,7 @@ public class User implements IUser {
 	}
 
 	public String toString() {
-		return Objects.toStringHelper(this).omitNullValues()
+		return MoreObjects.toStringHelper(this).omitNullValues()
                         .add( "id", ( id == UNSET_ID) ? "NEW" : Long.valueOf(id))
                         .add( "username", getUserName())
                         .add( "displayName", getDisplayName())

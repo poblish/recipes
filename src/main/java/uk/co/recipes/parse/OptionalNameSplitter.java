@@ -1,6 +1,3 @@
-/**
- * 
- */
 package uk.co.recipes.parse;
 
 import java.util.Collection;
@@ -25,6 +22,11 @@ public class OptionalNameSplitter {
 	private final static Joiner WORD_JOINER = Joiner.on(' ');
 
 	@Inject NameAdjuster nameAdjuster;
+
+	@Inject
+	public OptionalNameSplitter() {
+		// For Dagger
+	}
 
 	public SplitResults split( final String s1, final String s2) {
 

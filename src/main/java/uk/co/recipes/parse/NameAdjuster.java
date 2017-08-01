@@ -27,6 +27,11 @@ public class NameAdjuster {
     @Named("suffixAdjustments")
     @Inject List<String> badSuffixes;
 
+    @Inject
+	public NameAdjuster() {
+    	// For Dagger
+	}
+
 	// FIXME Can probably replace with one big regex
 	public AdjustedName adjust( final String inName) {
 	    Collection<String> notesToAdd = Lists.newArrayList();

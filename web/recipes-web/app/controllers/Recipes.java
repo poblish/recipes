@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import com.google.common.base.MoreObjects;
 import play.mvc.Result;
 import uk.co.recipes.Ingredient;
 import uk.co.recipes.Quantity;
@@ -40,7 +41,6 @@ import uk.co.recipes.ui.CuisineColours;
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
@@ -157,7 +157,7 @@ public class Recipes extends AbstractExplorableController {
 			events.visit( user1, recipe);
 		}
 
-		final String cuisineName = Objects.firstNonNull((String) recipe.getTags().get( RecipeTags.RECIPE_CUISINE ), "");
+		final String cuisineName = MoreObjects.firstNonNull((String) recipe.getTags().get( RecipeTags.RECIPE_CUISINE ), "");
 		final String cuisineColour = cuisineName.isEmpty() ? "" : colours.colourForName(cuisineName);
 
         final IExplorerFilterDef filter = getExplorerFilter(explorerFilters);

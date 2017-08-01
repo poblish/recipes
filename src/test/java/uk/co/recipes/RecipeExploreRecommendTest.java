@@ -14,7 +14,9 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+import dagger.Component;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.elasticsearch.client.Client;
@@ -44,7 +46,6 @@ import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 
 import dagger.Module;
-import dagger.ObjectGraph;
 
 /**
  * TODO
@@ -72,7 +73,7 @@ public class RecipeExploreRecommendTest {
 
 
     private void injectDependencies() {
-        ObjectGraph.create( new TestModule() ).inject(this);
+		DaggerRecipeExploreRecommendTest_TestComponent.create().inject(this);
     }
 
 	@BeforeClass
@@ -265,6 +266,9 @@ public class RecipeExploreRecommendTest {
 		esClient.close();
 	}
 
-    @Module( includes=DaggerModule.class, overrides=true, injects=RecipeExploreRecommendTest.class)
-    static class TestModule {}
+	@Singleton
+	@Component(modules={ DaggerModule.class })
+	public interface TestComponent {
+		void inject(final RecipeExploreRecommendTest runner);
+	}
 }

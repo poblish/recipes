@@ -5,6 +5,7 @@ package uk.co.recipes.parse;
 
 import java.util.Arrays;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 
@@ -32,6 +33,6 @@ public class SplitResults {
 	}
 
 	public String toString() {
-		return Objects.toStringHelper(this).add( "first", Arrays.toString(firstResults)).add( "second", Arrays.toString(secondResults)).toString();
+		return MoreObjects.toStringHelper(this).add( "first", Arrays.toString(firstResults)).add( "second", Arrays.toString(secondResults)).toString();
 	}
 }

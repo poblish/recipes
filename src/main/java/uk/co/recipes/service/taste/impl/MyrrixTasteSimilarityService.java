@@ -30,6 +30,11 @@ public class MyrrixTasteSimilarityService implements ITasteSimilarityAPI {
 	@Inject
 	ClientRecommender recommender;
 
+	@Inject
+	public MyrrixTasteSimilarityService() {
+		// For Dagger
+	}
+
 	@Override
 	public List<Long> similarIngredients( long inUser, int inNumRecs) {
 		try {

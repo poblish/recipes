@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+import dagger.Component;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.testng.annotations.BeforeClass;
@@ -41,8 +43,6 @@ import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Maps;
 
-import dagger.Module;
-import dagger.ObjectGraph;
 
 /**
  * 
@@ -70,7 +70,7 @@ public class IngredientsTest {
 //    private IIngredientQuantityScoreBooster booster = GRAPH.get( DefaultIngredientQuantityScoreBooster.class );
 
     private void injectDependencies() {
-        ObjectGraph.create( new TestModule() ).inject(this);
+		DaggerIngredientsTest_TestComponent.create().inject(this);
     }
 
 	@BeforeClass
@@ -297,6 +297,9 @@ public class IngredientsTest {
         return itemFactory.get(inName).get();
     }
 
-    @Module( includes=DaggerModule.class, overrides=true, injects=IngredientsTest.class)
-    static class TestModule {}
+	@Singleton
+	@Component(modules={ DaggerModule.class })
+	public interface TestComponent {
+		void inject(final IngredientsTest runner);
+	}
 }

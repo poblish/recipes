@@ -5,6 +5,7 @@ package service;
 
 import java.io.IOException;
 
+import com.feth.play.module.pa.service.AbstractUserService;
 import play.Application;
 import play.Logger;
 import play.mvc.Http.Session;
@@ -19,7 +20,6 @@ import uk.co.recipes.service.api.IUserPersistence;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.feth.play.module.pa.PlayAuthenticate;
-import com.feth.play.module.pa.service.UserServicePlugin;
 import com.feth.play.module.pa.user.AuthUser;
 import com.feth.play.module.pa.user.AuthUserIdentity;
 import com.feth.play.module.pa.user.EmailIdentity;
@@ -31,26 +31,32 @@ import com.google.common.base.Throwables;
 import dagger.Module;
 import dagger.ObjectGraph;
 
+import javax.inject.Inject;
+
 /**
  * "The combination of getId and getProvider from AuthUser can be used to identify an user"
  *
  * @author andrewregan
  *
  */
-public class PlayAuthUserServicePlugin extends UserServicePlugin {
+public class PlayAuthUserServicePlugin extends AbstractUserService {
+
+	private static PlayAuthUserServicePlugin STATIC_INST = null;  // FIXME
 
 	private static final ObjectGraph GRAPH = ObjectGraph.create( new RecipesWebAppModule() );  // FIXME Yuk!
     private static final IUserPersistence USERS = GRAPH.get( EsUserFactory.class );  // FIXME Yuk!
 
 
-	public PlayAuthUserServicePlugin( final Application app) {
-		super(app);
+	@Inject
+	public PlayAuthUserServicePlugin( final Application app, final PlayAuthenticate auth) {
+		super(auth);
+		STATIC_INST = this;  // FIXME
 	}
 
     public static IUser getLocalUser(final MetricRegistry inMetrics, final Session session) {
         final Timer.Context timerCtxt = inMetrics.timer( MetricNames.TIMER_USER_LOCAL_GET ).time();
         try {
-            return getUntimedLocalUser(session);
+            return STATIC_INST.getUntimedLocalUser(session);
         }
         finally {
             timerCtxt.close();
@@ -58,12 +64,12 @@ public class PlayAuthUserServicePlugin extends UserServicePlugin {
     }
 
     public static IUser getLocalUser(final Session session) {
-        return getUntimedLocalUser(session);
+        return STATIC_INST.getUntimedLocalUser(session);
     }
 
-    private static IUser getUntimedLocalUser(final Session session) {
+    private IUser getUntimedLocalUser(final Session session) {
         try {
-            final AuthUser currentAuthUser = PlayAuthenticate.getUser(session);
+            final AuthUser currentAuthUser = auth.getUser(session);
 
             if (Logger.isTraceEnabled()) {
             	Logger.trace("currentAuthUser: " + currentAuthUser);

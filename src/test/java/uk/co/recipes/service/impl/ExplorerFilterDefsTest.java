@@ -1,6 +1,3 @@
-/**
- * 
- */
 package uk.co.recipes.service.impl;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -10,7 +7,9 @@ import static uk.co.recipes.tags.FlavourTags.CITRUS;
 import java.io.IOException;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+import dagger.Component;
 import org.apache.http.client.ClientProtocolException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -23,7 +22,6 @@ import uk.co.recipes.tags.MeatAndFishTags;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dagger.Module;
-import dagger.ObjectGraph;
 
 /**
  * TODO
@@ -38,8 +36,8 @@ public class ExplorerFilterDefsTest {
 	private ExplorerFilterDefs filterDefs = new ExplorerFilterDefs();
 
 	@BeforeClass
-	public void injectDependencies() throws ClientProtocolException, IOException {
-        ObjectGraph.create( new TestModule() ).inject(this);
+	public void injectDependencies() throws IOException {
+        DaggerExplorerFilterDefsTest_TestComponent.create().inject(this);
 	}
 
 	@Test
@@ -72,6 +70,9 @@ public class ExplorerFilterDefsTest {
         assertThat( mapper.readValue("{\"includes\":[{\"filter\":\"Tag|FRUIT|yes\"},{\"filter\":\"Tag|VEGETABLE|maybe\"}],\"excludes\":[{\"filter\":\"Tag|CITRUS|no\"}]}", DefaultExplorerFilterDef.class), is(fDef1));
     }
 
-    @Module( includes=DaggerModule.class, overrides=true, injects=ExplorerFilterDefsTest.class)
-    static class TestModule {}
+    @Singleton
+    @Component(modules={ DaggerModule.class })
+    public interface TestComponent {
+        void inject(final ExplorerFilterDefsTest runner);
+    }
 }

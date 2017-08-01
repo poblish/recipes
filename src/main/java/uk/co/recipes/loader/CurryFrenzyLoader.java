@@ -12,7 +12,9 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+import dagger.Component;
 import org.elasticsearch.client.Client;
 
 import uk.co.recipes.DaggerModule;
@@ -26,8 +28,6 @@ import uk.co.recipes.test.TestDataUtils;
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Throwables;
 
-import dagger.Module;
-import dagger.ObjectGraph;
 
 /**
  * TODO
@@ -51,7 +51,10 @@ public class CurryFrenzyLoader {
 			long st = System.currentTimeMillis();
 
 			final CurryFrenzyLoader loader = new CurryFrenzyLoader();
-	        ObjectGraph.create( new TestModule() ).inject(loader);
+
+			final AppComponent tc = DaggerCurryFrenzyLoader_AppComponent.create();
+			tc.inject(loader);
+
 	        loader.start();
 
 			int i = 0;
@@ -117,7 +120,10 @@ public class CurryFrenzyLoader {
 //		esClient.close();
 	}
 
-	// Used by main method, not by CurryFrenzyLoader itself!
-    @Module( includes=DaggerModule.class, overrides=true, injects=CurryFrenzyLoader.class)
-    static class TestModule {}
+	@Singleton
+	@Component(modules={ DaggerModule.class })
+	public interface AppComponent {
+
+		void inject(final CurryFrenzyLoader runner);
+	}
 }

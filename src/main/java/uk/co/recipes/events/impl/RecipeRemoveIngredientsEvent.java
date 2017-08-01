@@ -4,6 +4,8 @@
 package uk.co.recipes.events.impl;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+
+import com.google.common.base.MoreObjects;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IRecipe;
 
@@ -36,7 +38,7 @@ public class RecipeRemoveIngredientsEvent implements java.io.Serializable {
 	}
 
 	public String toString() {
-		return Objects.toStringHelper(this).omitNullValues()
+		return MoreObjects.toStringHelper(this).omitNullValues()
 						.add( "recipe", recipe.getId())
 						.add( "ingredient", item)
 						.toString();

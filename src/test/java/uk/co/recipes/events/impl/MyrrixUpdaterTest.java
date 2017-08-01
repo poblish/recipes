@@ -3,62 +3,55 @@
  */
 package uk.co.recipes.events.impl;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import com.google.common.base.Optional;
+import com.google.common.collect.Maps;
+import dagger.Component;
+import dagger.Module;
+import dagger.Provides;
+import net.myrrix.client.ClientRecommender;
+import net.myrrix.client.MyrrixClientConfiguration;
+import org.apache.mahout.cf.taste.common.TasteException;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+import uk.co.recipes.*;
+import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.api.ITag;
+import uk.co.recipes.api.Units;
+import uk.co.recipes.events.api.IEventService;
+import uk.co.recipes.mocks.MockFactories;
+import uk.co.recipes.persistence.EsItemFactory;
+import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
+import uk.co.recipes.service.impl.DefaultIngredientQuantityScoreBooster;
+import uk.co.recipes.tags.CommonTags;
+import uk.co.recipes.tags.NationalCuisineTags;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.inject.Singleton;
-
-import net.myrrix.client.ClientRecommender;
-
-import org.apache.mahout.cf.taste.common.TasteException;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.testng.annotations.Test;
-
-import uk.co.recipes.DaggerModule;
-import uk.co.recipes.Ingredient;
-import uk.co.recipes.Quantity;
-import uk.co.recipes.Recipe;
-import uk.co.recipes.RecipeStage;
-import uk.co.recipes.User;
-import uk.co.recipes.api.ICanonicalItem;
-import uk.co.recipes.api.ITag;
-import uk.co.recipes.api.Units;
-import uk.co.recipes.tags.CommonTags;
-import uk.co.recipes.tags.NationalCuisineTags;
-
-import com.google.common.base.Optional;
-import com.google.common.base.Throwables;
-import com.google.common.collect.Maps;
-
-import dagger.Module;
-import dagger.ObjectGraph;
-import dagger.Provides;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
-/**
- * TODO
- * 
- * @author andrewr
- *
- */
 public class MyrrixUpdaterTest {
 
-    private final static ObjectGraph GRAPH = ObjectGraph.create( new TestModule() );
-
-    private final static MyrrixUpdater MU = GRAPH.get( MyrrixUpdater.class );
+    @Inject MyrrixUpdater updater;
 
     private final static Optional<ICanonicalItem> ABSENT = Optional.absent();
 
     private static int COUNT = 0;
 
-    @Test(enabled = false)
+    @BeforeClass
+    private void injectDependencies() {
+        DaggerMyrrixUpdaterTest_TestComponent.builder().testModule( new TestModule() ).build().inject(this);
+    }
+
+    @Test
     public void testAddItem() {
         final Map<ITag,Serializable> tags = Maps.newHashMap();
         tags.put( CommonTags.SPICE, Boolean.TRUE);
@@ -73,12 +66,12 @@ public class MyrrixUpdaterTest {
 
         assertThat( COUNT, is(0));
 
-        MU.onAddItem( new AddItemEvent(item) );
+        updater.onAddItem( new AddItemEvent(item) );
 
         assertThat( COUNT, is(3)); // Parent tag + two Tags
     }
 
-    @Test(enabled = false)
+    @Test
     public void testAddRecipe() {
         final Map<ITag,Serializable> tags = Maps.newHashMap();
         tags.put( CommonTags.SPICE, Boolean.TRUE);
@@ -101,13 +94,48 @@ public class MyrrixUpdaterTest {
 
         assertThat( COUNT, is(3));
 
-        MU.onAddRecipe( new AddRecipeEvent(r1) );
+        updater.onAddRecipe( new AddRecipeEvent(r1) );
 
         assertThat( COUNT, is(6)); // Parent tag + two Tags
     }
 
-    @Module( includes=DaggerModule.class, overrides=true)
-    static class TestModule {
+    // FIXME Suboptimal: https://google.github.io/dagger/testing.html
+    @Module
+    public class TestModule extends DaggerModule {
+        @Provides
+        @Singleton
+        EsItemFactory provideItemFactory() {
+            return MockFactories.inMemoryItemFactory();
+        }
+
+        @Provides
+        @Singleton
+        IEventService provideEventService() {
+            return new DefaultEventService();
+        }
+
+        @Provides
+        @Singleton
+        IIngredientQuantityScoreBooster provideIngredientQuantityScoreBooster() {
+            return mock(IIngredientQuantityScoreBooster.class);
+        }
+
+        @Provides
+        @Singleton
+        ClientRecommender provideClientRecommender() {
+            try {
+                return new ClientRecommender( new MyrrixClientConfiguration() );
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @Singleton
+    @Component(modules={ TestModule.class })
+    public interface TestComponent {
+        void inject(final MyrrixUpdaterTest runner);
+    }
 
 //        @Provides
 //        @Singleton
@@ -129,5 +157,25 @@ public class MyrrixUpdaterTest {
 //        		throw Throwables.propagate(e);
 //        	}
 //        }
+
+    private class RecommenderWrapper {
+        private final ClientRecommender finalRecommender;
+
+
+        public RecommenderWrapper() {
+            try {
+                finalRecommender = new ClientRecommender( new MyrrixClientConfiguration() );
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public void setItemTag(String tag, long itemID, float value) {
+            try {
+                finalRecommender.setItemTag(tag, itemID, value);
+            } catch (TasteException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

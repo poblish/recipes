@@ -58,6 +58,11 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 
 	private final static Logger LOG = LoggerFactory.getLogger( MyrrixRecommendationService.class );
 
+	@Inject
+	public MyrrixRecommendationService() {
+		// For Dagger
+	}
+
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.service.api.IRecommendationsAPI#recommendIngredients(uk.co.recipes.api.IUser, int)
 	 */
@@ -96,10 +101,10 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
             return Collections.emptyList();
         }
         catch (TasteException e) {
-            throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+            throw new RuntimeException(e);  // Yuk, FIXME, let's get the API right
         }
         catch (IOException e) {
-            throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+            throw new RuntimeException(e);  // Yuk, FIXME, let's get the API right
         }
 	}
 
@@ -117,10 +122,10 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
             return Collections.emptyList();
         }
         catch (TasteException e) {
-            throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+            throw new RuntimeException(e);  // Yuk, FIXME, let's get the API right
         }
 		catch (IOException e) {
-			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+			throw new RuntimeException(e);  // Yuk, FIXME, let's get the API right
 		}
         finally {
             timerCtxt.stop();
@@ -143,10 +148,10 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
             return Collections.emptyList();
         }
         catch (TasteException e) {
-            throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+            throw new RuntimeException(e);  // Yuk, FIXME, let's get the API right
         }
 		catch (IOException e) {
-			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+			throw new RuntimeException(e);  // Yuk, FIXME, let's get the API right
 		}
         finally {
             timerCtxt.stop();

@@ -4,6 +4,8 @@
 package uk.co.recipes;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+
+import com.google.common.base.MoreObjects;
 import uk.co.recipes.api.IUserAuth;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -60,7 +62,7 @@ public class UserAuth implements IUserAuth {
 	}
 
 	public String toString() {
-		return Objects.toStringHelper(this).omitNullValues()
+		return MoreObjects.toStringHelper(this).omitNullValues()
                         .add( "id", id)
                         .add( "provider", provider)
 						.toString();

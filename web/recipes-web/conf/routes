@@ -2,7 +2,7 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET     /                             controllers.Application.index()
+GET     /                             @controllers.Application.index()
 GET     /stats.html                   @controllers.Application.stats()
 GET     /stats_items.html             @controllers.Application.itemStats()
 
@@ -44,9 +44,9 @@ POST    /app/clearAll                 @controllers.Application.clearDataAndCache
 POST    /app/load/loadBBCGF           @controllers.Application.loadBbcGoodFood()
 POST    /app/load/loadCurry           @controllers.Application.loadCurryFrenzy()
 
-GET     /logout                       com.feth.play.module.pa.controllers.Authenticate.logout
-GET     /authenticate/:prv            com.feth.play.module.pa.controllers.Authenticate.authenticate(prv: String)
-GET     /authenticate/:prv/denied     controllers.Application.oAuthDenied(prv: String)
+GET     /logout                       @com.feth.play.module.pa.controllers.Authenticate.logout
+GET     /authenticate/:prv            @com.feth.play.module.pa.controllers.Authenticate.authenticate(prv: String)
+GET     /authenticate/:prv/denied     @controllers.Application.oAuthDenied(prv: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                 controllers.Assets.at(path="/public", file)

@@ -13,7 +13,9 @@ import java.util.Collection;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.apache.http.client.ClientProtocolException;
+import dagger.Component;
+import net.myrrix.client.ClientRecommender;
+import net.myrrix.client.MyrrixClientConfiguration;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -23,7 +25,6 @@ import uk.co.recipes.mocks.MockFactories;
 import uk.co.recipes.myrrix.MyrrixPrefsIngester;
 import uk.co.recipes.persistence.EsItemFactory;
 import dagger.Module;
-import dagger.ObjectGraph;
 import dagger.Provides;
 
 /**
@@ -37,8 +38,8 @@ public class MyrrixPrefsIngestTest {
 	@Inject MyrrixPrefsIngester ingester;
 
 	@BeforeClass
-	public void injectDependencies() throws ClientProtocolException, IOException {
-        ObjectGraph.create( new TestModule() ).inject(this);
+	private void injectDependencies() throws IOException {
+        DaggerMyrrixPrefsIngestTest_TestComponent.builder().testModule( new TestModule() ).build().inject(this);
 	}
 
     @Test
@@ -59,13 +60,30 @@ public class MyrrixPrefsIngestTest {
         assertThat( contents, is("ok"));
     }
 
-    @Module( includes=DaggerModule.class, overrides=true, injects=MyrrixPrefsIngestTest.class)
-    static class TestModule {
-
+    // FIXME Suboptimal: https://google.github.io/dagger/testing.html
+    @Module
+    public class TestModule extends DaggerModule {
         @Provides
         @Singleton
         EsItemFactory provideItemFactory() {
-        	return MockFactories.inMemoryItemFactory();
+            return MockFactories.inMemoryItemFactory();
         }
+
+        @Provides
+        @Singleton
+        ClientRecommender provideClientRecommender() {
+            try {
+                return new ClientRecommender( new MyrrixClientConfiguration() );
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @Singleton
+    @Component(modules={ TestModule.class })
+    public interface TestComponent {
+        void inject(final MyrrixPrefsIngestTest runner);
+
     }
 }

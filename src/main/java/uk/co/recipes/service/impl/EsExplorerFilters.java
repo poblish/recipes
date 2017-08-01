@@ -1,6 +1,3 @@
-/**
- * 
- */
 package uk.co.recipes.service.impl;
 
 import static uk.co.recipes.metrics.MetricNames.TIMER_BUILD_FILTER_GET_IDS;
@@ -14,6 +11,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import com.google.common.base.MoreObjects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +23,6 @@ import uk.co.recipes.service.api.IExplorerFilterDef;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
-import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Longs;
@@ -48,8 +45,12 @@ public class EsExplorerFilters {
 	@Inject EsSearchService search;
 	@Inject MetricRegistry metrics;
 
+	@Inject
+	public EsExplorerFilters() {
+		// For Dagger
+	}
 
-	public IExplorerFilter from( final IExplorerFilterDef inDef) throws IOException {
+	public IExplorerFilter from(final IExplorerFilterDef inDef) throws IOException {
 		final Timer.Context timerCtxt = metrics.timer(TIMER_BUILD_FILTER_GET_IDS).time();
 
 		try {
@@ -118,7 +119,7 @@ public class EsExplorerFilters {
 
 			@Override
 			public String toString() {
-				return Objects.toStringHelper(this).add( "includeIds", fIs.length).add( "excludeIds", fEs.length).toString();
+				return MoreObjects.toStringHelper(this).add( "includeIds", fIs.length).add( "excludeIds", fEs.length).toString();
 			}
 		};
     }
@@ -182,7 +183,7 @@ public class EsExplorerFilters {
 
 		@Override
 		public String toString() {
-			return Objects.toStringHelper(this).toString();
+			return MoreObjects.toStringHelper(this).toString();
 		}
 	}
 
@@ -201,7 +202,7 @@ public class EsExplorerFilters {
 
 		@Override
 		public String toString() {
-			return Objects.toStringHelper(this).toString();
+			return MoreObjects.toStringHelper(this).toString();
 		}
 	}
 }

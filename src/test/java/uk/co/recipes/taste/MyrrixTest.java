@@ -3,6 +3,7 @@ package uk.co.recipes.taste;
 import java.io.File;
 import java.io.IOException;
 
+import dagger.Component;
 import net.myrrix.client.ClientRecommender;
 
 import org.apache.mahout.cf.taste.common.TasteException;
@@ -10,9 +11,12 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import uk.co.recipes.DaggerModule;
+import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
 import uk.co.recipes.service.taste.impl.MyrrixTasteSimilarityService;
-import dagger.ObjectGraph;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * 
@@ -23,16 +27,17 @@ import dagger.ObjectGraph;
  */
 public class MyrrixTest {
 
-	private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
+	// private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
 
-	private MyrrixTasteRecommendationService api = GRAPH.get( MyrrixTasteRecommendationService.class );
-	// private MyrrixRecommendationService fullApi = GRAPH.get( MyrrixRecommendationService.class );
-
-	private MyrrixTasteSimilarityService explorerApi = GRAPH.get( MyrrixTasteSimilarityService.class );
+	@Inject MyrrixTasteRecommendationService api;
+	@Inject MyrrixRecommendationService fullApi;
+	@Inject MyrrixTasteSimilarityService explorerApi;
+	@Inject ClientRecommender recommender;
 
 	@BeforeClass
 	public void setUp() throws IOException, TasteException {
-		final ClientRecommender recommender = GRAPH.get( ClientRecommender.class );
+		DaggerMyrrixTest_TestComponent.create().inject(this);
+
 		recommender.ingest( new File("src/test/resources/taste/main.txt") );
 		recommender.refresh();
 	}
@@ -58,5 +63,11 @@ public class MyrrixTest {
 //		assertThat( explorerApi.similarIngredients( userId++, 10), is( Arrays.asList( 1L, 4L, 5L, 2L, 8L, 6L, 7L) ));
 //		assertThat( explorerApi.similarIngredients( userId++, 10), is( Arrays.asList( 3L, 1L, 5L, 2L, 8L, 6L, 7L) ));
 //		assertThat( explorerApi.similarIngredients( userId++, 10), is( Arrays.asList( 7L, 1L, 3L, 4L, 2L, 8L, 6L) ));
+	}
+
+	@Singleton
+	@Component(modules={ DaggerModule.class })
+	public interface TestComponent {
+		void inject(final MyrrixTest runner);
 	}
 }

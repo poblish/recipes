@@ -11,7 +11,9 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+import dagger.Component;
 import org.apache.http.client.ClientProtocolException;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
 import org.elasticsearch.client.Client;
@@ -45,7 +47,6 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.io.Files;
 
 import dagger.Module;
-import dagger.ObjectGraph;
 
 /**
  * 
@@ -72,7 +73,7 @@ public class ParseIngredientsTest {
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
-        ObjectGraph.create( new TestModule() ).inject(this);
+		DaggerParseIngredientsTest_TestComponent.create().inject(this);
 
         itemFactory.deleteAll();
 		recipeFactory.deleteAll();
@@ -338,7 +339,9 @@ public class ParseIngredientsTest {
 		}
 	}
 
-	// Used by main method, not by BbcGoodFoodLoader itself!
-    @Module( includes=DaggerModule.class, overrides=true, injects=ParseIngredientsTest.class)
-    static class TestModule {}
+	@Singleton
+	@Component(modules={ DaggerModule.class })
+	public interface TestComponent {
+		void inject(final ParseIngredientsTest runner);
+	}
 }

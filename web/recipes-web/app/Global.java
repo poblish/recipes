@@ -1,5 +1,7 @@
+import com.feth.play.module.pa.Resolver;
+import com.google.common.collect.Maps;
+import dagger.Provides;
 import play.Application;
-import play.GlobalSettings;
 import play.Logger;
 import play.api.mvc.EssentialFilter;
 import play.filters.gzip.GzipFilter;
@@ -7,7 +9,6 @@ import play.mvc.Call;
 import uk.co.recipes.DaggerModule;
 
 import com.feth.play.module.pa.PlayAuthenticate;
-import com.feth.play.module.pa.PlayAuthenticate.Resolver;
 import com.feth.play.module.pa.exceptions.AccessDeniedException;
 import com.feth.play.module.pa.exceptions.AuthException;
 
@@ -15,36 +16,38 @@ import controllers.routes;
 import dagger.Module;
 import dagger.ObjectGraph;
 
+import javax.inject.Singleton;
+
 /**
  * TODO
  * 
  * @author andrewregan
  * 
  */
-public class Global extends GlobalSettings {
+public class Global /* extends GlobalSettings */ {
 
 	private static ObjectGraph graph = ObjectGraph.create( new RecipesWebAppModule() );
 
-	@Override
+//	@Override
 	public void onStart( final Application app) {
 		Logger.info("Application has started");
 
-        PlayAuthenticate.setResolver(new Resolver() {
+        /* PlayAuthenticate.setResolver(new Resolver() {
 
             @Override
             public Call login() {
-                return /* FIXME */ routes.Application.index();
+                return / FIXME / routes.Application.index();
             }
 
             @Override
             public Call afterAuth() {
                 // The user will be redirected to this page after authentication if no original URL was saved
-                return /* FIXME */ routes.Application.index();
+                return / FIXME / routes.Application.index();
             }
 
             @Override
             public Call afterLogout() {
-                return /* FIXME */ routes.Application.index();
+                return / FIXME / routes.Application.index();
             }
 
             @Override
@@ -81,26 +84,71 @@ public class Global extends GlobalSettings {
                 return null;
             }
         });
+*/
     }
 
-	@Override
+	// @Override
 	public void onStop( final Application app) {
 		Logger.info("Application shutdown...");
 	}
 
-	@Override
+	// @Override
 	public <T> T getControllerInstance( final Class<T> inClass) {
 		return graph.get(inClass);
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
+	// @Override
 	public <T extends EssentialFilter> Class<T>[] filters() {
 		return new Class[]{ GzipFilter.class };
 	}
 
-    @Module( includes=DaggerModule.class, injects={controllers.Application.class, controllers.Recipes.class, controllers.Search.class, controllers.Tags.class, controllers.Users.class, controllers.Items.class})
+    @Module( includes=DaggerModule.class, injects={controllers.Application.class, controllers.Recipes.class,
+												   controllers.Search.class, controllers.Tags.class,
+												   controllers.Users.class, controllers.Items.class})
 	static class RecipesWebAppModule {
-		
+
+		@Provides
+		@Singleton
+		play.Configuration provideConfig() {
+			return new play.Configuration(Maps.newHashMap());  // FIXME
+		}
+
+		@Provides
+		@Singleton
+		com.feth.play.module.pa.Resolver provideResolver() {
+			return new Resolver() {
+				@Override
+				public Call login() {
+					return null;
+				}
+
+				@Override
+				public Call afterAuth() {
+					return null;
+				}
+
+				@Override
+				public Call auth(String provider) {
+					return null;
+				}
+
+				@Override
+				public Call askMerge() {
+					return null;
+				}
+
+				@Override
+				public Call askLink() {
+					return null;
+				}
+
+				@Override
+				public Call afterLogout() {
+					return null;
+				}
+			};
+		}
+
 	}
 }

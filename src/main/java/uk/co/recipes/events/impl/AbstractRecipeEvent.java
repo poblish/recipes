@@ -8,6 +8,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.Serializable;
 
+import com.google.common.base.MoreObjects;
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
@@ -48,7 +49,7 @@ public abstract class AbstractRecipeEvent implements Serializable {
 	}
 
 	public String toString() {
-		return Objects.toStringHelper(this).omitNullValues()
+		return MoreObjects.toStringHelper(this).omitNullValues()
 						.add( "user", user)
 						.add( "recipe", recipe.getId())
 						.add( "score", score)

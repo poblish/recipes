@@ -5,6 +5,7 @@ package uk.co.recipes;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.google.common.base.MoreObjects;
 import org.joda.time.DateTime;
 
 import uk.co.recipes.api.IForkDetails;
@@ -103,7 +104,7 @@ public class ForkDetails implements IForkDetails {
 	}
 
 	public String toString() {
-		return Objects.toStringHelper(this).omitNullValues()
+		return MoreObjects.toStringHelper(this).omitNullValues()
                         .add( "originalId", originalId)
                         .add( "originalTitle", originalTitle)
                         .add( "creator", originalUser)

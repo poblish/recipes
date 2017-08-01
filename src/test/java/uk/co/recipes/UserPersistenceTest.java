@@ -11,7 +11,9 @@ import static org.hamcrest.Matchers.is;
 import java.io.IOException;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+import dagger.Component;
 import org.apache.http.client.ClientProtocolException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -29,7 +31,6 @@ import uk.co.recipes.tags.CommonTags;
 import uk.co.recipes.tags.MeatAndFishTags;
 import uk.co.recipes.test.TestDataUtils;
 import dagger.Module;
-import dagger.ObjectGraph;
 
 
 /**
@@ -51,7 +52,7 @@ public class UserPersistenceTest {
 	@Inject ItemsLoader loader;
 
     private void injectDependencies() {
-        ObjectGraph.create( new TestModule() ).inject(this);
+        DaggerUserPersistenceTest_TestComponent.create().inject(this);
     }
 
     @BeforeClass
@@ -166,6 +167,9 @@ public class UserPersistenceTest {
         userRatings.addRating( u1, new ItemRating( itemFactory.get("ginger").get(), 5) );
     }
 
-    @Module( includes=DaggerModule.class, overrides=true, injects=UserPersistenceTest.class)
-    static class TestModule {}
+    @Singleton
+    @Component(modules={ DaggerModule.class })
+    public interface TestComponent {
+        void inject(final UserPersistenceTest runner);
+    }
 }

@@ -55,6 +55,11 @@ public class TestDataUtils {
 
 //	private final static Logger LOG = LoggerFactory.getLogger( TestDataUtils.class );
 
+	@Inject
+	public TestDataUtils() {
+		// For Dagger
+	}
+
 	private final static IParsedIngredientHandler NULL_HANDLER = new IParsedIngredientHandler() {
 		@Override
 		public void foundIngredient( IIngredient ingr) { }

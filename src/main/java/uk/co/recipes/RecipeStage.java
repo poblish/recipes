@@ -6,6 +6,7 @@ package uk.co.recipes;
 import java.util.Arrays;
 import java.util.Collection;
 
+import com.google.common.base.MoreObjects;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IRecipeStage;
@@ -119,7 +120,7 @@ public class RecipeStage implements IRecipeStage {
 	}
 
 	public String toString() {
-		return Objects.toStringHelper(this).omitNullValues()
+		return MoreObjects.toStringHelper(this).omitNullValues()
 						.add( "ingredients", ingredients)
 						.toString();
 	}

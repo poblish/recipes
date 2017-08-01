@@ -10,13 +10,13 @@ import static org.hamcrest.Matchers.is;
 import java.io.IOException;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+import dagger.Component;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import uk.co.recipes.DaggerModule;
-import dagger.Module;
-import dagger.ObjectGraph;
 
 /**
  * TODO
@@ -30,7 +30,7 @@ public class CuisineColoursTest {
 
 	@BeforeClass
     public void injectDependencies() {
-        ObjectGraph.create( new TestModule() ).inject(this);
+		DaggerCuisineColoursTest_TestComponent.create().inject(this);
     }
 
 	@Test
@@ -40,6 +40,9 @@ public class CuisineColoursTest {
 		// System.out.println(colsMap);
 	}
 
-    @Module( includes=DaggerModule.class, overrides=true, injects=CuisineColoursTest.class)
-    static class TestModule {}
+	@Singleton
+	@Component(modules={ DaggerModule.class })
+	public interface TestComponent {
+		void inject(final CuisineColoursTest runner);
+	}
 }

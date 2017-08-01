@@ -62,6 +62,10 @@ public class EsRecipeFactory implements IRecipePersistence {
 	@Inject MetricRegistry metrics;
 	@Inject IEventService eventService;
 
+	@Inject
+	public EsRecipeFactory() {
+		// For Dagger
+	}
 
 	public Optional<IRecipe> get( final String inName) throws IOException {
 		try {

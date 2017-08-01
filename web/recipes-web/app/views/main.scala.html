@@ -59,7 +59,7 @@
 			} else {
 			    @Application.storeLoginRedirectUrl()
 			    
-				Providers: @forProviders() { p =>
+				Providers: @forProviders( null, false,false,false) { p =>
 				    <a href="@p.getUrl()">@p.getKey()</a>
 				}
 		    }

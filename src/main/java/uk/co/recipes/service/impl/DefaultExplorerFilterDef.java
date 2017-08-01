@@ -1,11 +1,9 @@
-/**
- * 
- */
 package uk.co.recipes.service.impl;
 
 import java.util.Collections;
 import java.util.Set;
 
+import com.google.common.base.MoreObjects;
 import uk.co.recipes.api.IExplorerFilterItem;
 import uk.co.recipes.service.api.IExplorerFilterDef;
 
@@ -66,6 +64,6 @@ public class DefaultExplorerFilterDef implements IExplorerFilterDef {
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).omitNullValues().add( "includes", includes).add( "excludes", excludes).toString();
+		return MoreObjects.toStringHelper(this).omitNullValues().add( "includes", includes).add( "excludes", excludes).toString();
 	}
 }

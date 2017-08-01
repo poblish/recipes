@@ -58,7 +58,9 @@ import com.google.common.collect.Sets;
  */
 public class Application extends Controller {
 
-    private IItemPersistence items;
+	private static Application STATIC_INST = null;  // FIXME
+
+	private IItemPersistence items;
     private IUserPersistence users;
     private IRecipePersistence recipes;
     private EsSequenceFactory sequences;  // For deleteAll() only
@@ -68,13 +70,15 @@ public class Application extends Controller {
     private BbcGoodFoodLoader bbcGfLoader;
     private CurryFrenzyLoader cfLoader;
     private Client esClient;
+	private final PlayAuthenticate auth;
 
     private final ExecutorService loadPool = Executors.newFixedThreadPool(3);
 
     @Inject
     public Application( final EsItemFactory items, final EsRecipeFactory recipes, final EsUserFactory users, final ClientRecommender recommender, final MetricRegistry metrics, final Cache<String,ICanonicalItem> inItemsCache,
     				    final EsSequenceFactory seqs, final BbcGoodFoodLoader bbcGfLoader, final CurryFrenzyLoader cfLoader,
-    				    final Client esClient) {
+    				    final Client esClient,
+						final PlayAuthenticate auth) {
         this.items = checkNotNull(items);
         this.recipes = checkNotNull(recipes);
         this.users = checkNotNull(users);
@@ -84,7 +88,10 @@ public class Application extends Controller {
         this.sequences = checkNotNull(seqs);
         this.bbcGfLoader = checkNotNull(bbcGfLoader);
         this.cfLoader = checkNotNull(cfLoader);
-        this.esClient = checkNotNull(esClient);
+		this.esClient = checkNotNull(esClient);
+		this.auth = checkNotNull(auth);
+
+		STATIC_INST = this; // FIXME
     }
 
     public Result itemStats() {
@@ -110,7 +117,7 @@ public class Application extends Controller {
         return "Metrics: " + new String( baos.toByteArray() );
     }
 
-	public static Result index() {
+	public Result index() {
         return ok(views.html.index.render("Your new application is ready."));
     }
 
@@ -126,13 +133,13 @@ public class Application extends Controller {
         }
     }
 
-	public static Result oAuthDenied(final String providerKey) {
+	public Result oAuthDenied(final String providerKey) {
 		flash(/* FLASH_ERROR_KEY, */ "You need to accept the OAuth connection in order to use this website!");
 		return redirect(routes.Application.index());
 	}
 
 	public static void storeLoginRedirectUrl() {
-		PlayAuthenticate.storeOriginalUrl( ctx() );
+		STATIC_INST.auth.storeOriginalUrl( ctx() );
 	}
 
 	public static Set<ITag> allTags() {

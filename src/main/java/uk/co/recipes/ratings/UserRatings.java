@@ -28,6 +28,11 @@ public class UserRatings {
 
     private final static float INDIFFERENT_RATING = 5.0f;
 
+    @Inject
+	public UserRatings() {
+    	// For Dagger
+	}
+
     public Optional<IItemRating> addRating( final IUser inUser, final IItemRating inRating) throws IOException {
     	final Optional<IItemRating> oldRating = inUser.addRating(inRating);
     	final float oldRatingVal = oldRating.isPresent() ? oldRating.get().getScore() : INDIFFERENT_RATING;

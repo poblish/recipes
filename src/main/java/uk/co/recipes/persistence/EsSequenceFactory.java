@@ -27,6 +27,11 @@ public class EsSequenceFactory {
 	@Inject
 	Client esClient;
 
+	@Inject
+	public EsSequenceFactory() {
+		// For Dagger
+	}
+
 	/**
 	 * Inspired by http://blogs.perl.org/users/clinton_gormley/2011/10/elasticsearchsequence---a-blazing-fast-ticket-server.html
 	 * @param inIdForEntityType the 'type' of sequence

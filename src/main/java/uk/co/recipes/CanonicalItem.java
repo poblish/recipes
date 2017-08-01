@@ -15,6 +15,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -350,7 +351,7 @@ public class CanonicalItem implements ICanonicalItem {
 	public String toString() {
 		final Map<ITag,Serializable> tagsVal = getTags();
 
-		return Objects.toStringHelper(this).omitNullValues()
+		return MoreObjects.toStringHelper(this).omitNullValues()
 						.add( "name", canonicalName)
 					//	.add( "id", ( id == UNSET_ID) ? "NEW" : Long.valueOf(id))
 						.add( "parent", parent)

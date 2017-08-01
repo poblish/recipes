@@ -1,6 +1,3 @@
-/**
- * 
- */
 package uk.co.recipes;
 
 import java.io.File;
@@ -29,27 +26,10 @@ import org.slf4j.LoggerFactory;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.events.impl.DefaultEventService;
-import uk.co.recipes.events.impl.MyrrixUpdater;
-import uk.co.recipes.parse.IngredientParser;
-import uk.co.recipes.parse.NameAdjuster;
-import uk.co.recipes.persistence.EsItemFactory;
-import uk.co.recipes.persistence.EsRecipeFactory;
-import uk.co.recipes.persistence.EsSequenceFactory;
-import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.EsUtils;
-import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.persistence.JacksonFactory;
-import uk.co.recipes.ratings.UserRatings;
 import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
 import uk.co.recipes.service.impl.DefaultIngredientQuantityScoreBooster;
-import uk.co.recipes.service.impl.EsExplorerFilters;
-import uk.co.recipes.service.impl.EsSearchService;
-import uk.co.recipes.service.impl.MyrrixExplorerService;
-import uk.co.recipes.service.impl.MyrrixRecommendationService;
-import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
-import uk.co.recipes.service.taste.impl.MyrrixTasteSimilarityService;
-import uk.co.recipes.test.TestDataUtils;
-import uk.co.recipes.ui.CuisineColours;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
@@ -64,16 +44,7 @@ import com.google.common.io.LineProcessor;
 import dagger.Module;
 import dagger.Provides;
 
-/**
- * TODO
- * 
- * @author andrewregan
- * 
- */
-@Module(injects={EsItemFactory.class, EsRecipeFactory.class, ItemsLoader.class, IngredientParser.class, TestDataUtils.class, ObjectMapper.class, ClientRecommender.class,
-				 MyrrixTasteRecommendationService.class, MyrrixRecommendationService.class, MyrrixTasteSimilarityService.class, MyrrixExplorerService.class,
-				 Client.class, EsSearchService.class, EsUserFactory.class, EsSequenceFactory.class, MyrrixUpdater.class, IEventService.class, UserRatings.class,
-				 MetricRegistry.class, EsExplorerFilters.class, NameAdjuster.class, CuisineColours.class})
+@Module
 public class DaggerModule {
 
 	@Provides

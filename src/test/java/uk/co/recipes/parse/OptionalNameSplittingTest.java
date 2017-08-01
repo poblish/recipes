@@ -1,19 +1,16 @@
-/**
- * 
- */
 package uk.co.recipes.parse;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+import dagger.Component;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import uk.co.recipes.DaggerModule;
-import dagger.Module;
-import dagger.ObjectGraph;
 
 /**
  * Test the Ngram-style for turning two optional names into all possible (English) name combinations
@@ -26,11 +23,11 @@ public class OptionalNameSplittingTest {
 	@Inject OptionalNameSplitter splitter;
 
 	@BeforeClass
-    private void injectDependencies() {
-        ObjectGraph.create( new TestModule() ).inject(this);
-    }
+	private void injectDependencies() {
+		DaggerOptionalNameSplittingTest_TestComponent.create().inject(this);
+	}
 
-    @Test
+	@Test
 	public void testSplitting() {
 		assertThat( strFor("beef", "lamb"), is("SplitResults{first=[beef], second=[lamb]}"));
 		assertThat( strFor("red", "white wine"), is("SplitResults{first=[red wine, red], second=[white wine]}"));
@@ -50,6 +47,9 @@ public class OptionalNameSplittingTest {
 		return splitter.split(s1, s2).toString();
 	}
 
-    @Module( includes=DaggerModule.class, injects=OptionalNameSplittingTest.class)
-    static class TestModule {}
+	@Singleton
+	@Component(modules={ DaggerModule.class })
+	public interface TestComponent {
+		void inject(final OptionalNameSplittingTest runner);
+	}
 }

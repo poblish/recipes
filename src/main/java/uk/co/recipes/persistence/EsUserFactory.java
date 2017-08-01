@@ -48,8 +48,12 @@ public class EsUserFactory implements IUserPersistence {
 	@Named("elasticSearchUsersUrl")
 	String usersIndexUrl;
 
+	@Inject
+	public EsUserFactory() {
+		// For Dagger
+	}
 
-	public IUser put( final IUser inUser, String inId) throws IOException {
+	public IUser put(final IUser inUser, String inId) throws IOException {
 		inUser.setId( sequences.getSeqnoForType("users_seqno") );
 		esClient.prepareIndex( "recipe", "users", inId).setSource( mapper.writeValueAsString(inUser) ).execute().actionGet();
 		return inUser;

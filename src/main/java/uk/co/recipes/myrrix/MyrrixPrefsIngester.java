@@ -15,6 +15,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import com.google.common.base.MoreObjects;
 import net.myrrix.client.ClientRecommender;
 
 import org.apache.mahout.cf.taste.common.TasteException;
@@ -39,7 +40,12 @@ public class MyrrixPrefsIngester {
 	@Inject EsItemFactory itemFactory;
 	@Inject ClientRecommender myrrix;
 
-	public String parseRecommendations( final File inFile) throws IOException {
+    @Inject
+    public MyrrixPrefsIngester() {
+        // For Dagger
+    }
+
+    public String parseRecommendations(final File inFile) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 
 		visitRecommendationsFile( inFile, new UserPrefsVisitor() {
@@ -58,7 +64,7 @@ public class MyrrixPrefsIngester {
                 }
 
                 final ICanonicalItem item = itemFactory.get((String) eachUserPref.get("i") ).get();
-                sb.append(userId).append(',').append( item.getId() ).append(',').append( Objects.firstNonNull( eachUserPref.get("score"), "1"));
+                sb.append(userId).append(',').append( item.getId() ).append(',').append( MoreObjects.firstNonNull( eachUserPref.get("score"), "1"));
             }}
 		);
 
@@ -130,7 +136,7 @@ public class MyrrixPrefsIngester {
 			myrrix.refresh();
 		}
 		catch (TasteException e) {
-			Throwables.propagate(e);
+            throw new RuntimeException(e);
 		}
 	}
 

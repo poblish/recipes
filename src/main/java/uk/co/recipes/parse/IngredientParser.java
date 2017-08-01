@@ -75,7 +75,12 @@ public class IngredientParser {
 	private static final Pattern    WEAK_PREFIXES_STRIPPER = Pattern.compile("^(About|Approx|At least|Leaves from|Plus|Roughly|Up to) ", Pattern.CASE_INSENSITIVE);
 	private static final Pattern    CUPS_STRIPPER = Pattern.compile("[0-9] Cups?/([0-9]+ml)", Pattern.CASE_INSENSITIVE);
 
-	public boolean parse( final String inRawStr, final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) {
+	@Inject
+	public IngredientParser() {
+		// For Dagger
+	}
+
+	public boolean parse(final String inRawStr, final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) {
 		final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPE_LINE_PARSE).time();
 
 		try {

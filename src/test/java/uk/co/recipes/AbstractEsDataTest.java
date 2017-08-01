@@ -1,20 +1,15 @@
-/**
- * 
- */
 package uk.co.recipes;
 
 import java.io.IOException;
 
-import org.apache.http.client.ClientProtocolException;
 import org.elasticsearch.client.Client;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
-import uk.co.recipes.persistence.EsItemFactory;
-import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.service.api.IItemPersistence;
 import uk.co.recipes.service.api.IRecipePersistence;
-import dagger.ObjectGraph;
+
+import javax.inject.Inject;
 
 /**
  * TODO
@@ -24,14 +19,17 @@ import dagger.ObjectGraph;
  */
 public abstract class AbstractEsDataTest {
 
-	protected final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
+	@Inject
+	protected Client esClient;
 
-	protected Client esClient = GRAPH.get( Client.class );
-	protected IItemPersistence itemFactory = GRAPH.get( EsItemFactory.class );
-	protected IRecipePersistence recipeFactory = GRAPH.get( EsRecipeFactory.class );
+	@Inject
+	protected IItemPersistence itemFactory;
+
+	@Inject
+	protected IRecipePersistence recipeFactory;
 
 	@BeforeClass
-	public void cleanIndices() throws ClientProtocolException, IOException {
+	public void cleanIndices() throws IOException {
 		itemFactory.deleteAll();
 		recipeFactory.deleteAll();
 	}

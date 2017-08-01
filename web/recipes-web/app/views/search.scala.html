@@ -16,7 +16,7 @@
         <div class="tab-pane active" id="recipes">
 			<ol>
 			@for( eachRecipe <- foundRecipes) {
-			  <li><span title="@com.google.common.base.Objects.firstNonNull( eachRecipe.getTags().get( uk.co.recipes.tags.RecipeTags.RECIPE_CUISINE ), "Unknown") cuisine" style="background-color: @cuisineColours.colourForRecipe(eachRecipe); padding: 0 8px 0 8px; margin-right: 6px; border-radius: 8px"></span> <a href="/recipes/@eachRecipe.getTitle()">@eachRecipe.getTitle()</a>&nbsp;&nbsp;<!-- @_forkRecipeDisplay( eachRecipe, "btn-xs")  -->@_faveRecipeDisplay( eachRecipe, currUser, "btn-xs")</li>
+			  <li><span title="@com.google.common.base.MoreObjects.firstNonNull( eachRecipe.getTags().get( uk.co.recipes.tags.RecipeTags.RECIPE_CUISINE ), "Unknown") cuisine" style="background-color: @cuisineColours.colourForRecipe(eachRecipe); padding: 0 8px 0 8px; margin-right: 6px; border-radius: 8px"></span> <a href="/recipes/@eachRecipe.getTitle()">@eachRecipe.getTitle()</a>&nbsp;&nbsp;<!-- @_forkRecipeDisplay( eachRecipe, "btn-xs")  -->@_faveRecipeDisplay( eachRecipe, currUser, "btn-xs")</li>
 			}
 			</ol>
         </div>

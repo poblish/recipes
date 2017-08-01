@@ -11,7 +11,9 @@ import static uk.co.recipes.tags.FlavourTags.CITRUS;
 import java.io.IOException;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+import dagger.Component;
 import org.apache.http.client.ClientProtocolException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -24,8 +26,6 @@ import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.service.api.IExplorerFilter;
 import uk.co.recipes.tags.CommonTags;
 import uk.co.recipes.tags.MeatAndFishTags;
-import dagger.Module;
-import dagger.ObjectGraph;
 
 /**
  * TODO
@@ -44,7 +44,7 @@ public class EsExplorerFiltersTest {
 
 	@BeforeClass
 	public void cleanIndices() throws ClientProtocolException, IOException {
-        ObjectGraph.create( new TestModule() ).inject(this);
+        DaggerEsExplorerFiltersTest_TestComponent.create().inject(this);
 
         users.deleteAll();
 		recipes.deleteAll();
@@ -134,6 +134,9 @@ public class EsExplorerFiltersTest {
         assertThat( filter.idsToExclude().length, greaterThan(60));
     }
 
-    @Module( includes=DaggerModule.class, overrides=true, injects=EsExplorerFiltersTest.class)
-    static class TestModule {}
+    @Singleton
+    @Component(modules={ DaggerModule.class })
+    public interface TestComponent {
+        void inject(final EsExplorerFiltersTest runner);
+    }
 }

@@ -12,8 +12,9 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
-import org.apache.http.client.ClientProtocolException;
+import dagger.Component;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -30,8 +31,6 @@ import uk.co.recipes.test.TestDataUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import dagger.Module;
-import dagger.ObjectGraph;
 
 /**
  * TODO
@@ -51,8 +50,8 @@ public class EsSearchServiceTest {
 	@Inject EsSearchService searchService;
 
 	@BeforeClass
-	public void cleanIndices() throws ClientProtocolException, IOException {
-        ObjectGraph.create( new TestModule() ).inject(this);
+	public void cleanIndices() throws IOException {
+		DaggerEsSearchServiceTest_TestComponent.create().inject(this);
 
 		items.deleteAll();
 		recipes.deleteAll();
@@ -172,6 +171,9 @@ public class EsSearchServiceTest {
 		assertThat( /* Produce JsonNode */ mapper.valueToTree(results1).toString(), is(stringOutput));
 	}
 
-    @Module( includes=DaggerModule.class, overrides=true, injects=EsSearchServiceTest.class)
-    static class TestModule {}
+	@Singleton
+	@Component(modules={ DaggerModule.class })
+	public interface TestComponent {
+		void inject(final EsSearchServiceTest runner);
+	}
 }

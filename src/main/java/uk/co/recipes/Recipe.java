@@ -3,6 +3,7 @@
  */
 package uk.co.recipes;
 
+import static com.google.common.base.Objects.equal;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static uk.co.recipes.tags.TagUtils.findActivated;
 import static uk.co.recipes.tags.TagUtils.tagNamesTitleCase;
@@ -18,6 +19,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import org.joda.time.DateTime;
 
@@ -371,14 +373,14 @@ public class Recipe implements IRecipe {
 		}
 
 		final Recipe other = (Recipe) obj;
-		return Objects.equal( title, other.title) && Objects.equal( locale, other.locale) &&
-			   Objects.equal( stages, other.stages) && Objects.equal( tags, other.tags) &&
-			   Objects.equal( creator, other.creator) && /* Objects.equal( creationTime, other.creationTime) && */
-			   Objects.equal( forkDetails, other.forkDetails);
+		return equal( title, other.title) && equal( locale, other.locale) &&
+			   equal( stages, other.stages) && equal( tags, other.tags) &&
+			   equal( creator, other.creator) && /* Objects.equal( creationTime, other.creationTime) && */
+			   equal( forkDetails, other.forkDetails);
 	}
 
 	public String toString() {
-		return Objects.toStringHelper(this).omitNullValues()
+		return MoreObjects.toStringHelper(this).omitNullValues()
 						.add( "title", title)
 						.add( "id", ( id == UNSET_ID) ? "NEW" : Long.valueOf(id))
 						.add( "creator", creator)

@@ -13,7 +13,9 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+import dagger.Component;
 import org.elasticsearch.client.Client;
 
 import uk.co.recipes.DaggerModule;
@@ -29,9 +31,6 @@ import uk.co.recipes.test.TestDataUtils;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.google.common.base.Throwables;
-
-import dagger.Module;
-import dagger.ObjectGraph;
 
 /**
  * TODO
@@ -59,7 +58,10 @@ public class BbcGoodFoodLoader {
 			long st = System.currentTimeMillis();
 
 			final BbcGoodFoodLoader loader = new BbcGoodFoodLoader();
-	        ObjectGraph.create( new TestModule() ).inject(loader);
+
+			final AppComponent tc = DaggerBbcGoodFoodLoader_AppComponent.create();
+			tc.inject(loader);
+
 	        loader.start(true);
 
 			int i = 0;
@@ -138,7 +140,10 @@ public class BbcGoodFoodLoader {
 //		esClient.close();
 	}
 
-	// Used by main method, not by BbcGoodFoodLoader itself!
-    @Module( includes=DaggerModule.class, overrides=true, injects=BbcGoodFoodLoader.class)
-    static class TestModule {}
+	@Singleton
+	@Component(modules={ DaggerModule.class })
+	public interface AppComponent {
+
+		void inject(final BbcGoodFoodLoader runner);
+	}
 }

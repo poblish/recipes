@@ -53,6 +53,11 @@ public class ItemsLoader {
 	private static final Logger LOG = LoggerFactory.getLogger( ItemsLoader.class );
 	private static final Optional<ICanonicalItem> MISSING = Optional.absent();
 
+	@Inject
+	public ItemsLoader() {
+		// For Dagger
+	}
+
 	public void load() throws IOException {
 	    final List<Map<String,Object>> entriesToDefer = Lists.newArrayList();
 

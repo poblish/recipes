@@ -1,6 +1,3 @@
-/**
- * 
- */
 package uk.co.recipes.service.impl;
 
 import static uk.co.recipes.metrics.MetricNames.TIMER_ITEMS_MOSTSIMILAR;
@@ -48,6 +45,10 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	@Inject MetricRegistry metrics;
 	@Inject ObjectMapper mapper;
 
+	@Inject
+	public MyrrixExplorerService() {
+		// For Dagger
+	}
 
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.service.api.IExplorerAPI#similarIngredients(uk.co.recipes.api.IUser, int)

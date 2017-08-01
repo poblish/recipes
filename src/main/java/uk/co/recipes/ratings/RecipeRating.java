@@ -4,6 +4,8 @@
 package uk.co.recipes.ratings;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+
+import com.google.common.base.MoreObjects;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.ratings.IRecipeRating;
 
@@ -75,7 +77,7 @@ public class RecipeRating implements IRecipeRating {
     }
 
     public String toString() {
-        return Objects.toStringHelper(this).omitNullValues()
+        return MoreObjects.toStringHelper(this).omitNullValues()
 //                        .add( "rater", rater)
                         .add( "recipe", target)
                         .add( "score", score)

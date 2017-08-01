@@ -67,6 +67,11 @@ public class EsItemFactory implements IItemPersistence {
 	@Inject Cache<String,ICanonicalItem> itemsCache;
 
 
+	@Inject
+	public EsItemFactory() {
+		// For Dagger
+	}
+
 	public ICanonicalItem put( final ICanonicalItem inItem, String inId) throws IOException {
         final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_PUTS).time();
 
