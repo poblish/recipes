@@ -14,7 +14,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import org.apache.http.client.ClientProtocolException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -43,7 +42,7 @@ public class EsExplorerFiltersTest {
 	private ExplorerFilterDefs filterDefs = new ExplorerFilterDefs();
 
 	@BeforeClass
-	public void cleanIndices() throws ClientProtocolException, IOException {
+	public void cleanIndices() throws IOException {
         DaggerEsExplorerFiltersTest_TestComponent.create().inject(this);
 
         users.deleteAll();

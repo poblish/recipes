@@ -3,7 +3,6 @@
  */
 package uk.co.recipes.service.impl;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
 
@@ -35,34 +34,34 @@ public class ExplorerFilterDefs {
 
     	private final UserPreferences tempPrefs = new UserPreferences();
 
-        public Builder includeTag( final ITag inTag) throws IOException {
+        public Builder includeTag( final ITag inTag) {
             tempPrefs.explorerIncludeAdd(inTag);
             return this;
         }
 
-        public Builder includeTag( final ITag inTag, final String inValue) throws IOException {
+        public Builder includeTag( final ITag inTag, final String inValue) {
             tempPrefs.explorerIncludeAdd(inTag, inValue);
             return this;
         }
 
-    	public Builder includeTags( final ITag... inTags) throws IOException {
+    	public Builder includeTags( final ITag... inTags) {
     		for ( ITag each : inTags) {
     			includeTag(each);
     		}
             return this;
     	}
 
-        public Builder excludeTag( final ITag inTag) throws IOException {
+        public Builder excludeTag( final ITag inTag) {
             tempPrefs.explorerExcludeAdd(inTag);
             return this;
         }
 
-        public Builder excludeTag( final ITag inTag, final String inValue) throws IOException {
+        public Builder excludeTag( final ITag inTag, final String inValue) {
             tempPrefs.explorerExcludeAdd(inTag, inValue);
             return this;
         }
 
-    	public Builder excludeTags( final ITag... inTags) throws IOException {
+    	public Builder excludeTags( final ITag... inTags) {
     		for ( ITag each : inTags) {
     			excludeTag(each);
     		}

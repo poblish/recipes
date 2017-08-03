@@ -12,6 +12,7 @@ import javax.inject.Singleton;
 import com.google.common.base.Throwables;
 import net.myrrix.client.ClientRecommender;
 
+import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 
 import uk.co.recipes.api.ICanonicalItem;
@@ -26,8 +27,8 @@ import uk.co.recipes.service.taste.impl.MyrrixTasteSimilarityService;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.netflix.hystrix.HystrixCommand;
-import com.netflix.hystrix.HystrixCommandGroupKey;
+//import com.netflix.hystrix.HystrixCommand;
+//import com.netflix.hystrix.HystrixCommandGroupKey;
 
 /**
  * TODO
@@ -63,10 +64,12 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	    final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_MOSTSIMILAR).time();
 
 		try {
-            final HystrixCommand<List<RecommendedItem>> cmd = new MyrrixSimilarItemsCommand( item.getId(), inNumRecs, new String[]{"ITEM", mapper.writeValueAsString(inFilterDef)} );
-			return itemsFactory.getAll( MyrrixUtils.getItems( cmd.execute() ) );
+//			final HystrixCommand<List<RecommendedItem>> cmd = new MyrrixSimilarItemsCommand( item.getId(), inNumRecs, new String[]{"ITEM", mapper.writeValueAsString(inFilterDef)} );
+//			return itemsFactory.getAll( MyrrixUtils.getItems( cmd.execute() ) );
+			final MyrrixSimilarItemsCommand cmd = new MyrrixSimilarItemsCommand( item.getId(), inNumRecs, new String[]{"ITEM", mapper.writeValueAsString(inFilterDef)} );
+			return itemsFactory.getAll( MyrrixUtils.getItems( cmd.run() ) );
 		}
-        catch (IOException e) {
+        catch (IOException | TasteException e) {
             throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
         }
         finally {
@@ -87,10 +90,12 @@ public class MyrrixExplorerService implements IExplorerAPI {
 	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_MOSTSIMILAR).time();
 
 		try {
-		    final HystrixCommand<List<RecommendedItem>> cmd = new MyrrixSimilarItemsCommand( recipe.getId(), inNumRecs, new String[]{"RECIPE", mapper.writeValueAsString(inFilterDef)} );
-			return recipesFactory.getAll( MyrrixUtils.getItems( cmd.execute() ) );
+//			final HystrixCommand<List<RecommendedItem>> cmd = new MyrrixSimilarItemsCommand( recipe.getId(), inNumRecs, new String[]{"RECIPE", mapper.writeValueAsString(inFilterDef)} );
+//			return recipesFactory.getAll( MyrrixUtils.getItems( cmd.execute() ) );
+			final MyrrixSimilarItemsCommand cmd = new MyrrixSimilarItemsCommand( recipe.getId(), inNumRecs, new String[]{"RECIPE", mapper.writeValueAsString(inFilterDef)} );
+			return recipesFactory.getAll( MyrrixUtils.getItems( cmd.run() ) );
 		}
-		catch (IOException e) {
+		catch (IOException | TasteException e) {
 			throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
 		}
         finally {
@@ -138,21 +143,21 @@ public class MyrrixExplorerService implements IExplorerAPI {
 		return tasteSimilarity.similarityToItem( item1, item2);
 	}
 
-    private class MyrrixSimilarItemsCommand extends HystrixCommand<List<RecommendedItem>> {
+    private class MyrrixSimilarItemsCommand /* extends HystrixCommand<List<RecommendedItem>> */ {
 
         private long[] itemIds;
         private int howMany;
         private String[] rescorerParams;
 
         public MyrrixSimilarItemsCommand( long inItemId, int howMany, String[] rescorerParams) {
-            super( HystrixCommandGroupKey.Factory.asKey("Explorer.Similarity") );
+            // super( HystrixCommandGroupKey.Factory.asKey("Explorer.Similarity") );
             this.itemIds = new long[]{inItemId};
             this.howMany = howMany;
             this.rescorerParams = rescorerParams;
         }
 
-        @Override
-        protected List<RecommendedItem> run() throws Exception {
+        // @Override
+        protected List<RecommendedItem> run() throws TasteException {
             return recommender.mostSimilarItems( this.itemIds, this.howMany, this.rescorerParams, /* "contextUserID" */ 0L) ;
         }
     }

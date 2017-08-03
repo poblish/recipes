@@ -12,7 +12,6 @@ import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IRecipeStage;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
@@ -54,12 +53,7 @@ public class RecipeStage implements IRecipeStage {
 	@JsonIgnore
     @Override
     public Collection<ICanonicalItem> getItems() {
-        return FluentIterable.from(ingredients).transform( new Function<IIngredient,ICanonicalItem>() {
-
-            @Override
-            public ICanonicalItem apply( final IIngredient input) {
-                return input.getItem();
-            }} ).toSet();
+        return FluentIterable.from(ingredients).transform(IIngredient::getItem).toSet();
     }
 
 	@Override

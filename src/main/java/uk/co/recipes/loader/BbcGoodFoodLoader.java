@@ -1,6 +1,3 @@
-/**
- * 
- */
 package uk.co.recipes.loader;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -9,13 +6,14 @@ import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_DIR_PROCESS;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_PUTS;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import com.codahale.metrics.Timer.Context;
 import dagger.Component;
+import org.cfg4j.provider.ConfigurationProvider;
 import org.elasticsearch.client.Client;
 
 import uk.co.recipes.DaggerModule;
@@ -29,7 +27,6 @@ import uk.co.recipes.persistence.ItemsLoader;
 import uk.co.recipes.test.TestDataUtils;
 
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
 import com.google.common.base.Throwables;
 
 /**
@@ -51,7 +48,7 @@ public class BbcGoodFoodLoader {
     @Inject TestDataUtils dataUtils;
     @Inject MyrrixUpdater updater;
     @Inject MetricRegistry metrics;
-    final String path = System.getProperty("user.home") + "/Development/java/recipe_explorer/src/test/resources/";  // FIXME!
+	@Inject ConfigurationProvider config;
 
 	public static void main( String[] args) {
 		try {
@@ -59,8 +56,7 @@ public class BbcGoodFoodLoader {
 
 			final BbcGoodFoodLoader loader = new BbcGoodFoodLoader();
 
-			final AppComponent tc = DaggerBbcGoodFoodLoader_AppComponent.create();
-			tc.inject(loader);
+			DaggerBbcGoodFoodLoader_AppComponent.create().inject(loader);
 
 	        loader.start(true);
 
@@ -73,9 +69,7 @@ public class BbcGoodFoodLoader {
 			System.out.println("Finished loading in " + (( System.currentTimeMillis() - st) / 1000d) + " msecs");
 			System.exit(0);
 		}
-		catch (IOException e) {
-			Throwables.propagate(e);
-		} catch (InterruptedException e) {
+		catch (IOException | InterruptedException e) {
 			Throwables.propagate(e);
 		}
 	}
@@ -103,30 +97,21 @@ public class BbcGoodFoodLoader {
 		int count = 0;
 //		int errors = 0;
 
-		final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_DIR_PROCESS + ":bbcGoodFood").time();
+		final File path = config.getProperty("loader.curryfrenzy.path", File.class);
 
-		try {
-			for ( File each : new File( path + "ingredients/bbcgoodfood/").listFiles( new FilenameFilter() {
-
-				@Override
-				public boolean accept( File dir, String name) {
-					return name.endsWith(".txt");
-				}
-			} )) {
+		try (Context ctxt = metrics.timer(TIMER_RECIPES_DIR_PROCESS + ":bbcGoodFood").time()) {
+			for (File each : path.listFiles((dir, name) -> name.endsWith(".txt"))) {
 				try
 				{
-					dataUtils.parseIngredientsFrom( adminUser, path + "ingredients/bbcgoodfood/", each.getName() );
+					dataUtils.parseIngredientsFrom( adminUser, path, each.getName() );
 					count++;
 				}
 				catch (RuntimeException e) {
 					System.err.println(e);
 					// FIXME: use LOG.error("", e);
-//					errors++;
+	//					errors++;
 				}
 			}
-		}
-		finally {
-			timerCtxt.stop();
 		}
 
         while ( recipeFactory.countAll() < count) {

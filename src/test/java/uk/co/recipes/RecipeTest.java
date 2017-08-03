@@ -60,10 +60,10 @@ public class RecipeTest {
 
 		assertThat( r5.toString(), is("Recipe{title=1, id=NEW, creator=User{id=NEW, username=aregan, displayName=Andrew R}, stages=[RecipeStage{ingredients=[Ingredient{q=100 GRAMMES, item=CanonicalItem{name=Lamb}}, Ingredient{q=100 GRAMMES, item=CanonicalItem{name=Beef}}, Ingredient{q=100 GRAMMES, item=CanonicalItem{name=Carrot}}, Ingredient{q=100 GRAMMES, item=CanonicalItem{name=Aubergine}}]}], tags={SERVES_COUNT=4}, locale=en_GB}"));
 
-        assertThat((Recipe) r1.clone(), is(r1));
-        assertThat((Recipe) r2.clone(), is(r2));
-        assertThat((Recipe) r3.clone(), is(r3));
-        assertThat((Recipe) r4.clone(), is(r4));
-        assertThat((Recipe) r5.clone(), is(r5));
+        assertThat(r1.clone(), is(r1));
+        assertThat(r2.clone(), is(r2));
+        assertThat(r3.clone(), is(r3));
+        assertThat(r4.clone(), is(r4));
+        assertThat(r5.clone(), is(r5));
 	}
 }

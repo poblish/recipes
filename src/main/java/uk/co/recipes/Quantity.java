@@ -47,8 +47,7 @@ public class Quantity implements IQuantity {
 
 	/**
 	 * @param units
-	 * @param number
-	 */
+     */
 	public Quantity(IUnit units, final NonNumericQuantities nnQuantity) {
 		this.units = checkNotNull(units, "Units cannot be null");
 		this.nnQuantity = checkNotNull(nnQuantity);

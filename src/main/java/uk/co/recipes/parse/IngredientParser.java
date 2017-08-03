@@ -1,6 +1,3 @@
-/**
- * 
- */
 package uk.co.recipes.parse;
 
 import static java.util.Locale.ENGLISH;
@@ -13,6 +10,7 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
+import com.codahale.metrics.Timer.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,9 +25,7 @@ import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.tags.CommonTags;
 
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
 import com.google.common.base.Optional;
-import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 
 /**
@@ -81,13 +77,8 @@ public class IngredientParser {
 	}
 
 	public boolean parse(final String inRawStr, final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) {
-		final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPE_LINE_PARSE).time();
-
-		try {
+		try (Context ctxt = metrics.timer(TIMER_RECIPE_LINE_PARSE).time()) {
 			return timedParse(inRawStr, inHandler, inDeferHandler);
-		}
-		finally {
-			timerCtxt.stop();
 		}
 	}
 
@@ -383,30 +374,26 @@ public class IngredientParser {
     }
     
 	public ICanonicalItem findItem( final String inName) {
-		return itemFactory.getOrCreate( inName, new Supplier<ICanonicalItem>() {
+		return itemFactory.getOrCreate( inName, () -> {
+            final ICanonicalItem item = new CanonicalItem(inName);
 
-			@Override
-			public ICanonicalItem get() {
-				final ICanonicalItem item = new CanonicalItem(inName);
+            // FIXME This stuff is OK, but not really sustainable
+            String lcase = inName.toLowerCase();
 
-				// FIXME This stuff is OK, but not really sustainable
-				String lcase = inName.toLowerCase();
+            if ( lcase.endsWith("seeds") || lcase.endsWith("seed")) {
+                item.addTag( CommonTags.SPICE );
+            }
+            else if (lcase.endsWith(" flour")) {
+                item.addTag( CommonTags.FLOUR );
+            }
+            else if (lcase.endsWith(" cheese")) {
+                item.addTag( CommonTags.CHEESE );
+            }
+            else if (lcase.endsWith(" beans") || lcase.endsWith(" bean")) {
+                item.addTag( CommonTags.PULSE );
+            }
 
-				if ( lcase.endsWith("seeds") || lcase.endsWith("seed")) {
-					item.addTag( CommonTags.SPICE );
-				}
-				else if (lcase.endsWith(" flour")) {
-					item.addTag( CommonTags.FLOUR );
-				}
-				else if (lcase.endsWith(" cheese")) {
-					item.addTag( CommonTags.CHEESE );
-				}
-				else if (lcase.endsWith(" beans") || lcase.endsWith(" bean")) {
-					item.addTag( CommonTags.PULSE );
-				}
-
-				return item;
-			}
-		}, true);
+            return item;
+        }, true);
 	}
 }

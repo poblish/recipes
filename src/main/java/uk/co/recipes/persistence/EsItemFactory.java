@@ -1,6 +1,3 @@
-/**
- *
- */
 package uk.co.recipes.persistence;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -16,11 +13,12 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.codahale.metrics.Timer.Context;
 import org.apache.http.client.HttpClient;
+import org.cfg4j.provider.ConfigurationProvider;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.indices.IndexMissingException;
 import org.elasticsearch.indices.TypeMissingException;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.Logger;
@@ -33,7 +31,6 @@ import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.service.api.IItemPersistence;
 
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
@@ -54,6 +51,7 @@ public class EsItemFactory implements IItemPersistence {
 
 	@Inject Client esClient;
 	@Inject HttpClient httpClient;
+	@Inject ConfigurationProvider config;
 
 	@Inject @Named("elasticSearchItemsUrl")
 	String itemIndexUrl;
@@ -73,7 +71,7 @@ public class EsItemFactory implements IItemPersistence {
 	}
 
 	public ICanonicalItem put( final ICanonicalItem inItem, String inId) throws IOException {
-        final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_PUTS).time();
+        final Context timerCtxt = metrics.timer(TIMER_ITEMS_PUTS).time();
 
 		try {
 			inItem.setId( sequences.getSeqnoForType("items_seqno") );
@@ -92,7 +90,7 @@ public class EsItemFactory implements IItemPersistence {
 	}
 
 	public ICanonicalItem getByName( String inId) throws IOException {
-        final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_NAME_GETS).time();
+        final Context timerCtxt = metrics.timer(TIMER_ITEMS_NAME_GETS).time();
 
         final ICanonicalItem cachedItem = itemsCache.getIfPresent(inId);
         if ( cachedItem != null) {
@@ -119,13 +117,8 @@ public class EsItemFactory implements IItemPersistence {
             return Optional.absent();
         }
 
-        final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_ID_GETS).time();
-
-        try {
+        try (Context ctxt = metrics.timer(TIMER_ITEMS_ID_GETS).time()) {
             return esUtils.findOneByIdAndType( itemIndexUrl, inId, ICanonicalItem.class, CanonicalItem.class);
-        }
-        finally {
-            timerCtxt.stop();
         }
     }
 
@@ -179,17 +172,17 @@ public class EsItemFactory implements IItemPersistence {
 				try {
 					// http://www.elasticsearch.org/guide/reference/query-dsl/match-query/
 					final SearchResponse resp = esClient.prepareSearch("recipe").setTypes("items").setQuery( matchPhraseQuery( "aliases", inCanonicalName.toLowerCase()) ).addSort( "_score", DESC).execute().actionGet();
-					final SearchHit[] hits = resp.getHits().hits();
+					final SearchHit[] hits = resp.getHits().getHits();
 
 					if ( /* Yes, want only one great match */ hits.length == 1) {
-						final ICanonicalItem mappedAlias = mapper.readValue( hits[0].getSourceRef().toBytes(), CanonicalItem.class);
+						final ICanonicalItem mappedAlias = mapper.readValue( esUtils.toBytes(hits[0].getSourceRef()), CanonicalItem.class);
 						if ( mappedAlias != null) {
 //							LOG.info("Successfully mapped Alias '" + inCanonicalName + "' => " + mappedAlias);
 							return mappedAlias;
 						}
 					}
 					else if ( hits.length > 1) {
-                        final ICanonicalItem firstMatch = mapper.readValue( hits[0].getSourceRef().toBytes(), CanonicalItem.class);
+                        final ICanonicalItem firstMatch = mapper.readValue( esUtils.toBytes(hits[0].getSourceRef()), CanonicalItem.class);
 
                         // Yuk - check for *exact* alias match
                         for ( String eachAlias : ((CanonicalItem) firstMatch).getAliases()) {
@@ -234,61 +227,49 @@ public class EsItemFactory implements IItemPersistence {
 		}
 	}
 
-    public long countAll() throws IOException {
+    public long countAll() {
         return esUtils.countAll("items");
     }
 
     @Override
-    public void delete( final ICanonicalItem inItem) throws IOException {
+    public void delete( final ICanonicalItem inItem) {
         eventService.deleteItem(inItem);
         throw new RuntimeException("unimpl");
     }
 
     @Override
-    public void deleteNow( final ICanonicalItem inItem) throws IOException {
+    public void deleteNow( final ICanonicalItem inItem) {
         eventService.deleteItem(inItem);
         throw new RuntimeException("unimpl");
     }
 
 	public void deleteAll() throws IOException {
 		try {
-			esClient.admin().indices().prepareDeleteMapping().setIndices("recipe").setType("items").execute().actionGet();
+			esUtils.deleteAllByType("recipe", "items");
 
-            EsUtils.addPartialMatchMappings(esClient);
+            EsUtils.addPartialMatchMappings(esClient, config);
 		}
 		catch (TypeMissingException e) {
 			// Ignore
 		}
-		catch (IndexMissingException e) {
-			// Ignore
-		}
 	}
 
-	/**
-	 * @param items
-	 * @return
-	 */
 	public List<ICanonicalItem> getAll( final List<Long> inIds) throws IOException {
-	    final Timer.Context timerCtxt = metrics.timer("items.getAll").time();
-
 	    // FIXME OK, we can't use ES GET methods, because 'id' is the name, not this numeric Id
 	    // But the least we could do is use the ES MultiSearch API, not n individual searches!
 
-		try {
+		try (Context ctxt = metrics.timer("items.getAll").time()) {
 	        final List<ICanonicalItem> results = Lists.newArrayList();
-	
+
 	        for ( final Long eachId : inIds) {
 	            Optional<ICanonicalItem> oI = getById(eachId);
-	
+
 	            if (oI.isPresent()) {  // Shouldn't happen in Production!!
 	                results.add( oI.get() );
 	            }
 	        }
-	
+
 	        return results;
-		}
-		finally {
-			timerCtxt.close();
 		}
 	}
 

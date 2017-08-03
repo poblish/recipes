@@ -16,6 +16,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import com.codahale.metrics.Timer.Context;
 import uk.co.recipes.Ingredient;
 import uk.co.recipes.Recipe;
 import uk.co.recipes.RecipeStage;
@@ -60,15 +61,8 @@ public class TestDataUtils {
 		// For Dagger
 	}
 
-	private final static IParsedIngredientHandler NULL_HANDLER = new IParsedIngredientHandler() {
-		@Override
-		public void foundIngredient( IIngredient ingr) { }
-	};
-
-	private final static IDeferredIngredientHandler NULL_DEFER_HANDLER = new IDeferredIngredientHandler() {
-		@Override
-		public void deferIngredient( final DeferralStatus x) { }
-	};
+	private final static IParsedIngredientHandler NULL_HANDLER = ingr -> { };
+	private final static IDeferredIngredientHandler NULL_DEFER_HANDLER = x -> { };
 
 
 	public boolean parseIngredient( final String inStr) {
@@ -80,21 +74,16 @@ public class TestDataUtils {
 	}
 
 	public List<IIngredient> parseIngredientsFrom( final IUser adminUser, final String inFilename) throws IOException {
-		return parseIngredientsFrom( adminUser, "src/test/resources/ingredients/", inFilename);
+		return parseIngredientsFrom( adminUser, new File("src/test/resources/ingredients/"), inFilename);
 	}
 
-	public List<IIngredient> parseIngredientsFrom( final IUser adminUser, final String inDir, final String inFilename) throws IOException {
-		final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPE_PARSE).time();
-
-		try {
+	public List<IIngredient> parseIngredientsFrom( final IUser adminUser, final File inDir, final String inFilename) throws IOException {
+		try (Context ctxt = metrics.timer(TIMER_RECIPE_PARSE).time()) {
 			return timedParseIngredientsFrom( adminUser, inDir, inFilename);
 		}
-		finally {
-			timerCtxt.stop();
-		}
 	}
 
-	private List<IIngredient> timedParseIngredientsFrom( final IUser adminUser, final String inDir, final String inFilename) throws IOException {
+	private List<IIngredient> timedParseIngredientsFrom( final IUser adminUser, final File inDir, final String inFilename) throws IOException {
 		final List<IIngredient> allIngredients = Lists.newArrayList();
 
 		String recipeTitle = null;
@@ -139,19 +128,7 @@ public class TestDataUtils {
 
 			///////////////////////////////////////////////////////////////////////////////////////////
 
-			boolean matched = parser.parse( eachLine, new IParsedIngredientHandler() {
-
-				@Override
-				public void foundIngredient( final IIngredient ingr) {
-					allIngredients.add(ingr);
-				}
-			}, new IDeferredIngredientHandler() {
-
-				@Override
-				public void deferIngredient( DeferralStatus status) {
-					deferredItems.add(status);
-				}
-			} );
+			boolean matched = parser.parse( eachLine, allIngredients::add, deferredItems::add);
 
 			if (!matched) {
 				throw new RuntimeException(eachLine + " not matched");

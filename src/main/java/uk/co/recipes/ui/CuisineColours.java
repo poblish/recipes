@@ -12,8 +12,6 @@ import com.google.common.base.MoreObjects;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.tags.RecipeTags;
 
-import com.google.common.base.Objects;
-
 /**
  * TODO
  *

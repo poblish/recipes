@@ -13,11 +13,10 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import com.google.common.collect.Ordering;
 import dagger.Component;
-import org.apache.http.client.ClientProtocolException;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.common.collect.Ordering;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -30,7 +29,6 @@ import uk.co.recipes.cats.Categorisation;
 import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.parse.DeferralStatus;
 import uk.co.recipes.parse.IDeferredIngredientHandler;
-import uk.co.recipes.parse.IParsedIngredientHandler;
 import uk.co.recipes.parse.IngredientParser;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
@@ -45,8 +43,6 @@ import uk.co.recipes.test.TestDataUtils;
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.FluentIterable;
 import com.google.common.io.Files;
-
-import dagger.Module;
 
 /**
  * 
@@ -72,7 +68,7 @@ public class ParseIngredientsTest {
 	private static IUser ADMIN_USER;
 
 	@BeforeClass
-	public void cleanIndices() throws ClientProtocolException, IOException {
+	public void cleanIndices() throws IOException {
 		DaggerParseIngredientsTest_TestComponent.create().inject(this);
 
         itemFactory.deleteAll();
@@ -103,13 +99,7 @@ public class ParseIngredientsTest {
 	}
 
 	private void testCompleteParse( final String inInput, final String inExpectedToString) {
-		assertThat( inInput + " not parsed!", parser.parse( inInput, new IParsedIngredientHandler() {
-
-			@Override
-			public void foundIngredient( IIngredient ingr) {
-				assertThat( ingr.toString(), is(inExpectedToString));
-			}
-		}, new DummyDeferralHandler()), is(true));
+		assertThat( inInput + " not parsed!", parser.parse( inInput, ingr -> assertThat( ingr.toString(), is(inExpectedToString)), new DummyDeferralHandler()), is(true));
 	}
 
 	@Test

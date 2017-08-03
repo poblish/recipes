@@ -273,25 +273,13 @@ public class User implements IUser {
 
 	@JsonProperty("excludedItems")
 	public Collection<Long> getExcludedItemParentIdsForJackon() {
-		return FluentIterable.from(excludedItems).transform( new Function<ICanonicalItem,Long>() {
-
-			@Override
-			public Long apply( ICanonicalItem input) {
-				return input.getId();
-			}
-		} ).toList();
+		return FluentIterable.from(excludedItems).transform(ICanonicalItem::getId).toList();
 
 	}
 
 	@JsonProperty("excludedRecipes")
 	public Collection<Long> getExcludedRecipeIdsForJackon() {
-		return FluentIterable.from(excludedRecipes).transform( new Function<IRecipe,Long>() {
-
-			@Override
-			public Long apply( IRecipe input) {
-				return input.getId();
-			}
-		} ).toList();
+		return FluentIterable.from(excludedRecipes).transform(IRecipe::getId).toList();
 	}
 
 	@JsonIgnore

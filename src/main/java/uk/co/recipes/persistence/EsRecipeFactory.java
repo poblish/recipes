@@ -3,7 +3,7 @@
  */
 package uk.co.recipes.persistence;
 
-import static org.elasticsearch.index.query.QueryBuilders.fieldQuery;
+import static org.elasticsearch.index.query.QueryBuilders.*;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_NAME_GETS;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_PUTS;
 
@@ -17,9 +17,10 @@ import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
 
+import com.codahale.metrics.Timer.Context;
 import org.apache.http.client.HttpClient;
+import org.cfg4j.provider.ConfigurationProvider;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.indices.IndexMissingException;
 import org.elasticsearch.indices.TypeMissingException;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.Logger;
@@ -34,11 +35,9 @@ import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.service.api.IRecipePersistence;
 
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
-import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -56,6 +55,8 @@ public class EsRecipeFactory implements IRecipePersistence {
 
 	@Inject Client esClient;
 	@Inject HttpClient httpClient;
+	@Inject ConfigurationProvider config;
+
 	@Inject EsUtils esUtils;
 	@Inject EsSequenceFactory sequences;
 	@Inject ObjectMapper mapper;
@@ -77,26 +78,17 @@ public class EsRecipeFactory implements IRecipePersistence {
 	}
 
 	public IRecipe getByName( String inName) throws IOException {
-	    final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_NAME_GETS).time();
-
-        try {
-            final SearchHit[] hits = esClient.prepareSearch("recipe").setTypes("recipes").setQuery( fieldQuery( "title", inName) ).setSize(1).execute().get().getHits().hits();
+		try (Context ctxt = metrics.timer(TIMER_RECIPES_NAME_GETS).time()) {
+			// AGR FIXME FIXME `fieldQuery` works with UserPersistenceTest, `termQuery` doesn't
+            final SearchHit[] hits = esClient.prepareSearch("recipe").setTypes("recipes").setQuery( fieldQuery( "title", inName) ).setSize(1).execute().get().getHits().getHits();
             if ( hits.length < 1) {
                 return null;
             }
-            return mapper.readValue( hits[0].getSourceRef().toBytes(), Recipe.class);
+            return mapper.readValue(esUtils.toBytes(hits[0].getSourceRef()), Recipe.class);
         }
-        catch (InterruptedException e) {
-            Throwables.propagate(e);
+        catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
         }
-        catch (ExecutionException e) {
-            Throwables.propagate(e);
-        }
-        finally {
-            timerCtxt.stop();
-        }
-
-        return null;
 	}
 
 	public Optional<IRecipe> getById( long inId) throws IOException {
@@ -104,18 +96,18 @@ public class EsRecipeFactory implements IRecipePersistence {
 			return Optional.absent();
 		}
 
-		return Optional.fromNullable((IRecipe) mapper.readValue( esClient.prepareGet( "recipe", "recipes", String.valueOf(inId)).execute().actionGet().getSourceAsBytes(), Recipe.class));
+		return Optional.fromNullable(mapper.readValue( esClient.prepareGet( "recipe", "recipes", String.valueOf(inId)).execute().actionGet().getSourceAsBytes(), Recipe.class));
 	}
 
 	public IRecipe put( final IRecipe inRecipe, String inId_Unused) throws IOException {
-        final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_PUTS).time();
+        final Context timerCtxt = metrics.timer(TIMER_RECIPES_PUTS).time();
 
 	    final long newId = sequences.getSeqnoForType("recipes_seqno") + Recipe.BASE_ID;
 
 		try {
 			inRecipe.setId(newId);
 
-			esClient.prepareIndex( "recipe", "recipes", String.valueOf(newId))/*.setCreate(true) */.setSource( mapper.writeValueAsString(inRecipe) ).execute().actionGet();
+			final String indexedId = esClient.prepareIndex( "recipe", "recipes", String.valueOf(newId))/*.setCreate(true) */.setSource( mapper.writeValueAsString(inRecipe) ).execute().actionGet().getId();
 
 			eventService.addRecipe(inRecipe);
 		}
@@ -133,13 +125,7 @@ public class EsRecipeFactory implements IRecipePersistence {
         	throw new RuntimeException("Ingredient(s) could not be added");
         }
 
-		handledChangedItems( inRecipe, new Runnable() {
-
-			@Override
-			public void run() {
-				eventService.addRecipeIngredients( inRecipe, inIngredients);
-			}
-		});
+		handledChangedItems( inRecipe, () -> eventService.addRecipeIngredients( inRecipe, inIngredients));
 	}
 
 	@Override
@@ -149,13 +135,7 @@ public class EsRecipeFactory implements IRecipePersistence {
         	throw new RuntimeException("Ingredient(s) could not be removed");
         }
 
-		handledChangedItems( inRecipe, new Runnable() {
-
-			@Override
-			public void run() {
-				eventService.removeRecipeIngredients( inRecipe, inIngredients);
-			}
-		});
+		handledChangedItems( inRecipe, () -> eventService.removeRecipeIngredients( inRecipe, inIngredients));
 	}
 
 	@Override
@@ -177,13 +157,7 @@ public class EsRecipeFactory implements IRecipePersistence {
         	throw new RuntimeException("Item(s) could not be removed");
         }
 
-		handledChangedItems( inRecipe, new Runnable() {
-
-			@Override
-			public void run() {
-				eventService.removeRecipeIngredients( inRecipe, Iterables.toArray( ingredientsToRemove, IIngredient.class));
-			}
-		});
+		handledChangedItems( inRecipe, () -> eventService.removeRecipeIngredients( inRecipe, Iterables.toArray( ingredientsToRemove, IIngredient.class)));
 	}
 
 	private void handledChangedItems( final IRecipe inRecipe, final Runnable inEventServiceCallback) throws IOException {
@@ -192,24 +166,21 @@ public class EsRecipeFactory implements IRecipePersistence {
 		inEventServiceCallback.run();
 	}
 
-	public String toStringId( final IRecipe inRecipe) throws IOException {
+	public String toStringId( final IRecipe inRecipe) {
         return String.valueOf( inRecipe.getId() ); // inRecipe.getTitle().toLowerCase().replace( ' ', '_');
 	}
 
-    public long countAll() throws IOException {
+    public long countAll() {
         return esUtils.countAll("recipes");
     }
 
 	public void deleteAll() throws IOException {
 		try {
-			esClient.admin().indices().prepareDeleteMapping().setIndices("recipe").setType("recipes").execute().actionGet();
+			esUtils.deleteAllByType("recipe", "recipes");
 
-            EsUtils.addPartialMatchMappings(esClient);
+            EsUtils.addPartialMatchMappings(esClient, config);
 		}
 		catch (TypeMissingException e) {
-			// Ignore
-		}
-		catch (IndexMissingException e) {
 			// Ignore
 		}
 	}
@@ -218,28 +189,18 @@ public class EsRecipeFactory implements IRecipePersistence {
 		esUtils.waitUntilTypesRefreshed("recipes");
 	}
 
-	/**
-	 * @param items
-	 * @return
-	 * @throws IOException 
-	 */
 	public List<IRecipe> getAll( final List<Long> inIds) throws IOException {
-		final Timer.Context timerCtxt = metrics.timer("recipes.getAll").time();
-
 		if (inIds.isEmpty()) {
 			return Collections.emptyList();  // Is it fair to include this in timing?
 		}
 
-		final Collection<String> stringIds = Sets.newHashSet();
-		for ( Long each : inIds) {
-			stringIds.add( String.valueOf(each) );
-		}
+		try (Context ctxt = metrics.timer("recipes.getAll").time()) {
+			final Collection<String> stringIds = Sets.newHashSet();
+			for ( Long each : inIds) {
+				stringIds.add( String.valueOf(each) );
+			}
 
-		try {
 			return esUtils.deserializeRecipeHits( esClient.prepareMultiGet().add( "recipe", "recipes", stringIds).execute().actionGet() );
-		}
-		finally {
-			timerCtxt.close();
 		}
 	}
 
@@ -285,12 +246,12 @@ public class EsRecipeFactory implements IRecipePersistence {
         }
     }
 
-    public void delete( final IRecipe inRecipe) throws IOException {
+    public void delete( final IRecipe inRecipe) {
         esClient.prepareDelete( "recipe", "recipes", String.valueOf( inRecipe.getId() )).execute();  // Don't need to wait for this
         eventService.deleteRecipe(inRecipe);
     }
 
-    public void deleteNow( final IRecipe inRecipe) throws IOException {
+    public void deleteNow( final IRecipe inRecipe) {
         esClient.prepareDelete( "recipe", "recipes", String.valueOf( inRecipe.getId() )).execute().actionGet();
         eventService.deleteRecipe(inRecipe);
     }
@@ -300,6 +261,6 @@ public class EsRecipeFactory implements IRecipePersistence {
     }
 
     public interface PostForkChange<T> {
-        void apply( final T inObj) throws IOException;
+        void apply( final T inObj);
     }
 }

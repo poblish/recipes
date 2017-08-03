@@ -1,45 +1,36 @@
-/**
- * 
- */
 package uk.co.recipes.myrrix;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import net.myrrix.client.ClientRecommender;
-
-import org.elasticsearch.ElasticSearchIllegalArgumentException;
+import org.cfg4j.provider.ConfigurationProvider;
+import org.cfg4j.provider.ConfigurationProviderBuilder;
+import org.cfg4j.source.ConfigurationSource;
+import org.cfg4j.source.files.FilesConfigurationSource;
+import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
-import org.elasticsearch.indices.IndexMissingException;
 import org.slf4j.LoggerFactory;
 
 import uk.co.recipes.persistence.EsUtils;
 import uk.co.recipes.persistence.JacksonFactory;
-import uk.co.recipes.service.impl.EsSearchService;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Throwables;
 import com.google.common.io.Files;
 
 import dagger.Module;
 import dagger.Provides;
 
-/**
- * TODO
- * 
- * @author andrewregan
- * 
- */
-@Module(injects={ObjectMapper.class, ClientRecommender.class, EsSearchService.class, MetricRegistry.class, RecipesRescorer.class})
+@Module
 public class RescorerModule {
 
 	@Provides
@@ -50,45 +41,60 @@ public class RescorerModule {
 		return inst;
 	}
 
-	@Provides
-	@Singleton
-	Client provideEsClient() {
-		final Client c = new TransportClient().addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
+    @Provides
+    @Singleton
+    public ConfigurationSource fileBasedConfig() {
+        return new FilesConfigurationSource(() -> Paths.get("recipes_config.yml"));
+    }
 
+    @Provides
+    @Singleton
+    public ConfigurationProvider configurationProvider(final ConfigurationSource source) {
+        return new ConfigurationProviderBuilder().withConfigurationSource(source).build();
+    }
+
+    @Provides
+    @Singleton
+    Client provideEsClient(final ConfigurationProvider config) {
         try {
-            final String homeDir = System.getProperty("user.home");
-            final String settingsStr = Files.toString( new File( homeDir + "/Development/java/recipe_explorer/src/main/resources/index.yaml"), Charset.forName("utf-8"));
+            final Client c = new TransportClient().addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
 
-            try {
-                c.admin().indices().prepareUpdateSettings("recipe").setSettings(settingsStr).execute().actionGet();
-            }
-            catch (ElasticSearchIllegalArgumentException e) {
-                c.admin().indices().prepareClose("recipe").execute().actionGet();
-                c.admin().indices().prepareUpdateSettings("recipe").setSettings(settingsStr).execute().actionGet();
-            }
-            finally {
-                try {
-                	c.admin().indices().prepareOpen("recipe").execute().actionGet();
-                }
-                catch (IndexMissingException e) {
-                	c.admin().indices().prepareCreate("recipe").setSettings(settingsStr).execute().actionGet();
-                }
+            final String settingsStr = Files.toString( config.getProperty("elasticsearch.settingsPath", File.class), Charset.forName("utf-8"));
 
-                EsUtils.addPartialMatchMappings(c);
+            if (!c.admin().indices().exists( new IndicesExistsRequest("recipe") ).actionGet().isExists()) {
+                c.admin().indices().prepareCreate("recipe").setSettings(settingsStr).execute().actionGet();
             }
+
+//            try {
+//                c.admin().indices().prepareUpdateSettings("recipe").setSettings(settingsStr).execute().actionGet();
+//            }
+//            catch (RuntimeException /* Was ElasticSearchIllegalArgumentException */ e) {
+//                c.admin().indices().prepareClose("recipe").execute().actionGet();
+//                c.admin().indices().prepareUpdateSettings("recipe").setSettings(settingsStr).execute().actionGet();
+//            }
+//            finally {
+            // try {
+//                	c.admin().indices().prepareOpen("recipe").execute().actionGet();
+//                }
+//                catch (IndexNotFoundException e) {
+//                	c.admin().indices().prepareCreate("recipe").setSettings(settingsStr).execute().actionGet();
+//                }
+
+            EsUtils.addPartialMatchMappings(c, config);
+//            }
+
+            return c;
         }
         catch (IOException e) {
-           Throwables.propagate(e);
+            throw new RuntimeException(e);
         }
+    }
 
-		return c;
-	}
-
-	@Provides
-	@Named("elasticSearchItemsUrl")
-	String provideEsItemsUrl() {
-		return "http://localhost:9200/recipe/items";
-	}
+    @Provides
+    @Named("elasticSearchItemsUrl")
+    String provideEsItemsUrl(final ConfigurationProvider config) {
+        return config.getProperty("elasticSearchItemsUrl", String.class);
+    }
 
     @Provides
     @Singleton

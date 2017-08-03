@@ -3,7 +3,6 @@
  */
 package uk.co.recipes.persistence;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
@@ -24,8 +23,8 @@ public class EsSequenceFactory {
 	private static final String INDEX = "sequence";
 	private static final String TYPE = "sequence";
 
-	@Inject
-	Client esClient;
+	@Inject Client esClient;
+	@Inject EsUtils esUtils;
 
 	@Inject
 	public EsSequenceFactory() {
@@ -41,17 +40,14 @@ public class EsSequenceFactory {
 		try {
 			return esClient.prepareIndex( INDEX, TYPE).setId(inIdForEntityType).setSource("{}").execute().get().getVersion();
 		}
-		catch (InterruptedException e) {
+		catch (InterruptedException | ExecutionException e) {
 			throw Throwables.propagate(e);
 		}
-		catch (ExecutionException e) {
-			throw Throwables.propagate(e);
-		}
-	}
+    }
 
-	public void deleteAll() throws IOException {
+	public void deleteAll() {
 		try {
-		    esClient.admin().indices().prepareDeleteMapping().setIndices(INDEX).setType(TYPE).execute().actionGet();
+			esUtils.deleteAllByType(INDEX, TYPE);
 		}
         catch (TypeMissingException e) {
             // Ignore

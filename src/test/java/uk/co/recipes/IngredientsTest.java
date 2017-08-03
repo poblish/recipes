@@ -13,7 +13,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -40,7 +39,6 @@ import uk.co.recipes.tags.MeatAndFishTags;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Strings;
-import com.google.common.base.Supplier;
 import com.google.common.collect.Maps;
 
 
@@ -67,14 +65,14 @@ public class IngredientsTest {
     @Inject MyrrixRecommendationService recsApi;
 
     @Inject IEventService events;
-//    private IIngredientQuantityScoreBooster booster = GRAPH.get( DefaultIngredientQuantityScoreBooster.class );
+//  @Inject IIngredientQuantityScoreBooster booster;
 
     private void injectDependencies() {
 		DaggerIngredientsTest_TestComponent.create().inject(this);
     }
 
 	@BeforeClass
-	public void cleanIndices() throws ClientProtocolException, IOException {
+	public void cleanIndices() throws IOException {
 	    injectDependencies();
 
 		updater.startListening();
@@ -120,43 +118,27 @@ public class IngredientsTest {
 	// See: http://www.bbcgoodfood.com/recipes/5533/herby-lamb-cobbler
 	@Test
 	public void initialTest() throws IOException, InterruptedException {
-		final ICanonicalItem lamb = itemFactory.getOrCreate( "Lamb", new Supplier<ICanonicalItem>() {
+		final ICanonicalItem lamb = itemFactory.getOrCreate( "Lamb", () -> {
+            final ICanonicalItem meat = new CanonicalItem("Lamb");
+            meat.addTag( MeatAndFishTags.MEAT );
+            meat.addTag( MeatAndFishTags.RED_MEAT );
+            return meat;
+        });
 
-			@Override
-			public ICanonicalItem get() {
-				final ICanonicalItem meat = new CanonicalItem("Lamb");
-				meat.addTag( MeatAndFishTags.MEAT );
-				meat.addTag( MeatAndFishTags.RED_MEAT );
-				return meat;
-			}});
-
-		final ICanonicalItem lambNeck = itemFactory.getOrCreate( "Lamb Neck", new Supplier<ICanonicalItem>() {
-
-			@Override
-			public ICanonicalItem get() {
-				return new CanonicalItem("Lamb Neck", Optional.of(lamb));
-			}});
+		final ICanonicalItem lambNeck = itemFactory.getOrCreate( "Lamb Neck", () -> new CanonicalItem("Lamb Neck", Optional.of(lamb)));
 
 		final Ingredient lambIngredient = new Ingredient( lambNeck, new Quantity( Units.GRAMMES, 900));
 		lambIngredient.addNote( ENGLISH, "Neck fillets, cut into large chunks");
 
 		///////////////////////////////////////////////////
 
-		final ICanonicalItem bacon = itemFactory.getOrCreate( "Bacon", new Supplier<ICanonicalItem>() {
+		final ICanonicalItem bacon = itemFactory.getOrCreate( "Bacon", () -> {
+            final ICanonicalItem meat = new CanonicalItem("Bacon");
+            meat.addTag( MeatAndFishTags.MEAT );
+            return meat;
+        });
 
-			@Override
-			public ICanonicalItem get() {
-				final ICanonicalItem meat = new CanonicalItem("Bacon");
-				meat.addTag( MeatAndFishTags.MEAT );
-				return meat;
-			}});
-
-		final ICanonicalItem ssBacon = itemFactory.getOrCreate( "Lamb Neck", new Supplier<ICanonicalItem>() {
-
-			@Override
-			public ICanonicalItem get() {
-				return new CanonicalItem("Smoked Streaky Bacon", Optional.of(bacon));
-			}});
+		final ICanonicalItem ssBacon = itemFactory.getOrCreate( "Lamb Neck", () -> new CanonicalItem("Smoked Streaky Bacon", Optional.of(bacon)));
 
 		final Ingredient baconIngredient = new Ingredient( ssBacon, new Quantity( Units.GRAMMES, 200));
 		baconIngredient.addNote( ENGLISH, "Preferably in one piece, skinned and cut into pieces");
@@ -199,23 +181,11 @@ public class IngredientsTest {
 
 	@Test
 	public void testRecommendations() throws IOException, TasteException {
-		final IUser user1 = userFactory.getOrCreate( "Andrew Regan", new Supplier<IUser>() {
-
-			@Override
-			public IUser get() {
-				return new User( "aregan", "Andrew Regan");
-			}
-		} );
+		final IUser user1 = userFactory.getOrCreate( "Andrew Regan", () -> new User( "aregan", "Andrew Regan"));
 
 		assertThat( user1.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
 
-		final IUser user2 = userFactory.getOrCreate( "Foo Bar", new Supplier<IUser>() {
-
-			@Override
-			public IUser get() {
-				return new User( "foobar", "Foo Bar");
-			}
-		} );
+		final IUser user2 = userFactory.getOrCreate( "Foo Bar", () -> new User( "foobar", "Foo Bar"));
 
 		assertThat( user2.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
 

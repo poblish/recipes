@@ -72,7 +72,7 @@ public class OptionalNameSplitter {
 					each.append( words1[i] );
 				}
 
-				each.append( " " + WORD_JOINER.join(wordsColl2) );
+				each.append(" ").append(WORD_JOINER.join(wordsColl2));
 
 				poss2.add(each.toString());
 			}

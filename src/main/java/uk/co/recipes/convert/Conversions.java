@@ -142,13 +142,6 @@ public class Conversions {
         VOLUME_UNITS_TABLE.put( forUnit(unit), inLocale, inUnit);
     }
 
-	/**
-	 * 
-	 * TODO
-	 *
-	 * @author andrewregan
-	 *
-	 */
 	private static class ItemUnit {
 		private IUnit unit;
 		private String canonicalName;

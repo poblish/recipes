@@ -6,7 +6,6 @@ package uk.co.recipes.parse;
 import java.util.Arrays;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 
 
 /**

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package uk.co.recipes.events.impl;
 
@@ -184,7 +184,7 @@ public class MyrrixUpdater implements IEventListener {
             if (changesMade) {
                 recommender.ingest( new StringReader( myrrixPrefsBuf.toString() ) );
             	recommender.refresh();
-    
+
             	if (LOG.isTraceEnabled()) {
             		LOG.trace("addRecipeIngredients: refresh done");
             	}
@@ -226,7 +226,7 @@ public class MyrrixUpdater implements IEventListener {
             if (changesMade) {
                 recommender.ingest( new StringReader( myrrixPrefsBuf.toString() ) );
                 recommender.refresh();
-    
+
                 if (LOG.isTraceEnabled()) {
                     LOG.trace("deleteRecipeIngredients: refresh done");
                 }
@@ -242,10 +242,10 @@ public class MyrrixUpdater implements IEventListener {
             ioBuf.append("\n");
         }
 
-        ioBuf.append( inRecipeId + "," + inIngrItem.getId() + "," + inBaseScore);
+        ioBuf.append(inRecipeId).append(",").append(inIngrItem.getId()).append(",").append(inBaseScore);
 
         for ( ICanonicalItem eachConstituent : inIngrItem.getConstituents()) {
-            ioBuf.append( "\n" + inRecipeId + "," + eachConstituent.getId() + "," + (inBaseScore * INGREDIENT_CONSTITUENT_WEIGHT));
+            ioBuf.append("\n").append(inRecipeId).append(",").append(eachConstituent.getId()).append(",").append(inBaseScore * INGREDIENT_CONSTITUENT_WEIGHT);
         }
     }
 
@@ -287,7 +287,7 @@ public class MyrrixUpdater implements IEventListener {
     		    }
     		}
     	}
- 
+
     	return changesMade;
     }
 
@@ -303,7 +303,7 @@ public class MyrrixUpdater implements IEventListener {
         return true;
     }
 
-    private boolean setHierarchicalSimilarityTags( final ICanonicalItem inItem, final long inItemOrRecipeId, final float inScore) throws TasteException {
+    private boolean setHierarchicalSimilarityTags( final ICanonicalItem inItem, final long inItemOrRecipeId, final float inScore) {
 
         if (isPointlessScore(inScore)) {
             return false;
@@ -312,7 +312,7 @@ public class MyrrixUpdater implements IEventListener {
         boolean changesMade = false;
 
     	final String ourPseudoParentTagName = "PARENT_" + itemFactory.toStringId(inItem);
- 
+
     	if (LOG.isDebugEnabled()) {
     	    LOG.debug(( inScore > 0 ? "SET" : "UNSET") + " Tag '" + ourPseudoParentTagName + "' val=" + inScore + " for " + inItemOrRecipeId);
 		}
@@ -321,7 +321,7 @@ public class MyrrixUpdater implements IEventListener {
     	if ( inItem.parent().isPresent()) {
     		changesMade |= setHierarchicalSimilarityTags( inItem.parent().get(), inItemOrRecipeId, inScore * 0.8f);
     	}
-  
+
     	return changesMade;
     }
 

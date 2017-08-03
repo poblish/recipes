@@ -1,9 +1,6 @@
-/**
- * 
- */
 package uk.co.recipes.mocks;
 
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -11,8 +8,6 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import uk.co.recipes.CanonicalItem;
 import uk.co.recipes.api.ICanonicalItem;
@@ -20,7 +15,6 @@ import uk.co.recipes.persistence.EsItemFactory;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
-import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
 
 /**
@@ -35,41 +29,33 @@ public class MockFactories {
 
     @SuppressWarnings("unchecked")
 	public static EsItemFactory inMemoryItemFactory() {
-    	try {
+        try {
             final EsItemFactory iff = mock( EsItemFactory.class );
 
-            when( iff.get( anyString() )).thenAnswer( new Answer<Optional<ICanonicalItem>>() {
+            when( iff.get( anyString() )).thenAnswer(call -> {
+                final String name = (String) call.getArguments()[0];
+                return Optional.of( cachedGet(name) );
+            });
 
-				@Override
-				public Optional<ICanonicalItem> answer( InvocationOnMock invocation) {
-					final String name = (String) invocation.getArguments()[0];
-					return Optional.of( cachedGet(name) );
-				}
-			} );
+            when( iff.getOrCreate( anyString(), Mockito.any( Supplier.class ) )).thenAnswer(call -> {
+                final String name = (String) call.getArguments()[0];
+                final ICanonicalItem itemOrNull = ITEMS.get(name);
+                if ( itemOrNull != null) {
+                    return itemOrNull;
+                }
 
-            when( iff.getOrCreate( anyString(), Mockito.any( Supplier.class ) )).thenAnswer( new Answer<ICanonicalItem>() {
+                final Supplier<ICanonicalItem> getter = (Supplier<ICanonicalItem>) call.getArguments()[1];
 
-				@Override
-				public ICanonicalItem answer( InvocationOnMock invocation) {
-					final String name = (String) invocation.getArguments()[0];
-					final Supplier<ICanonicalItem> getter = (Supplier<ICanonicalItem>) invocation.getArguments()[1];
+                // System.out.println("Creating '" + inCanonicalName + "' ...");
 
-					final ICanonicalItem itemOrNull = ITEMS.get(name);
-					if ( itemOrNull != null) {
-						return itemOrNull;
-					}
-
-//					System.out.println("Creating '" + inCanonicalName + "' ...");
-
-					return getter.get();
-//					return put( getter.get(), toId(name));
-				}
-			} );
+                return getter.get();
+				// return put( getter.get(), toId(name));
+            });
 
             return iff;
     	}
     	catch (IOException e) {
-    		throw Throwables.propagate(e);
+    		throw new RuntimeException(e);
     	}
     }
 

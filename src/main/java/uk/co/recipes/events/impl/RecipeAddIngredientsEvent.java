@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package uk.co.recipes.events.impl;
 
@@ -8,8 +8,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.base.MoreObjects;
 import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.IRecipe;
-
-import com.google.common.base.Objects;
 
 /**
  * TODO

@@ -43,31 +43,15 @@ public final class TagUtils {
 
     private TagUtils() {}
 
-	private static final Function<Entry<ITag,Serializable>,ITag> ENTRY_KEYS = new Function<Entry<ITag,Serializable>,ITag>() {
-		public ITag apply( Entry<ITag,Serializable> input) {
-			return input.getKey();
-		}
-	};
+	private static final Function<Entry<ITag,Serializable>,ITag> ENTRY_KEYS = Entry::getKey;
 
-	private static final Function<Entry<ITag,Serializable>,String> TAG_NAMES_TITLECASE = new Function<Entry<ITag,Serializable>,String>() {
-		public String apply( Entry<ITag,Serializable> input) {
-			return formatTagName( input.getKey() );
-		}
-	};
+	private static final Function<Entry<ITag,Serializable>,String> TAG_NAMES_TITLECASE = input -> formatTagName( input.getKey() );
 
-	private static final Predicate<Entry<ITag,Serializable>> ALL_ACTIVATED = new Predicate<Entry<ITag,Serializable>>() {
-		public boolean apply( final Entry<ITag,Serializable> inEntry) {
-			return isActivated(inEntry);
-		}
-	};
+	private static final Predicate<Entry<ITag,Serializable>> ALL_ACTIVATED = TagUtils::isActivated;
 
 	public static Predicate<Entry<ITag,Serializable>> findActivated( final ITag... inTags) {
 		final Collection<ITag> tagsColl = Arrays.asList(inTags);
-		return new Predicate<Entry<ITag,Serializable>>() {
-			public boolean apply( final Entry<ITag,Serializable> inEntry) {
-				return tagsColl.contains( inEntry.getKey() ) && isActivated(inEntry);
-			}
-		};
+		return inEntry -> tagsColl.contains( inEntry.getKey() ) && isActivated(inEntry);
 	}
 
 	private static boolean isActivated( final Entry<ITag,Serializable> inEntry) {
@@ -139,13 +123,9 @@ public final class TagUtils {
 	}
 
 	public static Comparator<ITag> comparator() {
-		return new Comparator<ITag>() {
-
-			@Override
-			public int compare( ITag o1, ITag o2) {
-				// Yuk, FIXME
-				return ComparisonChain.start().compare( o1.toString(), o2.toString()).result();
-			}
-		};
+		return (o1, o2) -> {
+            // Yuk, FIXME
+            return ComparisonChain.start().compare( o1.toString(), o2.toString()).result();
+        };
 	}
 }

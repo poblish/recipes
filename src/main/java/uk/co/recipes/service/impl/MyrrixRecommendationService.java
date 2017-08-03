@@ -100,13 +100,10 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
         catch (NoSuchUserException e) {
             return Collections.emptyList();
         }
-        catch (TasteException e) {
+        catch (TasteException | IOException e) {
             throw new RuntimeException(e);  // Yuk, FIXME, let's get the API right
         }
-        catch (IOException e) {
-            throw new RuntimeException(e);  // Yuk, FIXME, let's get the API right
-        }
-	}
+    }
 
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.service.api.IRecommendationsAPI#recommendRecipes(uk.co.recipes.api.IUser, int)
@@ -121,13 +118,9 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
         catch (NoSuchUserException e) {
             return Collections.emptyList();
         }
-        catch (TasteException e) {
+        catch (TasteException | IOException e) {
             throw new RuntimeException(e);  // Yuk, FIXME, let's get the API right
-        }
-		catch (IOException e) {
-			throw new RuntimeException(e);  // Yuk, FIXME, let's get the API right
-		}
-        finally {
+        } finally {
             timerCtxt.stop();
         }
 	}
@@ -147,13 +140,9 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
         catch (NoSuchUserException e) {
             return Collections.emptyList();
         }
-        catch (TasteException e) {
+        catch (TasteException | IOException e) {
             throw new RuntimeException(e);  // Yuk, FIXME, let's get the API right
-        }
-		catch (IOException e) {
-			throw new RuntimeException(e);  // Yuk, FIXME, let's get the API right
-		}
-        finally {
+        } finally {
             timerCtxt.stop();
         }
 	}

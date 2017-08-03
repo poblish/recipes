@@ -1,36 +1,5 @@
 package uk.co.recipes;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import javax.inject.Named;
-import javax.inject.Singleton;
-
-import net.myrrix.client.ClientRecommender;
-import net.myrrix.client.MyrrixClientConfiguration;
-
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.elasticsearch.ElasticSearchIllegalArgumentException;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
-import org.elasticsearch.indices.IndexMissingException;
-import org.slf4j.LoggerFactory;
-
-import uk.co.recipes.api.ICanonicalItem;
-import uk.co.recipes.events.api.IEventService;
-import uk.co.recipes.events.impl.DefaultEventService;
-import uk.co.recipes.persistence.EsUtils;
-import uk.co.recipes.persistence.JacksonFactory;
-import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
-import uk.co.recipes.service.impl.DefaultIngredientQuantityScoreBooster;
-
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,14 +9,50 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import com.google.common.io.LineProcessor;
-
 import dagger.Module;
 import dagger.Provides;
+import net.myrrix.client.ClientRecommender;
+import net.myrrix.client.MyrrixClientConfiguration;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.cfg4j.provider.ConfigurationProvider;
+import org.cfg4j.provider.ConfigurationProviderBuilder;
+import org.cfg4j.source.ConfigurationSource;
+import org.cfg4j.source.files.FilesConfigurationSource;
+import org.elasticsearch.ElasticSearchIllegalArgumentException;
+import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.indices.IndexMissingException;
+import org.slf4j.LoggerFactory;
+import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.events.api.IEventService;
+import uk.co.recipes.events.impl.DefaultEventService;
+import uk.co.recipes.persistence.EsUtils;
+import uk.co.recipes.persistence.JacksonFactory;
+import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
+import uk.co.recipes.service.impl.DefaultIngredientQuantityScoreBooster;
+
+import javax.inject.Named;
+import javax.inject.Singleton;
+import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.nio.charset.Charset;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Module
 public class DaggerModule {
 
-	@Provides
+//    @Inject
+//    @Named("elasticSearchItemsUrl") String elasticSearchItemsUrl;
+
+    @Provides
 	@Singleton
 	HttpClient provideHttpClient() {
 		return HttpClientBuilder.create().build();
@@ -61,19 +66,34 @@ public class DaggerModule {
 		return inst;
 	}
 
+    @Provides
+    @Singleton
+    public ConfigurationSource fileBasedConfig() {
+        return new FilesConfigurationSource(() -> Paths.get("recipes_config.yml"));
+    }
+
+    @Provides
+    @Singleton
+    public ConfigurationProvider configurationProvider(final ConfigurationSource source) {
+        return new ConfigurationProviderBuilder().withConfigurationSource(source).build();
+    }
+
 	@Provides
 	@Singleton
-	Client provideEsClient() {
-		final Client c = new TransportClient().addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
-
+	Client provideEsClient(final ConfigurationProvider config)  {
         try {
-            final String homeDir = System.getProperty("user.home");
-            final String settingsStr = Files.toString( new File( homeDir + "/Development/java/recipe_explorer/src/main/resources/index.yaml"), Charset.forName("utf-8"));
+            final Client c = new TransportClient().addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
+
+            final String settingsStr = Files.toString( config.getProperty("elasticsearch.settingsPath", File.class), Charset.forName("utf-8"));
+
+//            if (!c.admin().indices().exists( new IndicesExistsRequest("recipe") ).actionGet().isExists()) {
+//                c.admin().indices().prepareCreate("recipe").setSettings(settingsStr).execute().actionGet();
+//            }
 
             try {
                 c.admin().indices().prepareUpdateSettings("recipe").setSettings(settingsStr).execute().actionGet();
             }
-            catch (ElasticSearchIllegalArgumentException e) {
+            catch (ElasticSearchIllegalArgumentException /* Was ElasticSearchIllegalArgumentException */ e) {
                 c.admin().indices().prepareClose("recipe").execute().actionGet();
                 c.admin().indices().prepareUpdateSettings("recipe").setSettings(settingsStr).execute().actionGet();
             }
@@ -85,26 +105,26 @@ public class DaggerModule {
                 	c.admin().indices().prepareCreate("recipe").setSettings(settingsStr).execute().actionGet();
                 }
 
-                EsUtils.addPartialMatchMappings(c);
+                EsUtils.addPartialMatchMappings(c, config);
             }
+
+            return c;
         }
         catch (IOException e) {
-           Throwables.propagate(e);
+           throw new RuntimeException(e);
         }
-
-		return c;
 	}
 
 	@Provides
 	@Named("elasticSearchItemsUrl")
-	String provideEsItemsUrl() {
-		return "http://localhost:9200/recipe/items";
+	String provideEsItemsUrl(final ConfigurationProvider config) {
+		return config.getProperty("elasticSearchItemsUrl", String.class);
 	}
 
 	@Provides
 	@Named("elasticSearchUsersUrl")
-	String provideEsUsersUrl() {
-		return "http://localhost:9200/recipe/users";
+	String provideEsUsersUrl(final ConfigurationProvider config) {
+		return config.getProperty("elasticSearchUsersUrl", String.class);
 	}
 
     @Provides
@@ -158,9 +178,9 @@ public class DaggerModule {
     @Provides
     @Singleton
     @Named("prefixAdjustments")
-    List<String> providePrefixAdjustments() {
+    List<String> providePrefixAdjustments(final ConfigurationProvider config) {
         try {
-            return commentedFileToStrings( System.getProperty("user.home") + "/Development/java/recipe_explorer/src/main/resources/prefixAdjustments.txt");
+            return commentedFileToStrings( config.getProperty("prefixAdjustmentsPath", File.class) );
         } catch (IOException e) {
             throw Throwables.propagate(e);
         }
@@ -169,16 +189,16 @@ public class DaggerModule {
     @Provides
     @Singleton
     @Named("suffixAdjustments")
-    List<String> provideSuffixAdjustments() {
+    List<String> provideSuffixAdjustments(final ConfigurationProvider config) {
         try {
-            return commentedFileToStrings( System.getProperty("user.home") + "/Development/java/recipe_explorer/src/main/resources/suffixAdjustments.txt");
+            return commentedFileToStrings( config.getProperty("suffixAdjustmentsPath", File.class) );
         } catch (IOException e) {
             throw Throwables.propagate(e);
         }
     }
 
-    private List<String> commentedFileToStrings( final String inPath) throws IOException {
-        return Files.readLines( new File(inPath), Charset.forName("utf-8"), new LineProcessor<List<String>>() {
+    private List<String> commentedFileToStrings( final File inFile) throws IOException {
+        return Files.readLines( inFile, Charset.forName("utf-8"), new LineProcessor<List<String>>() {
         	final List<String> result = Lists.newArrayList();
 
         	@Override
@@ -199,9 +219,9 @@ public class DaggerModule {
 	@Provides
 	@Singleton
     @Named("cuisineColours")
-	Map<String,String> provideCuisineColours( ObjectMapper mapper) {
+	Map<String,String> provideCuisineColours(final ObjectMapper mapper, final ConfigurationProvider config) {
 		try {
-			return mapper.readValue( new File( System.getProperty("user.home") + "/Development/java/recipe_explorer/src/test/resources/cuisineColours.json"), mapper.getTypeFactory().constructMapType( HashMap.class, String.class, String.class));
+			return mapper.readValue( config.getProperty("cuisineColoursPath", File.class), mapper.getTypeFactory().constructMapType( HashMap.class, String.class, String.class));
 		} catch (IOException e) {
 			throw Throwables.propagate(e);
 		}

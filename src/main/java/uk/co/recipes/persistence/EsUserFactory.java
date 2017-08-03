@@ -3,8 +3,7 @@
  */
 package uk.co.recipes.persistence;
 
-import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
-import static org.elasticsearch.index.query.QueryBuilders.fieldQuery;
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -71,7 +70,7 @@ public class EsUserFactory implements IUserPersistence {
         return esUtils.findOneByIdAndType( usersIndexUrl, inId, IUser.class, User.class);
     }
 
-	public String toId( final String inName) throws IOException {
+	public String toId( final String inName) {
 		return inName.toLowerCase().replace( ' ', '_');
 	}
 
@@ -106,19 +105,19 @@ public class EsUserFactory implements IUserPersistence {
 	}
 
     @Override
-    public void delete( final IUser obj) throws IOException {
+    public void delete( final IUser obj) {
         throw new RuntimeException("unimpl");
     }
 
     @Override
-    public void deleteNow( final IUser obj) throws IOException {
+    public void deleteNow( final IUser obj) {
         throw new RuntimeException("unimpl");
     }
 
     @Override
 	public void deleteAll() throws IOException {
 		try {
-			esClient.admin().indices().prepareDeleteMapping().setIndices("recipe").setType("users").execute().actionGet();
+			esUtils.deleteAllByType("recipe", "users");
 		}
 		catch (TypeMissingException e) {
 			// Ignore
@@ -141,12 +140,12 @@ public class EsUserFactory implements IUserPersistence {
     }
 
     @Override
-    public String toStringId( final IUser obj) throws IOException {
+    public String toStringId( final IUser obj) {
         return toId( obj.getUserName() );
     }
 
     @Override
-    public long countAll() throws IOException {
+    public long countAll() {
         return esUtils.countAll("users");
     }
 
@@ -157,7 +156,7 @@ public class EsUserFactory implements IUserPersistence {
 	@Override
 	public Optional<IUser> findWithAuth( final IUserAuth inAuth) throws IOException {
         try {
-			final SearchHit[] hits = esClient.prepareSearch("recipe").setTypes("users").setQuery( boolQuery().must( fieldQuery( "authId", inAuth.getAuthId() )).must( fieldQuery( "authProvider", inAuth.getAuthProvider()) ) ).setSize(2).execute().get().getHits().hits();
+			final SearchHit[] hits = esClient.prepareSearch("recipe").setTypes("users").setQuery( boolQuery().must( termQuery( "authId", inAuth.getAuthId() )).must( termQuery( "authProvider", inAuth.getAuthProvider()) ) ).setSize(2).execute().get().getHits().getHits();
 			if ( hits.length > 1) {
 				throw new RuntimeException("Too many matches for " + inAuth);
 			}
@@ -166,25 +165,16 @@ public class EsUserFactory implements IUserPersistence {
 				return Optional.absent();
 			}
 
-            return Optional.of((IUser) mapper.readValue( hits[0].getSourceRef().toBytes(), User.class) );
+            return Optional.of(mapper.readValue( esUtils.toBytes(hits[0].getSourceRef()), User.class));
 		}
-        catch (InterruptedException e) {
+        catch (InterruptedException | ExecutionException e) {
         	throw Throwables.propagate(e);
-		}
-        catch (ExecutionException e) {
-			throw Throwables.propagate(e);
 		}
 	}
 
 	// FIXME, perhaps
 	@Override
 	public IUser adminUser() {
-		return getOrCreate( "Admin", new Supplier<IUser>() {
-
-			@Override
-			public IUser get() {
-				return new User( "admin", "Admin");
-			}
-		} );
+		return getOrCreate( "Admin", () -> new User( "admin", "Admin"));
 	}
 }

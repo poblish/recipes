@@ -1,6 +1,3 @@
-/**
- * 
- */
 package uk.co.recipes.service.api;
 
 import java.io.IOException;
@@ -27,13 +24,13 @@ public interface IPersistenceAPI<T> {
     T getOrCreate( final String inCanonicalName, final Supplier<T> inCreator, final boolean inMatchAliases);
     List<T> getAll( final List<Long> inIds) throws IOException;
 
-    String toStringId( final T obj) throws IOException;
+    String toStringId( final T obj);
 
-    long countAll() throws IOException;
+    long countAll();
 
-    void delete( final T obj) throws IOException;
-    void deleteNow( final T obj) throws IOException;
+    void delete( final T obj);
+    void deleteNow( final T obj);
     void deleteAll() throws IOException;
 
-    void waitUntilRefreshed() throws InterruptedException;
+    void waitUntilRefreshed();
 }

@@ -14,7 +14,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import org.apache.http.client.ClientProtocolException;
 import org.elasticsearch.client.Client;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -33,11 +32,8 @@ import uk.co.recipes.service.impl.ExplorerFilterDefs;
 import uk.co.recipes.tags.MeatAndFishTags;
 import uk.co.recipes.test.TestDataUtils;
 
-import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Ordering;
-
-import dagger.Module;
 
 /**
  * TODO
@@ -58,7 +54,7 @@ public class RecipeSearchTest {
 	@Inject EsExplorerFilters explorerFilters;
 
 	@BeforeClass
-	public void cleanIndices() throws ClientProtocolException, IOException {
+	public void cleanIndices() throws IOException {
 		DaggerRecipeSearchTest_TestComponent.create().inject(this);
 
         itemFactory.deleteAll();
@@ -96,11 +92,7 @@ public class RecipeSearchTest {
 	public void testSearchByTagWithSorting() throws IOException {
 		final List<ICanonicalItem> matches = searchApi.findItemsByTag( MeatAndFishTags.MEAT );
 
-		final List<String> returnedNames = FluentIterable.from(matches).transform( new Function<ICanonicalItem, String>() {
-			public String apply( ICanonicalItem input) {
-				return input.getCanonicalName();
-			}
-		}).toList();
+		final List<String> returnedNames = FluentIterable.from(matches).transform(ICanonicalItem::getCanonicalName).toList();
 
 		assertThat( returnedNames, is( Ordering.from( String.CASE_INSENSITIVE_ORDER ).sortedCopy(returnedNames) ));
 	}

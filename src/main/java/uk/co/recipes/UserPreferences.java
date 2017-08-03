@@ -16,7 +16,6 @@ import uk.co.recipes.tags.TagUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.google.common.base.Objects;
@@ -233,7 +232,7 @@ public class UserPreferences implements IUserPreferences {
     	return new JsonDeserializer<IExplorerFilterItem<?>>() {
 
 			@Override
-			public IExplorerFilterItem<?> deserialize( JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+			public IExplorerFilterItem<?> deserialize( JsonParser jp, DeserializationContext ctxt) throws IOException {
                 jp.nextValue();  // Ignore field name!
                 final String stringRepr = jp.getText();
                 jp.nextValue();  // Must skip to next now, to avoid confusing Parser!

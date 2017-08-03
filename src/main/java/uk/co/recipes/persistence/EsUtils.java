@@ -1,6 +1,3 @@
-/**
- * 
- */
 package uk.co.recipes.persistence;
 
 import java.io.File;
@@ -13,13 +10,17 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.elasticsearch.ElasticSearchException;
+import org.cfg4j.provider.ConfigurationProvider;
+import org.elasticsearch.action.ActionResponse;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
-import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse.AnalyzeToken;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsRequestBuilder;
 import org.elasticsearch.action.get.MultiGetItemResponse;
 import org.elasticsearch.action.get.MultiGetResponse;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.common.bytes.BytesReference;
+import org.elasticsearch.index.query.BaseQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,14 +68,14 @@ public class EsUtils {
 	public <T> Optional<T> findOneByIdAndType( final String inBaseUrl, final long inId, final Class<T> inIfClazz, final Class<? extends T> inImplClazz) throws IOException {
 		final Iterator<JsonNode> nodeItr = mapper.readTree( new URL( inBaseUrl + "/_search?q=id:" + inId + "&size=1") ).path("hits").path("hits").iterator();
 		if (nodeItr.hasNext()) {
-			return Optional.fromNullable((T) mapper.readValue( parseSource( nodeItr.next() ), inImplClazz) );
+			return Optional.fromNullable(mapper.readValue( parseSource( nodeItr.next() ), inImplClazz));
 		}
 
 		return Optional.absent();
 	}
 
-    public <T> long countAll( final String inType) throws IOException {
-        return esClient.prepareCount("recipe").setTypes(inType).execute().actionGet().getCount();
+    public <T> long countAll( final String inType) {
+        return esClient.prepareSearch("recipe").setTypes(inType).setSize(0).execute().actionGet().getHits().totalHits();
     }
 
 	public void waitUntilTypesRefreshed( final String... inTypes) {
@@ -109,7 +110,7 @@ public class EsUtils {
 		final List<IRecipe> results = Lists.newArrayList();
 
 		for ( final SearchHit eachHit : inHits) {
-			results.add( mapper.readValue( eachHit.getSourceRef().toBytes(), Recipe.class) );
+			results.add( mapper.readValue( toBytes(eachHit.getSourceRef()), Recipe.class) );
 		}
 
 		return results;
@@ -151,20 +152,32 @@ public class EsUtils {
 		return results;
 	}
 
-	public static void addPartialMatchMappings( final Client inClient) throws ElasticSearchException, IOException {
-		// FIXME - absolute paths!
-	    final String homeDir = System.getProperty("user.home");
-		inClient.admin().indices().preparePutMapping("recipe").setType("items").setSource( Files.toString( new File( homeDir + "/Development/java/recipe_explorer/src/main/resources/esItemsMappingsAutocomplete.json"), Charset.forName("utf-8")) ).execute().actionGet();
-		inClient.admin().indices().preparePutMapping("recipe").setType("recipes").setSource( Files.toString( new File( homeDir + "/Development/java/recipe_explorer/src/main/resources/esRecipesMappingsAutocomplete.json"), Charset.forName("utf-8")) ).execute().actionGet();
+	public static void addPartialMatchMappings(final Client inClient, final ConfigurationProvider config) throws IOException {
+		inClient.admin().indices().preparePutMapping("recipe").setType("items").setSource( Files.toString( config.getProperty("elasticsearch.mappings.items.path", File.class), Charset.forName("utf-8")) ).execute().actionGet();
+		inClient.admin().indices().preparePutMapping("recipe").setType("recipes").setSource( Files.toString( config.getProperty("elasticsearch.mappings.recipes.path", File.class), Charset.forName("utf-8")) ).execute().actionGet();
 	}
 
 	public static Function<AnalyzeResponse.AnalyzeToken,String> getAnalyzeTokenToStringFunc() {
-		return new Function<AnalyzeResponse.AnalyzeToken,String>() {
+		return AnalyzeResponse.AnalyzeToken::getTerm;
+	}
 
-            @Override
-            public String apply( final AnalyzeToken input) {
-                return input.getTerm();
-            }
-        };
+	public static byte[] toBytes(final BytesReference ref) {
+		return ref.toBytes();
+		// return BytesReference.toBytes(ref);
+	}
+
+	public QueryStringQueryBuilder queryString(final String q) {
+		return org.elasticsearch.index.query.QueryBuilders.queryString(q);
+		// return org.elasticsearch.index.query.QueryBuilders.queryStringQuery(q);
+	}
+
+	public ActionResponse deleteAllByType(final String index, final String type) {
+		return esClient.admin().indices().prepareDeleteMapping().setIndices(index).setType(type).execute().actionGet();
+
+		// https://www.elastic.co/guide/en/elasticsearch/client/java-api/current/java-docs-delete-by-query.html
+//		return DeleteByQueryAction.INSTANCE.newRequestBuilder(esClient)
+//				.filter(typeQuery(type))
+//				.source(index)
+//				.get();
 	}
 }

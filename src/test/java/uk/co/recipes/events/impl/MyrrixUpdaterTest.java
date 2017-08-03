@@ -10,8 +10,6 @@ import dagger.Module;
 import dagger.Provides;
 import net.myrrix.client.ClientRecommender;
 import org.apache.mahout.cf.taste.common.TasteException;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -38,7 +36,6 @@ import java.util.Map;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 import static uk.co.recipes.api.Units.GRAMMES;
 
 
@@ -140,13 +137,11 @@ public class MyrrixUpdaterTest {
             try {
                 final ClientRecommender mr = mock( ClientRecommender.class );
 
-                doAnswer( new Answer<Object>() {
-                    public Object answer(InvocationOnMock invocation) {
-                        Object[] args = invocation.getArguments();
-                        System.out.println(Arrays.toString(args));
-                        COUNT++;
-                        return "called with arguments: " + args;
-                    }
+                doAnswer(invocation -> {
+                    Object[] args = invocation.getArguments();
+                    System.out.println(Arrays.toString(args));
+                    COUNT++;
+                    return "called with arguments: " + Arrays.toString(args);
                 }).when(mr).setItemTag( anyString(), anyLong(), anyFloat());
 
                 return mr;

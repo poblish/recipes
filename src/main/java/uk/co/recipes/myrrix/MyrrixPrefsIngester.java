@@ -1,6 +1,3 @@
-/**
- * 
- */
 package uk.co.recipes.myrrix;
 
 import java.io.File;
@@ -24,8 +21,6 @@ import org.yaml.snakeyaml.Yaml;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.persistence.EsItemFactory;
 
-import com.google.common.base.Objects;
-import com.google.common.base.Throwables;
 import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 
@@ -48,25 +43,22 @@ public class MyrrixPrefsIngester {
     public String parseRecommendations(final File inFile) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 
-		visitRecommendationsFile( inFile, new UserPrefsVisitor() {
+		visitRecommendationsFile( inFile, (userId, eachUserPref) -> {
+            if (eachUserPref.containsKey("block") ||
+                ( /* All done, don't create '1' rating */ eachUserPref.containsKey("fave") && !eachUserPref.containsKey("score"))) {
+                return;
+            }
 
-            @Override
-            public void visit( int userId, Map<String, Object> eachUserPref) throws IOException {
-                if ( eachUserPref.containsKey("block") ||
-                    ( /* All done, don't create '1' rating */ eachUserPref.containsKey("fave") && !eachUserPref.containsKey("score"))) {
-                    return;
-                }
+            ////////////////////////////////  Deal with ratings/scores
 
-                ////////////////////////////////  Deal with ratings/scores
+            if (sb.length() > 0) {
+                sb.append('\r');
+            }
 
-                if ( sb.length() > 0) {
-                    sb.append('\r');
-                }
-
-                final ICanonicalItem item = itemFactory.get((String) eachUserPref.get("i") ).get();
-                sb.append(userId).append(',').append( item.getId() ).append(',').append( MoreObjects.firstNonNull( eachUserPref.get("score"), "1"));
-            }}
-		);
+            final ICanonicalItem item = itemFactory.get((String) eachUserPref.get("i") ).get();
+            sb.append(userId).append(',').append( item.getId() ).append(',').append( MoreObjects.firstNonNull( eachUserPref.get("score"), "1"));
+        }
+        );
 
 		System.out.println("Parsed: " + sb.toString().replace( '\r', ' ') + "  (" + sb.length() + " chars)");
 
@@ -76,34 +68,28 @@ public class MyrrixPrefsIngester {
     public Collection<ICanonicalItem> parseFaves( final File inFile) throws IOException {
     	final Set<ICanonicalItem> faves = Sets.newLinkedHashSet();
 
-        visitRecommendationsFile( inFile, new UserPrefsVisitor() {
+        visitRecommendationsFile( inFile, (userId, eachUserPref) -> {
+            if (eachUserPref.containsKey("block")) {
+                return;
+            }
 
-            @Override
-            public void visit( int userId, Map<String, Object> eachUserPref) throws IOException {
-                if (eachUserPref.containsKey("block")) {
-                    return;
-                }
-
-                if (eachUserPref.containsKey("fave")) {
-                    final ICanonicalItem item = itemFactory.get((String) eachUserPref.get("i") ).get();
-                    faves.add(item);
-                }
-            }}
+            if (eachUserPref.containsKey("fave")) {
+                final ICanonicalItem item = itemFactory.get((String) eachUserPref.get("i") ).get();
+                faves.add(item);
+            }
+        }
         );
 
         return faves;
     }
 
     public String parseBlocks( final File inFile) throws IOException {
-        visitRecommendationsFile( inFile, new UserPrefsVisitor() {
-
-            @Override
-            public void visit( int userId, Map<String, Object> eachUserPref) throws IOException {
-                if (eachUserPref.containsKey("block")) {
-                    final ICanonicalItem item = itemFactory.get((String) eachUserPref.get("i") ).get();
-                    System.out.println("BLOCK: " + item);
-                }
-            }}
+        visitRecommendationsFile( inFile, (userId, eachUserPref) -> {
+            if (eachUserPref.containsKey("block")) {
+                final ICanonicalItem item = itemFactory.get((String) eachUserPref.get("i") ).get();
+                System.out.println("BLOCK: " + item);
+            }
+        }
         );
 
         return "ok";
@@ -130,7 +116,7 @@ public class MyrrixPrefsIngester {
         }
     }
 
-	public void ingestRecommendations( final String inData) throws IOException {
+	public void ingestRecommendations( final String inData) {
 		try {
 			myrrix.ingest( new StringReader(inData) );
 			myrrix.refresh();
@@ -140,7 +126,7 @@ public class MyrrixPrefsIngester {
 		}
 	}
 
-	private static interface UserPrefsVisitor {
+	private interface UserPrefsVisitor {
 	    void visit( final int userId, final Map<String,Object> eachUserPref) throws IOException;
 	}
 }

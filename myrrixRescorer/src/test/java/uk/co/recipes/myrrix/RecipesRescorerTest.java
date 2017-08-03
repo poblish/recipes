@@ -23,16 +23,18 @@ public class RecipesRescorerTest {
 
     private final static MyrrixRecommender REC = mock( MyrrixRecommender.class );
 
+    private final RecipesRescorer recipe_rescorer = new RecipesRescorer();
+
     @Test
     public void testRecommendRecipeFilteringNoIncludes() {
-        final IDRescorer rescorer = new RecipesRescorer().getRecommendRescorer( new long[]{1L}, REC, new String[]{"RECIPE"});
+        final IDRescorer rescorer = recipe_rescorer.getRecommendRescorer( new long[]{1L}, REC, new String[]{"RECIPE"});
         assertThat( rescorer.isFiltered(100L), is(true));
         assertThat( rescorer.isFiltered(4611686018427387909L), is(false));
     }
 
     @Test
     public void testRecommendRecipeFilteringWithIncludes() {
-        final IDRescorer rescorer = new RecipesRescorer().getRecommendRescorer( new long[]{1L}, REC, new String[]{"RECIPE", "4611686018427387904,4611686018427387905,4611686018427387906"});
+        final IDRescorer rescorer = recipe_rescorer.getRecommendRescorer( new long[]{1L}, REC, new String[]{"RECIPE", "4611686018427387904,4611686018427387905,4611686018427387906"});
         assertThat( rescorer.isFiltered(100L), is(true));
         assertThat( rescorer.isFiltered(4611686018427387904L), is(false));  // An include
         assertThat( rescorer.isFiltered(4611686018427387909L), is(true));  // Good recipe, but not an include
@@ -45,7 +47,7 @@ public class RecipesRescorerTest {
     public void testRecommendItemFiltering() {
         final MyrrixRecommender REC = mock( MyrrixRecommender.class );
 
-        final IDRescorer rescorer = new RecipesRescorer().getRecommendRescorer( new long[]{1L}, REC, new String[]{"ITEM", "1,9000,4611686018427387906"});
+        final IDRescorer rescorer = recipe_rescorer.getRecommendRescorer( new long[]{1L}, REC, new String[]{"ITEM", "1,9000,4611686018427387906"});
         assertThat( rescorer.isFiltered(1L), is(false));
         assertThat( rescorer.isFiltered(9000L), is(false));
         assertThat( rescorer.isFiltered(9001L), is(true));
@@ -55,7 +57,7 @@ public class RecipesRescorerTest {
 
     @Test
     public void testSimilarityRecipeFiltering() {
-        final Rescorer<LongPair> rescorer = new RecipesRescorer().getMostSimilarItemsRescorer( REC, new String[]{"RECIPE", "4611686018427387904,4611686018427387905"});
+        final Rescorer<LongPair> rescorer = recipe_rescorer.getMostSimilarItemsRescorer( REC, new String[]{"RECIPE", "4611686018427387904,4611686018427387905"});
         assertThat( rescorer.isFiltered( new LongPair(100L,100L) ), is(true));  // Not Recipe
         assertThat( rescorer.isFiltered( new LongPair(4611686018427387904L,14L)), is(true));  // One is not a Recipe
         assertThat( rescorer.isFiltered( new LongPair(4611686018427387905L,4611686018427387905L)), is(false));
@@ -67,7 +69,7 @@ public class RecipesRescorerTest {
 
     @Test
     public void testSimilarityRecipeFilteringNulls1() {
-        final Rescorer<LongPair> rescorer = new RecipesRescorer().getMostSimilarItemsRescorer( REC, new String[]{"RECIPE", null, null});
+        final Rescorer<LongPair> rescorer = recipe_rescorer.getMostSimilarItemsRescorer( REC, new String[]{"RECIPE", null, null});
         assertThat( rescorer.isFiltered( new LongPair(4611686018427387907L,4611686018427387907L)), is(false));
         assertThat( rescorer.isFiltered( new LongPair(14L,4611686018427387906L)), is(true));  // Invalid combination
         assertThat( rescorer.isFiltered( new LongPair(4611686018427387906L,14L)), is(true));  // Invalid combination
@@ -75,13 +77,13 @@ public class RecipesRescorerTest {
 
     @Test
     public void testSimilarityRecipeFilteringNulls2() {
-        final Rescorer<LongPair> rescorer = new RecipesRescorer().getMostSimilarItemsRescorer( REC, (String[]) null);
+        final Rescorer<LongPair> rescorer = recipe_rescorer.getMostSimilarItemsRescorer( REC, (String[]) null);
         assertThat( rescorer.isFiltered( new LongPair(4611686018427387906L,4611686018427387906L)), is(false));
     }
 
     @Test
     public void testSimilarityItemFiltering() {
-        final Rescorer<LongPair> rescorer = new RecipesRescorer().getMostSimilarItemsRescorer( REC, new String[]{"ITEM", "1,9000,4611686018427387906"});
+        final Rescorer<LongPair> rescorer = recipe_rescorer.getMostSimilarItemsRescorer( REC, new String[]{"ITEM", "1,9000,4611686018427387906"});
         assertThat( rescorer.isFiltered( new LongPair(100L,100L) ), is(true));
         assertThat( rescorer.isFiltered( new LongPair(3611686018427387904L,3611686018427387904L)), is(true));
         assertThat( rescorer.isFiltered( new LongPair(1L,1L)), is(false));
@@ -92,7 +94,7 @@ public class RecipesRescorerTest {
 
     @Test
     public void testSimilarityItemFilteringInclExcl() {
-        final Rescorer<LongPair> rescorer = new RecipesRescorer().getMostSimilarItemsRescorer( REC, new String[]{"ITEM", "", "3,4"});
+        final Rescorer<LongPair> rescorer = recipe_rescorer.getMostSimilarItemsRescorer( REC, new String[]{"ITEM", "", "3,4"});
         assertThat( rescorer.isFiltered( new LongPair(1L,1L)), is(false));
         assertThat( rescorer.isFiltered( new LongPair(9000L,9000L)), is(false));
         assertThat( rescorer.isFiltered( new LongPair(2L,2L)), is(false));
@@ -105,18 +107,18 @@ public class RecipesRescorerTest {
 
     @Test
     public void testSimilarityItemFilteringNulls() {
-        final Rescorer<LongPair> rescorer = new RecipesRescorer().getMostSimilarItemsRescorer( REC, new String[]{"ITEM", null, null});
+        final Rescorer<LongPair> rescorer = recipe_rescorer.getMostSimilarItemsRescorer( REC, new String[]{"ITEM", null, null});
         assertThat( rescorer.isFiltered( new LongPair(1L,1L)), is(false));
     }
 
     @Test
     public void testSimilarityAll1() {
-    	doTestSimilarityAll( new RecipesRescorer().getMostSimilarItemsRescorer( REC, new String[]{}));
+    	doTestSimilarityAll( recipe_rescorer.getMostSimilarItemsRescorer( REC, new String[]{}));
     }
 
     @Test
     public void testSimilarityAll2() {
-    	doTestSimilarityAll( new RecipesRescorer().getMostSimilarItemsRescorer( REC, (String[]) null));
+    	doTestSimilarityAll( recipe_rescorer.getMostSimilarItemsRescorer( REC, (String[]) null));
     }
 
     private void doTestSimilarityAll( Rescorer<LongPair> rescorer) {
@@ -127,12 +129,12 @@ public class RecipesRescorerTest {
 
     @Test
     public void testRecommendationsAll1() {
-    	doTestRecommendationsAll( new RecipesRescorer().getRecommendRescorer( new long[]{1L}, REC, new String[]{}));
+    	doTestRecommendationsAll( recipe_rescorer.getRecommendRescorer( new long[]{1L}, REC, new String[]{}));
     }
 
     @Test
     public void testRecommendationsAll2() {
-    	doTestRecommendationsAll( new RecipesRescorer().getRecommendRescorer( new long[]{1L}, REC, (String[]) null));
+    	doTestRecommendationsAll( recipe_rescorer.getRecommendRescorer( new long[]{1L}, REC, (String[]) null));
     }
 
 	private void doTestRecommendationsAll( IDRescorer rescorer) {

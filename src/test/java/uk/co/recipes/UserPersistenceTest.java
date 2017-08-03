@@ -30,7 +30,6 @@ import uk.co.recipes.ratings.UserRatings;
 import uk.co.recipes.tags.CommonTags;
 import uk.co.recipes.tags.MeatAndFishTags;
 import uk.co.recipes.test.TestDataUtils;
-import dagger.Module;
 
 
 /**

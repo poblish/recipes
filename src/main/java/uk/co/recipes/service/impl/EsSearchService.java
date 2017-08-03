@@ -1,6 +1,3 @@
-/**
- * 
- */
 package uk.co.recipes.service.impl;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
@@ -13,13 +10,13 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.codahale.metrics.Timer.Context;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Throwables;
 import org.elasticsearch.action.search.SearchResponse;
@@ -39,13 +36,10 @@ import uk.co.recipes.service.api.ISearchResult;
 import uk.co.recipes.tags.TagUtils;
 
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Function;
-import com.google.common.base.Objects;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -72,18 +66,13 @@ public class EsSearchService implements ISearchAPI {
 		// For Dagger
 	}
 
-	/* (non-Javadoc)
-         * @see uk.co.recipes.service.api.ISearchAPI#findItemsByName(java.lang.String)
-         */
 	@Override
 	public List<ICanonicalItem> findItemsByName( String inName) throws IOException {
 	    return findItemsByName( inName, false);
 	}
 
 	private List<ICanonicalItem> findItemsByName( String inName, boolean inSortByName) throws IOException {
-	    final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_SEARCHES).time();
-
-		try
+		try (Context ctxt = metrics.timer(TIMER_ITEMS_SEARCHES).time())
 		{
 /*			FIXME No, I don't know why this doesn't work...
 
@@ -105,24 +94,13 @@ public class EsSearchService implements ISearchAPI {
 
 			// Yuk FIXME by letting ES do this right!
 			if (inSortByName) {
-				Collections.sort( results, new Comparator<ICanonicalItem>() {
-	
-					@Override
-					public int compare( ICanonicalItem o1, ICanonicalItem o2) {
-						return o1.getCanonicalName().compareToIgnoreCase( o2.getCanonicalName() );
-					}} );
+				results.sort((o1, o2) -> o1.getCanonicalName().compareToIgnoreCase(o2.getCanonicalName()));
 			}
 
 			return results;
 		}
-		catch (MalformedURLException e) {
+		catch (MalformedURLException | JsonProcessingException e) {
 			throw Throwables.propagate(e);
-		}
-		catch (JsonProcessingException e) {
-			throw Throwables.propagate(e);
-		}
-        finally {
-            timerCtxt.stop();
         }
 	}
 
@@ -136,28 +114,20 @@ public class EsSearchService implements ISearchAPI {
 
 	@Override
 	public List<IRecipe> findRecipesByName( final String inName, final int inSize) throws IOException {
-	    final Timer.Context searchTimerCtxt = metrics.timer(TIMER_RECIPES_SEARCHES_SEARCH).time();
 	    final SearchResponse resp;
 
-		try {
+		try (Context searchTimer = metrics.timer(TIMER_RECIPES_SEARCHES_SEARCH).time()) {
             resp = esClient.prepareSearch("recipe").setTypes("recipes").setSize(inSize)
-            				.setQuery( queryString(inName)
-            					.field("recipes.stages.ingredients.item.canonicalName")
-            					.field("recipes.stages.ingredients.item.constituents.canonicalName", 0.5f)
-            					.field("title", 1.1f) )
+            				.setQuery( esUtils.queryString(inName)
+								.field("recipes.stages.ingredients.item.canonicalName")
+								.field("recipes.stages.ingredients.item.constituents.canonicalName", 0.5f)
+								.field("title", 1.1f) )
             				.execute().actionGet();
 		}
-        finally {
-        	searchTimerCtxt.stop();
-        }
 
-	    final Timer.Context deserTimerCtxt = metrics.timer(TIMER_RECIPES_SEARCHES_DESER).time();
-		try {
-			return esUtils.deserializeRecipeHits( resp.getHits().hits() );
+		try (Context deserTimer = metrics.timer(TIMER_RECIPES_SEARCHES_DESER).time()) {
+			return esUtils.deserializeRecipeHits( resp.getHits().getHits() );
 		}
-        finally {
-        	deserTimerCtxt.stop();
-        }
 	}
 
     @Override
@@ -168,7 +138,7 @@ public class EsSearchService implements ISearchAPI {
     // FIXME Shameless copy/paste job
     @Override
     public List<ICanonicalItem> findItemsByTag( final ITag inTag, final String inValue) throws IOException {
-	    final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_SEARCHES).time();
+	    final Context timerCtxt = metrics.timer(TIMER_ITEMS_SEARCHES).time();
 
 		try
 		{
@@ -182,36 +152,27 @@ public class EsSearchService implements ISearchAPI {
 
 			// Yuk FIXME by letting ES do this right!
 			if (true) {
-				Collections.sort( results, new Comparator<ICanonicalItem>() {
-	
-					@Override
-					public int compare( ICanonicalItem o1, ICanonicalItem o2) {
-						return o1.getCanonicalName().compareToIgnoreCase( o2.getCanonicalName() );
-					}} );
+				results.sort((o1, o2) -> o1.getCanonicalName().compareToIgnoreCase(o2.getCanonicalName()));
 			}
 
 			return results;
 		}
-		catch (MalformedURLException e) {
+		catch (MalformedURLException | JsonProcessingException e) {
 			throw new RuntimeException(e);
-		}
-		catch (JsonProcessingException e) {
-			throw new RuntimeException(e);
-		}
-        finally {
+		} finally {
             timerCtxt.stop();
         }
     }
 
     @Override
-    public long[] findRecipeIdsByTag( final ITag inTag) throws IOException {
+    public long[] findRecipeIdsByTag( final ITag inTag) {
         return findRecipeIdsByTag( inTag, "true");
     }
 
     // FIXME Shameless copy/paste job
     @Override
-    public long[] findRecipeIdsByTag( final ITag inTag, final String inValue) throws IOException {
-        final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_IDS_SEARCHES).time();
+    public long[] findRecipeIdsByTag( final ITag inTag, final String inValue) {
+        final Context timerCtxt = metrics.timer(TIMER_RECIPES_IDS_SEARCHES).time();
 
         try
         {
@@ -235,25 +196,25 @@ public class EsSearchService implements ISearchAPI {
 	 * @see uk.co.recipes.service.api.ISearchAPI#countItemsByName(java.lang.String)
 	 */
 	@Override
-	public int countItemsByName( String inName) throws IOException {
-		return (int) esClient.prepareCount("recipe").setTypes("items").setQuery( queryString(inName) ).execute().actionGet().getCount();
+	public int countItemsByName( String inName) {
+		return (int) esClient.prepareSearch("recipe").setTypes("items").setQuery( esUtils.queryString(inName) ).setSize(0).execute().actionGet().getHits().totalHits();
 	}
 
 	/* (non-Javadoc)
 	 * @see uk.co.recipes.service.api.ISearchAPI#countRecipesByName(java.lang.String)
 	 */
 	@Override
-	public int countRecipesByName( String inName) throws IOException {
-		return (int) esClient.prepareCount("recipe").setTypes("recipes").setQuery( queryString(inName) ).execute().actionGet().getCount();
+	public int countRecipesByName( String inName) {
+		return (int) esClient.prepareSearch("recipe").setTypes("recipes").setQuery( esUtils.queryString(inName) ).setSize(0).execute().actionGet().getHits().totalHits();
 	}
 
     @Override
-    public int countItemsByTag( final ITag inTag) throws IOException {
+    public int countItemsByTag( final ITag inTag) {
         return countItemsByName( tagString(inTag) );
     }
 
     @Override
-    public int countRecipesByTag( final ITag inTag) throws IOException {
+    public int countRecipesByTag( final ITag inTag) {
         return countRecipesByName( tagString(inTag) );
     }
 
@@ -262,13 +223,13 @@ public class EsSearchService implements ISearchAPI {
     }
 
 	@Override
-	public List<ITag> findTagsByName( String inName) throws IOException {
+	public List<ITag> findTagsByName( String inName) {
 		// A bit of a cheat...
 		return TagUtils.findTagsByName(inName);
 	}
 
 	@Override
-	public int countTagsByName( String inName) throws IOException {
+	public int countTagsByName( String inName) {
 		return findTagsByName(inName).size();
 	}
 
@@ -291,7 +252,7 @@ public class EsSearchService implements ISearchAPI {
 	}
 
     @Override
-    public long[] findRecipeIdsByItemName( final ICanonicalItem... inItems) throws IOException {
+    public long[] findRecipeIdsByItemName( final ICanonicalItem... inItems) {
         Set<String> cNames = Sets.newHashSet();  // FIXME Factor this out somewhere
 
         for ( ICanonicalItem each : inItems) {
@@ -321,7 +282,7 @@ public class EsSearchService implements ISearchAPI {
 	}
 
     @Override
-    public long[] findRecipeIdsByItemName( String... inNames) throws IOException {
+    public long[] findRecipeIdsByItemName( String... inNames) {
         return findNRecipeIdsByItemName( 9999, inNames);
     }
 
@@ -346,17 +307,17 @@ public class EsSearchService implements ISearchAPI {
 
         final SearchResponse resp = esClient.prepareSearch("recipe").setTypes("recipes").setQuery(booleanQ).setSize(inCount).execute().actionGet();
 
-		return esUtils.deserializeRecipeHits( resp.getHits().hits() );
+		return esUtils.deserializeRecipeHits( resp.getHits().getHits() );
 	}
 
-    private long[] findNRecipeIdsByItemName( final int inCount, String... inNames) throws IOException {
+    private long[] findNRecipeIdsByItemName( final int inCount, String... inNames) {
         if (inNames.length == 0) {
             return new long[0];
         }
 
 		final BoolQueryBuilder booleanQ = getBooleanQueryForNames(inNames);
 
-        final SearchHit[] hits = esClient.prepareSearch("recipe").setTypes("recipes").setQuery(booleanQ).setNoFields().setSize(inCount).execute().actionGet().getHits().hits();
+        final SearchHit[] hits = esClient.prepareSearch("recipe").setTypes("recipes").setQuery(booleanQ).setNoFields().setSize(inCount).execute().actionGet().getHits().getHits();
 
         if ( hits.length == 0) {
             return new long[0];
@@ -373,18 +334,18 @@ public class EsSearchService implements ISearchAPI {
     }
 
 	@Override
-	public int countRecipesByItemName( String... inNames) throws IOException {
+	public int countRecipesByItemName( String... inNames) {
 		if (inNames.length == 0) {
 			return 0;
 		}
 
-	    final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_COUNT_AMONG_RECIPES).time();
+	    final Context timerCtxt = metrics.timer(TIMER_ITEMS_COUNT_AMONG_RECIPES).time();
 
 		try
 		{
 			final BoolQueryBuilder booleanQ = getBooleanQueryForNames(inNames);
 	
-	        return /* FIXME Cast */ (int) esClient.prepareCount("recipe").setTypes("recipes").setQuery(booleanQ).execute().actionGet().getCount();
+	        return (int) esClient.prepareSearch("recipe").setTypes("recipes").setQuery(booleanQ).setSize(0).execute().actionGet().getHits().totalHits();
 		}
 		finally {
 			timerCtxt.stop();
@@ -415,26 +376,24 @@ public class EsSearchService implements ISearchAPI {
     	}
 
     	// Yuk
-    	final String[] typesArr = FluentIterable.from(areasColl).transform( new Function<ESearchArea,String>() {
-    		public String apply( ESearchArea inArea) {
-    			if ( inArea == ESearchArea.ITEMS) {
-    				return "items";
-    			}
-    			else /* if ( inArea == ESearchArea.RECIPES) */ {
-    				return "recipes";
-    			}
-    		}
-    	} ).toArray( String.class );
+    	final String[] typesArr = FluentIterable.from(areasColl).transform(inArea -> {
+            if ( inArea == ESearchArea.ITEMS) {
+                return "items";
+            }
+            else /* if ( inArea == ESearchArea.RECIPES) */ {
+                return "recipes";
+            }
+        }).toArray( String.class );
 
         final SearchResponse resp = esClient.prepareSearch("recipe").setTypes(typesArr).setQuery( matchPhraseQuery( "autoCompleteTerms", inStr) ).setSize(inSize).execute().actionGet();
-        final SearchHit[] hits = resp.getHits().hits();
+        final SearchHit[] hits = resp.getHits().getHits();
 
         for ( final SearchHit eachHit : hits) {
             if ( eachHit.getType().equals("items")) {
-                results.add( new ItemSearchResult( mapper.readValue( eachHit.getSourceRef().toBytes(), CanonicalItem.class) ));
+                results.add( new ItemSearchResult( mapper.readValue( esUtils.toBytes(eachHit.getSourceRef()), CanonicalItem.class) ));
             }
             else {
-                results.add( new RecipeSearchResult( mapper.readValue( eachHit.getSourceRef().toBytes(), Recipe.class) ));
+                results.add( new RecipeSearchResult( mapper.readValue( esUtils.toBytes(eachHit.getSourceRef()), Recipe.class) ));
             }
         }
 

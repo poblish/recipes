@@ -38,6 +38,11 @@
                     "name": "net.myrrix",
                     "level": "info",
                     "additivity": "true"
+                },
+                {
+                    "name": "io.netty",
+                    "level": "warn",
+                    "additivity": "true"
                 }
             ],
             "root": {

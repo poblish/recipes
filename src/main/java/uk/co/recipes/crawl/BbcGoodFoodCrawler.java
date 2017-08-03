@@ -39,9 +39,7 @@ public class BbcGoodFoodCrawler {
 			System.out.println("Finished loading in " + (( System.currentTimeMillis() - st) / 1000d) + " msecs");
 			System.exit(0);
 		}
-		catch (IOException e) {
-			Throwables.propagate(e);
-		} catch (InterruptedException e) {
+		catch (IOException | InterruptedException e) {
 			Throwables.propagate(e);
 		}
 	}

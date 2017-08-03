@@ -8,7 +8,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+import dagger.Component;
 import net.myrrix.common.MyrrixRecommender;
 import net.myrrix.online.AbstractRescorerProvider;
 
@@ -18,8 +20,10 @@ import org.apache.mahout.common.LongPair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.co.recipes.DaggerModule;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
+import uk.co.recipes.loader.DaggerBbcGoodFoodLoader_AppComponent;
 import uk.co.recipes.service.api.IExplorerFilter;
 import uk.co.recipes.service.api.IExplorerFilterDef;
 import uk.co.recipes.service.impl.DefaultExplorerFilterDef;
@@ -34,7 +38,6 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.primitives.Longs;
 
-import dagger.ObjectGraph;
 
 /**
  * TODO
@@ -61,7 +64,9 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 	public RecipesRescorer() {
 	    System.out.println("Injecting dependencies...");
 	    long st = System.currentTimeMillis();
-        ObjectGraph.create( new RescorerModule() ).inject(this);
+
+		DaggerRecipesRescorer_AppComponent.create().inject(this);
+
         System.out.println("Injecting dependencies DONE in " + ( System.currentTimeMillis() - st) + " msecs");
 
         itemArrayType = mapper.getTypeFactory().constructCollectionType( List.class, ICanonicalItem.class);
@@ -299,5 +304,12 @@ public class RecipesRescorer extends AbstractRescorerProvider {
 		long[] excludeIds = EMPTY_ARRAY;
 		boolean mayFilterOutSelf = true; // Why would this *ever* be true?
 		boolean deadFilter = false; // Must not return anything
+	}
+
+	@Singleton
+	@Component(modules={ DaggerModule.class })
+	public interface AppComponent {
+
+		void inject(final RecipesRescorer runner);
 	}
 }

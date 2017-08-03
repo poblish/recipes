@@ -10,7 +10,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import org.apache.http.client.ClientProtocolException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -20,8 +19,6 @@ import uk.co.recipes.tags.CommonTags;
 import uk.co.recipes.tags.MeatAndFishTags;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import dagger.Module;
 
 /**
  * TODO

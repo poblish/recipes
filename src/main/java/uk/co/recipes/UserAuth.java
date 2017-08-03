@@ -24,9 +24,7 @@ public class UserAuth implements IUserAuth {
 	private final String provider;
 
 	/**
-	 * @param id
-	 * @param provider
-	 */
+     */
 	@JsonCreator
 	public UserAuth( @JsonProperty("authProvider") final String inProvider, @JsonProperty("authId") final String inId) {
 		this.provider = checkNotNull(inProvider);

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package uk.co.recipes.persistence;
 
@@ -18,6 +18,8 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import com.codahale.metrics.Timer.Context;
+import org.cfg4j.provider.ConfigurationProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -29,7 +31,6 @@ import uk.co.recipes.parse.IngredientParser;
 import uk.co.recipes.tags.TagUtils;
 
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
@@ -48,7 +49,7 @@ public class ItemsLoader {
 	@Inject MetricRegistry metrics;
 	@Inject EsItemFactory itemFactory;
 	@Inject IngredientParser parser;
-	final String path = System.getProperty("user.home") + "/Development/java/recipe_explorer/src/test/resources/";  // FIXME!
+	@Inject ConfigurationProvider config;
 
 	private static final Logger LOG = LoggerFactory.getLogger( ItemsLoader.class );
 	private static final Optional<ICanonicalItem> MISSING = Optional.absent();
@@ -62,15 +63,16 @@ public class ItemsLoader {
 	    final List<Map<String,Object>> entriesToDefer = Lists.newArrayList();
 
 	    final Set<String> topLevelNamesCache = Sets.newHashSet();
+		final File path = config.getProperty("loader.items.path", File.class);
 
-		for ( Object each : new Yaml().loadAll( Files.toString( new File( path + "inputs.yaml"), Charset.forName("utf-8")))) {
+		for ( Object each : new Yaml().loadAll( Files.toString(path, Charset.forName("utf-8")))) {
 
 			@SuppressWarnings("unchecked")
 			final Map<String,Object> map = (Map<String,Object>) each;
 
 			final String parentName = (String) map.get("parent");
 			final Optional<ICanonicalItem> parentCI = ( parentName != null) ? itemFactory.get(parentName) : MISSING;
- 
+
 			if ( parentName != null && !parentCI.isPresent()) {
                 // Parent doesn't exist yet, defer...
 			    entriesToDefer.add(map);
@@ -80,7 +82,6 @@ public class ItemsLoader {
 			if (!processItem( map, parentCI, topLevelNamesCache)) {
 			    // Most probably because of missing constituent
                 entriesToDefer.add(map);
-                continue;
 			}
 		}
 
@@ -88,7 +89,7 @@ public class ItemsLoader {
 		for ( Map<String,Object> eachDeferred : entriesToDefer) {
             final String parentName = (String) eachDeferred.get("parent");
             final Optional<ICanonicalItem> parentCI = ( parentName != null) ? itemFactory.get(parentName) : MISSING;
- 
+
             if ( parentName != null && !parentCI.isPresent()) {
                 // Parent doesn't exist yet, defer
                 throw new RuntimeException("Missing parent item '" + parentName + "' for '" + eachDeferred.get("canonicalName") + "'");
@@ -101,12 +102,8 @@ public class ItemsLoader {
 	}
 
 	private boolean processItem( final Map<String,Object> inMap, final Optional<ICanonicalItem> inParent, final Set<String> inTopLevelNamesCache) {
-	    final Timer.Context timerCtxt = metrics.timer(TIMER_LOAD_ITEM_PROCESSITEM).time();
-	    try {
+	    try (Context ctxt = metrics.timer(TIMER_LOAD_ITEM_PROCESSITEM).time()) {
 	    	return timedProcessItem( inMap, inParent, inTopLevelNamesCache);
-	    }
-	    finally {
-            timerCtxt.stop();
 	    }
 	}
 

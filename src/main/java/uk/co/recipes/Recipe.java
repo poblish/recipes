@@ -10,8 +10,6 @@ import static uk.co.recipes.tags.TagUtils.tagNamesTitleCase;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -122,12 +120,7 @@ public class Recipe implements IRecipe {
 	@Override
     public Collection<IIngredient> getSortedIngredients() {
         List<IIngredient> itemsList = Lists.newArrayList( getIngredients() );
-        Collections.sort( itemsList, new Comparator<IIngredient>() {
-
-			@Override
-			public int compare( IIngredient o1, IIngredient o2) {
-				return o1.getItem().getCanonicalName().compareToIgnoreCase( o2.getItem().getCanonicalName() );
-			}} );
+        itemsList.sort((o1, o2) -> o1.getItem().getCanonicalName().compareToIgnoreCase(o2.getItem().getCanonicalName()));
 
         return itemsList;
     }
@@ -157,12 +150,7 @@ public class Recipe implements IRecipe {
 	@JsonIgnore
     public Collection<ICanonicalItem> getSortedItems() {
         List<ICanonicalItem> itemsList = Lists.newArrayList( getItems() );
-        Collections.sort( itemsList, new Comparator<ICanonicalItem>() {
-
-			@Override
-			public int compare( ICanonicalItem o1, ICanonicalItem o2) {
-				return o1.getCanonicalName().compareToIgnoreCase( o2.getCanonicalName() );
-			}} );
+        itemsList.sort((o1, o2) -> o1.getCanonicalName().compareToIgnoreCase(o2.getCanonicalName()));
 
         return itemsList;
     }

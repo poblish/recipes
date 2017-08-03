@@ -8,16 +8,9 @@
 	<description>???</description>
 	<dependencies>
 		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>6.8.5</version>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>junit</artifactId>
-					<groupId>junit</groupId>
-				</exclusion>
-			</exclusions>
+			<groupId>uk.co.recipes</groupId>
+			<artifactId>recipes-domain</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>net.myrrix</groupId>
@@ -41,20 +34,27 @@
 			<version>${hamcrest.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.squareup.dagger</groupId>
-			<artifactId>dagger</artifactId>
-			<version>${dagger.version}</version>
+			<groupId>org.cfg4j</groupId>
+			<artifactId>cfg4j-core</artifactId>
+			<version>4.4.1</version>
 		</dependency>
 		<dependency>
-			<groupId>com.squareup.dagger</groupId>
-			<artifactId>dagger-compiler</artifactId>
-			<version>${dagger.version}</version>
-			<optional>true</optional>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>2.8.47</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>uk.co.recipes</groupId>
-			<artifactId>recipes-domain</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.10</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>junit</artifactId>
+					<groupId>junit</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 	<build>
@@ -63,10 +63,17 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>3.6.2</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>com.google.dagger</groupId>
+							<artifactId>dagger-compiler</artifactId>
+							<version>${dagger.version}</version>
+						</path>
+					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -85,7 +92,7 @@
 		</plugins>
 	</build>
 	<properties>
-		<dagger.version>1.1.0</dagger.version>
+		<dagger.version>2.11</dagger.version>
 		<hamcrest.version>1.3</hamcrest.version>
 	</properties>
 </project>

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package uk.co.recipes.events.impl;
 
@@ -12,8 +12,6 @@ import com.google.common.base.MoreObjects;
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
-
-import com.google.common.base.Objects;
 
 
 /**
