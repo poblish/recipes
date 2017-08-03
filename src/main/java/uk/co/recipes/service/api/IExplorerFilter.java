@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package uk.co.recipes.service.api;
 
@@ -7,10 +7,9 @@ package uk.co.recipes.service.api;
  * TODO
  *
  * @author andrewregan
- *
  */
 public interface IExplorerFilter {
 
-	long[] idsToInclude();
-	long[] idsToExclude();
+    long[] idsToInclude();
+    long[] idsToExclude();
 }

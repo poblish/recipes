@@ -1,21 +1,19 @@
 package uk.co.recipes.service.api;
 
-import java.io.IOException;
-
+import com.google.common.base.Optional;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.api.IUserAuth;
 
-import com.google.common.base.Optional;
+import java.io.IOException;
 
 /**
  * TODO
- * 
- * @author andrewr
  *
+ * @author andrewr
  */
 public interface IUserPersistence extends IPersistenceAPI<IUser> {
 
-	IUser adminUser();
+    IUser adminUser();
 
-	Optional<IUser> findWithAuth( final IUserAuth inAuth) throws IOException;
+    Optional<IUser> findWithAuth(final IUserAuth inAuth) throws IOException;
 }

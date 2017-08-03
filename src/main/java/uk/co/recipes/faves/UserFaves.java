@@ -1,11 +1,7 @@
 /**
- * 
+ *
  */
 package uk.co.recipes.faves;
-
-import java.io.IOException;
-
-import javax.inject.Inject;
 
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
@@ -13,55 +9,55 @@ import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.persistence.EsUserFactory;
 
+import javax.inject.Inject;
+import java.io.IOException;
+
 /**
  * TODO
  *
  * @author andrewregan
- *
  */
 public class UserFaves {
 
-    @Inject EsUserFactory userFactory;
-    @Inject IEventService eventService;
+    @Inject
+    EsUserFactory userFactory;
+    @Inject
+    IEventService eventService;
 
-    public void faveItem( final IUser inUser, final ICanonicalItem inItem) throws IOException {
-    	boolean unfave = inUser.isFave(inItem);
+    public void faveItem(final IUser inUser, final ICanonicalItem inItem) throws IOException {
+        boolean unfave = inUser.isFave(inItem);
 
-    	if (unfave) {
-    		inUser.removeFave(inItem);
-    	}
-    	else {
-    		inUser.addFave(inItem);
-    	}
+        if (unfave) {
+            inUser.removeFave(inItem);
+        } else {
+            inUser.addFave(inItem);
+        }
 
-    	userFactory.update(inUser);
+        userFactory.update(inUser);
 
-    	if (unfave) {
-    		eventService.unFaveItem(inUser, inItem);
-    	}
-    	else {
-    		eventService.faveItem(inUser, inItem);
-    	}
+        if (unfave) {
+            eventService.unFaveItem(inUser, inItem);
+        } else {
+            eventService.faveItem(inUser, inItem);
+        }
     }
 
-    public void faveRecipe( final IUser inUser, final IRecipe inRecipe) throws IOException {
-    	boolean unfave = inUser.isFave(inRecipe);
+    public void faveRecipe(final IUser inUser, final IRecipe inRecipe) throws IOException {
+        boolean unfave = inUser.isFave(inRecipe);
 
-    	if (unfave) {
-    		inUser.removeFave(inRecipe);
-    	}
-    	else {
-    		inUser.addFave(inRecipe);
-    	}
+        if (unfave) {
+            inUser.removeFave(inRecipe);
+        } else {
+            inUser.addFave(inRecipe);
+        }
 
-    	userFactory.update(inUser);
+        userFactory.update(inUser);
 
-    	if (unfave) {
-    		eventService.unFaveRecipe(inUser, inRecipe);
-    	}
-    	else {
-    		eventService.faveRecipe(inUser, inRecipe);
-    	}
+        if (unfave) {
+            eventService.unFaveRecipe(inUser, inRecipe);
+        } else {
+            eventService.faveRecipe(inUser, inRecipe);
+        }
     }
 
 //    public Optional<IRecipeRating> addRating( final IUser inUser, final IRecipeRating inRating) throws IOException {

@@ -1,24 +1,15 @@
 /**
- * 
+ *
  */
 package uk.co.recipes;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.is;
-
-import java.io.IOException;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Ordering;
 import dagger.Component;
 import org.elasticsearch.client.Client;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.persistence.EsItemFactory;
@@ -32,95 +23,108 @@ import uk.co.recipes.service.impl.ExplorerFilterDefs;
 import uk.co.recipes.tags.MeatAndFishTags;
 import uk.co.recipes.test.TestDataUtils;
 
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Ordering;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.io.IOException;
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.is;
 
 /**
  * TODO
  *
  * @author andrewregan
- *
  */
 public class RecipeSearchTest {
 
-	@Inject EsItemFactory itemFactory;
-	@Inject EsRecipeFactory recipeFactory;
-	@Inject EsUserFactory userFactory;
+    @Inject
+    EsItemFactory itemFactory;
+    @Inject
+    EsRecipeFactory recipeFactory;
+    @Inject
+    EsUserFactory userFactory;
 
-	@Inject Client esClient;
-	@Inject ItemsLoader loader;
-	@Inject TestDataUtils dataUtils;
-	@Inject EsSearchService searchApi;
-	@Inject EsExplorerFilters explorerFilters;
+    @Inject
+    Client esClient;
+    @Inject
+    ItemsLoader loader;
+    @Inject
+    TestDataUtils dataUtils;
+    @Inject
+    EsSearchService searchApi;
+    @Inject
+    EsExplorerFilters explorerFilters;
 
-	@BeforeClass
-	public void cleanIndices() throws IOException {
-		DaggerRecipeSearchTest_TestComponent.create().inject(this);
+    @BeforeClass
+    public void cleanIndices() throws IOException {
+        DaggerRecipeSearchTest_TestComponent.create().inject(this);
 
         itemFactory.deleteAll();
-		recipeFactory.deleteAll();
-	}
+        recipeFactory.deleteAll();
+    }
 
-	@BeforeClass
-	public void loadIngredientsFromYaml() throws InterruptedException, IOException {
-		loader.load();
+    @BeforeClass
+    public void loadIngredientsFromYaml() throws InterruptedException, IOException {
+        loader.load();
 
-		final IUser adminUser = userFactory.adminUser();
+        final IUser adminUser = userFactory.adminUser();
 
-		dataUtils.parseIngredientsFrom( adminUser, "inputs3.txt");
-		dataUtils.parseIngredientsFrom( adminUser, "chCashBlackSpiceCurry.txt");
-		dataUtils.parseIngredientsFrom( adminUser, "bol1.txt");
-		dataUtils.parseIngredientsFrom( adminUser, "bol2.txt");
-		dataUtils.parseIngredientsFrom( adminUser, "chineseBeef.txt");
+        dataUtils.parseIngredientsFrom(adminUser, "inputs3.txt");
+        dataUtils.parseIngredientsFrom(adminUser, "chCashBlackSpiceCurry.txt");
+        dataUtils.parseIngredientsFrom(adminUser, "bol1.txt");
+        dataUtils.parseIngredientsFrom(adminUser, "bol2.txt");
+        dataUtils.parseIngredientsFrom(adminUser, "chineseBeef.txt");
 
-        while ( recipeFactory.countAll() < 5) {
-        	Thread.sleep(200); // Wait for saves to appear...
+        while (recipeFactory.countAll() < 5) {
+            Thread.sleep(200); // Wait for saves to appear...
         }
-	}
+    }
 
-	@Test
-	public void findGarlicRecipes() throws InterruptedException, IOException {
-		assertThat( searchApi.countRecipesByName("garlic"), is(4));
-	}
+    @Test
+    public void findGarlicRecipes() throws InterruptedException, IOException {
+        assertThat(searchApi.countRecipesByName("garlic"), is(4));
+    }
 
 //	@Test
 //	public void testUnusedTag() throws IOException {
 //		assertThat( searchApi.findRecipesByTag( NationalCuisineTags.GERMAN ).size(), is(0));
 //	}
 
-	@Test
-	public void testSearchByTagWithSorting() throws IOException {
-		final List<ICanonicalItem> matches = searchApi.findItemsByTag( MeatAndFishTags.MEAT );
+    @Test
+    public void testSearchByTagWithSorting() throws IOException {
+        final List<ICanonicalItem> matches = searchApi.findItemsByTag(MeatAndFishTags.MEAT);
 
-		final List<String> returnedNames = FluentIterable.from(matches).transform(ICanonicalItem::getCanonicalName).toList();
+        final List<String> returnedNames = FluentIterable.from(matches).transform(ICanonicalItem::getCanonicalName).toList();
 
-		assertThat( returnedNames, is( Ordering.from( String.CASE_INSENSITIVE_ORDER ).sortedCopy(returnedNames) ));
-	}
+        assertThat(returnedNames, is(Ordering.from(String.CASE_INSENSITIVE_ORDER).sortedCopy(returnedNames)));
+    }
 
-	@Test
-	public void testSearchByTagAndFilters() throws IOException {
-		final int numItems = searchApi.findItemsByTag( MeatAndFishTags.MEAT ).size();
+    @Test
+    public void testSearchByTagAndFilters() throws IOException {
+        final int numItems = searchApi.findItemsByTag(MeatAndFishTags.MEAT).size();
 
-        final long[] foundRecipeIds = searchApi.findRecipeIdsByTag( MeatAndFishTags.MEAT );
-        assertThat( foundRecipeIds.length, greaterThanOrEqualTo(4));  // Surely 5 ?!?
+        final long[] foundRecipeIds = searchApi.findRecipeIdsByTag(MeatAndFishTags.MEAT);
+        assertThat(foundRecipeIds.length, greaterThanOrEqualTo(4));  // Surely 5 ?!?
 
-		final IExplorerFilter filter = explorerFilters.from( new ExplorerFilterDefs().build().includeTags( MeatAndFishTags.MEAT ).toFilterDef() );
-		assertThat( filter.idsToInclude().length, is( foundRecipeIds.length + numItems));
-		assertThat( filter.idsToExclude().length, is(0));
+        final IExplorerFilter filter = explorerFilters.from(new ExplorerFilterDefs().build().includeTags(MeatAndFishTags.MEAT).toFilterDef());
+        assertThat(filter.idsToInclude().length, is(foundRecipeIds.length + numItems));
+        assertThat(filter.idsToExclude().length, is(0));
 
-		final IExplorerFilter filter2 = explorerFilters.from( new ExplorerFilterDefs().build().excludeTags( MeatAndFishTags.MEAT ).toFilterDef() );
-		assertThat( filter2.idsToInclude().length, is(0));
-		assertThat( filter2.idsToExclude().length, is( foundRecipeIds.length + numItems));
-	}
+        final IExplorerFilter filter2 = explorerFilters.from(new ExplorerFilterDefs().build().excludeTags(MeatAndFishTags.MEAT).toFilterDef());
+        assertThat(filter2.idsToInclude().length, is(0));
+        assertThat(filter2.idsToExclude().length, is(foundRecipeIds.length + numItems));
+    }
 
-	@AfterClass
-	public void shutDown() {
-		esClient.close();
-	}
+    @AfterClass
+    public void shutDown() {
+        esClient.close();
+    }
 
-	@Singleton
-	@Component(modules={ DaggerModule.class })
-	public interface TestComponent {
-		void inject(final RecipeSearchTest runner);
-	}
+    @Singleton
+    @Component(modules = {DaggerModule.class})
+    public interface TestComponent {
+        void inject(final RecipeSearchTest runner);
+    }
 }

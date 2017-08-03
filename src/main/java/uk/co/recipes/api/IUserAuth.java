@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package uk.co.recipes.api;
 
@@ -7,10 +7,9 @@ package uk.co.recipes.api;
  * TODO
  *
  * @author andrewregan
- *
  */
 public interface IUserAuth {
 
-	String getAuthId();
-	String getAuthProvider();
+    String getAuthId();
+    String getAuthProvider();
 }

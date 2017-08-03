@@ -1,21 +1,20 @@
 /**
- * 
+ *
  */
 package uk.co.recipes.service.api;
 
 
 /**
  * TODO
- * 
- * @author andrewr
  *
+ * @author andrewr
  */
 public interface ISearchResult<T> {
 
-	long getId();
+    long getId();
 
-	String getDisplayName();
-	String getType();
+    String getDisplayName();
+    String getType();
 
     T getEntity();
 }

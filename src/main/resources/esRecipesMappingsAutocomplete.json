@@ -1,10 +1,10 @@
 {
-    "recipes": {
-        "properties": {
-            "autoCompleteTerms": {
-				"analyzer": "autocomplete",
-				"type": "string"
-            }
-        }
+  "recipes": {
+    "properties": {
+      "autoCompleteTerms": {
+        "analyzer": "autocomplete",
+        "type": "string"
+      }
     }
+  }
 }

@@ -1,31 +1,30 @@
 /**
- * 
+ *
  */
 package uk.co.recipes.api;
 
-import java.util.Collection;
-
 import com.google.common.base.Optional;
+
+import java.util.Collection;
 
 /**
  * TODO
- * 
+ *
  * @author andrewregan
- * 
  */
 public interface ICanonicalItem extends ITagging, java.io.Serializable {
 
-	long getId();
-	void setId( long id);
+    long getId();
+    void setId(long id);
 
-	String getCanonicalName();
-	Optional<IQuantity> getBaseAmount();
+    String getCanonicalName();
+    Optional<IQuantity> getBaseAmount();
 
-	Optional<ICanonicalItem> parent();
+    Optional<ICanonicalItem> parent();
 
-	boolean descendsFrom( final ICanonicalItem inOther);
+    boolean descendsFrom(final ICanonicalItem inOther);
 
-	void setParent( ICanonicalItem canonicalItem);
+    void setParent(ICanonicalItem canonicalItem);
 
-	Collection<ICanonicalItem> getConstituents();
+    Collection<ICanonicalItem> getConstituents();
 }

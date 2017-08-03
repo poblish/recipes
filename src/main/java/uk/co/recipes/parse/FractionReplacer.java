@@ -1,18 +1,17 @@
 /**
- * 
+ *
  */
 package uk.co.recipes.parse;
 
 /**
  * Deal with Unicode character symbols before they get into the system
- * 
- * @author andrewr
  *
+ * @author andrewr
  */
 public class FractionReplacer {
 
-    public String replaceFractions( final String inStr) {
-        return specialReplace( specialReplace( specialReplace( specialReplace( inStr.trim(), "⁄", "/"), "¼", ".25"), "¾", ".75"), "½", ".5");
+    public String replaceFractions(final String inStr) {
+        return specialReplace(specialReplace(specialReplace(specialReplace(inStr.trim(), "⁄", "/"), "¼", ".25"), "¾", ".75"), "½", ".5");
     }
 
     private static String specialReplace(String inString, String oldPattern, String newPattern) {
@@ -30,21 +29,17 @@ public class FractionReplacer {
             // This stuff is mine...
             if (sb.length() == 0) {
                 sb.append("0").append(newPattern);
-            }
-            else {
-                final char prevChar = sb.charAt( sb.length() - 1 );
-    
+            } else {
+                final char prevChar = sb.charAt(sb.length() - 1);
+
                 if (Character.isDigit(prevChar)) {
                     sb.append(newPattern);
-                }
-                else if ( prevChar == ' ' && sb.length() > 1 && Character.isDigit( sb.charAt( sb.length() - 2 ) )) /* Fix '3 0.25' => '3.25' */ {
-                    sb.deleteCharAt( sb.length() - 1); // delete previous space
+                } else if (prevChar == ' ' && sb.length() > 1 && Character.isDigit(sb.charAt(sb.length() - 2))) /* Fix '3 0.25' => '3.25' */ {
+                    sb.deleteCharAt(sb.length() - 1); // delete previous space
                     sb.append(newPattern);
-                }
-                else if (Character.isLetter(prevChar)) {
+                } else if (Character.isLetter(prevChar)) {
                     throw new RuntimeException("Fractional character immediately follows letter");
-                }
-                else {
+                } else {
                     sb.append("0").append(newPattern);
                 }
             }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package uk.co.recipes.api;
 
@@ -11,13 +11,12 @@ import java.util.Map;
  * TODO
  *
  * @author andrewregan
- *
  */
 public interface ITagging {
 
-	void addTag( final ITag key);
-	void addTag( final ITag key, final Serializable value);
+    void addTag(final ITag key);
+    void addTag(final ITag key, final Serializable value);
 
-	Map<ITag,Serializable> getTags();
-	List<String> getTagNamesForDisplay();
+    Map<ITag,Serializable> getTags();
+    List<String> getTagNamesForDisplay();
 }

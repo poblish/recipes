@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package uk.co.recipes.events.impl;
 
@@ -9,15 +9,14 @@ import uk.co.recipes.api.IUser;
 
 /**
  * TODO
- * 
- * @author andrewr
  *
+ * @author andrewr
  */
 public class FaveRecipeEvent extends AbstractRecipeEvent {
 
     private static final long serialVersionUID = 1L;
 
-    public FaveRecipeEvent( final IUser user, final IRecipe inItem) {
+    public FaveRecipeEvent(final IUser user, final IRecipe inItem) {
         super(user, inItem, 10.0f);
     }
 }

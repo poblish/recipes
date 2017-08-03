@@ -1,13 +1,12 @@
 /**
- * 
+ *
  */
 package uk.co.recipes.api.ratings;
 
 /**
  * TODO
- * 
- * @author andrewr
  *
+ * @author andrewr
  */
 public interface IRating {
 

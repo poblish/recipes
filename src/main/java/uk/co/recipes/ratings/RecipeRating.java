@@ -1,27 +1,25 @@
 /**
- * 
+ *
  */
 package uk.co.recipes.ratings;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.ratings.IRecipeRating;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.Objects;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * TODO
- * 
- * @author andrewr
  *
+ * @author andrewr
  */
 public class RecipeRating implements IRecipeRating {
 
-//    private final IUser rater;
+    //    private final IUser rater;
     private final IRecipe target;
     private final int score;
 
@@ -32,7 +30,7 @@ public class RecipeRating implements IRecipeRating {
 //    }
 
     @JsonCreator
-    public RecipeRating( @JsonProperty("recipe") final IRecipe inTarget, @JsonProperty("score") int inScore) {
+    public RecipeRating(@JsonProperty("recipe") final IRecipe inTarget, @JsonProperty("score") int inScore) {
 //        rater = null;  // FIXME
         target = checkNotNull(inTarget);
         score = inScore;
@@ -57,7 +55,7 @@ public class RecipeRating implements IRecipeRating {
     @Override
     public int hashCode() {
         // No user? Hmm...
-        return Objects.hashCode( target, score);
+        return Objects.hashCode(target, score);
     }
 
     @Override
@@ -73,14 +71,14 @@ public class RecipeRating implements IRecipeRating {
         }
         final RecipeRating other = (RecipeRating) obj;
         // No user? Hmm...
-        return score == other.score && Objects.equal( target, other.target);
+        return score == other.score && Objects.equal(target, other.target);
     }
 
     public String toString() {
         return MoreObjects.toStringHelper(this).omitNullValues()
 //                        .add( "rater", rater)
-                        .add( "recipe", target)
-                        .add( "score", score)
-                        .toString();
+                .add("recipe", target)
+                .add("score", score)
+                .toString();
     }
 }

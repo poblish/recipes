@@ -1,10 +1,10 @@
 {
-    "items": {
-        "properties": {
-            "autoCompleteTerms": {
-				"analyzer": "autocomplete",
-				"type": "string"
-            }
-        }
+  "items": {
+    "properties": {
+      "autoCompleteTerms": {
+        "analyzer": "autocomplete",
+        "type": "string"
+      }
     }
+  }
 }

@@ -1,18 +1,17 @@
 /**
- * 
+ *
  */
 package uk.co.recipes.api;
 
 /**
  * TODO
- * 
- * @author andrewregan
  *
+ * @author andrewregan
  */
 public interface IQuantity {
 
-	double getNumber();
-	IUnit getUnits();
+    double getNumber();
+    IUnit getUnits();
 
-	String buildString( boolean display);
+    String buildString(boolean display);
 }

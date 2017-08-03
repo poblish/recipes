@@ -1,28 +1,26 @@
 /**
- * 
+ *
  */
 package uk.co.recipes.ratings;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ratings.IItemRating;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.Objects;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 
 /**
  * TODO
- * 
- * @author andrewr
  *
+ * @author andrewr
  */
 public class ItemRating implements IItemRating {
 
-//    private final IUser rater;
+    //    private final IUser rater;
     private final ICanonicalItem target;
     private final int score;
 
@@ -33,7 +31,7 @@ public class ItemRating implements IItemRating {
 //    }
 
     @JsonCreator
-    public ItemRating( @JsonProperty("item") final ICanonicalItem inTarget, @JsonProperty("score") int inScore) {
+    public ItemRating(@JsonProperty("item") final ICanonicalItem inTarget, @JsonProperty("score") int inScore) {
 //        rater = null;  // FIXME
         target = checkNotNull(inTarget);
         score = inScore;
@@ -58,7 +56,7 @@ public class ItemRating implements IItemRating {
     @Override
     public int hashCode() {
         // No user? Hmm...
-        return Objects.hashCode( target, score);
+        return Objects.hashCode(target, score);
     }
 
     @Override
@@ -74,14 +72,14 @@ public class ItemRating implements IItemRating {
         }
         final ItemRating other = (ItemRating) obj;
         // No user? Hmm...
-        return score == other.score && Objects.equal( target, other.target);
+        return score == other.score && Objects.equal(target, other.target);
     }
 
     public String toString() {
         return MoreObjects.toStringHelper(this).omitNullValues()
 //                        .add( "rater", rater)
-                        .add( "item", target)
-                        .add( "score", score)
-                        .toString();
+                .add("item", target)
+                .add("score", score)
+                .toString();
     }
 }

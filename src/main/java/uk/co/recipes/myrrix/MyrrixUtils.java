@@ -10,13 +10,13 @@ import static java.util.stream.Collectors.toList;
  * TODO
  *
  * @author andrewregan
- *
  */
 public final class MyrrixUtils {
 
-    private MyrrixUtils() {}
+    private MyrrixUtils() {
+    }
 
-	public static List<Long> getItems( final List<RecommendedItem> inItems) {
-		return inItems.stream().map(RecommendedItem::getItemID).collect(toList());
-	}
+    public static List<Long> getItems(final List<RecommendedItem> inItems) {
+        return inItems.stream().map(RecommendedItem::getItemID).collect(toList());
+    }
 }

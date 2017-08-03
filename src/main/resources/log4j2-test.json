@@ -1,56 +1,56 @@
 {
-    "configuration": {
-        "status": "error",
-        "name": "RoutingTest",
-        "packages": "org.apache.logging.log4j.test",
-        "ThresholdFilter": {
-            "level": "all"
-        },
-        "appenders": {
-            "Console": {
-                "name": "STDOUT",
-                "PatternLayout": {
-                    "pattern": "%d{ABSOLUTE} - %-5p (%c{1}) [%X] - %m%n"
-                }
-            }
-        },
-        "loggers": {
-            "logger": [
-                {
-                    "name": "EventLogger",
-                    "level": "info",
-                    "additivity": "false",
-                    "appender-ref": {
-                        "ref": "Routing"
-                    }
-                },
-                {
-                    "name": "uk.co.recipes",
-                    "level": "debug",
-                    "additivity": "true"
-                },
-                {
-                    "name": "uk.co.recipes.events.impl.MyrrixUpdater",
-                    "level": "info",
-                    "additivity": "true"
-                },
-                {
-                    "name": "net.myrrix",
-                    "level": "info",
-                    "additivity": "true"
-                },
-                {
-                    "name": "io.netty",
-                    "level": "warn",
-                    "additivity": "true"
-                }
-            ],
-            "root": {
-                "level": "debug",
-                "appender-ref": {
-                    "ref": "STDOUT"
-                }
-            }
+  "configuration": {
+    "status": "error",
+    "name": "RoutingTest",
+    "packages": "org.apache.logging.log4j.test",
+    "ThresholdFilter": {
+      "level": "all"
+    },
+    "appenders": {
+      "Console": {
+        "name": "STDOUT",
+        "PatternLayout": {
+          "pattern": "%d{ABSOLUTE} - %-5p (%c{1}) [%X] - %m%n"
         }
+      }
+    },
+    "loggers": {
+      "logger": [
+        {
+          "name": "EventLogger",
+          "level": "info",
+          "additivity": "false",
+          "appender-ref": {
+            "ref": "Routing"
+          }
+        },
+        {
+          "name": "uk.co.recipes",
+          "level": "debug",
+          "additivity": "true"
+        },
+        {
+          "name": "uk.co.recipes.events.impl.MyrrixUpdater",
+          "level": "info",
+          "additivity": "true"
+        },
+        {
+          "name": "net.myrrix",
+          "level": "info",
+          "additivity": "true"
+        },
+        {
+          "name": "io.netty",
+          "level": "warn",
+          "additivity": "true"
+        }
+      ],
+      "root": {
+        "level": "debug",
+        "appender-ref": {
+          "ref": "STDOUT"
+        }
+      }
     }
+  }
 }

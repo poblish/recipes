@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package uk.co.recipes.events.impl;
 
@@ -41,7 +41,8 @@ import static uk.co.recipes.api.Units.GRAMMES;
 
 public class MyrrixUpdaterTest {
 
-    @Inject MyrrixUpdater updater;
+    @Inject
+    MyrrixUpdater updater;
 
     private final static Optional<ICanonicalItem> ABSENT = Optional.absent();
 
@@ -49,7 +50,7 @@ public class MyrrixUpdaterTest {
 
     @BeforeClass
     private void injectDependencies() {
-        DaggerMyrrixUpdaterTest_TestComponent.builder().testModule( new TestModule() ).build().inject(this);
+        DaggerMyrrixUpdaterTest_TestComponent.builder().testModule(new TestModule()).build().inject(this);
     }
 
     @BeforeMethod
@@ -60,40 +61,40 @@ public class MyrrixUpdaterTest {
     @Test
     public void testAddItem() {
         final Map<ITag,Serializable> tags = Maps.newHashMap();
-        tags.put( CommonTags.SPICE, Boolean.TRUE);
-        tags.put( NationalCuisineTags.INDIAN, "3.0");  // Try boosting
+        tags.put(CommonTags.SPICE, Boolean.TRUE);
+        tags.put(NationalCuisineTags.INDIAN, "3.0");  // Try boosting
 
-        final ICanonicalItem item = mock( ICanonicalItem.class );
-        when( item.getCanonicalName() ).thenReturn("ginger");
-        when( item.getTags() ).thenReturn(tags);
-        when( item.parent() ).thenReturn(ABSENT);
+        final ICanonicalItem item = mock(ICanonicalItem.class);
+        when(item.getCanonicalName()).thenReturn("ginger");
+        when(item.getTags()).thenReturn(tags);
+        when(item.parent()).thenReturn(ABSENT);
 
         /////////////////////////////////////////////////
 
-        assertThat( COUNT, is(0));
+        assertThat(COUNT, is(0));
 
-        updater.onAddItem( new AddItemEvent(item) );
+        updater.onAddItem(new AddItemEvent(item));
 
         // 1/8/2017: Was this ever working? assertThat( COUNT, is(3)); // Parent tag + two Tags
-        assertThat( COUNT, is(2)); // Just two Tags
+        assertThat(COUNT, is(2)); // Just two Tags
     }
 
     @Test
     public void testAddRecipe() throws IOException {
         final Map<ITag,Serializable> tags = Maps.newHashMap();
-        tags.put( CommonTags.SPICE, Boolean.TRUE);
-        tags.put( NationalCuisineTags.INDIAN, "3.0");  // Try boosting
+        tags.put(CommonTags.SPICE, Boolean.TRUE);
+        tags.put(NationalCuisineTags.INDIAN, "3.0");  // Try boosting
 
-        final ICanonicalItem item = mock( ICanonicalItem.class );
-        when( item.getCanonicalName() ).thenReturn("ginger");
-        when( item.getTags() ).thenReturn(tags);
-        when( item.parent() ).thenReturn(ABSENT);
-        when( item.getBaseAmount() ).thenReturn( Optional.of( new Quantity( GRAMMES, 100)));
+        final ICanonicalItem item = mock(ICanonicalItem.class);
+        when(item.getCanonicalName()).thenReturn("ginger");
+        when(item.getTags()).thenReturn(tags);
+        when(item.parent()).thenReturn(ABSENT);
+        when(item.getBaseAmount()).thenReturn(Optional.of(new Quantity(GRAMMES, 100)));
 
-        final User user = new User( "aregan", "Andrew R");
+        final User user = new User("aregan", "Andrew R");
 
         final RecipeStage rs1 = new RecipeStage();
-        rs1.addIngredients( new Ingredient( item, new Quantity( Units.TSP, 1)) );
+        rs1.addIngredients(new Ingredient(item, new Quantity(Units.TSP, 1)));
 
         final Recipe r1 = new Recipe(user, "1", Locale.UK);
         r1.addStage(rs1);
@@ -102,12 +103,12 @@ public class MyrrixUpdaterTest {
 
         /////////////////////////////////////////////////
 
-        assertThat( COUNT, is(0));
+        assertThat(COUNT, is(0));
 
-        updater.onAddRecipe( new AddRecipeEvent(r1) );
+        updater.onAddRecipe(new AddRecipeEvent(r1));
 
         // 1/8/2017: Was this ever working? assertThat( COUNT, is(3)); // Parent tag + two Tags
-        assertThat( COUNT, is(2)); // Just two Tags
+        assertThat(COUNT, is(2)); // Just two Tags
     }
 
     // FIXME Suboptimal: https://google.github.io/dagger/testing.html
@@ -135,25 +136,24 @@ public class MyrrixUpdaterTest {
         @Singleton
         ClientRecommender provideClientRecommender() {
             try {
-                final ClientRecommender mr = mock( ClientRecommender.class );
+                final ClientRecommender mr = mock(ClientRecommender.class);
 
                 doAnswer(invocation -> {
                     Object[] args = invocation.getArguments();
                     System.out.println(Arrays.toString(args));
                     COUNT++;
                     return "called with arguments: " + Arrays.toString(args);
-                }).when(mr).setItemTag( anyString(), anyLong(), anyFloat());
+                }).when(mr).setItemTag(anyString(), anyLong(), anyFloat());
 
                 return mr;
-            }
-            catch (TasteException e) {
+            } catch (TasteException e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
     @Singleton
-    @Component(modules={ TestModule.class })
+    @Component(modules = {TestModule.class})
     public interface TestComponent {
         void inject(final MyrrixUpdaterTest runner);
     }

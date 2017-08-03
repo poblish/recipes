@@ -3,20 +3,19 @@
  */
 package uk.co.recipes.events.impl;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.Serializable;
-
 import com.google.common.base.MoreObjects;
 import uk.co.recipes.Recipe;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
 
+import java.io.Serializable;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 
 /**
  * @author andrewr
- *
  */
 public abstract class AbstractRecipeEvent implements Serializable {
 
@@ -28,29 +27,29 @@ public abstract class AbstractRecipeEvent implements Serializable {
 
     public AbstractRecipeEvent(IUser user, IRecipe inRecipe, float inScore) {
         this.user = user;
-        this.recipe = checkNotNull( inRecipe, "Recipe cannot be null");
+        this.recipe = checkNotNull(inRecipe, "Recipe cannot be null");
         this.score = inScore;
 
-        checkArgument( inRecipe.getId() >= Recipe.BASE_ID, "Recipe has not been persisted");
+        checkArgument(inRecipe.getId() >= Recipe.BASE_ID, "Recipe has not been persisted");
     }
 
-	public IUser getUser() {
-		return user;
-	}
+    public IUser getUser() {
+        return user;
+    }
 
-	public IRecipe getRecipe() {
-		return recipe;
-	}
+    public IRecipe getRecipe() {
+        return recipe;
+    }
 
-	public float getScore() {
-		return score;
-	}
+    public float getScore() {
+        return score;
+    }
 
-	public String toString() {
-		return MoreObjects.toStringHelper(this).omitNullValues()
-						.add( "user", user)
-						.add( "recipe", recipe.getId())
-						.add( "score", score)
-						.toString();
-	}
+    public String toString() {
+        return MoreObjects.toStringHelper(this).omitNullValues()
+                .add("user", user)
+                .add("recipe", recipe.getId())
+                .add("score", score)
+                .toString();
+    }
 }
