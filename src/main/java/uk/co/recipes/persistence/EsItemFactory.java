@@ -83,7 +83,7 @@ public class EsItemFactory implements IItemPersistence {
             inItem.setId(sequences.getSeqnoForType("items_seqno"));
 
 			/* IndexResponse esResp = */
-            esClient.prepareIndex("recipe", "items", inId)/*.setCreate(true) */.setSource(mapper.writeValueAsString(inItem)).execute().actionGet();
+            esClient.prepareIndex("recipe", "items", inId)/*.setRefreshPolicy(WAIT_UNTIL).setCreate(true)*/.setSource(mapper.writeValueAsString(inItem)).execute().actionGet();
 
             itemsCache.put(inId, inItem);
 
@@ -284,6 +284,7 @@ public class EsItemFactory implements IItemPersistence {
     }
 
     public void waitUntilRefreshed() {
+        // Redundant? ...
         esUtils.waitUntilTypesRefreshed("items");
     }
 }

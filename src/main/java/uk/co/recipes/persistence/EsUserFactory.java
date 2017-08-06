@@ -155,7 +155,13 @@ public class EsUserFactory implements IUserPersistence {
     @Override
     public Optional<IUser> findWithAuth(final IUserAuth inAuth) throws IOException {
         try {
-            final SearchHit[] hits = esClient.prepareSearch("recipe").setTypes("users").setQuery(boolQuery().must(termQuery("authId", inAuth.getAuthId())).must(termQuery("authProvider", inAuth.getAuthProvider()))).setSize(2).execute().get().getHits().getHits();
+            final SearchHit[] hits = esClient.prepareSearch("recipe")
+                    .setTypes("users")
+                    .setQuery( boolQuery().must(termQuery("auths.authId", inAuth.getAuthId())).must(termQuery("auths.authProvider", inAuth.getAuthProvider())) )
+                    .setSize(2)
+                    .execute()
+                    .get().getHits().getHits();
+
             if (hits.length > 1) {
                 throw new RuntimeException("Too many matches for " + inAuth);
             }

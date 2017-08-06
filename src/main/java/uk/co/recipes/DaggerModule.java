@@ -22,7 +22,9 @@ import org.cfg4j.source.files.FilesConfigurationSource;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.slf4j.LoggerFactory;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.events.api.IEventService;
@@ -36,6 +38,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -79,7 +82,15 @@ public class DaggerModule {
     @Singleton
     Client provideEsClient(final ConfigurationProvider config) {
         try {
-            final Client c = new TransportClient().addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
+            final Settings settings = Settings.builder()
+                    .put("client.transport.ignore_cluster_name", true)
+                    .build();
+
+            final String esHost = config.getProperty("elasticsearch.host", String.class);
+            final int esPort = config.getProperty("elasticsearch.port", Integer.class);
+
+            final Client c = new PreBuiltTransportClient(settings)
+                    .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(esHost), esPort));
 
             if (!c.admin().indices().exists(new IndicesExistsRequest("recipe")).actionGet().isExists()) {
                 final String settingsStr = Files.toString(config.getProperty("elasticsearch.settingsPath", File.class), Charset.forName("utf-8"));

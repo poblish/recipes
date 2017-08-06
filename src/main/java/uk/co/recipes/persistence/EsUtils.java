@@ -17,6 +17,7 @@ import org.elasticsearch.action.get.MultiGetResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.bytes.BytesReference;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
+import org.elasticsearch.index.reindex.DeleteByQueryAction;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,8 +90,7 @@ public class EsUtils {
             }
             while (waitsToGo > 0 && reqBuilder.execute().actionGet().getTotal().getRefresh().getTotal() == currCount);
         } catch (InterruptedException e) {
-            Throwables.propagate(e)
-            ;
+            Throwables.propagate(e);
         }
 
         if (waitsToGo <= 0) {
@@ -158,22 +158,22 @@ public class EsUtils {
     }
 
     public static byte[] toBytes(final BytesReference ref) {
-        return ref.toBytes();
-        // return BytesReference.toBytes(ref);
+//        return ref.toBytes();
+         return BytesReference.toBytes(ref);
     }
 
-    public QueryStringQueryBuilder queryString(final String q) {
-        return org.elasticsearch.index.query.QueryBuilders.queryString(q);
-        // return org.elasticsearch.index.query.QueryBuilders.queryStringQuery(q);
+    public static QueryStringQueryBuilder queryString(final String q) {
+//        return org.elasticsearch.index.query.QueryBuilders.queryString(q);
+         return org.elasticsearch.index.query.QueryBuilders.queryStringQuery(q);
     }
 
     public ActionResponse deleteAllByType(final String index, final String type) {
-        return esClient.admin().indices().prepareDeleteMapping().setIndices(index).setType(type).execute().actionGet();
+//        return esClient.admin().indices().prepareDeleteMapping().setIndices(index).setType(type).execute().actionGet();
 
         // https://www.elastic.co/guide/en/elasticsearch/client/java-api/current/java-docs-delete-by-query.html
-//		return DeleteByQueryAction.INSTANCE.newRequestBuilder(esClient)
-//				.filter(typeQuery(type))
-//				.source(index)
-//				.get();
+		return DeleteByQueryAction.INSTANCE.newRequestBuilder(esClient)
+				.filter(org.elasticsearch.index.query.QueryBuilders.typeQuery(type))
+				.source(index)
+				.get();
     }
 }

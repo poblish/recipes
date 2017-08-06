@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
-import static org.elasticsearch.index.query.QueryBuilders.fieldQuery;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_NAME_GETS;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_PUTS;
 
@@ -83,7 +82,7 @@ public class EsRecipeFactory implements IRecipePersistence {
     public IRecipe getByName(String inName) throws IOException {
         try (Context ctxt = metrics.timer(TIMER_RECIPES_NAME_GETS).time()) {
             // AGR FIXME FIXME `fieldQuery` works with UserPersistenceTest, `termQuery` doesn't
-            final SearchHit[] hits = esClient.prepareSearch("recipe").setTypes("recipes").setQuery(fieldQuery("title", inName)).setSize(1).execute().get().getHits().getHits();
+            final SearchHit[] hits = esClient.prepareSearch("recipe").setTypes("recipes").setQuery(esUtils.queryString("title:" + inName)).setSize(1).execute().get().getHits().getHits();
             if (hits.length < 1) {
                 return null;
             }

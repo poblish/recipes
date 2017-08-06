@@ -35,40 +35,23 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_PUTS;
 
-/**
- * TODO
- *
- * @author andrewregan
- */
 public class RecipeExploreRecommendTest {
 
-    @Inject
-    Client esClient;
-    @Inject
-    MetricRegistry metrics;
-    @Inject
-    IEventService events;
+    @Inject Client esClient;
+    @Inject MetricRegistry metrics;
+    @Inject IEventService events;
 
-    @Inject
-    EsItemFactory itemFactory;
-    @Inject
-    EsUserFactory userFactory;
-    @Inject
-    EsRecipeFactory recipeFactory;
-    @Inject
-    EsSequenceFactory sequenceFactory;
-    @Inject
-    ItemsLoader loader;
+    @Inject EsItemFactory itemFactory;
+    @Inject EsUserFactory userFactory;
+    @Inject EsRecipeFactory recipeFactory;
+    @Inject EsSequenceFactory sequenceFactory;
+    @Inject ItemsLoader loader;
 
-    @Inject
-    TestDataUtils dataUtils;
+    @Inject TestDataUtils dataUtils;
 
-    @Inject
-    MyrrixUpdater updater;
-    @Inject
-    MyrrixExplorerService explorerApi;
-    @Inject
-    MyrrixRecommendationService recsApi;
+    @Inject MyrrixUpdater updater;
+    @Inject MyrrixExplorerService explorerApi;
+    @Inject MyrrixRecommendationService recsApi;
 
 
     private void injectDependencies() {
@@ -104,6 +87,8 @@ public class RecipeExploreRecommendTest {
             Thread.sleep(200); // Wait for saves to appear...
         }
 
+        Thread.sleep(2000);
+
         assertThat(metrics.timer(TIMER_RECIPES_PUTS).getCount(), is((long) count));
     }
 
@@ -125,7 +110,7 @@ public class RecipeExploreRecommendTest {
     }
 
     @Test
-    public void testRecommendations() throws IOException, TasteException {
+    public void testRecommendations() throws IOException, TasteException, InterruptedException {
         final IUser user1 = userFactory.getOrCreate("Andrew Regan", () -> new User("aregan", "Andrew Regan"));
 
         assertThat(user1.getId(), greaterThanOrEqualTo(0L));  // Check we've been persisted
@@ -142,6 +127,8 @@ public class RecipeExploreRecommendTest {
         events.rateRecipe(user2, recipeFactory.getByName("chcashblackspicecurry.txt"), (float) Math.random());
         events.rateRecipe(user2, recipeFactory.getByName("bol1.txt"), (float) Math.random());
         events.rateRecipe(user2, recipeFactory.getByName("Bulk"), (float) Math.random());
+
+        Thread.sleep(1000);
 
         final List<IRecipe> recsFor1 = recsApi.recommendRecipes(user1, 20);
         final List<IRecipe> recsFor2 = recsApi.recommendRecipes(user2, 20);
@@ -163,10 +150,12 @@ public class RecipeExploreRecommendTest {
 
     @Test
     public void testModifiedExploration() throws IOException, TasteException {
-        final IRecipe recipe1 = recipeFactory.get("inputs3.txt").get();
-        final long currNumRecipes = recipeFactory.countAll();
+        final int expectedNumIngredients = 15;
 
-        System.out.println("Existing: " + recipe1);
+        final IRecipe recipe1 = recipeFactory.get("inputs3.txt").get();
+        assertThat(recipe1.getItems().size(), is(expectedNumIngredients));  // Sanity check
+
+        final long currNumRecipes = recipeFactory.countAll();
 
         assertThat(explorerApi.similarity(recipe1, recipe1), is(1f));  // Check Recipe has 100% similarity to itself
 
@@ -174,7 +163,7 @@ public class RecipeExploreRecommendTest {
             try {
                 assertThat(inCopy.getTitle(), not("inputs3.txt"));
                 assertThat(inCopy.getIngredients(), is(recipe1.getIngredients()));
-                assertThat(inCopy.getItems().size(), is(15));
+                assertThat(inCopy.getItems().size(), is(expectedNumIngredients));
                 assertThat(inCopy.removeItems(item("ginger"), item("coriander"), item("onion"), item("cinnamon_stick"), item("turmeric") /*, item("fennel_seed") */), is(true));
                 assertThat(inCopy.getItems().size(), is(10));  // Check Items have actually been removed!
             } catch (IOException e) {

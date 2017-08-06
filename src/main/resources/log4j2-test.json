@@ -43,6 +43,21 @@
           "name": "io.netty",
           "level": "warn",
           "additivity": "true"
+        },
+        {
+          "name": "org.elasticsearch.common.network",
+          "level": "info",
+          "additivity": "true"
+        },
+        {
+          "name": "org.elasticsearch.client.transport",
+          "level": "info",
+          "additivity": "true"
+        },
+        {
+          "name": "org.elasticsearch.threadpool",
+          "level": "warn",
+          "additivity": "true"
         }
       ],
       "root": {

@@ -94,6 +94,15 @@ public class ItemsLoader {
                 throw new RuntimeException("Deferral failed for " + eachDeferred);  // FIXME!
             }
         }
+
+        while (itemFactory.countAll() < 820) {  // FIXME
+            System.out.println("Waiting for import to complete...");
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private boolean processItem(final Map<String,Object> inMap, final Optional<ICanonicalItem> inParent, final Set<String> inTopLevelNamesCache) {

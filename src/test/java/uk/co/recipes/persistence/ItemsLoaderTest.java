@@ -36,7 +36,7 @@ public class ItemsLoaderTest {
         DaggerItemsLoaderTest_TestComponent.builder().testModule(new TestModule()).build().inject(this);
     }
 
-    @Test
+    @Test(enabled = false)  // (AGR) 5/8/17 Not sure what purpose of this is any more
     public void loadIngredientsFromYaml() throws IOException {
         loader.load();
     }

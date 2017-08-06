@@ -2,8 +2,9 @@
   "recipes": {
     "properties": {
       "autoCompleteTerms": {
+        "search_analyzer": "autocomplete",
         "analyzer": "autocomplete",
-        "type": "string"
+        "type": "text"
       }
     }
   }
