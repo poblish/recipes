@@ -25,7 +25,7 @@ public class Ingredient implements IIngredient {
 
     private ICanonicalItem item;
     private IQuantity quantity;
-    private boolean optional = false;
+    private boolean optional;
     private final Map<Locale,List<String>> notes = Maps.newHashMap();
 
     // Purely for Jackson deserialization

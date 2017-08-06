@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
  */
 public class MockFactories {
 
-    private final static Map<String,ICanonicalItem> ITEMS = Maps.newHashMap();
+    private static final Map<String,ICanonicalItem> ITEMS = Maps.newHashMap();
 
     @SuppressWarnings("unchecked")
     public static EsItemFactory inMemoryItemFactory() {

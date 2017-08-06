@@ -6,7 +6,6 @@ package uk.co.recipes.persistence;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer.Context;
 import com.google.common.base.Optional;
-import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -140,54 +139,47 @@ public class ItemsLoader {
 
         //////////////////////////////////////////////////////////////////////////////
 
-        itemFactory.getOrCreate(name, new Supplier<ICanonicalItem>() {
+        itemFactory.getOrCreate(name, () -> {
+            final ICanonicalItem newItem = new CanonicalItem(name, inParent);
 
-            @SuppressWarnings("unchecked")
-            @Override
-            public ICanonicalItem get() {
-                final ICanonicalItem newItem = new CanonicalItem(name, inParent);
-
-                for (Object eachTag : yamlObjectToStrings(inMap.get("tags"))) {
-                    if (eachTag instanceof Map) {
-                        for (Entry<Object,Object> eachEntry : ((Map<Object,Object>) eachTag).entrySet()) {
-                            processTagValue(newItem, (String) eachEntry.getKey(), String.valueOf(eachEntry.getValue()));
-                        }
-                    } else {
-                        processTagValue(newItem, (String) eachTag, Boolean.TRUE);
-                    }
+            for (Object eachTag : yamlObjectToStrings(inMap.get("tags"))) {
+                if (eachTag instanceof Map) {
+                    ((Map<Object,Object>) eachTag).forEach((key, value) -> processTagValue(newItem, (String) key, String.valueOf(value)));
+                } else {
+                    processTagValue(newItem, (String) eachTag, Boolean.TRUE);
                 }
-
-                if (inParent.isPresent() && ((CanonicalItem) newItem).hasOverlappingTags()) {
-                    LOG.warn("Overlapping Tags for: " + newItem);
-                }
-
-                if (((CanonicalItem) newItem).hasUnecessaryCancelTags()) {
-                    LOG.warn("Unnecessary Cancel tags (" + ((CanonicalItem) newItem).getCancelTags() + ") among: " + newItem);
-                }
-
-                ///////////////////////////////////////////////////////////////////////
-
-                for (String eachAlias : yamlObjectToStrings(inMap.get("aliases"))) {
-                    ((CanonicalItem) newItem).aliases.add(eachAlias);
-                }
-
-                if (!validConstitutents.isEmpty()) {
-                    if (LOG.isTraceEnabled()) {
-                        LOG.trace("Adding " + validConstitutents + " to " + newItem);
-                    }
-                    ((CanonicalItem) newItem).constituents.addAll(validConstitutents);
-                }
-
-                final String baseAmt = (String) inMap.get("baseAmt");
-                if (baseAmt != null) {
-                    final Optional<Quantity> parsedQ = parser.parseQuantity(baseAmt);
-                    if (parsedQ.isPresent()) {
-                        ((CanonicalItem) newItem).setBaseAmount(parsedQ.get());
-                    }
-                }
-
-                return newItem;
             }
+
+            if (inParent.isPresent() && ((CanonicalItem) newItem).hasOverlappingTags()) {
+                LOG.warn("Overlapping Tags for: " + newItem);
+            }
+
+            if (((CanonicalItem) newItem).hasUnecessaryCancelTags()) {
+                LOG.warn("Unnecessary Cancel tags (" + ((CanonicalItem) newItem).getCancelTags() + ") among: " + newItem);
+            }
+
+            ///////////////////////////////////////////////////////////////////////
+
+            for (String eachAlias : yamlObjectToStrings(inMap.get("aliases"))) {
+                ((CanonicalItem) newItem).aliases.add(eachAlias);
+            }
+
+            if (!validConstitutents.isEmpty()) {
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace("Adding " + validConstitutents + " to " + newItem);
+                }
+                ((CanonicalItem) newItem).constituents.addAll(validConstitutents);
+            }
+
+            final String baseAmt = (String) inMap.get("baseAmt");
+            if (baseAmt != null) {
+                final Optional<Quantity> parsedQ = parser.parseQuantity(baseAmt);
+                if (parsedQ.isPresent()) {
+                    ((CanonicalItem) newItem).setBaseAmount(parsedQ.get());
+                }
+            }
+
+            return newItem;
         });
 
         return true;  // OK

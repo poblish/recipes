@@ -42,7 +42,7 @@ public class IngredientParser {
     OptionalNameSplitter optSplitter;
 
     @SuppressWarnings("unused")
-    private final static Logger LOG = LoggerFactory.getLogger(IngredientParser.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IngredientParser.class);
 
     private static final String DEC_FRAC_NUMBER_BIT = "(?:[0-9\\.]+ ?x +)?[0-9\\.]*(?: ?[0-9]/[0-9])?";
     private static final String DEC_FRAC_NUMBER_PATTERN = "(" + DEC_FRAC_NUMBER_BIT + ")";

@@ -11,6 +11,7 @@ import com.google.common.io.Files;
 import org.cfg4j.provider.ConfigurationProvider;
 import org.elasticsearch.action.ActionResponse;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
+import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse.AnalyzeToken;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsRequestBuilder;
 import org.elasticsearch.action.get.MultiGetItemResponse;
 import org.elasticsearch.action.get.MultiGetResponse;
@@ -47,7 +48,7 @@ public class EsUtils {
     @Inject
     ObjectMapper mapper;
 
-    private final static Logger LOG = LoggerFactory.getLogger(EsUtils.class);
+    private static final Logger LOG = LoggerFactory.getLogger(EsUtils.class);
 
     @Inject
     public EsUtils() {
@@ -153,8 +154,8 @@ public class EsUtils {
         inClient.admin().indices().preparePutMapping("recipe").setType("recipes").setSource(Files.toString(config.getProperty("elasticsearch.mappings.recipes.path", File.class), Charset.forName("utf-8"))).execute().actionGet();
     }
 
-    public static Function<AnalyzeResponse.AnalyzeToken,String> getAnalyzeTokenToStringFunc() {
-        return AnalyzeResponse.AnalyzeToken::getTerm;
+    public static Function<AnalyzeToken,String> getAnalyzeTokenToStringFunc() {
+        return AnalyzeToken::getTerm;
     }
 
     public static byte[] toBytes(final BytesReference ref) {

@@ -32,7 +32,7 @@ import static org.hamcrest.Matchers.is;
  */
 public class UserPersistenceTest {
 
-    private final static String TEST_RECIPE = "inputs3.txt";
+    private static final String TEST_RECIPE = "inputs3.txt";
 
     @Inject
     EsItemFactory itemFactory;

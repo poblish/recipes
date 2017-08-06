@@ -6,6 +6,7 @@ package uk.co.recipes;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.base.MoreObjects;
@@ -33,7 +34,7 @@ import static uk.co.recipes.tags.TagUtils.tagNamesTitleCase;
  *
  * @author andrewregan
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)  // Mainly to avoid null baseAmount being serialized
+@JsonInclude(Include.NON_NULL)  // Mainly to avoid null baseAmount being serialized
 public class CanonicalItem implements ICanonicalItem {
 
     private static final long serialVersionUID = 1L;
@@ -46,7 +47,7 @@ public class CanonicalItem implements ICanonicalItem {
 
     private long id = UNSET_ID;
     private String canonicalName;
-    private ICanonicalItem parent = null; // Can't use Optional<> as it screws with JSON serialization
+    private ICanonicalItem parent; // Can't use Optional<> as it screws with JSON serialization
     public Collection<String> aliases = Sets.newHashSet();
     private IQuantity baseAmount;
 
@@ -153,7 +154,7 @@ public class CanonicalItem implements ICanonicalItem {
 
     public boolean hasOverlappingTags() {
         // *Must* take a copy of the collection - do *not* modify 'tags'
-        final List<ITag> copy = Lists.newArrayList(Maps.filterEntries(tags, TagUtils.findActivated()).keySet());
+        final List<ITag> copy = Lists.newArrayList(Maps.filterEntries(tags, findActivated()).keySet());
         copy.retainAll(((CanonicalItem) parent).tags.keySet());
         return !copy.isEmpty();
     }

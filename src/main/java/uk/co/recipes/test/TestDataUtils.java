@@ -62,9 +62,9 @@ public class TestDataUtils {
         // For Dagger
     }
 
-    private final static IParsedIngredientHandler NULL_HANDLER = ingr -> {
+    private static final IParsedIngredientHandler NULL_HANDLER = ingr -> {
     };
-    private final static IDeferredIngredientHandler NULL_DEFER_HANDLER = x -> {
+    private static final IDeferredIngredientHandler NULL_DEFER_HANDLER = x -> {
     };
 
 

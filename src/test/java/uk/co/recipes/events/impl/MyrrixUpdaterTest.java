@@ -44,7 +44,7 @@ public class MyrrixUpdaterTest {
     @Inject
     MyrrixUpdater updater;
 
-    private final static Optional<ICanonicalItem> ABSENT = Optional.absent();
+    private static final Optional<ICanonicalItem> ABSENT = Optional.absent();
 
     private static int COUNT;
 

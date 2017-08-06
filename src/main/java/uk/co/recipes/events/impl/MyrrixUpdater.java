@@ -51,10 +51,10 @@ public class MyrrixUpdater implements IEventListener {
     @Inject
     IIngredientQuantityScoreBooster booster;
 
-    private final static float DEFAULT_WEIGHT = 1.0f;
-    private final static float OPTIONAL_INGREDIENT_WEIGHT = 0.4f;
-    private final static float MATCHING_RECIPE_CATEGORY_WEIGHT = 0.6f;
-    private final static float INGREDIENT_CONSTITUENT_WEIGHT = 0.25f;  // Pretty low, but bear in mind that if a constit is tagged with 'MEAT', that could still pull in +10
+    private static final float DEFAULT_WEIGHT = 1.0f;
+    private static final float OPTIONAL_INGREDIENT_WEIGHT = 0.4f;
+    private static final float MATCHING_RECIPE_CATEGORY_WEIGHT = 0.6f;
+    private static final float INGREDIENT_CONSTITUENT_WEIGHT = 0.25f;  // Pretty low, but bear in mind that if a constit is tagged with 'MEAT', that could still pull in +10
 
     @Inject
     public MyrrixUpdater() {

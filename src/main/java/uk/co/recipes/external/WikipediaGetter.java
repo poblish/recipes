@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  */
 public class WikipediaGetter {
 
-    private final static Pattern LINK_PATTERN = Pattern.compile("\\[[0-9]+\\]");
+    private static final Pattern LINK_PATTERN = Pattern.compile("\\[[0-9]+\\]");
 
     public Optional<WikipediaResults> getResultsFor(final String inPage) throws IOException {
         final String url = "http://en.wikipedia.org/wiki/" + URLEncoder.encode(inPage.replace(' ', '_'), "utf-8");

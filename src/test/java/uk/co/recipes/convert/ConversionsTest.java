@@ -27,21 +27,21 @@ import static org.hamcrest.Matchers.*;
  */
 public class ConversionsTest {
 
-    private final static Conversions CVS = new Conversions();
+    private static final Conversions CVS = new Conversions();
 
-    private final static IQuantity ONE_CUP = new Quantity(Units.CUP, 1);
-    private final static IQuantity ONE_QUART = new Quantity(Units.QUART, 1);
-    private final static IQuantity ONE_OZ = new Quantity(Units.OUNCES, 1);
-    private final static IQuantity ONE_TSP = new Quantity(Units.TSP, 1);
-    private final static IQuantity ONE_HEAPED_TSP = new Quantity(Units.HEAPED_TSP, 1);
-    private final static IQuantity ONE_ROUNDED_TSP = new Quantity(Units.ROUNDED_TSP, 1);
-    private final static IQuantity ONE_TBSP = new Quantity(Units.TBSP, 1);
-    private final static IQuantity ONE_HEAPED_TBSP = new Quantity(Units.HEAPED_TBSP, 1);
-    private final static IQuantity ONE_ROUNDED_TBSP = new Quantity(Units.ROUNDED_TBSP, 1);
-    private final static IQuantity NINETEEN_GRAMMES = new Quantity(Units.GRAMMES, 19);
-    private final static IQuantity EIGHT_KG = new Quantity(Units.KG, 8);
-    private final static IQuantity SIXTEEN_ML = new Quantity(Units.ML, 16);
-    private final static IQuantity FIVE_LITRES = new Quantity(Units.LITRE, 5);
+    private static final IQuantity ONE_CUP = new Quantity(Units.CUP, 1);
+    private static final IQuantity ONE_QUART = new Quantity(Units.QUART, 1);
+    private static final IQuantity ONE_OZ = new Quantity(Units.OUNCES, 1);
+    private static final IQuantity ONE_TSP = new Quantity(Units.TSP, 1);
+    private static final IQuantity ONE_HEAPED_TSP = new Quantity(Units.HEAPED_TSP, 1);
+    private static final IQuantity ONE_ROUNDED_TSP = new Quantity(Units.ROUNDED_TSP, 1);
+    private static final IQuantity ONE_TBSP = new Quantity(Units.TBSP, 1);
+    private static final IQuantity ONE_HEAPED_TBSP = new Quantity(Units.HEAPED_TBSP, 1);
+    private static final IQuantity ONE_ROUNDED_TBSP = new Quantity(Units.ROUNDED_TBSP, 1);
+    private static final IQuantity NINETEEN_GRAMMES = new Quantity(Units.GRAMMES, 19);
+    private static final IQuantity EIGHT_KG = new Quantity(Units.KG, 8);
+    private static final IQuantity SIXTEEN_ML = new Quantity(Units.ML, 16);
+    private static final IQuantity FIVE_LITRES = new Quantity(Units.LITRE, 5);
 
     @Test
     public void testGrammesUK() {

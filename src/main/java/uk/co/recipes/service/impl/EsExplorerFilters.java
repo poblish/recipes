@@ -2,6 +2,7 @@ package uk.co.recipes.service.impl;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
+import com.codahale.metrics.Timer.Context;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
@@ -36,7 +37,7 @@ public class EsExplorerFilters {
     private static final IExplorerFilter NULL_FILTER = new NullFilter();
 
     private static final long[] EMPTY_ARRAY = new long[0];
-    private static final long[] UNUSABLE_ARRAY = new long[]{-1};  // ANDed to death, this should not be used.
+    private static final long[] UNUSABLE_ARRAY = {-1};  // ANDed to death, this should not be used.
 
     @Inject
     EsSearchService search;
@@ -49,7 +50,7 @@ public class EsExplorerFilters {
     }
 
     public IExplorerFilter from(final IExplorerFilterDef inDef) throws IOException {
-        final Timer.Context timerCtxt = metrics.timer(TIMER_BUILD_FILTER_GET_IDS).time();
+        final Context timerCtxt = metrics.timer(TIMER_BUILD_FILTER_GET_IDS).time();
 
         try {
             return timedFrom(inDef);
@@ -142,7 +143,7 @@ public class EsExplorerFilters {
     }
 
     private long[] getIdsForResults(final List<ICanonicalItem> inItems, final long[] inRecipeIds, final boolean inInclude) {
-        final Timer.Context timerCtxt = metrics.timer(TIMER_EXPLORER_FILTER_IDS_GET).time();
+        final Context timerCtxt = metrics.timer(TIMER_EXPLORER_FILTER_IDS_GET).time();
 
         final long[] ids = new long[inItems.size() + inRecipeIds.length];
         int i = 0;

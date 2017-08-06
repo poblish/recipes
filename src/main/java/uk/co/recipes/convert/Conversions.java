@@ -30,13 +30,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class Conversions {
 
-    private final static Locale DEFAULT_LOCALE = new Locale("xx", "xx");
-    private final static String DEFAULT_ITEM = "_";
+    private static final Locale DEFAULT_LOCALE = new Locale("xx", "xx");
+    private static final String DEFAULT_ITEM = "_";
 
-    private final static double ROUNDED_FACTOR = 1.3;    // Guessing, after http://www.hintsandthings.co.uk/kitchen/measures.htm
-    private final static double HEAPED_FACTOR = 1.8;    // " " "
+    private static final double ROUNDED_FACTOR = 1.3;    // Guessing, after http://www.hintsandthings.co.uk/kitchen/measures.htm
+    private static final double HEAPED_FACTOR = 1.8;    // " " "
 
-    private final static Table<ItemUnit,Locale,Unit<?>> VOLUME_UNITS_TABLE = HashBasedTable.create();
+    private static final Table<ItemUnit,Locale,Unit<?>> VOLUME_UNITS_TABLE = HashBasedTable.create();
 
     static {
         final Unit<Volume> millilitre = NonSI.LITRE.divide(1000);

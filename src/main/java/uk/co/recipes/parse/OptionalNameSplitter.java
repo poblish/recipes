@@ -16,8 +16,8 @@ import java.util.List;
  */
 public class OptionalNameSplitter {
 
-    private final static Splitter WORD_SPLITTER = Splitter.on(' ').trimResults();
-    private final static Joiner WORD_JOINER = Joiner.on(' ');
+    private static final Splitter WORD_SPLITTER = Splitter.on(' ').trimResults();
+    private static final Joiner WORD_JOINER = Joiner.on(' ');
 
     @Inject
     NameAdjuster nameAdjuster;

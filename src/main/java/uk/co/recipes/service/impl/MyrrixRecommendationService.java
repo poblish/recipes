@@ -5,6 +5,7 @@ package uk.co.recipes.service.impl;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
+import com.codahale.metrics.Timer.Context;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
 import net.myrrix.client.ClientRecommender;
@@ -55,10 +56,10 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
     @Inject
     ObjectMapper mapper;
 
-    private static final long[] ANON_EMPTYITEMS = new long[]{0L};
-    private static final float[] ANON_EMPTYVALUES = new float[]{0};
+    private static final long[] ANON_EMPTYITEMS = {0L};
+    private static final float[] ANON_EMPTYVALUES = {0};
 
-    private final static Logger LOG = LoggerFactory.getLogger(MyrrixRecommendationService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MyrrixRecommendationService.class);
 
     @Inject
     public MyrrixRecommendationService() {
@@ -70,7 +71,7 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
      */
     @Override
     public List<ICanonicalItem> recommendIngredients(final IUser inUser, int inNumRecs) {
-        final Timer.Context timerCtxt = metrics.timer(TIMER_USER_ITEMS_RECOMMENDATIONS).time();
+        final Context timerCtxt = metrics.timer(TIMER_USER_ITEMS_RECOMMENDATIONS).time();
 
         try {
             return recommendIngredientsForId(inUser.getId(), inNumRecs);
@@ -84,7 +85,7 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
      */
     @Override
     public List<ICanonicalItem> recommendIngredients(final IRecipe inRecipe, int inNumRecs) {
-        final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPE_ITEMS_RECOMMENDATIONS).time();
+        final Context timerCtxt = metrics.timer(TIMER_RECIPE_ITEMS_RECOMMENDATIONS).time();
 
         try {
             return recommendIngredientsForId(inRecipe.getId(), inNumRecs);
@@ -108,7 +109,7 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
      */
     @Override
     public List<IRecipe> recommendRecipes(IUser inUser, int inNumRecs) {
-        final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_RECOMMENDATIONS).time();
+        final Context timerCtxt = metrics.timer(TIMER_RECIPES_RECOMMENDATIONS).time();
 
         try {
             return recipesFactory.getAll(MyrrixUtils.getItems(recommender.recommend(inUser.getId(), inNumRecs, false, new String[]{"RECIPE"})));
@@ -127,7 +128,7 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
             return recommendRecipes(inUser, inNumRecs);
         }
 
-        final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_FILTERED_RECOMMENDATIONS).time();
+        final Context timerCtxt = metrics.timer(TIMER_RECIPES_FILTERED_RECOMMENDATIONS).time();
 
         try {
 
@@ -181,7 +182,7 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
     }
 
     private List<IRecipe> recommendRecipesToAnonymous(final long[] preferredItemIds, final float[] itemScores, int inNumRecs, final Collection<ICanonicalItem> inItems) {
-        final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_FILTERED_RECOMMENDATIONS).time();  // Same again - that OK?
+        final Context timerCtxt = metrics.timer(TIMER_RECIPES_FILTERED_RECOMMENDATIONS).time();  // Same again - that OK?
 
         try {
             return recipesFactory.getAll(MyrrixUtils.getItems(recommender.recommendToAnonymous(preferredItemIds, itemScores, inNumRecs, new String[]{"RECIPE", "", getItemsListJson(inItems)}, null)));

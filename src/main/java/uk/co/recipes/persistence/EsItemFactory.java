@@ -43,7 +43,7 @@ import static uk.co.recipes.metrics.MetricNames.*;
  */
 public class EsItemFactory implements IItemPersistence {
 
-    private final static Logger LOG = LoggerFactory.getLogger(EsItemFactory.class);
+    private static final Logger LOG = LoggerFactory.getLogger(EsItemFactory.class);
 
     @Inject
     Client esClient;

@@ -72,7 +72,7 @@ public class BbcGoodFoodCrawler {
 
     public static class MyCrawler extends WebCrawler {
 
-        private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g"
+        private static final Pattern FILTERS = Pattern.compile(".*(\\.(css|js|bmp|gif|jpe?g"
                 + "|png|tiff?|mid|mp2|mp3|mp4"
                 + "|wav|avi|mov|mpeg|ram|m4v|pdf"
                 + "|rm|smil|wmv|swf|wma|zip|rar|gz))$");

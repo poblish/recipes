@@ -1,7 +1,7 @@
 package uk.co.recipes.service.impl;
 
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
+import com.codahale.metrics.Timer.Context;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
 import net.myrrix.client.ClientRecommender;
@@ -62,17 +62,13 @@ public class MyrrixExplorerService implements IExplorerAPI {
 
     @Override
     public List<ICanonicalItem> similarIngredients(final ICanonicalItem item, final IExplorerFilterDef inFilterDef, final int inNumRecs) {
-        final Timer.Context timerCtxt = metrics.timer(TIMER_ITEMS_MOSTSIMILAR).time();
-
-        try {
+        try (Context ignored = metrics.timer(TIMER_ITEMS_MOSTSIMILAR).time()) {
 //			final HystrixCommand<List<RecommendedItem>> cmd = new MyrrixSimilarItemsCommand( item.getId(), inNumRecs, new String[]{"ITEM", mapper.writeValueAsString(inFilterDef)} );
 //			return itemsFactory.getAll( MyrrixUtils.getItems( cmd.execute() ) );
             final MyrrixSimilarItemsCommand cmd = new MyrrixSimilarItemsCommand(item.getId(), inNumRecs, new String[]{"ITEM", mapper.writeValueAsString(inFilterDef)});
             return itemsFactory.getAll(MyrrixUtils.getItems(cmd.run()));
         } catch (IOException | TasteException e) {
             throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
-        } finally {
-            timerCtxt.stop();
         }
     }
 
@@ -86,17 +82,13 @@ public class MyrrixExplorerService implements IExplorerAPI {
 
     @Override
     public List<IRecipe> similarRecipes(final IRecipe recipe, final IExplorerFilterDef inFilterDef, final int inNumRecs) {
-        final Timer.Context timerCtxt = metrics.timer(TIMER_RECIPES_MOSTSIMILAR).time();
-
-        try {
+        try (Context ignored = metrics.timer(TIMER_RECIPES_MOSTSIMILAR).time()) {
 //			final HystrixCommand<List<RecommendedItem>> cmd = new MyrrixSimilarItemsCommand( recipe.getId(), inNumRecs, new String[]{"RECIPE", mapper.writeValueAsString(inFilterDef)} );
 //			return recipesFactory.getAll( MyrrixUtils.getItems( cmd.execute() ) );
             final MyrrixSimilarItemsCommand cmd = new MyrrixSimilarItemsCommand(recipe.getId(), inNumRecs, new String[]{"RECIPE", mapper.writeValueAsString(inFilterDef)});
             return recipesFactory.getAll(MyrrixUtils.getItems(cmd.run()));
         } catch (IOException | TasteException e) {
             throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
-        } finally {
-            timerCtxt.stop();
         }
     }
 

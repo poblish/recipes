@@ -25,7 +25,7 @@ public class UserRatings {
     @Inject
     IEventService eventService;
 
-    private final static float INDIFFERENT_RATING = 5.0f;
+    private static final float INDIFFERENT_RATING = 5.0f;
 
     @Inject
     public UserRatings() {
