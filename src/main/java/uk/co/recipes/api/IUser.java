@@ -4,10 +4,10 @@
 package uk.co.recipes.api;
 
 import com.google.common.base.Optional;
-import org.joda.time.DateTime;
 import uk.co.recipes.api.ratings.IItemRating;
 import uk.co.recipes.api.ratings.IRecipeRating;
 
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.Set;
 
@@ -31,7 +31,7 @@ public interface IUser extends java.io.Serializable {
     boolean getEmailValidated();
 
     boolean isActive();
-    DateTime getLastLoginTime();
+    OffsetDateTime getLastLoginTime();
 
     IUserPreferences getPrefs();
 

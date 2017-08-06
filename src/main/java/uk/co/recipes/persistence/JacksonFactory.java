@@ -8,7 +8,8 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.base.Throwables;
 import uk.co.recipes.*;
 import uk.co.recipes.api.*;
@@ -99,7 +100,10 @@ public final class JacksonFactory {
         inMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);  // When reading in ES hits, e.g. _index
         inMapper.configure(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS, false);
 
-        inMapper.registerModule(testModule);
-        inMapper.registerModule(new JodaModule());
+        inMapper.registerModule(testModule)
+                // https://github.com/FasterXML/jackson-modules-java8
+                .registerModule(new Jdk8Module())
+                .registerModule(new JavaTimeModule())
+                /* Not needed: .registerModule(new ParameterNamesModule()) */;
     }
 }

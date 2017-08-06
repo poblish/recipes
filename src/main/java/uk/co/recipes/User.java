@@ -9,11 +9,11 @@ import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Sets;
-import org.joda.time.DateTime;
 import uk.co.recipes.api.*;
 import uk.co.recipes.api.ratings.IItemRating;
 import uk.co.recipes.api.ratings.IRecipeRating;
 
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.Set;
 
@@ -41,7 +41,7 @@ public class User implements IUser {
     private boolean emailValidated;
 
     private boolean isActive = true;
-    private DateTime lastLoginTime;
+    private OffsetDateTime lastLoginTime;
 
     private final Collection<IItemRating> itemRatings = Sets.newHashSet();  // FIXME Be careful loading this, could be big
     private final Collection<IRecipeRating> recipeRatings = Sets.newHashSet();  // FIXME Be careful loading this, could be big
@@ -210,13 +210,13 @@ public class User implements IUser {
     }
 
     @Override
-    public DateTime getLastLoginTime() {
+    public OffsetDateTime getLastLoginTime() {
         return lastLoginTime;
     }
 
     //    @Override
     public void initLastLoginTime() {
-        lastLoginTime = new DateTime();
+        lastLoginTime = OffsetDateTime.now();
     }
 
 //    @Override

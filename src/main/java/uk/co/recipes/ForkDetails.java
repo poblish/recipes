@@ -7,10 +7,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
-import org.joda.time.DateTime;
 import uk.co.recipes.api.IForkDetails;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
+
+import java.time.OffsetDateTime;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -24,10 +25,10 @@ public class ForkDetails implements IForkDetails {
     private long originalId;
     private String originalTitle;
     private IUser originalUser;
-    private DateTime forkTime;
+    private OffsetDateTime forkTime;
 
     @JsonCreator
-    public ForkDetails(@JsonProperty("originalId") final long inOriginalId, @JsonProperty("originalTitle") final String inTitle, @JsonProperty("forkTime") final DateTime inTime, @JsonProperty("originalUser") final IUser inUser) {
+    public ForkDetails(@JsonProperty("originalId") final long inOriginalId, @JsonProperty("originalTitle") final String inTitle, @JsonProperty("forkTime") final OffsetDateTime inTime, @JsonProperty("originalUser") final IUser inUser) {
         originalId = inOriginalId;
         originalTitle = checkNotNull(inTitle);
         forkTime = checkNotNull(inTime);
@@ -38,7 +39,7 @@ public class ForkDetails implements IForkDetails {
         originalId = inOriginal.getId();
         originalTitle = inOriginal.getTitle();
         originalUser = inOriginal.getCreator();
-        forkTime = new DateTime();
+        forkTime = OffsetDateTime.now();
     }
 
     /* (non-Javadoc)
@@ -69,7 +70,7 @@ public class ForkDetails implements IForkDetails {
      * @see uk.co.recipes.api.IForkDetails#getForkTime()
      */
     @Override
-    public DateTime getForkTime() {
+    public OffsetDateTime getForkTime() {
         return forkTime;
     }
 

@@ -3,9 +3,8 @@
  */
 package uk.co.recipes.api;
 
-import org.joda.time.DateTime;
-
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -27,7 +26,7 @@ public interface IRecipe extends ITagging, Cloneable, Serializable {
     Locale getLocale();
 
     IUser getCreator();
-    DateTime getCreationTime();
+    OffsetDateTime getCreationTime();
 
     Object clone();
 

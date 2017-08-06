@@ -12,11 +12,11 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
-import org.joda.time.DateTime;
 import uk.co.recipes.api.*;
 import uk.co.recipes.tags.RecipeTags;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -42,7 +42,7 @@ public class Recipe implements IRecipe {
     private IUser creator;
     private String title;
     private Locale locale;
-    private DateTime creationTime = new DateTime();
+    private OffsetDateTime creationTime = OffsetDateTime.now();
     private IForkDetails forkDetails;
 
     private final List<IRecipeStage> stages = Lists.newArrayList();
@@ -58,7 +58,7 @@ public class Recipe implements IRecipe {
         locale = checkNotNull(inLocale, "Locale cannot be null");
     }
 
-    public Recipe(final IUser inCreator, String inTitle, final Locale inLocale, final DateTime inCreationTime) {
+    public Recipe(final IUser inCreator, String inTitle, final Locale inLocale, final OffsetDateTime inCreationTime) {
         this(inCreator, inTitle, inLocale);
         creationTime = checkNotNull(inCreationTime, "CreationTime cannot be null");
     }
@@ -282,7 +282,7 @@ public class Recipe implements IRecipe {
     }
 
     @Override
-    public DateTime getCreationTime() {
+    public OffsetDateTime getCreationTime() {
         return creationTime;
     }
 
