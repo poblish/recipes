@@ -73,7 +73,7 @@ public class EsUtils {
     }
 
     public <T> long countAll(final String inType) {
-        return esClient.prepareSearch("recipe").setTypes(inType).setSize(0).execute().actionGet().getHits().totalHits();
+        return esClient.prepareSearch("recipe").setTypes(inType).setSize(0).execute().actionGet().getHits().getTotalHits();
     }
 
     public void waitUntilTypesRefreshed(final String... inTypes) {
