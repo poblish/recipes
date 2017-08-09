@@ -3,35 +3,21 @@
  */
 package service;
 
-import java.io.IOException;
-
+import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.service.AbstractUserService;
-import play.Application;
+import com.feth.play.module.pa.user.*;
+import com.google.common.base.Optional;
+import com.google.common.base.Throwables;
 import play.Logger;
-import play.mvc.Http.Session;
-import uk.co.recipes.DaggerModule;
 import uk.co.recipes.User;
 import uk.co.recipes.UserAuth;
 import uk.co.recipes.api.IUser;
-import uk.co.recipes.metrics.MetricNames;
-import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.service.api.IUserPersistence;
 
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
-import com.feth.play.module.pa.PlayAuthenticate;
-import com.feth.play.module.pa.user.AuthUser;
-import com.feth.play.module.pa.user.AuthUserIdentity;
-import com.feth.play.module.pa.user.EmailIdentity;
-import com.feth.play.module.pa.user.FirstLastNameIdentity;
-import com.feth.play.module.pa.user.NameIdentity;
-import com.google.common.base.Optional;
-import com.google.common.base.Throwables;
-
-import dagger.Module;
-import dagger.ObjectGraph;
-
 import javax.inject.Inject;
+import java.io.IOException;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * "The combination of getId and getProvider from AuthUser can be used to identify an user"
@@ -41,57 +27,13 @@ import javax.inject.Inject;
  */
 public class PlayAuthUserServicePlugin extends AbstractUserService {
 
-	private static PlayAuthUserServicePlugin STATIC_INST = null;  // FIXME
-
-	private static final ObjectGraph GRAPH = ObjectGraph.create( new RecipesWebAppModule() );  // FIXME Yuk!
-    private static final IUserPersistence USERS = GRAPH.get( EsUserFactory.class );  // FIXME Yuk!
-
+	private final IUserPersistence users;
 
 	@Inject
-	public PlayAuthUserServicePlugin( final Application app, final PlayAuthenticate auth) {
+	public PlayAuthUserServicePlugin(final IUserPersistence users, final PlayAuthenticate auth) {
 		super(auth);
-		STATIC_INST = this;  // FIXME
+		this.users = checkNotNull(users);
 	}
-
-    public static IUser getLocalUser(final MetricRegistry inMetrics, final Session session) {
-        final Timer.Context timerCtxt = inMetrics.timer( MetricNames.TIMER_USER_LOCAL_GET ).time();
-        try {
-            return STATIC_INST.getUntimedLocalUser(session);
-        }
-        finally {
-            timerCtxt.close();
-        }
-    }
-
-    public static IUser getLocalUser(final Session session) {
-        return STATIC_INST.getUntimedLocalUser(session);
-    }
-
-    private IUser getUntimedLocalUser(final Session session) {
-        try {
-            final AuthUser currentAuthUser = auth.getUser(session);
-
-            if (Logger.isTraceEnabled()) {
-            	Logger.trace("currentAuthUser: " + currentAuthUser);
-            }
-
-            if ( currentAuthUser == null) {
-                return null;
-            }
-
-            final Optional<IUser> theUser = USERS.findWithAuth( new UserAuth( currentAuthUser.getProvider(), currentAuthUser.getId() ) );
-
-            if (Logger.isTraceEnabled()) {
-                Logger.trace("theUser: " + theUser);
-            }
-
-            return theUser.orNull();
-        }
-        catch (IOException e) {
-            Logger.error("ERROR: " + e);
-            return null;
-        }
-    }
 
 	/**
 	 * The getLocalIdentity function gets called on any login to check whether the session user still has a valid corresponding local
@@ -101,7 +43,7 @@ public class PlayAuthUserServicePlugin extends AbstractUserService {
 	@Override
 	public Object getLocalIdentity( final AuthUserIdentity inUser) {
 		try {
-			final Optional<IUser> theUser = USERS.findWithAuth( new UserAuth( inUser.getProvider(), inUser.getId() ) );
+			final Optional<IUser> theUser = users.findWithAuth( new UserAuth( inUser.getProvider(), inUser.getId() ) );
 			Logger.info("*** Loaded " + theUser);
 			return theUser.orNull();
 		}
@@ -182,21 +124,13 @@ public class PlayAuthUserServicePlugin extends AbstractUserService {
 		try {
 			Logger.info("*** Try to save: " + inUser + " with " + newUser);
 
-			USERS.put( newUser, /* Yuk: */ USERS.toStringId(newUser));
-			USERS.waitUntilRefreshed();  // Yuk, but if we don't do this, we might redirect to page + try to show Login details before User exists in index
+			users.put( newUser, /* Yuk: */ users.toStringId(newUser));
+			users.waitUntilRefreshed();  // Yuk, but if we don't do this, we might redirect to page + try to show Login details before User exists in index
 
 			return newUser;
 		}
 		catch (IOException e) {
 			throw Throwables.propagate(e);
 		}
-		catch (InterruptedException e) {
-			throw Throwables.propagate(e);
-		}
-	}
-
-	@Module( includes=DaggerModule.class, injects={})
-	static class RecipesWebAppModule {
-		
 	}
 }

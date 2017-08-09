@@ -1,8 +1,8 @@
 package controllers;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.feth.play.module.pa.PlayAuthenticate;
 import play.mvc.Controller;
-import service.PlayAuthUserServicePlugin;
+import service.UserProvider;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.persistence.EsItemFactory;
@@ -16,42 +16,38 @@ import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.ui.CuisineColours;
 
-import com.codahale.metrics.MetricRegistry;
+import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * 
- * TODO
- *
- * @author andrewregan
- *
- */
 public abstract class AbstractExplorableController extends Controller {
 
 	protected IItemPersistence items;
     protected IExplorerAPI explorer;
     protected EsExplorerFilters explorerFilters;
-    protected MetricRegistry metrics;
     protected IRecommendationsAPI recsApi;
     protected IEventService events;
     protected CuisineColours colours;
+    protected PlayAuthenticate auth;
+    protected UserProvider userProvider;
 
-    public AbstractExplorableController( final EsItemFactory items, final EsExplorerFilters explorerFilters, final MyrrixExplorerService explorer,
-    									 final MyrrixRecommendationService inRecService, final MetricRegistry metrics, final IEventService eventService,
-    									 final CuisineColours colours) {
+    public AbstractExplorableController(final EsItemFactory items, final EsExplorerFilters explorerFilters, final MyrrixExplorerService explorer,
+                                        final MyrrixRecommendationService inRecService, final IEventService eventService,
+                                        final CuisineColours colours,
+                                        final PlayAuthenticate auth, final UserProvider userProvider) {
         this.items = checkNotNull(items);
         this.explorer = checkNotNull(explorer);
         this.explorerFilters = checkNotNull(explorerFilters);
-        this.metrics = checkNotNull(metrics);
         this.recsApi = checkNotNull(inRecService);
         this.events = checkNotNull(eventService);
         this.colours = checkNotNull(colours);
+        this.auth = checkNotNull(auth);
+        this.userProvider = checkNotNull(userProvider);
     }
 
     protected IUser getLocalUser() {
-        return /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( metrics, session());
+        return userProvider.getUser(session());
     }
 
-    public IExplorerFilterDef getExplorerFilter( final EsExplorerFilters inFilters) {
+    public IExplorerFilterDef getExplorerFilter( final EsExplorerFilters /* FIXME?? */ inFilters) {
         final IUser currUser = getLocalUser();
         if ( currUser == null) {
             return ExplorerFilterDefs.nullFilter();

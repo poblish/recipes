@@ -1,7 +1,10 @@
-@(currUser: uk.co.recipes.api.IUser, cuisineColours: uk.co.recipes.ui.CuisineColours,
-  tag: uk.co.recipes.api.ITag, matches: List[uk.co.recipes.api.ICanonicalItem], matchingRecipes: List[uk.co.recipes.api.IRecipe])
+@import service.UserProvider
 
-@main("Tag: " + tag) {
+@(currUser: uk.co.recipes.api.IUser, cuisineColours: uk.co.recipes.ui.CuisineColours,
+  tag: uk.co.recipes.api.ITag, matches: List[uk.co.recipes.api.ICanonicalItem], matchingRecipes: List[uk.co.recipes.api.IRecipe],
+  playAuth: com.feth.play.module.pa.PlayAuthenticate, users: UserProvider)
+
+@main("Tag: " + tag, playAuth, users) {
 	<section id="top">
 	    <div class="wrapper">
 	        <h1>@tag</h1>

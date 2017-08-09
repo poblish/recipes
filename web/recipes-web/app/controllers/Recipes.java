@@ -1,33 +1,22 @@
 package controllers;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.IOException;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
-import javax.inject.Inject;
-
+import com.codahale.metrics.MetricRegistry;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.feth.play.module.pa.PlayAuthenticate;
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Optional;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
 import play.mvc.Result;
-import uk.co.recipes.Ingredient;
-import uk.co.recipes.Quantity;
-import uk.co.recipes.Recipe;
-import uk.co.recipes.RecipeStage;
-import uk.co.recipes.User;
-import uk.co.recipes.api.ICanonicalItem;
-import uk.co.recipes.api.IExplorerFilterItem;
-import uk.co.recipes.api.IIngredient;
-import uk.co.recipes.api.IRecipe;
-import uk.co.recipes.api.IUser;
-import uk.co.recipes.api.Units;
+import service.UserProvider;
+import uk.co.recipes.*;
+import uk.co.recipes.api.*;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.faves.UserFaves;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
-import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.ratings.RecipeRating;
 import uk.co.recipes.ratings.UserRatings;
 import uk.co.recipes.service.api.IExplorerFilterDef;
@@ -38,12 +27,13 @@ import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.tags.RecipeTags;
 import uk.co.recipes.ui.CuisineColours;
 
-import com.codahale.metrics.MetricRegistry;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Optional;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
+import javax.inject.Inject;
+import java.io.IOException;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * 
@@ -63,10 +53,11 @@ public class Recipes extends AbstractExplorableController {
 	public static final String[] DIET_TYPES = {"Vegan", "Vegetarian"};
 
     @Inject
-    public Recipes( final MyrrixUpdater updater, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService, final EsItemFactory items,
-                    final EsRecipeFactory recipes, final EsUserFactory users, final UserRatings inRatings, final MyrrixRecommendationService inRecService, final MetricRegistry metrics,
-                    final ObjectMapper inMapper, final IEventService eventService, final UserFaves userFaves, final CuisineColours colours) {
-    	super( items, explorerFilters, inExplorerService, inRecService, metrics, eventService, colours);
+    public Recipes(final MyrrixUpdater updater, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService, final EsItemFactory items,
+				   final EsRecipeFactory recipes, final UserRatings inRatings, final MyrrixRecommendationService inRecService, final MetricRegistry metrics,
+				   final ObjectMapper inMapper, final IEventService eventService, final UserFaves userFaves, final CuisineColours colours,
+				   final PlayAuthenticate auth, final UserProvider userProvider) {
+    	super( items, explorerFilters, inExplorerService, inRecService, eventService, colours, auth, userProvider);
 
     	updater.startListening();
         this.recipes = checkNotNull(recipes);
@@ -78,7 +69,7 @@ public class Recipes extends AbstractExplorableController {
     public Result create() throws IOException, InterruptedException {
 		final IUser user1 = getLocalUser();
 		final IRecipe recipe = getSessionCreatedRecipe(true);
-        return ok(views.html.create_recipe.render(user1, recipe, recsApi.recommendRandomRecipesToAnonymous( recipe, 12), colours));
+        return ok(views.html.create_recipe.render(user1, recipe, recsApi.recommendRandomRecipesToAnonymous( recipe, 12), colours, auth, userProvider));
     }
 
     public Result createAddIngredient( final String ingredient) throws IOException, InterruptedException {
@@ -162,7 +153,10 @@ public class Recipes extends AbstractExplorableController {
 
         final IExplorerFilterDef filter = getExplorerFilter(explorerFilters);
 
-        return ok(views.html.recipe.render( recipe, user1, explorer.similarRecipes( recipe, filter, 12), recsApi.recommendIngredients( recipe, 9), filter, colours, cuisineName, cuisineColour, recipeCategoriesSelections(filter), recipeDietTypesSelections(filter)));
+        return ok(views.html.recipe.render( recipe, user1, explorer.similarRecipes( recipe, filter, 12),
+				recsApi.recommendIngredients( recipe, 9), filter, colours, cuisineName, cuisineColour,
+				recipeCategoriesSelections(filter), recipeDietTypesSelections(filter),
+				auth, userProvider));
     }
 
 	private Map<String,Boolean> recipeCategoriesSelections( final IExplorerFilterDef inFilterDef) {

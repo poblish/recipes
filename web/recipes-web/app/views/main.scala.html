@@ -1,6 +1,7 @@
-@(title: String)(content: Html)
-
 @import com.feth.play.module.pa.views.html._
+@import service.UserProvider
+
+@(title: String, playAuth: com.feth.play.module.pa.PlayAuthenticate, users: UserProvider)(content: Html)
 
 <!DOCTYPE html>
 <html>
@@ -53,17 +54,22 @@
 
 
 		<p>
-		@defining(service.PlayAuthUserServicePlugin.getLocalUser(session())) { user =>
-			@if( user != null) {
-				Welcome, <a href="/users/@user.getUserName()">@user.getDisplayName()</a>&nbsp;&nbsp;<a href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout">Logout</a>
+@* Comment-out pending: https://github.com/joscha/play-authenticate/issues/343
+
+        @currentAuth(playAuth) { auth =>
+			@if(auth != null) {
+                @defining(users.getUser(session())) { user =>
+                    Welcome, <a href="/users/@user.getUserName()">@user.getDisplayName()</a>&nbsp;<a href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout">Logout</a>
+                }
 			} else {
 			    @Application.storeLoginRedirectUrl()
-			    
-				Providers: @forProviders( null, false,false,false) { p =>
+
+                @forProviders(playAuth) { p =>
 				    <a href="@p.getUrl()">@p.getKey()</a>
 				}
 		    }
-		}</p>
+		} *@
+        </p>
 
 @content
 </body>

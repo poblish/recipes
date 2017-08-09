@@ -1,14 +1,10 @@
 package controllers;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.util.List;
-
-import javax.inject.Inject;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.feth.play.module.pa.PlayAuthenticate;
+import com.google.common.base.Optional;
 import play.mvc.Result;
+import service.UserProvider;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
@@ -28,9 +24,12 @@ import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.ui.CuisineColours;
 
-import com.codahale.metrics.MetricRegistry;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Optional;
+import javax.inject.Inject;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * 
@@ -49,11 +48,12 @@ public class Items extends AbstractExplorableController {
 	private final static int NUM_RECOMMENDATIONS_TO_SHOW = 12;
 
     @Inject
-    public Items( final MyrrixUpdater updater, final EsItemFactory items, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService,
-    			  final MyrrixRecommendationService inRecService, final EsUserFactory users, final UserRatings inRatings, final MetricRegistry metrics,
-    			  final ObjectMapper inMapper, final EsSearchService inSearch, final IEventService eventService, final UserFaves userFaves,
-    			  final CuisineColours colours) {
-        super( items, explorerFilters, inExplorerService, inRecService, metrics, eventService, colours);
+    public Items(final MyrrixUpdater updater, final EsItemFactory items, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService,
+                 final MyrrixRecommendationService inRecService, final EsUserFactory users, final UserRatings inRatings,
+                 final ObjectMapper inMapper, final EsSearchService inSearch, final IEventService eventService, final UserFaves userFaves,
+                 final CuisineColours colours,
+                 final PlayAuthenticate auth, final UserProvider userProvider) {
+        super( items, explorerFilters, inExplorerService, inRecService, eventService, colours, auth, userProvider);
 
     	updater.startListening();
         this.ratings = checkNotNull(inRatings);
@@ -81,10 +81,12 @@ public class Items extends AbstractExplorableController {
         final List<IRecipe> recRecipes = ( user1 != null) ? recsApi.recommendRecipes( user1, NUM_RECOMMENDATIONS_TO_SHOW, item) : recsApi.recommendRecipesToAnonymous( NUM_RECOMMENDATIONS_TO_SHOW, item);
 
         if (!recRecipes.isEmpty()) {
-            return ok(views.html.item.render( item, user1, similarities, recRecipes, /* Got recommendations OK */ true, colours, -1));
+            return ok(views.html.item.render( item, user1, similarities, recRecipes, /* Got recommendations OK */ true, colours, -1, auth, userProvider));
         }
 
-        return ok(views.html.item.render( item, user1, similarities, searchApi.findRandomRecipesByItemName( NUM_RECOMMENDATIONS_TO_SHOW, item), /* Didn't get recommendations */ false, colours, recipesCount));
+        return ok(views.html.item.render( item, user1, similarities,
+                searchApi.findRandomRecipesByItemName( NUM_RECOMMENDATIONS_TO_SHOW, item), /* Didn't get recommendations */ false,
+                colours, recipesCount, auth, userProvider));
     }
 
     public Result rate( final String name, final int inScore) throws IOException {

@@ -1,6 +1,10 @@
-@(searchQuery: String, currUser: uk.co.recipes.api.IUser, cuisineColours: uk.co.recipes.ui.CuisineColours, foundRecipes: List[uk.co.recipes.api.IRecipe], foundTags: List[uk.co.recipes.api.ITag], foundItems: List[uk.co.recipes.api.ICanonicalItem])
+@import service.UserProvider
 
-@main("Search Results: " + searchQuery) {
+@(searchQuery: String, currUser: uk.co.recipes.api.IUser, cuisineColours: uk.co.recipes.ui.CuisineColours,
+  foundRecipes: List[uk.co.recipes.api.IRecipe], foundTags: List[uk.co.recipes.api.ITag], foundItems: List[uk.co.recipes.api.ICanonicalItem],
+  playAuth: com.feth.play.module.pa.PlayAuthenticate, users: UserProvider)
+
+@main("Search Results: " + searchQuery, playAuth, users) {
 	<section id="top">
 	    <div class="wrapper">
 	        <h1>Search Results</h1>

@@ -1,6 +1,10 @@
-@(metrics: String, itemsCount: Long, recipesCount: Long, usersCount: Long, cacheStats: com.google.common.cache.CacheStats, myrrixUsersCount: Integer, myrrixItemsCount: Integer)
+@import service.UserProvider
 
-@main("Statistics") {
+@(metrics: String, itemsCount: Long, recipesCount: Long, usersCount: Long, cacheStats: com.google.common.cache.CacheStats,
+  myrrixUsersCount: Integer, myrrixItemsCount: Integer,
+  playAuth: com.feth.play.module.pa.PlayAuthenticate, users: UserProvider)
+
+@main("Statistics", playAuth, users) {
 	<section id="top">
 	    <div class="wrapper">
 	        <h1>Statistics</h1>

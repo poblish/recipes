@@ -56,7 +56,7 @@
 	    </div>
 	    <div id="collapse3" class="panel-collapse collapse">
 	      <div class="panel-body">
-			Created by <a href="/users/@recipe.getCreator().getUserName()">@recipe.getCreator().getDisplayName()</a> on @org.joda.time.format.DateTimeFormat.forPattern("dd MMMM yyyy 'at' HH:mm").withLocale( Locale.UK ).print( recipe.getCreationTime() )
+			Created by <a href="/users/@recipe.getCreator().getUserName()">@recipe.getCreator().getDisplayName()</a> on @java.time.format.DateTimeFormatter.ofPattern("dd MMMM yyyy 'at' HH:mm").withLocale( Locale.UK ).format( recipe.getCreationTime() )
 	      </div>
 	    </div>
 	  </div>

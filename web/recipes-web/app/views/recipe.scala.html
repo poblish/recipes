@@ -1,9 +1,12 @@
+@import service.UserProvider
+
 @(recipe: uk.co.recipes.api.IRecipe, currUser: uk.co.recipes.api.IUser, similarities: List[uk.co.recipes.api.IRecipe],
   recommendedItems: List[uk.co.recipes.api.ICanonicalItem], explorerFilters: uk.co.recipes.service.api.IExplorerFilterDef,
   cuisineColours: uk.co.recipes.ui.CuisineColours, cuisineName: String, cuisineColour: String,
-  recipeCategoriesActivationMap: Map[String,Boolean], dietTypesActivationMap: Map[String,Boolean])
+  recipeCategoriesActivationMap: Map[String,Boolean], dietTypesActivationMap: Map[String,Boolean],
+  playAuth: com.feth.play.module.pa.PlayAuthenticate, users: UserProvider)
 
-@main("Recipe: " + recipe.getTitle() ) {
+@main("Recipe: " + recipe.getTitle(), playAuth, users) {
 
 	@_explorerHeader()
 

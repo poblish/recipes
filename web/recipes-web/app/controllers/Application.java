@@ -1,28 +1,23 @@
 package controllers;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.EnumSet;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-
+import com.codahale.metrics.ConsoleReporter;
+import com.codahale.metrics.MetricRegistry;
+import com.feth.play.module.pa.PlayAuthenticate;
+import com.google.common.base.Function;
+import com.google.common.base.Throwables;
+import com.google.common.cache.Cache;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
+import com.google.common.collect.Sets;
 import net.myrrix.client.ClientRecommender;
-
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
-
 import play.mvc.Controller;
 import play.mvc.Result;
-import service.PlayAuthUserServicePlugin;
+import service.UserProvider;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.IUser;
@@ -38,24 +33,18 @@ import uk.co.recipes.service.api.IUserPersistence;
 import uk.co.recipes.tags.CommonTags;
 import uk.co.recipes.tags.TagUtils;
 
-import com.codahale.metrics.ConsoleReporter;
-import com.codahale.metrics.MetricRegistry;
-import com.feth.play.module.pa.PlayAuthenticate;
-import com.google.common.base.Function;
-import com.google.common.base.Throwables;
-import com.google.common.cache.Cache;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
-import com.google.common.collect.Sets;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.EnumSet;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-/**
- * 
- * TODO
- *
- * @author andrewregan
- *
- */
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class Application extends Controller {
 
 	private static Application STATIC_INST = null;  // FIXME
@@ -71,14 +60,16 @@ public class Application extends Controller {
     private CurryFrenzyLoader cfLoader;
     private Client esClient;
 	private final PlayAuthenticate auth;
+	private final UserProvider userProvider;
 
     private final ExecutorService loadPool = Executors.newFixedThreadPool(3);
 
     @Inject
-    public Application( final EsItemFactory items, final EsRecipeFactory recipes, final EsUserFactory users, final ClientRecommender recommender, final MetricRegistry metrics, final Cache<String,ICanonicalItem> inItemsCache,
-    				    final EsSequenceFactory seqs, final BbcGoodFoodLoader bbcGfLoader, final CurryFrenzyLoader cfLoader,
-    				    final Client esClient,
-						final PlayAuthenticate auth) {
+    public Application(final EsItemFactory items, final EsRecipeFactory recipes, final EsUserFactory users,
+					   final ClientRecommender recommender, final MetricRegistry metrics, final Cache<String,ICanonicalItem> inItemsCache,
+					   final EsSequenceFactory seqs, final BbcGoodFoodLoader bbcGfLoader, final CurryFrenzyLoader cfLoader,
+					   final Client esClient,
+					   final PlayAuthenticate auth, final UserProvider userProvider) {
         this.items = checkNotNull(items);
         this.recipes = checkNotNull(recipes);
         this.users = checkNotNull(users);
@@ -90,6 +81,7 @@ public class Application extends Controller {
         this.cfLoader = checkNotNull(cfLoader);
 		this.esClient = checkNotNull(esClient);
 		this.auth = checkNotNull(auth);
+		this.userProvider = checkNotNull(userProvider);
 
 		STATIC_INST = this; // FIXME
     }
@@ -100,7 +92,7 @@ public class Application extends Controller {
     		names.add( each.getSource().get("canonicalName").toString() );
     	}
 
-    	return ok(views.html.stats_items.render( Lists.newArrayList(names) ));
+    	return ok(views.html.stats_items.render( Lists.newArrayList(names), auth, userProvider));
     }
 
     public String getMetricsString() {
@@ -118,18 +110,18 @@ public class Application extends Controller {
     }
 
 	public Result index() {
-        return ok(views.html.index.render("Your new application is ready."));
+        return ok(views.html.index.render("Your new application is ready.", auth, userProvider));
     }
 
 	public Result stats() {
         try {
-        	return ok(views.html.stats.render( getMetricsString(), items.countAll(), recipes.countAll(), users.countAll(), itemsCache.stats(), /* Ugh! FIXME */ recommender.getAllUserIDs().size(), /* Ugh! FIXME */ recommender.getAllItemIDs().size()));
-        }
-        catch (IOException e) {  // Yuk!!!
-        	return ok(views.html.stats.render( "???", -1L, -1L, -1L, null, -1, -1));
+        	return ok(views.html.stats.render( getMetricsString(), items.countAll(), recipes.countAll(), users.countAll(),
+					itemsCache.stats(), /* Ugh! FIXME */ recommender.getAllUserIDs().size(),
+					/* Ugh! FIXME */ recommender.getAllItemIDs().size(), auth, userProvider));
         }
         catch (TasteException e) {  // Yuk!!!
-        	return ok(views.html.stats.render( "???", -1L, -1L, -1L, null, -1, -1));
+        	return ok(views.html.stats.render( "???", -1L, -1L,
+					-1L, null, -1, -1, auth, userProvider));
         }
     }
 
@@ -154,115 +146,91 @@ public class Application extends Controller {
 	}
 
 	public Result explorerIncludeAdd( final String inName) {
-        return handleUserPreference( new UserTask() {
-
-			@Override
-			public boolean makeChanges( IUser inUser) {
-				try {
-					return inUser.getPrefs().explorerIncludeAdd( tagForFilterItemName(inName) );
-				}
-				catch (RuntimeException e) {
-					return inUser.getPrefs().explorerIncludeAdd( getItem(inName) );
-				}
-			}} );
+        return handleUserPreference(inUser -> {
+            try {
+                return inUser.getPrefs().explorerIncludeAdd( tagForFilterItemName(inName) );
+            }
+            catch (RuntimeException e) {
+                return inUser.getPrefs().explorerIncludeAdd( getItem(inName) );
+            }
+        });
     }
 
 	public Result explorerIncludeAddWithValue( final String inName, final String inValue) {
-        return handleUserPreference( new UserTask() {
-
-			@Override
-			public boolean makeChanges( IUser inUser) {
-				try {
-					return inUser.getPrefs().explorerIncludeAdd( tagForFilterItemName(inName), inValue);
-				}
-				catch (RuntimeException e) {
-					throw new UnsupportedOperationException("Should this work?");
-				}
-			}} );
+        return handleUserPreference(inUser -> {
+            try {
+                return inUser.getPrefs().explorerIncludeAdd( tagForFilterItemName(inName), inValue);
+            }
+            catch (RuntimeException e) {
+                throw new UnsupportedOperationException("Should this work?");
+            }
+        });
     }
 
 	public Result explorerIncludeRemove( final String inName) {
-        return handleUserPreference( new UserTask() {
-
-			@Override
-			public boolean makeChanges( IUser inUser) {
-				try {
-					return inUser.getPrefs().explorerIncludeRemove( tagForFilterItemName(inName) );
-				}
-				catch (RuntimeException e) {
-					return inUser.getPrefs().explorerIncludeRemove( getItem(inName) );
-				}
-			}} );
+        return handleUserPreference(inUser -> {
+            try {
+                return inUser.getPrefs().explorerIncludeRemove( tagForFilterItemName(inName) );
+            }
+            catch (RuntimeException e) {
+                return inUser.getPrefs().explorerIncludeRemove( getItem(inName) );
+            }
+        });
     }
 
 	public Result explorerIncludeRemoveWithValue( final String inName, final String inValue) {
-        return handleUserPreference( new UserTask() {
-
-			@Override
-			public boolean makeChanges( IUser inUser) {
-				try {
-					return inUser.getPrefs().explorerIncludeRemove( tagForFilterItemName(inName), inValue);
-				}
-				catch (RuntimeException e) {
-					return inUser.getPrefs().explorerIncludeRemove( getItem(inName) );
-				}
-			}} );
+        return handleUserPreference(inUser -> {
+            try {
+                return inUser.getPrefs().explorerIncludeRemove( tagForFilterItemName(inName), inValue);
+            }
+            catch (RuntimeException e) {
+                return inUser.getPrefs().explorerIncludeRemove( getItem(inName) );
+            }
+        });
     }
 
 	public Result explorerExcludeAdd( final String inName) {
-        return handleUserPreference( new UserTask() {
-
-			@Override
-			public boolean makeChanges( IUser inUser) {
-				try {
-					return inUser.getPrefs().explorerExcludeAdd( tagForFilterItemName(inName) );
-				}
-				catch (RuntimeException e) {
-					return inUser.getPrefs().explorerExcludeAdd( getItem(inName) );
-				}
-			}} );
+        return handleUserPreference(inUser -> {
+            try {
+                return inUser.getPrefs().explorerExcludeAdd( tagForFilterItemName(inName) );
+            }
+            catch (RuntimeException e) {
+                return inUser.getPrefs().explorerExcludeAdd( getItem(inName) );
+            }
+        });
     }
 
 	public Result explorerExcludeAddWithValue( final String inName, final String inValue) {
-        return handleUserPreference( new UserTask() {
-
-			@Override
-			public boolean makeChanges( IUser inUser) {
-				try {
-					return inUser.getPrefs().explorerExcludeAdd( tagForFilterItemName(inName), inValue);
-				}
-				catch (RuntimeException e) {
-					throw new UnsupportedOperationException("Should this work?");
-				}
-			}} );
+        return handleUserPreference(inUser -> {
+            try {
+                return inUser.getPrefs().explorerExcludeAdd( tagForFilterItemName(inName), inValue);
+            }
+            catch (RuntimeException e) {
+                throw new UnsupportedOperationException("Should this work?");
+            }
+        });
     }
 
 	public Result explorerExcludeRemove( final String inName) {
-        return handleUserPreference( new UserTask() {
-
-			@Override
-			public boolean makeChanges( IUser inUser) {
-				try {
-					return inUser.getPrefs().explorerExcludeRemove( tagForFilterItemName(inName) );
-				}
-				catch (RuntimeException e) {
-					return inUser.getPrefs().explorerExcludeRemove( getItem(inName) );
-				}
-			}} );
+        return handleUserPreference(inUser -> {
+            try {
+                return inUser.getPrefs().explorerExcludeRemove( tagForFilterItemName(inName) );
+            }
+            catch (RuntimeException e) {
+                return inUser.getPrefs().explorerExcludeRemove( getItem(inName) );
+            }
+        });
     }
 
 	public Result explorerExcludeRemoveWithValue( final String inName, final String inValue) {
-        return handleUserPreference( new UserTask() {
-
-			@Override
-			public boolean makeChanges( IUser inUser) {
-				try {
-					return inUser.getPrefs().explorerExcludeRemove( tagForFilterItemName(inName), inValue);
-				}
-				catch (RuntimeException e) {
-					return inUser.getPrefs().explorerExcludeRemove( getItem(inName) );
-				}
-			}} );
+        return handleUserPreference(inUser -> {
+            try {
+                return inUser.getPrefs().explorerExcludeRemove( tagForFilterItemName(inName), inValue);
+            }
+            catch (RuntimeException e) {
+                return inUser.getPrefs().explorerExcludeRemove( getItem(inName) );
+            }
+        });
     }
 
 	private ITag tagForFilterItemName( final String inName) {
@@ -270,12 +238,7 @@ public class Application extends Controller {
 	}
 
 	public Result explorerClearAll() {
-        return handleUserPreference( new UserTask() {
-
-			@Override
-			public boolean makeChanges( IUser inUser) {
-				return inUser.getPrefs().explorerClearAll();
-			}} );
+        return handleUserPreference(inUser -> inUser.getPrefs().explorerClearAll());
     }
 
 	public Result clearDataAndCache() throws IOException {
@@ -288,47 +251,39 @@ public class Application extends Controller {
 	}
 
 	public Result loadBbcGoodFood() throws IOException, InterruptedException {
-		loadPool.submit( new Runnable() {
-
-			@Override
-			public void run() {
-				try {
-					System.out.println("Start BBC Good Food load...");
-					bbcGfLoader.start(false);
-					System.out.println("DONE BBC Good Food load...");
-				} catch (IOException e) {
-					Throwables.propagate(e);
-				} catch (InterruptedException e) {
-					Throwables.propagate(e);
-				}
-			}
-		} );
+		loadPool.submit(() -> {
+            try {
+                System.out.println("Start BBC Good Food load...");
+                bbcGfLoader.start(false);
+                System.out.println("DONE BBC Good Food load...");
+            } catch (IOException e) {
+				throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+				throw new RuntimeException(e);
+            }
+        });
 
 		return ok("Started");
 	}
 
 	public Result loadCurryFrenzy() throws IOException, InterruptedException {
-		loadPool.submit( new Runnable() {
-
-			@Override
-			public void run() {
-				try {
-					System.out.println("Start Curry Frenzy load...");
-					cfLoader.start();
-					System.out.println("DONE Curry Frenzy load...");
-				} catch (IOException e) {
-					Throwables.propagate(e);
-				} catch (InterruptedException e) {
-					Throwables.propagate(e);
-				}
-			}
-		} );
+		loadPool.submit(() -> {
+            try {
+                System.out.println("Start Curry Frenzy load...");
+                cfLoader.start();
+                System.out.println("DONE Curry Frenzy load...");
+            } catch (IOException e) {
+				throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
 		return ok("Started");
 	}
 
 	public Result handleUserPreference( final UserTask inTask) {
-        final IUser currUser = /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( metrics, session());
+        final IUser currUser = userProvider.getUser(session());
         if ( currUser == null) {
 		    return unauthorized("Not logged-in");
         }
@@ -341,13 +296,13 @@ public class Application extends Controller {
 			((EsUserFactory) users).update(currUser);
 		}
         catch (IOException e) {
-			throw Throwables.propagate(e);
+			throw new RuntimeException(e);
 		}
 
         try {
 			users.waitUntilRefreshed();
 		}
-        catch (InterruptedException e) {
+        catch (RuntimeException e) {
 			// NOOP
 		}
 

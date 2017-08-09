@@ -6,16 +6,21 @@ scalaVersion in ThisBuild := "2.11.11"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
 
-libraryDependencies += "uk.co.recipes" % "recipes-domain" % "0.0.1-SNAPSHOT" // exclude("org.scala-stm", "scala-stm_2.10.0")
-libraryDependencies += "com.squareup.dagger" % "dagger-compiler" % "1.1.0"
+libraryDependencies += "com.google.dagger" % "dagger" % "2.11"
+libraryDependencies += "com.google.dagger" % "dagger-compiler" % "2.11"
 libraryDependencies += "com.codahale.metrics" % "metrics-core" % "3.0.1"
 libraryDependencies += "com.codahale.metrics" % "metrics-servlets" % "3.0.1"
-libraryDependencies += "com.feth" %% "play-authenticate" % "0.8.3"  // "0.5.0-SNAPSHOT" // exclude("org.scala-stm", "scala-stm_2.10.0")
+libraryDependencies += "com.feth" %% "play-authenticate" % "0.8.3"
+libraryDependencies += "org.apache.commons" % "commons-lang3" % "3.6"  // For JGravatar
+libraryDependencies += "com.google.guava" % "guava" % "23.0"  // Enforced
+libraryDependencies += "uk.co.recipes" % "recipes-domain" % "1.0.0"
+libraryDependencies += "org.asynchttpclient" % "async-http-client" % "2.1.0-alpha23"  // #################
+
 
 resolvers += Resolver.mavenLocal
 
 // FIXME @ https://www.playframework.com/documentation/2.6.x/JavaDependencyInjection#Static-routes-generator
-routesGenerator := StaticRoutesGenerator
+// routesGenerator := StaticRoutesGenerator
 
 //resolvers += "play-easymail (release)" at "http://joscha.github.com/play-easymail/repo/releases/"
 //resolvers += "play-easymail (snapshot)" at "http://joscha.github.com/play-easymail/repo/snapshots/"

@@ -1,7 +1,10 @@
-@(item: uk.co.recipes.api.ICanonicalItem, currUser: uk.co.recipes.api.IUser, similarities: List[uk.co.recipes.api.ICanonicalItem], recommendedRecipes: List[uk.co.recipes.api.IRecipe],
-  hasGoodRecommendations: Boolean, cuisineColours: uk.co.recipes.ui.CuisineColours, recipesCount: Integer)
+@import service.UserProvider
 
-@main("Item: " + item.getCanonicalName() ) {
+@(item: uk.co.recipes.api.ICanonicalItem, currUser: uk.co.recipes.api.IUser, similarities: List[uk.co.recipes.api.ICanonicalItem], recommendedRecipes: List[uk.co.recipes.api.IRecipe],
+  hasGoodRecommendations: Boolean, cuisineColours: uk.co.recipes.ui.CuisineColours, recipesCount: Integer,
+  playAuth: com.feth.play.module.pa.PlayAuthenticate, users: UserProvider)
+
+@main("Item: " + item.getCanonicalName(), playAuth, users) {
 
 	@_explorerHeader()
 

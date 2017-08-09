@@ -1,6 +1,8 @@
-@(message: String)
+@import service.UserProvider
 
-@main("Recipes") {
+@(message: String, playAuth: com.feth.play.module.pa.PlayAuthenticate, users: UserProvider)
+
+@main("Recipes", playAuth, users) {
     
 <div class="hero-unit">
   <h1>Welcome to Recipes</h1>

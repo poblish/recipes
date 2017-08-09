@@ -1,6 +1,12 @@
-@(currentUser: uk.co.recipes.api.IUser, recipe: uk.co.recipes.api.IRecipe, recommendedRecipes: List[uk.co.recipes.api.IRecipe], cuisineColours: uk.co.recipes.ui.CuisineColours)
+@import service.UserProvider
 
-@main("Create Recipe") {
+@(currentUser: uk.co.recipes.api.IUser,
+  recipe: uk.co.recipes.api.IRecipe,
+  recommendedRecipes: List[uk.co.recipes.api.IRecipe],
+  cuisineColours: uk.co.recipes.ui.CuisineColours,
+  playAuth: com.feth.play.module.pa.PlayAuthenticate, users: UserProvider)
+
+@main("Create Recipe", playAuth, users) {
 
 	@_explorerHeader()
 

@@ -1,17 +1,11 @@
 package controllers;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-import javax.inject.Inject;
-
+import com.codahale.metrics.MetricRegistry;
+import com.feth.play.module.pa.PlayAuthenticate;
 import jgravatar.Gravatar;
 import play.mvc.Controller;
 import play.mvc.Result;
-import service.PlayAuthUserServicePlugin;
+import service.UserProvider;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
@@ -23,33 +17,35 @@ import uk.co.recipes.service.api.IUserPersistence;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.ui.CuisineColours;
 
-import com.codahale.metrics.MetricRegistry;
+import javax.inject.Inject;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
-/**
- * 
- * TODO
- *
- * @author andrewregan
- *
- */
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class Users extends Controller {
 
     private IUserPersistence users;
-    private MetricRegistry metrics;
     private UserFaves faves;
     private IRecommendationsAPI recsApi;
     private CuisineColours colours;
     private MyrrixPrefsIngester prefsIngester;
+    private PlayAuthenticate auth;
+    private UserProvider userProvider;
 
     @Inject
-    public Users( final EsUserFactory inUsers, final MetricRegistry metrics, final UserFaves userFaves,
-    			  final MyrrixRecommendationService inRecService, final CuisineColours colours, final MyrrixPrefsIngester inIngester) {
+    public Users(final EsUserFactory inUsers, final MetricRegistry metrics, final UserFaves userFaves,
+                 final MyrrixRecommendationService inRecService, final CuisineColours colours,
+                 final MyrrixPrefsIngester inIngester,
+                 final PlayAuthenticate auth, final UserProvider userProvider) {
         this.users = checkNotNull(inUsers);
-        this.metrics = checkNotNull(metrics);
         this.faves = checkNotNull(userFaves);
         this.recsApi = checkNotNull(inRecService);
         this.colours = checkNotNull(colours);
         this.prefsIngester = checkNotNull(inIngester);
+        this.auth = checkNotNull(auth);
+        this.userProvider = checkNotNull(userProvider);
     }
 
     public Result display( final String id) throws IOException {
@@ -59,7 +55,7 @@ public class Users extends Controller {
 
         final List<IRecipe> recommendedRecipes = recsApi.recommendRecipes( user, 12);
         final List<ICanonicalItem> recommendedItems = recsApi.recommendIngredients( user, 12);
-        return ok(views.html.user.render( user, recommendedRecipes, recommendedItems, colours, gravatar.getUrl( user.getEmail() )));
+        return ok(views.html.user.render( user, recommendedRecipes, recommendedItems, colours, gravatar.getUrl( user.getEmail() ), auth, userProvider));
     }
 
     public Result ingestPrefs() throws IOException {
@@ -85,6 +81,6 @@ public class Users extends Controller {
     }
 
     private IUser getLocalUser() {
-        return /* Yuk! */ PlayAuthUserServicePlugin.getLocalUser( metrics, session());
+        return userProvider.getUser(session());
     }
 }

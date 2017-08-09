@@ -1,8 +1,11 @@
-@(user: uk.co.recipes.api.IUser, recommendedRecipes: List[uk.co.recipes.api.IRecipe], recommendedItems: List[uk.co.recipes.api.ICanonicalItem], cuisineColours: uk.co.recipes.ui.CuisineColours, gravatarUrl: String)
-
 @import com.feth.play.module.pa.views.html._
+@import service.UserProvider
 
-@main("User: " + user.getDisplayName()) {
+@(user: uk.co.recipes.api.IUser, recommendedRecipes: List[uk.co.recipes.api.IRecipe], recommendedItems: List[uk.co.recipes.api.ICanonicalItem],
+  cuisineColours: uk.co.recipes.ui.CuisineColours, gravatarUrl: String,
+  playAuth: com.feth.play.module.pa.PlayAuthenticate, users: UserProvider)
+
+@main("User: " + user.getDisplayName(), playAuth, users) {
 	<section id="top">
 	    <div class="wrapper">
 	        <h1>@user.getDisplayName()</h1>
