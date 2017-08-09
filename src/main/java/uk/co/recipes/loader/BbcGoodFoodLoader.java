@@ -75,6 +75,11 @@ public class BbcGoodFoodLoader {
         }
     }
 
+    @Inject
+    public BbcGoodFoodLoader() {
+        // For Dagger
+    }
+
     public void start(boolean inClearData) throws IOException, InterruptedException {
         updater.startListening();
 

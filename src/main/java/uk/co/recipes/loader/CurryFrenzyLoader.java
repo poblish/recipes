@@ -70,6 +70,11 @@ public class CurryFrenzyLoader {
         }
     }
 
+    @Inject
+    public CurryFrenzyLoader() {
+        // For Dagger
+    }
+
     public void start() throws IOException, InterruptedException {
         updater.startListening();
 

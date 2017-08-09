@@ -1,6 +1,3 @@
-/**
- *
- */
 package uk.co.recipes.faves;
 
 import uk.co.recipes.api.ICanonicalItem;
@@ -12,17 +9,15 @@ import uk.co.recipes.persistence.EsUserFactory;
 import javax.inject.Inject;
 import java.io.IOException;
 
-/**
- * TODO
- *
- * @author andrewregan
- */
 public class UserFaves {
 
+    @Inject EsUserFactory userFactory;
+    @Inject IEventService eventService;
+
     @Inject
-    EsUserFactory userFactory;
-    @Inject
-    IEventService eventService;
+    public UserFaves() {
+        // For Dagger
+    }
 
     public void faveItem(final IUser inUser, final ICanonicalItem inItem) throws IOException {
         boolean unfave = inUser.isFave(inItem);
