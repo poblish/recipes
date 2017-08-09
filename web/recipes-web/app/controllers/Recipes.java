@@ -199,64 +199,48 @@ public class Recipes extends AbstractExplorableController {
 	}
 
     public Result rate( final String name, final int inScore) throws IOException, InterruptedException {
-    	return handleLoggedInRecipeBasedAction( name, new RecipeAction() {
+    	return handleLoggedInRecipeBasedAction( name, (loggedInUser, recipe) -> {
+            ratings.addRating( loggedInUser, new RecipeRating( recipe, inScore) );
 
-			@Override
-			public Result doAction( final IUser loggedInUser, final IRecipe recipe) throws IOException, InterruptedException {
-				ratings.addRating( loggedInUser, new RecipeRating( recipe, inScore) );
-				  
-		        return reloadRecipe(recipe);
-			}
-		} );
+            return reloadRecipe(recipe);
+        });
     }
 
     public Result removeIngredient( final String name, final String ingredient) throws IOException, InterruptedException {
-    	return handleLoggedInRecipeBasedAction( name, new RecipeAction() {
+    	return handleLoggedInRecipeBasedAction( name, (loggedInUser, recipe) -> {
+            // FIXME Check recipe.getForkDetails(), also creator vs. current user for permissions!
 
-			@Override
-			public Result doAction( final IUser loggedInUser, final IRecipe recipe) throws IOException, InterruptedException {
-		        // FIXME Check recipe.getForkDetails(), also creator vs. current user for permissions!
+            final ICanonicalItem theItemToRemove = checkNotNull( items.get(ingredient).get(), "Could not load Item");
 
-		        final ICanonicalItem theItemToRemove = checkNotNull( items.get(ingredient).get(), "Could not load Item");
+            recipes.removeItems( recipe, theItemToRemove);
+            recipes.waitUntilRefreshed();
 
-		        recipes.removeItems( recipe, theItemToRemove);
-		        recipes.waitUntilRefreshed();
-
-		        return reloadRecipe(recipe);
-			}
-		} );
+            return reloadRecipe(recipe);
+        });
      }
 
     public Result addIngredient( final String name, final String ingredient) throws IOException, InterruptedException {
-    	return handleLoggedInRecipeBasedAction( name, new RecipeAction() {
+    	return handleLoggedInRecipeBasedAction( name, (loggedInUser, recipe) -> {
+            // FIXME Check recipe.getForkDetails(), also creator vs. current user for permissions!
 
-			@Override
-			public Result doAction( final IUser loggedInUser, final IRecipe recipe) throws IOException, InterruptedException {
-		        // FIXME Check recipe.getForkDetails(), also creator vs. current user for permissions!
+            final ICanonicalItem theItemToAdd = checkNotNull( items.get(ingredient).get(), "Could not load Item");
 
-		        final ICanonicalItem theItemToAdd = checkNotNull( items.get(ingredient).get(), "Could not load Item");
+            recipes.addIngredients( recipe, new Ingredient( theItemToAdd, /* FIXME: hardcoded: */ new Quantity( Units.GRAMMES, 100)));
+            recipes.waitUntilRefreshed();
 
-		        recipes.addIngredients( recipe, new Ingredient( theItemToAdd, /* FIXME: hardcoded: */ new Quantity( Units.GRAMMES, 100)));
-		        recipes.waitUntilRefreshed();
-
-		        return reloadRecipe(recipe);
-			}
-		} );
+            return reloadRecipe(recipe);
+        });
      }
 
     // Bear in mind: can be unfave-ing too!
     public Result fave( final String name) throws IOException, InterruptedException {
-    	return handleLoggedInRecipeBasedAction( name, new RecipeAction() {
+    	return handleLoggedInRecipeBasedAction( name, (loggedInUser, recipe) -> {
+            faves.faveRecipe( loggedInUser, recipe);
 
-			@Override
-			public Result doAction( final IUser loggedInUser, final IRecipe recipe) throws IOException, InterruptedException {
-				faves.faveRecipe( loggedInUser, recipe);
+            recipes.waitUntilRefreshed();
 
-		        recipes.waitUntilRefreshed();
-
-		        return reloadRecipe(recipe);
-			}
-		} );
+            return reloadRecipe(recipe);
+        });
      }
 
     private Result handleLoggedInRecipeBasedAction( final String inRecipeName, final RecipeAction inAction) throws IOException, InterruptedException {

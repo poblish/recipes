@@ -100,7 +100,7 @@ public final class Gravatar {
 	}
 
 	private String formatUrlParameters() {
-		List<String> params = new ArrayList<String>();
+		List<String> params = new ArrayList<>();
 
 		if (size != DEFAULT_SIZE)
 			params.add("s=" + size);

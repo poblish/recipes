@@ -1,13 +1,9 @@
-/**
- * 
- */
 package service;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.service.AbstractUserService;
 import com.feth.play.module.pa.user.*;
 import com.google.common.base.Optional;
-import com.google.common.base.Throwables;
 import play.Logger;
 import uk.co.recipes.User;
 import uk.co.recipes.UserAuth;
@@ -130,7 +126,7 @@ public class PlayAuthUserServicePlugin extends AbstractUserService {
 			return newUser;
 		}
 		catch (IOException e) {
-			throw Throwables.propagate(e);
+			throw new RuntimeException(e);
 		}
 	}
 }
