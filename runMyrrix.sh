@@ -2,6 +2,8 @@
 pkill -f net.myrrix.web.Runner
 pkill -f org.elasticsearch.bootstrap.ElasticSearch
 
+# Needed to manually hack myrrix project (!!!) to update Guava, and install as 1.0.3
+
 mvn clean install -DskipTests=true
 mvn -f myrrixRescorer/ clean install  -DskipTests=true
 
