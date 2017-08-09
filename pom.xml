@@ -10,8 +10,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <!-- ClientRecommender won't let us go any further than this :( -->
-            <version>18.0</version>
+            <version>23.0</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -110,7 +109,8 @@
         <dependency>
             <groupId>net.myrrix</groupId>
             <artifactId>myrrix-client</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
+            <!-- My hacked version -->
+            <version>1.0.3</version>
         </dependency>
         <dependency>
             <groupId>com.google.dagger</groupId>

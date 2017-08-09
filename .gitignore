@@ -11,3 +11,4 @@ curryfrenzy/
 myrrixRescorer/dependency-reduced-pom.xml
 .idea
 *.iml
+*.out
