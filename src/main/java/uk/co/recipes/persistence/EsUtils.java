@@ -1,5 +1,7 @@
 package uk.co.recipes.persistence;
 
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer.Context;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,13 +12,13 @@ import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import org.cfg4j.provider.ConfigurationProvider;
 import org.elasticsearch.action.ActionResponse;
-import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse.AnalyzeToken;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsRequestBuilder;
 import org.elasticsearch.action.get.MultiGetItemResponse;
 import org.elasticsearch.action.get.MultiGetResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.bytes.BytesReference;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.elasticsearch.index.reindex.DeleteByQueryAction;
 import org.elasticsearch.search.SearchHit;
@@ -43,10 +45,9 @@ import java.util.List;
  */
 public class EsUtils {
 
-    @Inject
-    Client esClient;
-    @Inject
-    ObjectMapper mapper;
+    @Inject Client esClient;
+    @Inject ObjectMapper mapper;
+    @Inject MetricRegistry metrics;
 
     private static final Logger LOG = LoggerFactory.getLogger(EsUtils.class);
 
@@ -77,25 +78,27 @@ public class EsUtils {
     }
 
     public void waitUntilTypesRefreshed(final String... inTypes) {
-        final IndicesStatsRequestBuilder reqBuilder = esClient.admin().indices().prepareStats("recipe").setRefresh(true).setTypes(inTypes);
-        final long currCount = reqBuilder.execute().actionGet().getTotal().getRefresh().getTotal();
-        int waitsToGo = 10;
+        try (Context ignored = metrics.timer("elasticsearch.waitUntilTypesRefreshed").time()) {
+            final IndicesStatsRequestBuilder reqBuilder = esClient.admin().indices().prepareStats("recipe").setRefresh(true).setTypes(inTypes);
+            final long currCount = reqBuilder.execute().actionGet().getTotal().getRefresh().getTotal();
+            int waitsToGo = 10;
 
 //		LOG.info("Is... "  + currCount);
 
-        try {
-            do {
-                Thread.sleep(250);
-                //			LOG.info("Now... "  + reqBuilder.execute().actionGet().getTotal().getRefresh().getTotal() + ", waitsToGo = " + waitsToGo);
-                waitsToGo--;
+            try {
+                do {
+                    Thread.sleep(250);
+                    //			LOG.info("Now... "  + reqBuilder.execute().actionGet().getTotal().getRefresh().getTotal() + ", waitsToGo = " + waitsToGo);
+                    waitsToGo--;
+                }
+                while (waitsToGo > 0 && reqBuilder.execute().actionGet().getTotal().getRefresh().getTotal() == currCount);
+            } catch (InterruptedException e) {
+                Throwables.propagate(e);
             }
-            while (waitsToGo > 0 && reqBuilder.execute().actionGet().getTotal().getRefresh().getTotal() == currCount);
-        } catch (InterruptedException e) {
-            Throwables.propagate(e);
-        }
 
-        if (waitsToGo <= 0) {
-            throw new RuntimeException("Timeout exceeded!");
+            if (waitsToGo <= 0) {
+                throw new RuntimeException("Timeout exceeded!");
+            }
         }
     }
 
@@ -159,22 +162,20 @@ public class EsUtils {
     }
 
     public static byte[] toBytes(final BytesReference ref) {
-//        return ref.toBytes();
          return BytesReference.toBytes(ref);
     }
 
     public static QueryStringQueryBuilder queryString(final String q) {
-//        return org.elasticsearch.index.query.QueryBuilders.queryString(q);
-         return org.elasticsearch.index.query.QueryBuilders.queryStringQuery(q);
+         return QueryBuilders.queryStringQuery(q);
     }
 
     public ActionResponse deleteAllByType(final String index, final String type) {
-//        return esClient.admin().indices().prepareDeleteMapping().setIndices(index).setType(type).execute().actionGet();
-
         // https://www.elastic.co/guide/en/elasticsearch/client/java-api/current/java-docs-delete-by-query.html
-		return DeleteByQueryAction.INSTANCE.newRequestBuilder(esClient)
-				.filter(org.elasticsearch.index.query.QueryBuilders.typeQuery(type))
-				.source(index)
-				.get();
+        try (Context ignored = metrics.timer("elasticsearch.deleteAll." + type).time()) {
+            return DeleteByQueryAction.INSTANCE.newRequestBuilder(esClient)
+                        .filter(QueryBuilders.typeQuery(type))
+                        .source(index)
+                        .get();
+        }
     }
 }
