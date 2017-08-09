@@ -101,18 +101,14 @@ public class EsRecipeFactory implements IRecipePersistence {
     }
 
     public IRecipe put(final IRecipe inRecipe, String inId_Unused) throws IOException {
-        final Context timerCtxt = metrics.timer(TIMER_RECIPES_PUTS).time();
+        try (Context ignored = metrics.timer(TIMER_RECIPES_PUTS).time()) {
+            final long newId = sequences.getSeqnoForType("recipes_seqno") + Recipe.BASE_ID;
 
-        final long newId = sequences.getSeqnoForType("recipes_seqno") + Recipe.BASE_ID;
-
-        try {
             inRecipe.setId(newId);
 
             final String indexedId = esClient.prepareIndex("recipe", "recipes", String.valueOf(newId))/*.setCreate(true) */.setSource(mapper.writeValueAsString(inRecipe)).execute().actionGet().getId();
 
             eventService.addRecipe(inRecipe);
-        } finally {
-            timerCtxt.stop();
         }
 
         return inRecipe;

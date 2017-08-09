@@ -81,7 +81,7 @@ public class TestDataUtils {
     }
 
     public List<IIngredient> parseIngredientsFrom(final IUser adminUser, final File inDir, final String inFilename) throws IOException {
-        try (Context ctxt = metrics.timer(TIMER_RECIPE_PARSE).time()) {
+        try (Context ignored = metrics.timer(TIMER_RECIPE_PARSE).time()) {
             return timedParseIngredientsFrom(adminUser, inDir, inFilename);
         }
     }

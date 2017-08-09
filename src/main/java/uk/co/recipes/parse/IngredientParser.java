@@ -77,7 +77,7 @@ public class IngredientParser {
     }
 
     public boolean parse(final String inRawStr, final IParsedIngredientHandler inHandler, final IDeferredIngredientHandler inDeferHandler) {
-        try (Context ctxt = metrics.timer(TIMER_RECIPE_LINE_PARSE).time()) {
+        try (Context ignored = metrics.timer(TIMER_RECIPE_LINE_PARSE).time()) {
             return timedParse(inRawStr, inHandler, inDeferHandler);
         }
     }
