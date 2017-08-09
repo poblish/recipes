@@ -1,6 +1,7 @@
 package uk.co.recipes.loader;
 
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer.Context;
 import com.google.common.base.Throwables;
 import dagger.Component;
 import org.cfg4j.provider.ConfigurationProvider;
@@ -20,6 +21,7 @@ import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_DIR_PROCESS;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_PUTS;
 
 
@@ -93,13 +95,15 @@ public class CurryFrenzyLoader {
 
         final File path = config.getProperty("loader.curryfrenzy.path", File.class);
 
-        for (File each : path.listFiles((dir, name) -> name.endsWith(".txt"))) {
-            try {
-                dataUtils.parseIngredientsFrom(adminUser, path, each.getName());
-                count++;
-            } catch (RuntimeException e) {
-                System.err.println(e);
-                errors++;
+        try (Context ctxt = metrics.timer(TIMER_RECIPES_DIR_PROCESS + ":curryFrenzy").time()) {
+            for (File each : path.listFiles((dir, name) -> name.endsWith(".txt"))) {
+                try {
+                    dataUtils.parseIngredientsFrom(adminUser, path, each.getName());
+                    count++;
+                } catch (RuntimeException e) {
+                    System.err.println(e);
+                    errors++;
+                }
             }
         }
 

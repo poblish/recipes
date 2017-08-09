@@ -103,7 +103,7 @@ public class BbcGoodFoodLoader {
         int count = 0;
 //		int errors = 0;
 
-        final File path = config.getProperty("loader.curryfrenzy.path", File.class);
+        final File path = config.getProperty("loader.bbcgoodfood.path", File.class);
 
         try (Context ctxt = metrics.timer(TIMER_RECIPES_DIR_PROCESS + ":bbcGoodFood").time()) {
             for (File each : path.listFiles((dir, name) -> name.endsWith(".txt"))) {
