@@ -25,21 +25,12 @@ import java.util.regex.Pattern;
 import static java.util.Locale.ENGLISH;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPE_LINE_PARSE;
 
-/**
- * TODO
- *
- * @author andrewregan
- */
 public class IngredientParser {
 
-    @Inject
-    EsItemFactory itemFactory;
-    @Inject
-    NameAdjuster nameAdjuster;
-    @Inject
-    MetricRegistry metrics;
-    @Inject
-    OptionalNameSplitter optSplitter;
+    @Inject EsItemFactory itemFactory;
+    @Inject NameAdjuster nameAdjuster;
+    @Inject MetricRegistry metrics;
+    @Inject OptionalNameSplitter optSplitter;
 
     @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(IngredientParser.class);
@@ -57,7 +48,7 @@ public class IngredientParser {
     private static final Pattern ITEM_NAME_PATTERN = Pattern.compile(ITEM_NAME, Pattern.CASE_INSENSITIVE);
 
     private static final Pattern A = Pattern.compile(NUMBER_AND_UNITS + " " + SUFFIX, Pattern.CASE_INSENSITIVE);
-    private static final Pattern B = Pattern.compile("((?:a )?(few |generous |good |large |small |thumb-sized? )?(splash|bottle|bunch|dash|drizzle|drops?|few|glass|handful|little|piece|knob|pinch|quantity|splash|squeeze)(?: of)?) " + SUFFIX, Pattern.CASE_INSENSITIVE);
+    private static final Pattern B = Pattern.compile("((?:a )?(few |generous |good |large |small |thumb-sized? )?(bottle|bunch|dash|drizzle|drops?|few|glass|handful|little|piece|knob|pinch|quantity|splash|squeeze)(?: of)?) " + SUFFIX, Pattern.CASE_INSENSITIVE);
     private static final Pattern C = Pattern.compile("((?:finely )?(?:grated )?(?:juice|juice and zest|zest|zest and juice))(?: of)? " + DEC_FRAC_NUMBER_PATTERN + " " + SUFFIX, Pattern.CASE_INSENSITIVE);
     private static final Pattern D = Pattern.compile("(icing sugar|nutmeg|parmesan|salt|salt and pepper.*|beaten egg|.*cream)" + NOTES, Pattern.CASE_INSENSITIVE);
     private static final Pattern E = Pattern.compile("((?:dressed|steamed|cooked|sliced|sweet|roughly chopped) [\\w-\\(\\) ]*)" + NOTES, Pattern.CASE_INSENSITIVE);
@@ -281,7 +272,7 @@ public class IngredientParser {
             handleSplitIngredient(splitResults.getFirstResults(), false, inQuantity, inNoteStr, inName.getNotes(), inHandler, inDeferHandler);
             handleSplitIngredient(splitResults.getSecondResults(), false, inQuantity, inNoteStr, inName.getNotes(), inHandler, inDeferHandler);
         } catch (IOException e) {
-            Throwables.propagate(e);  // Ugh FIXME
+            throw new RuntimeException(e);  // Ugh
         }
     }
 
@@ -301,7 +292,7 @@ public class IngredientParser {
             handleSplitIngredient(splitResults.getFirstResults(), true, inQuantity, inNoteStr, inName.getNotes(), inHandler, inDeferHandler);
             handleSplitIngredient(splitResults.getSecondResults(), true, inQuantity, inNoteStr, inName.getNotes(), inHandler, inDeferHandler);
         } catch (IOException e) {
-            Throwables.propagate(e);  // Ugh FIXME
+            throw new RuntimeException(e);  // Ugh
         }
     }
 
