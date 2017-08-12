@@ -155,15 +155,22 @@ public class EsSearchServiceTest {
         assertThat(output, allOf(containsString("Curry Paste"), containsString("Blackcurrants"), containsString("Curry Leaves")));
     }
 
-    // AGR FIXME 6/8/17 Definitely flaky
     @Test
-    public void testSerializeResults() throws IOException {
-        final List<ISearchResult<?>> results1 = searchService.findPartial("curr", 4, ITEMS, RECIPES);
+    public void testSerializeItem() throws IOException {
+        final List<ISearchResult<?>> results1 = searchService.findPartial("Redc", 4, ITEMS);
         final String stringOutput = mapper.writeValueAsString(results1);
         assertThat(stringOutput, containsString("\"id\":"));  // at least one Id
         assertThat(stringOutput, containsString("\"displayName\":\"Redcurrants\""));
-        assertThat(stringOutput, containsString("\"displayName\":\"chCashBlackSpiceCurry.txt\""));
         assertThat(stringOutput, containsString("\"type\":\"item\""));
+        assertThat( /* Produce JsonNode */ mapper.valueToTree(results1).toString(), is(stringOutput));
+    }
+
+    @Test
+    public void testSerializeRecipe() throws IOException {
+        final List<ISearchResult<?>> results1 = searchService.findPartial("BlackSpice", 2, RECIPES);
+        final String stringOutput = mapper.writeValueAsString(results1);
+        assertThat(stringOutput, containsString("\"id\":"));  // at least one Id
+        assertThat(stringOutput, containsString("\"displayName\":\"chCashBlackSpiceCurry.txt\""));
         assertThat(stringOutput, containsString("\"type\":\"recipe\""));
         assertThat( /* Produce JsonNode */ mapper.valueToTree(results1).toString(), is(stringOutput));
     }
