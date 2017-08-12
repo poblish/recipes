@@ -6,6 +6,7 @@ import org.apache.mahout.cf.taste.common.TasteException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import uk.co.recipes.DaggerModule;
+import uk.co.recipes.ProductionMyrrixModule;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
 import uk.co.recipes.service.taste.impl.MyrrixTasteSimilarityService;
@@ -15,23 +16,12 @@ import javax.inject.Singleton;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * TODO
- *
- * @author andrewregan
- */
 public class MyrrixTest {
 
-    // private final static ObjectGraph GRAPH = ObjectGraph.create( new DaggerModule() );
-
-    @Inject
-    MyrrixTasteRecommendationService api;
-    @Inject
-    MyrrixRecommendationService fullApi;
-    @Inject
-    MyrrixTasteSimilarityService explorerApi;
-    @Inject
-    ClientRecommender recommender;
+    @Inject MyrrixTasteRecommendationService api;
+    @Inject MyrrixRecommendationService fullApi;
+    @Inject MyrrixTasteSimilarityService explorerApi;
+    @Inject ClientRecommender recommender;
 
     @BeforeClass
     public void setUp() throws IOException, TasteException {
@@ -41,7 +31,7 @@ public class MyrrixTest {
         recommender.refresh();
     }
 
-    @Test
+    @Test(enabled = false)
     public void testMyrrixRecommendations() throws IOException, TasteException {
         long userId = 1000L;
         // FIXME - these are too unpredictable at the moment
@@ -52,7 +42,7 @@ public class MyrrixTest {
         api.recommendIngredients(userId++, 10);  // No asserts: just too variable
     }
 
-    @Test
+    @Test(enabled = false)
     public void testMyrrixSimilarity() throws IOException, TasteException {
         long userId = 1000L;
         // FIXME - these are too unpredictable at the moment
@@ -65,7 +55,7 @@ public class MyrrixTest {
     }
 
     @Singleton
-    @Component(modules = {DaggerModule.class})
+    @Component(modules = {DaggerModule.class, ProductionMyrrixModule.class})
     public interface TestComponent {
         void inject(final MyrrixTest runner);
     }

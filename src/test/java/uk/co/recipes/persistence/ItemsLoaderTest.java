@@ -9,6 +9,7 @@ import dagger.Module;
 import dagger.Provides;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.yaml.snakeyaml.Yaml;
 import uk.co.recipes.DaggerModule;
 import uk.co.recipes.mocks.MockFactories;
 
@@ -61,6 +62,12 @@ public class ItemsLoaderTest {
         @Named("prefixAdjustments")
         List<String> providePrefixAdjustments() {
             return Collections.emptyList();
+        }
+
+        @Provides
+        @Singleton
+        Yaml yaml() {
+            return new Yaml();
         }
 
         @Provides

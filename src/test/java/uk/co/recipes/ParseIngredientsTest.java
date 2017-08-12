@@ -80,7 +80,6 @@ public class ParseIngredientsTest {
     @BeforeClass
     public void loadIngredientsFromYaml() throws InterruptedException, IOException {
         loader.load();
-        Thread.sleep(1000);
     }
 
     @Test
@@ -328,7 +327,7 @@ public class ParseIngredientsTest {
     }
 
     @Singleton
-    @Component(modules = {DaggerModule.class})
+    @Component(modules = {DaggerModule.class, ProductionMyrrixModule.class})
     public interface TestComponent {
         void inject(final ParseIngredientsTest runner);
     }

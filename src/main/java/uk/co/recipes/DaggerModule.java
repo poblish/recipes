@@ -11,8 +11,6 @@ import com.google.common.io.Files;
 import com.google.common.io.LineProcessor;
 import dagger.Module;
 import dagger.Provides;
-import net.myrrix.client.ClientRecommender;
-import net.myrrix.client.MyrrixClientConfiguration;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.cfg4j.provider.ConfigurationProvider;
@@ -25,6 +23,7 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.Yaml;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.events.impl.DefaultEventService;
@@ -48,13 +47,16 @@ import java.util.concurrent.TimeUnit;
 @Module
 public class DaggerModule {
 
-//    @Inject
-//    @Named("elasticSearchItemsUrl") String elasticSearchItemsUrl;
-
     @Provides
     @Singleton
     HttpClient provideHttpClient() {
         return HttpClientBuilder.create().build();
+    }
+
+    @Provides
+    @Singleton
+    Yaml provideYamlInstance() {
+        return new Yaml();
     }
 
     @Provides
@@ -140,21 +142,6 @@ public class DaggerModule {
                 .build();
         reporter.start(1, TimeUnit.MINUTES);
         return registry;
-    }
-
-    @Provides
-    @Singleton
-    ClientRecommender provideClientRecommender() {
-        final MyrrixClientConfiguration clientConfig = new MyrrixClientConfiguration();
-        clientConfig.setHost("localhost");
-        clientConfig.setPort(8080);
-
-        // TranslatingClientRecommender recommender = new TranslatingClientRecommender( new ClientRecommender(clientConfig) );
-        try {
-            return new ClientRecommender(clientConfig);
-        } catch (IOException e) {
-            throw Throwables.propagate(e);
-        }
     }
 
     @Provides

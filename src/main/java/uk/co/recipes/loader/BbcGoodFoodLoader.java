@@ -7,6 +7,7 @@ import dagger.Component;
 import org.cfg4j.provider.ConfigurationProvider;
 import org.elasticsearch.client.Client;
 import uk.co.recipes.DaggerModule;
+import uk.co.recipes.ProductionMyrrixModule;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.persistence.*;
@@ -130,9 +131,8 @@ public class BbcGoodFoodLoader {
     }
 
     @Singleton
-    @Component(modules = {DaggerModule.class})
+    @Component(modules = {DaggerModule.class, ProductionMyrrixModule.class})
     public interface AppComponent {
-
         void inject(final BbcGoodFoodLoader runner);
     }
 }

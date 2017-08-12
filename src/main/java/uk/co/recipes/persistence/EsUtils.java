@@ -81,13 +81,11 @@ public class EsUtils {
         try (Context ignored = metrics.timer("elasticsearch.waitUntilTypesRefreshed").time()) {
             final IndicesStatsRequestBuilder reqBuilder = esClient.admin().indices().prepareStats("recipe").setRefresh(true).setTypes(inTypes);
             final long currCount = reqBuilder.execute().actionGet().getTotal().getRefresh().getTotal();
-            int waitsToGo = 10;
-
-//		LOG.info("Is... "  + currCount);
+            int waitsToGo = 25;
 
             try {
                 do {
-                    Thread.sleep(250);
+                    Thread.sleep(100);
                     //			LOG.info("Now... "  + reqBuilder.execute().actionGet().getTotal().getRefresh().getTotal() + ", waitsToGo = " + waitsToGo);
                     waitsToGo--;
                 }

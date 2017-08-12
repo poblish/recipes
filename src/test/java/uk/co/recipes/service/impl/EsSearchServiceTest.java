@@ -1,6 +1,3 @@
-/**
- *
- */
 package uk.co.recipes.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,11 +28,6 @@ import static uk.co.recipes.service.api.ESearchArea.ITEMS;
 import static uk.co.recipes.service.api.ESearchArea.RECIPES;
 
 
-/**
- * TODO
- *
- * @author andrewregan
- */
 public class EsSearchServiceTest {
 
     @Inject
@@ -72,7 +64,10 @@ public class EsSearchServiceTest {
         dataUtils.parseIngredientsFrom(adminUser, "bol1.txt");
         dataUtils.parseIngredientsFrom(adminUser, "bol2.txt");
 
-        Thread.sleep(900);
+        while (recipes.countAll() < 3) {  // FIXME
+            System.out.println("Waiting for recipes to appear...");
+            Thread.sleep(100);
+        }
     }
 
     // Will find > 1, because it'll find Turmeric as a *constituent* of Curry Powder, etc.

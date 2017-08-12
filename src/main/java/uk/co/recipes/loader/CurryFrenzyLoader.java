@@ -7,6 +7,7 @@ import dagger.Component;
 import org.cfg4j.provider.ConfigurationProvider;
 import org.elasticsearch.client.Client;
 import uk.co.recipes.DaggerModule;
+import uk.co.recipes.ProductionMyrrixModule;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.impl.MyrrixUpdater;
 import uk.co.recipes.persistence.EsRecipeFactory;
@@ -121,9 +122,8 @@ public class CurryFrenzyLoader {
     }
 
     @Singleton
-    @Component(modules = {DaggerModule.class})
+    @Component(modules = {DaggerModule.class, ProductionMyrrixModule.class})
     public interface AppComponent {
-
         void inject(final CurryFrenzyLoader runner);
     }
 }

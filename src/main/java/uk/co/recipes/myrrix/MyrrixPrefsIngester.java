@@ -20,17 +20,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-/**
- * TODO
- *
- * @author andrewregan
- */
 public class MyrrixPrefsIngester {
 
-    @Inject
-    EsItemFactory itemFactory;
-    @Inject
-    ClientRecommender myrrix;
+    @Inject EsItemFactory itemFactory;
+    @Inject ClientRecommender myrrix;
+    @Inject Yaml yaml;
 
     @Inject
     public MyrrixPrefsIngester() {
@@ -66,15 +60,15 @@ public class MyrrixPrefsIngester {
         final Set<ICanonicalItem> faves = Sets.newLinkedHashSet();
 
         visitRecommendationsFile(inFile, (userId, eachUserPref) -> {
-                    if (eachUserPref.containsKey("block")) {
-                        return;
-                    }
-
-                    if (eachUserPref.containsKey("fave")) {
-                        final ICanonicalItem item = itemFactory.get((String) eachUserPref.get("i")).get();
-                        faves.add(item);
-                    }
+                if (eachUserPref.containsKey("block")) {
+                    return;
                 }
+
+                if (eachUserPref.containsKey("fave")) {
+                    final ICanonicalItem item = itemFactory.get((String) eachUserPref.get("i")).get();
+                    faves.add(item);
+                }
+            }
         );
 
         return faves;
@@ -93,7 +87,7 @@ public class MyrrixPrefsIngester {
     }
 
     private void visitRecommendationsFile(final File inFile, final UserPrefsVisitor inVisitor) throws IOException {
-        for (Object eachDoc : new Yaml().loadAll(Files.toString(inFile, Charset.forName("utf-8")))) {
+        for (Object eachDoc : yaml.loadAll(Files.toString(inFile, Charset.forName("utf-8")))) {
 
             @SuppressWarnings("unchecked") final Map<Integer,List<Map<String,Object>>> eachDocMap = (Map<Integer,List<Map<String,Object>>>) eachDoc;
 

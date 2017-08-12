@@ -37,14 +37,11 @@ import static uk.co.recipes.metrics.MetricNames.TIMER_LOAD_ITEM_PROCESSITEM;
  */
 public class ItemsLoader {
 
-    @Inject
-    MetricRegistry metrics;
-    @Inject
-    EsItemFactory itemFactory;
-    @Inject
-    IngredientParser parser;
-    @Inject
-    ConfigurationProvider config;
+    @Inject MetricRegistry metrics;
+    @Inject EsItemFactory itemFactory;
+    @Inject IngredientParser parser;
+    @Inject ConfigurationProvider config;
+    @Inject Yaml yaml;
 
     private static final Logger LOG = LoggerFactory.getLogger(ItemsLoader.class);
     private static final Optional<ICanonicalItem> MISSING = Optional.absent();
@@ -60,7 +57,7 @@ public class ItemsLoader {
         final Set<String> topLevelNamesCache = Sets.newHashSet();
         final File path = config.getProperty("loader.items.path", File.class);
 
-        for (Object each : new Yaml().loadAll(Files.toString(path, Charset.forName("utf-8")))) {
+        for (Object each : yaml.loadAll(Files.toString(path, Charset.forName("utf-8")))) {
 
             @SuppressWarnings("unchecked") final Map<String,Object> map = (Map<String,Object>) each;
 
@@ -97,7 +94,7 @@ public class ItemsLoader {
         while (itemFactory.countAll() < 820) {  // FIXME
             System.out.println("Waiting for import to complete...");
             try {
-                Thread.sleep(500);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

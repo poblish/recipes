@@ -1,6 +1,3 @@
-/**
- *
- */
 package uk.co.recipes.events.impl;
 
 import com.google.common.base.Optional;
@@ -17,11 +14,8 @@ import uk.co.recipes.*;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.Units;
-import uk.co.recipes.events.api.IEventService;
 import uk.co.recipes.mocks.MockFactories;
 import uk.co.recipes.persistence.EsItemFactory;
-import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
-import uk.co.recipes.service.impl.DefaultIngredientQuantityScoreBooster;
 import uk.co.recipes.tags.CommonTags;
 import uk.co.recipes.tags.NationalCuisineTags;
 
@@ -50,7 +44,11 @@ public class MyrrixUpdaterTest {
 
     @BeforeClass
     private void injectDependencies() {
-        DaggerMyrrixUpdaterTest_TestComponent.builder().testModule(new TestModule()).build().inject(this);
+        DaggerMyrrixUpdaterTest_TestComponent.builder()
+                .testItemsModule( new TestItemsModule() )
+                .testMyrrixModule( new TestMyrrixModule() )
+                .build()
+                .inject(this);
     }
 
     @BeforeMethod
@@ -111,27 +109,8 @@ public class MyrrixUpdaterTest {
         assertThat(COUNT, is(2)); // Just two Tags
     }
 
-    // FIXME Suboptimal: https://google.github.io/dagger/testing.html
     @Module
-    public class TestModule extends DaggerModule {
-        @Provides
-        @Singleton
-        EsItemFactory provideItemFactory() {
-            return MockFactories.inMemoryItemFactory();
-        }
-
-        @Provides
-        @Singleton
-        IEventService provideEventService() {
-            return new DefaultEventService();
-        }
-
-        @Provides
-        @Singleton
-        IIngredientQuantityScoreBooster provideIngredientQuantityScoreBooster() {
-            return new DefaultIngredientQuantityScoreBooster();
-        }
-
+    public class TestMyrrixModule {
         @Provides
         @Singleton
         ClientRecommender provideClientRecommender() {
@@ -152,8 +131,17 @@ public class MyrrixUpdaterTest {
         }
     }
 
+    @Module
+    public class TestItemsModule {
+        @Provides
+        @Singleton
+        EsItemFactory provideItemFactory() {
+            return MockFactories.inMemoryItemFactory();
+        }
+    }
+
     @Singleton
-    @Component(modules = {TestModule.class})
+    @Component(modules = {DaggerModule.class, TestMyrrixModule.class, TestItemsModule.class})
     public interface TestComponent {
         void inject(final MyrrixUpdaterTest runner);
     }

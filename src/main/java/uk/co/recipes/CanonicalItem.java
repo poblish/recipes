@@ -14,12 +14,9 @@ import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IQuantity;
 import uk.co.recipes.api.ITag;
-import uk.co.recipes.tags.TagUtils;
 
 import java.io.Serializable;
 import java.util.*;
@@ -39,7 +36,7 @@ public class CanonicalItem implements ICanonicalItem {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Logger LOG = LoggerFactory.getLogger(CanonicalItem.class);
+    // private static final Logger LOG = LoggerFactory.getLogger(CanonicalItem.class);
 
     private static final long UNSET_ID = -1L;
     private static final long TOO_HIGH_ID = 0x4000000000000000L;

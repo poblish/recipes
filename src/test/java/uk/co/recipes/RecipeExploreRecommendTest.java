@@ -1,12 +1,12 @@
-/**
- *
- */
 package uk.co.recipes;
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 import dagger.Component;
+import dagger.Module;
+import dagger.Provides;
+import net.myrrix.client.ClientRecommender;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.elasticsearch.client.Client;
 import org.testng.annotations.AfterClass;
@@ -28,11 +28,18 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.anyFloat;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_PUTS;
 
 public class RecipeExploreRecommendTest {
@@ -87,8 +94,6 @@ public class RecipeExploreRecommendTest {
             Thread.sleep(200); // Wait for saves to appear...
         }
 
-        Thread.sleep(2000);
-
         assertThat(metrics.timer(TIMER_RECIPES_PUTS).getCount(), is((long) count));
     }
 
@@ -127,8 +132,6 @@ public class RecipeExploreRecommendTest {
         events.rateRecipe(user2, recipeFactory.getByName("chcashblackspicecurry.txt"), (float) Math.random());
         events.rateRecipe(user2, recipeFactory.getByName("bol1.txt"), (float) Math.random());
         events.rateRecipe(user2, recipeFactory.getByName("Bulk"), (float) Math.random());
-
-        Thread.sleep(1000);
 
         final List<IRecipe> recsFor1 = recsApi.recommendRecipes(user1, 20);
         final List<IRecipe> recsFor2 = recsApi.recommendRecipes(user2, 20);
@@ -226,8 +229,33 @@ public class RecipeExploreRecommendTest {
         esClient.close();
     }
 
+    @Module
+    public static class TestMyrrixModule {
+        @Provides
+        @Singleton
+        static ClientRecommender clientRecommender() {
+            try {
+                final ClientRecommender mr = mock(ClientRecommender.class);
+
+                doAnswer(invocation -> {
+                    Object[] args = invocation.getArguments();
+                    long recipeId1 = (long) args[0];
+                    long recipeId2 = (long) args[1];
+                    if (recipeId1 == recipeId2) {
+                        return new float[]{1.0f};  // cheating?!?!?
+                    }
+                    return new float[]{0.f};
+                }).when(mr).similarityToItem(anyLong(), anyLong());
+
+                return mr;
+            } catch (TasteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     @Singleton
-    @Component(modules = {DaggerModule.class})
+    @Component(modules = {DaggerModule.class, TestMyrrixModule.class})
     public interface TestComponent {
         void inject(final RecipeExploreRecommendTest runner);
     }

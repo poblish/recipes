@@ -4,6 +4,9 @@ import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import dagger.Component;
+import dagger.Module;
+import dagger.Provides;
+import net.myrrix.client.ClientRecommender;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -23,50 +26,43 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import static java.util.Locale.ENGLISH;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.anyFloat;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
 
 
-/**
- * TODO
- *
- * @author andrewregan
- */
 public class IngredientsTest {
 
-    @Inject
-    EsItemFactory itemFactory;
-    @Inject
-    EsUserFactory userFactory;
-    @Inject
-    EsRecipeFactory recipes;
-    @Inject
-    EsSequenceFactory sequenceFactory;
-    @Inject
-    ItemsLoader loader;
+    @Inject EsItemFactory itemFactory;
+    @Inject EsUserFactory userFactory;
+    @Inject EsRecipeFactory recipes;
+    @Inject EsSequenceFactory sequenceFactory;
+    @Inject ItemsLoader loader;
 
-    @Inject
-    MyrrixUpdater updater;
+    @Inject MyrrixUpdater updater;
 
-    @Inject
-    EsSearchService searchService;
-    @Inject
-    MyrrixExplorerService explorerApi;
-    @Inject
-    EsExplorerFilters explorerFilters;
-    @Inject
-    MyrrixRecommendationService recsApi;
+    @Inject EsSearchService searchService;
+    @Inject MyrrixExplorerService explorerApi;
+    @Inject EsExplorerFilters explorerFilters;
+    @Inject MyrrixRecommendationService recsApi;
 
-    @Inject
-    IEventService events;
+    @Inject IEventService events;
 //  @Inject IIngredientQuantityScoreBooster booster;
 
     private void injectDependencies() {
-        DaggerIngredientsTest_TestComponent.create().inject(this);
+        DaggerIngredientsTest_TestComponent.builder()
+                .testMyrrixModule( new TestMyrrixModule() )
+                .build()
+                .inject(this);
     }
 
     @BeforeClass
@@ -265,8 +261,29 @@ public class IngredientsTest {
         return itemFactory.get(inName).get();
     }
 
+    @Module
+    public class TestMyrrixModule {
+        @Provides
+        @Singleton
+        ClientRecommender clientRecommender() {
+            try {
+                final ClientRecommender mr = mock(ClientRecommender.class);
+
+                doAnswer(invocation -> {
+                    Object[] args = invocation.getArguments();
+                    System.out.println(Arrays.toString(args));
+                    return "called with arguments: " + Arrays.toString(args);
+                }).when(mr).setItemTag(anyString(), anyLong(), anyFloat());
+
+                return mr;
+            } catch (TasteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     @Singleton
-    @Component(modules = {DaggerModule.class})
+    @Component(modules = {DaggerModule.class, TestMyrrixModule.class})
     public interface TestComponent {
         void inject(final IngredientsTest runner);
     }
