@@ -7,6 +7,8 @@ import com.google.common.base.Throwables;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Lists;
+import com.google.common.eventbus.AsyncEventBus;
+import com.google.common.eventbus.EventBus;
 import com.google.common.io.Files;
 import com.google.common.io.LineProcessor;
 import dagger.Module;
@@ -42,6 +44,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 @Module
@@ -121,8 +124,14 @@ public class DaggerModule {
 
     @Provides
     @Singleton
-    IEventService provideEventService() {
-        return new DefaultEventService();
+    EventBus eventBus() {
+        return new AsyncEventBus(Executors.newFixedThreadPool(5));
+    }
+
+    @Provides
+    @Singleton
+    IEventService provideEventService(EventBus eventBus) {
+        return new DefaultEventService(eventBus);
     }
 
     @Provides

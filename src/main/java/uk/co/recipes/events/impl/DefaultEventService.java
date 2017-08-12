@@ -1,9 +1,5 @@
-/**
- *
- */
 package uk.co.recipes.events.impl;
 
-import com.google.common.eventbus.AsyncEventBus;
 import com.google.common.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,22 +10,15 @@ import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.api.IEventListener;
 import uk.co.recipes.events.api.IEventService;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import java.util.concurrent.Executors;
-
-/**
- * TODO
- *
- * @author andrewregan
- */
-@Singleton
 public class DefaultEventService implements IEventService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultEventService.class);
 
-    @Inject
-    EventBus eventBus = /* FIXME - inject properly */ new AsyncEventBus(Executors.newFixedThreadPool(5));
+    private final EventBus eventBus;
+
+    public DefaultEventService(EventBus eventBus) {
+        this.eventBus = eventBus;
+    }
 
     public void addListener(final IEventListener inL) {
         if (LOG.isTraceEnabled()) {
