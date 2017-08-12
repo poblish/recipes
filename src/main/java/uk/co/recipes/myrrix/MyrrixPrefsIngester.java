@@ -35,20 +35,20 @@ public class MyrrixPrefsIngester {
         final StringBuilder sb = new StringBuilder();
 
         visitRecommendationsFile(inFile, (userId, eachUserPref) -> {
-                    if (eachUserPref.containsKey("block") ||
-                            ( /* All done, don't create '1' rating */ eachUserPref.containsKey("fave") && !eachUserPref.containsKey("score"))) {
-                        return;
-                    }
+            if (eachUserPref.containsKey("block") ||
+                    ( /* All done, don't create '1' rating */ eachUserPref.containsKey("fave") && !eachUserPref.containsKey("score"))) {
+                return;
+            }
 
-                    ////////////////////////////////  Deal with ratings/scores
+            ////////////////////////////////  Deal with ratings/scores
 
-                    if (sb.length() > 0) {
-                        sb.append('\r');
-                    }
+            if (sb.length() > 0) {
+                sb.append('\r');
+            }
 
-                    final ICanonicalItem item = itemFactory.get((String) eachUserPref.get("i")).get();
-                    sb.append(userId).append(',').append(item.getId()).append(',').append(MoreObjects.firstNonNull(eachUserPref.get("score"), "1"));
-                }
+            final ICanonicalItem item = itemFactory.get((String) eachUserPref.get("i")).get();
+            sb.append(userId).append(',').append(item.getId()).append(',').append(MoreObjects.firstNonNull(eachUserPref.get("score"), "1"));
+        }
         );
 
         System.out.println("Parsed: " + sb.toString().replace('\r', ' ') + "  (" + sb.length() + " chars)");
@@ -60,15 +60,15 @@ public class MyrrixPrefsIngester {
         final Set<ICanonicalItem> faves = Sets.newLinkedHashSet();
 
         visitRecommendationsFile(inFile, (userId, eachUserPref) -> {
-                if (eachUserPref.containsKey("block")) {
-                    return;
-                }
-
-                if (eachUserPref.containsKey("fave")) {
-                    final ICanonicalItem item = itemFactory.get((String) eachUserPref.get("i")).get();
-                    faves.add(item);
-                }
+            if (eachUserPref.containsKey("block")) {
+                return;
             }
+
+            if (eachUserPref.containsKey("fave")) {
+                final ICanonicalItem item = itemFactory.get((String) eachUserPref.get("i")).get();
+                faves.add(item);
+            }
+        }
         );
 
         return faves;
@@ -76,11 +76,11 @@ public class MyrrixPrefsIngester {
 
     public String parseBlocks(final File inFile) throws IOException {
         visitRecommendationsFile(inFile, (userId, eachUserPref) -> {
-                    if (eachUserPref.containsKey("block")) {
-                        final ICanonicalItem item = itemFactory.get((String) eachUserPref.get("i")).get();
-                        System.out.println("BLOCK: " + item);
-                    }
-                }
+            if (eachUserPref.containsKey("block")) {
+                final ICanonicalItem item = itemFactory.get((String) eachUserPref.get("i")).get();
+                System.out.println("BLOCK: " + item);
+            }
+        }
         );
 
         return "ok";
@@ -105,6 +105,7 @@ public class MyrrixPrefsIngester {
         }
     }
 
+    @SuppressWarnings("unused")  // Used by Web
     public void ingestRecommendations(final String inData) {
         try {
             myrrix.ingest(new StringReader(inData));
