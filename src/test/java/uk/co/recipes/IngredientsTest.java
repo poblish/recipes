@@ -15,7 +15,7 @@ import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.api.Units;
 import uk.co.recipes.events.api.IEventService;
-import uk.co.recipes.events.impl.MyrrixUpdater;
+import uk.co.recipes.events.impl.TaggedTasteUpdater;
 import uk.co.recipes.persistence.*;
 import uk.co.recipes.service.api.IExplorerFilter;
 import uk.co.recipes.service.impl.*;
@@ -48,7 +48,7 @@ public class IngredientsTest {
     @Inject EsSequenceFactory sequenceFactory;
     @Inject ItemsLoader loader;
 
-    @Inject MyrrixUpdater updater;
+    @Inject TaggedTasteUpdater updater;
 
     @Inject EsSearchService searchService;
     @Inject MyrrixExplorerService explorerApi;

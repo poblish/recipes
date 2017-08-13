@@ -17,7 +17,7 @@ import uk.co.recipes.api.IForkDetails;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.api.IEventService;
-import uk.co.recipes.events.impl.MyrrixUpdater;
+import uk.co.recipes.events.impl.TaggedTasteUpdater;
 import uk.co.recipes.persistence.*;
 import uk.co.recipes.service.impl.MyrrixExplorerService;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
@@ -56,7 +56,7 @@ public class RecipeExploreRecommendTest {
 
     @Inject TestDataUtils dataUtils;
 
-    @Inject MyrrixUpdater updater;
+    @Inject TaggedTasteUpdater updater;
     @Inject MyrrixExplorerService explorerApi;
     @Inject MyrrixRecommendationService recsApi;
 

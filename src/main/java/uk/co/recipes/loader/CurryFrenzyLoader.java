@@ -9,7 +9,7 @@ import org.elasticsearch.client.Client;
 import uk.co.recipes.DaggerModule;
 import uk.co.recipes.ProductionMyrrixModule;
 import uk.co.recipes.api.IUser;
-import uk.co.recipes.events.impl.MyrrixUpdater;
+import uk.co.recipes.events.impl.TaggedTasteUpdater;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.persistence.ItemsLoader;
@@ -44,7 +44,7 @@ public class CurryFrenzyLoader {
     @Inject
     TestDataUtils dataUtils;
     @Inject
-    MyrrixUpdater updater;
+    TaggedTasteUpdater updater;
     @Inject
     MetricRegistry metrics;
     @Inject

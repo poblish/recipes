@@ -30,8 +30,8 @@
           "additivity": "true"
         },
         {
-          "name": "uk.co.recipes.events.impl.MyrrixUpdater",
-          "level": "info",
+          "name": "uk.co.recipes.events.impl.TaggedTasteUpdater",
+          "level": "debug",
           "additivity": "true"
         },
         {

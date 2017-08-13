@@ -1,6 +1,3 @@
-/**
- *
- */
 package uk.co.recipes.service.taste.impl;
 
 import com.google.common.base.Throwables;
@@ -15,11 +12,6 @@ import javax.inject.Singleton;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * TODO
- *
- * @author andrewregan
- */
 @Singleton
 public class MyrrixTasteSimilarityService implements ITasteSimilarityAPI {
 

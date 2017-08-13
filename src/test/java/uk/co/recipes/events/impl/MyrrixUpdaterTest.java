@@ -35,8 +35,7 @@ import static uk.co.recipes.api.Units.GRAMMES;
 
 public class MyrrixUpdaterTest {
 
-    @Inject
-    MyrrixUpdater updater;
+    @Inject TaggedTasteUpdater updater;
 
     private static final Optional<ICanonicalItem> ABSENT = Optional.absent();
 
