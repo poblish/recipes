@@ -25,8 +25,8 @@ import static uk.co.recipes.service.api.ESearchArea.TAGS;
 
 public class Search extends Controller {
 
-	private ObjectMapper mapper;
-	private ISearchAPI search;
+    private ObjectMapper mapper;
+    private ISearchAPI search;
     private CuisineColours colours;
     private PlayAuthenticate auth;
     private UserProvider userProvider;
@@ -46,7 +46,7 @@ public class Search extends Controller {
     }
 
     public Result doSearch() throws IOException {
-		final IUser currUser = getLocalUser();
+        final IUser currUser = getLocalUser();
         final String[] theInputs = request().queryString().get("input");
         final boolean gotInput = ( theInputs != null && theInputs.length > 0 && !theInputs[0].isEmpty());
 
@@ -68,7 +68,7 @@ public class Search extends Controller {
 
         final List<ISearchResult<?>> results = search.findPartial( searchString[0], Integer.parseInt( count[0] ), ITEMS);  // FIXME Use 20 if not set, or set > 20
 
-    	return returnSearchResults( results, request().queryString().get("callback"));
+        return returnSearchResults( results, request().queryString().get("callback"));
     }
 
     public Result findPartialWithTags() throws IOException {
@@ -78,19 +78,19 @@ public class Search extends Controller {
 
         final List<ISearchResult<?>> results = search.findPartial( searchString[0], Integer.parseInt( count[0] ), ITEMS, TAGS);  // FIXME Use 20 if not set, or set > 20
 
-    	return returnSearchResults( results, request().queryString().get("callback"));
+        return returnSearchResults( results, request().queryString().get("callback"));
     }
 
     private Result returnSearchResults( final List<ISearchResult<?>> inResults, final String[] inCallback) throws IOException {
-    	// System.out.println("results = " + mapper.writeValueAsString(results));
+        // System.out.println("results = " + mapper.writeValueAsString(results));
 
         // Play 2.1.x doesn't support Jackson 2.x, so we can't pass JsonNode
 
-    	if ( inCallback.length > 0) {
-    		return ok( inCallback[0] + "(" + mapper.writeValueAsString(inResults) + ")").as("application/json");
-    	}
+        if ( inCallback.length > 0) {
+            return ok( inCallback[0] + "(" + mapper.writeValueAsString(inResults) + ")").as("application/json");
+        }
 
-    	return ok( mapper.writeValueAsString(inResults) ).as("application/json");
+        return ok( mapper.writeValueAsString(inResults) ).as("application/json");
     }
 
     private IUser getLocalUser() {

@@ -42,10 +42,10 @@ public class Items extends AbstractExplorableController {
 
     private UserRatings ratings;
     private UserFaves faves;
-	private ObjectMapper mapper;
-	private ISearchAPI searchApi;
+    private ObjectMapper mapper;
+    private ISearchAPI searchApi;
 
-	private final static int NUM_RECOMMENDATIONS_TO_SHOW = 12;
+    private final static int NUM_RECOMMENDATIONS_TO_SHOW = 12;
 
     @Inject
     public Items(final MyrrixUpdater updater, final EsItemFactory items, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService,
@@ -55,7 +55,7 @@ public class Items extends AbstractExplorableController {
                  final PlayAuthenticate auth, final UserProvider userProvider) {
         super( items, explorerFilters, inExplorerService, inRecService, eventService, colours, auth, userProvider);
 
-    	updater.startListening();
+        updater.startListening();
         this.ratings = checkNotNull(inRatings);
         this.mapper = checkNotNull(inMapper);
         this.searchApi = checkNotNull(inSearch);
@@ -63,7 +63,7 @@ public class Items extends AbstractExplorableController {
     }
 
     public Result display( final String name) throws IOException {
-		final IUser user1 = getLocalUser();
+        final IUser user1 = getLocalUser();
 
         final Optional<ICanonicalItem> optItem = items.get( name.replace('+', ' ') );
         if (!optItem.isPresent()) {
@@ -71,11 +71,11 @@ public class Items extends AbstractExplorableController {
         }
 
         final ICanonicalItem item = optItem.get();
-		if ( user1 != null) {
-			events.visit( user1, item);
-		}
+        if ( user1 != null) {
+            events.visit( user1, item);
+        }
 
-		final int recipesCount = searchApi.countRecipesByItemName( item.getCanonicalName() );  // FIXME Should cache this!
+        final int recipesCount = searchApi.countRecipesByItemName( item.getCanonicalName() );  // FIXME Should cache this!
 
         final List<ICanonicalItem> similarities = explorer.similarIngredients( item, getExplorerFilter(explorerFilters), 12);
         final List<IRecipe> recRecipes = ( user1 != null) ? recsApi.recommendRecipes( user1, NUM_RECOMMENDATIONS_TO_SHOW, item) : recsApi.recommendRecipesToAnonymous( NUM_RECOMMENDATIONS_TO_SHOW, item);
@@ -97,7 +97,7 @@ public class Items extends AbstractExplorableController {
             return unauthorized("Not logged-in");
         }
 
-		ratings.addRating( user1, new ItemRating( item, inScore) );
+        ratings.addRating( user1, new ItemRating( item, inScore) );
 
         return redirect("/items/" + URLEncoder.encode( item.getCanonicalName(), "utf-8"));  // FIXME - horrible way to reload!
     }
@@ -110,7 +110,7 @@ public class Items extends AbstractExplorableController {
             return unauthorized("Not logged-in");
         }
 
-		faves.faveItem( user1, item);
+        faves.faveItem( user1, item);
 
         items.waitUntilRefreshed();
 
@@ -123,13 +123,13 @@ public class Items extends AbstractExplorableController {
             return notFound("'" + name + "' not found!");
         }
 
-		final Optional<WikipediaResults> results = new WikipediaGetter().getResultsFor( optItem.get().getCanonicalName() );
+        final Optional<WikipediaResults> results = new WikipediaGetter().getResultsFor( optItem.get().getCanonicalName() );
 
-    	if (results.isPresent()) {
-    		return ok( mapper.writeValueAsString( results.get() ) ).as("application/json");
-    	}
-    	else {
-    		return ok("").as("application/json");
-    	}
+        if (results.isPresent()) {
+            return ok( mapper.writeValueAsString( results.get() ) ).as("application/json");
+        }
+        else {
+            return ok("").as("application/json");
+        }
     }
 }

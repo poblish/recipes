@@ -21,8 +21,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class Tags extends Controller {
 
-	private ISearchAPI search;
-	private CuisineColours colours;
+    private ISearchAPI search;
+    private CuisineColours colours;
     private PlayAuthenticate auth;
     private UserProvider userProvider;
 

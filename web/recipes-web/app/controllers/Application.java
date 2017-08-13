@@ -50,9 +50,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class Application extends Controller {
 
-	private static Application STATIC_INST = null;  // FIXME
+    private static Application STATIC_INST = null;  // FIXME
 
-	private IItemPersistence items;
+    private IItemPersistence items;
     private IUserPersistence users;
     private IRecipePersistence recipes;
     private EsSequenceFactory sequences;  // For deleteAll() only
@@ -62,17 +62,17 @@ public class Application extends Controller {
     private BbcGoodFoodLoader bbcGfLoader;
     private CurryFrenzyLoader cfLoader;
     private Client esClient;
-	private final PlayAuthenticate auth;
-	private final UserProvider userProvider;
+    private final PlayAuthenticate auth;
+    private final UserProvider userProvider;
 
     private final ExecutorService loadPool = Executors.newFixedThreadPool(3);
 
     @Inject
     public Application(final EsItemFactory items, final EsRecipeFactory recipes, final EsUserFactory users,
-					   final ClientRecommender recommender, final MetricRegistry metrics, final Cache<String,ICanonicalItem> inItemsCache,
-					   final EsSequenceFactory seqs, final BbcGoodFoodLoader bbcGfLoader, final CurryFrenzyLoader cfLoader,
-					   final Client esClient,
-					   final PlayAuthenticate auth, final UserProvider userProvider) {
+                       final ClientRecommender recommender, final MetricRegistry metrics, final Cache<String,ICanonicalItem> inItemsCache,
+                       final EsSequenceFactory seqs, final BbcGoodFoodLoader bbcGfLoader, final CurryFrenzyLoader cfLoader,
+                       final Client esClient,
+                       final PlayAuthenticate auth, final UserProvider userProvider) {
         this.items = checkNotNull(items);
         this.recipes = checkNotNull(recipes);
         this.users = checkNotNull(users);
@@ -82,24 +82,24 @@ public class Application extends Controller {
         this.sequences = checkNotNull(seqs);
         this.bbcGfLoader = checkNotNull(bbcGfLoader);
         this.cfLoader = checkNotNull(cfLoader);
-		this.esClient = checkNotNull(esClient);
-		this.auth = checkNotNull(auth);
-		this.userProvider = checkNotNull(userProvider);
+        this.esClient = checkNotNull(esClient);
+        this.auth = checkNotNull(auth);
+        this.userProvider = checkNotNull(userProvider);
 
-		STATIC_INST = this; // FIXME
+        STATIC_INST = this; // FIXME
     }
 
     public Result itemStats() {
-    	final Set<String> names = Sets.newTreeSet();
-    	for ( SearchHit each : esClient.prepareSearch("recipe").setTypes("items").setQuery( QueryBuilders.matchAllQuery() ).setSize(9999).execute().actionGet().getHits()) {
-    		names.add( each.getSource().get("canonicalName").toString() );
-    	}
+        final Set<String> names = Sets.newTreeSet();
+        for ( SearchHit each : esClient.prepareSearch("recipe").setTypes("items").setQuery( QueryBuilders.matchAllQuery() ).setSize(9999).execute().actionGet().getHits()) {
+            names.add( each.getSource().get("canonicalName").toString() );
+        }
 
-    	return ok(stats_items.render( Lists.newArrayList(names), auth, userProvider));
+        return ok(stats_items.render( Lists.newArrayList(names), auth, userProvider));
     }
 
     public String getMetricsString() {
-    	if (metrics.getMetrics().isEmpty()) {
+        if (metrics.getMetrics().isEmpty()) {
             return "No Metrics in... " + metrics;
         }
 
@@ -112,33 +112,33 @@ public class Application extends Controller {
         return "Metrics: " + new String( baos.toByteArray() );
     }
 
-	public Result index() {
+    public Result index() {
         return ok(index.render("Your new application is ready.", auth, userProvider));
     }
 
-	public Result stats() {
+    public Result stats() {
         try {
-        	return ok(stats.render( getMetricsString(), items.countAll(), recipes.countAll(), users.countAll(),
-					itemsCache.stats(), /* Ugh! FIXME */ recommender.getAllUserIDs().size(),
-					/* Ugh! FIXME */ recommender.getAllItemIDs().size(), auth, userProvider));
+            return ok(stats.render( getMetricsString(), items.countAll(), recipes.countAll(), users.countAll(),
+                    itemsCache.stats(), /* Ugh! FIXME */ recommender.getAllUserIDs().size(),
+                    /* Ugh! FIXME */ recommender.getAllItemIDs().size(), auth, userProvider));
         }
         catch (TasteException e) {  // Yuk!!!
-        	return ok(stats.render( "???", -1L, -1L,
-					-1L, null, -1, -1, auth, userProvider));
+            return ok(stats.render( "???", -1L, -1L,
+                    -1L, null, -1, -1, auth, userProvider));
         }
     }
 
-	public Result oAuthDenied(final String providerKey) {
-		flash(/* FLASH_ERROR_KEY, */ "You need to accept the OAuth connection in order to use this website!");
-		return redirect(routes.Application.index());
-	}
+    public Result oAuthDenied(final String providerKey) {
+        flash(/* FLASH_ERROR_KEY, */ "You need to accept the OAuth connection in order to use this website!");
+        return redirect(routes.Application.index());
+    }
 
-	public static void storeLoginRedirectUrl() {
-		STATIC_INST.auth.storeOriginalUrl( ctx() );
-	}
+    public static void storeLoginRedirectUrl() {
+        STATIC_INST.auth.storeOriginalUrl( ctx() );
+    }
 
-	public static Set<ITag> allTags() {
-		return EnumSet.allOf(CommonTags.class).stream().map(new Function<CommonTags,ITag>() {
+    public static Set<ITag> allTags() {
+        return EnumSet.allOf(CommonTags.class).stream().map(new Function<CommonTags,ITag>() {
 
             @Override
             @Nullable
@@ -146,9 +146,9 @@ public class Application extends Controller {
                 return inTag;
             }
         }).collect(Collectors.toCollection(() -> new TreeSet<>(Ordering.usingToString())));
-	}
+    }
 
-	public Result explorerIncludeAdd( final String inName) {
+    public Result explorerIncludeAdd( final String inName) {
         return handleUserPreference(inUser -> {
             try {
                 return inUser.getPrefs().explorerIncludeAdd( tagForFilterItemName(inName) );
@@ -159,7 +159,7 @@ public class Application extends Controller {
         });
     }
 
-	public Result explorerIncludeAddWithValue( final String inName, final String inValue) {
+    public Result explorerIncludeAddWithValue( final String inName, final String inValue) {
         return handleUserPreference(inUser -> {
             try {
                 return inUser.getPrefs().explorerIncludeAdd( tagForFilterItemName(inName), inValue);
@@ -170,7 +170,7 @@ public class Application extends Controller {
         });
     }
 
-	public Result explorerIncludeRemove( final String inName) {
+    public Result explorerIncludeRemove( final String inName) {
         return handleUserPreference(inUser -> {
             try {
                 return inUser.getPrefs().explorerIncludeRemove( tagForFilterItemName(inName) );
@@ -181,7 +181,7 @@ public class Application extends Controller {
         });
     }
 
-	public Result explorerIncludeRemoveWithValue( final String inName, final String inValue) {
+    public Result explorerIncludeRemoveWithValue( final String inName, final String inValue) {
         return handleUserPreference(inUser -> {
             try {
                 return inUser.getPrefs().explorerIncludeRemove( tagForFilterItemName(inName), inValue);
@@ -192,7 +192,7 @@ public class Application extends Controller {
         });
     }
 
-	public Result explorerExcludeAdd( final String inName) {
+    public Result explorerExcludeAdd( final String inName) {
         return handleUserPreference(inUser -> {
             try {
                 return inUser.getPrefs().explorerExcludeAdd( tagForFilterItemName(inName) );
@@ -203,7 +203,7 @@ public class Application extends Controller {
         });
     }
 
-	public Result explorerExcludeAddWithValue( final String inName, final String inValue) {
+    public Result explorerExcludeAddWithValue( final String inName, final String inValue) {
         return handleUserPreference(inUser -> {
             try {
                 return inUser.getPrefs().explorerExcludeAdd( tagForFilterItemName(inName), inValue);
@@ -214,7 +214,7 @@ public class Application extends Controller {
         });
     }
 
-	public Result explorerExcludeRemove( final String inName) {
+    public Result explorerExcludeRemove( final String inName) {
         return handleUserPreference(inUser -> {
             try {
                 return inUser.getPrefs().explorerExcludeRemove( tagForFilterItemName(inName) );
@@ -225,7 +225,7 @@ public class Application extends Controller {
         });
     }
 
-	public Result explorerExcludeRemoveWithValue( final String inName, final String inValue) {
+    public Result explorerExcludeRemoveWithValue( final String inName, final String inValue) {
         return handleUserPreference(inUser -> {
             try {
                 return inUser.getPrefs().explorerExcludeRemove( tagForFilterItemName(inName), inValue);
@@ -236,90 +236,90 @@ public class Application extends Controller {
         });
     }
 
-	private ITag tagForFilterItemName( final String inName) {
-		return TagUtils.forName( /* FIXME, lame: */ inName.toUpperCase() );
-	}
+    private ITag tagForFilterItemName( final String inName) {
+        return TagUtils.forName( /* FIXME, lame: */ inName.toUpperCase() );
+    }
 
-	public Result explorerClearAll() {
+    public Result explorerClearAll() {
         return handleUserPreference(inUser -> inUser.getPrefs().explorerClearAll());
     }
 
-	public Result clearDataAndCache() throws IOException {
-	    itemsCache.invalidateAll();
-	    users.deleteAll();
-		items.deleteAll();
-		recipes.deleteAll();
-		sequences.deleteAll();
-		return ok("Cleared");
-	}
+    public Result clearDataAndCache() throws IOException {
+        itemsCache.invalidateAll();
+        users.deleteAll();
+        items.deleteAll();
+        recipes.deleteAll();
+        sequences.deleteAll();
+        return ok("Cleared");
+    }
 
-	public Result loadBbcGoodFood() throws IOException, InterruptedException {
-		loadPool.submit(() -> {
+    public Result loadBbcGoodFood() throws IOException, InterruptedException {
+        loadPool.submit(() -> {
             try {
                 System.out.println("Start BBC Good Food load...");
                 bbcGfLoader.start(false);
                 System.out.println("DONE BBC Good Food load...");
             } catch (IOException | InterruptedException e) {
-				throw new RuntimeException(e);
+                throw new RuntimeException(e);
             }
         });
 
-		return ok("Started");
-	}
+        return ok("Started");
+    }
 
-	public Result loadCurryFrenzy() throws IOException, InterruptedException {
-		loadPool.submit(() -> {
+    public Result loadCurryFrenzy() throws IOException, InterruptedException {
+        loadPool.submit(() -> {
             try {
                 System.out.println("Start Curry Frenzy load...");
                 cfLoader.start();
                 System.out.println("DONE Curry Frenzy load...");
             } catch (IOException | InterruptedException e) {
-				throw new RuntimeException(e);
+                throw new RuntimeException(e);
             }
         });
 
-		return ok("Started");
-	}
+        return ok("Started");
+    }
 
-	public Result handleUserPreference( final UserTask inTask) {
+    public Result handleUserPreference( final UserTask inTask) {
         final IUser currUser = userProvider.getUser(session());
         if ( currUser == null) {
-		    return unauthorized("Not logged-in");
+            return unauthorized("Not logged-in");
         }
 
         if (!inTask.makeChanges(currUser)) {
-        	return ok();
+            return ok();
         }
 
         try {
-			((EsUserFactory) users).update(currUser);
-		}
+            ((EsUserFactory) users).update(currUser);
+        }
         catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+            throw new RuntimeException(e);
+        }
 
         try {
-			users.waitUntilRefreshed();
-		}
+            users.waitUntilRefreshed();
+        }
         catch (RuntimeException e) {
-			// NOOP
-		}
+            // NOOP
+        }
 
         return ok();
     }
 
-	private interface UserTask {
-		// Return false if no change
-		boolean makeChanges( final IUser inUser);
-	}
+    private interface UserTask {
+        // Return false if no change
+        boolean makeChanges( final IUser inUser);
+    }
 
-	// Yuk
-	private ICanonicalItem getItem( final String inName) {
-		try {
-			return items.get(inName).get();
-		}
-		catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    // Yuk
+    private ICanonicalItem getItem( final String inName) {
+        try {
+            return items.get(inName).get();
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
