@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import java.io.File;
 import java.io.Reader;
 
 public class MyrrixUpdater {
@@ -25,6 +26,11 @@ public class MyrrixUpdater {
 
     public void ingest(final Reader reader) throws TasteException {
         this.recommender.ingest(reader);
+        refresh();
+    }
+
+    public void ingest(File file) throws TasteException {
+        this.recommender.ingest(file);
         refresh();
     }
 

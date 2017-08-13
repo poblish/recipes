@@ -9,7 +9,7 @@ import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.events.api.IEventService;
-import uk.co.recipes.events.impl.MyrrixUpdater;
+import uk.co.recipes.events.impl.TaggedTasteUpdater;
 import uk.co.recipes.external.WikipediaGetter;
 import uk.co.recipes.external.WikipediaResults;
 import uk.co.recipes.faves.UserFaves;
@@ -48,7 +48,7 @@ public class Items extends AbstractExplorableController {
     private final static int NUM_RECOMMENDATIONS_TO_SHOW = 12;
 
     @Inject
-    public Items(final MyrrixUpdater updater, final EsItemFactory items, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService,
+    public Items(final TaggedTasteUpdater updater, final EsItemFactory items, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService,
                  final MyrrixRecommendationService inRecService, final EsUserFactory users, final UserRatings inRatings,
                  final ObjectMapper inMapper, final EsSearchService inSearch, final IEventService eventService, final UserFaves userFaves,
                  final CuisineColours colours,

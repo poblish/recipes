@@ -3,13 +3,10 @@ package uk.co.recipes.service.impl;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer.Context;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Throwables;
-import net.myrrix.client.ClientRecommender;
 import org.apache.mahout.cf.taste.common.TasteException;
-import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
-import uk.co.recipes.myrrix.MyrrixUtils;
+import uk.co.recipes.myrrix.MyrrixLookups;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.service.api.IExplorerAPI;
@@ -34,8 +31,7 @@ public class MyrrixExplorerService implements IExplorerAPI {
 
     @Inject
     MyrrixTasteSimilarityService tasteSimilarity;
-    @Inject
-    ClientRecommender recommender;
+    @Inject MyrrixLookups recommender;
     @Inject
     EsItemFactory itemsFactory;
     @Inject
@@ -50,9 +46,6 @@ public class MyrrixExplorerService implements IExplorerAPI {
         // For Dagger
     }
 
-    /* (non-Javadoc)
-     * @see uk.co.recipes.service.api.IExplorerAPI#similarIngredients(uk.co.recipes.api.IUser, int)
-     */
     @Override
     public List<ICanonicalItem> similarIngredients(final ICanonicalItem item, int inNumRecs) {
         return similarIngredients(item, ExplorerFilterDefs.nullFilter(), inNumRecs);
@@ -61,18 +54,14 @@ public class MyrrixExplorerService implements IExplorerAPI {
     @Override
     public List<ICanonicalItem> similarIngredients(final ICanonicalItem item, final IExplorerFilterDef inFilterDef, final int inNumRecs) {
         try (Context ignored = metrics.timer(TIMER_ITEMS_MOSTSIMILAR).time()) {
-//			final HystrixCommand<List<RecommendedItem>> cmd = new MyrrixSimilarItemsCommand( item.getId(), inNumRecs, new String[]{"ITEM", mapper.writeValueAsString(inFilterDef)} );
-//			return itemsFactory.getAll( MyrrixUtils.getItems( cmd.execute() ) );
+            // final HystrixCommand<List<RecommendedItem>> cmd = new MyrrixSimilarItemsCommand( item.getId(), inNumRecs, new String[]{"ITEM", mapper.writeValueAsString(inFilterDef)} );
             final MyrrixSimilarItemsCommand cmd = new MyrrixSimilarItemsCommand(item.getId(), inNumRecs, new String[]{"ITEM", mapper.writeValueAsString(inFilterDef)});
-            return itemsFactory.getAll(MyrrixUtils.getItems(cmd.run()));
+            return itemsFactory.getAll( cmd.run() );
         } catch (IOException | TasteException e) {
-            throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+            throw new RuntimeException(e);  // Yuk, FIXME, let's get the API right
         }
     }
 
-    /* (non-Javadoc)
-     * @see uk.co.recipes.service.api.IExplorerAPI#similarRecipes(uk.co.recipes.api.IUser, int)
-     */
     @Override
     public List<IRecipe> similarRecipes(final IRecipe inTarget, int inNumRecs) {
         return similarRecipes(inTarget, ExplorerFilterDefs.nullFilter(), inNumRecs);
@@ -81,12 +70,11 @@ public class MyrrixExplorerService implements IExplorerAPI {
     @Override
     public List<IRecipe> similarRecipes(final IRecipe recipe, final IExplorerFilterDef inFilterDef, final int inNumRecs) {
         try (Context ignored = metrics.timer(TIMER_RECIPES_MOSTSIMILAR).time()) {
-//			final HystrixCommand<List<RecommendedItem>> cmd = new MyrrixSimilarItemsCommand( recipe.getId(), inNumRecs, new String[]{"RECIPE", mapper.writeValueAsString(inFilterDef)} );
-//			return recipesFactory.getAll( MyrrixUtils.getItems( cmd.execute() ) );
+            // final HystrixCommand<List<RecommendedItem>> cmd = new MyrrixSimilarItemsCommand( recipe.getId(), inNumRecs, new String[]{"RECIPE", mapper.writeValueAsString(inFilterDef)} );
             final MyrrixSimilarItemsCommand cmd = new MyrrixSimilarItemsCommand(recipe.getId(), inNumRecs, new String[]{"RECIPE", mapper.writeValueAsString(inFilterDef)});
-            return recipesFactory.getAll(MyrrixUtils.getItems(cmd.run()));
+            return recipesFactory.getAll( cmd.run() );
         } catch (IOException | TasteException e) {
-            throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+            throw new RuntimeException(e);  // Yuk, FIXME, let's get the API right
         }
     }
 
@@ -144,7 +132,7 @@ public class MyrrixExplorerService implements IExplorerAPI {
         }
 
         // @Override
-        protected List<RecommendedItem> run() throws TasteException {
+        protected List<Long> run() throws TasteException {
             return recommender.mostSimilarItems(this.itemIds, this.howMany, this.rescorerParams, /* "contextUserID" */ 0L);
         }
     }

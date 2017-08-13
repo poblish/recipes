@@ -6,11 +6,11 @@ import jgravatar.Gravatar;
 import play.mvc.Controller;
 import play.mvc.Result;
 import service.UserProvider;
+import uk.co.recipes.TaggedPrefsIngester;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.faves.UserFaves;
-import uk.co.recipes.myrrix.MyrrixPrefsIngester;
 import uk.co.recipes.persistence.EsUserFactory;
 import uk.co.recipes.service.api.IRecommendationsAPI;
 import uk.co.recipes.service.api.IUserPersistence;
@@ -30,14 +30,14 @@ public class Users extends Controller {
     private UserFaves faves;
     private IRecommendationsAPI recsApi;
     private CuisineColours colours;
-    private MyrrixPrefsIngester prefsIngester;
+    private TaggedPrefsIngester prefsIngester;
     private PlayAuthenticate auth;
     private UserProvider userProvider;
 
     @Inject
     public Users(final EsUserFactory inUsers, final MetricRegistry metrics, final UserFaves userFaves,
                  final MyrrixRecommendationService inRecService, final CuisineColours colours,
-                 final MyrrixPrefsIngester inIngester,
+                 final TaggedPrefsIngester inIngester,
                  final PlayAuthenticate auth, final UserProvider userProvider) {
         this.users = checkNotNull(inUsers);
         this.faves = checkNotNull(userFaves);

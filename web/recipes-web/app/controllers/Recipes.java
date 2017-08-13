@@ -13,7 +13,7 @@ import service.UserProvider;
 import uk.co.recipes.*;
 import uk.co.recipes.api.*;
 import uk.co.recipes.events.api.IEventService;
-import uk.co.recipes.events.impl.MyrrixUpdater;
+import uk.co.recipes.events.impl.TaggedTasteUpdater;
 import uk.co.recipes.faves.UserFaves;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
@@ -53,7 +53,7 @@ public class Recipes extends AbstractExplorableController {
     public static final String[] DIET_TYPES = {"Vegan", "Vegetarian"};
 
     @Inject
-    public Recipes(final MyrrixUpdater updater, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService, final EsItemFactory items,
+    public Recipes(final TaggedTasteUpdater updater, final EsExplorerFilters explorerFilters, final MyrrixExplorerService inExplorerService, final EsItemFactory items,
                    final EsRecipeFactory recipes, final UserRatings inRatings, final MyrrixRecommendationService inRecService, final MetricRegistry metrics,
                    final ObjectMapper inMapper, final IEventService eventService, final UserFaves userFaves, final CuisineColours colours,
                    final PlayAuthenticate auth, final UserProvider userProvider) {

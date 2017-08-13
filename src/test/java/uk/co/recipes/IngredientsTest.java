@@ -271,7 +271,7 @@ public class IngredientsTest {
 
                 doAnswer(invocation -> {
                     Object[] args = invocation.getArguments();
-                    System.out.println(Arrays.toString(args));
+                    // System.out.println(Arrays.toString(args));
                     return "called with arguments: " + Arrays.toString(args);
                 }).when(mr).setItemTag(anyString(), anyLong(), anyFloat());
 

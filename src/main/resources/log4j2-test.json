@@ -31,7 +31,7 @@
         },
         {
           "name": "uk.co.recipes.events.impl.TaggedTasteUpdater",
-          "level": "debug",
+          "level": "info",
           "additivity": "true"
         },
         {

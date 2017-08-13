@@ -1,12 +1,12 @@
 package uk.co.recipes.taste;
 
 import dagger.Component;
-import net.myrrix.client.ClientRecommender;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import uk.co.recipes.DaggerModule;
 import uk.co.recipes.ProductionMyrrixModule;
+import uk.co.recipes.myrrix.MyrrixUpdater;
 import uk.co.recipes.service.impl.MyrrixRecommendationService;
 import uk.co.recipes.service.taste.impl.MyrrixTasteRecommendationService;
 import uk.co.recipes.service.taste.impl.MyrrixTasteSimilarityService;
@@ -21,14 +21,13 @@ public class MyrrixTest {
     @Inject MyrrixTasteRecommendationService api;
     @Inject MyrrixRecommendationService fullApi;
     @Inject MyrrixTasteSimilarityService explorerApi;
-    @Inject ClientRecommender recommender;
+    @Inject MyrrixUpdater updater;
 
     @BeforeClass
     public void setUp() throws IOException, TasteException {
         DaggerMyrrixTest_TestComponent.create().inject(this);
 
-        recommender.ingest(new File("src/test/resources/taste/main.txt"));
-        recommender.refresh();
+        updater.ingest(new File("src/test/resources/taste/main.txt"));
     }
 
     @Test(enabled = false)

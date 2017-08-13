@@ -1,9 +1,8 @@
 package uk.co.recipes.service.taste.impl;
 
-import net.myrrix.client.ClientRecommender;
 import org.apache.mahout.cf.taste.common.NoSuchItemException;
 import org.apache.mahout.cf.taste.common.TasteException;
-import uk.co.recipes.myrrix.MyrrixUtils;
+import uk.co.recipes.myrrix.MyrrixLookups;
 import uk.co.recipes.service.taste.api.ITasteSimilarityAPI;
 
 import javax.inject.Inject;
@@ -14,8 +13,7 @@ import java.util.List;
 @Singleton
 public class MyrrixTasteSimilarityService implements ITasteSimilarityAPI {
 
-    @Inject
-    ClientRecommender recommender;
+    @Inject MyrrixLookups recommender;
 
     @Inject
     public MyrrixTasteSimilarityService() {
@@ -25,7 +23,7 @@ public class MyrrixTasteSimilarityService implements ITasteSimilarityAPI {
     @Override
     public List<Long> similarIngredients(long inUser, int inNumRecs) {
         try {
-            return MyrrixUtils.getItems(recommender.mostSimilarItems(new long[]{inUser}, inNumRecs, new String[]{"ITEM"}, /* "contextUserID" */ 0L));
+            return recommender.mostSimilarItems(new long[]{inUser}, inNumRecs, new String[]{"ITEM"}, /* "contextUserID" */ 0L);
         } catch (NoSuchItemException e) {
             return Collections.emptyList();
         } catch (TasteException e) {
@@ -41,7 +39,7 @@ public class MyrrixTasteSimilarityService implements ITasteSimilarityAPI {
     @Override
     public float similarityToItem(long itemOrRecipe1, long itemOrRecipe2) {
         try {
-            return recommender.similarityToItem(itemOrRecipe1, itemOrRecipe2)[0];
+            return recommender.similarityToItem(itemOrRecipe1, itemOrRecipe2);
         } catch (TasteException e) {
             throw new RuntimeException(e);  // Yuk, FIXME, let's get the API right
         }

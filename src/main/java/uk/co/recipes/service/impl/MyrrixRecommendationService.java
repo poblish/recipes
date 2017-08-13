@@ -1,13 +1,8 @@
-/**
- *
- */
 package uk.co.recipes.service.impl;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer.Context;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Throwables;
-import net.myrrix.client.ClientRecommender;
 import org.apache.mahout.cf.taste.common.NoSuchUserException;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.slf4j.Logger;
@@ -15,8 +10,8 @@ import org.slf4j.LoggerFactory;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
+import uk.co.recipes.myrrix.MyrrixLookups;
 import uk.co.recipes.myrrix.MyrrixUpdater;
-import uk.co.recipes.myrrix.MyrrixUtils;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;
 import uk.co.recipes.service.api.IRecommendationsAPI;
@@ -40,20 +35,13 @@ import static uk.co.recipes.metrics.MetricNames.*;
 @Singleton
 public class MyrrixRecommendationService implements IRecommendationsAPI {
 
-    @Inject
-    MyrrixTasteRecommendationService tasteRecommendations;
-    @Inject
-    ClientRecommender recommender;
-    @Inject
-    EsItemFactory itemsFactory;
-    @Inject
-    EsRecipeFactory recipesFactory;
-    @Inject
-    MyrrixUpdater myrrixUpdater;
-    @Inject
-    MetricRegistry metrics;
-    @Inject
-    ObjectMapper mapper;
+    @Inject MyrrixTasteRecommendationService tasteRecommendations;
+    @Inject MyrrixLookups recommender;
+    @Inject EsItemFactory itemsFactory;
+    @Inject EsRecipeFactory recipesFactory;
+    @Inject MyrrixUpdater myrrixUpdater;
+    @Inject MetricRegistry metrics;
+    @Inject ObjectMapper mapper;
 
     private static final long[] ANON_EMPTYITEMS = {0L};
     private static final float[] ANON_EMPTYVALUES = {0};
@@ -95,7 +83,7 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
 
     private List<ICanonicalItem> recommendIngredientsForId(final long inUserOrRecipeId, int inNumRecs) {
         try {
-            return itemsFactory.getAll(MyrrixUtils.getItems(recommender.recommend(inUserOrRecipeId, inNumRecs, false, new String[]{"ITEM"})));
+            return itemsFactory.getAll(recommender.recommend(inUserOrRecipeId, inNumRecs, false, new String[]{"ITEM"}));
         } catch (NoSuchUserException e) {
             return Collections.emptyList();
         } catch (TasteException | IOException e) {
@@ -111,7 +99,7 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
         final Context timerCtxt = metrics.timer(TIMER_RECIPES_RECOMMENDATIONS).time();
 
         try {
-            return recipesFactory.getAll(MyrrixUtils.getItems(recommender.recommend(inUser.getId(), inNumRecs, false, new String[]{"RECIPE"})));
+            return recipesFactory.getAll(recommender.recommend(inUser.getId(), inNumRecs, false, new String[]{"RECIPE"}));
         } catch (NoSuchUserException e) {
             return Collections.emptyList();
         } catch (TasteException | IOException e) {
@@ -130,8 +118,7 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
         final Context timerCtxt = metrics.timer(TIMER_RECIPES_FILTERED_RECOMMENDATIONS).time();
 
         try {
-
-            return recipesFactory.getAll(MyrrixUtils.getItems(recommender.recommend(inUser.getId(), inNumRecs, false, new String[]{"RECIPE", "", getItemsListJson(Arrays.asList(inIncludes))})));
+            return recipesFactory.getAll(recommender.recommend(inUser.getId(), inNumRecs, false, new String[]{"RECIPE", "", getItemsListJson(Arrays.asList(inIncludes))}));
         } catch (NoSuchUserException e) {
             return Collections.emptyList();
         } catch (TasteException | IOException e) {
@@ -181,10 +168,8 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
     }
 
     private List<IRecipe> recommendRecipesToAnonymous(final long[] preferredItemIds, final float[] itemScores, int inNumRecs, final Collection<ICanonicalItem> inItems) {
-        final Context timerCtxt = metrics.timer(TIMER_RECIPES_FILTERED_RECOMMENDATIONS).time();  // Same again - that OK?
-
-        try {
-            return recipesFactory.getAll(MyrrixUtils.getItems(recommender.recommendToAnonymous(preferredItemIds, itemScores, inNumRecs, new String[]{"RECIPE", "", getItemsListJson(inItems)}, null)));
+        try (Context ignored = metrics.timer(TIMER_RECIPES_FILTERED_RECOMMENDATIONS).time()) {  // Same again - that OK?
+            return recipesFactory.getAll( recommender.recommendToAnonymous(preferredItemIds, itemScores, inNumRecs, new String[]{"RECIPE", "", getItemsListJson(inItems)}, null) );
         } catch (NoSuchUserException e) {
             // Basically, this means we've passed in one single Item pref, and that Item has had _zero_ previous prefs. In which case, we're quite entitled to return nothing. How the caller deals with that is his business.
             return Collections.emptyList();
@@ -193,9 +178,7 @@ public class MyrrixRecommendationService implements IRecommendationsAPI {
             return Collections.emptyList();
             // FIXME throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
         } catch (IOException e) {
-            throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
-        } finally {
-            timerCtxt.stop();
+            throw new RuntimeException(e);  // Yuk, FIXME, let's get the API right
         }
     }
 
