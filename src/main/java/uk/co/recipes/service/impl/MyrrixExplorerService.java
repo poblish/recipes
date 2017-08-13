@@ -23,8 +23,6 @@ import java.util.List;
 
 import static uk.co.recipes.metrics.MetricNames.TIMER_ITEMS_MOSTSIMILAR;
 import static uk.co.recipes.metrics.MetricNames.TIMER_RECIPES_MOSTSIMILAR;
-//import com.netflix.hystrix.HystrixCommand;
-//import com.netflix.hystrix.HystrixCommandGroupKey;
 
 /**
  * TODO

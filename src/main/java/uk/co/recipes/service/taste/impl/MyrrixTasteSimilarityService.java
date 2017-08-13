@@ -1,6 +1,5 @@
 package uk.co.recipes.service.taste.impl;
 
-import com.google.common.base.Throwables;
 import net.myrrix.client.ClientRecommender;
 import org.apache.mahout.cf.taste.common.NoSuchItemException;
 import org.apache.mahout.cf.taste.common.TasteException;
@@ -30,7 +29,7 @@ public class MyrrixTasteSimilarityService implements ITasteSimilarityAPI {
         } catch (NoSuchItemException e) {
             return Collections.emptyList();
         } catch (TasteException e) {
-            throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+            throw new RuntimeException(e);  // Yuk, FIXME, let's get the API right
         }
     }
 
@@ -44,7 +43,7 @@ public class MyrrixTasteSimilarityService implements ITasteSimilarityAPI {
         try {
             return recommender.similarityToItem(itemOrRecipe1, itemOrRecipe2)[0];
         } catch (TasteException e) {
-            throw Throwables.propagate(e);  // Yuk, FIXME, let's get the API right
+            throw new RuntimeException(e);  // Yuk, FIXME, let's get the API right
         }
     }
 }

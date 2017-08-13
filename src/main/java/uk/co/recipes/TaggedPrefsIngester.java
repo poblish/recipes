@@ -1,12 +1,12 @@
-package uk.co.recipes.myrrix;
+package uk.co.recipes;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Sets;
 import com.google.common.io.Files;
-import net.myrrix.client.ClientRecommender;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.yaml.snakeyaml.Yaml;
 import uk.co.recipes.api.ICanonicalItem;
+import uk.co.recipes.myrrix.MyrrixUpdater;
 import uk.co.recipes.persistence.EsItemFactory;
 
 import javax.inject.Inject;
@@ -20,14 +20,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-public class MyrrixPrefsIngester {
+public class TaggedPrefsIngester {
 
     @Inject EsItemFactory itemFactory;
-    @Inject ClientRecommender myrrix;
+    @Inject MyrrixUpdater myrrix;
     @Inject Yaml yaml;
 
     @Inject
-    public MyrrixPrefsIngester() {
+    public TaggedPrefsIngester() {
         // For Dagger
     }
 
@@ -109,7 +109,6 @@ public class MyrrixPrefsIngester {
     public void ingestRecommendations(final String inData) {
         try {
             myrrix.ingest(new StringReader(inData));
-            myrrix.refresh();
         } catch (TasteException e) {
             throw new RuntimeException(e);
         }

@@ -4,7 +4,6 @@
 package uk.co.recipes.service.impl;
 
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
 import com.codahale.metrics.Timer.Context;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
@@ -16,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.api.IRecipe;
 import uk.co.recipes.api.IUser;
-import uk.co.recipes.events.impl.MyrrixUpdater;
+import uk.co.recipes.myrrix.MyrrixUpdater;
 import uk.co.recipes.myrrix.MyrrixUtils;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.persistence.EsRecipeFactory;

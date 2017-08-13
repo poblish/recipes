@@ -15,7 +15,7 @@ import uk.co.recipes.api.ITag;
 import uk.co.recipes.api.IUser;
 import uk.co.recipes.api.Units;
 import uk.co.recipes.cats.Categorisation;
-import uk.co.recipes.events.impl.MyrrixUpdater;
+import uk.co.recipes.myrrix.MyrrixUpdater;
 import uk.co.recipes.parse.DeferralStatus;
 import uk.co.recipes.parse.IDeferredIngredientHandler;
 import uk.co.recipes.parse.IngredientParser;

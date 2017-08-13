@@ -11,6 +11,7 @@ import uk.co.recipes.api.IIngredient;
 import uk.co.recipes.api.ITag;
 import uk.co.recipes.events.api.IEventListener;
 import uk.co.recipes.events.api.IEventService;
+import uk.co.recipes.myrrix.MyrrixUpdater;
 import uk.co.recipes.persistence.EsItemFactory;
 import uk.co.recipes.service.api.IIngredientQuantityScoreBooster;
 import uk.co.recipes.tags.RecipeTags;

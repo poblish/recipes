@@ -1,6 +1,3 @@
-/**
- *
- */
 package uk.co.recipes.taste;
 
 import dagger.Component;
@@ -11,9 +8,9 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.yaml.snakeyaml.Yaml;
 import uk.co.recipes.DaggerModule;
+import uk.co.recipes.TaggedPrefsIngester;
 import uk.co.recipes.api.ICanonicalItem;
 import uk.co.recipes.mocks.MockFactories;
-import uk.co.recipes.myrrix.MyrrixPrefsIngester;
 import uk.co.recipes.persistence.EsItemFactory;
 
 import javax.inject.Inject;
@@ -26,19 +23,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 
-/**
- * TODO
- *
- * @author andrewregan
- */
-public class MyrrixPrefsIngestTest {
+public class TaggedPrefsIngestTest {
 
-    @Inject
-    MyrrixPrefsIngester ingester;
+    @Inject TaggedPrefsIngester ingester;
 
     @BeforeClass
     private void injectDependencies() throws IOException {
-        DaggerMyrrixPrefsIngestTest_TestComponent.builder().testModule(new TestModule()).build().inject(this);
+        DaggerTaggedPrefsIngestTest_TestComponent.builder().testModule(new TestModule()).build().inject(this);
     }
 
     @Test
@@ -84,6 +75,6 @@ public class MyrrixPrefsIngestTest {
     @Singleton
     @Component(modules = {TestModule.class})
     public interface TestComponent {
-        void inject(final MyrrixPrefsIngestTest runner);
+        void inject(final TaggedPrefsIngestTest runner);
     }
 }

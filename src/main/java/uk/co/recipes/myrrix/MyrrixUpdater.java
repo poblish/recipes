@@ -1,4 +1,4 @@
-package uk.co.recipes.events.impl;
+package uk.co.recipes.myrrix;
 
 import net.myrrix.client.ClientRecommender;
 import org.apache.mahout.cf.taste.common.TasteException;
