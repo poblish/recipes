@@ -1,23 +1,23 @@
 elasticSearchItemsUrl: http://localhost:9200/recipe/items
 elasticSearchUsersUrl: http://localhost:9200/recipe/users
-prefixAdjustmentsPath: /Users/andrewregan/Development/java/recipe_explorer/src/main/resources/prefixAdjustments.txt
-suffixAdjustmentsPath: /Users/andrewregan/Development/java/recipe_explorer/src/main/resources/suffixAdjustments.txt
-cuisineColoursPath: /Users/andrewregan/Development/java/recipe_explorer/src/test/resources/cuisineColours.json
+prefixAdjustmentsPath: ~/recipes/src/main/resources/prefixAdjustments.txt
+suffixAdjustmentsPath: ~/recipes/src/main/resources/suffixAdjustments.txt
+cuisineColoursPath: ~/recipes/src/test/resources/cuisineColours.json
 
 elasticsearch:
   host: localhost
   port: 9300
-  settingsPath: /Users/andrewregan/Development/java/recipe_explorer/src/main/resources/index.yaml
+  settingsPath: ~/recipes/src/main/resources/index.yaml
   mappings:
     items:
-      path: /Users/andrewregan/Development/java/recipe_explorer/src/main/resources/esItemsMappingsAutocomplete.json
+      path: ~/recipes/src/main/resources/esItemsMappingsAutocomplete.json
     recipes:
-      path: /Users/andrewregan/Development/java/recipe_explorer/src/main/resources/esRecipesMappingsAutocomplete.json
+      path: ~/recipes/src/main/resources/esRecipesMappingsAutocomplete.json
 
 loader:
   items:
-    path: /Users/andrewregan/Development/java/recipe_explorer/src/test/resources/inputs.yaml
+    path: ~/recipes/src/test/resources/inputs.yaml
   bbcgoodfood:
-    path: /Users/andrewregan/Development/java/recipe_explorer/src/test/resources/ingredients/bbcgoodfood
+    path: ~/recipes/src/test/resources/ingredients/bbcgoodfood
   curryfrenzy:
-    path: /Users/andrewregan/Development/java/recipe_explorer/src/test/resources/ingredients/curryfrenzy
+    path: ~/recipes/src/test/resources/ingredients/curryfrenzy
